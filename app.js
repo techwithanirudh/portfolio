@@ -18,16 +18,25 @@
 	function restoreThemeFromStorage() {
 		let theme = localStorage.getItem('theme')
 		if (!theme) { 
-			localStorage.setItem('theme', 'dark'); } 
-		else if (theme === 'light') {
+			localStorage.setItem('theme', 'dark'); 
+		} else if (theme === 'light') {
 			document.body.classList.add("light-mode");
-		}
-		
+		} else {
+			document.body.classList.remove("light-mode");
+		}	
 	}
 
 	function restoreThemeFromURLParams() {
-		let theme = localStorage.getItem('theme')
-		if (!theme) localStorage.setItem('theme', 'dark')
+		let search = new URLSearchParams(location.search)
+		if (search.has('theme')) {
+			let theme = search.get('theme')
+			if (theme === 'light') {
+				document.body.classList.add("light-mode");
+			} else {
+				document.body.classList.remove("light-mode");
+				search.set('theme', 'dark');
+			}
+		}
 	}
 	
 	function updateTheme(el=document.body) {
