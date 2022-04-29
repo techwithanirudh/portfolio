@@ -1,0 +1,16 @@
+{
+  "background_color": "#277bae",
+  "description": "A portfolio for Anirudh Sriram also known as Tech With Anirudh",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Tech With Anirudh",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Tech With Anirudh",
+  "start_url": "/",
+  "theme_color": "#277bae",
+  "categories": [],
+  "screenshots": [],
+  "icons": [],
+  "shortcuts": []
+}
