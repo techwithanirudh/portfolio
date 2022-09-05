@@ -56,112 +56,123 @@ pattern = "**/{*.js,*.jsx,*.ts,*.tsx,*.mjs,*.cjs}"
   [languages.javascript.languageServer]
   start = ["typescript-language-server", "--stdio"]
 
+# TODO autocomplete relies on snippet support, which we don't advertise to LSP servers.
+# For now CSS autocomplete will use built-in codemirror, which is not perfect but good enough
+[languages.css]
+pattern = "**/{*.less,*.scss,*.css}"
+  [languages.css.languageServer]
+    start = ["vscode-css-language-server", "--stdio"]
+    [languages.css.languageServer.configuration.css]
+      customData = [ ]
+      validate = true
 
-# Commenting out css LSP for now
-# because it conflicts with emmet
-# [languages.css]
-# pattern = "**/{*.less,*.scss,*.css}"
-#   [languages.css.languageServer]
-#     start = ["vscode-css-language-server", "--stdio"]
-#     [languages.css.languageServer.configuration.css]
-#       customData = [ ]
-#       validate = true
-
-#       [languages.css.languageServer.configuration.css.completion]
-#       triggerPropertyValueCompletion = true
-#       completePropertyWithSemicolon = true
+      [languages.css.languageServer.configuration.css.completion]
+      triggerPropertyValueCompletion = true
+      completePropertyWithSemicolon = true
     
-#       [languages.css.languageServer.configuration.css.hover]
-#       documentation = true
-#       references = true
+      [languages.css.languageServer.configuration.css.hover]
+      documentation = true
+      references = true
     
-#       [languages.css.languageServer.configuration.css.lint]
-#       compatibleVendorPrefixes = "ignore"
-#       vendorPrefix = "warning"
-#       duplicateProperties = "warning"
-#       emptyRules = "warning"
-#       importStatement = "ignore"
-#       boxModel = "ignore"
-#       universalSelector = "ignore"
-#       zeroUnits = "ignore"
-#       fontFaceProperties = "warning"
-#       hexColorLength = "error"
-#       argumentsInColorFunction = "error"
-#       unknownProperties = "warning"
-#       validProperties = [ ]
-#       ieHack = "ignore"
-#       unknownVendorSpecificProperties = "ignore"
-#       propertyIgnoredDueToDisplay = "warning"
-#       important = "ignore"
-#       float = "ignore"
-#       idSelector = "ignore"
-#       unknownAtRules = "warning"
+      [languages.css.languageServer.configuration.css.lint]
+      # Configure linting
+      # ignore = don't show any warning or error
+      # warning = show yellow underline
+      # error = show red underline
+      argumentsInColorFunction = "error" # Invalid number of parameters
+      boxModel = "ignore" # Do not use width or height when using padding or border
+      compatibleVendorPrefixes = "ignore"  # When using a vendor-specific prefix make sure to also include all other vendor-specific properties"
+      duplicateProperties = "warning" # Do not use duplicate style definitions
+      emptyRules = "warning" # Do not use empty rulesets
+      float = "ignore" # Avoid using 'float'. Floats lead to fragile CSS that is easy to break if one aspect of the layout changes.
+      fontFaceProperties = "warning" # @font-face rule must define 'src' and 'font-family' properties 
+      hexColorLength = "error" # Hex colors must consist of three, four, six or eight hex numbers
+      idSelector = "ignore" # Selectors should not contain IDs because these rules are too tightly coupled with the HTML.
+      ieHack = "ignore" # IE hacks are only necessary when supporting IE7 and older
+      important = "ignore" # Avoid using !important. It is an indication that the specificity of the entire CSS has gotten out of control and needs to be refactored.
+      importStatement = "ignore" # Import statements do not load in parallel
+      propertyIgnoredDueToDisplay = "warning" # Property is ignored due to the display
+      universalSelector = "ignore" # The universal selector (*) is known to be slow
+      unknownAtRules = "warning" # Unknown at-rule
+      unknownProperties = "warning" # Unknown property.
+      validProperties = [ ] # add some properties that the linter doesn't know about
+      unknownVendorSpecificProperties = "ignore" # Unknown vendor specific property.
+      vendorPrefix = "warning" # When using a vendor-specific prefix also include the standard property
+      zeroUnits = "ignore" # No unit for zero needed
     
-#       [languages.css.languageServer.configuration.css.trace]
-#       server = "off"
+      [languages.css.languageServer.configuration.css.trace]
+      server = "off"
     
-#     [languages.css.languageServer.configuration.scss]
-#     validate = true
+    [languages.css.languageServer.configuration.scss]
+    validate = true
     
-#       [languages.css.languageServer.configuration.scss.completion]
-#       triggerPropertyValueCompletion = true
-#       completePropertyWithSemicolon = true
+      [languages.css.languageServer.configuration.scss.completion]
+      triggerPropertyValueCompletion = true
+      completePropertyWithSemicolon = true
     
-#       [languages.css.languageServer.configuration.scss.hover]
-#       documentation = true
-#       references = true
+      [languages.css.languageServer.configuration.scss.hover]
+      documentation = true
+      references = true
     
-#       [languages.css.languageServer.configuration.scss.lint]
-#       compatibleVendorPrefixes = "ignore"
-#       vendorPrefix = "warning"
-#       duplicateProperties = "ignore"
-#       emptyRules = "warning"
-#       importStatement = "ignore"
-#       boxModel = "ignore"
-#       universalSelector = "ignore"
-#       zeroUnits = "ignore"
-#       fontFaceProperties = "warning"
-#       hexColorLength = "error"
-#       argumentsInColorFunction = "error"
-#       unknownProperties = "warning"
-#       validProperties = [ ]
-#       ieHack = "ignore"
-#       unknownVendorSpecificProperties = "ignore"
-#       propertyIgnoredDueToDisplay = "warning"
-#       important = "ignore"
-#       float = "ignore"
-#       idSelector = "ignore"
-#       unknownAtRules = "warning"
+      [languages.css.languageServer.configuration.scss.lint]
+      # Configure linting
+      # ignore = don't show any warning or error
+      # warning = show yellow underline
+      # error = show red underline
+      argumentsInColorFunction = "error" # Invalid number of parameters
+      boxModel = "ignore" # Do not use width or height when using padding or border
+      compatibleVendorPrefixes = "ignore"  # When using a vendor-specific prefix make sure to also include all other vendor-specific properties"
+      duplicateProperties = "warning" # Do not use duplicate style definitions
+      emptyRules = "warning" # Do not use empty rulesets
+      float = "ignore" # Avoid using 'float'. Floats lead to fragile CSS that is easy to break if one aspect of the layout changes.
+      fontFaceProperties = "warning" # @font-face rule must define 'src' and 'font-family' properties 
+      hexColorLength = "error" # Hex colors must consist of three, four, six or eight hex numbers
+      idSelector = "ignore" # Selectors should not contain IDs because these rules are too tightly coupled with the HTML.
+      ieHack = "ignore" # IE hacks are only necessary when supporting IE7 and older
+      important = "ignore" # Avoid using !important. It is an indication that the specificity of the entire CSS has gotten out of control and needs to be refactored.
+      importStatement = "ignore" # Import statements do not load in parallel
+      propertyIgnoredDueToDisplay = "warning" # Property is ignored due to the display
+      universalSelector = "ignore" # The universal selector (*) is known to be slow
+      unknownAtRules = "warning" # Unknown at-rule
+      unknownProperties = "warning" # Unknown property.
+      validProperties = [ ] # add some properties that the linter doesn't know about
+      unknownVendorSpecificProperties = "ignore" # Unknown vendor specific property.
+      vendorPrefix = "warning" # When using a vendor-specific prefix also include the standard property
+      zeroUnits = "ignore" # No unit for zero needed"
     
-#     [languages.css.languageServer.configuration.less]
-#     validate = true
+    [languages.css.languageServer.configuration.less]
+    validate = true
     
-#       [languages.css.languageServer.configuration.less.completion]
-#       triggerPropertyValueCompletion = true
-#       completePropertyWithSemicolon = true
+      [languages.css.languageServer.configuration.less.completion]
+      triggerPropertyValueCompletion = true
+      completePropertyWithSemicolon = true
     
-#       [languages.css.languageServer.configuration.less.hover]
-#       documentation = true
-#       references = true
+      [languages.css.languageServer.configuration.less.hover]
+      documentation = true
+      references = true
     
-#       [languages.css.languageServer.configuration.less.lint]
-#       compatibleVendorPrefixes = "ignore"
-#       vendorPrefix = "warning"
-#       duplicateProperties = "ignore"
-#       emptyRules = "warning"
-#       importStatement = "ignore"
-#       boxModel = "ignore"
-#       universalSelector = "ignore"
-#       zeroUnits = "ignore"
-#       fontFaceProperties = "warning"
-#       hexColorLength = "error"
-#       argumentsInColorFunction = "error"
-#       unknownProperties = "warning"
-#       validProperties = [ ]
-#       ieHack = "ignore"
-#       unknownVendorSpecificProperties = "ignore"
-#       propertyIgnoredDueToDisplay = "warning"
-#       important = "ignore"
-#       float = "ignore"
-#       idSelector = "ignore"
-#       unknownAtRules = "warning"
+      [languages.css.languageServer.configuration.less.lint]
+      # Configure linting
+      # ignore = don't show any warning or error
+      # warning = show yellow underline
+      # error = show red underline
+      argumentsInColorFunction = "error" # Invalid number of parameters
+      boxModel = "ignore" # Do not use width or height when using padding or border
+      compatibleVendorPrefixes = "ignore"  # When using a vendor-specific prefix make sure to also include all other vendor-specific properties"
+      duplicateProperties = "warning" # Do not use duplicate style definitions
+      emptyRules = "warning" # Do not use empty rulesets
+      float = "ignore" # Avoid using 'float'. Floats lead to fragile CSS that is easy to break if one aspect of the layout changes.
+      fontFaceProperties = "warning" # @font-face rule must define 'src' and 'font-family' properties 
+      hexColorLength = "error" # Hex colors must consist of three, four, six or eight hex numbers
+      idSelector = "ignore" # Selectors should not contain IDs because these rules are too tightly coupled with the HTML.
+      ieHack = "ignore" # IE hacks are only necessary when supporting IE7 and older
+      important = "ignore" # Avoid using !important. It is an indication that the specificity of the entire CSS has gotten out of control and needs to be refactored.
+      importStatement = "ignore" # Import statements do not load in parallel
+      propertyIgnoredDueToDisplay = "warning" # Property is ignored due to the display
+      universalSelector = "ignore" # The universal selector (*) is known to be slow
+      unknownAtRules = "warning" # Unknown at-rule
+      unknownProperties = "warning" # Unknown property.
+      validProperties = [ ] # add some properties that the linter doesn't know about
+      unknownVendorSpecificProperties = "ignore" # Unknown vendor specific property.
+      vendorPrefix = "warning" # When using a vendor-specific prefix also include the standard property
+      zeroUnits = "ignore" # No unit for zero needed"

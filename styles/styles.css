@@ -959,6 +959,15 @@ section {
   .main-title h2 .bg-text {
     font-size: 4rem;
   }
+
+	
+#hubspot-messages-iframe-container.widget-align-right {
+    left: 0!important;
+}
+
+#hubspot-messages-iframe-container {
+	top: 0!important;
+}
 }
 
 /*# sourceMappingURL=styles.css.map */
