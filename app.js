@@ -25,37 +25,18 @@
 			document.body.classList.remove("light-mode");
 		}	
 	}
-
-	function restoreThemeFromURLParams() {
-		let search = new URLSearchParams(location.search)
-		if (search.has('theme')) {
-			let theme = search.get('theme')
-			if (theme === 'light') {
-				document.body.classList.add("light-mode");
-			} else {
-				document.body.classList.remove("light-mode");
-				search.set('theme', 'dark');
-				location.search = search.toString();
-			}
-		}
-	}
 	
 	function updateTheme(el=document.body) {
-		let search = new URLSearchParams(location.search);
 		var mode = el.classList.contains('light-mode');
 		if (mode) {
-			search.set('theme', 'light')
 			localStorage.setItem('theme', 'light')
 		} else {
-			search.set('theme', 'dark')
 			localStorage.setItem('theme', 'dark')
 		}
-		location.search = search.toString();
 	}
 
 	// Setup
 	restoreThemeFromStorage();
-	restoreThemeFromURLParams();
 	restoreOpenedStateFromUrl();
 	
     [...document.querySelectorAll(".control")].forEach(button => {

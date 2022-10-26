@@ -183,11 +183,12 @@ section {
   height: 100%;
   object-fit: cover;
   transition: all 0.4s ease-in-out;
-  filter: grayscale(100%);
+/*   filter: grayscale(100%); */
+   filter: grayscale(0);
 }
-.header-content .left-header .image img:hover {
+/* .header-content .left-header .image img:hover {
   filter: grayscale(0);
-}
+} */
 .header-content .right-header {
   display: flex;
   flex-direction: column;
@@ -213,15 +214,18 @@ section {
   padding-bottom: 5rem;
 }
 .about-container .right-about {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 2rem;
 }
 .about-container .right-about .about-item {
   border: 1px solid var(--color-grey-5);
   border-radius: 5px;
-  transition: all 0.4s ease-in-out;
-  box-shadow: 1px 2px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease-in-out;    
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 2px 15px rgb(0 0 0 / 10%);
 }
 .about-container .right-about .about-item:hover {
   cursor: default;
@@ -434,9 +438,13 @@ section {
   transition: all 0.4s ease-in-out;
 }
 .portfolios .portfolio-item .hover-items h3 {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   color: var(--color-white);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.3rem;
+}
+.hover-items p {
+	padding-left: 2em;
+	padding-right: 2em;
 }
 .portfolios .portfolio-item .hover-items .icons {
   display: flex;
