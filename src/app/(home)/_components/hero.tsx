@@ -17,7 +17,7 @@ const Hero = () => {
   );
 
   return (
-    <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden bg-dashed px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
+    <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden bg-dashed px-4 py-16 sm:px-16'>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -38,14 +38,26 @@ const Hero = () => {
           priority
         />
       </motion.div>
-      <div className='flex items-center justify-center space-x-2'>
-        <Icons.code className='h-6 w-6 text-primary transition-transform hover:scale-125' />
-        <span className='font-medium text-muted-foreground text-sm'>
-          Full-Stack Developer & Tech Writer
-        </span>
-      </div>
-      <h1 className='max-w-2xl text-center font-regular leading-tight tracking-tighter text-4xl md:text-6xl'>
-        I&apos;m Kyle <br /> a Forum Moderator.
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative rounded-full p-1 border-2 border-border shadow-sm transition-transform hover:scale-110"
+      >
+        <div className="rounded-full overflow-hidden bg-background p-1 ">
+          <Image
+            src="/icon.png"
+            alt="Profile picture"
+            width={200}
+            height={200}
+            className="rounded-full"
+            priority
+          />
+        </div>
+      </motion.div>
+      <h1 className='max-w-2xl text-center font-semibold leading-tight tracking-tighter text-4xl md:text-6xl'>
+        Hi! I'm Kyle!
       </h1>
       <p className='max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
         <Balancer>

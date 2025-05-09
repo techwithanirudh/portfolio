@@ -13,7 +13,6 @@ export default function Home() {
   return (
     <>
       <Hero posts={posts} />
-      <Separator />
       <Features />
       <Separator />
       <Testimonials />
