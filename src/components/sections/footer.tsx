@@ -3,6 +3,7 @@ import {
   linkItems,
   owner,
   postsPerPage,
+  socials,
 } from '@/app/layout.config';
 import { InlineLink } from '@/components/inline-link';
 import { getSortedByDatePosts, getTags } from '@/lib/source';
@@ -31,7 +32,7 @@ export function Footer() {
     >
       <div
         className={cn(
-          'grid gap-8 text-muted-foreground text-sm sm:grid-cols-3',
+          'grid gap-8 text-muted-foreground text-sm sm:grid-cols-4',
         )}
       >
         <div className='flex flex-col gap-6'>
@@ -85,6 +86,27 @@ export function Footer() {
             ))}
           </ul>
         </div>
+
+
+        <div className='flex flex-col gap-6'>
+          <p className='font-medium text-foreground'>Socials</p>
+
+          <ul className='flex flex-col gap-3'>
+            {socials.map((social, i) => (
+              <li key={social.url}>
+                <InlineLink
+                  key={i.toString()}
+                  href={social.url}
+                  className='inline-flex items-center gap-1.5 text-muted-foreground no-underline [&_svg]:size-4'
+                >
+                  {social.icon}
+                  {social.name}
+                </InlineLink>
+              </li>
+            ))}
+          </ul>
+        </div>
+
       </div>
       <Copyright />
     </footer>

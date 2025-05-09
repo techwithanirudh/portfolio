@@ -30,7 +30,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const params = await props.params;
   const description =
-    'Contact us for any inquiries, feedback, or support. We are here to assist you.';
+    'Contact me for any inquiries, feedback. We are here to assist you.';
 
   return createMetadata({
     title: 'Contact',

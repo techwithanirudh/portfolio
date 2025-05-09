@@ -1,11 +1,20 @@
 import { Icons } from '@/components/icons/icons';
 import type { LinkItemType } from 'fumadocs-ui/layouts/links';
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
+import { CastleIcon, MessageSquareIcon, YoutubeIcon } from 'lucide-react';
+import type { JSX } from 'react';
+
+type Social = {
+  icon: JSX.Element;
+  name: string;
+  url: string;
+  description?: string;
+};
 
 export const title = 'Kyle';
 export const description =
   'A powerful platform to streamline your business operations.';
-export const owner = 'Kyle';
+export const owner = 'Tech With Anirudh';
 
 export const baseOptions: BaseLayoutProps = {
   nav: {
@@ -25,6 +34,12 @@ export const linkItems: LinkItemType[] = [
     icon: <Icons.phone />,
     text: 'Contact',
     url: '/contact',
+    active: 'url',
+  },
+  {
+    icon: <Icons.atSign />,
+    text: 'Socials',
+    url: '/socials',
     active: 'url',
   },
   {
@@ -52,5 +67,32 @@ export const linkItems: LinkItemType[] = [
     ],
   },
 ];
+
+export const socials: Social[] = [
+  {
+    icon: <Icons.globe />,
+    name: 'Anirudh\'s Arena',
+    url: 'https://community.techwithanirudh.com/u/winter',
+    description: "My profile on the Anirudh\'s Arena forum I\'m a community moderator",
+  },
+  {
+    icon: <CastleIcon />,
+    name: 'Chess.com',
+    url: 'https://www.chess.com/member/diamonds_and_netherite',
+    description: 'Follow my chess journey and games on Chess.com'
+  },
+  {
+    name: "AMC Forum",
+    description: "My profile on the Active Member Chat forum",
+    url: "https://amcforum.wiki/u/geo/activity",
+    icon: <MessageSquareIcon />
+  },
+  {
+    name: "YouTube",
+    description: "Subscribe to my YouTube channel for chess and entertainment content",
+    url: "https://www.youtube.com/@i-use-chess-.-com",
+    icon: <YoutubeIcon />
+  },
+]
 
 export const postsPerPage = 5;

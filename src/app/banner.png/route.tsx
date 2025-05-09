@@ -41,8 +41,8 @@ export async function GET() {
   const [fonts] = await Promise.all([loadAssets()]);
 
   return generateOGImage({
-    title: 'SaasCN',
-    subtitle: 'Automate Smarter. Work Faster. Grow Better.',
+    title: 'Kyle',
+    subtitle: 'A Discourse forum lover and expert in community moderation',
     fonts,
   });
 }
