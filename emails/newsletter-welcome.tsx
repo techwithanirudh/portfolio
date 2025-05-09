@@ -1,3 +1,4 @@
+import { title } from '@/app/layout.config';
 import { baseUrl } from '@/lib/constants';
 import {
   Body,
@@ -92,27 +93,28 @@ export default function NewsletterWelcomeEmail({
         />
       </Head>
       <Preview>
-        Thanks for joining our newsletter! Get ready to transform your business
-        operations.
+        Thanks for joining my newsletter! This email is to welcome you.
       </Preview>
       <Tailwind>
         <Body className='bg-white font-sans'>
           <Container className='mx-auto w-full max-w-[600px] p-8'>
             <Section>
               <Text className='mx-0 mt-4 mb-8 p-0 text-center font-normal text-2xl'>
-                <span className='font-bold tracking-tighter'>SaasCN</span>
+                <span className='font-bold tracking-tighter'>Blog</span>
               </Text>
               <Heading className='my-4 font-medium text-4xl leading-tight'>
-                Welcome to Better Business Operations!
+                Welcome!
               </Heading>
               <Text className='text-lg leading-8'>Hey {firstName},</Text>
               <Text className='text-lg leading-8'>
-                Thanks for subscribing to our newsletter! We're excited to share
-                the latest updates about our business automation platform,
-                industry insights, and tips for maximizing your productivity.
+                Thanks for subscribing to my newsletter! I&apos;m excited to
+                share my thoughts and ideas with you. You can expect an email
+                every few weeks, and I might occasionally share newsletter-only
+                content as well—so stay tuned!
               </Text>
               <Text className='text-lg leading-8'>
-                Here are some popular articles you might find interesting:
+                Here are a few popular posts from the past few months that you
+                might find interesting:
               </Text>
             </Section>
 
@@ -132,15 +134,14 @@ export default function NewsletterWelcomeEmail({
 
             <Section>
               <Text className='text-lg text-zinc-900 leading-8'>
-                Thank you for being a part of our community! We look forward to
-                helping you streamline your business operations and achieve
-                greater efficiency.
+                Thank you for being a part of my community! I appreciate your
+                support and look forward to connecting with you.
               </Text>
               <Text
                 className='select-none text-4xl text-zinc-900 leading-8'
                 style={{ fontFamily: 'Alex Brush' }}
               >
-                The SaasCN Team
+                {title}
               </Text>
             </Section>
           </Container>
@@ -161,7 +162,7 @@ NewsletterWelcomeEmail.PreviewProps = {
       tags: ['Next.js', 'Pages', 'Routing'],
       image: `${baseUrl}/images/blog/pages.png`,
       author: 'You',
-      url: `${baseUrl}/blog/pages`,
+      url: `${baseUrl}/posts/pages`,
     },
     {
       title: 'Markdown Examples',
@@ -171,7 +172,7 @@ NewsletterWelcomeEmail.PreviewProps = {
       tags: ['Markdown', 'Docs', 'Writing'],
       image: `${baseUrl}/images/blog/markdown-examples.png`,
       author: 'You',
-      url: `${baseUrl}/blog/markdown-examples`,
+      url: `${baseUrl}/posts/markdown-examples`,
     },
     {
       title: 'Using MDX',
@@ -181,7 +182,7 @@ NewsletterWelcomeEmail.PreviewProps = {
       tags: ['MDX', 'Next.js', 'React'],
       image: `${baseUrl}/images/blog/using-mdx.png`,
       author: 'You',
-      url: `${baseUrl}/blog/using-mdx`,
+      url: `${baseUrl}/posts/using-mdx`,
     },
   ],
 } satisfies NewsletterWelcomeEmailProps;

@@ -6,9 +6,9 @@ export function createMetadata(override: Metadata): Metadata {
     openGraph: {
       title: override.title ?? undefined,
       description: override.description ?? undefined,
-      url: 'https://saas-landing.techwithanirudh.com',
+      url: 'https://winter.techwithanirudh.com',
       images: '/banner.png',
-      siteName: 'SaasCN',
+      siteName: 'Kyle',
       ...override.openGraph,
     },
     twitter: {
