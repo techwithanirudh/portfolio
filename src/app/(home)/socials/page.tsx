@@ -1,7 +1,10 @@
 import { Section } from '@/components/section';
 import { createMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
-import CTA from '../_components/cta';
+import { FAQ } from './_components/faq';
+import SocialsUI from './_components/socials';
+import { socials } from '@/app/layout.config';
+import Separator from '@/components/separator';
 
 export default function Socials(): React.ReactElement {
   return (
@@ -14,7 +17,10 @@ export default function Socials(): React.ReactElement {
           Find me on these platforms and let&apos;s connect
         </p>
       </Section>
-      
+      <Separator />
+      <SocialsUI socials={socials} />
+      <Separator />
+      <FAQ />
     </>
   );
 }

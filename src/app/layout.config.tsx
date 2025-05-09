@@ -4,7 +4,7 @@ import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { CastleIcon, MessageSquareIcon, YoutubeIcon } from 'lucide-react';
 import type { JSX } from 'react';
 
-type Social = {
+export type Social = {
   icon: JSX.Element;
   name: string;
   url: string;

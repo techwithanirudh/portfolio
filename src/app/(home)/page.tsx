@@ -3,7 +3,7 @@ import Separator from '@/components/separator';
 import { getSortedByDatePosts } from '@/lib/source';
 import CTA from './_components/cta';
 import { Customers } from './_components/customers';
-import { FAQ } from './_components/faq';
+import { FAQ } from './socials/_components/faq';
 import About from './_components/about';
 import Skills from './_components/skills';
 
