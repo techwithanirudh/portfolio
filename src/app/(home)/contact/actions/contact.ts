@@ -13,7 +13,7 @@ export const contact = actionClient
     try {
       const { data, error } = await resend.emails.send({
         from: env.EMAIL_FROM,
-        to: env.EMAIL_FROM,
+        to: env.EMAIL_TO,
         subject: `New contact form submission from ${name}`,
         text: message,
         replyTo: email,
