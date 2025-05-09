@@ -106,19 +106,6 @@ export function Footer() {
               ))}
           </ul>
         </div>
-
-        <div className='flex flex-col gap-6'>
-          <p className='font-medium text-foreground'>Legal</p>
-
-          <ul className='flex flex-col gap-3'>
-            <li>
-              <ActiveLink href={'/privacy'}>Privacy Policy</ActiveLink>
-            </li>
-            <li>
-              <ActiveLink href={'/terms'}>Terms of Service</ActiveLink>
-            </li>
-          </ul>
-        </div>
       </div>
       <Copyright />
     </footer>

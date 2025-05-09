@@ -2,10 +2,10 @@ import { Icons } from '@/components/icons/icons';
 import type { LinkItemType } from 'fumadocs-ui/layouts/links';
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 
-export const title = 'SaasCN';
+export const title = 'Kyle';
 export const description =
   'A powerful platform to streamline your business operations.';
-export const owner = 'SaasCN';
+export const owner = 'Kyle';
 
 export const baseOptions: BaseLayoutProps = {
   nav: {
@@ -19,12 +19,6 @@ export const linkItems: LinkItemType[] = [
     icon: <Icons.info />,
     text: 'About',
     url: '/about',
-    active: 'url',
-  },
-  {
-    icon: <Icons.pricing />,
-    text: 'Pricing',
-    url: '/pricing',
     active: 'url',
   },
   {
