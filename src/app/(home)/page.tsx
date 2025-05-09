@@ -15,6 +15,7 @@ export default function Home() {
   return (
     <>
       <Hero posts={posts} />
+      <Separator />
       <Customers count={10} />
       <Separator />
       <About />
