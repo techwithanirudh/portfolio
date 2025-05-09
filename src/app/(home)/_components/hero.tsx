@@ -17,7 +17,7 @@ const Hero = () => {
   );
 
   return (
-    <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden bg-dashed px-4 py-16 sm:px-16'>
+    <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden bg-dashed px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -38,7 +38,6 @@ const Hero = () => {
           priority
         />
       </motion.div>
-
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -77,7 +76,7 @@ const Hero = () => {
           href='/blog'
         >
           Browse Posts
-          <Icons.arrowUpRight className='group-hover:-rotate-12 ml-2 size-5 transition-transform' />
+          <Icons.arrowRight className='group-hover:-rotate-45 ml-2 size-5 transition-transform' />
         </Link>
 
         <div className='flex items-center space-x-4'>

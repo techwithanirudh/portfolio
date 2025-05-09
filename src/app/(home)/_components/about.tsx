@@ -19,6 +19,9 @@ export default function About(): React.ReactElement {
           <p className='text-lg'>
             I’m a moderator on Anirudh’s Arena forum and an active member of the AMC (Active Member Chat) community. I’m passionate about building vibrant online communities.
           </p>
+          <p className='text-lg'>
+            I’m also a content creator, sharing my love for chess and entertainment on various platforms. I enjoy creating engaging content that resonates with my audience.
+          </p>
         </div>
         <Link
           className={cn(
@@ -26,7 +29,7 @@ export default function About(): React.ReactElement {
               variant: 'link',
               size: 'lg',
             }),
-            'group !p-0',
+            'group !p-0 h-fit',
           )}
           href='/about'
         >

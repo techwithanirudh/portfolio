@@ -4,7 +4,9 @@ import { getSortedByDatePosts } from '@/lib/source';
 import CTA from './_components/cta';
 import { Customers } from './_components/customers';
 import { FAQ } from './_components/faq';
-import Features from './_components/features';
+import About from './_components/about';
+import Skills from './_components/skills';
+
 import Testimonials from './_components/testimonials';
 
 export default function Home() {
@@ -13,11 +15,13 @@ export default function Home() {
   return (
     <>
       <Hero posts={posts} />
-      <Features />
+      <About />
       <Separator />
-      <Testimonials />
-      <Separator />
-      <FAQ />
+      <Skills />
+      {/* <Separator />
+      <Testimonials /> */}
+      {/* <Separator />
+      <FAQ /> */}
       <Separator />
       <CTA />
     </>

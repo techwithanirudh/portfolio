@@ -31,7 +31,7 @@ export function Footer() {
     >
       <div
         className={cn(
-          'grid gap-8 text-muted-foreground text-sm sm:grid-cols-5',
+          'grid gap-8 text-muted-foreground text-sm sm:grid-cols-3',
         )}
       >
         <div className='flex flex-col gap-6'>
@@ -83,27 +83,6 @@ export function Footer() {
                 </ActiveLink>
               </li>
             ))}
-          </ul>
-        </div>
-
-        <div className='flex flex-col gap-6'>
-          <p className='font-medium text-foreground'>Socials</p>
-
-          <ul className='flex flex-col gap-3'>
-            {navItems
-              .filter((item) => item.type === 'icon')
-              .map((item, i) => (
-                <li key={item.url}>
-                  <InlineLink
-                    key={i.toString()}
-                    href={item.url}
-                    className='inline-flex items-center gap-1.5 text-muted-foreground no-underline [&_svg]:size-4'
-                  >
-                    {item.icon}
-                    {item.text}
-                  </InlineLink>
-                </li>
-              ))}
           </ul>
         </div>
       </div>

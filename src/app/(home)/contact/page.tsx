@@ -22,7 +22,6 @@ export default function Contact(): React.ReactElement {
           <ContactForm />
         </div>
       </Section>
-      <CTA />
     </>
   );
 }
