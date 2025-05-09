@@ -10,7 +10,7 @@ import Image from "next/image";
 export default function CTA(): React.ReactElement {
   return (
     <Section className="grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0">
-      <div className="flex flex-col gap-2 px-6 py-10 md:py-14">
+      <div className="flex flex-col gap-2 px-6 py-10 md:py-14 justify-center">
         <h4 className="text-3xl md:text-5xl font-regular tracking-tighter">
           The Moderator
         </h4>
