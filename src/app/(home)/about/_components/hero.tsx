@@ -1,31 +1,45 @@
-import { Section } from '@/components/section';
-import Image from 'next/image';
-import Balancer from 'react-wrap-balancer';
+import { Icons } from "@/components/icons/icons";
+import { Section } from "@/components/section";
+import { Button } from "@/components/ui/button";
+import { env } from "@/env";
+import Link from "next/link";
+import type React from "react";
+import Balancer from "react-wrap-balancer";
+import * as motion from "motion/react-client";
+import Image from "next/image";
 
-const Hero = () => (
-  <Section className='relative w-full overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
-    <div className='mx-auto flex flex-col items-center justify-center gap-8'>
-      <div className='flex flex-col items-center gap-6 text-center'>
-        <Image
-          src={'/icon.png'}
-          alt='Hero Background'
-          height={200}
-          width={200}
-          priority
-          className='transition-transform hover:scale-110'
-        />
-        <h1 className='max-w-2xl bg-gradient-to-b bg-opacity-50 from-foreground to-muted-foreground/70 bg-clip-text font-regular text-4xl text-transparent tracking-tighter sm:text-6xl md:text-7xl'>
-          <Balancer>Building the modern BizOps platform</Balancer>
-        </h1>
-        <p className='mx-auto max-w-2xl text-lg text-muted-foreground/90 md:text-xl'>
-          <Balancer>
-            Technology has come a long way, and we're here to revolutionize how
-            businesses operate.
-          </Balancer>
+export default function CTA(): React.ReactElement {
+  return (
+    <Section className="flex flex-wrap items-center divide-y divide-dashed divide-border lg:divide-x lg:divide-y-0">
+      <div className="flex w-fit items-center p-6  justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative rounded-md overflow-hidden p-1 border-2 border-border shadow-sm transition-transform hover:scale-110 "
+        >
+          <Image
+            src="/icon.png"
+            alt="Profile picture"
+            width={300}
+            height={300}
+            className="rounded-sm"
+            priority
+          />
+        </motion.div>
+      </div>
+
+      <div className="flex flex-col gap-2 p-6 flex-1 justify-center">
+        <h4 className="max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl">
+          The Moderator
+        </h4>
+        <p className="max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg">
+          I’m a community builder who loves transforming small forums into
+          vibrant hangouts. I’m also a Discourse moderator, skilled in managing
+          categories, plugins, and keeping conversations welcoming. When I’m not
+          handling forum tasks, I play chess and binge-watch YouTube.
         </p>
       </div>
-    </div>
-  </Section>
-);
-
-export default Hero;
+    </Section>
+  );
+}

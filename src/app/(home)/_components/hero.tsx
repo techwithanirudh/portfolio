@@ -18,7 +18,7 @@ const Hero = () => {
 
   return (
     <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
-      {/* <motion.div
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{
@@ -37,24 +37,8 @@ const Hero = () => {
           className='pointer-events-none absolute right-0 bottom-0 h-[900px] w-[1004px] max-w-[1004px] translate-x-1/2 translate-y-1/2 select-none opacity-80 dark:opacity-100'
           priority
         />
-      </motion.div> */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="relative rounded-full p-1 border-2 border-border shadow-sm transition-transform hover:scale-110"
-      >
-        <div className="rounded-full overflow-hidden bg-background p-1 ">
-          <Image
-            src="/icon.png"
-            alt="Profile picture"
-            width={200}
-            height={200}
-            className="rounded-full"
-            priority
-          />
-        </div>
       </motion.div>
+
       <h1 className='max-w-2xl text-center font-semibold leading-tight tracking-tighter text-4xl md:text-6xl'>
         Hi! I'm Kyle!
       </h1>
