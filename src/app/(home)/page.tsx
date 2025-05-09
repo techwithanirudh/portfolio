@@ -2,12 +2,8 @@ import Hero from '@/app/(home)/_components/hero';
 import Separator from '@/components/separator';
 import { getSortedByDatePosts } from '@/lib/source';
 import CTA from './_components/cta';
-import { Customers } from './_components/customers';
-import { FAQ } from './socials/_components/faq';
 import About from './_components/about';
 import Skills from './_components/skills';
-
-import Testimonials from './_components/testimonials';
 
 export default function Home() {
   const posts = getSortedByDatePosts().slice(0, 3);
@@ -15,8 +11,8 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Separator />
-      <Customers count={10} />
+      {/* <Separator />
+      <Customers count={10} /> */}
       <Separator />
       <About />
       <Separator />

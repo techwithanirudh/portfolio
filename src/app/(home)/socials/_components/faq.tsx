@@ -9,29 +9,24 @@ import {
 
 const faq = [
   {
-    question: 'What is SaasCN?',
+    question: 'What\'s the best way to contact you?',
     answer:
-      'SaasCN is a comprehensive business operations platform that helps companies streamline their workflows, automate processes, and scale efficiently. Our solutions are designed for businesses of all sizes.',
+      'The most reliable way to reach me is through the contact form on this website. I check my emails regularly and will respond as soon as possible.',
   },
   {
-    question: 'How secure is the platform?',
+    question: 'Can I challenge you to a chess game?',
     answer:
-      'We implement enterprise-grade security measures, including end-to-end encryption, regular security audits, and compliance with industry standards. Your data security is our top priority.',
+      'You can find me on Chess.com and send a challenge. I enjoy playing with community members when time permits.',
   },
   {
-    question: 'Can I integrate with other tools?',
+    question: 'Where can I chat with you?',
     answer:
-      'Yes! SaasCN offers extensive integration capabilities with popular business tools and services. Our API and webhook system allows for seamless connection with your existing tech stack.',
+      'You can chat with me on AMCForum and Anirudh’s Arena! Feel free to drop by and say hi!',
   },
   {
-    question: 'How does pricing work?',
+    question: 'How often do you post on YouTube?',
     answer:
-      'We offer flexible pricing tiers designed to scale with your business needs, from starter plans for small teams to enterprise solutions for large organizations. Check our pricing page for detailed information.',
-  },
-  {
-    question: 'What kind of support do you provide?',
-    answer:
-      'Our dedicated support team is available 24/7 through multiple channels including live chat, email, and phone. We also provide extensive documentation and training resources.',
+      'I’m currently juggling school, so my upload schedule isn’t super consistent, but I aim to post 1-2 videos a month. Subscribe to stay updated whenever new content drops!',
   },
 ];
 
@@ -44,7 +39,7 @@ export const FAQ = () => (
       <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
         Still have questions?{' '}
         <InlineLink href='/contact' className='no-underline'>
-          Contact Us
+          Contact Me
         </InlineLink>
       </p>
     </div>
