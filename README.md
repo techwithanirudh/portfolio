@@ -1,6 +1,6 @@
-# SaasCN
+# PortfolioCN
 
-This is a landing page template built using [Fumadocs](https://fumadocs.vercel.app), a documentation framework for Next.js.  
+This is a portfolio template built using [Fumadocs](https://fumadocs.vercel.app), a documentation framework for Next.js.  
 
 ---
 
