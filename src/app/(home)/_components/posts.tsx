@@ -21,6 +21,7 @@ export default function Posts({ posts }: { posts: Page[] }) {
               key={post.url}
               author={post.data.author}
               tags={post.data.tags}
+              slugs={post.slugs}
             />
           );
         })}

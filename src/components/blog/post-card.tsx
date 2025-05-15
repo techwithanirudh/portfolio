@@ -3,6 +3,7 @@ import { CalendarIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import type React from 'react';
 import Balancer from 'react-wrap-balancer';
+import { unstable_ViewTransition as ViewTransition } from 'react';
 
 interface PostCardProps {
   title: string;
@@ -11,6 +12,7 @@ interface PostCardProps {
   url: string;
   date: string;
   author: string;
+  slugs: string[];
   tags?: string[];
 }
 
@@ -21,6 +23,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   url,
   date,
   author,
+  slugs,
   tags,
 }) => {
   return (
@@ -30,12 +33,14 @@ export const PostCard: React.FC<PostCardProps> = ({
     >
       <div className='order-2 flex h-full flex-col justify-between gap-4 md:order-1 md:col-span-2 xl:col-span-3'>
         <div className='flex-1 gap-4'>
-          <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-            {title}
-          </h2>
-          <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
-            <Balancer>{description}</Balancer>
-          </p>
+          <ViewTransition name={slugs.join('/')}>
+            <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
+            <Balancer>{title}</Balancer>
+            </h2>
+            <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
+              <Balancer>{description}</Balancer>
+            </p>
+          </ViewTransition>
         </div>
         <div className='flex flex-col justify-center gap-4'>
           {/* <div className='flex flex-wrap gap-2'>

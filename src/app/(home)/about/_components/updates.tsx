@@ -5,7 +5,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel';
 import type { Page } from '@/lib/source';
-import { PostCard } from './update-card';
+import { UpdateCard } from './update-card';
 
 const Updates = ({ posts }: { posts: Page[] }) => {
   return (
@@ -29,7 +29,7 @@ const Updates = ({ posts }: { posts: Page[] }) => {
                   className='min-h-full pl-0 md:basis-1/2 lg:basis-1/3'
                   key={post.url}
                 >
-                  <PostCard
+                  <UpdateCard
                     title={post.data.title}
                     description={post.data.description ?? ''}
                     image={post.data.image}
@@ -37,6 +37,7 @@ const Updates = ({ posts }: { posts: Page[] }) => {
                     date={date}
                     author={post.data.author}
                     tags={post.data.tags}
+                    slugs={post.slugs}
                   />
                 </CarouselItem>
               );

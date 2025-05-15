@@ -78,8 +78,8 @@ const Testimonials = () => {
             What others are saying
           </h2>
           <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
-            My clients have been thrilled with the results. Here are some of
-            their testimonials about my work. 
+            I've had the pleasure of working with some amazing people. Here is what
+            they have to say about my work.{' '}
           </p>
         </div>
 
