@@ -58,7 +58,7 @@ export const Customers = ({
   return (
     <Section className='relative flex flex-col items-center justify-between gap-8 p-6 py-8 sm:flex-row sm:gap-16 md:py-10'>
       <p className='text-muted-foreground sm:max-w-xs'>
-        Moderated over {count}+ forums and communities, including:
+        Worked with {count}+ customers, including some of the best in the industry.
       </p>
       <div className='md:w-[50%]'>
         <Carousel

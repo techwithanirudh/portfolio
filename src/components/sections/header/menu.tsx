@@ -2,7 +2,7 @@
 
 import { cva } from 'class-variance-authority';
 import Link from 'fumadocs-core/link';
-import { cn } from 'fumadocs-ui/components/api';
+import { cn } from '@/lib/utils';
 import { buttonVariants } from 'fumadocs-ui/components/ui/button';
 import {
   NavigationMenuContent,
