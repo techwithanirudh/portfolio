@@ -6,12 +6,13 @@ import About from './_components/about';
 import Skills from './_components/skills';
 import Testimonials from './_components/testimonials';
 import { Customers } from './_components/customers';
+import { Wrapper } from '@/components/wrapper';
 
 export default function Home() {
   const posts = getSortedByDatePosts().slice(0, 3);
 
   return (
-    <>
+    <Wrapper lenis={{}}>
       <Hero />
       <Separator />
       <Customers count={10} />
@@ -25,6 +26,6 @@ export default function Home() {
       <FAQ /> */}
       <Separator />
       <CTA />
-    </>
+    </Wrapper>
   );
 }

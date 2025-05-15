@@ -19,6 +19,7 @@ export const owner = 'Tech With Anirudh';
 export const baseOptions: BaseLayoutProps = {
   nav: {
     title,
+    enableSearch: false
   },
   githubUrl: 'https://github.com/techwithanirudh/shadcn-saas-landing',
 };
@@ -34,12 +35,6 @@ export const linkItems: LinkItemType[] = [
     icon: <Icons.phone />,
     text: 'Contact',
     url: '/contact',
-    active: 'url',
-  },
-  {
-    icon: <Icons.atSign />,
-    text: 'Socials',
-    url: '/socials',
     active: 'url',
   },
   {

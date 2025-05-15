@@ -110,7 +110,7 @@ export function ThemeToggle({
                 className='absolute inset-0 rounded-full bg-accent'
                 transition={{
                   type: 'spring',
-                  duration: 1.5,
+                  duration: 0.5,
                 }}
               />
             )}

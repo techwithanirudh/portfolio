@@ -101,6 +101,9 @@ importers:
       katex:
         specifier: 0.16.21
         version: 0.16.21
+      lenis:
+        specifier: ^1.3.3
+        version: 1.3.3(react@19.0.0)
       lucide-react:
         specifier: ^0.477.0
         version: 0.477.0(react@19.0.0)
@@ -164,6 +167,9 @@ importers:
       tailwindcss-animate:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@4.0.4)
+      tempus:
+        specifier: 1.0.0-dev.11
+        version: 1.0.0-dev.11(react@19.0.0)
       usehooks-ts:
         specifier: ^3.1.1
         version: 3.1.1(react@19.0.0)
@@ -3558,6 +3564,20 @@ packages:
   leac@0.6.0:
     resolution: {integrity: sha512-y+SqErxb8h7nE/fiEX07jsbuhrpO9lL8eca7/Y1nuWV2moNlXhyd59iDGcRf6moVyDMbmTNzL40SUyrFU/yDpg==}
 
+  lenis@1.3.3:
+    resolution: {integrity: sha512-DOopj/UKHS54E9l2g4BOpDUvsyvkd1zkv+ECtHxQ9Fto8ozzKSz7MccqT+KOyG0ABA/OHXZ7l9INx0peUoQ8rQ==}
+    peerDependencies:
+      '@nuxt/kit': '>=3.0.0'
+      react: '>=17.0.0'
+      vue: '>=3.0.0'
+    peerDependenciesMeta:
+      '@nuxt/kit':
+        optional: true
+      react:
+        optional: true
+      vue:
+        optional: true
+
   lightningcss-darwin-arm64@1.29.3:
     resolution: {integrity: sha512-fb7raKO3pXtlNbQbiMeEu8RbBVHnpyqAoxTyTRMEWFQWmscGC2wZxoHzZ+YKAepUuKT9uIW5vL2QbFivTgprZg==}
     engines: {node: '>= 12.0.0'}
@@ -4530,6 +4550,14 @@ packages:
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
     engines: {node: '>=6'}
+
+  tempus@1.0.0-dev.11:
+    resolution: {integrity: sha512-ZZ8Oli3m8csNbKsXi2pLQvm4tRfHvTI5ZDjknrQlatRg30mVnBm17L3PvP+h2OGvRdYTlTYfKYMXhWyx0JgM8w==}
+    peerDependencies:
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
 
   tippy.js@6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
@@ -7850,6 +7878,10 @@ snapshots:
 
   leac@0.6.0: {}
 
+  lenis@1.3.3(react@19.0.0):
+    optionalDependencies:
+      react: 19.0.0
+
   lightningcss-darwin-arm64@1.29.3:
     optional: true
 
@@ -9242,6 +9274,10 @@ snapshots:
   tailwindcss@4.0.4: {}
 
   tapable@2.2.1: {}
+
+  tempus@1.0.0-dev.11(react@19.0.0):
+    optionalDependencies:
+      react: 19.0.0
 
   tippy.js@6.3.7:
     dependencies:

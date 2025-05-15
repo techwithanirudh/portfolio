@@ -1,6 +1,7 @@
 import { title as homeTitle } from '@/app/layout.config';
 import { Section } from '@/components/section';
 import { TagCard } from '@/components/tags/tag-card';
+import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';
 import { getTags } from '@/lib/source';
 import { cn } from '@/lib/utils';
@@ -10,7 +11,7 @@ export default function Page() {
   const tags = getTags();
 
   return (
-    <>
+    <Wrapper lenis={{}}>
       <Section className='p-4 lg:p-6'>
         <h1 className='font-normal text-3xl leading-tight tracking-tighter md:text-5xl'>
           Tags
@@ -34,7 +35,7 @@ export default function Page() {
           )}
         </div>
       </Section>
-    </>
+    </Wrapper>
   );
 }
 

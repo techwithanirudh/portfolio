@@ -2,6 +2,7 @@ import { postsPerPage } from '@/app/layout.config';
 import { PostCard } from '@/components/blog/post-card';
 import { NumberedPagination } from '@/components/numbered-pagination';
 import { Section } from '@/components/section';
+import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';
 import { getSortedByDatePosts } from '@/lib/source';
 import type { Metadata, ResolvingMetadata } from 'next';
@@ -61,7 +62,7 @@ export default async function Page(props: {
   const posts = getSortedByDatePosts().slice(startIndex, endIndex);
 
   return (
-    <>
+    <Wrapper lenis={{}}>
       <Section className='p-4 lg:p-6'>
         <h1 className='font-normal text-3xl leading-tight tracking-tighter md:text-5xl'>
           All {totalPosts} Posts{' '}
@@ -88,7 +89,7 @@ export default async function Page(props: {
         </div>
       </Section>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
-    </>
+    </Wrapper>
   );
 }
 
