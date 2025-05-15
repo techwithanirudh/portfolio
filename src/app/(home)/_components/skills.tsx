@@ -2,15 +2,7 @@
 
 import { Section } from '@/components/section';
 import { cva } from 'class-variance-authority';
-import {
-  BarChart3 as BarChartIcon,
-  HandCoins as HandCoinsIcon,
-  HandshakeIcon,
-  Boxes as IntegrationsIcon,
-  PenIcon,
-  UserRoundCogIcon,
-  Users as UsersIcon,
-} from 'lucide-react';
+import { HandshakeIcon, PenIcon, UserRoundCogIcon } from 'lucide-react';
 
 // Create a variant for feature items
 const featureItemVariants = cva(
@@ -41,8 +33,7 @@ const features = [
     id: 2,
     Icon: HandshakeIcon,
     title: 'Community Building',
-    description:
-      'Creating welcoming spaces for meaningful member connections.',
+    description: 'Creating welcoming spaces for meaningful member connections.',
     size: 'sm',
   },
   {
@@ -52,7 +43,7 @@ const features = [
     description:
       'Developing engaging chess and entertainment content across platforms.',
     size: 'sm',
-  }
+  },
 ];
 
 const Skills = () => (
@@ -63,7 +54,8 @@ const Skills = () => (
           My Expertise
         </h2>
         <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
-          I have specialized skills in building and moderating engaging online spaces
+          I have specialized skills in building and moderating engaging online
+          spaces
         </p>
       </div>
 

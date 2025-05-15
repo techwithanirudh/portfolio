@@ -19,7 +19,7 @@ export const owner = 'Tech With Anirudh';
 export const baseOptions: BaseLayoutProps = {
   nav: {
     title,
-    enableSearch: false
+    enableSearch: false,
   },
   githubUrl: 'https://github.com/techwithanirudh/shadcn-saas-landing',
 };
@@ -66,28 +66,30 @@ export const linkItems: LinkItemType[] = [
 export const socials: Social[] = [
   {
     icon: <Icons.globe />,
-    name: 'Anirudh\'s Arena',
+    name: "Anirudh's Arena",
     url: 'https://community.techwithanirudh.com/u/winter',
-    description: "My profile on the Anirudh\'s Arena forum I\'m a community moderator",
+    description:
+      "My profile on the Anirudh's Arena forum I'm a community moderator",
   },
   {
     icon: <CastleIcon />,
     name: 'Chess.com',
     url: 'https://www.chess.com/member/diamonds_and_netherite',
-    description: 'Follow my chess journey and games on Chess.com'
+    description: 'Follow my chess journey and games on Chess.com',
   },
   {
-    name: "AMC Forum",
-    description: "My profile on the Active Member Chat forum",
-    url: "https://amcforum.wiki/u/geo/activity",
-    icon: <MessageSquareIcon />
+    name: 'AMC Forum',
+    description: 'My profile on the Active Member Chat forum',
+    url: 'https://amcforum.wiki/u/geo/activity',
+    icon: <MessageSquareIcon />,
   },
   {
-    name: "YouTube",
-    description: "Subscribe to my YouTube channel for chess and entertainment content",
-    url: "https://www.youtube.com/@i-use-chess-.-com",
-    icon: <YoutubeIcon />
+    name: 'YouTube',
+    description:
+      'Subscribe to my YouTube channel for chess and entertainment content',
+    url: 'https://www.youtube.com/@i-use-chess-.-com',
+    icon: <YoutubeIcon />,
   },
-]
+];
 
 export const postsPerPage = 5;

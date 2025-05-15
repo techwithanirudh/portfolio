@@ -2,8 +2,8 @@ import { BlurImage } from '@/components/blur-image';
 import { CalendarIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import type React from 'react';
-import Balancer from 'react-wrap-balancer';
 import { unstable_ViewTransition as ViewTransition } from 'react';
+import Balancer from 'react-wrap-balancer';
 
 interface UpdateCardProps {
   title: string;
@@ -29,7 +29,7 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
   return (
     <Link
       href={url}
-      className='flex flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80 min-h-full'
+      className='flex min-h-full flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
     >
       {image && (
         <div className='relative inline-flex items-center justify-center transition-transform hover:scale-105'>
@@ -47,7 +47,7 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
         <div className='flex-1 space-y-2'>
           <ViewTransition name={slugs.join('/')}>
             <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-            <Balancer>{title}</Balancer>
+              <Balancer>{title}</Balancer>
             </h2>
             <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
               <Balancer>{description}</Balancer>

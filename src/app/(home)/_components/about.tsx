@@ -11,16 +11,19 @@ export default function About(): React.ReactElement {
         <h4 className='text-left font-regular text-3xl tracking-tighter md:text-5xl'>
           About Me
         </h4>
-        
       </div>
 
       <div className='space-y-4 px-6 py-10 md:py-14'>
         <div className='prose dark:prose-invert w-full space-y-4'>
           <p className='text-lg'>
-            I’m a moderator on Anirudh’s Arena forum and an active member of the AMC (Active Member Chat) community. I’m passionate about building vibrant online communities.
+            I’m a moderator on Anirudh’s Arena forum and an active member of the
+            AMC (Active Member Chat) community. I’m passionate about building
+            vibrant online communities.
           </p>
           <p className='text-lg'>
-            I’m also a content creator, sharing my love for chess and entertainment on various platforms. I enjoy creating engaging content that resonates with my audience.
+            I’m also a content creator, sharing my love for chess and
+            entertainment on various platforms. I enjoy creating engaging
+            content that resonates with my audience.
           </p>
         </div>
         <Link

@@ -39,12 +39,13 @@ const Hero = () => {
         />
       </motion.div>
 
-      <h1 className='max-w-2xl text-center font-semibold leading-tight tracking-tighter text-4xl md:text-6xl'>
+      <h1 className='max-w-2xl text-center font-semibold text-4xl leading-tight tracking-tighter md:text-6xl'>
         Hi! I'm Kyle!
       </h1>
       <p className='max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
         <Balancer>
-          I’m passionate about Discourse forums and experienced in community moderation. I enjoy reading my favorite book series, Wings of Fire.
+          I’m passionate about Discourse forums and experienced in community
+          moderation. I enjoy reading my favorite book series, Wings of Fire.
         </Balancer>
       </p>
 

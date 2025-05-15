@@ -52,7 +52,9 @@ const Header = ({
           size={20}
           className='text-muted-foreground transition-transform hover:rotate-12 hover:scale-125'
         />
-        <span className='font-bold text-3xl leading-tight tracking-tighter md:text-4xl'>{tag}</span>
+        <span className='font-bold text-3xl leading-tight tracking-tighter md:text-4xl'>
+          {tag}
+        </span>
       </ViewTransition>
       <h1 className='font-bold text-3xl leading-tight tracking-tighter md:text-4xl'>
         <span className='text-muted-foreground'>Posts</span>{' '}
@@ -172,8 +174,9 @@ export async function generateMetadata(
 
   return createMetadata({
     title: pageTitle,
-    description: `Posts tagged with ${tag}${!isFirstPage ? ` - Page ${pageIndex}` : ''
-      }`,
+    description: `Posts tagged with ${tag}${
+      !isFirstPage ? ` - Page ${pageIndex}` : ''
+    }`,
     openGraph: {
       url: canonicalUrl,
     },

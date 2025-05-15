@@ -2,8 +2,8 @@ import { BlurImage } from '@/components/blur-image';
 import { CalendarIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import type React from 'react';
-import Balancer from 'react-wrap-balancer';
 import { unstable_ViewTransition as ViewTransition } from 'react';
+import Balancer from 'react-wrap-balancer';
 
 interface PostCardProps {
   title: string;
@@ -35,7 +35,7 @@ export const PostCard: React.FC<PostCardProps> = ({
         <div className='flex-1 gap-4'>
           <ViewTransition name={slugs.join('/')}>
             <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-            <Balancer>{title}</Balancer>
+              <Balancer>{title}</Balancer>
             </h2>
             <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
               <Balancer>{description}</Balancer>

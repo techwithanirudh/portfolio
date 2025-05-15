@@ -1,9 +1,9 @@
 import { Section } from '@/components/section';
+import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
 import { ContactForm } from './_components/contact-form';
 import { FAQ } from './_components/faq';
-import { Wrapper } from '@/components/wrapper';
 
 export default function Contact(): React.ReactElement {
   return (
@@ -14,7 +14,8 @@ export default function Contact(): React.ReactElement {
             Contact Me
           </h4>
           <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
-            Have a question or want to connect? Send a message and expect a response within a week.
+            Have a question or want to connect? Send a message and expect a
+            response within a week.
           </p>
         </div>
 
@@ -23,7 +24,7 @@ export default function Contact(): React.ReactElement {
         </div>
       </Section>
       <FAQ />
-    </Wrapper>  
+    </Wrapper>
   );
 }
 

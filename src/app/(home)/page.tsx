@@ -1,12 +1,12 @@
 import Hero from '@/app/(home)/_components/hero';
 import Separator from '@/components/separator';
+import { Wrapper } from '@/components/wrapper';
 import { getSortedByDatePosts } from '@/lib/source';
-import CTA from './_components/cta';
 import About from './_components/about';
+import CTA from './_components/cta';
+import { Customers } from './_components/customers';
 import Skills from './_components/skills';
 import Testimonials from './_components/testimonials';
-import { Customers } from './_components/customers';
-import { Wrapper } from '@/components/wrapper';
 
 export default function Home() {
   const posts = getSortedByDatePosts().slice(0, 3);

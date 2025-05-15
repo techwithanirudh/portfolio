@@ -87,7 +87,6 @@ export function Footer() {
           </ul>
         </div>
 
-
         <div className='flex flex-col gap-6'>
           <p className='font-medium text-foreground'>Socials</p>
 
@@ -106,7 +105,6 @@ export function Footer() {
             ))}
           </ul>
         </div>
-
       </div>
       <Copyright />
     </footer>

@@ -9,7 +9,7 @@ import {
 
 const faq = [
   {
-    question: 'What\'s the best way to contact you?',
+    question: "What's the best way to contact you?",
     answer:
       'The most reliable way to reach me is through the contact form on this website. I check my emails regularly and will respond as soon as possible.',
   },
