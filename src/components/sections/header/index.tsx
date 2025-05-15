@@ -37,71 +37,73 @@ export const Header = ({
 
   return (
     <Navbar>
-      <Link
-        href={nav.url ?? '/'}
-        className='inline-flex items-center gap-2.5 font-semibold'
-      >
-        {nav.title}
-      </Link>
-      {nav.children}
-      <NavigationMenuList className='ml-2 flex flex-row items-center gap-2 max-sm:hidden'>
-        {navItems
-          .filter((item) => !isSecondary(item))
-          .map((item, i) => (
+      <div className='flex items-center justify-between w-full'>
+        <Link
+          href={nav.url ?? '/'}
+          className='inline-flex items-center gap-2.5 font-semibold'
+        >
+          {nav.title}
+        </Link>
+        {nav.children}
+        <NavigationMenuList className='ml-2 flex flex-row items-center gap-2 max-sm:hidden'>
+          {navItems
+            .filter((item) => !isSecondary(item))
+            .map((item, i) => (
+              <NavbarLinkItem
+                key={i.toString()}
+                item={item}
+                className='text-sm'
+              />
+            ))}
+        </NavigationMenuList>
+        <div className='flex flex-row items-center justify-end lg:gap-1.5'>
+          {enableSearch ? (
+            <SearchOnly>
+              <SearchToggle className='lg:hidden' />
+              <LargeSearchToggle className='w-full max-w-[240px] max-lg:hidden' />
+            </SearchOnly>
+          ) : null}
+          {navItems.filter(isSecondary).map((item, i) => (
             <NavbarLinkItem
               key={i.toString()}
               item={item}
-              className='text-sm'
+              className='-me-1.5 max-lg:hidden'
             />
           ))}
-      </NavigationMenuList>
-      <div className='flex flex-1 flex-row items-center justify-end lg:gap-1.5'>
-        {enableSearch ? (
-          <SearchOnly>
-            <SearchToggle className='lg:hidden' />
-            <LargeSearchToggle className='w-full max-w-[240px] max-lg:hidden' />
-          </SearchOnly>
-        ) : null}
-        {navItems.filter(isSecondary).map((item, i) => (
-          <NavbarLinkItem
-            key={i.toString()}
-            item={item}
-            className='-me-1.5 max-lg:hidden'
-          />
-        ))}
-        <Menu className='lg:hidden'>
-          <MenuTrigger className='group -me-2'>
-            <ChevronDown className='size-3 transition-transform duration-300 group-data-[state=open]:rotate-180' />
-          </MenuTrigger>
-          <MenuContent className='sm:flex-row sm:items-center sm:justify-end'>
-            {menuItems
-              .filter((item) => !isSecondary(item))
-              .map((item, i) => (
-                <MenuLinkItem
-                  key={i.toString()}
-                  item={item}
-                  className='sm:hidden'
-                />
-              ))}
-            <div className='-ms-1.5 flex flex-row items-center gap-1.5 max-sm:mt-2'>
-              {menuItems.filter(isSecondary).map((item, i) => (
-                <MenuLinkItem
-                  key={i.toString()}
-                  item={item}
-                  className='-me-1.5'
-                />
-              ))}
-              <div className='flex-1' />
-              {i18n ? (
-                <LanguageToggle>
-                  <Languages className='size-5' />
-                  <LanguageToggleText />
-                  <ChevronDown className='size-3 text-fd-muted-foreground' />
-                </LanguageToggle>
-              ) : null}
-            </div>
-          </MenuContent>
-        </Menu>
+          <Menu className='lg:hidden'>
+            <MenuTrigger className='group -me-2'>
+              <ChevronDown className='size-3 transition-transform duration-300 group-data-[state=open]:rotate-180' />
+            </MenuTrigger>
+            <MenuContent className='sm:flex-row sm:items-center sm:justify-end'>
+              {menuItems
+                .filter((item) => !isSecondary(item))
+                .map((item, i) => (
+                  <MenuLinkItem
+                    key={i.toString()}
+                    item={item}
+                    className='sm:hidden'
+                  />
+                ))}
+              <div className='-ms-1.5 flex flex-row items-center gap-1.5 max-sm:mt-2'>
+                {menuItems.filter(isSecondary).map((item, i) => (
+                  <MenuLinkItem
+                    key={i.toString()}
+                    item={item}
+                    className='-me-1.5'
+                  />
+                ))}
+                <div className='flex-1' />
+                {i18n ? (
+                  <LanguageToggle>
+                    <Languages className='size-5' />
+                    <LanguageToggleText />
+                    <ChevronDown className='size-3 text-fd-muted-foreground' />
+                  </LanguageToggle>
+                ) : null}
+              </div>
+            </MenuContent>
+          </Menu>
+        </div>
       </div>
     </Navbar>
   );
