@@ -59,7 +59,7 @@ const ContactFormInner = () => {
                 />
               </FormControl>
               <FormDescription>
-                Your full name, so we know who we are talking to.
+                Your full name, so I know who I'm talking to.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -80,7 +80,7 @@ const ContactFormInner = () => {
                 />
               </FormControl>
               <FormDescription>
-                We will never share your email with anyone else.
+                I will never share your email with anyone else.
               </FormDescription>
               <FormMessage />
             </FormItem>

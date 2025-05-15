@@ -37,7 +37,7 @@ export const Header = ({
 
   return (
     <Navbar>
-      <div className='flex items-center justify-between w-full'>
+      <div className='flex w-full items-center justify-between'>
         <Link
           href={nav.url ?? '/'}
           className='inline-flex items-center gap-2.5 font-semibold'
