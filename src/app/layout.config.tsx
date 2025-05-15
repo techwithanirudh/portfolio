@@ -25,12 +25,12 @@ export const baseOptions: BaseLayoutProps = {
 };
 
 export const linkItems: LinkItemType[] = [
-  {
-    text: 'Home',
-    url: '/',
-    icon: <Icons.home />,
-    active: 'url',
-  },
+  // {
+  //   text: 'Home',
+  //   url: '/',
+  //   icon: <Icons.home />,
+  //   active: 'url',
+  // },
   {
     icon: <Icons.info />,
     text: 'About',

@@ -1,8 +1,19 @@
+import { owner } from '@/app/layout.config';
 import type { Metadata } from 'next/types';
 
 export function createMetadata(override: Metadata): Metadata {
   return {
     ...override,
+    creator: owner,
+    publisher: owner,
+    formatDetection: {
+      telephone: false,
+      ...override.formatDetection,
+    },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+    },
     openGraph: {
       title: override.title ?? undefined,
       description: override.description ?? undefined,

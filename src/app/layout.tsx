@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import type { ReactNode } from 'react';
 import '@/styles/globals.css';
 import 'katex/dist/katex.css';
-import { baseUrl } from '@/lib/constants';
+import { baseUrl, isProduction } from '@/lib/constants';
 import { Body } from './layout.client';
 import { description as homeDescription } from './layout.config';
 import { Provider } from './provider';
@@ -19,11 +19,20 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const name = 'Kyle';
+
 export const metadata = createMetadata({
   title: {
-    template: '%s | Kyle',
-    default: 'Kyle',
+    template: `%s | ${name}`,
+    default: name,
   },
+  applicationName: name,
+  authors: [
+    {
+      name,
+      url: baseUrl.toString(),
+    },
+  ],
   description: homeDescription,
   metadataBase: baseUrl,
 });

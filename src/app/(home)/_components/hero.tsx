@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Balancer from 'react-wrap-balancer';
 import heroImage from '../../../../public/images/gradient-noise-purple-azure-light.png';
+import { ViewAnimation } from '@/components/view-animation';
 
 const Hero = () => {
   const links = getLinks(linkItems, baseOptions.githubUrl);
@@ -19,8 +20,8 @@ const Hero = () => {
   return (
     <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        initial={{ opacity: 0, translateY: -8  }}
+        animate={{ opacity: 1, translateY: 0 }}
         transition={{
           duration: 0.4,
           scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
@@ -38,50 +39,80 @@ const Hero = () => {
           priority
         />
       </motion.div>
-
-      <h1 className='max-w-2xl text-center font-semibold text-4xl leading-tight tracking-tighter md:text-6xl'>
-        Hi! I'm Kyle!
-      </h1>
-      <p className='max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
-        <Balancer>
-          I’m passionate about Discourse forums and experienced in community
-          moderation. I enjoy reading my favorite book series, Wings of Fire.
-        </Balancer>
-      </p>
+      <ViewAnimation
+        initial={{ opacity: 0, translateY: -8 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+        delay={0.4}
+      >
+        <h1
+          className={cn(
+            'max-w-4xl font-bold text-3xl leading-tight tracking-tight',
+            'sm:text-center sm:text-4xl sm:leading-tight',
+            'md:text-5xl md:leading-tight',
+          )}
+        >
+          Hi! I'm Kyle!
+        </h1>
+      </ViewAnimation>
+      <ViewAnimation
+        initial={{ opacity: 0, translateY: -8 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+        delay={0.8}
+      >
+        <p className='max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
+          <Balancer>
+            I’m passionate about Discourse forums and experienced in community
+            moderation. I enjoy reading my favorite book series, Wings of Fire.
+          </Balancer>
+        </p>
+      </ViewAnimation>
 
       <div className='flex flex-wrap items-center justify-center gap-4'>
-        <Link
-          className={cn(
-            buttonVariants({
-              variant: 'default',
-              size: 'lg',
-            }),
-            'group rounded-full bg-primary hover:bg-primary/90',
-          )}
-          href='/blog'
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -8 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+          delay={1.2}
         >
-          Browse Posts
-          <Icons.arrowRight className='group-hover:-rotate-45 ml-2 size-5 transition-transform' />
-        </Link>
+          <Link
+            className={cn(
+              buttonVariants({
+                variant: 'default',
+                size: 'lg',
+              }),
+              'group rounded-full bg-primary hover:bg-primary/90',
+            )}
+            href='/blog'
+          >
+            Browse Posts
+            <Icons.arrowRight className='group-hover:-rotate-45 ml-2 size-5 transition-transform' />
+          </Link>
+        </ViewAnimation>
 
         <div className='flex items-center space-x-4'>
           {navItems
             .filter((item) => item.type === 'icon')
             .map((item, i) => (
-              <Link
+              <ViewAnimation
+                initial={{ opacity: 0, translateY: -8 }}
+                whileInView={{ opacity: 1, translateY: 0 }}
+                delay={1.6 + i * 0.4}
                 key={i.toString()}
-                href={item.url}
-                className={cn(
-                  buttonVariants({
-                    variant: 'ghost',
-                    size: 'icon',
-                  }),
-                  'rounded-full',
-                )}
+                className='flex items-center'
               >
-                {item.icon}
-                <span className='sr-only'>{item.text}</span>
-              </Link>
+                <Link
+                  href={item.url}
+                  className={cn(
+                    buttonVariants({
+                      variant: 'ghost',
+                      size: 'icon',
+                    }),
+                    'rounded-full',
+                  )}
+                >
+                  {item.icon}
+                  <span className='sr-only'>{item.text}</span>
+                </Link>
+              </ViewAnimation>
             ))}
         </div>
       </div>
