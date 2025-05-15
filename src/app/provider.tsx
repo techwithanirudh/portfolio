@@ -8,7 +8,6 @@ import { ProgressProvider } from '@bprogress/next/app';
 import { TooltipProvider } from '@radix-ui/react-tooltip';
 import { RootProvider } from 'fumadocs-ui/provider';
 import type { ReactNode } from 'react';
-import { unstable_ViewTransition as ViewTransition } from 'react';
 
 export function Provider({
   children,
@@ -39,7 +38,7 @@ export function Provider({
           shallowRouting
         >
           <TooltipProvider>
-            <ViewTransition>{children}</ViewTransition>
+            {children}
           </TooltipProvider>
         </ProgressProvider>
         <Analytics />

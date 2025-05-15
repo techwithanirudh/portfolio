@@ -4,6 +4,7 @@ import { HomeLayout } from 'fumadocs-ui/layouts/home';
 import { getLinks } from 'fumadocs-ui/layouts/shared';
 import type { ReactNode } from 'react';
 import { baseOptions, linkItems } from '../layout.config';
+import { unstable_ViewTransition as ViewTransition } from 'react';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -21,8 +22,10 @@ const Layout = ({ children }: { children: ReactNode }) => {
       className='pt-0'
     >
       <main className='flex flex-1 flex-col divide-y divide-dashed divide-border border-border border-dashed sm:border-b'>
-        {children}
-        <Footer />
+
+        <ViewTransition>{children}
+          <Footer />
+        </ViewTransition>
       </main>
     </HomeLayout>
   );

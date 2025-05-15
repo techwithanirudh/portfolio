@@ -20,6 +20,7 @@ import { SearchOnly } from 'fumadocs-ui/provider';
 import { ChevronDown, Languages } from 'lucide-react';
 import { Menu, MenuContent, MenuLinkItem, MenuTrigger } from './menu';
 import { Navbar, NavbarMenuLink } from './navbar';
+import { ViewAnimation } from '@/components/view-animation';
 
 export const Header = ({
   nav: { enableSearch = true, ...nav } = {},
@@ -38,42 +39,72 @@ export const Header = ({
   return (
     <Navbar>
       <div className='flex w-full items-center justify-between'>
-        <Link
-          href={nav.url ?? '/'}
-          className='inline-flex items-center gap-2.5 font-semibold'
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -8 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
         >
-          {nav.title}
-        </Link>
+          <Link
+            href={nav.url ?? '/'}
+            className='inline-flex items-center gap-2.5 font-semibold'
+          >
+            {nav.title}
+          </Link>
+        </ViewAnimation>
         {nav.children}
         <NavigationMenuList className='ml-2 flex flex-row items-center gap-2 max-sm:hidden'>
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
-              <NavbarLinkItem
+              <ViewAnimation
                 key={i.toString()}
-                item={item}
-                className='text-sm'
-              />
+                initial={{ opacity: 0, translateY: -8 }}
+                whileInView={{ opacity: 1, translateY: 0 }}
+                delay={0.4 + i * 0.1}
+              >
+                <NavbarLinkItem
+                  item={item}
+                  className='text-sm'
+                />
+              </ViewAnimation>
             ))}
         </NavigationMenuList>
         <div className='flex flex-row items-center justify-end lg:gap-1.5'>
-          {enableSearch ? (
-            <SearchOnly>
-              <SearchToggle className='lg:hidden' />
-              <LargeSearchToggle className='w-full max-w-[240px] max-lg:hidden' />
-            </SearchOnly>
-          ) : null}
-          {navItems.filter(isSecondary).map((item, i) => (
-            <NavbarLinkItem
-              key={i.toString()}
-              item={item}
-              className='-me-1.5 max-lg:hidden'
-            />
-          ))}
+          <ViewAnimation
+            initial={{ opacity: 0, translateY: -8 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+            delay={0.8}
+          >
+            {enableSearch ? (
+              <SearchOnly>
+                <SearchToggle className='lg:hidden' />
+                <LargeSearchToggle className='w-full max-w-[240px] max-lg:hidden' />
+              </SearchOnly>
+            ) : null}
+          </ViewAnimation>
+          <ViewAnimation
+            initial={{ opacity: 0, translateY: -8 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+            delay={0.8}
+          >
+            {navItems.filter(isSecondary).map((item, i) => (
+              <NavbarLinkItem
+                key={i.toString()}
+                item={item}
+                className='-me-1.5 max-lg:hidden'
+              />
+            ))}
+          </ViewAnimation>
           <Menu className='lg:hidden'>
-            <MenuTrigger className='group -me-2'>
-              <ChevronDown className='size-3 transition-transform duration-300 group-data-[state=open]:rotate-180' />
-            </MenuTrigger>
+            <ViewAnimation
+              initial={{ opacity: 0, translateY: -8 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+              delay={0.8}
+            >
+              <MenuTrigger className='group -me-2'>
+                <ChevronDown className='size-3 transition-transform duration-300 group-data-[state=open]:rotate-180' />
+              </MenuTrigger>
+            </ViewAnimation>
+
             <MenuContent className='sm:flex-row sm:items-center sm:justify-end'>
               {menuItems
                 .filter((item) => !isSecondary(item))
