@@ -1,15 +1,15 @@
-import { getLinks } from 'fumadocs-ui/layouts/shared';
-import { ActiveLink } from '@/components/active-link';
-import { getSortedByDatePosts, getTags } from '@/lib/source';
 import {
   baseOptions,
   linkItems,
   postsPerPage,
   socials,
 } from '@/app/layout.config';
-import type { ReactNode } from 'react';
+import { ActiveLink } from '@/components/active-link';
 import { ViewAnimation } from '@/components/view-animation';
+import { getSortedByDatePosts, getTags } from '@/lib/source';
+import { getLinks } from 'fumadocs-ui/layouts/shared';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 type ListItem = {
   title: string;

@@ -37,9 +37,7 @@ export function Provider({
           startOnLoad
           shallowRouting
         >
-          <TooltipProvider>
-            {children}
-          </TooltipProvider>
+          <TooltipProvider>{children}</TooltipProvider>
         </ProgressProvider>
         <Analytics />
         <Toaster />

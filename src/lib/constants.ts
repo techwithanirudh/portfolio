@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from '@/env';
 
 export const isProduction = process.env.NODE_ENV === 'production';
 export const baseUrl =

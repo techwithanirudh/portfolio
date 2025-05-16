@@ -1,6 +1,6 @@
+import { vercel } from '@t3-oss/env-core/presets-zod';
 import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
-import { vercel } from "@t3-oss/env-core/presets-zod";
 
 export const env = createEnv({
   extends: [vercel()],

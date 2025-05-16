@@ -60,7 +60,7 @@ const Skills = () => (
         </p>
       </div>
 
-      <div className='w-full border-border border-t border-dashed pb-4 space-y-4'>
+      <div className='w-full space-y-4 border-border border-t border-dashed pb-4'>
         <div className='grid grid-cols-1 divide-x divide-y divide-dashed divide-border text-left sm:grid-cols-2 lg:grid-cols-3'>
           {features.map((feature) => (
             <div
@@ -83,10 +83,10 @@ const Skills = () => (
         </div>
         <div className='flex flex-row gap-4 px-6 py-4'>
           <Badge>
-            <span className='text-sm font-semibold'>Chess</span>
+            <span className='font-semibold text-sm'>Chess</span>
           </Badge>
           <Badge>
-            <span className='text-sm font-semibold'>Community</span>
+            <span className='font-semibold text-sm'>Community</span>
           </Badge>
           {/* carousel of languages adn technologies u know */}
         </div>

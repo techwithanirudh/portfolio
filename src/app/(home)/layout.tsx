@@ -3,8 +3,8 @@ import { Header } from '@/components/sections/header';
 import { HomeLayout } from 'fumadocs-ui/layouts/home';
 import { getLinks } from 'fumadocs-ui/layouts/shared';
 import type { ReactNode } from 'react';
-import { baseOptions, linkItems } from '../layout.config';
 import { unstable_ViewTransition as ViewTransition } from 'react';
+import { baseOptions, linkItems } from '../layout.config';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (
@@ -22,8 +22,8 @@ const Layout = ({ children }: { children: ReactNode }) => {
       className='pt-0'
     >
       <main className='flex flex-1 flex-col divide-y divide-dashed divide-border border-border border-dashed sm:border-b'>
-
-        <ViewTransition>{children}
+        <ViewTransition>
+          {children}
           <Footer />
         </ViewTransition>
       </main>

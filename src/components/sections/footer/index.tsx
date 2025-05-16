@@ -1,9 +1,9 @@
 import { owner } from '@/app/layout.config';
-import { cn } from '@/lib/utils';
 import { UserButton } from '@/components/auth/user-button';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { Links } from './links';
 import { ViewAnimation } from '@/components/view-animation';
+import { cn } from '@/lib/utils';
+import { Links } from './links';
 
 export const Footer = () => (
   <footer
@@ -30,8 +30,7 @@ export const Footer = () => (
           delay={0.8}
         >
           <p className='whitespace-nowrap text-muted-foreground text-sm'>
-            &copy; {new Date().getFullYear()} {owner}. All rights
-            reserved.
+            &copy; {new Date().getFullYear()} {owner}. All rights reserved.
           </p>
         </ViewAnimation>
       </div>

@@ -2,6 +2,7 @@ import { baseOptions, linkItems } from '@/app/layout.config';
 import { Icons } from '@/components/icons/icons';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
+import { ViewAnimation } from '@/components/view-animation';
 import { cn } from '@/lib/utils';
 import { getLinks } from 'fumadocs-ui/layouts/shared';
 import * as motion from 'motion/react-client';
@@ -9,7 +10,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Balancer from 'react-wrap-balancer';
 import heroImage from '../../../../public/images/gradient-noise-purple-azure-light.png';
-import { ViewAnimation } from '@/components/view-animation';
 
 const Hero = () => {
   const links = getLinks(linkItems, baseOptions.githubUrl);
@@ -20,7 +20,7 @@ const Hero = () => {
   return (
     <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
       <motion.div
-        initial={{ opacity: 0, translateY: -8  }}
+        initial={{ opacity: 0, translateY: -8 }}
         animate={{ opacity: 1, translateY: 0 }}
         transition={{
           duration: 0.4,

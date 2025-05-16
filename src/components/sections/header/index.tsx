@@ -1,3 +1,4 @@
+import { ViewAnimation } from '@/components/view-animation';
 import Link from 'fumadocs-core/link';
 import {
   LanguageToggle,
@@ -20,7 +21,6 @@ import { SearchOnly } from 'fumadocs-ui/provider';
 import { ChevronDown, Languages } from 'lucide-react';
 import { Menu, MenuContent, MenuLinkItem, MenuTrigger } from './menu';
 import { Navbar, NavbarMenuLink } from './navbar';
-import { ViewAnimation } from '@/components/view-animation';
 
 export const Header = ({
   nav: { enableSearch = true, ...nav } = {},
@@ -61,10 +61,7 @@ export const Header = ({
                 whileInView={{ opacity: 1, translateY: 0 }}
                 delay={0.4 + i * 0.1}
               >
-                <NavbarLinkItem
-                  item={item}
-                  className='text-sm'
-                />
+                <NavbarLinkItem item={item} className='text-sm' />
               </ViewAnimation>
             ))}
         </NavigationMenuList>
