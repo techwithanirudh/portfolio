@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import { PlusIcon } from 'lucide-react';
 import type { HTMLAttributes } from 'react';
+import { ViewAnimation } from './view-animation';
 
 type SectionProps = {
   sectionClassName?: string;
@@ -11,9 +12,13 @@ const Cross = () => (
     <div className='absolute left-3 h-6 w-px bg-background' />
     <div className='absolute top-3 h-px w-6 bg-background' />
 
-    <div className='-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2'>
+    <ViewAnimation
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      className='-translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2'
+    >
       <PlusIcon size={20} className='text-border/70 dark:text-border' />
-    </div>
+    </ViewAnimation>
   </div>
 );
 

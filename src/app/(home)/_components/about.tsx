@@ -9,7 +9,7 @@ export default function About(): React.ReactElement {
   return (
     <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
       <ViewAnimation
-        className='flex flex-col gap-2 px-6 py-10 md:py-14 h-full'
+        className='flex h-full flex-col gap-2 px-6 py-10 md:py-14'
         initial={{ opacity: 0, translateY: -8 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >

@@ -4,7 +4,7 @@ import { Wrapper } from '@/components/wrapper';
 import { getSortedByDatePosts } from '@/lib/source';
 import About from './_components/about';
 import CTA from './_components/cta';
-import { Customers } from './_components/customers';
+import { Logos } from './_components/logos';
 import Skills from './_components/skills';
 import Testimonials from './_components/testimonials';
 
@@ -15,7 +15,7 @@ export default function Home() {
     <Wrapper lenis={{}}>
       <Hero />
       <Separator />
-      <Customers count={10} />
+      <Logos />
       <Separator />
       <About />
       <Separator />
