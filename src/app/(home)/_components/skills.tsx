@@ -2,6 +2,7 @@
 
 import { Section } from '@/components/section';
 import { Badge } from '@/components/ui/badge';
+import { ViewAnimation } from '@/components/view-animation';
 import { cva } from 'class-variance-authority';
 import { HandshakeIcon, PenIcon, UserRoundCogIcon } from 'lucide-react';
 
@@ -62,12 +63,18 @@ const Skills = () => (
 
       <div className='w-full space-y-4 border-border border-t border-dashed pb-4'>
         <div className='grid grid-cols-1 divide-x divide-y divide-dashed divide-border text-left sm:grid-cols-2 lg:grid-cols-3'>
-          {features.map((feature) => (
-            <div
-              key={feature.id}
+          {features.map((feature, index) => (
+            <ViewAnimation
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              // Make the delay the length of the grid for example if there are 3 items in one row then it is modulo 3 or 2 items in one row then it is modulo 2
+              // so that the animation is staggered
+              // this is checked as size if lg it takes to cols and if sm it takes 1 col
+              delay={(index % (feature.size === 'lg' ? 2 : 3)) * 0.15}
               className={featureItemVariants({
                 size: feature.size as 'sm' | 'lg',
               })}
+              key={feature.id}
             >
               <feature.Icon className='h-8 w-8 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
               <div className='flex flex-col '>
@@ -78,7 +85,7 @@ const Skills = () => (
                   {feature.description}
                 </p>
               </div>
-            </div>
+            </ViewAnimation>
           ))}
         </div>
         <div className='flex flex-row gap-4 px-6 py-4'>

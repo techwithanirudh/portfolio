@@ -2,6 +2,7 @@ import { PostCard } from '@/components/blog/post-card';
 import { Icons } from '@/components/icons/icons';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
+import { ViewAnimation } from '@/components/view-animation';
 import type { Page } from '@/lib/source';
 import Link from 'next/link';
 

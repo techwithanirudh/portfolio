@@ -8,6 +8,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { ViewAnimation } from '@/components/view-animation';
 import { User } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -73,7 +74,11 @@ const Testimonials = () => {
   return (
     <Section className='relative w-full pt-10'>
       <div className='flex flex-col gap-10'>
-        <div className='flex flex-col gap-2 px-6'>
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -8 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+          className='flex flex-col gap-2 px-6'
+        >
           <h2 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>
             What others are saying
           </h2>
@@ -81,7 +86,7 @@ const Testimonials = () => {
             I've had the pleasure of working with some amazing people. Here is
             what they have to say about my work.{' '}
           </p>
-        </div>
+        </ViewAnimation>
 
         <Carousel
           setApi={setApi}
@@ -93,25 +98,32 @@ const Testimonials = () => {
                 className='pl-0 lg:basis-1/2'
                 key={`${item.title}_${index}`}
               >
-                <div className='flex aspect-video flex-col justify-between p-6 hover:bg-card lg:col-span-2'>
-                  <User className='h-8 w-8 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
-                  <div className='flex flex-col gap-4'>
-                    <div className='flex flex-col'>
-                      <h3 className='text-xl tracking-tight'>{item.title}</h3>
-                      <p className='max-w-xs text-base text-muted-foreground'>
-                        {item.description}
+                <ViewAnimation
+                  initial={{ opacity: 0, filter: 'blur(0px)' }}
+                  animate={{ opacity: 1 }}
+                  delay={0.4 + index * 0.1}
+                >
+                  <div className='flex aspect-video flex-col justify-between p-6 hover:bg-card lg:col-span-2'>
+                    <User className='h-8 w-8 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
+                    <div className='flex flex-col gap-4'>
+                      <div className='flex flex-col'>
+                        <h3 className='text-xl tracking-tight'>{item.title}</h3>
+                        <p className='max-w-xs text-base text-muted-foreground'>
+                          {item.description}
+                        </p>
+                      </div>
+                      <p className='flex flex-row items-center gap-2 text-sm'>
+                        <span className='text-muted-foreground'>By</span>
+                        <Avatar className='h-6 w-6'>
+                          <AvatarImage src={item.author.image} />
+                          <AvatarFallback>??</AvatarFallback>
+                        </Avatar>
+                        <span>{item.author.name}</span>
                       </p>
                     </div>
-                    <p className='flex flex-row items-center gap-2 text-sm'>
-                      <span className='text-muted-foreground'>By</span>
-                      <Avatar className='h-6 w-6'>
-                        <AvatarImage src={item.author.image} />
-                        <AvatarFallback>??</AvatarFallback>
-                      </Avatar>
-                      <span>{item.author.name}</span>
-                    </p>
                   </div>
-                </div>
+                </ViewAnimation>
+
               </CarouselItem>
             ))}
           </CarouselContent>

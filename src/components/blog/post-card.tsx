@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type React from 'react';
 import { unstable_ViewTransition as ViewTransition } from 'react';
 import Balancer from 'react-wrap-balancer';
+import { ViewAnimation } from '../view-animation';
 
 interface PostCardProps {
   title: string;
@@ -29,21 +30,26 @@ export const PostCard: React.FC<PostCardProps> = ({
   return (
     <Link
       href={url}
-      className='grid grid-cols-1 gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80 md:grid-cols-3 xl:grid-cols-4'
+      className='block transition-colors'
     >
-      <div className='order-2 flex h-full flex-col justify-between gap-4 md:order-1 md:col-span-2 xl:col-span-3'>
-        <div className='flex-1 gap-4'>
-          <ViewTransition name={slugs.join('/')}>
-            <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-              <Balancer>{title}</Balancer>
-            </h2>
-            <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
-              <Balancer>{description}</Balancer>
-            </p>
-          </ViewTransition>
-        </div>
-        <div className='flex flex-col justify-center gap-4'>
-          {/* <div className='flex flex-wrap gap-2'>
+      <ViewAnimation
+        initial={{ opacity: 0, translateY: -8 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+        className='grid grid-cols-1 gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80 md:grid-cols-3 xl:grid-cols-4'
+      >
+        <div className='order-2 flex h-full flex-col justify-between gap-4 md:order-1 md:col-span-2 xl:col-span-3'>
+          <div className='flex-1 gap-4'>
+            <ViewTransition name={slugs.join('/')}>
+              <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
+                <Balancer>{title}</Balancer>
+              </h2>
+              <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
+                <Balancer>{description}</Balancer>
+              </p>
+            </ViewTransition>
+          </div>
+          <div className='flex flex-col justify-center gap-4'>
+            {/* <div className='flex flex-wrap gap-2'>
             {tags?.map((tag) => (
               <>
                 <TagCard name={tag} key={tag} className='p-0 [&_svg]:size-4 [&_span]:text-muted-foreground gap-1' />
@@ -51,31 +57,32 @@ export const PostCard: React.FC<PostCardProps> = ({
               </>
             ))}
           </div> */}
-          <div className='group inline-flex items-center gap-2 text-muted-foreground text-sm'>
-            <span className='inline-flex items-center gap-1 capitalize'>
-              <UserIcon className='size-4 transition-transform hover:scale-125' />
-              {author}
-            </span>
-            <span>•</span>
-            <span className='inline-flex items-center gap-1'>
-              <CalendarIcon className='size-4 transition-transform hover:scale-125' />
-              {date}
-            </span>
+            <div className='group inline-flex items-center gap-2 text-muted-foreground text-sm'>
+              <span className='inline-flex items-center gap-1 capitalize'>
+                <UserIcon className='size-4 transition-transform hover:scale-125' />
+                {author}
+              </span>
+              <span>•</span>
+              <span className='inline-flex items-center gap-1'>
+                <CalendarIcon className='size-4 transition-transform hover:scale-125' />
+                {date}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {image && (
-        <div className='group relative order-1 col-span-1 inline-flex items-center justify-center transition-transform hover:scale-105 md:order-2'>
-          <BlurImage
-            width={853}
-            height={554}
-            src={image}
-            alt={title}
-            className='relative rounded-lg'
-          />
-        </div>
-      )}
+        {image && (
+          <div className='group relative order-1 col-span-1 inline-flex items-center justify-center transition-transform hover:scale-105 md:order-2'>
+            <BlurImage
+              width={853}
+              height={554}
+              src={image}
+              alt={title}
+              className='relative rounded-lg'
+            />
+          </div>
+        )}
+      </ViewAnimation>
     </Link>
   );
 };

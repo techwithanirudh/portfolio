@@ -5,6 +5,7 @@ import {
 import { PostJsonLd } from '@/components/json-ld';
 import { Section } from '@/components/section';
 import { TagCard } from '@/components/tags/tag-card';
+import { ViewAnimation } from '@/components/view-animation';
 import { createMetadata } from '@/lib/metadata';
 import { metadataImage } from '@/lib/metadata-image';
 import { type Page as MDXPage, getPost, getPosts } from '@/lib/source';
@@ -32,17 +33,36 @@ function Header(props: { page: MDXPage; tags?: string[] }) {
       >
         <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
           <ViewTransition name={page.slugs.join('/')}>
-            <h1 className='max-w-4xl font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-              <Balancer>{page.data.title}</Balancer>
-            </h1>
-            <p className='mx-auto max-w-4xl'>
-              <Balancer>{page.data.description}</Balancer>
-            </p>
+            <ViewAnimation
+              initial={{ opacity: 0, translateY: -8 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+              delay={0.4}
+            >
+              <h1 className='max-w-4xl font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
+                <Balancer>{page.data.title}</Balancer>
+              </h1>
+            </ViewAnimation>
+            <ViewAnimation
+              initial={{ opacity: 0, translateY: -8 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+              delay={0.8}
+            >
+              <p className='mx-auto max-w-4xl'>
+                <Balancer>{page.data.description}</Balancer>
+              </p>
+            </ViewAnimation>
           </ViewTransition>
         </div>
         <div className='flex flex-wrap gap-2'>
-          {tags?.map((tag) => (
-            <TagCard name={tag} key={tag} className=' border border-border ' />
+          {tags?.map((tag, index) => (
+            <ViewAnimation
+              initial={{ opacity: 0, translateY: -8 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+              delay={1.2 + index * 0.4}
+              key={tag}
+            >
+              <TagCard name={tag} className='border border-border' />
+            </ViewAnimation>
           ))}
         </div>
       </div>
@@ -68,6 +88,7 @@ export default async function Page(props: {
       <Section className='h-full' sectionClassName='flex flex-1'>
         <article className='flex min-h-full flex-col lg:flex-row'>
           <div className='flex flex-1 flex-col gap-4'>
+
             <InlineTOC
               items={toc}
               className='rounded-none border-0 border-border border-b border-dashed'
@@ -113,7 +134,7 @@ export default async function Page(props: {
             <Share url={page.url} />
           </div>
         </article>
-      </Section>
+      </Section >
       <PostJsonLd page={page} />
     </>
   );
