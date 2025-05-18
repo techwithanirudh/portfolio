@@ -41,7 +41,7 @@
                 "dbaeumer.vscode-eslint"
             ],
             "settings": {
-                "terminal.integrated.defaultProfile.linux": "zsh",
+                // "terminal.integrated.defaultProfile.linux": "zsh",
                 "debug.internalConsoleOptions": "neverOpen",
                 "editor.formatOnPaste": true,
                 "editor.guides.bracketPairs": "active",
@@ -51,7 +51,8 @@
                 "diffEditor.renderSideBySide": false,
                 "files.watcherExclude": {
                     "**/node_modules/**": true
-                }, // Prettifies the response with emojis and such.
+                }, 
+                // Prettifies the response with emojis and such.
                 "betterTypeScriptErrors.prettify": true,
                 "github.copilot.chat.codeGeneration.instructions": [
                     {
