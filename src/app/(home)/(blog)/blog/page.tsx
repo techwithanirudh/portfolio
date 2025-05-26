@@ -1,5 +1,4 @@
 import { postsPerPage } from '@/app/layout.config';
-import { PostCard } from '@/components/blog/post-card';
 import { NumberedPagination } from '@/components/numbered-pagination';
 import { Section } from '@/components/section';
 import { Wrapper } from '@/components/wrapper';
@@ -7,28 +6,13 @@ import { createMetadata } from '@/lib/metadata';
 import { getSortedByDatePosts } from '@/lib/source';
 import type { Metadata, ResolvingMetadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
+import { Hero } from './_components/hero';
+import Posts from '../../_components/posts';
 
 export const dynamicParams = false;
 
 const totalPosts = getSortedByDatePosts().length;
 const pageCount = Math.ceil(totalPosts / postsPerPage);
-
-const CurrentPostsCount = ({
-  startIndex,
-  endIndex,
-}: {
-  startIndex: number;
-  endIndex: number;
-}) => {
-  const start = startIndex + 1;
-  const end = endIndex < totalPosts ? endIndex : totalPosts;
-  if (start === end) return <span>({start})</span>;
-  return (
-    <span>
-      ({start}-{end})
-    </span>
-  );
-};
 
 const Pagination = ({ pageIndex }: { pageIndex: number }) => {
   const handlePageChange = async (page: number) => {
@@ -63,32 +47,12 @@ export default async function Page(props: {
 
   return (
     <Wrapper lenis={{}}>
-      <Section className='p-4 lg:p-6'>
-        <h1 className='font-normal text-3xl leading-tight tracking-tighter md:text-5xl'>
-          All {totalPosts} Posts{' '}
-          <CurrentPostsCount startIndex={startIndex} endIndex={endIndex} />
-        </h1>
-      </Section>
-      <Section className='h-full' sectionClassName='flex flex-1'>
-        <div className='grid divide-y divide-dashed divide-border text-left'>
-          {posts.map((post) => {
-            const date = new Date(post.data.date).toDateString();
-            return (
-              <PostCard
-                title={post.data.title}
-                description={post.data.description ?? ''}
-                image={post.data.image}
-                url={post.url}
-                date={date}
-                key={post.url}
-                author={post.data.author}
-                tags={post.data.tags}
-                slugs={post.slugs}
-              />
-            );
-          })}
-        </div>
-      </Section>
+      <Hero 
+        totalPosts={totalPosts}
+        startIndex={startIndex}
+        endIndex={endIndex}
+      />
+      <Posts posts={posts} className='h-full' sectionClassName='flex flex-1' />
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
     </Wrapper>
   );

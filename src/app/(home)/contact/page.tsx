@@ -5,18 +5,28 @@ import type { Metadata } from 'next';
 import { ContactForm } from './_components/contact-form';
 import { FAQ } from './_components/faq';
 import { Hero } from './_components/hero';
+import { ViewAnimation } from '@/components/view-animation';
 
 export default function Contact(): React.ReactElement {
   return (
     <Wrapper lenis={{}}>
       <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
-        <div className='px-6 py-10 md:py-14'>
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -8 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+          className='px-6 py-10 md:py-14'
+        >
           <Hero />
-        </div>
+        </ViewAnimation>
 
-        <div className='flex w-full items-center px-6 py-10 md:py-14'>
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -8 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+          delay={0.4}
+          className='flex w-full items-center px-6 py-10 md:py-14'
+        >
           <ContactForm />
-        </div>
+        </ViewAnimation>
       </Section>
       <FAQ />
     </Wrapper>

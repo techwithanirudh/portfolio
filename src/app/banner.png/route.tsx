@@ -41,7 +41,7 @@ export async function GET() {
   const [fonts] = await Promise.all([loadAssets()]);
 
   return generateOGImage({
-    title: 'Kyle',
+    title: 'Anirudh',
     subtitle: 'A Discourse forum lover and expert in community moderation',
     fonts,
   });

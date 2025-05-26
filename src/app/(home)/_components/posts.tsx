@@ -2,13 +2,18 @@ import { PostCard } from '@/components/blog/post-card';
 import { Icons } from '@/components/icons/icons';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
-import { ViewAnimation } from '@/components/view-animation';
 import type { Page } from '@/lib/source';
 import Link from 'next/link';
+import type { HTMLAttributes } from 'react';
 
-export default function Posts({ posts }: { posts: Page[] }) {
+export default function Posts({
+  posts,
+  ...props
+}: { posts: Page[] } & {
+  sectionClassName?: string;
+} & HTMLAttributes<HTMLDivElement>) {
   return (
-    <Section>
+    <Section {...props}>
       <div className='grid divide-y divide-dashed divide-border text-left'>
         {posts.map((post) => {
           const date = new Date(post.data.date).toDateString();

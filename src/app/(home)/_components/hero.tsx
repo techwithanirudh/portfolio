@@ -51,7 +51,7 @@ const Hero = () => {
             'md:text-5xl md:leading-tight',
           )}
         >
-          Hi! I'm Kyle!
+          Hi! I'm Anirudh!
         </h1>
       </ViewAnimation>
       <ViewAnimation

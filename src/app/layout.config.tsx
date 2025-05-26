@@ -11,7 +11,7 @@ export type Social = {
   description?: string;
 };
 
-export const title = 'Kyle';
+export const title = 'Anirudh';
 export const description =
   'A powerful platform to streamline your business operations.';
 export const owner = 'Tech With Anirudh';

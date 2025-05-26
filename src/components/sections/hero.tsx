@@ -3,13 +3,32 @@ import { Children, type ReactNode } from 'react';
 import { Balancer } from 'react-wrap-balancer';
 import { ViewAnimation } from '@/components/view-animation';
 import { Section } from '../section';
-import { description } from '@/app/layout.config';
+import { cva, type VariantProps } from 'class-variance-authority';
+
+const heroVariants = cva('flex flex-col', {
+  variants: {
+    variant: {
+      default:
+        'gap-8 py-8 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20 sm:shadow-sm',
+      compact: 'gap-4 lg:p-2',
+    },
+    align: {
+      center: 'items-start justify-center sm:items-center',
+      start: 'items-start justify-center sm:items-start',
+      end: 'items-start justify-center sm:items-end',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    align: 'center',
+  },
+});
 
 type HeroProps = {
   image?: ReactNode;
-  caption?: string | null;
-  title: string;
-  description?: string | null;
+  caption?: string | ReactNode | null;
+  title: string | ReactNode;
+  description?: string | ReactNode | null;
   children?: ReactNode;
   className?: string;
 };
@@ -21,15 +40,14 @@ export const HeroSection = ({
   description,
   children,
   className,
-}: HeroProps) => (
+  variant,
+  align,
+}: HeroProps &
+  VariantProps<typeof heroVariants> & {
+    asChild?: boolean;
+  }) => (
   <Section className='p-4'>
-    <div
-      className={cn(
-        'flex flex-col items-start justify-center gap-8 py-8',
-        'sm:items-center sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20 sm:shadow-sm',
-        className,
-      )}
-    >
+    <div className={cn(heroVariants({ variant, align, className }))}>
       {image && (
         <ViewAnimation
           initial={{ opacity: 0, translateY: -8 }}
@@ -59,6 +77,7 @@ export const HeroSection = ({
               'max-w-4xl font-bold text-3xl leading-tight tracking-tight',
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
+              variant === 'compact' && 'font-normal',
             )}
           >
             <Balancer>{title}</Balancer>

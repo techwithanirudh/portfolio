@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
-const name = 'Kyle';
+const name = 'Anirudh';
 
 export const metadata = createMetadata({
   title: {

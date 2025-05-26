@@ -19,7 +19,7 @@ export function createMetadata(override: Metadata): Metadata {
       description: override.description ?? undefined,
       url: 'https://winter.techwithanirudh.com',
       images: '/banner.png',
-      siteName: 'Kyle',
+      siteName: 'Anirudh',
       ...override.openGraph,
     },
     twitter: {
