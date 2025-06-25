@@ -1,0 +1,87 @@
+import { Prose } from '@/components/prose';
+import { Section } from '@/components/section';
+import { cn } from '@/lib/utils';
+import { ViewAnimation } from '@/components/view-animation';
+import Link from 'next/link';
+import Image from 'next/image';
+
+interface Role {
+  _title: string;
+  _slug: string;
+  description: string;
+  endYear?: number;
+  startYear: number;
+  role: string;
+  url: string;
+  location: string;
+  type: string;
+  logo: {
+    width: number;
+    height: number;
+    url: string;
+    alt?: string;
+  };
+}
+
+interface RolesProps {
+  roles: Role[];
+}
+
+export const Roles = ({ roles }: RolesProps) => {
+  if (!roles.length) {
+    return <div>No roles found</div>;
+  }
+
+  return (
+    <Section className="grid sm:grid-cols-2">
+      {roles.map((role, index) => (
+        <ViewAnimation
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          delay={index % 2 ? 0.2 : 0}
+          className={cn(
+            index % 2 === 0 ? 'sm:border-r border-dashed' : '',
+            index < roles.length - 2 ? 'border-b border-dashed' : ''
+          )}
+          key={role._title}
+        >
+          <Link
+            href={`/work/${role._slug}`}
+            className={cn(
+              'flex flex-col items-start gap-6 px-4 py-8 transition-colors hover:bg-background',
+              'sm:flex-row sm:px-8'
+            )}
+          >
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center">
+              <Image
+                src={role.logo.url}
+                width={role.logo.width}
+                height={role.logo.height}
+                alt={role.logo.alt ?? ''}
+                className="block size-full object-contain dark:brightness-0 dark:invert"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <h2 className="font-semibold text-xl tracking-tight">
+                <span className="block leading-tight">{role.role}</span>
+                <span className="block text-muted-foreground">
+                  {role._title}
+                </span>
+              </h2>
+              <Prose className="prose-sm">
+                <p>{role.description}</p>
+              </Prose>
+              <p className="text-muted-foreground text-sm">
+                {role.type} &bull; {role.startYear} &mdash;{' '}
+                {role.endYear ?? 'Present'} &bull; {role.location}
+              </p>
+            </div>
+          </Link>
+        </ViewAnimation>
+      ))}
+      {roles.length % 2 && (
+        <div className="hidden border-t bg-dashed sm:block" />
+      )}
+    </Section>
+  );
+};

@@ -51,7 +51,11 @@ const features = [
 const Skills = () => (
   <Section className='relative w-full pt-10'>
     <div className='flex flex-col gap-10'>
-      <div className='flex flex-col gap-2 px-6'>
+      <ViewAnimation
+        initial={{ opacity: 0, translateY: -8 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+        className='flex flex-col gap-2 px-6'
+      >
         <h2 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>
           My Expertise
         </h2>
@@ -59,7 +63,7 @@ const Skills = () => (
           I have specialized skills in building and moderating engaging online
           spaces
         </p>
-      </div>
+      </ViewAnimation>
 
       <div className='w-full space-y-4 border-border border-t border-dashed pb-4'>
         <div className='grid grid-cols-1 divide-x divide-y divide-dashed divide-border text-left sm:grid-cols-2 lg:grid-cols-3'>
