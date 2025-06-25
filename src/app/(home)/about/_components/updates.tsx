@@ -4,10 +4,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
-import type { Page } from '@/lib/source';
+import type { BlogPage } from '@/lib/source';
 import { UpdateCard } from './update-card';
 
-const Updates = ({ posts }: { posts: Page[] }) => {
+const Updates = ({ posts }: { posts: BlogPage[] }) => {
   return (
     <Section className='relative w-full pt-10'>
       <div className='flex flex-col gap-10'>

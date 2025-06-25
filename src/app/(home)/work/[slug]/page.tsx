@@ -7,7 +7,8 @@ import { Section } from '@/components/section';
 import { TagCard } from '@/components/tags/tag-card';
 import { ViewAnimation } from '@/components/view-animation';
 import { createMetadata } from '@/lib/metadata';
-import { type BlogPage as MDXPage, getPost, getPosts } from '@/lib/source';
+import { metadataImage } from '@/lib/metadata-image';
+import { type Page as MDXPage, getPost, getPosts } from '@/lib/source';
 import { cn } from '@/lib/utils';
 import { File, Files, Folder } from 'fumadocs-ui/components/files';
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
@@ -142,32 +143,25 @@ export default async function Page(props: {
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug = [] } = await props.params;
-  const page = getPost([slug]);
+  const params = await props.params;
+  const page = getPost([params.slug]);
 
   if (!page) notFound();
 
   const title = page.data.title;
   const description = page.data.description ?? homeDescription;
 
-  const image = {
-    url: ['/og', 'blog', ...slug, 'image.png'].join('/'),
-    width: 1200,
-    height: 630,
-  };
-
   return createMetadata(
-    {
+    metadataImage.withImage(page.slugs, {
       title,
       description,
       openGraph: {
         url: `/blog/${page.slugs.join('/')}`,
-        images: [image],
       },
       alternates: {
         canonical: page.url,
       },
-    }
+    }),
   );
 }
 

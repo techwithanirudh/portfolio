@@ -12,7 +12,7 @@ import { z } from 'zod';
 
 export const blog = defineCollections({
   type: 'doc',
-  dir: 'content',
+  dir: 'content/blog',
   schema: frontmatterSchema.extend({
     date: z
       .string()
@@ -29,6 +29,31 @@ export const blog = defineCollections({
         }
       }),
     author: z.string(),
+    tags: z.array(z.string()).optional(),
+    image: z.string().optional(),
+  }),
+});
+
+export const work = defineCollections({
+  type: 'doc',
+  dir: 'content/work',
+  schema: frontmatterSchema.extend({
+    date: z
+      .string()
+      .or(z.date())
+      .transform((value, context) => {
+        try {
+          return new Date(value);
+        } catch {
+          context.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: 'Invalid date',
+          });
+          return z.NEVER;
+        }
+      }),
+    website: z.string().optional(),
+    github: z.string().optional(),
     tags: z.array(z.string()).optional(),
     image: z.string().optional(),
   }),
