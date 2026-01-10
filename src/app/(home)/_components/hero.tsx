@@ -42,7 +42,7 @@ const Hero = () => {
       <ViewAnimation
         initial={{ opacity: 0, translateY: -8 }}
         whileInView={{ opacity: 1, translateY: 0 }}
-        delay={0.4}
+        delay={0.2}
       >
         <h1
           className={cn(
@@ -57,7 +57,7 @@ const Hero = () => {
       <ViewAnimation
         initial={{ opacity: 0, translateY: -8 }}
         whileInView={{ opacity: 1, translateY: 0 }}
-        delay={0.8}
+        delay={0.4}
       >
         <p className='max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
           <Balancer>
@@ -71,7 +71,7 @@ const Hero = () => {
         <ViewAnimation
           initial={{ opacity: 0, translateY: -8 }}
           whileInView={{ opacity: 1, translateY: 0 }}
-          delay={1.2}
+          delay={0.6}
         >
           <Link
             className={cn(
@@ -93,9 +93,9 @@ const Hero = () => {
             .filter((item) => item.type === 'icon')
             .map((item, i) => (
               <ViewAnimation
-                initial={{ opacity: 0, translateY: -8 }}
-                whileInView={{ opacity: 1, translateY: 0 }}
-                delay={1.6 + i * 0.4}
+                initial={{ opacity: 0, translateY: -8, scale: 0.8 }}
+                whileInView={{ opacity: 1, translateY: 0, scale: 1 }}
+                delay={0.8 + i * 0.1}
                 key={i.toString()}
                 className='flex items-center'
               >

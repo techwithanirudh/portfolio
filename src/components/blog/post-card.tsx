@@ -15,6 +15,7 @@ interface PostCardProps {
   author: string;
   slugs: string[];
   tags?: string[];
+  index?: number;
 }
 
 export const PostCard: React.FC<PostCardProps> = ({
@@ -26,6 +27,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   author,
   slugs,
   tags,
+  index = 0,
 }) => {
   return (
     <Link
@@ -33,9 +35,10 @@ export const PostCard: React.FC<PostCardProps> = ({
       className='block transition-colors'
     >
       <ViewAnimation
-        initial={{ opacity: 0, translateY: -8 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-        className='grid grid-cols-1 gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80 md:grid-cols-3 xl:grid-cols-4'
+        initial={{ opacity: 0, translateX: -24, translateY: 8 }}
+        whileInView={{ opacity: 1, translateX: 0, translateY: 0 }}
+        delay={index * 0.1}
+        className='grid grid-cols-1 gap-4 bg-card/50 px-6 py-6 transition-all duration-300 hover:bg-card/80 hover:shadow-lg hover:scale-[1.02] md:grid-cols-3 xl:grid-cols-4'
       >
         <div className='order-2 flex h-full flex-col justify-between gap-4 md:order-1 md:col-span-2 xl:col-span-3'>
           <div className='flex-1 gap-4'>
@@ -72,7 +75,12 @@ export const PostCard: React.FC<PostCardProps> = ({
         </div>
 
         {image && (
-          <div className='group relative order-1 col-span-1 inline-flex items-center justify-center transition-transform hover:scale-105 md:order-2'>
+          <ViewAnimation
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            delay={index * 0.1 + 0.2}
+            className='group relative order-1 col-span-1 inline-flex items-center justify-center transition-transform hover:scale-105 md:order-2'
+          >
             <BlurImage
               width={853}
               height={554}
@@ -80,7 +88,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               alt={title}
               className='relative rounded-lg'
             />
-          </div>
+          </ViewAnimation>
         )}
       </ViewAnimation>
     </Link>

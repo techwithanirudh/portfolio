@@ -1,4 +1,5 @@
 import { socials } from '@/app/layout.config';
+import { SectionHeader } from '@/components/sections/section-header';
 import {
   Tooltip,
   TooltipContent,
@@ -10,22 +11,18 @@ import Balancer from 'react-wrap-balancer';
 
 export const Hero = () => (
   <div className='flex flex-col gap-2'>
-    <h4 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>
-      Contact Me
-    </h4>
-    <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
-      <Balancer>
-        Have a question or want to connect? Send a message and expect a response
-        within a week.
-      </Balancer>
-    </p>
+    <SectionHeader
+      title="Contact Me"
+      description="Have a question or want to connect? Send a message and expect a response within a week."
+      align="left"
+    />
     <TooltipProvider>
       <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-muted p-1.5 text-muted-foreground'>
         {socials.map((social, index) => (
           <ViewAnimation
-            initial={{ opacity: 0, translateY: -8 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-            delay={0.4 + index * 0.4}
+            initial={{ opacity: 0, translateY: -8, scale: 0.8 }}
+            whileInView={{ opacity: 1, translateY: 0, scale: 1 }}
+            delay={0.5 + index * 0.1}
             key={social.url}
           >
             <Tooltip delayDuration={0}>

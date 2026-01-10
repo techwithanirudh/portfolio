@@ -1,6 +1,7 @@
 'use client';
 
 import { Section } from '@/components/section';
+import { SectionHeader } from '@/components/sections/section-header';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Carousel,
@@ -48,24 +49,22 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
   return (
     <Section className='relative w-full pt-10'>
       <div className='flex flex-col gap-10'>
-        <ViewAnimation
-          initial={{ opacity: 0, translateY: -8 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-          className='flex flex-col gap-2 px-6'
-        >
-          <h2 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>
-            What others are saying
-          </h2>
-          <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
-            I've had the pleasure of working with some amazing people. Here is
-            what they have to say about my work.{' '}
-          </p>
-        </ViewAnimation>
+        <SectionHeader
+          title="What others are saying"
+          description="I've had the pleasure of working with some amazing people. Here is what they have to say about my work."
+          align="left"
+          className="px-6"
+        />
 
-        <Carousel
-          setApi={setApi}
-          className='w-full border-border border-t border-dashed'
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: 24 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+          delay={0.5}
         >
+          <Carousel
+            setApi={setApi}
+            className='w-full border-border border-t border-dashed'
+          >
           <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
             {testimonials.map((item, index) => (
               <CarouselItem
@@ -73,11 +72,12 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
                 key={`${item.title}_${index}`}
               >
                 <ViewAnimation
-                  initial={{ opacity: 0, filter: 'blur(0px)' }}
-                  animate={{ opacity: 1 }}
-                  delay={0.4 + index * 0.1}
+                  initial={{ opacity: 0, translateX: -20, scale: 0.95 }}
+                  whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
+                  delay={0.7 + index * 0.15}
+                  className='h-full'
                 >
-                  <div className='flex aspect-video flex-col justify-between p-6 hover:bg-card lg:col-span-2'>
+                  <div className='flex aspect-video flex-col justify-between p-6 transition-all duration-300 hover:bg-card hover:shadow-lg hover:scale-[1.02] lg:col-span-2'>
                     <User className='h-8 w-8 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
                     <div className='flex flex-col gap-4'>
                       <div className='flex flex-col'>
@@ -97,11 +97,11 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
                     </div>
                   </div>
                 </ViewAnimation>
-
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
+        </ViewAnimation>
       </div>
     </Section>
   );

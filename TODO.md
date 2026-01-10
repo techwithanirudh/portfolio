@@ -15,3 +15,10 @@
 - [ ] Use [pqoqubbw animated icons](https://icons.pqoqubbw.dev/).
 - [ ] Add a marquee footer like https://21st.dev/serafimcloud/marquee/default
 - [ ] Use flex-1 on some pages with less content.
+
+## Roadmap (requested)
+- [ ] Replace all names from winter to anirudh (highest priority).
+- [ ] Add animations for all components.
+- [ ] Add remaining components from `shadcn-portfolio` (https://github.com/techwithanirudh/shadcn-portfolio).
+- [ ] Upgrade Fumadocs and packages to latest versions, porting from `shadcn-saas-landing` (https://github.com/techwithanirudh/shadcn-saas-landing).
+- [ ] Switch to `env.ts` and update Next.js config from `fumadocs-starter` (https://github.com/techwithanirudh/fumadocs-starter) (least important).

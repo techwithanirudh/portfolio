@@ -77,7 +77,7 @@ export const HeroSection = ({
               'max-w-4xl font-bold text-3xl leading-tight tracking-tight',
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
-              variant === 'compact' && 'font-normal',
+              variant === 'compact' && 'font-normal text-left sm:text-left font-regular tracking-tighter',
             )}
           >
             <Balancer>{title}</Balancer>
@@ -89,7 +89,10 @@ export const HeroSection = ({
             whileInView={{ opacity: 1, translateY: 0 }}
             delay={0.6}
           >
-            <p className='text-muted-foreground text-sm sm:text-base'>
+            <p className={cn(
+              'text-muted-foreground text-sm sm:text-base',
+              variant === 'compact' && 'max-w-xl text-left text-lg leading-relaxed tracking-tight lg:max-w-lg'
+            )}>
               <Balancer>{description}</Balancer>
             </p>
           </ViewAnimation>

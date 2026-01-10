@@ -15,7 +15,7 @@ export default function Posts({
   return (
     <Section {...props}>
       <div className='grid divide-y divide-dashed divide-border text-left'>
-        {posts.map((post) => {
+        {posts.map((post, index) => {
           const date = new Date(post.data.date).toDateString();
           return (
             <PostCard
@@ -28,6 +28,7 @@ export default function Posts({
               author={post.data.author}
               tags={post.data.tags}
               slugs={post.slugs}
+              index={index}
             />
           );
         })}
