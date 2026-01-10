@@ -61,8 +61,9 @@ const Hero = () => {
       >
         <p className='max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
           <Balancer>
-            I’m passionate about Discourse forums and experienced in community
-            moderation. I enjoy reading my favorite book series, Wings of Fire.
+            I’m an avid tech enthusiast who grew up building with Lego and now
+            ship web and AI projects. I work across Python, OpenCV, TensorFlow,
+            and GPT, and love sharing my creations online.
           </Balancer>
         </p>
       </ViewAnimation>

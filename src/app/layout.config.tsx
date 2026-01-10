@@ -73,9 +73,8 @@ export const socials: Social[] = [
   {
     icon: <Icons.globe />,
     name: "Anirudh's Arena",
-    url: 'https://community.techwithanirudh.com/u/winter',
-    description:
-      "My profile on the Anirudh's Arena forum I'm a community moderator",
+    url: 'https://community.techwithanirudh.com/u/anirudh',
+    description: "My profile on the Anirudh's Arena forum.",
   },
   {
     icon: <CastleIcon />,

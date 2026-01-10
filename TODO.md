@@ -17,7 +17,8 @@
 - [ ] Use flex-1 on some pages with less content.
 
 ## Roadmap (requested)
-- [ ] Replace all names from winter to anirudh (highest priority).
+- [x] Replace all names from winter to anirudh (highest priority).
+- [ ] Add a Work Section, basically like the blog but a new loader for all projects and work
 - [ ] Add animations for all components.
 - [ ] Add remaining components from `shadcn-portfolio` (https://github.com/techwithanirudh/shadcn-portfolio).
 - [ ] Upgrade Fumadocs and packages to latest versions, porting from `shadcn-saas-landing` (https://github.com/techwithanirudh/shadcn-saas-landing).

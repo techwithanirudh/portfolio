@@ -12,7 +12,7 @@ export default function Hero(): React.ReactElement {
       className='relative flex items-center justify-center overflow-hidden rounded-md border-2 border-border p-1 shadow-sm transition-transform hover:scale-110'
     >
       <Image
-        src='/icon.png'
+        src='/images/icon.png'
         alt='Profile picture'
         width={300}
         height={300}
@@ -27,8 +27,8 @@ export default function Hero(): React.ReactElement {
       variant='compact'
       align='start'
       image={profileImage}
-      title='The Moderator'
-      description="I'm a community builder who loves transforming small forums into vibrant hangouts. I'm also a Discourse moderator, skilled in managing categories, plugins, and keeping conversations welcoming. When I'm not handling forum tasks, I play chess and binge‑watch YouTube."
+      title='Tech Enthusiast'
+      description='I started building with Lego, moved into robotics with Mindstorms and EV3Dev, and now create AI and web apps with Python, OpenCV, TensorFlow, GPT, and Azure AI. I’ve collaborated with Bosch on autonomous car research, and I enjoy electronic music and sharing my work online.'
     />
   );
 }

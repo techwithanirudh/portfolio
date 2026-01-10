@@ -42,7 +42,7 @@ export async function GET() {
 
   return generateOGImage({
     title: 'Anirudh',
-    subtitle: 'A Discourse forum lover and expert in community moderation',
+    subtitle: 'A tech enthusiast building AI and web projects',
     fonts,
   });
 }
