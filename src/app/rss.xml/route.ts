@@ -1,9 +1,9 @@
-import { Feed } from 'feed';
-import { description, owner, title } from '@/app/layout.shared';
-import { baseUrl } from '@/lib/constants';
-import { getPosts } from '@/lib/source';
+import { Feed } from 'feed'
+import { description, owner, title } from '@/app/layout.shared'
+import { baseUrl } from '@/lib/constants'
+import { getPosts } from '@/lib/source'
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-static'
 
 const escapeForXML = (str: string) => {
   return str
@@ -11,18 +11,18 @@ const escapeForXML = (str: string) => {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-};
+    .replace(/'/g, '&apos;')
+}
 
 export const GET = () => {
-  const feed = createFeed();
+  const feed = createFeed()
 
   return new Response(feed.atom1(), {
     headers: {
       'Content-Type': 'application/xml',
     },
-  });
-};
+  })
+}
 
 function createFeed(): Feed {
   const feed = new Feed({
@@ -36,9 +36,9 @@ function createFeed(): Feed {
     link: baseUrl.href,
     feed: new URL('/api/rss.xml', baseUrl).href,
     updated: new Date(),
-  });
+  })
 
-  const posts = getPosts();
+  const posts = getPosts()
   for (const post of posts) {
     feed.addItem({
       title: post.data.title,
@@ -48,7 +48,7 @@ function createFeed(): Feed {
         title: post.data.title,
         type: 'image/webp',
         url: escapeForXML(
-          new URL(`/og/${post.slugs.join('/')}/image.webp`, baseUrl.href).href,
+          new URL(`/og/${post.slugs.join('/')}/image.webp`, baseUrl.href).href
         ),
       },
       date: post.data.date,
@@ -58,8 +58,8 @@ function createFeed(): Feed {
           // link: new URL('/about', baseUrl).href,
         },
       ],
-    });
+    })
   }
 
-  return feed;
+  return feed
 }

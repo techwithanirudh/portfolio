@@ -1,11 +1,11 @@
-import { Section } from '@/components/section';
+import { Section } from '@/components/section'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from '@/components/ui/carousel';
-import type { BlogPage } from '@/lib/source';
-import { UpdateCard } from './update-card';
+} from '@/components/ui/carousel'
+import type { BlogPage } from '@/lib/source'
+import { UpdateCard } from './update-card'
 
 const Updates = ({ posts }: { posts: BlogPage[] }) => {
   return (
@@ -23,30 +23,30 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
         <Carousel className='w-full border-border border-t border-dashed'>
           <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
             {posts.map((post) => {
-              const date = new Date(post.data.date).toDateString();
+              const date = new Date(post.data.date).toDateString()
               return (
                 <CarouselItem
                   className='min-h-full pl-0 md:basis-1/2 lg:basis-1/3'
                   key={post.url}
                 >
                   <UpdateCard
-                    title={post.data.title}
+                    author={post.data.author}
+                    date={date}
                     description={post.data.description ?? ''}
                     image={post.data.image}
-                    url={post.url}
-                    date={date}
-                    author={post.data.author}
-                    tags={post.data.tags}
                     slugs={post.slugs}
+                    tags={post.data.tags}
+                    title={post.data.title}
+                    url={post.url}
                   />
                 </CarouselItem>
-              );
+              )
             })}
           </CarouselContent>
         </Carousel>
       </div>
     </Section>
-  );
-};
+  )
+}
 
-export default Updates;
+export default Updates

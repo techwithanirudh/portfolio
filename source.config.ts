@@ -1,13 +1,13 @@
-import { transformerRemoveNotationEscape } from '@shikijs/transformers';
+import { transformerRemoveNotationEscape } from '@shikijs/transformers'
 import {
   defineCollections,
   defineConfig,
   frontmatterSchema,
-} from 'fumadocs-mdx/config';
-import jsonSchema from 'fumadocs-mdx/plugins/json-schema';
-import lastModified from 'fumadocs-mdx/plugins/last-modified';
-import { transformerTwoslash } from 'fumadocs-twoslash';
-import { z } from 'zod';
+} from 'fumadocs-mdx/config'
+import jsonSchema from 'fumadocs-mdx/plugins/json-schema'
+import lastModified from 'fumadocs-mdx/plugins/last-modified'
+import { transformerTwoslash } from 'fumadocs-twoslash'
+import { z } from 'zod'
 
 export const blog = defineCollections({
   type: 'doc',
@@ -18,21 +18,21 @@ export const blog = defineCollections({
       .or(z.date())
       .transform((value, context) => {
         try {
-          return new Date(value);
+          return new Date(value)
         } catch {
           context.issues.push({
             code: 'custom',
             message: 'The value could not be transformed to Date type.',
             input: value,
-          });
-          return z.NEVER;
+          })
+          return z.NEVER
         }
       }),
     author: z.string(),
     tags: z.array(z.string()).optional(),
     image: z.string().optional(),
   }),
-});
+})
 
 export const work = defineCollections({
   type: 'doc',
@@ -43,14 +43,14 @@ export const work = defineCollections({
       .or(z.date())
       .transform((value, context) => {
         try {
-          return new Date(value);
+          return new Date(value)
         } catch {
           context.issues.push({
             code: 'custom',
             message: 'The value could not be transformed to Date type.',
             input: value,
-          });
-          return z.NEVER;
+          })
+          return z.NEVER
         }
       }),
     author: z.string().optional(),
@@ -59,7 +59,7 @@ export const work = defineCollections({
     tags: z.array(z.string()).optional(),
     image: z.string().optional(),
   }),
-});
+})
 
 export default defineConfig({
   plugins: [
@@ -71,13 +71,13 @@ export default defineConfig({
   mdxOptions: async () => {
     const { rehypeCodeDefaultOptions } = await import(
       'fumadocs-core/mdx-plugins/rehype-code'
-    );
+    )
     const { remarkSteps } = await import(
       'fumadocs-core/mdx-plugins/remark-steps'
-    );
-    const { default: remarkMath } = await import('remark-math');
-    const { default: rehypeKatex } = await import('rehype-katex');
-    const { remarkAutoTypeTable } = await import('fumadocs-typescript');
+    )
+    const { default: remarkMath } = await import('remark-math')
+    const { default: rehypeKatex } = await import('rehype-katex')
+    const { remarkAutoTypeTable } = await import('fumadocs-typescript')
 
     return {
       rehypeCodeOptions: {
@@ -102,6 +102,6 @@ export default defineConfig({
       },
       remarkPlugins: [remarkSteps, remarkMath, remarkAutoTypeTable],
       rehypePlugins: (v) => [rehypeKatex, ...v],
-    };
+    }
   },
-});
+})

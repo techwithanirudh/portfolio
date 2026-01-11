@@ -1,17 +1,17 @@
-'use client';
+'use client'
 
-import { motion, useReducedMotion } from 'motion/react';
-import type { ReactNode } from 'react';
+import { motion, useReducedMotion } from 'motion/react'
+import type { ReactNode } from 'react'
 
-type ViewAnimationProps = {
-  initial?: Record<string, string | number>;
-  whileInView?: Record<string, string | number>;
-  animate?: Record<string, string | number>;
-  delay?: number;
+interface ViewAnimationProps {
+  initial?: Record<string, string | number>
+  whileInView?: Record<string, string | number>
+  animate?: Record<string, string | number>
+  delay?: number
   // className?: ComponentProps<typeof motion.div>['className'];
-  className?: string;
-  children: ReactNode;
-};
+  className?: string
+  children: ReactNode
+}
 
 export const ViewAnimation = ({
   initial,
@@ -21,22 +21,22 @@ export const ViewAnimation = ({
   className,
   children,
 }: ViewAnimationProps) => {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion()
 
   if (shouldReduceMotion) {
-    return children;
+    return children
   }
 
   return (
     <motion.div
-      initial={{ filter: 'blur(4px)', ...initial }}
-      whileInView={{ filter: 'blur(0px)', ...whileInView }}
       animate={animate}
       className={className}
-      viewport={{ once: true, amount: 0.5 }}
+      initial={{ filter: 'blur(4px)', ...initial }}
       transition={{ delay, duration: 0.8 }}
+      viewport={{ once: true, amount: 0.5 }}
+      whileInView={{ filter: 'blur(0px)', ...whileInView }}
     >
       {children}
     </motion.div>
-  );
-};
+  )
+}

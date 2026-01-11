@@ -1,17 +1,17 @@
-import type { ReactNode } from 'react';
-import { Balancer } from 'react-wrap-balancer';
-import { ViewAnimation } from '@/components/view-animation';
-import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react'
+import { Balancer } from 'react-wrap-balancer'
+import { ViewAnimation } from '@/components/view-animation'
+import { cn } from '@/lib/utils'
 
-type SectionHeaderProps = {
-  title: string | ReactNode;
-  description?: string | ReactNode | null;
-  className?: string;
-  titleClassName?: string;
-  descriptionClassName?: string;
-  align?: 'left' | 'center';
-  size?: 'default' | 'large';
-};
+interface SectionHeaderProps {
+  title: string | ReactNode
+  description?: string | ReactNode | null
+  className?: string
+  titleClassName?: string
+  descriptionClassName?: string
+  align?: 'left' | 'center'
+  size?: 'default' | 'large'
+}
 
 export const SectionHeader = ({
   title,
@@ -26,13 +26,13 @@ export const SectionHeader = ({
     className={cn(
       'flex flex-col gap-4',
       align === 'center' ? 'items-center text-center' : 'items-start text-left',
-      className,
+      className
     )}
   >
     <ViewAnimation
+      delay={0.1}
       initial={{ opacity: 0, translateY: -8 }}
       whileInView={{ opacity: 1, translateY: 0 }}
-      delay={0.1}
     >
       <h1
         className={cn(
@@ -40,7 +40,7 @@ export const SectionHeader = ({
           size === 'large'
             ? 'text-3xl sm:text-4xl md:text-5xl'
             : 'text-2xl sm:text-3xl md:text-4xl',
-          titleClassName,
+          titleClassName
         )}
       >
         <Balancer>{title}</Balancer>
@@ -48,15 +48,15 @@ export const SectionHeader = ({
     </ViewAnimation>
     {description && (
       <ViewAnimation
+        delay={0.3}
         initial={{ opacity: 0, translateY: -8 }}
         whileInView={{ opacity: 1, translateY: 0 }}
-        delay={0.3}
       >
         <p
           className={cn(
             'max-w-2xl text-muted-foreground',
             size === 'large' ? 'text-lg' : 'text-base',
-            descriptionClassName,
+            descriptionClassName
           )}
         >
           <Balancer>{description}</Balancer>
@@ -64,4 +64,4 @@ export const SectionHeader = ({
       </ViewAnimation>
     )}
   </div>
-);
+)

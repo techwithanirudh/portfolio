@@ -1,18 +1,18 @@
-import { CalendarIcon, UserIcon } from 'lucide-react';
-import Link from 'next/link';
-import type React from 'react';
-import Balancer from 'react-wrap-balancer';
-import { BlurImage } from '@/components/blur-image';
+import { CalendarIcon, UserIcon } from 'lucide-react'
+import Link from 'next/link'
+import type React from 'react'
+import Balancer from 'react-wrap-balancer'
+import { BlurImage } from '@/components/blur-image'
 
 interface UpdateCardProps {
-  title: string;
-  description: string;
-  image?: string | null;
-  url: string;
-  date: string;
-  author: string;
-  tags?: string[];
-  slugs?: string[];
+  title: string
+  description: string
+  image?: string | null
+  url: string
+  date: string
+  author: string
+  tags?: string[]
+  slugs?: string[]
 }
 
 export const UpdateCard: React.FC<UpdateCardProps> = ({
@@ -27,17 +27,17 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
 }) => {
   return (
     <Link
-      href={url}
       className='flex flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+      href={url}
     >
       {image && (
         <div className='relative inline-flex items-center justify-center transition-transform hover:scale-105'>
           <BlurImage
-            width={853}
-            height={554}
-            src={image}
             alt={title}
             className='relative rounded-lg'
+            height={554}
+            src={image}
+            width={853}
           />
         </div>
       )}
@@ -66,5 +66,5 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
         </div>
       </div>
     </Link>
-  );
-};
+  )
+}

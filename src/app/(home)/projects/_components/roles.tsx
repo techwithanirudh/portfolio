@@ -1,64 +1,64 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { Prose } from '@/components/prose';
-import { Section } from '@/components/section';
-import { ViewAnimation } from '@/components/view-animation';
-import { cn } from '@/lib/utils';
+import Image from 'next/image'
+import Link from 'next/link'
+import { Prose } from '@/components/prose'
+import { Section } from '@/components/section'
+import { ViewAnimation } from '@/components/view-animation'
+import { cn } from '@/lib/utils'
 
 interface Role {
-  _title: string;
-  _slug: string;
-  description: string;
-  endYear?: number;
-  startYear: number;
-  role: string;
-  url: string;
-  location: string;
-  type: string;
+  _title: string
+  _slug: string
+  description: string
+  endYear?: number
+  startYear: number
+  role: string
+  url: string
+  location: string
+  type: string
   logo: {
-    width: number;
-    height: number;
-    url: string;
-    alt?: string;
-  };
+    width: number
+    height: number
+    url: string
+    alt?: string
+  }
 }
 
 interface RolesProps {
-  roles: Role[];
+  roles: Role[]
 }
 
 export const Roles = ({ roles }: RolesProps) => {
   if (!roles.length) {
-    return <div>No roles found</div>;
+    return <div>No roles found</div>
   }
 
   return (
     <Section className='grid sm:grid-cols-2'>
       {roles.map((role, index) => (
         <ViewAnimation
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          delay={index % 2 ? 0.2 : 0}
           className={cn(
             index % 2 === 0 ? 'border-dashed sm:border-r' : '',
-            index < roles.length - 2 ? 'border-b border-dashed' : '',
+            index < roles.length - 2 ? 'border-b border-dashed' : ''
           )}
+          delay={index % 2 ? 0.2 : 0}
+          initial={{ opacity: 0 }}
           key={role._title}
+          whileInView={{ opacity: 1 }}
         >
           <Link
-            href={`/work/${role._slug}`}
             className={cn(
               'flex flex-col items-start gap-6 px-4 py-8 transition-colors hover:bg-background',
-              'sm:flex-row sm:px-8',
+              'sm:flex-row sm:px-8'
             )}
+            href={`/work/${role._slug}`}
           >
             <div className='flex h-12 w-12 shrink-0 items-center justify-center'>
               <Image
-                src={role.logo.url}
-                width={role.logo.width}
-                height={role.logo.height}
                 alt={role.logo.alt ?? ''}
                 className='block size-full object-contain dark:brightness-0 dark:invert'
+                height={role.logo.height}
+                src={role.logo.url}
+                width={role.logo.width}
               />
             </div>
             <div className='flex flex-col gap-2'>
@@ -83,5 +83,5 @@ export const Roles = ({ roles }: RolesProps) => {
         <div className='hidden border-t bg-dashed sm:block' />
       )}
     </Section>
-  );
-};
+  )
+}

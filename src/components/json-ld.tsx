@@ -1,14 +1,14 @@
-import type { BlogPosting, BreadcrumbList, Graph } from 'schema-dts';
-import { title as homeTitle, owner } from '@/app/layout.shared';
-import { baseUrl } from '@/lib/constants';
-import type { BlogPage } from '@/lib/source';
+import type { BlogPosting, BreadcrumbList, Graph } from 'schema-dts'
+import { title as homeTitle, owner } from '@/app/layout.shared'
+import { baseUrl } from '@/lib/constants'
+import type { BlogPage } from '@/lib/source'
 
 export const PostJsonLd = ({ page }: { page: BlogPage }) => {
   if (!page) {
-    return null;
+    return null
   }
 
-  const url = new URL(page.url, baseUrl.href).href;
+  const url = new URL(page.url, baseUrl.href).href
 
   const post: BlogPosting = {
     '@type': 'BlogPosting',
@@ -33,7 +33,7 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => {
       name: owner,
       url: 'https://techwithanirudh.com/',
     },
-  };
+  }
 
   const breadcrumbList: BreadcrumbList = {
     '@type': 'BreadcrumbList',
@@ -57,21 +57,21 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => {
         item: url,
       },
     ],
-  };
+  }
 
   const graph: Graph = {
     '@context': 'https://schema.org',
     '@graph': [post, breadcrumbList],
-  };
+  }
 
   return (
     <script
-      type='application/ld+json'
-      // biome-ignore lint/security/noDangerouslySetInnerHtml:
       dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml:
+      type='application/ld+json'
     />
-  );
-};
+  )
+}
 
 export const TagJsonLd = ({ tag }: { tag: string }) => {
   const breadcrumbList: BreadcrumbList = {
@@ -96,18 +96,18 @@ export const TagJsonLd = ({ tag }: { tag: string }) => {
         item: new URL(`/tags/${tag}`, baseUrl.href).href,
       },
     ],
-  };
+  }
 
   const graph: Graph = {
     '@context': 'https://schema.org',
     '@graph': [breadcrumbList],
-  };
+  }
 
   return (
     <script
-      type='application/ld+json'
-      // biome-ignore lint/security/noDangerouslySetInnerHtml:
       dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
+      // biome-ignore lint/security/noDangerouslySetInnerHtml:
+      type='application/ld+json'
     />
-  );
-};
+  )
+}

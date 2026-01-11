@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod'
 
 export const ContactSchema = z.object({
   name: z
@@ -20,6 +20,6 @@ export const ContactSchema = z.object({
     .min(10, {
       message: 'Message must be at least 10 characters.',
     }),
-});
+})
 
-export type Contact = z.infer<typeof ContactSchema>;
+export type Contact = z.infer<typeof ContactSchema>

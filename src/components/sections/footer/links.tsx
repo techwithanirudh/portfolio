@@ -1,37 +1,37 @@
-import { resolveLinkItems } from 'fumadocs-ui/layouts/shared';
-import Link from 'next/link';
-import type { ReactNode } from 'react';
+import { resolveLinkItems } from 'fumadocs-ui/layouts/shared'
+import Link from 'next/link'
+import type { ReactNode } from 'react'
 import {
   baseOptions,
   linkItems,
   postsPerPage,
   socials,
-} from '@/app/layout.shared';
-import { ActiveLink } from '@/components/active-link';
-import { ViewAnimation } from '@/components/view-animation';
-import { getSortedByDatePosts, getTags } from '@/lib/source';
+} from '@/app/layout.shared'
+import { ActiveLink } from '@/components/active-link'
+import { ViewAnimation } from '@/components/view-animation'
+import { getSortedByDatePosts, getTags } from '@/lib/source'
 
-type ListItem = {
-  title: string;
-  href?: string;
-  external?: boolean;
+interface ListItem {
+  title: string
+  href?: string
+  external?: boolean
   items: {
-    href: string;
-    children: ReactNode;
-  }[];
-};
+    href: string
+    children: ReactNode
+  }[]
+}
 
 export const Links = async () => {
   const links = resolveLinkItems({
     links: linkItems,
     githubUrl: baseOptions.githubUrl,
-  });
+  })
   const navItems = links.filter((item) =>
-    ['nav', 'all'].includes(item.on ?? 'all'),
-  );
+    ['nav', 'all'].includes(item.on ?? 'all')
+  )
 
-  const posts = getSortedByDatePosts();
-  const tags = getTags();
+  const posts = getSortedByDatePosts()
+  const tags = getTags()
 
   const lists: ListItem[] = [
     {
@@ -43,7 +43,7 @@ export const Links = async () => {
             (item) =>
               item.type !== 'menu' &&
               item.type !== 'custom' &&
-              item.type !== 'icon',
+              item.type !== 'icon'
           )
           .map((item) => ({
             href: item.url,
@@ -78,17 +78,17 @@ export const Links = async () => {
         ),
       })),
     },
-  ];
+  ]
 
   return (
     <div className='grid gap-8 text-muted-foreground text-sm sm:grid-cols-4'>
       {lists.map((list, index) => (
         <ViewAnimation
-          initial={{ opacity: 0, translateY: -8 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-          delay={index * 0.1}
-          key={list.title}
           className='flex flex-col gap-6'
+          delay={index * 0.1}
+          initial={{ opacity: 0, translateY: -8 }}
+          key={list.title}
+          whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='font-medium text-foreground'>
             {list.href ? (
@@ -102,8 +102,8 @@ export const Links = async () => {
               <li key={item.href}>
                 <ActiveLink
                   href={item.href}
-                  target={list.external ? '_blank' : undefined}
                   rel={list.external ? 'noopener noreferrer' : undefined}
+                  target={list.external ? '_blank' : undefined}
                 >
                   {item.children}
                 </ActiveLink>
@@ -113,5 +113,5 @@ export const Links = async () => {
         </ViewAnimation>
       ))}
     </div>
-  );
-};
+  )
+}

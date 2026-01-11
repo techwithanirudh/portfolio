@@ -1,14 +1,14 @@
-import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
-import type { ComponentProps, ReactNode } from 'react';
-import { PostComments } from '@/app/(home)/(blog)/blog/[slug]/page.client';
-import { Section } from './section';
+import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
+import type { ComponentProps, ReactNode } from 'react'
+import { PostComments } from '@/app/(home)/(blog)/blog/[slug]/page.client'
+import { Section } from './section'
 
 interface MdxLayoutProps {
-  children: ReactNode;
-  title: string;
-  toc?: ComponentProps<typeof InlineTOC>['items'];
-  comments?: boolean;
-  slug: string;
+  children: ReactNode
+  title: string
+  toc?: ComponentProps<typeof InlineTOC>['items']
+  comments?: boolean
+  slug: string
 }
 
 export default function MdxLayout({
@@ -31,8 +31,8 @@ export default function MdxLayout({
           <div className='flex flex-1 flex-col gap-4'>
             {toc?.length ? (
               <InlineTOC
-                items={toc}
                 className='rounded-none border-0 border-border border-b border-dashed'
+                items={toc}
               />
             ) : (
               <div className='py-2' />
@@ -40,8 +40,8 @@ export default function MdxLayout({
             <div className='prose min-w-0 flex-1 px-4'>{children}</div>
             {comments ? (
               <PostComments
-                slug={slug}
                 className='[&_form>div]:!rounded-none rounded-none border-0 border-border border-t border-dashed'
+                slug={slug}
               />
             ) : (
               <div className='py-2' />
@@ -50,5 +50,5 @@ export default function MdxLayout({
         </article>
       </Section>
     </>
-  );
+  )
 }

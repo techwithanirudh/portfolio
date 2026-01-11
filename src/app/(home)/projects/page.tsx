@@ -1,6 +1,6 @@
-import Hero from '@/app/(home)/_components/hero';
-import Testimonials from '../_components/testimonials';
-import { Roles } from './_components/roles';
+import Hero from '@/app/(home)/_components/hero'
+import Testimonials from '../_components/testimonials'
+import { Roles } from './_components/roles'
 
 const rolesData = [
   {
@@ -38,7 +38,7 @@ const rolesData = [
       alt: 'Digital Agency Logo',
     },
   },
-];
+]
 
 const testimonialsData = [
   {
@@ -59,7 +59,7 @@ const testimonialsData = [
       image: 'https://github.com/mikechen.png',
     },
   },
-];
+]
 
 const Work = () => {
   return (
@@ -68,7 +68,7 @@ const Work = () => {
       <Roles roles={rolesData} />
       <Testimonials testimonials={testimonialsData} />
     </>
-  );
-};
+  )
+}
 
-export default Work;
+export default Work

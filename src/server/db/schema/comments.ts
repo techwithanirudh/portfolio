@@ -8,15 +8,15 @@ import {
   serial,
   timestamp,
   varchar,
-} from 'drizzle-orm/pg-core';
+} from 'drizzle-orm/pg-core'
 
-const createTable = pgTableCreator((name) => `blog_${name}`);
+const createTable = pgTableCreator((name) => `blog_${name}`)
 
 export const roles = createTable('roles', {
   userId: varchar('userId', { length: 256 }).primaryKey(),
   name: varchar('name', { length: 256 }).notNull(),
   canDelete: boolean('canDelete').notNull(),
-});
+})
 
 export const comments = createTable('comments', {
   id: serial('id').primaryKey().notNull(),
@@ -27,7 +27,7 @@ export const comments = createTable('comments', {
   timestamp: timestamp('timestamp', { withTimezone: true })
     .defaultNow()
     .notNull(),
-});
+})
 
 export const rates = createTable(
   'rates',
@@ -39,5 +39,5 @@ export const rates = createTable(
   (table) => [
     primaryKey({ columns: [table.userId, table.commentId] }),
     index('comment_idx').on(table.commentId),
-  ],
-);
+  ]
+)

@@ -1,9 +1,9 @@
-import { betterAuth } from 'better-auth';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { headers } from 'next/headers';
+import { betterAuth } from 'better-auth'
+import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { headers } from 'next/headers'
 
-import { env } from '@/env';
-import { db } from '@/server/db';
+import { env } from '@/env'
+import { db } from '@/server/db'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -26,10 +26,10 @@ export const auth = betterAuth({
       },
     },
   },
-});
+})
 
 export const getSession = async () => {
   return await auth.api.getSession({
     headers: await headers(),
-  });
-};
+  })
+}

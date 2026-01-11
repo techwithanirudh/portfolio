@@ -1,9 +1,9 @@
-import { cva, type VariantProps } from 'class-variance-authority';
-import { Children, type ReactNode } from 'react';
-import { Balancer } from 'react-wrap-balancer';
-import { ViewAnimation } from '@/components/view-animation';
-import { cn } from '@/lib/utils';
-import { Section } from '../section';
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Children, type ReactNode } from 'react'
+import { Balancer } from 'react-wrap-balancer'
+import { ViewAnimation } from '@/components/view-animation'
+import { cn } from '@/lib/utils'
+import { Section } from '../section'
 
 const heroVariants = cva('flex flex-col', {
   variants: {
@@ -22,16 +22,16 @@ const heroVariants = cva('flex flex-col', {
     variant: 'default',
     align: 'center',
   },
-});
+})
 
-type HeroProps = {
-  image?: ReactNode;
-  caption?: string | ReactNode | null;
-  title: string | ReactNode;
-  description?: string | ReactNode | null;
-  children?: ReactNode;
-  className?: string;
-};
+interface HeroProps {
+  image?: ReactNode
+  caption?: string | ReactNode | null
+  title: string | ReactNode
+  description?: string | ReactNode | null
+  children?: ReactNode
+  className?: string
+}
 
 export const HeroSection = ({
   image,
@@ -44,7 +44,7 @@ export const HeroSection = ({
   align,
 }: HeroProps &
   VariantProps<typeof heroVariants> & {
-    asChild?: boolean;
+    asChild?: boolean
   }) => (
   <Section className='p-4'>
     <div className={cn(heroVariants({ variant, align, className }))}>
@@ -68,9 +68,9 @@ export const HeroSection = ({
           </ViewAnimation>
         )}
         <ViewAnimation
+          delay={0.4}
           initial={{ opacity: 0, translateY: -8 }}
           whileInView={{ opacity: 1, translateY: 0 }}
-          delay={0.4}
         >
           <h1
             className={cn(
@@ -78,7 +78,7 @@ export const HeroSection = ({
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
               variant === 'compact' &&
-                'text-left font-normal font-regular tracking-tighter sm:text-left',
+                'text-left font-normal font-regular tracking-tighter sm:text-left'
             )}
           >
             <Balancer>{title}</Balancer>
@@ -86,15 +86,15 @@ export const HeroSection = ({
         </ViewAnimation>
         {description && (
           <ViewAnimation
+            delay={0.6}
             initial={{ opacity: 0, translateY: -8 }}
             whileInView={{ opacity: 1, translateY: 0 }}
-            delay={0.6}
           >
             <p
               className={cn(
                 'text-muted-foreground text-sm sm:text-base',
                 variant === 'compact' &&
-                  'max-w-xl text-left text-lg leading-relaxed tracking-tight lg:max-w-lg',
+                  'max-w-xl text-left text-lg leading-relaxed tracking-tight lg:max-w-lg'
               )}
             >
               <Balancer>{description}</Balancer>
@@ -104,13 +104,13 @@ export const HeroSection = ({
       </div>
       {Children.map(children, (child, index) => (
         <ViewAnimation
+          delay={description ? 1 : 0.8 + index * 0.2}
           initial={{ opacity: 0, translateY: -8 }}
           whileInView={{ opacity: 1, translateY: 0 }}
-          delay={description ? 1 : 0.8 + index * 0.2}
         >
           {child}
         </ViewAnimation>
       ))}
     </div>
   </Section>
-);
+)

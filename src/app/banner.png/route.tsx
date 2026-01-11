@@ -1,4 +1,4 @@
-import { generateOGImage } from '@/app/banner.png/og';
+import { generateOGImage } from '@/app/banner.png/og'
 
 async function loadAssets(): Promise<
   { name: string; data: Buffer; weight: 400 | 600; style: 'normal' }[]
@@ -10,10 +10,10 @@ async function loadAssets(): Promise<
   ] = await Promise.all([
     import('./fonts/geist-regular-otf.json').then((mod) => mod.default || mod),
     import('./fonts/geistmono-regular-otf.json').then(
-      (mod) => mod.default || mod,
+      (mod) => mod.default || mod
     ),
     import('./fonts/geist-semibold-otf.json').then((mod) => mod.default || mod),
-  ]);
+  ])
 
   return [
     {
@@ -34,15 +34,15 @@ async function loadAssets(): Promise<
       weight: 600 as const,
       style: 'normal' as const,
     },
-  ];
+  ]
 }
 
 export async function GET() {
-  const [fonts] = await Promise.all([loadAssets()]);
+  const [fonts] = await Promise.all([loadAssets()])
 
   return generateOGImage({
     title: 'Anirudh',
     subtitle: 'A tech enthusiast building AI and web projects',
     fonts,
-  });
+  })
 }

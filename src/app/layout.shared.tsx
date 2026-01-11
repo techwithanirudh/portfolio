@@ -1,26 +1,26 @@
-import type { BaseLayoutProps, LinkItemType } from 'fumadocs-ui/layouts/shared';
-import { CastleIcon, MessageSquareIcon, YoutubeIcon } from 'lucide-react';
-import type { JSX } from 'react';
-import { Icons } from '@/components/icons/icons';
+import type { BaseLayoutProps, LinkItemType } from 'fumadocs-ui/layouts/shared'
+import { CastleIcon, MessageSquareIcon, YoutubeIcon } from 'lucide-react'
+import type { JSX } from 'react'
+import { Icons } from '@/components/icons/icons'
 
-export type Social = {
-  icon: JSX.Element;
-  name: string;
-  url: string;
-  description?: string;
-};
+export interface Social {
+  icon: JSX.Element
+  name: string
+  url: string
+  description?: string
+}
 
-export const title = 'Anirudh';
+export const title = 'Anirudh'
 export const description =
-  'A powerful platform to streamline your business operations.';
-export const owner = 'Tech With Anirudh';
+  'A powerful platform to streamline your business operations.'
+export const owner = 'Tech With Anirudh'
 
 export const baseOptions: BaseLayoutProps = {
   nav: {
     title,
   },
   githubUrl: 'https://github.com/techwithanirudh/shadcn-saas-landing',
-};
+}
 
 export const linkItems: LinkItemType[] = [
   {
@@ -59,7 +59,7 @@ export const linkItems: LinkItemType[] = [
       },
     ],
   },
-];
+]
 
 export const socials: Social[] = [
   {
@@ -87,6 +87,6 @@ export const socials: Social[] = [
     url: 'https://www.youtube.com/@i-use-chess-.-com',
     icon: <YoutubeIcon />,
   },
-];
+]
 
-export const postsPerPage = 5;
+export const postsPerPage = 5

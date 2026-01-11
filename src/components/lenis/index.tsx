@@ -1,29 +1,29 @@
-'use client';
+'use client'
 
-import type { LenisOptions } from 'lenis';
-import 'lenis/dist/lenis.css';
-import type { LenisRef, LenisProps as ReactLenisProps } from 'lenis/react';
-import { ReactLenis, useLenis } from 'lenis/react';
-import { useRef } from 'react';
-import { useTempus } from 'tempus/react';
+import type { LenisOptions } from 'lenis'
+import 'lenis/dist/lenis.css'
+import type { LenisRef, LenisProps as ReactLenisProps } from 'lenis/react'
+import { ReactLenis, useLenis } from 'lenis/react'
+import { useRef } from 'react'
+import { useTempus } from 'tempus/react'
 
 // import { useStore } from '~/libs/store'
 
 interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
-  root: boolean;
-  options: LenisOptions;
+  root: boolean
+  options: LenisOptions
 }
 
 export function Lenis({ root, options }: LenisProps) {
-  const lenisRef = useRef<LenisRef>(null);
+  const lenisRef = useRef<LenisRef>(null)
   //   const isNavOpened = useStore((state) => state.isNavOpened)
-  const _lenis = useLenis();
+  const _lenis = useLenis()
 
   useTempus((time: number) => {
     if (lenisRef.current?.lenis) {
-      lenisRef.current.lenis.raf(time);
+      lenisRef.current.lenis.raf(time)
     }
-  });
+  })
 
   //   useEffect(() => {
   //     if (isNavOpened) {
@@ -35,8 +35,6 @@ export function Lenis({ root, options }: LenisProps) {
 
   return (
     <ReactLenis
-      ref={lenisRef}
-      root={root}
       options={{
         ...options,
         lerp: options?.lerp ?? 0.125,
@@ -46,6 +44,8 @@ export function Lenis({ root, options }: LenisProps) {
           node?.nodeName === 'VERCEL-LIVE-FEEDBACK' ||
           node?.id === 'theatrejs-studio-root',
       }}
+      ref={lenisRef}
+      root={root}
     />
-  );
+  )
 }

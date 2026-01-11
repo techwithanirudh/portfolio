@@ -8,4 +8,4 @@ export const Hero = () => (
       spam, unsubscribe anytime.
     </p>
   </div>
-);
+)

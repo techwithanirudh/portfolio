@@ -1,20 +1,20 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-import { Icons } from '@/components/icons/icons';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import type { User } from '@/lib/auth-client';
-import { cn } from '@/lib/utils';
+import { Icons } from '@/components/icons/icons'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import type { User } from '@/lib/auth-client'
+import { cn } from '@/lib/utils'
 
 export interface UserAvatarClassNames {
-  base?: string;
-  image?: string;
-  fallback?: string;
-  fallbackIcon?: string;
+  base?: string
+  image?: string
+  fallback?: string
+  fallbackIcon?: string
 }
 
 export interface UserAvatarProps {
-  user?: User | null;
-  classNames?: UserAvatarClassNames;
+  user?: User | null
+  classNames?: UserAvatarClassNames
 }
 
 export function UserAvatar({
@@ -23,13 +23,13 @@ export function UserAvatar({
   className,
   ...props
 }: UserAvatarProps & ComponentProps<typeof Avatar>) {
-  const name = user?.name || user?.email;
-  const src = user?.image;
+  const name = user?.name || user?.email
+  const src = user?.image
 
   return (
     <Avatar
-      key={src}
       className={cn('rounded-md', className, classNames?.base)}
+      key={src}
       {...props}
     >
       <AvatarImage
@@ -41,7 +41,7 @@ export function UserAvatar({
       <AvatarFallback
         className={cn(
           'rounded-md bg-transparent uppercase',
-          classNames?.fallback,
+          classNames?.fallback
         )}
         delayMs={src ? 200 : 0}
       >
@@ -50,7 +50,7 @@ export function UserAvatar({
         )}
       </AvatarFallback>
     </Avatar>
-  );
+  )
 }
 
-const firstTwoCharacters = (name?: string | null) => name?.slice(0, 2);
+const firstTwoCharacters = (name?: string | null) => name?.slice(0, 2)

@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useAction } from 'next-safe-action/hooks';
-import { Suspense } from 'react';
-import { useForm } from 'react-hook-form';
-import { Icons } from '@/components/icons/icons';
-import { Alert, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useAction } from 'next-safe-action/hooks'
+import { Suspense } from 'react'
+import { useForm } from 'react-hook-form'
+import { Icons } from '@/components/icons/icons'
+import { Alert, AlertTitle } from '@/components/ui/alert'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -15,12 +15,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import type { Contact } from '@/lib/validators/contact';
-import { ContactSchema } from '@/lib/validators/contact';
-import { contact } from '../actions/contact';
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import type { Contact } from '@/lib/validators/contact'
+import { ContactSchema } from '@/lib/validators/contact'
+import { contact } from '../actions/contact'
 
 const ContactFormInner = () => {
   const form = useForm({
@@ -30,17 +30,17 @@ const ContactFormInner = () => {
       email: '',
       message: '',
     },
-  });
+  })
 
-  const { execute, result, status } = useAction(contact);
+  const { execute, result, status } = useAction(contact)
 
   const onSubmit = (values: Contact) => {
-    execute(values);
-  };
+    execute(values)
+  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='flex-1 space-y-8'>
+      <form className='flex-1 space-y-8' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name='name'
@@ -91,8 +91,8 @@ const ContactFormInner = () => {
               <FormLabel>Message</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Hi there, I'm interested in..."
                   className='max-h-[20rem] min-h-[10rem] resize-y bg-background'
+                  placeholder="Hi there, I'm interested in..."
                   {...field}
                   disabled={status === 'executing'}
                 />
@@ -102,9 +102,9 @@ const ContactFormInner = () => {
           )}
         />
         <Button
-          type='submit'
           className='w-full'
           disabled={!form.formState.isValid || status === 'executing'}
+          type='submit'
         >
           {status === 'executing' ? (
             <Icons.spinner className='mr-2 size-4 animate-spin' />
@@ -133,11 +133,11 @@ const ContactFormInner = () => {
         )}
       </form>
     </Form>
-  );
-};
+  )
+}
 
 export const ContactForm = () => (
   <Suspense>
     <ContactFormInner />
   </Suspense>
-);
+)

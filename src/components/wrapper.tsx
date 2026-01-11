@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import type { LenisOptions } from 'lenis';
-import { Lenis } from './lenis';
+import type { LenisOptions } from 'lenis'
+import { Lenis } from './lenis'
 
 interface WrapperProps extends React.HTMLAttributes<HTMLDivElement> {
-  lenis?: boolean | LenisOptions;
+  lenis?: boolean | LenisOptions
 }
 
 export function Wrapper({
@@ -16,7 +16,7 @@ export function Wrapper({
   return (
     <>
       {children}
-      {lenis && <Lenis root options={typeof lenis === 'object' ? lenis : {}} />}
+      {lenis && <Lenis options={typeof lenis === 'object' ? lenis : {}} root />}
     </>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-import type { Metadata } from 'next';
-import { title as homeTitle } from '@/app/layout.shared';
-import { Section } from '@/components/section';
-import { TagCard } from '@/components/tags/tag-card';
-import { ViewAnimation } from '@/components/view-animation';
-import { Wrapper } from '@/components/wrapper';
-import { createMetadata } from '@/lib/metadata';
-import { getTags } from '@/lib/source';
-import { cn } from '@/lib/utils';
-import { Hero } from './_components/hero';
+import type { Metadata } from 'next'
+import { title as homeTitle } from '@/app/layout.shared'
+import { Section } from '@/components/section'
+import { TagCard } from '@/components/tags/tag-card'
+import { ViewAnimation } from '@/components/view-animation'
+import { Wrapper } from '@/components/wrapper'
+import { createMetadata } from '@/lib/metadata'
+import { getTags } from '@/lib/source'
+import { cn } from '@/lib/utils'
+import { Hero } from './_components/hero'
 
 export default function Page() {
-  const tags = getTags();
+  const tags = getTags()
 
   return (
     <Wrapper lenis={{}}>
@@ -19,18 +19,18 @@ export default function Page() {
         <div className='grid grid-cols-1 divide-y divide-dashed divide-border sm:grid-cols-2 lg:grid-cols-4'>
           {tags.map((tag, index) => (
             <ViewAnimation
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              delay={(index % 4) * 0.2}
               className='size-full'
+              delay={(index % 4) * 0.2}
+              initial={{ opacity: 0 }}
               key={tag}
+              whileInView={{ opacity: 1 }}
             >
               <TagCard
+                className={cn(
+                  'size-full items-center justify-start gap-2 rounded-none border-r bg-card/50 p-6 hover:bg-card/80'
+                )}
                 displayCount={true}
                 name={tag}
-                className={cn(
-                  'size-full items-center justify-start gap-2 rounded-none border-r bg-card/50 p-6 hover:bg-card/80',
-                )}
               />
             </ViewAnimation>
           ))}
@@ -40,14 +40,14 @@ export default function Page() {
         </div>
       </Section>
     </Wrapper>
-  );
+  )
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
-  const _params = await props.params;
-  const description = `Explore all the tags on ${homeTitle}.`;
+  const _params = await props.params
+  const description = `Explore all the tags on ${homeTitle}.`
 
   return createMetadata({
     title: 'Tags',
@@ -58,5 +58,5 @@ export async function generateMetadata(props: {
     alternates: {
       canonical: '/tags',
     },
-  });
+  })
 }

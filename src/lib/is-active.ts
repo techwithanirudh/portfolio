@@ -1,8 +1,8 @@
 export function normalize(urlOrPath: string) {
   if (urlOrPath.length > 1 && urlOrPath.endsWith('/')) {
-    return urlOrPath.slice(0, -1);
+    return urlOrPath.slice(0, -1)
   }
-  return urlOrPath;
+  return urlOrPath
 }
 
 /**
@@ -13,11 +13,11 @@ export function isActive(
   pathname: string,
   nested = true
 ): boolean {
-  const normalizedHref = normalize(href);
-  const normalizedPathname = normalize(pathname);
+  const normalizedHref = normalize(href)
+  const normalizedPathname = normalize(pathname)
 
   return (
     normalizedHref === normalizedPathname ||
     (nested && normalizedPathname.startsWith(`${normalizedHref}/`))
-  );
+  )
 }

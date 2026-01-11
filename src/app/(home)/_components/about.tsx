@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import { Icons } from '@/components/icons/icons';
-import { Section } from '@/components/section';
-import { buttonVariants } from '@/components/ui/button';
-import { ViewAnimation } from '@/components/view-animation';
-import { cn } from '@/lib/utils';
+import Link from 'next/link'
+import { Icons } from '@/components/icons/icons'
+import { Section } from '@/components/section'
+import { buttonVariants } from '@/components/ui/button'
+import { ViewAnimation } from '@/components/view-animation'
+import { cn } from '@/lib/utils'
 
 export default function About(): React.ReactElement {
   return (
@@ -19,10 +19,10 @@ export default function About(): React.ReactElement {
       </ViewAnimation>
 
       <ViewAnimation
+        className='relative'
+        delay={0.4}
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        delay={0.4}
-        className='relative'
       >
         <div className='space-y-4 px-6 py-10 md:py-14'>
           <div className='prose dark:prose-invert w-full space-y-4'>
@@ -42,15 +42,15 @@ export default function About(): React.ReactElement {
                 variant: 'link',
                 size: 'lg',
               }),
-              'group !p-0 h-fit',
+              'group !p-0 h-fit'
             )}
             href='/about'
           >
             Learn More
-            <Icons.arrowUpRight className='group-hover:-rotate-12 size-5 transition-transform' />
+            <Icons.arrowUpRight className='size-5 transition-transform group-hover:-rotate-12' />
           </Link>
         </div>
       </ViewAnimation>
     </Section>
-  );
+  )
 }

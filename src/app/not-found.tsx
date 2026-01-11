@@ -1,18 +1,18 @@
-import { HomeLayout } from 'fumadocs-ui/layouts/home';
-import type { Metadata } from 'next';
-import { Header } from '@/components/sections/header';
-import { createMetadata } from '@/lib/metadata';
-import { baseOptions, linkItems } from './layout.shared';
+import { HomeLayout } from 'fumadocs-ui/layouts/home'
+import type { Metadata } from 'next'
+import { Header } from '@/components/sections/header'
+import { createMetadata } from '@/lib/metadata'
+import { baseOptions, linkItems } from './layout.shared'
 
 export default function NotFound() {
   return (
     <HomeLayout
       {...baseOptions}
+      className='pt-0'
       links={linkItems}
       nav={{
         component: <Header links={linkItems} {...baseOptions} />,
       }}
-      className='pt-0'
     >
       <main className='flex flex-1'>
         <div className='container relative mx-auto flex min-h-full flex-1 items-center justify-center border-border border-x border-b border-dashed'>
@@ -27,17 +27,17 @@ export default function NotFound() {
         </div>
       </main>
     </HomeLayout>
-  );
+  )
 }
 
 export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
+  params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
-  const _params = await props.params;
-  const description = 'The page you are looking for could not be found.';
+  const _params = await props.params
+  const description = 'The page you are looking for could not be found.'
 
   return createMetadata({
     title: 'Not Found',
     description,
-  });
+  })
 }

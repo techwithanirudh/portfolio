@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import { cva } from 'class-variance-authority';
-import { HandshakeIcon, PenIcon, UserRoundCogIcon } from 'lucide-react';
-import { Section } from '@/components/section';
-import { Badge } from '@/components/ui/badge';
-import { ViewAnimation } from '@/components/view-animation';
+import { cva } from 'class-variance-authority'
+import { HandshakeIcon, PenIcon, UserRoundCogIcon } from 'lucide-react'
+import { Section } from '@/components/section'
+import { Badge } from '@/components/ui/badge'
+import { ViewAnimation } from '@/components/view-animation'
 
 // Create a variant for feature items
 const featureItemVariants = cva(
@@ -19,8 +19,8 @@ const featureItemVariants = cva(
     defaultVariants: {
       size: 'sm',
     },
-  },
-);
+  }
+)
 
 const features = [
   {
@@ -46,15 +46,15 @@ const features = [
       'Developing engaging chess and entertainment content across platforms.',
     size: 'sm',
   },
-];
+]
 
 const Skills = () => (
   <Section className='relative w-full pt-10'>
     <div className='flex flex-col gap-10'>
       <ViewAnimation
+        className='flex flex-col gap-2 px-6'
         initial={{ opacity: 0, translateY: -8 }}
         whileInView={{ opacity: 1, translateY: 0 }}
-        className='flex flex-col gap-2 px-6'
       >
         <h2 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>
           My Expertise
@@ -69,16 +69,16 @@ const Skills = () => (
         <div className='grid grid-cols-1 divide-x divide-y divide-dashed divide-border text-left sm:grid-cols-2 lg:grid-cols-3'>
           {features.map((feature, index) => (
             <ViewAnimation
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              // Make the delay the length of the grid for example if there are 3 items in one row then it is modulo 3 or 2 items in one row then it is modulo 2
-              // so that the animation is staggered
-              // this is checked as size if lg it takes to cols and if sm it takes 1 col
-              delay={(index % (feature.size === 'lg' ? 2 : 3)) * 0.15}
               className={featureItemVariants({
                 size: feature.size as 'sm' | 'lg',
               })}
+              delay={(index % (feature.size === 'lg' ? 2 : 3)) * 0.15}
+              // Make the delay the length of the grid for example if there are 3 items in one row then it is modulo 3 or 2 items in one row then it is modulo 2
+              // so that the animation is staggered
+              // this is checked as size if lg it takes to cols and if sm it takes 1 col
+              initial={{ opacity: 0 }}
               key={feature.id}
+              whileInView={{ opacity: 1 }}
             >
               <feature.Icon className='h-8 w-8 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
               <div className='flex flex-col'>
@@ -104,5 +104,5 @@ const Skills = () => (
       </div>
     </div>
   </Section>
-);
-export default Skills;
+)
+export default Skills

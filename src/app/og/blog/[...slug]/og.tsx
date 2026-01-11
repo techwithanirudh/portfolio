@@ -1,9 +1,9 @@
-import type { ImageResponseOptions } from '@takumi-rs/image-response';
-import type { ReactElement } from 'react';
+import type { ImageResponseOptions } from '@takumi-rs/image-response'
+import type { ReactElement } from 'react'
 
 interface GenerateProps {
-  title: string;
-  description?: string;
+  title: string
+  description?: string
 }
 
 export async function getImageResponseOptions(): Promise<ImageResponseOptions> {
@@ -11,7 +11,7 @@ export async function getImageResponseOptions(): Promise<ImageResponseOptions> {
     format: 'webp',
     width: 1200,
     height: 630,
-  };
+  }
 }
 
 export function generate({
@@ -66,5 +66,5 @@ export function generate({
         </div>
       </div>
     </div>
-  );
+  )
 }

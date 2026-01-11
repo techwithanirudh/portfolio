@@ -1,8 +1,8 @@
-import type { Metadata } from 'next';
-import { owner, title } from '@/app/layout.shared';
-import { env } from '@/env';
-import type { BlogPage } from './source/blog';
-import type { ProjectPage } from './source/projects';
+import type { Metadata } from 'next'
+import { owner, title } from '@/app/layout.shared'
+import { env } from '@/env'
+import type { BlogPage } from './source/blog'
+import type { ProjectPage } from './source/projects'
 
 export function createMetadata(override: Metadata): Metadata {
   return {
@@ -40,26 +40,26 @@ export function createMetadata(override: Metadata): Metadata {
       },
       ...override.alternates,
     },
-  };
+  }
 }
 
 export function getBlogPageImage(page: BlogPage) {
-  const segments = [...page.slugs, 'image.webp'];
+  const segments = [...page.slugs, 'image.webp']
   return {
     segments,
     url: `/og/blog/${segments.join('/')}`,
-  };
+  }
 }
 
 export function getProjectPageImage(page: ProjectPage) {
-  const segments = [...page.slugs, 'image.webp'];
+  const segments = [...page.slugs, 'image.webp']
   return {
     segments,
     url: `/og/work/${segments.join('/')}`,
-  };
+  }
 }
 
 export const baseUrl =
   env.NODE_ENV === 'development' || !env.NEXT_PUBLIC_APP_URL
     ? new URL('http://localhost:3000')
-    : new URL(env.NEXT_PUBLIC_APP_URL);
+    : new URL(env.NEXT_PUBLIC_APP_URL)
