@@ -15,9 +15,9 @@ const faq = [
       'The most reliable way to reach me is through the contact form on this website. I check my emails regularly and will respond as soon as possible.',
   },
   {
-    question: 'Can I challenge you to a chess game?',
+    question: 'Can I challenge you to a vibe coding game?',
     answer:
-      'You can find me on Chess.com and send a challenge. I enjoy playing with community members when time permits.',
+      'NEIN',
   },
   {
     question: 'Where can I chat with you?',

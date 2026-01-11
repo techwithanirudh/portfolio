@@ -14,7 +14,7 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => {
     '@type': 'BlogPosting',
     headline: page.data.title,
     description: page.data.description,
-    image: new URL(`/og/${page.slugs.join('/')}/image.png`, baseUrl.href).href,
+    image: new URL(`/og/${page.slugs.join('/')}/image.webp`, baseUrl.href).href,
     datePublished: new Date(page.data.date).toISOString(),
     dateModified: page.data.lastModified
       ? new Date(page.data.lastModified).toISOString()

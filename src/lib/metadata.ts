@@ -33,6 +33,13 @@ export function createMetadata(override: Metadata): Metadata {
       images: '/banner.png',
       ...override.twitter,
     },
+    alternates: {
+      canonical: '/',
+      types: {
+        'application/rss+xml': '/api/rss.xml',
+      },
+      ...override.alternates,
+    },
   };
 }
 
