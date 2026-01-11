@@ -2,7 +2,7 @@ import { DocsLayout as FumadocsDocsLayout } from 'fumadocs-ui/layouts/docs';
 import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { cn } from 'fumadocs-ui/utils/cn';
 import type { ComponentProps, HTMLAttributes, ReactNode } from 'react';
-import type { PageTree } from '@/lib/source/blog';
+import type { PageTree } from '@/lib/source';
 import { Header } from './sections/header';
 
 type FumadocsLayoutProps = ComponentProps<typeof FumadocsDocsLayout>;

@@ -1,3 +1,5 @@
+import type { Metadata, ResolvingMetadata } from 'next';
+import { notFound, redirect } from 'next/navigation';
 import { postsPerPage } from '@/app/layout.shared';
 import { PostCard } from '@/components/blog/post-card';
 import { Icons } from '@/components/icons/icons';
@@ -6,9 +8,6 @@ import { NumberedPagination } from '@/components/numbered-pagination';
 import { Section } from '@/components/section';
 import { createMetadata } from '@/lib/metadata';
 import { getPostsByTag, getTags } from '@/lib/source';
-import type { Metadata, ResolvingMetadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
-import { ViewTransition } from 'react';
 
 export const dynamicParams = false;
 
@@ -47,17 +46,12 @@ const Header = ({
 }) => (
   <Section className='p-4 lg:p-6'>
     <div className='flex items-center gap-2'>
-      <ViewTransition name={tag}>
-        <Icons.tag
-          size={20}
-          className='text-muted-foreground transition-transform hover:rotate-12 hover:scale-125'
-        />
-        <span className='font-bold text-3xl leading-tight tracking-tighter md:text-4xl'>
-          {tag}
-        </span>
-      </ViewTransition>
+      <Icons.tag
+        size={20}
+        className='text-muted-foreground transition-transform hover:rotate-12 hover:scale-125'
+      />
       <h1 className='font-bold text-3xl leading-tight tracking-tighter md:text-4xl'>
-        <span className='text-muted-foreground'>Posts</span>{' '}
+        {tag} <span className='text-muted-foreground'>Posts</span>{' '}
         <CurrentPostsCount
           startIndex={startIndex}
           endIndex={endIndex}
@@ -115,13 +109,13 @@ export default async function Page(props: {
             const date = new Date(post.data.date).toDateString();
             return (
               <PostCard
-                title={post.data.title}
+                title={post.data.title ?? 'Untitled'}
                 description={post.data.description ?? ''}
-                image={post.data.image}
+                image={post.data.image ?? null}
                 url={post.url}
                 date={date}
                 key={post.url}
-                author={post.data.author}
+                author={post.data.author ?? 'Unknown'}
                 tags={post.data.tags}
                 slugs={post.slugs}
               />
@@ -154,7 +148,7 @@ type Props = {
 
 export async function generateMetadata(
   props: Props,
-  parent: ResolvingMetadata,
+  _parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const params = await props.params;
   const searchParams = await props.searchParams;
@@ -174,9 +168,8 @@ export async function generateMetadata(
 
   return createMetadata({
     title: pageTitle,
-    description: `Posts tagged with ${tag}${
-      !isFirstPage ? ` - Page ${pageIndex}` : ''
-    }`,
+    description: `Posts tagged with ${tag}${!isFirstPage ? ` - Page ${pageIndex}` : ''
+      }`,
     openGraph: {
       url: canonicalUrl,
     },

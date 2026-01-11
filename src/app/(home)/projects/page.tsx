@@ -57,12 +57,14 @@ const testimonialsData = [
   }
 ];
 
-const Work = () => (
-  <>
-    <Hero />
-    <Roles roles={rolesData} />
-    <Testimonials testimonials={testimonialsData} />
-  </>
-);
+const Work = () => {
+  return (
+    <>
+      <Hero />
+      <Roles roles={rolesData} />
+      <Testimonials testimonials={testimonialsData} />
+    </>
+  );
+};
 
 export default Work;

@@ -1,7 +1,6 @@
 import Hero from '@/app/(home)/_components/hero';
 import Separator from '@/components/separator';
 import { Wrapper } from '@/components/wrapper';
-import { getSortedByDatePosts } from '@/lib/source';
 import About from './_components/about';
 import CTA from './_components/cta';
 import { Logos } from './_components/logos';

@@ -1,14 +1,3 @@
-import {
-  PostComments,
-  Share,
-} from '@/app/(home)/(blog)/blog/[slug]/page.client';
-import { PostJsonLd } from '@/components/json-ld';
-import { Section } from '@/components/section';
-import { TagCard } from '@/components/tags/tag-card';
-import { ViewAnimation } from '@/components/view-animation';
-import { createMetadata } from '@/lib/metadata';
-import { type BlogPage as MDXPage, getPost, getPosts } from '@/lib/source';
-import { cn } from '@/lib/utils';
 import { File, Files, Folder } from 'fumadocs-ui/components/files';
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
@@ -17,7 +6,18 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ViewTransition } from 'react';
 import Balancer from 'react-wrap-balancer';
-import { description as homeDescription } from 'src/app/layout.config';
+import { description as homeDescription } from 'src/app/layout.shared';
+import {
+  PostComments,
+  Share,
+} from '@/app/(home)/(blog)/blog/[slug]/page.client';
+import { PostJsonLd } from '@/components/json-ld';
+import { Section } from '@/components/section';
+import { TagCard } from '@/components/tags/tag-card';
+import { ViewAnimation } from '@/components/view-animation';
+import { createMetadata, getBlogPageImage } from '@/lib/metadata';
+import { getPost, getPosts, type BlogPage as MDXPage } from '@/lib/source';
+import { cn } from '@/lib/utils';
 
 function Header(props: { page: MDXPage; tags?: string[] }) {
   const { page, tags } = props;
@@ -38,7 +38,7 @@ function Header(props: { page: MDXPage; tags?: string[] }) {
               delay={0.4}
             >
               <h1 className='max-w-4xl font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-                <Balancer>{page.data.title}</Balancer>
+                <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
               </h1>
             </ViewAnimation>
             <ViewAnimation
@@ -47,7 +47,7 @@ function Header(props: { page: MDXPage; tags?: string[] }) {
               delay={0.8}
             >
               <p className='mx-auto max-w-4xl'>
-                <Balancer>{page.data.description}</Balancer>
+                <Balancer>{page.data.description ?? ''}</Balancer>
               </p>
             </ViewAnimation>
           </ViewTransition>
@@ -87,7 +87,6 @@ export default async function Page(props: {
       <Section className='h-full' sectionClassName='flex flex-1'>
         <article className='flex min-h-full flex-col lg:flex-row'>
           <div className='flex flex-1 flex-col gap-4'>
-
             <InlineTOC
               items={toc}
               className='rounded-none border-0 border-border border-b border-dashed'
@@ -112,14 +111,14 @@ export default async function Page(props: {
           <div className='flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
             <div>
               <p className='mb-1 text-fd-muted-foreground'>Written by</p>
-              <p className='font-medium'>{page.data.author}</p>
+              <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
             </div>
             <div>
               <p className='mb-1 text-fd-muted-foreground text-sm'>
                 Created At
               </p>
               <p className='font-medium'>
-                {new Date(page.data.date ?? page.file.name).toDateString()}
+                {new Date(page.data.date).toDateString()}
               </p>
             </div>
             {lastUpdate && (
@@ -133,7 +132,7 @@ export default async function Page(props: {
             <Share url={page.url} />
           </div>
         </article>
-      </Section >
+      </Section>
       <PostJsonLd page={page} />
     </>
   );
@@ -142,33 +141,30 @@ export default async function Page(props: {
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug = [] } = await props.params;
-  const page = getPost([slug]);
+  const params = await props.params;
+  const page = getPost([params.slug]);
 
   if (!page) notFound();
 
-  const title = page.data.title;
+  const title = page.data.title ?? 'Untitled';
   const description = page.data.description ?? homeDescription;
 
-  const image = {
-    url: ['/og', 'blog', ...slug, 'image.png'].join('/'),
-    width: 1200,
-    height: 630,
-  };
+  const image = getBlogPageImage(page);
 
-  return createMetadata(
-    {
-      title,
-      description,
-      openGraph: {
-        url: `/blog/${page.slugs.join('/')}`,
-        images: [image],
-      },
-      alternates: {
-        canonical: page.url,
-      },
-    }
-  );
+  return createMetadata({
+    title,
+    description,
+    openGraph: {
+      url: `/blog/${page.slugs.join('/')}`,
+      images: image.url,
+    },
+    twitter: {
+      images: image.url,
+    },
+    alternates: {
+      canonical: page.url,
+    },
+  });
 }
 
 export function generateStaticParams(): { slug: string | undefined }[] {

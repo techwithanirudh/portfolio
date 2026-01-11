@@ -1,10 +1,10 @@
 import { title as homeTitle } from '@/app/layout.shared';
 import { owner } from '@/app/layout.shared';
 import { baseUrl } from '@/lib/constants';
-import type { Post } from '@/lib/source';
+import type { BlogPage } from '@/lib/source';
 import type { BlogPosting, BreadcrumbList, Graph } from 'schema-dts';
 
-export const PostJsonLd = ({ page }: { page: Post }) => {
+export const PostJsonLd = ({ page }: { page: BlogPage }) => {
   if (!page) {
     return null;
   }
