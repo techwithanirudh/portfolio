@@ -66,8 +66,8 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => {
 
   return (
     <script
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires inline script content
       dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml:
       type='application/ld+json'
     />
   )
@@ -105,8 +105,8 @@ export const TagJsonLd = ({ tag }: { tag: string }) => {
 
   return (
     <script
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires inline script content
       dangerouslySetInnerHTML={{ __html: JSON.stringify(graph) }}
-      // biome-ignore lint/security/noDangerouslySetInnerHtml:
       type='application/ld+json'
     />
   )

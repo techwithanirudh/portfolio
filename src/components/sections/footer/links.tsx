@@ -21,7 +21,7 @@ interface ListItem {
   }[]
 }
 
-export const Links = async () => {
+export const Links = () => {
   const links = resolveLinkItems({
     links: linkItems,
     githubUrl: baseOptions.githubUrl,

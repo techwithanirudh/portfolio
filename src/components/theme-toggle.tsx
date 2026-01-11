@@ -82,24 +82,15 @@ export function ThemeToggle({
     value = currentTheme
   }
 
+  const themesToRender =
+    mode === 'light-dark'
+      ? themes.filter(({ key }) => key !== 'system')
+      : themes
+
   return (
-    <div
-      aria-label={mode === 'light-dark' ? 'Toggle Theme' : undefined}
-      className={container}
-      data-theme-toggle=''
-      onClick={() => {
-        if (mode !== 'light-dark') {
-          return
-        }
-        handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-      }}
-      {...props}
-    >
-      {themes.map(({ key, icon: Icon, label }) => {
+    <div className={container} data-theme-toggle='' {...props}>
+      {themesToRender.map(({ key, icon: Icon, label }) => {
         const isActive = value === key
-        if (mode === 'light-dark' && key === 'system') {
-          return
-        }
 
         return (
           <button
@@ -107,9 +98,6 @@ export function ThemeToggle({
             className={itemVariants({ active: isActive })}
             key={key}
             onClick={() => {
-              if (mode === 'light-dark') {
-                return
-              }
               handleChangeTheme(key as Theme)
             }}
             type='button'

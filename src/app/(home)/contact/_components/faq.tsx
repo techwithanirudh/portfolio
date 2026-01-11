@@ -61,12 +61,10 @@ export const FAQ = () => (
         <ViewAnimation
           delay={0.4 + index * 0.2}
           initial={{ opacity: 0, translateY: -8 }}
+          key={`${item.question}-${index}`}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <AccordionItem
-            key={`${item.question}-${index}`}
-            value={`index-${index}`}
-          >
+          <AccordionItem value={`index-${index}`}>
             <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline data-[state=open]:bg-card'>
               {item.question}
             </AccordionTrigger>

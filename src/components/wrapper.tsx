@@ -1,18 +1,15 @@
 'use client'
 
 import type { LenisOptions } from 'lenis'
+import type { ReactNode } from 'react'
 import { Lenis } from './lenis'
 
-interface WrapperProps extends React.HTMLAttributes<HTMLDivElement> {
+interface WrapperProps {
+  children: ReactNode
   lenis?: boolean | LenisOptions
 }
 
-export function Wrapper({
-  children,
-  className,
-  lenis = true,
-  ...props
-}: WrapperProps) {
+export function Wrapper({ children, lenis = true }: WrapperProps) {
   return (
     <>
       {children}
