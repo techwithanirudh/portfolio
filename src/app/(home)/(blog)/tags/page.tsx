@@ -1,13 +1,13 @@
+import type { Metadata } from 'next';
 import { title as homeTitle } from '@/app/layout.shared';
 import { Section } from '@/components/section';
 import { TagCard } from '@/components/tags/tag-card';
+import { ViewAnimation } from '@/components/view-animation';
 import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';
 import { getTags } from '@/lib/source';
 import { cn } from '@/lib/utils';
-import type { Metadata } from 'next';
 import { Hero } from './_components/hero';
-import { ViewAnimation } from '@/components/view-animation';
 
 export default function Page() {
   const tags = getTags();
@@ -29,7 +29,7 @@ export default function Page() {
                 displayCount={true}
                 name={tag}
                 className={cn(
-                  'items-center justify-start gap-2 rounded-none border-r bg-card/50 p-6 hover:bg-card/80 size-full'
+                  'size-full items-center justify-start gap-2 rounded-none border-r bg-card/50 p-6 hover:bg-card/80',
                 )}
               />
             </ViewAnimation>
@@ -46,7 +46,7 @@ export default function Page() {
 export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>;
 }): Promise<Metadata> {
-  const params = await props.params;
+  const _params = await props.params;
   const description = `Explore all the tags on ${homeTitle}.`;
 
   return createMetadata({

@@ -1,4 +1,3 @@
-
 export const Hero = () => (
   <div className='flex flex-col gap-2'>
     <h4 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>

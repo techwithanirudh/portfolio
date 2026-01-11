@@ -1,8 +1,7 @@
+import Link from 'next/link';
 import { Icons } from '@/components/icons/icons';
 import { getPostsByTag } from '@/lib/source';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { ViewTransition } from 'react';
 
 export const TagCard = ({
   name,
@@ -23,13 +22,11 @@ export const TagCard = ({
         className,
       )}
     >
-      <ViewTransition name={name}>
-        <Icons.tag
-          size={18}
-          className='my-auto text-muted-foreground transition-transform group-hover:rotate-12'
-        />
-        <span className='text-card-foreground'>{name}</span>
-      </ViewTransition>
+      <Icons.tag
+        size={18}
+        className='my-auto text-muted-foreground transition-transform group-hover:rotate-12'
+      />
+      <span className='text-card-foreground'>{name}</span>
       {displayCount && (
         <span className='ml-auto text-muted-foreground'>({posts.length})</span>
       )}

@@ -1,10 +1,10 @@
+import Link from 'next/link';
+import type React from 'react';
+import Balancer from 'react-wrap-balancer';
 import { Icons } from '@/components/icons/icons';
 import { Section } from '@/components/section';
 import { Button } from '@/components/ui/button';
 import { ViewAnimation } from '@/components/view-animation';
-import Link from 'next/link';
-import type React from 'react';
-import Balancer from 'react-wrap-balancer';
 
 export default function CTA(): React.ReactElement {
   return (

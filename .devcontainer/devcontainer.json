@@ -1,82 +1,82 @@
 {
-    "name": "Node.js & TypeScript",
-    "build": {
-        "dockerfile": "Dockerfile"
+  "name": "Node.js & TypeScript",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  // Add more features. See complete list https://github.com/devcontainers/features
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": "false"
     },
-    // Add more features. See complete list https://github.com/devcontainers/features
-    "features": {
-        "ghcr.io/devcontainers/features/git:1": {
-            "version": "latest",
-            "ppa": "false"
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "configureZshAsDefaultShell": true,
+      "installOhMyZsh": true,
+      "installOhMyZshConfig": true
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  // Configure tool-specific properties.
+  "customizations": {
+    // Configure properties specific to VS Code.
+    "vscode": {
+      // Add the IDs of extensions you want installed when the container is created.
+      "extensions": [
+        // TypeScript
+        "bierner.lit-html",
+        "better-ts-errors.better-ts-errors",
+        // Makefile
+        "ms-vscode.makefile-tools",
+        // Markdown
+        "bierner.markdown-preview-github-styles",
+        "bierner.markdown-emoji",
+        "bierner.markdown-checkbox",
+        "bierner.jsdoc-markdown-highlighting",
+        "ms-vscode.wordcount",
+        // Other
+        "albert.tabout",
+        "streetsidesoftware.code-spell-checker",
+        "bierner.comment-tagged-templates",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        // "terminal.integrated.defaultProfile.linux": "zsh",
+        "debug.internalConsoleOptions": "neverOpen",
+        "editor.formatOnPaste": true,
+        "editor.guides.bracketPairs": "active",
+        "scm.defaultViewMode": "tree",
+        "diffEditor.diffAlgorithm": "advanced",
+        "diffEditor.experimental.showMoves": true,
+        "diffEditor.renderSideBySide": false,
+        "files.watcherExclude": {
+          "**/node_modules/**": true
         },
-        "ghcr.io/devcontainers/features/common-utils:2": {
-            "installZsh": true,
-            "configureZshAsDefaultShell": true,
-            "installOhMyZsh": true,
-            "installOhMyZshConfig": true
-        },
-        "ghcr.io/devcontainers/features/github-cli:1": {}
-    },
-    // Configure tool-specific properties.
-    "customizations": {
-        // Configure properties specific to VS Code.
-        "vscode": {
-            // Add the IDs of extensions you want installed when the container is created.
-            "extensions": [
-                // TypeScript
-                "bierner.lit-html",
-                "better-ts-errors.better-ts-errors",
-                // Makefile
-                "ms-vscode.makefile-tools",
-                // Markdown
-                "bierner.markdown-preview-github-styles",
-                "bierner.markdown-emoji",
-                "bierner.markdown-checkbox",
-                "bierner.jsdoc-markdown-highlighting",
-                "ms-vscode.wordcount",
-                // Other
-                "albert.tabout",
-                "streetsidesoftware.code-spell-checker",
-                "bierner.comment-tagged-templates",
-                "dbaeumer.vscode-eslint"
-            ],
-            "settings": {
-                // "terminal.integrated.defaultProfile.linux": "zsh",
-                "debug.internalConsoleOptions": "neverOpen",
-                "editor.formatOnPaste": true,
-                "editor.guides.bracketPairs": "active",
-                "scm.defaultViewMode": "tree",
-                "diffEditor.diffAlgorithm": "advanced",
-                "diffEditor.experimental.showMoves": true,
-                "diffEditor.renderSideBySide": false,
-                "files.watcherExclude": {
-                    "**/node_modules/**": true
-                }, 
-                // Prettifies the response with emojis and such.
-                "betterTypeScriptErrors.prettify": true,
-                "github.copilot.chat.codeGeneration.instructions": [
-                    {
-                        "text": "This dev container includes the TypeScript compiler (`tsc`) pre-installed and available on the `PATH` for TypeScript development."
-                    }
-                ]
-            }
-        }
-    },
-    // Use 'forwardPorts' to make a list of ports inside the container available locally.
-    "forwardPorts": [
-        // Http
-        3000
-    ],
-    // Use 'portsAttributes' to set default properties for specific forwarded ports.
-    // More info: https://containers.dev/implementors/json_reference/#port-attributes
-    "portsAttributes": {
-        "3000": {
-            "label": "Web",
-            "onAutoForward": "notify"
-        }
-    },
-    // Use 'postCreateCommand' to run commands after the container is created.
-    "postCreateCommand": "export COREPACK_ENABLE_DOWNLOAD_PROMPT=0 && pnpm install",
-    // Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-    "remoteUser": "node"
+        // Prettifies the response with emojis and such.
+        "betterTypeScriptErrors.prettify": true,
+        "github.copilot.chat.codeGeneration.instructions": [
+          {
+            "text": "This dev container includes the TypeScript compiler (`tsc`) pre-installed and available on the `PATH` for TypeScript development."
+          }
+        ]
+      }
+    }
+  },
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [
+    // Http
+    3000
+  ],
+  // Use 'portsAttributes' to set default properties for specific forwarded ports.
+  // More info: https://containers.dev/implementors/json_reference/#port-attributes
+  "portsAttributes": {
+    "3000": {
+      "label": "Web",
+      "onAutoForward": "notify"
+    }
+  },
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "export COREPACK_ENABLE_DOWNLOAD_PROMPT=0 && pnpm install",
+  // Set `remoteUser` to `root` to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node"
 }

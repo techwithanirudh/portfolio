@@ -1,13 +1,13 @@
+import type { Metadata, ResolvingMetadata } from 'next';
+import { notFound, redirect } from 'next/navigation';
 import { postsPerPage } from '@/app/layout.shared';
 import { NumberedPagination } from '@/components/numbered-pagination';
 import { Section } from '@/components/section';
 import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';
 import { getSortedByDatePosts } from '@/lib/source';
-import type { Metadata, ResolvingMetadata } from 'next';
-import { notFound, redirect } from 'next/navigation';
-import { Hero } from './_components/hero';
 import Posts from '../../_components/posts';
+import { Hero } from './_components/hero';
 
 export const dynamicParams = false;
 
@@ -47,7 +47,7 @@ export default async function Page(props: {
 
   return (
     <Wrapper lenis={{}}>
-      <Hero 
+      <Hero
         totalPosts={totalPosts}
         startIndex={startIndex}
         endIndex={endIndex}
@@ -73,9 +73,9 @@ type Props = {
 
 export async function generateMetadata(
   props: Props,
-  parent: ResolvingMetadata,
+  _parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const params = await props.params;
+  const _params = await props.params;
   const searchParams = await props.searchParams;
 
   const pageIndex = searchParams.page

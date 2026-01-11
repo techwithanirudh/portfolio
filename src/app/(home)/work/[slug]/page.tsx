@@ -6,11 +6,11 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ViewTransition } from 'react';
 import Balancer from 'react-wrap-balancer';
-import { description as homeDescription } from '@/app/layout.shared';
 import {
   PostComments,
   Share,
 } from '@/app/(home)/(blog)/blog/[slug]/page.client';
+import { description as homeDescription } from '@/app/layout.shared';
 import { Section } from '@/components/section';
 import { TagCard } from '@/components/tags/tag-card';
 import { ViewAnimation } from '@/components/view-animation';

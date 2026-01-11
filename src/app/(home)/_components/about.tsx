@@ -1,9 +1,9 @@
+import Link from 'next/link';
 import { Icons } from '@/components/icons/icons';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
 import { ViewAnimation } from '@/components/view-animation';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 
 export default function About(): React.ReactElement {
   return (

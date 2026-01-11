@@ -1,12 +1,12 @@
+import type { Metadata } from 'next';
+import type React from 'react';
 import { NewsletterForm } from '@/app/(home)/(blog)/newsletter/components/newsletter-form';
 import { title as homeTitle } from '@/app/layout.shared';
 import { Section } from '@/components/section';
+import { ViewAnimation } from '@/components/view-animation';
 import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';
-import type { Metadata } from 'next';
-import type React from 'react';
 import CTA from '../../_components/cta';
-import { ViewAnimation } from '@/components/view-animation';
 import { Hero } from './components/hero';
 
 export default function NewsletterPage(): React.ReactElement {
@@ -38,7 +38,7 @@ export default function NewsletterPage(): React.ReactElement {
 export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>;
 }): Promise<Metadata> {
-  const params = await props.params;
+  const _params = await props.params;
   const description = `News and updates from ${homeTitle}. Stay informed with the latest articles, features, and insights.`;
 
   return createMetadata({

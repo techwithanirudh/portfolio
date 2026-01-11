@@ -2,6 +2,8 @@ import {
   type LinkItemType,
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared';
+import Link from 'next/link';
+import type { ReactNode } from 'react';
 import {
   baseOptions,
   linkItems,
@@ -11,8 +13,6 @@ import {
 import { ActiveLink } from '@/components/active-link';
 import { ViewAnimation } from '@/components/view-animation';
 import { getSortedByDatePosts, getTags } from '@/lib/source';
-import Link from 'next/link';
-import type { ReactNode } from 'react';
 
 type ListItem = {
   title: string;

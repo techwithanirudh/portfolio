@@ -1,3 +1,7 @@
+import {
+  type LinkItemType,
+  resolveLinkItems,
+} from 'fumadocs-ui/layouts/shared';
 import * as motion from 'motion/react-client';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,7 +12,6 @@ import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
 import { ViewAnimation } from '@/components/view-animation';
 import { cn } from '@/lib/utils';
-import { resolveLinkItems, type LinkItemType } from 'fumadocs-ui/layouts/shared';
 import heroImage from '../../../../public/images/gradient-noise-purple-azure-light.png';
 
 const Hero = () => {

@@ -1,7 +1,7 @@
-import { HeroSection } from '@/components/sections/hero';
 import * as motion from 'motion/react-client';
 import Image from 'next/image';
 import type React from 'react';
+import { HeroSection } from '@/components/sections/hero';
 
 export default function Hero(): React.ReactElement {
   const profileImage = (

@@ -6,7 +6,8 @@ const rolesData = [
   {
     _title: 'Tech Startup Inc.',
     _slug: 'tech-startup',
-    description: 'Led the development of a scalable web application serving over 100k users.',
+    description:
+      'Led the development of a scalable web application serving over 100k users.',
     endYear: 2024,
     startYear: 2022,
     role: 'Senior Frontend Developer',
@@ -17,13 +18,14 @@ const rolesData = [
       width: 100,
       height: 100,
       url: '/images/logos/light/logo-1.png',
-      alt: 'Tech Startup Logo'
-    }
+      alt: 'Tech Startup Logo',
+    },
   },
   {
     _title: 'Digital Agency Co.',
     _slug: 'digital-agency',
-    description: 'Built responsive websites and e-commerce solutions for diverse clients.',
+    description:
+      'Built responsive websites and e-commerce solutions for diverse clients.',
     startYear: 2020,
     role: 'Frontend Developer',
     url: 'https://digitalagency.com',
@@ -33,15 +35,16 @@ const rolesData = [
       width: 100,
       height: 100,
       url: '/images/logos/light/logo-2.png',
-      alt: 'Digital Agency Logo'
-    }
-  }
+      alt: 'Digital Agency Logo',
+    },
+  },
 ];
 
 const testimonialsData = [
   {
     title: 'Exceptional work quality',
-    description: 'The project was delivered on time with exceptional attention to detail. Highly recommended for any development work.',
+    description:
+      'The project was delivered on time with exceptional attention to detail. Highly recommended for any development work.',
     author: {
       name: 'Sarah Johnson',
       image: 'https://github.com/sarahjohnson.png',
@@ -49,12 +52,13 @@ const testimonialsData = [
   },
   {
     title: 'Great collaboration',
-    description: 'Working together was seamless. Great communication and technical expertise throughout the project.',
+    description:
+      'Working together was seamless. Great communication and technical expertise throughout the project.',
     author: {
       name: 'Mike Chen',
       image: 'https://github.com/mikechen.png',
     },
-  }
+  },
 ];
 
 const Work = () => {

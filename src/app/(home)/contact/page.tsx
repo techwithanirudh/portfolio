@@ -1,11 +1,11 @@
+import type { Metadata } from 'next';
 import { Section } from '@/components/section';
+import { ViewAnimation } from '@/components/view-animation';
 import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';
-import type { Metadata } from 'next';
 import { ContactForm } from './_components/contact-form';
 import { FAQ } from './_components/faq';
 import { Hero } from './_components/hero';
-import { ViewAnimation } from '@/components/view-animation';
 
 export default function Contact(): React.ReactElement {
   return (
@@ -36,7 +36,7 @@ export default function Contact(): React.ReactElement {
 export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>;
 }): Promise<Metadata> {
-  const params = await props.params;
+  const _params = await props.params;
   const description =
     'Contact me for any inquiries, feedback. We are here to assist you.';
 

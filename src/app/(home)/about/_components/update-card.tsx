@@ -1,9 +1,8 @@
-import { BlurImage } from '@/components/blur-image';
 import { CalendarIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import type React from 'react';
-import { ViewTransition } from 'react';
 import Balancer from 'react-wrap-balancer';
+import { BlurImage } from '@/components/blur-image';
 
 interface UpdateCardProps {
   title: string;
@@ -12,8 +11,8 @@ interface UpdateCardProps {
   url: string;
   date: string;
   author: string;
-  slugs: string[];
   tags?: string[];
+  slugs?: string[];
 }
 
 export const UpdateCard: React.FC<UpdateCardProps> = ({
@@ -23,13 +22,13 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
   url,
   date,
   author,
-  slugs,
-  tags,
+  tags: _tags,
+  slugs: _slugs,
 }) => {
   return (
     <Link
       href={url}
-      className='flex min-h-full flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+      className='flex flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
     >
       {image && (
         <div className='relative inline-flex items-center justify-center transition-transform hover:scale-105'>
@@ -45,14 +44,12 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
 
       <div className='flex h-full flex-col justify-between gap-4'>
         <div className='flex-1 space-y-2'>
-          <ViewTransition name={slugs.join('/')}>
-            <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-              <Balancer>{title}</Balancer>
-            </h2>
-            <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
-              <Balancer>{description}</Balancer>
-            </p>
-          </ViewTransition>
+          <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
+            <Balancer>{title}</Balancer>
+          </h2>
+          <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
+            <Balancer>{description}</Balancer>
+          </p>
         </div>
         <div className='flex flex-col justify-center gap-4'>
           <div className='group inline-flex items-center gap-2 text-muted-foreground text-sm'>

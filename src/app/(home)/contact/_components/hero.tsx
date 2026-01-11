@@ -7,14 +7,13 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { ViewAnimation } from '@/components/view-animation';
-import Balancer from 'react-wrap-balancer';
 
 export const Hero = () => (
   <div className='flex flex-col gap-2'>
     <SectionHeader
-      title="Contact Me"
-      description="Have a question or want to connect? Send a message and expect a response within a week."
-      align="left"
+      title='Contact Me'
+      description='Have a question or want to connect? Send a message and expect a response within a week.'
+      align='left'
     />
     <TooltipProvider>
       <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-muted p-1.5 text-muted-foreground'>

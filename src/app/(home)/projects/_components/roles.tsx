@@ -1,9 +1,9 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import { Prose } from '@/components/prose';
 import { Section } from '@/components/section';
-import { cn } from '@/lib/utils';
 import { ViewAnimation } from '@/components/view-animation';
-import Link from 'next/link';
-import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 interface Role {
   _title: string;
@@ -33,15 +33,15 @@ export const Roles = ({ roles }: RolesProps) => {
   }
 
   return (
-    <Section className="grid sm:grid-cols-2">
+    <Section className='grid sm:grid-cols-2'>
       {roles.map((role, index) => (
         <ViewAnimation
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           delay={index % 2 ? 0.2 : 0}
           className={cn(
-            index % 2 === 0 ? 'sm:border-r border-dashed' : '',
-            index < roles.length - 2 ? 'border-b border-dashed' : ''
+            index % 2 === 0 ? 'border-dashed sm:border-r' : '',
+            index < roles.length - 2 ? 'border-b border-dashed' : '',
           )}
           key={role._title}
         >
@@ -49,29 +49,29 @@ export const Roles = ({ roles }: RolesProps) => {
             href={`/work/${role._slug}`}
             className={cn(
               'flex flex-col items-start gap-6 px-4 py-8 transition-colors hover:bg-background',
-              'sm:flex-row sm:px-8'
+              'sm:flex-row sm:px-8',
             )}
           >
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center">
+            <div className='flex h-12 w-12 shrink-0 items-center justify-center'>
               <Image
                 src={role.logo.url}
                 width={role.logo.width}
                 height={role.logo.height}
                 alt={role.logo.alt ?? ''}
-                className="block size-full object-contain dark:brightness-0 dark:invert"
+                className='block size-full object-contain dark:brightness-0 dark:invert'
               />
             </div>
-            <div className="flex flex-col gap-2">
-              <h2 className="font-semibold text-xl tracking-tight">
-                <span className="block leading-tight">{role.role}</span>
-                <span className="block text-muted-foreground">
+            <div className='flex flex-col gap-2'>
+              <h2 className='font-semibold text-xl tracking-tight'>
+                <span className='block leading-tight'>{role.role}</span>
+                <span className='block text-muted-foreground'>
                   {role._title}
                 </span>
               </h2>
-              <Prose className="prose-sm">
+              <Prose className='prose-sm'>
                 <p>{role.description}</p>
               </Prose>
-              <p className="text-muted-foreground text-sm">
+              <p className='text-muted-foreground text-sm'>
                 {role.type} &bull; {role.startYear} &mdash;{' '}
                 {role.endYear ?? 'Present'} &bull; {role.location}
               </p>
@@ -80,7 +80,7 @@ export const Roles = ({ roles }: RolesProps) => {
         </ViewAnimation>
       ))}
       {roles.length % 2 && (
-        <div className="hidden border-t bg-dashed sm:block" />
+        <div className='hidden border-t bg-dashed sm:block' />
       )}
     </Section>
   );

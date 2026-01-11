@@ -6,6 +6,7 @@ import type { LenisRef, LenisProps as ReactLenisProps } from 'lenis/react';
 import { ReactLenis, useLenis } from 'lenis/react';
 import { useRef } from 'react';
 import { useTempus } from 'tempus/react';
+
 // import { useStore } from '~/libs/store'
 
 interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
@@ -16,7 +17,7 @@ interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
 export function Lenis({ root, options }: LenisProps) {
   const lenisRef = useRef<LenisRef>(null);
   //   const isNavOpened = useStore((state) => state.isNavOpened)
-  const lenis = useLenis();
+  const _lenis = useLenis();
 
   useTempus((time: number) => {
     if (lenisRef.current?.lenis) {

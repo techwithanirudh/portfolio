@@ -1,19 +1,17 @@
+import Image from 'next/image';
+import Marquee from 'react-fast-marquee';
 import { Section } from '@/components/section';
 import { ViewAnimation } from '@/components/view-animation';
-import Marquee from 'react-fast-marquee';
-
-import ClaudeLight from '@/public/images/logos/light/claude.svg';
-import NeonLight from '@/public/images/logos/light/neon.svg';
-import NextjsLight from '@/public/images/logos/light/nextjs.svg';
-import OpenAILight from '@/public/images/logos/light/openai.svg';
-import VercelLight from '@/public/images/logos/light/vercel.svg';
-
 import ClaudeDark from '@/public/images/logos/dark/claude.svg';
 import NeonDark from '@/public/images/logos/dark/neon.svg';
 import NextjsDark from '@/public/images/logos/dark/nextjs.svg';
 import OpenAIDark from '@/public/images/logos/dark/openai.svg';
 import VercelDark from '@/public/images/logos/dark/vercel.svg';
-import Image from 'next/image';
+import ClaudeLight from '@/public/images/logos/light/claude.svg';
+import NeonLight from '@/public/images/logos/light/neon.svg';
+import NextjsLight from '@/public/images/logos/light/nextjs.svg';
+import OpenAILight from '@/public/images/logos/light/openai.svg';
+import VercelLight from '@/public/images/logos/light/vercel.svg';
 
 const logos = [
   {
@@ -50,12 +48,12 @@ export const Logos = () => (
       whileInView={{ opacity: 1, translateY: 0 }}
       className='px-4'
     >
-      <p className='text-muted-foreground text-base'>
+      <p className='text-base text-muted-foreground'>
         My projects have been used by the world&apos;s most innovative companies
       </p>
     </ViewAnimation>
 
-    <div className='relative md:max-w-[50%] select-none'>
+    <div className='relative select-none md:max-w-[50%]'>
       <Marquee autoFill>
         {logos.map((logo, index) => (
           <ViewAnimation

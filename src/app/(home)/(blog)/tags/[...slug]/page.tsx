@@ -168,8 +168,9 @@ export async function generateMetadata(
 
   return createMetadata({
     title: pageTitle,
-    description: `Posts tagged with ${tag}${!isFirstPage ? ` - Page ${pageIndex}` : ''
-      }`,
+    description: `Posts tagged with ${tag}${
+      !isFirstPage ? ` - Page ${pageIndex}` : ''
+    }`,
     openGraph: {
       url: canonicalUrl,
     },

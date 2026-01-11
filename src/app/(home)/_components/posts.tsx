@@ -1,10 +1,10 @@
+import Link from 'next/link';
+import type { HTMLAttributes } from 'react';
 import { PostCard } from '@/components/blog/post-card';
 import { Icons } from '@/components/icons/icons';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';
 import type { BlogPage } from '@/lib/source';
-import Link from 'next/link';
-import type { HTMLAttributes } from 'react';
 
 export default function Posts({
   posts,
