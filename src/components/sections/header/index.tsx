@@ -16,9 +16,10 @@ import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home';
 import {
   type LinkItemType,
   type NavOptions,
+  renderTitleNav,
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared';
-import { cn } from 'fumadocs-ui/utils/cn';
+import { cn } from '@/lib/utils';
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top';
 import { ChevronDown } from 'lucide-react';
 import { type ComponentProps, Fragment, useMemo, useState } from 'react';
@@ -79,12 +80,9 @@ export const Header = ({
       transparentMode={nav.transparentMode}
       className={className}
     >
-      <Link
-        href={nav.url ?? '/'}
-        className='inline-flex items-center gap-2.5 font-semibold'
-      >
-        {nav.title}
-      </Link>
+      {renderTitleNav(nav, {
+        className: 'inline-flex items-center gap-2.5 font-semibold',
+      })}
       {nav.children}
       <ul className='flex flex-row items-center gap-2 px-3 max-sm:hidden'>
         {navItems

@@ -6,7 +6,7 @@ import {
 } from 'fumadocs-ui/components/ui/button';
 import { useI18n } from 'fumadocs-ui/contexts/i18n';
 import { useSearchContext } from 'fumadocs-ui/contexts/search';
-import { cn } from 'fumadocs-ui/utils/cn';
+import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import type { ComponentProps } from 'react';
 

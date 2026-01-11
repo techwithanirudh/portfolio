@@ -1,7 +1,4 @@
-import {
-  type LinkItemType,
-  resolveLinkItems,
-} from 'fumadocs-ui/layouts/shared';
+import { resolveLinkItems } from 'fumadocs-ui/layouts/shared';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import {
@@ -28,7 +25,7 @@ export const Links = async () => {
   const links = resolveLinkItems({
     links: linkItems,
     githubUrl: baseOptions.githubUrl,
-  }) as LinkItemType[];
+  });
   const navItems = links.filter((item) =>
     ['nav', 'all'].includes(item.on ?? 'all'),
   );

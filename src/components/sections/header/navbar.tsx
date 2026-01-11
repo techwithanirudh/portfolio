@@ -6,7 +6,7 @@ import {
   NavigationMenuLink,
   NavigationMenuViewport,
 } from 'fumadocs-ui/components/ui/navigation-menu';
-import { cn } from 'fumadocs-ui/utils/cn';
+import { cn } from '@/lib/utils';
 import { type HTMLAttributes, useState } from 'react';
 
 export const Navbar = (props: HTMLAttributes<HTMLElement>) => {

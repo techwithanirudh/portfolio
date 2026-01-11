@@ -1,7 +1,7 @@
 'use client';
 
 import { cva } from 'class-variance-authority';
-import { cn } from 'fumadocs-ui/utils/cn';
+import { cn } from '@/lib/utils';
 import { Airplay, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { type ComponentProps, useEffect, useState } from 'react';

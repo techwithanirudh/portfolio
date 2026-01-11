@@ -16,8 +16,8 @@ import {
 import { useI18n } from 'fumadocs-ui/contexts/i18n';
 import { useSearchContext } from 'fumadocs-ui/contexts/search';
 import type { LinkItemType } from 'fumadocs-ui/layouts/shared';
-import { cn } from 'fumadocs-ui/utils/cn';
-import { isActive } from 'fumadocs-ui/utils/is-active';
+import { isActive } from '@/lib/is-active';
+import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import type { ComponentProps, ComponentPropsWithoutRef } from 'react';
 
@@ -192,7 +192,7 @@ export const SearchToggle = ({
 export const LargeSearchToggle = ({
   hideIfDisabled,
   ...props
-}: ComponentProps<'button'> & {
+}: Omit<ComponentProps<'button'>, 'ref'> & {
   hideIfDisabled?: boolean;
 }) => {
   const { enabled, hotKey, setOpenSearch } = useSearchContext();
