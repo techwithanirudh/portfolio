@@ -1,4 +1,4 @@
-import { socials } from '@/app/layout.config';
+import { socials } from '@/app/layout.shared';
 import { SectionHeader } from '@/components/sections/section-header';
 import {
   Tooltip,

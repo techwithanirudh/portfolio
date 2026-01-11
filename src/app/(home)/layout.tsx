@@ -3,8 +3,8 @@ import { Header } from '@/components/sections/header';
 import { HomeLayout } from 'fumadocs-ui/layouts/home';
 import { getLinks } from 'fumadocs-ui/layouts/shared';
 import type { ReactNode } from 'react';
-import { unstable_ViewTransition as ViewTransition } from 'react';
-import { baseOptions, linkItems } from '../layout.config';
+import { ViewTransition } from 'react';
+import { baseOptions, linkItems } from '../layout.shared';
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (

@@ -1,20 +1,21 @@
+import { work } from 'fumadocs-mdx:collections/server';
 import { loader } from 'fumadocs-core/source';
-import type { InferMetaType, InferPageType } from 'fumadocs-core/source';
-import { createMDXSource } from 'fumadocs-mdx';
-import { work } from '.source';
+import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
 
-export const project = loader({
+export const project = loader(toFumadocsSource(work, []), {
   baseUrl: '/work',
-  source: createMDXSource(work),
 });
-export const { getPage: getProject, getPages: getProjects, pageTree } = project;
+
+export const {
+  getPage: getProject,
+  getPages: getProjects,
+  pageTree: projectPageTree,
+} = project;
 
 export type Project = ReturnType<typeof getProject>;
+export type ProjectPage = ReturnType<typeof getProjects>[number];
 
 const projects = getProjects();
 
 export const getSortedByDateProjects = () =>
   projects.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime());
-
-export type ProjectPage = InferPageType<typeof project>;
-export type ProjectMeta = InferMetaType<typeof project>;

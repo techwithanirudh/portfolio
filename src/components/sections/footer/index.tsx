@@ -1,4 +1,4 @@
-import { owner } from '@/app/layout.config';
+import { owner } from '@/app/layout.shared';
 import { UserButton } from '@/components/auth/user-button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { ViewAnimation } from '@/components/view-animation';

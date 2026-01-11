@@ -1,12 +1,12 @@
 'use client';
 
-import { cn } from '@/lib/utils';
 import Link, { type LinkProps } from 'fumadocs-core/link';
 import {
   NavigationMenu,
   NavigationMenuLink,
   NavigationMenuViewport,
 } from 'fumadocs-ui/components/ui/navigation-menu';
+import { cn } from 'fumadocs-ui/utils/cn';
 import { type HTMLAttributes, useState } from 'react';
 
 export const Navbar = (props: HTMLAttributes<HTMLElement>) => {

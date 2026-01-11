@@ -1,4 +1,4 @@
-import { title } from '@/app/layout.config';
+import { title } from '@/app/layout.shared';
 import { baseUrl } from '@/lib/constants';
 import {
   Body,

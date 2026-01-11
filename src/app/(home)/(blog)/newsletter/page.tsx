@@ -1,5 +1,5 @@
 import { NewsletterForm } from '@/app/(home)/(blog)/newsletter/components/newsletter-form';
-import { title as homeTitle } from '@/app/layout.config';
+import { title as homeTitle } from '@/app/layout.shared';
 import { Section } from '@/components/section';
 import { Wrapper } from '@/components/wrapper';
 import { createMetadata } from '@/lib/metadata';

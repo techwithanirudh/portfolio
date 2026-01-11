@@ -38,6 +38,9 @@
       ],
       "@/public/*": [
         "./public/*"
+      ],
+      "fumadocs-mdx:collections/*": [
+        "./.source/*"
       ]
     }
   },

@@ -1,4 +1,4 @@
-import { baseOptions, linkItems } from '@/app/layout.config';
+import { baseOptions, linkItems } from '@/app/layout.shared';
 import { Icons } from '@/components/icons/icons';
 import { Section } from '@/components/section';
 import { buttonVariants } from '@/components/ui/button';

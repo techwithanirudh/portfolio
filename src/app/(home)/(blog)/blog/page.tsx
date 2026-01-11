@@ -1,4 +1,4 @@
-import { postsPerPage } from '@/app/layout.config';
+import { postsPerPage } from '@/app/layout.shared';
 import { NumberedPagination } from '@/components/numbered-pagination';
 import { Section } from '@/components/section';
 import { Wrapper } from '@/components/wrapper';

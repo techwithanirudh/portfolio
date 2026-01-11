@@ -2,7 +2,7 @@ import { BlurImage } from '@/components/blur-image';
 import { CalendarIcon, UserIcon } from 'lucide-react';
 import Link from 'next/link';
 import type React from 'react';
-import { unstable_ViewTransition as ViewTransition } from 'react';
+import { ViewTransition } from 'react';
 import Balancer from 'react-wrap-balancer';
 import { ViewAnimation } from '../view-animation';
 

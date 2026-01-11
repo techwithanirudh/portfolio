@@ -2,7 +2,7 @@ import { Icons } from '@/components/icons/icons';
 import { getPostsByTag } from '@/lib/source';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { unstable_ViewTransition as ViewTransition } from 'react';
+import { ViewTransition } from 'react';
 
 export const TagCard = ({
   name,

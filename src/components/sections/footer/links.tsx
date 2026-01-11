@@ -1,13 +1,16 @@
 import {
+  type LinkItemType,
+  resolveLinkItems,
+} from 'fumadocs-ui/layouts/shared';
+import {
   baseOptions,
   linkItems,
   postsPerPage,
   socials,
-} from '@/app/layout.config';
+} from '@/app/layout.shared';
 import { ActiveLink } from '@/components/active-link';
 import { ViewAnimation } from '@/components/view-animation';
 import { getSortedByDatePosts, getTags } from '@/lib/source';
-import { getLinks } from 'fumadocs-ui/layouts/shared';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
@@ -22,7 +25,10 @@ type ListItem = {
 };
 
 export const Links = async () => {
-  const links = getLinks(linkItems, baseOptions.githubUrl);
+  const links = resolveLinkItems({
+    links: linkItems,
+    githubUrl: baseOptions.githubUrl,
+  }) as LinkItemType[];
   const navItems = links.filter((item) =>
     ['nav', 'all'].includes(item.on ?? 'all'),
   );

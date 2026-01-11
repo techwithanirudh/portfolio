@@ -1,6 +1,5 @@
+import type { BaseLayoutProps, LinkItemType } from 'fumadocs-ui/layouts/shared';
 import { Icons } from '@/components/icons/icons';
-import type { LinkItemType } from 'fumadocs-ui/layouts/links';
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
 import { CastleIcon, MessageSquareIcon, YoutubeIcon } from 'lucide-react';
 import type { JSX } from 'react';
 
@@ -19,18 +18,11 @@ export const owner = 'Tech With Anirudh';
 export const baseOptions: BaseLayoutProps = {
   nav: {
     title,
-    enableSearch: false,
   },
   githubUrl: 'https://github.com/techwithanirudh/shadcn-saas-landing',
 };
 
 export const linkItems: LinkItemType[] = [
-  // {
-  //   text: 'Home',
-  //   url: '/',
-  //   icon: <Icons.home />,
-  //   active: 'url',
-  // },
   {
     icon: <Icons.info />,
     text: 'About',

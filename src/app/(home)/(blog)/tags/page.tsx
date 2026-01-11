@@ -1,4 +1,4 @@
-import { title as homeTitle } from '@/app/layout.config';
+import { title as homeTitle } from '@/app/layout.shared';
 import { Section } from '@/components/section';
 import { TagCard } from '@/components/tags/tag-card';
 import { Wrapper } from '@/components/wrapper';
