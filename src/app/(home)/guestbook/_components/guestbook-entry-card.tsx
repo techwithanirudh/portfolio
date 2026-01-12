@@ -64,7 +64,7 @@ export const GuestbookEntryCard = ({
   }
 
   return (
-    <div className='grid gap-4 px-6 py-6'>
+    <div className='grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'>
       <div className='flex flex-wrap items-start justify-between gap-3'>
         <div className='space-y-1'>
           <h3 className='font-medium text-sm'>{entry.name}</h3>
@@ -78,14 +78,18 @@ export const GuestbookEntryCard = ({
         {canEdit ? (
           <div className='flex items-center gap-2'>
             <Button
+              aria-label='Edit entry'
+              className='rounded-none'
               disabled={editAction.status === 'executing' || isEditing}
               onClick={startEditing}
               size='icon'
               variant='ghost'
             >
-              <Icons.pencil />
+              <Icons.pencil className='size-4' />
             </Button>
             <Button
+              aria-label='Delete entry'
+              className='rounded-none'
               disabled={
                 deleteAction.status === 'executing' ||
                 editAction.status === 'executing'
@@ -94,7 +98,7 @@ export const GuestbookEntryCard = ({
               size='icon'
               variant='destructive'
             >
-              <Icons.trash />
+              <Icons.trash className='size-4' />
             </Button>
           </div>
         ) : null}

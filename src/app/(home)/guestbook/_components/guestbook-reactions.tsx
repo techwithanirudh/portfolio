@@ -1,7 +1,7 @@
 'use client'
 
 import { useOptimisticAction } from 'next-safe-action/hooks'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import {
   EmojiPicker,
   EmojiPickerContent,
@@ -76,7 +76,7 @@ export const GuestbookReactions = ({
 }: GuestbookReactionsProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
-  const { execute, optimisticState, result, status } = useOptimisticAction(
+  const { execute, optimisticState, status } = useOptimisticAction(
     toggleGuestbookReaction,
     {
       currentState: { reactions },
@@ -84,19 +84,7 @@ export const GuestbookReactions = ({
     }
   )
 
-  useEffect(() => {
-    if (result.serverError) {
-      setIsOpen(false)
-    }
-  }, [result.serverError])
-
-  const sortedReactions = useMemo(
-    () =>
-      [...optimisticState.reactions].sort((a, b) =>
-        a.emoji.localeCompare(b.emoji)
-      ),
-    [optimisticState.reactions]
-  )
+  const optimisticReactions = optimisticState.reactions
 
   const handleReaction = (emoji: string) => {
     execute({ entryId, emoji })
@@ -106,10 +94,10 @@ export const GuestbookReactions = ({
   return (
     <div className='space-y-2'>
       <div className='flex flex-wrap gap-2'>
-        {sortedReactions.map((reaction) => (
+        {optimisticReactions.map((reaction: GuestbookReactionItem) => (
           <Button
             className={cn(
-              'gap-2 rounded-full border border-dashed border-border bg-transparent px-3 text-xs',
+              'gap-2 rounded-none border border-dashed border-border bg-transparent px-3 text-xs',
               reaction.reacted && 'border-primary text-primary'
             )}
             disabled={!canReact || status === 'executing'}
@@ -126,7 +114,7 @@ export const GuestbookReactions = ({
         <Popover onOpenChange={setIsOpen} open={isOpen}>
           <PopoverTrigger asChild>
             <Button
-              className='gap-2 rounded-full border border-dashed border-border bg-transparent px-3 text-xs'
+              className='gap-2 rounded-none border border-dashed border-border bg-transparent px-3 text-xs'
               disabled={!canReact}
               size='sm'
               type='button'
