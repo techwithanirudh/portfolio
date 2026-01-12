@@ -98,9 +98,6 @@ const ContactFormInner = () => {
                   disabled={status === 'executing'}
                 />
               </FormControl>
-              <FormDescription>
-                Please include at least 30 characters.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
