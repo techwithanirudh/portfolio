@@ -42,16 +42,22 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
             ))}
           </div>
 
-          <Link
-            className={buttonVariants({
-              variant: 'default',
-              className: 'group rounded-none py-4 sm:py-8 w-full',
-            })}
-            href='/work'
+          <ViewAnimation
+            delay={0.6 + works.length * 0.1}
+            initial={{ opacity: 0, translateY: -8 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
           >
-            View More
-            <Icons.arrowUpRight className='ml-2 size-5 transition-transform group-hover:-rotate-12' />
-          </Link>
+            <Link
+              className={buttonVariants({
+                variant: 'default',
+                className: 'group w-full rounded-none py-4 sm:py-8',
+              })}
+              href='/work'
+            >
+              View More
+              <Icons.arrowUpRight className='ml-2 size-5 transition-transform group-hover:-rotate-12' />
+            </Link>
+          </ViewAnimation>
         </div>
       </div>
     </Section>
