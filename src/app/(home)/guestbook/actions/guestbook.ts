@@ -5,12 +5,14 @@ import { revalidatePath } from 'next/cache'
 
 import { ActionError, actionClient } from '@/lib/safe-action'
 import {
+  GuestbookDeleteSchema,
   GuestbookEditSchema,
   GuestbookEntrySchema,
   GuestbookReactionSchema,
 } from '@/lib/validators'
 import { getSession } from '@/server/auth'
 import { db } from '@/server/db'
+import { deleteGuestbookEntry } from '@/server/db/queries/guestbook'
 import { guestbookEntries, guestbookReactions } from '@/server/db/schema'
 
 const requireUser = async () => {
@@ -103,6 +105,21 @@ export const editGuestbookEntry = actionClient
 
     if (updated.length === 0) {
       throw new ActionError('Unable to edit this message.')
+    }
+
+    revalidatePath('/guestbook')
+
+    return { success: true }
+  })
+
+export const removeGuestbookEntry = actionClient
+  .schema(GuestbookDeleteSchema)
+  .action(async ({ parsedInput }) => {
+    const user = await requireUser()
+    const removed = await deleteGuestbookEntry(parsedInput.entryId, user.id)
+
+    if (!removed) {
+      throw new ActionError('Unable to delete this message.')
     }
 
     revalidatePath('/guestbook')

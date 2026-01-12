@@ -12,10 +12,17 @@ export const GuestbookReactionSchema = z.object({
   emoji: z.string().min(1).max(12),
 })
 
-export const GuestbookEditSchema = GuestbookEntrySchema.extend({
+export const GuestbookEntryIdSchema = z.object({
   entryId: z.number().int().positive(),
 })
+
+export const GuestbookEditSchema = GuestbookEntrySchema.merge(
+  GuestbookEntryIdSchema
+)
+
+export const GuestbookDeleteSchema = GuestbookEntryIdSchema
 
 export type GuestbookEntry = z.infer<typeof GuestbookEntrySchema>
 export type GuestbookReaction = z.infer<typeof GuestbookReactionSchema>
 export type GuestbookEdit = z.infer<typeof GuestbookEditSchema>
+export type GuestbookDelete = z.infer<typeof GuestbookDeleteSchema>

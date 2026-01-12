@@ -201,7 +201,7 @@ export function SmoothCursor({
             style={{
               opacity: !isOverPointer ? 1 : 0,
             }}
-            className={`pointer-events-none absolute top-0 left-0 h-[34px] w-[34px] rounded-full border-2 shadow-sm drop-shadow-sm transition-all duration-300 ease-out will-change-transform dark:border-gray-700 ${disableRotation ? "-rotate-45" : ""}`}
+            className={`pointer-events-none absolute top-0 left-0 h-[34px] w-[34px] rounded-full border-2 shadow-sm drop-shadow-sm transition-all duration-300 ease-out will-change-transform dark:border-border ${disableRotation ? "-rotate-45" : ""}`}
           ></div>
         </>
       )}

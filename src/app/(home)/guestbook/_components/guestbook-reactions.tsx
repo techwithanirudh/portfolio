@@ -1,8 +1,7 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useAction } from 'next-safe-action/hooks'
-import { useEffect, useState } from 'react'
+import { useOptimisticAction } from 'next-safe-action/hooks'
+import { useEffect, useMemo, useState } from 'react'
 import {
   EmojiPicker,
   EmojiPickerContent,
@@ -26,73 +25,80 @@ interface GuestbookReactionsProps {
   canReact: boolean
 }
 
+interface OptimisticState {
+  reactions: GuestbookReactionItem[]
+}
+
+const updateOptimisticReactions = (
+  state: OptimisticState,
+  payload: { entryId: number; emoji: string }
+) => {
+  const { emoji } = payload
+  const existing = state.reactions.find((item) => item.emoji === emoji)
+
+  if (!existing) {
+    return {
+      reactions: [
+        ...state.reactions,
+        {
+          emoji,
+          count: 1,
+          reacted: true,
+        },
+      ],
+    }
+  }
+
+  const nextReacted = !existing.reacted
+  const nextCount = existing.reacted
+    ? Math.max(existing.count - 1, 0)
+    : existing.count + 1
+
+  const updated = state.reactions
+    .map((item) =>
+      item.emoji === emoji
+        ? {
+            ...item,
+            count: nextCount,
+            reacted: nextReacted,
+          }
+        : item
+    )
+    .filter((item) => item.count > 0)
+
+  return { reactions: updated }
+}
+
 export const GuestbookReactions = ({
   entryId,
   reactions,
   canReact,
 }: GuestbookReactionsProps) => {
-  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
-  const [optimisticReactions, setOptimisticReactions] = useState(reactions)
 
-  const { execute, status, result } = useAction(toggleGuestbookReaction)
-
-  useEffect(() => {
-    setOptimisticReactions(reactions)
-  }, [reactions])
-
-  useEffect(() => {
-    if (status === 'hasSucceeded') {
-      router.refresh()
+  const { execute, optimisticState, result, status } = useOptimisticAction(
+    toggleGuestbookReaction,
+    {
+      currentState: { reactions },
+      updateFn: updateOptimisticReactions,
     }
-  }, [router, status])
+  )
 
   useEffect(() => {
     if (result.serverError) {
-      setOptimisticReactions(reactions)
+      setIsOpen(false)
     }
-  }, [reactions, result.serverError])
+  }, [result.serverError])
 
-  const updateOptimisticReaction = (emoji: string) => {
-    setOptimisticReactions((previous) => {
-      const existing = previous.find((item) => item.emoji === emoji)
-
-      if (!existing) {
-        return [
-          ...previous,
-          {
-            emoji,
-            count: 1,
-            reacted: true,
-          },
-        ]
-      }
-
-      const nextReacted = !existing.reacted
-      const nextCount = existing.reacted
-        ? Math.max(existing.count - 1, 0)
-        : existing.count + 1
-
-      const updated = previous.map((item) =>
-        item.emoji === emoji
-          ? {
-              ...item,
-              count: nextCount,
-              reacted: nextReacted,
-            }
-          : item
-      )
-
-      if (nextCount === 0) {
-        return updated.filter((item) => item.emoji !== emoji)
-      }
-
-      return updated
-    })
-  }
+  const sortedReactions = useMemo(
+    () =>
+      [...optimisticState.reactions].sort((a, b) =>
+        a.emoji.localeCompare(b.emoji)
+      ),
+    [optimisticState.reactions]
+  )
 
   const handleReaction = (emoji: string) => {
-    updateOptimisticReaction(emoji)
     execute({ entryId, emoji })
     setIsOpen(false)
   }
@@ -100,7 +106,7 @@ export const GuestbookReactions = ({
   return (
     <div className='space-y-2'>
       <div className='flex flex-wrap gap-2'>
-        {optimisticReactions.map((reaction) => (
+        {sortedReactions.map((reaction) => (
           <Button
             className={cn(
               'gap-2 rounded-full border border-dashed border-border bg-transparent px-3 text-xs',
