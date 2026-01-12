@@ -56,10 +56,13 @@ const ContactFormInner = () => {
                   disabled={status === 'executing'}
                 />
               </FormControl>
-              <FormDescription>
-                Your full name, so I know who I'm talking to.
-              </FormDescription>
-              <FormMessage />
+              {form.formState.errors.name ? (
+                <FormMessage />
+              ) : (
+                <FormDescription>
+                  Your full name, so I know who I'm talking to.
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
@@ -77,10 +80,13 @@ const ContactFormInner = () => {
                   disabled={status === 'executing'}
                 />
               </FormControl>
-              <FormDescription>
-                I will never share your email with anyone else.
-              </FormDescription>
-              <FormMessage />
+              {form.formState.errors.email ? (
+                <FormMessage />
+              ) : (
+                <FormDescription>
+                  I will never share your email with anyone else.
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
@@ -98,13 +104,19 @@ const ContactFormInner = () => {
                   disabled={status === 'executing'}
                 />
               </FormControl>
-              <FormMessage />
+              {form.formState.errors.message ? (
+                <FormMessage />
+              ) : (
+                <FormDescription>
+                  Please include at least 30 characters.
+                </FormDescription>
+              )}
             </FormItem>
           )}
         />
         <Button
           className='w-full'
-          disabled={!form.formState.isValid || status === 'executing'}
+          disabled={status === 'executing'}
           type='submit'
         >
           {status === 'executing' ? (
