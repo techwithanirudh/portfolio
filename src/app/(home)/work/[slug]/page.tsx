@@ -93,20 +93,26 @@ function Header(props: { page: MDXPage }) {
           </ViewTransition>
         </div>
         {links.length > 0 && (
-          <div className='flex flex-wrap gap-3'>
-            {links.map((link) => (
-              <Button asChild key={link.href} size='sm' variant='secondary'>
-                <Link
-                  href={link.href}
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  {link.icon}
-                  {link.label}
-                </Link>
-              </Button>
-            ))}
-          </div>
+          <ViewAnimation
+            delay={1}
+            initial={{ opacity: 0, translateY: -8 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <div className='flex flex-wrap gap-3'>
+              {links.map((link) => (
+                <Button asChild key={link.href} size='sm' variant='secondary'>
+                  <Link
+                    href={link.href}
+                    rel='noopener noreferrer'
+                    target='_blank'
+                  >
+                    {link.icon}
+                    {link.label}
+                  </Link>
+                </Button>
+              ))}
+            </div>
+          </ViewAnimation>
         )}
       </div>
     </Section>
@@ -130,24 +136,30 @@ export default async function Page(props: {
 
       <Section className='h-full' sectionClassName='flex flex-1'>
         <article className='flex min-h-full flex-col'>
-          <div className='flex flex-1 flex-col gap-4'>
-            <InlineTOC
-              className='rounded-none border-0 border-border border-b border-dashed'
-              items={toc}
-            />
-            <div className='prose min-w-0 flex-1 px-4'>
-              <Mdx
-                components={{
-                  ...defaultMdxComponents,
-                  File,
-                  Files,
-                  Folder,
-                  Tabs,
-                  Tab,
-                }}
+          <ViewAnimation
+            delay={0.2}
+            initial={{ opacity: 0, translateY: -8 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <div className='flex flex-1 flex-col gap-4'>
+              <InlineTOC
+                className='rounded-none border-0 border-border border-b border-dashed'
+                items={toc}
               />
+              <div className='prose min-w-0 flex-1 px-4 pb-4'>
+                <Mdx
+                  components={{
+                    ...defaultMdxComponents,
+                    File,
+                    Files,
+                    Folder,
+                    Tabs,
+                    Tab,
+                  }}
+                />
+              </div>
             </div>
-          </div>
+          </ViewAnimation>
         </article>
       </Section>
     </>
