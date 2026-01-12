@@ -8,6 +8,7 @@ import Analytics from '@/components/analytics'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { SmoothCursor } from '@/components/smooth-cursor'
 
 export function Provider({
   children,
@@ -39,6 +40,7 @@ export function Provider({
       <Analytics />
       <Toaster />
       <TailwindIndicator />
+      <SmoothCursor disableRotation />
     </ThemeProvider>
   )
 }
