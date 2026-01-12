@@ -12,7 +12,7 @@ const faq = [
   {
     question: 'What technologies do you specialize in?',
     answer:
-      'I focus on full-stack web development with Next.js, React, TypeScript, and Python. For AI work, I mostly use OpenCV and GPT-based APIs. For databases and backends, I work with Firebase, Drizzle ORM, and Node.js.',
+      "I focus on full-stack web development with Next.js, React, and TypeScript. I'm familiar with Python for AI experiments using OpenCV and GPT-based APIs. For databases and backends, I work with Drizzle ORM, and Node.js.",
   },
   {
     question: 'What are you focusing on right now?',

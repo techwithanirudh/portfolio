@@ -65,7 +65,7 @@ const Hero = () => {
         <p className='max-w-2xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
           <Balancer>
             I'm a full-stack developer who builds web apps and AI tools. I
-            mostly work with Next.js, Python, and modern web tech.
+            mostly work with Next.js, React, and TypeScript.
           </Balancer>
         </p>
       </ViewAnimation>

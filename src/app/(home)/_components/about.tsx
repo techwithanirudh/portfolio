@@ -32,9 +32,9 @@ export default function About(): React.ReactElement {
               from there.
             </p>
             <p className='text-lg'>
-              These days I work mostly with Next.js, React, and Python. I've
-              shipped open-source projects from no-code experiments to small AI
-              helpers.
+              These days I work mostly with Next.js, React, and TypeScript, with
+              some Python for AI experiments. I've shipped open-source projects
+              from no-code experiments to small AI helpers.
             </p>
           </div>
           <Link

@@ -37,8 +37,8 @@ export default function Detailed(): React.ReactElement {
                 a while and still like to tinker.
               </p>
               <p>
-                I build web and AI apps with Python, OpenCV, GPT APIs, and Azure
-                AI.
+                I build web apps with Next.js, React, and TypeScript, and I
+                experiment with Python, OpenCV, and AI.
               </p>
               <p>
                 I've worked on research projects around privacy for autonomous
@@ -46,11 +46,10 @@ export default function Detailed(): React.ReactElement {
               </p>
               <p>
                 I'm creating a few projects right now and sharing them through
-                open source. You can find my work on GitHub and at
-                techwithanirudh.com.
+                open source. You can find my work on GitHub, and here!
               </p>
               <p>
-                In my free time, I enjoy electronic music and sharing my builds
+                In my free time, I enjoy 80s music and sharing my builds
                 online.
               </p>
               <Link

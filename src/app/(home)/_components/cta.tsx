@@ -28,7 +28,7 @@ export default function CTA(): React.ReactElement {
           >
             <p className='max-w-2xl text-center text-muted-foreground sm:text-xl'>
               <Balancer>
-                Have questions or want to work together? Reach out through the
+                Have questions or want to connect? Reach out through the
                 contact form or find me on social platforms.
               </Balancer>
             </p>

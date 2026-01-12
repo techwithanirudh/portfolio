@@ -35,7 +35,7 @@ const features = [
     Icon: BrainCircuitIcon,
     title: 'AI & Machine Learning',
     description:
-      'Building AI features with Python, OpenCV, and GPT-powered applications.',
+      'Exploring AI features with Python, OpenCV, and GPT-powered APIs.',
     size: 'sm',
   },
   {
@@ -43,7 +43,7 @@ const features = [
     Icon: LayersIcon,
     title: 'Full Stack Development',
     description:
-      'Creating end-to-end solutions with Node.js, Python, databases, and cloud technologies.',
+      'Creating end-to-end solutions with Node.js, TypeScript, databases, and cloud technologies.',
     size: 'sm',
   },
 ]

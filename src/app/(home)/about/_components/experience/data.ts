@@ -21,11 +21,11 @@ export const experiences = [
       'Shipped a Product Hunt launch, built PowerApps solutions, and published Maskio on GitHub Game Jam.',
   },
   {
-    role: 'Python Programmer',
+    role: 'Python & AI Experiments',
     company: 'Independent',
     timeframe: '2019 – 2020',
     summary:
-      'Built early AI projects with Keras, OpenCV, and GPT-based tooling.',
+      'Built early AI experiments with Keras, OpenCV, and GPT-based tooling.',
   },
   {
     role: 'Mindstorms / Lego Boost Programmer',
