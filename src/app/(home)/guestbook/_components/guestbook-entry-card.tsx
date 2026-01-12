@@ -76,7 +76,7 @@ export const GuestbookEntryCard = ({
           </p>
         </div>
         {canEdit ? (
-          <div className='flex items-center gap-2'>
+          <div className='flex items-center'>
             <Button
               aria-label='Edit entry'
               className='rounded-none'
@@ -89,14 +89,14 @@ export const GuestbookEntryCard = ({
             </Button>
             <Button
               aria-label='Delete entry'
-              className='rounded-none'
+              className='rounded-none text-destructive'
               disabled={
                 deleteAction.status === 'executing' ||
                 editAction.status === 'executing'
               }
               onClick={deleteEntry}
               size='icon'
-              variant='destructive'
+              variant='ghost'
             >
               <Icons.trash className='size-4' />
             </Button>
