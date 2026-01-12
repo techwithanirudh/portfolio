@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -40,6 +41,7 @@ export interface UserButtonProps {
 }
 
 export function UserButton({ className, classNames }: UserButtonProps) {
+  const router = useRouter()
   const { data: sessionData, isPending } = useSession()
   const user = sessionData?.user ?? null
 
@@ -105,7 +107,10 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         {user ? (
           <DropdownMenuItem
             className={classNames?.content?.menuItem}
-            onClick={() => signOut()}
+            onClick={async () => {
+              await signOut()
+              router.refresh()
+            }}
           >
             <Icons.logOut className='size-4' />
             Log Out

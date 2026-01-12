@@ -48,7 +48,7 @@ export const GuestbookForm = () => {
 
   if (!user) {
     return (
-      <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-4 w-full text-center'>
         <p className='text-muted-foreground text-sm'>
           Sign in to leave a guestbook message.
         </p>
