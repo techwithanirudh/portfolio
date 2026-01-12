@@ -78,7 +78,7 @@ export const HeroSection = ({
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
               variant === 'compact' &&
-                'text-left font-normal font-regular tracking-tighter sm:text-left'
+              'text-left font-normal font-regular tracking-tighter sm:text-left'
             )}
           >
             <Balancer>{title}</Balancer>
@@ -92,9 +92,9 @@ export const HeroSection = ({
           >
             <p
               className={cn(
-                'typography-body text-muted-foreground text-sm sm:text-base',
+                'text-muted-foreground text-sm sm:text-base',
                 variant === 'compact' &&
-                  'text-left text-lg leading-relaxed tracking-tight'
+                'text-left text-lg leading-relaxed tracking-tight'
               )}
             >
               <Balancer>{description}</Balancer>
