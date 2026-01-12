@@ -1,0 +1,37 @@
+export const experiences = [
+  {
+    role: 'Research Collaboration',
+    company: 'Independent',
+    timeframe: 'Apr 2022 – May 2022',
+    summary:
+      'Co-authored a research paper on privacy challenges for autonomous cars.',
+  },
+  {
+    role: 'Full Stack Developer',
+    company: 'Independent',
+    timeframe: '2021 – Present',
+    summary:
+      'Built AniKode Studio, AniSlides, and AniAuthenticator across web and AI tooling.',
+  },
+  {
+    role: 'Web / PowerApps Developer',
+    company: 'Independent',
+    timeframe: '2020 – 2021',
+    summary:
+      'Shipped a Product Hunt launch, built PowerApps solutions, and published Maskio on GitHub Game Jam.',
+  },
+  {
+    role: 'Python Programmer',
+    company: 'Independent',
+    timeframe: '2019 – 2020',
+    summary:
+      'Built early AI projects with Keras, OpenCV, and GPT-based tooling.',
+  },
+  {
+    role: 'Mindstorms / Lego Boost Programmer',
+    company: 'Independent',
+    timeframe: '2018 – 2019',
+    summary:
+      'Created robotics experiments including Snake, Vernie, Humanoid Robot, and Gripper.',
+  },
+]

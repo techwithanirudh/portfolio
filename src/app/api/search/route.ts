@@ -1,0 +1,23 @@
+import { createSearchAPI } from 'fumadocs-core/search/server'
+import { getPosts, getWorkPages } from '@/lib/source'
+
+export const { GET } = createSearchAPI('advanced', {
+  indexes: [
+    ...getPosts().map((page) => ({
+      title: page.data.title ?? 'Untitled',
+      description: page.data.description,
+      structuredData: page.data.structuredData,
+      id: page.url,
+      url: page.url,
+      tag: 'blog',
+    })),
+    ...getWorkPages().map((page) => ({
+      title: page.data.title ?? 'Untitled',
+      description: page.data.description,
+      structuredData: page.data.structuredData,
+      id: page.url,
+      url: page.url,
+      tag: 'projects',
+    })),
+  ],
+})

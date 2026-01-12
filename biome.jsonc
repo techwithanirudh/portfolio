@@ -1,0 +1,81 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "!node_modules",
+      "!**/.next",
+      "!**/dist",
+      "!**/public",
+      "!.github",
+      "!.vercel",
+      "!pnpm-lock.yaml",
+      "!bun.lock",
+      "!**/*.md",
+      "!**/*.mdx",
+      "!components/ui",
+      "!**/*.grit"
+    ]
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useGenericFontNames": "off",
+        "useSemanticElements": "warn"
+      },
+      "correctness": {
+        "useUniqueElementIds": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off",
+        "noNamespaceImport": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "info",
+          "options": {
+            "functions": ["cn"]
+          }
+        },
+        "noLeakedRender": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "es5",
+      "jsxQuoteStyle": "single"
+    }
+  },
+  "json": {
+    "parser": {
+      "allowComments": true
+    }
+  },
+  "extends": [
+    "ultracite/core",
+    "ultracite/react",
+    "ultracite/next",
+    "ultracite/biome/core",
+    "ultracite/biome/react",
+    "ultracite/biome/next"
+  ]
+}
