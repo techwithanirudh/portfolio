@@ -16,10 +16,10 @@ export default function Detailed(): React.ReactElement {
           >
             <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
               <h2 className='font-semibold text-2xl'>About</h2>
-              <div className='prose prose-sm dark:prose-invert text-muted-foreground'>
-                A quick look at my background, focus, and what I’m building
+              <p className='text-muted-foreground text-sm'>
+                A quick look at my background, focus, and what I'm building
                 next.
-              </div>
+              </p>
             </div>
           </ViewAnimation>
         </div>
@@ -32,7 +32,7 @@ export default function Detailed(): React.ReactElement {
           >
             <div className='space-y-6 p-8 text-lg text-muted-foreground'>
               <p>
-                Hi, I’m Anirudh (techwithanirudh). I’ve been building things for
+                Hi, I'm Anirudh (techwithanirudh). I've been building things for
                 a while and still like to tinker.
               </p>
               <p>
@@ -40,11 +40,11 @@ export default function Detailed(): React.ReactElement {
                 AI.
               </p>
               <p>
-                I’ve worked on research projects around privacy for autonomous
+                I've worked on research projects around privacy for autonomous
                 vehicles and shared a few write-ups along the way.
               </p>
               <p>
-                I’m creating a few projects right now and sharing them through
+                I'm creating a few projects right now and sharing them through
                 open source. You can find my work on GitHub and at
                 techwithanirudh.com.
               </p>
