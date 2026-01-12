@@ -2,6 +2,8 @@
 
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
+import { Icons } from '@/components/icons/icons'
+import { Button } from '@/components/ui/button'
 import {
   EmojiPicker,
   EmojiPickerContent,
@@ -13,8 +15,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 import type { GuestbookReactionItem } from './guestbook-types'
@@ -97,7 +97,7 @@ export const GuestbookReactions = ({
         {optimisticReactions.map((reaction: GuestbookReactionItem) => (
           <Button
             className={cn(
-              'gap-2 rounded-none border border-dashed border-border bg-transparent px-3 text-xs',
+              'gap-2 rounded-none border border-border border-dashed bg-transparent px-3 text-xs',
               reaction.reacted && 'border-primary text-primary'
             )}
             disabled={!canReact || status === 'executing'}
@@ -114,7 +114,7 @@ export const GuestbookReactions = ({
         <Popover onOpenChange={setIsOpen} open={isOpen}>
           <PopoverTrigger asChild>
             <Button
-              className='gap-2 rounded-none border border-dashed border-border bg-transparent px-3 text-xs'
+              className='gap-2 rounded-none border border-border border-dashed bg-transparent px-3 text-xs'
               disabled={!canReact}
               size='sm'
               type='button'

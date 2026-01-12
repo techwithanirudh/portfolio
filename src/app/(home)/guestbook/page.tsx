@@ -35,7 +35,7 @@ export default async function GuestbookPage() {
         </ViewAnimation>
       </Section>
       <Section className='p-6'>
-        <h2 className='text-xl font-medium'>Recent Entries</h2>
+        <h2 className='font-medium text-xl'>Recent Entries</h2>
       </Section>
       <Section>
         <GuestbookEntries

@@ -1,8 +1,8 @@
 'use client'
 
 import { Icons } from '@/components/icons/icons'
-import type { GuestbookEntryItem } from './guestbook-types'
 import { GuestbookEntryCard } from './guestbook-entry-card'
+import type { GuestbookEntryItem } from './guestbook-types'
 
 interface GuestbookEntriesProps {
   currentUserId: string | null

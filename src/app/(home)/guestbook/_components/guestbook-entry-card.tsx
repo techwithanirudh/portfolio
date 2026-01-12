@@ -8,8 +8,8 @@ import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { editGuestbookEntry, removeGuestbookEntry } from '../actions/guestbook'
-import type { GuestbookEntryItem } from './guestbook-types'
 import { GuestbookReactions } from './guestbook-reactions'
+import type { GuestbookEntryItem } from './guestbook-types'
 
 interface GuestbookEntryCardProps {
   entry: GuestbookEntryItem
@@ -141,7 +141,7 @@ export const GuestbookEntryCard = ({
           ) : null}
         </div>
       ) : (
-        <p className='text-sm text-muted-foreground'>{entry.message}</p>
+        <p className='text-muted-foreground text-sm'>{entry.message}</p>
       )}
       {isEditing ? null : (
         <GuestbookReactions
