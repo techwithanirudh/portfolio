@@ -3,6 +3,7 @@ import { Section } from '@/components/section'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
+import { Icons } from '@/components/icons/icons'
 
 export default function Detailed(): React.ReactElement {
   return (
@@ -60,6 +61,7 @@ export default function Detailed(): React.ReactElement {
                 href='/work'
               >
                 View Work
+                <Icons.arrowUpRight className='size-4 transition-transform group-hover:-rotate-12' />
               </Link>
             </div>
           </ViewAnimation>
