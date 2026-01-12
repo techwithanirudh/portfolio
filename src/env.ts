@@ -32,7 +32,7 @@ export const env = createEnv({
 
   client: {
     // App
-    NEXT_PUBLIC_BASE_URL: z.url().min(1),
+    NEXT_PUBLIC_BASE_URL: z.url().min(1).optional(),
     // Analytics
     NEXT_PUBLIC_UMAMI_URL: z.url().optional(),
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.uuid().optional(),
