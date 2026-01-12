@@ -71,9 +71,6 @@
     }
   },
   "extends": [
-    "ultracite/core",
-    "ultracite/react",
-    "ultracite/next",
     "ultracite/biome/core",
     "ultracite/biome/react",
     "ultracite/biome/next"

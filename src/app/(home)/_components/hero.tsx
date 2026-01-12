@@ -87,7 +87,7 @@ const Hero = () => {
             href='/work'
           >
             Browse Work
-            <Icons.arrowRight className='ml-2 size-5 transition-transform group-hover:-rotate-45' />
+            <Icons.arrowRight className='size-5 transition-transform group-hover:-rotate-45' />
           </Link>
         </ViewAnimation>
 

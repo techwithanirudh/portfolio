@@ -55,7 +55,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
               href='/work'
             >
               View More
-              <Icons.arrowUpRight className='ml-2 size-5 transition-transform group-hover:-rotate-12' />
+              <Icons.arrowUpRight className='size-5 transition-transform group-hover:-rotate-12' />
             </Link>
           </ViewAnimation>
         </div>
