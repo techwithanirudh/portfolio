@@ -25,6 +25,7 @@ import { contact } from '../actions/contact'
 const ContactFormInner = () => {
   const form = useForm({
     resolver: zodResolver(ContactSchema),
+    mode: 'onChange',
     defaultValues: {
       name: '',
       email: '',
@@ -97,6 +98,9 @@ const ContactFormInner = () => {
                   disabled={status === 'executing'}
                 />
               </FormControl>
+              <FormDescription>
+                Please include at least 30 characters.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}

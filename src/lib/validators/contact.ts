@@ -12,11 +12,9 @@ export const ContactSchema = z.object({
   email: z.email({
     error: 'Please provide a valid email address.',
   }),
-  message: z
-    .string()
-    .min(10, {
-      message: 'Message must be at least 10 characters.',
-    }),
+  message: z.string().min(30, {
+    message: 'Message must be at least 30 characters.',
+  }),
 })
 
 export type Contact = z.infer<typeof ContactSchema>
