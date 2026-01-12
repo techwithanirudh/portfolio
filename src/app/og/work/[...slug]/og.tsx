@@ -69,7 +69,7 @@ export function generate({
               color: 'rgba(255,255,255,0.7)',
             }}
           >
-            Selected Work
+            Work
           </span>
           <span
             style={{

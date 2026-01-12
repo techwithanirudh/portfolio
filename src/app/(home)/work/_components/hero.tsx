@@ -7,8 +7,8 @@ export const Hero = (_props: {
 }) => (
   <HeroSection
     align='center'
-    description='Selected work highlighting product, design, and engineering outcomes.'
-    title='Selected Work'
+    description='A snapshot of recent projects and collaborations.'
+    title='Work'
     variant='default'
   />
 )

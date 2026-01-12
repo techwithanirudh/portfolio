@@ -1,7 +1,6 @@
 'use strict'
 const siteUrl =
-  process.env.NODE_ENV === 'development' ||
-  !process.env.NEXT_PUBLIC_BASE_URL
+  process.env.NODE_ENV === 'development' || !process.env.NEXT_PUBLIC_BASE_URL
     ? new URL('https://localhost:3000')
     : new URL(process.env.NEXT_PUBLIC_BASE_URL)
 

@@ -16,7 +16,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
             align='left'
             className='px-6'
             description='A snapshot of recent projects and collaborations.'
-            title='Selected Work'
+            title='Work'
             titleClassName='text-base font-medium'
           />
         </ViewAnimation>

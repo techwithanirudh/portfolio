@@ -9,12 +9,7 @@ interface WorkCardProps {
   url: string
 }
 
-export const WorkCard = ({
-  title,
-  description,
-  image,
-  url
-}: WorkCardProps) => {
+export const WorkCard = ({ title, description, image, url }: WorkCardProps) => {
   return (
     <Link
       className='group flex h-full flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
@@ -24,7 +19,7 @@ export const WorkCard = ({
         <div className='relative inline-flex items-center justify-center overflow-hidden bg-background transition-transform group-hover:scale-102'>
           <BlurImage
             alt={title}
-            className='h-full w-full aspect-video rounded-lg'
+            className='aspect-video h-full w-full rounded-lg'
             height={500}
             imageClassName='h-full w-full object-cover'
             src={image}
@@ -34,9 +29,7 @@ export const WorkCard = ({
       )}
       <div className='flex flex-1 flex-col gap-3'>
         <div className='flex flex-1 flex-col gap-2'>
-          <h2 className='font-medium text-lg md:text-xl'>
-            {title}
-          </h2>
+          <h2 className='font-medium text-lg md:text-xl'>{title}</h2>
           <p className='line-clamp-3 text-muted-foreground text-sm'>
             <Balancer>{description}</Balancer>
           </p>

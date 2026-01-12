@@ -59,7 +59,7 @@ export default function Detailed(): React.ReactElement {
                 )}
                 href='/work'
               >
-                View Selected Work
+                View Work
               </Link>
             </div>
           </ViewAnimation>
