@@ -1,10 +1,25 @@
 ---
 title: AniKode Website Builder
-description: AniKode Website Builder is a drag-and-drop website builder with built-in low-code/no-code editors. It's designed for both beginners and advanced users who want to create responsive and visually appealing websites without deep coding knowledge.
+description: Next.js website builder with a GrapesJS editor, Drizzle persistence, and NextAuth auth flows.
 date: 2023-06-15
 website: https://anikode.techwithanirudh.com/
 image: /images/projects/anikode/cover.jpg
-tags: ['Next.js', 'Chakra UI', 'TailwindCSS', 'Drizzle ORM', 'No-Code']
+tags: ['Next.js', 'GrapesJS', 'Drizzle ORM', 'NextAuth', 'TailwindCSS']
 ---
 
-AniKode Website Builder is a drag-and-drop website builder with built-in low-code/no-code editors. It's designed for both beginners and advanced users who want to create responsive and visually appealing websites without deep coding knowledge.
+AniKode is a Next.js 14 website builder centered on a GrapesJS editor and a dashboard-style workflow. It combines a drag-and-drop canvas with a plugin-driven block system, then persists projects through Drizzle so users can reopen and iterate on their layouts.
+
+Auth flows are handled through NextAuth and the UI is composed with Radix and Tailwind, which keeps the editor chrome consistent across dialogs, menus, and configuration panels. The system leans on JSON serialization for project state, so exports and previews stay close to the editor source of truth.
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - GrapesJS editor with export, form, and custom-code plugins.
+    - JSON-based project persistence and live preview workflow.
+    - Dashboard UX with editor panels for pages, assets, and settings.
+  </Tab>
+  <Tab value="Stack">
+    - Next.js 14, Tailwind CSS, Radix UI, Framer Motion.
+    - Drizzle ORM + Postgres adapters, NextAuth sessions.
+    - React Hook Form + Zod, React Email + Resend.
+  </Tab>
+</Tabs>

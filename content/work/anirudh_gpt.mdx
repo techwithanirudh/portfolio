@@ -1,10 +1,25 @@
 ---
 title: AnirudhGPT
-description: AnirudhGPT is an open-source UI interface for interacting with OpenAI's APIs. It allows developers to easily set up a ChatGPT-like interface with minimal effort.
+description: Next.js chat UI with Firebase client/admin setup and a lightweight prompt workflow.
 date: 2023-04-05
-github: https://github.com/techwithanirudh/ChatGPT-With-Memory/tree/main
+github: https://github.com/techwithanirudh/ChatGPT-With-Memory
 image: /images/projects/anirudh_gpt/cover.jpg
 tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 ---
 
-AnirudhGPT is an open-source UI interface for interacting with OpenAI’s APIs. It allows developers to easily set up a ChatGPT-like interface with minimal effort.
+AnirudhGPT is a compact Next.js chat UI that wires Firebase on the client and admin sides. The app mixes App Router and legacy pages, which keeps the UI modern while preserving a straightforward routing structure for chat views and assets.
+
+Firebase handles the data layer, with Firestore as the primary store and admin access configured for server-side operations. The UI is intentionally lightweight, using Tailwind for layout and a small component set so the chat flow stays fast to iterate.
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - Chat-first UI with reusable message components.
+    - Firebase client + admin setup for Firestore access.
+    - Simple routing split between `app` and `pages`.
+  </Tab>
+  <Tab value="Stack">
+    - Next.js, TypeScript, Tailwind, PostCSS.
+    - Firebase SDKs + Firestore.
+    - Minimal build scripts and config surface.
+  </Tab>
+</Tabs>

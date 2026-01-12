@@ -1,11 +1,51 @@
 ---
-title: Personal Portfolio Website
-description: A personal portfolio to showcase your coding projects, resume, and skills in a beautifully designed format.
-date: 2024-05-26
-website: https://techwithanirudh.com/
-github: https://github.com/techwithanirudh/shadcn-portfolio
+title: Portfolio
+description: Next.js portfolio powered by Fumadocs MDX content, typed metadata, and a lightweight contact pipeline.
+date: 2026-01-12
+website: /portfolio
+github: https://github.com/techwithanirudh/portfolio
 image: /images/projects/portfolio/cover.jpg
-tags: ['Next.js', 'React', 'TypeScript', 'MDX', 'shadcn/ui']
+tags: ['Next.js', 'Fumadocs', 'Drizzle', 'MDX', 'TypeScript']
 ---
 
-This is my personal portfolio website where I showcase my coding projects, resume, and skills in a beautifully designed format. I created this website to have an online presence and to share my work with potential employers and clients. The project helped me improve my front-end development skills and learn more about modern web development practices.
+Portfolio is a Next.js App Router site that treats MDX as the primary content source for work and blog entries. The project leans on Fumadocs for collections, search indexing, and schema validation, then layers in OG image generation, RSS feeds, and structured metadata to make the content shareable.
+
+The UI stack uses Tailwind and Radix patterns for cards, dialogs, and layout sections, while Drizzle and Better Auth provide the scaffolding for comments and newsletter flows. Everything is split into focused modules so content, metadata, and UI can evolve independently.
+
+<Files>
+  <Folder name="content" defaultOpen>
+    <Folder name="work">
+      <File name="portfolio.mdx" />
+    </Folder>
+    <Folder name="blog">
+      <File name="*.mdx" />
+    </Folder>
+  </Folder>
+  <Folder name="src" defaultOpen>
+    <Folder name="lib">
+      <Folder name="source">
+        <File name="work.ts" />
+        <File name="blog.ts" />
+      </Folder>
+      <File name="metadata.ts" />
+    </Folder>
+    <Folder name="app">
+      <Folder name="api">
+        <File name="search/route.ts" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - Fumadocs MDX collections for work and blog content.
+    - OG images, RSS feed, and search indexing baked in.
+    - Contact/newsletter workflows with server actions.
+  </Tab>
+  <Tab value="Stack">
+    - Next.js, TypeScript, Tailwind, Radix UI.
+    - Fumadocs MDX + Shiki, Zod validators.
+    - Drizzle ORM, Better Auth, React Email + Resend.
+  </Tab>
+</Tabs>

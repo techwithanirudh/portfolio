@@ -1,0 +1,25 @@
+---
+title: Speaking Meeting Bot
+description: FastAPI + Pipecat meeting bots with real-time WebSocket audio and persona-driven behaviors.
+date: 2025-06-09
+github: https://github.com/Meeting-BaaS/speaking-meeting-bot
+image: https://raw.githubusercontent.com/Meeting-BaaS/speaking-meeting-bot/main/images/SpeakingBot.png
+tags: ['Python', 'FastAPI', 'Pipecat', 'MeetingBaaS', 'WebSocket']
+---
+
+Speaking Meeting Bot is a Python 3.11 FastAPI service that runs real-time meeting agents through Pipecat. It exposes REST and WebSocket endpoints for bot creation, and uses MeetingBaaS APIs to join Google Meet or Teams calls with distinct persona profiles.
+
+Personas are stored in Markdown files so behavior, tone, and knowledge can be tuned without touching code. The audio stack combines Pipecat’s pipeline with STT/TTS providers and OpenAI reasoning, while deployment tooling supports local ngrok tunnels and production base URLs.
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - REST + WebSocket API for spawning meeting bots.
+    - Markdown-based personas with optional avatar generation.
+    - Real-time audio pipelines with configurable providers.
+  </Tab>
+  <Tab value="Stack">
+    - FastAPI, Pipecat, Python 3.11.
+    - MeetingBaaS APIs + WebSocket transport.
+    - Cartesia TTS, Gladia/Deepgram STT, OpenAI.
+  </Tab>
+</Tabs>

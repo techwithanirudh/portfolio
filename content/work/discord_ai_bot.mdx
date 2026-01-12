@@ -1,0 +1,24 @@
+---
+title: Discord AI Bot
+description: Bun-powered Discord bot with Vercel AI SDK integrations, voice support, and modular tooling.
+date: 2025-10-21
+github: https://github.com/techwithanirudh/discord-ai-bot
+tags: ['Discord', 'AI', 'Bun', 'TypeScript']
+---
+
+Discord AI Bot is a Bun-based TypeScript runtime that pairs discord.js with the Vercel AI SDK. The bot is designed to swap AI providers easily and supports both text and voice flows, with optional speech tooling layered into the same command pipeline.
+
+The runtime keeps command registration, event handling, and AI tool execution modular so new skills can be added without touching the core. Voice features rely on Discord’s voice stack plus Deepgram and ElevenLabs, while Upstash Redis is used to rate-limit and protect long-running requests.
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - Slash command framework with modular handlers.
+    - Multi-provider AI routing via the Vercel AI SDK.
+    - Voice pipeline with STT/TTS integrations.
+  </Tab>
+  <Tab value="Stack">
+    - Bun, TypeScript, discord.js.
+    - OpenAI/Anthropic/OpenRouter/Google providers.
+    - Upstash Redis, Pino, ESLint/Prettier.
+  </Tab>
+</Tabs>

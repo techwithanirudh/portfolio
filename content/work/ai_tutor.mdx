@@ -1,10 +1,51 @@
 ---
-title: AI Tutor - GPT
-description: AI Tutor - GPT is an educational tool, which leverages OpenAI's ChatGPT to provide personalized academic support, helping students solve complex problems and understand topics across various subjects.
+title: AI Tutor
+description: Next.js 16 AI learning workspace with chat, quizzes, flashcards, and voice sessions.
 date: 2023-11-20
-website: https://chat.openai.com/g/g-QhTV4OrrZ-ai-tutor
+website: https://tutor.techwithanirudh.com
 image: /images/projects/ai_tutor/cover.jpg
-tags: ['ChatGPT', 'AI', 'Education']
+tags: ['Next.js', 'AI', 'Drizzle', 'NextAuth', 'LiveKit']
 ---
 
-AI Tutor - GPT is an educational tool, which leverages OpenAI's ChatGPT to provide personalized academic support, helping students solve complex problems and understand topics across various subjects.
+AI Tutor is a Next.js 16 learning workspace that turns chat into a guided study loop. The UI blends chat, document editing, quizzes, and flashcards, while the AI layer is routed through a shared prompt registry that chooses between OpenAI, Anthropic, and Google models.
+
+The app separates auth and chat flows, persists history through Drizzle on Neon, and runs NextAuth with Google/Resend/Keycloak providers. Voice sessions run on LiveKit with transcript syncing and noise filtering, so the same study flow works in text or audio mode.
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <Folder name="app">
+      <Folder name="(chat)">
+        <Folder name="api">
+          <Folder name="quiz">
+            <File name="route.ts" />
+          </Folder>
+        </Folder>
+      </Folder>
+    </Folder>
+    <Folder name="server">
+      <Folder name="db">
+        <File name="schema.ts" />
+        <File name="queries.ts" />
+      </Folder>
+    </Folder>
+    <Folder name="lib">
+      <Folder name="ai">
+        <File name="prompts.ts" />
+        <File name="models.ts" />
+      </Folder>
+    </Folder>
+  </Folder>
+</Files>
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - Chat workspace that generates documents, quizzes, and flashcards.
+    - Versioned document tools with suggestions and diff helpers.
+    - LiveKit voice rooms with transcript-aware UI.
+  </Tab>
+  <Tab value="Stack">
+    - Next.js 16 App Router, Tailwind, Radix UI.
+    - Drizzle ORM + Neon, NextAuth, React Email.
+    - AI SDK providers with typed model registry.
+  </Tab>
+</Tabs>

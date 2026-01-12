@@ -1,6 +1,6 @@
 ---
 title: Solving Autonomous Driving Privacy Challenges using AI
-description: This research paper looks at privacy concerns in autonomous vehicle technology. It explores approaches to protect personal data while supporting training for autonomous systems. The work draws on collaboration across the Open Science Foundation around ethical AI in automotive technology.
+description: Python OpenCV + MediaPipe prototype exploring face-mesh triangulation for privacy in AV datasets.
 date: 2022-04-15
 website: https://osf.io/mtfpy/
 github: https://github.com/techwithanirudh/AutonomousDrivingPaperCode/
@@ -8,4 +8,19 @@ image: /images/projects/autonomous_driving/cover.jpg
 tags: ['Research', 'AI', 'Autonomous Driving', 'Privacy']
 ---
 
-This research paper looks at privacy concerns in autonomous vehicle technology. It explores approaches to protect personal data while supporting training for autonomous systems. The paper draws on collaboration across the Open Science Foundation around ethical AI in automotive technology.
+This research prototype explores privacy-preserving preprocessing for autonomous driving datasets. It uses OpenCV and MediaPipe Face Mesh to triangulate faces, then warps triangle regions to reduce raw facial fidelity while keeping geometry consistent for downstream modeling.
+
+The pipeline downloads a base face, extracts landmarks, applies the triangulation topology, and uses affine transforms to blend a new face region. Live webcam capture makes it easier to test the mesh transformation in real time and validate how much identity signal is removed.
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - MediaPipe face mesh triangulation and affine warping.
+    - Live webcam capture with debug overlays.
+    - Focused on ethical AV dataset preprocessing.
+  </Tab>
+  <Tab value="Stack">
+    - Python, OpenCV, MediaPipe, NumPy.
+    - Simple scripts for capture and mesh tooling.
+    - OSF-backed research collaboration.
+  </Tab>
+</Tabs>

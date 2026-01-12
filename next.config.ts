@@ -32,6 +32,18 @@ async function createNextConfig(): Promise<NextConfig> {
         },
         {
           protocol: 'https',
+          hostname: 'raw.githubusercontent.com',
+          port: '',
+          pathname: '/techwithanirudh/**',
+        },
+        {
+          protocol: 'https',
+          hostname: 'raw.githubusercontent.com',
+          port: '',
+          pathname: '/Meeting-BaaS/**',
+        },
+        {
+          protocol: 'https',
           hostname: 'fumadocs.dev',
           port: '',
         },

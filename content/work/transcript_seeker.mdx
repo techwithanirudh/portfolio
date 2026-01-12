@@ -1,0 +1,40 @@
+---
+title: Transcript Seeker
+description: Turborepo app with React/Vite frontend, Nitro proxy, Drizzle ORM, and MeetingBaaS integrations.
+date: 2025-05-02
+github: https://github.com/Meeting-BaaS/transcript-seeker
+image: https://raw.githubusercontent.com/Meeting-BaaS/transcript-seeker/main/.github/images/transcript-seeker.png
+tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
+---
+
+Transcript Seeker is a Turborepo app for uploading recordings, transcribing them, and exploring the results inside a React + Vite interface. The UI is built around synced playback and transcripts, with a Nitro proxy and Drizzle models behind the scenes to keep data flows structured.
+
+The product leans on local-first storage with PGLite in the browser and optional Turso/SQLite for persistent calendar data. MeetingBaaS APIs integrate meeting bots, while AI chat and summarization tools make transcripts interactive.
+
+<Files>
+  <Folder name="apps" defaultOpen>
+    <Folder name="web">
+      <File name="src" />
+      <File name="vite.config.ts" />
+    </Folder>
+  </Folder>
+  <Folder name="packages" defaultOpen>
+    <Folder name="db">
+      <File name="schema" />
+    </Folder>
+  </Folder>
+  <File name="turbo.json" />
+</Files>
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - Upload, transcribe, and seek through recordings.
+    - Local-first storage with optional calendar sync.
+    - MeetingBaaS bot integration plus AI chat.
+  </Tab>
+  <Tab value="Stack">
+    - React + Vite, Tailwind, Radix UI.
+    - Nitro proxy, Drizzle ORM, PGLite/Turso.
+    - Turborepo + pnpm workspace tooling.
+  </Tab>
+</Tabs>

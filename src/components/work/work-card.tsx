@@ -16,16 +16,14 @@ export const WorkCard = ({ title, description, image, url }: WorkCardProps) => {
       href={url}
     >
       {image && (
-        <div className='relative inline-flex items-center justify-center overflow-hidden bg-background transition-transform group-hover:scale-102'>
-          <BlurImage
-            alt={title}
-            className='aspect-video h-full w-full rounded-lg'
-            height={500}
-            imageClassName='h-full w-full object-cover'
-            src={image}
-            width={800}
-          />
-        </div>
+        <BlurImage
+          alt={title}
+          className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform group-hover:scale-102'
+          fill
+          imageClassName='object-cover'
+          sizes='(min-width: 768px) 50vw, 100vw'
+          src={image}
+        />
       )}
       <div className='flex flex-1 flex-col gap-3'>
         <div className='flex flex-1 flex-col gap-2'>
