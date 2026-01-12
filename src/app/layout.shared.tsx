@@ -12,7 +12,7 @@ export interface Social {
 export const title = 'Anirudh Sriram'
 export const description =
   'Building random stuff :D. Always tinkering with new ideas.'
-export const owner = 'Tech With Anirudh'
+export const owner = 'Anirudh Sriram'
 
 export const baseOptions: BaseLayoutProps = {
   nav: {
