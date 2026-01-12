@@ -146,7 +146,7 @@ export default async function Page(props: {
                 className='rounded-none border-0 border-border border-b border-dashed'
                 items={toc}
               />
-              <div className='prose typography-body min-w-0 flex-1 px-4 pb-4'>
+              <div className='prose min-w-0 flex-1 px-4 pb-4'>
                 <Mdx
                   components={{
                     ...defaultMdxComponents,

@@ -27,14 +27,14 @@ export default function About(): React.ReactElement {
         <div className='space-y-4 px-6 py-10 md:py-14'>
           <div className='prose dark:prose-invert typography-body w-full space-y-4'>
             <p className='text-lg'>
-              I'm a full-stack developer who likes building practical web and AI
-              tools. I started tinkering with Lego Mindstorms and kept building
-              from there.
+              I'm Anirudh, a full-stack developer who builds practical web apps
+              and AI tools. I started tinkering with Lego Mindstorms and kept
+              building from there.
             </p>
             <p className='text-lg'>
-              These days I work mostly with Next.js, React, and TypeScript, with
-              some Python for AI experiments. I've shipped open-source projects
-              from no-code experiments to small AI helpers.
+              My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
+              Python was part of my early AI experiments. I build open-source
+              projects like AI Tutor and Coolify Tweaks.
             </p>
           </div>
           <Link

@@ -11,7 +11,7 @@ export interface Social {
 
 export const title = 'Anirudh Sriram'
 export const description =
-  'Building random stuff :D. Always tinkering with new ideas.'
+  'Developer who builds cool web and AI things, always learning and exploring.'
 export const owner = 'Anirudh Sriram'
 
 export const baseOptions: BaseLayoutProps = {

@@ -33,20 +33,21 @@ export default function Detailed(): React.ReactElement {
           >
             <div className='space-y-6 p-8 text-lg text-muted-foreground'>
               <p>
-                Hi, I'm Anirudh (techwithanirudh). I've been building things for
-                a while and still like to tinker.
+                Hi, I'm Anirudh. I'm a full-stack developer who builds web apps
+                and AI tools.
               </p>
               <p>
-                I build web apps with Next.js, React, and TypeScript, and I
-                experiment with Python, OpenCV, and AI.
+                My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
+                Python was part of my earlier AI experiments, but today I focus
+                on shipping product-grade web apps.
               </p>
               <p>
                 I've worked on research projects around privacy for autonomous
                 vehicles and shared a few write-ups along the way.
               </p>
               <p>
-                I'm creating a few projects right now and sharing them through
-                open source. You can find my work on GitHub, and here!
+                I'm building projects like AI Tutor and Coolify Tweaks and
+                sharing them in open source.
               </p>
               <p>
                 In my free time, I enjoy 80s music and sharing my builds online.

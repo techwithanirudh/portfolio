@@ -12,7 +12,7 @@ const faq = [
   {
     question: 'What technologies do you specialize in?',
     answer:
-      "I focus on full-stack web development with Next.js, React, and TypeScript. I'm familiar with Python for AI experiments using OpenCV and GPT-based APIs. For databases and backends, I work with Drizzle ORM, and Node.js.",
+      'I focus on full-stack web development with Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL. I use AI tools where they add value.',
   },
   {
     question: 'What are you focusing on right now?',
@@ -22,7 +22,7 @@ const faq = [
   {
     question: 'How can I get in touch with you?',
     answer:
-      "The best way to reach me is through the contact form on this website or via email at hello@techwithanirudh.com. You can also connect with me on GitHub, LinkedIn, or join discussions on Anirudh's Arena community forum.",
+      'The best way to reach me is through the contact form on this website or via email at hello@techwithanirudh.com. You can also connect with me on GitHub or LinkedIn.',
   },
   {
     question: "What's your development approach?",

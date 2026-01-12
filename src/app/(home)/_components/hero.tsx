@@ -64,8 +64,8 @@ const Hero = () => {
       >
         <p className='typography-body text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
           <Balancer>
-            I'm a full-stack developer who builds web apps and AI tools. I
-            mostly work with Next.js, React, and TypeScript.
+            I'm Anirudh (techwithanirudh), a developer who builds web apps and
+            AI tools and keeps learning as I go.
           </Balancer>
         </p>
       </ViewAnimation>

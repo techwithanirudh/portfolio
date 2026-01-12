@@ -5,7 +5,7 @@ export default function Hero(): React.ReactElement {
   return (
     <HeroSection
       align='center'
-      description="I'm Anirudh (techwithanirudh), a design engineer who builds with Next.js and AI tools."
+      description="I'm Anirudh (techwithanirudh), a developer who builds web apps and AI tools and keeps exploring new ideas."
       title='About'
       variant='default'
     />

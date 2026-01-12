@@ -37,7 +37,7 @@ export default function MdxLayout({
             ) : (
               <div className='py-2' />
             )}
-            <div className='prose typography-body min-w-0 flex-1 px-4'>
+            <div className='prose min-w-0 flex-1 px-4'>
               {children}
             </div>
             {comments ? (
