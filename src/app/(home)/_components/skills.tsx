@@ -60,7 +60,7 @@ const Skills = () => (
           My Expertise
         </h2>
         <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
-          Focused on building practical web and AI projects with modern tools
+          Focused on building practical projects with modern tools
         </p>
       </ViewAnimation>
 

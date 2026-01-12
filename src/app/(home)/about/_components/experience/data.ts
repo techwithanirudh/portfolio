@@ -1,7 +1,14 @@
 export const experiences = [
   {
+    role: 'Software Engineering Intern',
+    company: 'Energent.ai',
+    timeframe: 'Sep 2025 – Dec 2025',
+    summary:
+      'Worked on the frontend and microservices of Energent.ai\'s AI data analysis platform.',
+  },
+  {
     role: 'Research Collaboration',
-    company: 'Independent',
+    company: 'Bosch',
     timeframe: 'Apr 2022 – May 2022',
     summary:
       'Co-authored a research paper on privacy challenges for autonomous cars.',

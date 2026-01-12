@@ -49,8 +49,7 @@ export default function Detailed(): React.ReactElement {
                 open source. You can find my work on GitHub, and here!
               </p>
               <p>
-                In my free time, I enjoy 80s music and sharing my builds
-                online.
+                In my free time, I enjoy 80s music and sharing my builds online.
               </p>
               <Link
                 className={cn(
