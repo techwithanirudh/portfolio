@@ -48,7 +48,7 @@ export default function About(): React.ReactElement {
             href='/about'
           >
             Learn More
-            <Icons.arrowUpRight className='size-5 transition-transform group-hover:-rotate-12' />
+            <Icons.arrowUpRight className='size-4 transition-transform group-hover:-rotate-12' />
           </Link>
         </div>
       </ViewAnimation>
