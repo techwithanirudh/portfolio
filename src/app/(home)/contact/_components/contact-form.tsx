@@ -25,7 +25,7 @@ import { contact } from '../actions/contact'
 const ContactFormInner = () => {
   const form = useForm({
     resolver: zodResolver(ContactSchema),
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: {
       name: '',
       email: '',
