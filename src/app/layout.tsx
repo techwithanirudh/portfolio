@@ -89,7 +89,10 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
     >
       <Body>
         <script
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw script
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+          }}
           type='application/ld+json'
         />
         <RootProvider

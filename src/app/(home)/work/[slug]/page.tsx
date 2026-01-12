@@ -77,7 +77,7 @@ function Header(props: { page: MDXPage }) {
               initial={{ opacity: 0, translateY: -8 }}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
-              <p className='mx-auto typography-body'>
+              <p className='typography-body mx-auto'>
                 <Balancer>{page.data.description ?? ''}</Balancer>
               </p>
             </ViewAnimation>

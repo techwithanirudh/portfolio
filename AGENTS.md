@@ -98,7 +98,30 @@ Write code that is **accessible, performant, type-safe, and maintainable**. Focu
 **Solid/Svelte/Vue/Qwik:**
 - Use `class` and `for` attributes (not `className` or `htmlFor`)
 
----
+## Typography & SEO
+
+### Typography System
+
+- `typography-hero`: Use for primary page headlines (hero, post/work titles)
+- `typography-title`: Use for section headings and sub-headers
+- `typography-body`: Use for body copy, descriptions, and prose containers
+
+These utilities are defined in `src/styles/globals.css` using CSS variables:
+- `--typography-hero-width: 56rem`
+- `--typography-title-width: 40rem`
+- `--typography-body-width: 60ch`
+
+Usage guidance:
+- Apply `typography-hero`/`typography-title` directly to heading elements
+- Apply `typography-body` to paragraph and prose containers
+
+### SEO & Structured Data
+
+- JSON-LD is injected in `src/app/layout.tsx` as a `Person` + `WebSite` graph
+- The script escapes `<` characters and uses a Biome ignore for `dangerouslySetInnerHTML`
+- Keep page `title` and `description` fields unique per page/work
+- Ensure all images have meaningful `alt` text
+- Consider `FAQPage` JSON-LD for the FAQ section later
 
 ## Testing
 

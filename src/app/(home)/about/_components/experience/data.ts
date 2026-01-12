@@ -4,7 +4,7 @@ export const experiences = [
     company: 'Energent.ai',
     timeframe: 'Sep 2025 – Dec 2025',
     summary:
-      'Worked on the frontend and microservices of Energent.ai\'s AI data analysis platform.',
+      "Worked on the frontend and microservices of Energent.ai's AI data analysis platform.",
   },
   {
     role: 'Research Collaboration',
