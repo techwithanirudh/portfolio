@@ -8,7 +8,7 @@ import { createMetadata } from '@/lib/metadata'
 import '@/styles/globals.css'
 import 'katex/dist/katex.css'
 import { Body } from './layout.client'
-import { description as homeDescription } from './layout.shared'
+import { description as homeDescription, owner, title } from './layout.shared'
 import { Provider } from './provider'
 
 const geistSans = Geist({
@@ -21,17 +21,15 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-const name = 'Anirudh'
-
 export const metadata = createMetadata({
   title: {
-    template: `%s | ${name}`,
-    default: name,
+    template: `%s | ${title}`,
+    default: title,
   },
-  applicationName: name,
+  applicationName: title,
   authors: [
     {
-      name,
+      name: owner,
       url: baseUrl.toString(),
     },
   ],
