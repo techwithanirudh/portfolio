@@ -40,10 +40,10 @@ export const FAQ = () => (
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <div className='flex flex-col gap-2'>
-          <h4 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>
+          <h4 className='typography-title text-left font-regular text-3xl tracking-tighter md:text-5xl'>
             Frequently Asked Questions
           </h4>
-          <p className='max-w-xl text-left text-lg text-muted-foreground leading-relaxed tracking-tight lg:max-w-lg'>
+          <p className='typography-body text-left text-lg text-muted-foreground leading-relaxed tracking-tight'>
             Still have questions?{' '}
             <InlineLink className='no-underline' href='/contact'>
               Contact Me

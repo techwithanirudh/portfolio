@@ -35,7 +35,7 @@ export const SectionHeader = ({
     >
       <h1
         className={cn(
-          'font-bold leading-tight tracking-tight',
+          'typography-title font-bold leading-tight tracking-tight',
           size === 'large'
             ? 'text-3xl sm:text-4xl md:text-5xl'
             : 'text-2xl sm:text-3xl md:text-4xl',
@@ -53,7 +53,7 @@ export const SectionHeader = ({
       >
         <p
           className={cn(
-            'max-w-2xl text-muted-foreground',
+            'typography-body text-muted-foreground',
             size === 'large' ? 'text-lg' : 'text-base',
             descriptionClassName
           )}

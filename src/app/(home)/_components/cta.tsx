@@ -15,7 +15,7 @@ export default function CTA(): React.ReactElement {
           initial={{ opacity: 0, translateY: -8 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <h2 className='max-w-xl text-center font-regular text-3xl tracking-tighter sm:text-5xl'>
+          <h2 className='typography-title text-center font-regular text-3xl tracking-tighter sm:text-5xl'>
             Let's Collaborate
           </h2>
         </ViewAnimation>
@@ -26,7 +26,7 @@ export default function CTA(): React.ReactElement {
             initial={{ opacity: 0, translateY: -8 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <p className='max-w-2xl text-center text-muted-foreground sm:text-xl'>
+            <p className='typography-body text-center text-muted-foreground sm:text-xl'>
               <Balancer>
                 Have questions or want to connect? Reach out through the contact
                 form or find me on social platforms.

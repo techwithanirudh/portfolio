@@ -17,7 +17,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
           initial={{ opacity: 0, translateY: -8 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <h2 className='max-w-xl text-left font-regular text-3xl tracking-tighter md:text-5xl'>
+          <h2 className='typography-title text-left font-regular text-3xl tracking-tighter md:text-5xl'>
             Blog
           </h2>
         </ViewAnimation>

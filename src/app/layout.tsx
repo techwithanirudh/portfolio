@@ -8,7 +8,12 @@ import { createMetadata } from '@/lib/metadata'
 import '@/styles/globals.css'
 import 'katex/dist/katex.css'
 import { Body } from './layout.client'
-import { description as homeDescription, owner, title } from './layout.shared'
+import {
+  description as homeDescription,
+  owner,
+  socials,
+  title,
+} from './layout.shared'
 import { Provider } from './provider'
 
 const geistSans = Geist({
@@ -44,6 +49,37 @@ export const viewport: Viewport = {
   ],
 }
 
+const baseUrlString = baseUrl.toString()
+const socialUrls = socials
+  .map((social) => social.url)
+  .filter((url) => url.startsWith('http'))
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person',
+      '@id': `${baseUrlString}#person`,
+      name: owner,
+      url: baseUrlString,
+      description: homeDescription,
+      jobTitle: 'Full-stack Developer',
+      knowsAbout: ['Next.js', 'React', 'TypeScript', 'Web Development', 'AI'],
+      sameAs: socialUrls,
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${baseUrlString}#website`,
+      name: title,
+      url: baseUrlString,
+      description: homeDescription,
+      publisher: {
+        '@id': `${baseUrlString}#person`,
+      },
+    },
+  ],
+}
+
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html
@@ -52,6 +88,10 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       suppressHydrationWarning
     >
       <Body>
+        <script
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          type='application/ld+json'
+        />
         <RootProvider
           search={{
             SearchDialog: CustomSearchDialog,

@@ -49,7 +49,7 @@ const Hero = () => {
       >
         <h1
           className={cn(
-            'max-w-4xl font-bold text-3xl leading-tight tracking-tight',
+            'typography-hero font-bold text-3xl leading-tight tracking-tight',
             'sm:text-center sm:text-4xl sm:leading-tight',
             'md:text-5xl md:leading-tight'
           )}

@@ -68,7 +68,7 @@ function Header(props: { page: MDXPage }) {
               initial={{ opacity: 0, translateY: -8 }}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
-              <h1 className='max-w-4xl font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
+              <h1 className='typography-hero font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
                 <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
               </h1>
             </ViewAnimation>
@@ -77,7 +77,7 @@ function Header(props: { page: MDXPage }) {
               initial={{ opacity: 0, translateY: -8 }}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
-              <p className='mx-auto max-w-4xl'>
+              <p className='mx-auto typography-body'>
                 <Balancer>{page.data.description ?? ''}</Balancer>
               </p>
             </ViewAnimation>
@@ -146,7 +146,7 @@ export default async function Page(props: {
                 className='rounded-none border-0 border-border border-b border-dashed'
                 items={toc}
               />
-              <div className='prose min-w-0 flex-1 px-4 pb-4'>
+              <div className='prose typography-body min-w-0 flex-1 px-4 pb-4'>
                 <Mdx
                   components={{
                     ...defaultMdxComponents,

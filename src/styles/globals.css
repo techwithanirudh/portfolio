@@ -75,6 +75,9 @@
 @layer base {
   :root {
     --radius: 0.5rem;
+    --typography-hero-width: 56rem;
+    --typography-title-width: 40rem;
+    --typography-body-width: 60ch;
   }
 }
 
@@ -131,6 +134,18 @@
 
   .divide-border {
     @apply divide-border/70 dark:divide-border;
+  }
+
+  .typography-hero {
+    max-width: var(--typography-hero-width);
+  }
+
+  .typography-title {
+    max-width: var(--typography-title-width);
+  }
+
+  .typography-body {
+    max-width: var(--typography-body-width);
   }
 }
 

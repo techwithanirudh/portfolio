@@ -74,7 +74,7 @@ export const HeroSection = ({
         >
           <h1
             className={cn(
-              'max-w-4xl font-bold text-3xl leading-tight tracking-tight',
+              'typography-hero font-bold text-3xl leading-tight tracking-tight',
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
               variant === 'compact' &&
@@ -92,9 +92,9 @@ export const HeroSection = ({
           >
             <p
               className={cn(
-                'text-muted-foreground text-sm sm:text-base',
+                'typography-body text-muted-foreground text-sm sm:text-base',
                 variant === 'compact' &&
-                  'max-w-xl text-left text-lg leading-relaxed tracking-tight lg:max-w-lg'
+                  'text-left text-lg leading-relaxed tracking-tight'
               )}
             >
               <Balancer>{description}</Balancer>

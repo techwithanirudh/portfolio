@@ -25,7 +25,7 @@ export default function About(): React.ReactElement {
         whileInView={{ opacity: 1 }}
       >
         <div className='space-y-4 px-6 py-10 md:py-14'>
-          <div className='prose dark:prose-invert w-full space-y-4'>
+          <div className='prose dark:prose-invert typography-body w-full space-y-4'>
             <p className='text-lg'>
               I'm a full-stack developer who likes building practical web and AI
               tools. I started tinkering with Lego Mindstorms and kept building
