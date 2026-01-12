@@ -34,16 +34,20 @@ export const env = createEnv({
 
   client: {
     // App
-    NEXT_PUBLIC_APP_URL: z.string().url().min(1).optional(),
+    NEXT_PUBLIC_BASE_URL: z.url().min(1).optional(),
     // Analytics
-    NEXT_PUBLIC_UMAMI_URL: z.string().url().optional(),
-    NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.string().uuid().optional(),
+    NEXT_PUBLIC_UMAMI_URL: z.url().optional(),
+    NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.uuid().optional(),
   },
 
   experimental__runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
 
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_BASE_URL:
+      process.env.NEXT_PUBLIC_BASE_URL ??
+      (process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : undefined),
     NEXT_PUBLIC_UMAMI_URL: process.env.NEXT_PUBLIC_UMAMI_URL,
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
   },

@@ -373,3 +373,8 @@ killAllAnimations({
 """
 
 Take inspiration from  https://chanhdai.com/
+
+- Add Umami Analytics
+- Add BotID
+- Add Actual Content
+- Add OLD Blogs

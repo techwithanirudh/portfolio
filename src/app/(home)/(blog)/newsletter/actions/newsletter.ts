@@ -19,7 +19,7 @@ const splitName = (name = '') => {
 }
 
 export const subscribe = actionClient
-  .schema(NewsletterSchema)
+  .inputSchema(NewsletterSchema)
   .action(async ({ parsedInput: { email } }) => {
     const session = await getSession()
     const fullName = session?.user.name || ''
