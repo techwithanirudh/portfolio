@@ -28,13 +28,11 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(['development', 'test', 'production'])
       .default('development'),
-    // Vercel
-    VERCEL_PROJECT_PRODUCTION_URL: z.string().optional(),
   },
 
   client: {
     // App
-    NEXT_PUBLIC_BASE_URL: z.url().min(1).optional(),
+    NEXT_PUBLIC_BASE_URL: z.url().min(1),
     // Analytics
     NEXT_PUBLIC_UMAMI_URL: z.url().optional(),
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.uuid().optional(),
