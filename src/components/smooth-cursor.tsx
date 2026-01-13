@@ -197,10 +197,10 @@ export function SmoothCursor({
         <Cursor cursorType={cursorType} isOverPointer={isOverPointer} />
       ) : (
         <>
-          <div className='absolute h-[34px] w-[34px] dark:bg-white dark:blur-[7rem]' />
+            <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
           <div
             className={
-              'pointer-events-none h-[34px] w-[34px] rounded-full border-2 bg-white shadow-sm transition-all duration-300 ease-out will-change-transform'
+              'pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-all duration-300 ease-out will-change-transform'
             }
             style={{
               opacity: cursorType === 'pointer' || isOverPointer ? 1 : 0,
@@ -208,7 +208,7 @@ export function SmoothCursor({
             }}
           />
           <div
-            className={`pointer-events-none absolute top-0 left-0 h-[34px] w-[34px] rounded-full border-2 shadow-sm drop-shadow-sm transition-all duration-300 ease-out will-change-transform dark:border-border ${disableRotation ? '-rotate-45' : ''}`}
+            className={`pointer-events-none absolute top-0 left-0 size-[24px] rounded-full border-2 shadow-sm drop-shadow-sm transition-all duration-300 ease-out will-change-transform dark:border-border ${disableRotation ? '-rotate-45' : ''}`}
             style={{
               opacity: isOverPointer ? 0 : 1,
             }}
