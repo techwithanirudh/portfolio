@@ -35,14 +35,26 @@ export default async function GuestbookPage() {
         </ViewAnimation>
       </Section>
       <Section className='p-6'>
-        <h2 className='font-medium text-xl'>Recent Entries</h2>
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: 8 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+          delay={0.6}
+        >
+          <h2 className='font-medium text-xl'>Recent Entries</h2>
+        </ViewAnimation>
       </Section>
       <Section>
-        <GuestbookEntries
-          currentUserId={currentUserId ?? null}
-          entries={entries}
-          isSignedIn={Boolean(currentUserId)}
-        />
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: 8 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+          delay={0.8}
+        >
+          <GuestbookEntries
+            currentUserId={currentUserId ?? null}
+            entries={entries}
+            isSignedIn={Boolean(currentUserId)}
+          />
+        </ViewAnimation>
       </Section>
     </Wrapper>
   )

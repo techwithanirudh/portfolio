@@ -2,6 +2,8 @@
 
 import { Icons } from '@/components/icons/icons'
 import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
+
+import { ViewAnimation } from '@/components/view-animation'
 import { GuestbookEntryCard } from './entry-card'
 
 interface GuestbookEntriesProps {
@@ -29,13 +31,19 @@ export const GuestbookEntries = ({
   return (
     <div className='max-h-[32rem] w-full overflow-y-auto'>
       <div className='divide-y divide-dashed divide-border'>
-        {entries.map((entry) => (
-          <GuestbookEntryCard
-            currentUserId={currentUserId}
-            entry={entry}
-            isSignedIn={isSignedIn}
+        {entries.map((entry, index) => (
+          <ViewAnimation
             key={entry.id}
-          />
+            delay={0.8 + 0.1 * index}
+            initial={{ opacity: 0, translateY: 8 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <GuestbookEntryCard
+              currentUserId={currentUserId}
+              entry={entry}
+              isSignedIn={isSignedIn}
+            />
+          </ViewAnimation>
         ))}
       </div>
     </div>
