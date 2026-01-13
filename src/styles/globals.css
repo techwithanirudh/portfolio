@@ -100,7 +100,7 @@
 
 @layer base {
   a {
-    @apply [overflow-wrap:anywhere];
+    @apply [overflow-wrap:anywhere] decoration-wavy;
   }
 
   button:not(:disabled),
