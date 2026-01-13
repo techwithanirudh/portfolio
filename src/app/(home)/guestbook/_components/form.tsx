@@ -18,7 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import { useSession } from '@/lib/auth-client'
+import { getLoginUrl, useSession } from '@/lib/auth-client'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
@@ -55,7 +55,7 @@ export const GuestbookForm = () => {
           Sign in to leave a guestbook message.
         </p>
         <Button asChild className='w-full'>
-          <Link href='/login'>Sign in to post</Link>
+          <Link href={getLoginUrl('/guestbook')}>Sign in to post</Link>
         </Button>
       </div>
     )

@@ -1,6 +1,7 @@
 'use client'
 
 import { HomeLayout } from 'fumadocs-ui/layouts/home'
+import { useSearchParams } from 'next/navigation'
 import { baseOptions, linkItems } from '@/app/layout.shared'
 import { Icons } from '@/components/icons/icons'
 import { Header } from '@/components/sections/header'
@@ -23,7 +24,11 @@ const Cross = () => (
   </div>
 )
 
-function SignInCard() {
+type SignInCardProps = {
+  redirectTo: string
+}
+
+function SignInCard({ redirectTo }: SignInCardProps) {
   return (
     <div className='relative mx-auto w-full max-w-xl'>
       <div className='absolute -top-3 -left-3 z-10 hidden h-6 sm:block'>
@@ -55,7 +60,7 @@ function SignInCard() {
                   onClick={async () => {
                     await signIn.social({
                       provider: 'google',
-                      callbackURL: '/',
+                      callbackURL: redirectTo,
                     })
                   }}
                   variant='outline'
@@ -70,7 +75,7 @@ function SignInCard() {
                   onClick={async () => {
                     await signIn.social({
                       provider: 'github',
-                      callbackURL: '/',
+                      callbackURL: redirectTo,
                     })
                   }}
                   variant='outline'
@@ -95,6 +100,10 @@ function SignInCard() {
 }
 
 export default function LoginPage() {
+  const searchParams = useSearchParams()
+  const redirectToParam = searchParams.get('redirectTo')
+  const redirectTo = redirectToParam?.startsWith('/') ? redirectToParam : '/'
+
   return (
     <HomeLayout
       {...baseOptions}
@@ -106,7 +115,7 @@ export default function LoginPage() {
     >
       <main className='flex flex-1'>
         <div className='container relative mx-auto flex min-h-full flex-1 items-center justify-center border-border border-x border-b border-dashed'>
-          <SignInCard />
+          <SignInCard redirectTo={redirectTo} />
         </div>
       </main>
     </HomeLayout>
