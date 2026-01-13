@@ -34,7 +34,7 @@ export function Provider({
         stopDelay={1000}
       >
         <TooltipProvider>
-          <ViewTransition>{children}</ViewTransition>
+          {children}
         </TooltipProvider>
       </ProgressProvider>
       <Analytics />

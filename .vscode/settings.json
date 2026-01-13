@@ -31,7 +31,7 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[css]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "vscode.css-language-features"
   },
   "[yaml]": {
     "editor.defaultFormatter": "biomejs.biome"

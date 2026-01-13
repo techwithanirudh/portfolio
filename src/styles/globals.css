@@ -58,14 +58,17 @@
     from {
       height: 0;
     }
+
     to {
       height: var(--radix-accordion-content-height);
     }
   }
+
   @keyframes accordion-up {
     from {
       height: var(--radix-accordion-content-height);
     }
+
     to {
       height: 0;
     }
@@ -115,16 +118,14 @@
 
 @layer utilities {
   .bg-dashed {
-    background-image: linear-gradient(
-      45deg,
-      var(--color-border) 12.50%,
-      transparent 12.50%,
-      transparent 50%,
-      var(--color-border) 50%,
-      var(--color-border) 62.50%,
-      transparent 62.50%,
-      transparent 100%
-    );
+    background-image: linear-gradient(45deg,
+        var(--color-border) 12.50%,
+        transparent 12.50%,
+        transparent 50%,
+        var(--color-border) 50%,
+        var(--color-border) 62.50%,
+        transparent 62.50%,
+        transparent 100%);
     background-size: 0.25rem 0.25rem;
   }
 
@@ -176,10 +177,8 @@
     background-image: radial-gradient(transparent 1px, rgb(255, 255, 255) 1px);
     background-size: 4px 4px;
     backdrop-filter: blur(3px);
-    mask: linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgb(255, 255, 255, 0.6) 100%
-    );
+    mask: linear-gradient(rgba(255, 255, 255, 0) 0%,
+        rgb(255, 255, 255, 0.6) 100%);
     opacity: 1;
     position: absolute;
     inset: 0;
@@ -191,17 +190,13 @@
   .footer-gradient {
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 0% 50%,
-      rgba(255, 255, 255, 0.5) 100%
-    );
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 0% 50%,
+        rgba(255, 255, 255, 0.5) 100%);
   }
 
   .dark .footer-gradient {
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0) 0% 50%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
+    background-image: linear-gradient(rgba(0, 0, 0, 0) 0% 50%,
+        rgba(0, 0, 0, 0.5) 100%);
   }
 
   .dark .footer-grid {
@@ -240,14 +235,27 @@
       clip-path: inset(0 0 0 0);
     }
   }
-}
-/* 
-@media (prefers-reduced-motion: no-preference) {
-  ::view-transition-old(.slow-fade) {
-    animation-duration: 500ms;
+
+  @keyframes reveal {
+    0% {
+      scale: 0.8;
+      opacity: 0;
+      translate: 0 4lh;
+      filter: blur(20px);
+    }
   }
 
-  ::view-transition-new(.slow-fade) {
-    animation-duration: 500ms;
+  ::view-transition-new(.page-enter):only-child {
+    animation-name: reveal;
   }
-} */
+
+  ::view-transition-old(.page-exit):only-child {
+    animation-name: reveal;
+    animation-direction: reverse;
+  }
+
+  /* util for faster than default (250ms) transitions. Typically used to make exits faster so they don't visually overlap with enters */
+  ::view-transition-group(.duration-100) {
+    animation-duration: 100ms;
+  }
+}
