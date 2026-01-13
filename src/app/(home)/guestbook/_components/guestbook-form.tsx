@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
@@ -37,14 +36,12 @@ export const GuestbookForm = () => {
     },
   })
 
-  const { execute, result, status } = useAction(createGuestbookEntry)
-
-  useEffect(() => {
-    if (status === 'hasSucceeded') {
+  const { execute, result, status } = useAction(createGuestbookEntry, {
+    onSuccess: () => {
       form.reset()
       router.refresh()
-    }
-  }, [form, router, status])
+    },
+  })
 
   if (!user) {
     return (

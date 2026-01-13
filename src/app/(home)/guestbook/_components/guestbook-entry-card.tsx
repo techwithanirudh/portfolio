@@ -3,7 +3,7 @@
 import { formatDistanceToNow } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -26,21 +26,17 @@ export const GuestbookEntryCard = ({
   const [isEditing, setIsEditing] = useState(false)
   const [draftMessage, setDraftMessage] = useState(entry.message)
 
-  const editAction = useAction(editGuestbookEntry)
-  const deleteAction = useAction(removeGuestbookEntry)
-
-  useEffect(() => {
-    if (editAction.status === 'hasSucceeded') {
+  const editAction = useAction(editGuestbookEntry, {
+    onSuccess: () => {
       setIsEditing(false)
       router.refresh()
-    }
-  }, [editAction.status, router])
-
-  useEffect(() => {
-    if (deleteAction.status === 'hasSucceeded') {
+    },
+  })
+  const deleteAction = useAction(removeGuestbookEntry, {
+    onSuccess: () => {
       router.refresh()
-    }
-  }, [deleteAction.status, router])
+    },
+  })
 
   const canEdit = currentUserId === entry.userId
   const editedLabel = entry.editedAt ? ' • Edited' : ''
