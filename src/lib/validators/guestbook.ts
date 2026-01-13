@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+// Input schemas
 export const GuestbookEntrySchema = z.object({
   message: z
     .string()
@@ -22,7 +23,27 @@ export const GuestbookEditSchema = GuestbookEntrySchema.merge(
 
 export const GuestbookDeleteSchema = GuestbookEntryIdSchema
 
+// Output schemas
+export const GuestbookReactionItemSchema = z.object({
+  emoji: z.string(),
+  count: z.number(),
+  reacted: z.boolean(),
+})
+
+export const GuestbookEntryItemSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  message: z.string(),
+  userId: z.string(),
+  createdAt: z.string(),
+  editedAt: z.string().nullable(),
+  reactions: z.array(GuestbookReactionItemSchema),
+})
+
+// Inferred types
 export type GuestbookEntry = z.infer<typeof GuestbookEntrySchema>
 export type GuestbookReaction = z.infer<typeof GuestbookReactionSchema>
 export type GuestbookEdit = z.infer<typeof GuestbookEditSchema>
 export type GuestbookDelete = z.infer<typeof GuestbookDeleteSchema>
+export type GuestbookReactionItem = z.infer<typeof GuestbookReactionItemSchema>
+export type GuestbookEntryItem = z.infer<typeof GuestbookEntryItemSchema>

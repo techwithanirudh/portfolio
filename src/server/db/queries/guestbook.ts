@@ -1,16 +1,13 @@
 import { and, desc, eq, sql } from 'drizzle-orm'
 import { unstable_cache } from 'next/cache'
 
+import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { db } from '@/server/db'
 import { guestbookEntries, guestbookReactions } from '@/server/db/schema'
 
-interface ReactionState {
-  emoji: string
-  count: number
-  reacted: boolean
-}
-
-const fetchGuestbookEntries = async (currentUserId?: string | null) => {
+const fetchGuestbookEntries = async (
+  currentUserId?: string | null
+): Promise<GuestbookEntryItem[]> => {
   const reactedExpression = currentUserId
     ? sql<boolean>`coalesce(bool_or(${guestbookReactions.userId} = ${currentUserId}), false)`
     : sql<boolean>`false`
@@ -45,18 +42,7 @@ const fetchGuestbookEntries = async (currentUserId?: string | null) => {
     )
     .orderBy(desc(guestbookEntries.createdAt))
 
-  const entriesMap = new Map<
-    number,
-    {
-      id: number
-      name: string
-      message: string
-      userId: string
-      editedAt: Date | null
-      createdAt: Date
-      reactions: ReactionState[]
-    }
-  >()
+  const entriesMap = new Map()
 
   for (const row of rows) {
     const entry = entriesMap.get(row.id) ?? {

@@ -9,9 +9,9 @@ import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { editGuestbookEntry, removeGuestbookEntry } from '../actions/guestbook'
 import { GuestbookReactions } from './reactions'
-import type { GuestbookEntryItem } from './types'
 
 interface GuestbookEntryCardProps {
   entry: GuestbookEntryItem

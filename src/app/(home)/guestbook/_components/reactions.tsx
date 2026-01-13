@@ -17,8 +17,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
+import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
-import type { GuestbookReactionItem } from './types'
 
 interface GuestbookReactionsProps {
   entryId: number
