@@ -3,7 +3,6 @@
 import { ProgressProvider } from '@bprogress/next/app'
 import { TooltipProvider } from '@radix-ui/react-tooltip'
 import type { ReactNode } from 'react'
-import { ViewTransition } from 'react'
 import Analytics from '@/components/analytics'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -33,9 +32,7 @@ export function Provider({
         startOnLoad
         stopDelay={1000}
       >
-        <TooltipProvider>
-          {children}
-        </TooltipProvider>
+        <TooltipProvider>{children}</TooltipProvider>
       </ProgressProvider>
       <Analytics />
       <Toaster />

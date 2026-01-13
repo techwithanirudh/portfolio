@@ -1,7 +1,7 @@
 'use server'
 
-import { Resend } from 'resend'
 import { checkBotId } from 'botid/server'
+import { Resend } from 'resend'
 import { env } from '@/env'
 import { ActionError, actionClient } from '@/lib/safe-action'
 import { ContactSchema } from '@/lib/validators/contact'
