@@ -1,10 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useAction } from 'next-safe-action/hooks'
-import { useForm } from 'react-hook-form'
+import type { BaseSyntheticEvent } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useSession } from '@/lib/auth-client'
-import type { GuestbookEntry } from '@/lib/validators'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
@@ -28,20 +27,26 @@ export const GuestbookForm = () => {
   const { data: session } = useSession()
   const user = session?.user
 
-  const form = useForm({
-    resolver: zodResolver(GuestbookEntrySchema),
-    mode: 'onBlur',
-    defaultValues: {
-      message: '',
-    },
-  })
+  const { form, action, handleSubmitWithAction, resetFormAndAction } =
+    useHookFormAction(createGuestbookEntry, zodResolver(GuestbookEntrySchema), {
+      actionProps: {},
+      formProps: {
+        mode: 'onBlur',
+        defaultValues: {
+          message: '',
+        },
+      },
+      errorMapProps: {},
+    })
 
-  const { execute, result, status } = useAction(createGuestbookEntry, {
-    onSuccess: () => {
-      form.reset()
+  const handleSubmit = async (event?: BaseSyntheticEvent) => {
+    await handleSubmitWithAction(event)
+
+    if (action.hasSucceeded) {
+      resetFormAndAction()
       router.refresh()
-    },
-  })
+    }
+  }
 
   if (!user) {
     return (
@@ -56,13 +61,9 @@ export const GuestbookForm = () => {
     )
   }
 
-  const onSubmit = (values: GuestbookEntry) => {
-    execute(values)
-  }
-
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
+      <form className='flex-1 space-y-6' onSubmit={handleSubmit}>
         <FormField
           control={form.control}
           name='message'
@@ -74,7 +75,7 @@ export const GuestbookForm = () => {
                   className='min-h-[10rem] resize-y bg-background'
                   placeholder='Say hello...'
                   {...field}
-                  disabled={status === 'executing'}
+                  disabled={action.status === 'executing'}
                 />
               </FormControl>
               {form.formState.errors.message ? (
@@ -89,15 +90,15 @@ export const GuestbookForm = () => {
         />
         <Button
           className='w-full'
-          disabled={status === 'executing'}
+          disabled={action.status === 'executing'}
           type='submit'
         >
-          {status === 'executing' ? (
+          {action.status === 'executing' ? (
             <Icons.spinner className='mr-2 size-4 animate-spin' />
           ) : null}
           Leave message
         </Button>
-        {status === 'hasSucceeded' && (
+        {action.status === 'hasSucceeded' && (
           <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
@@ -105,11 +106,11 @@ export const GuestbookForm = () => {
             </AlertTitle>
           </Alert>
         )}
-        {result.serverError && (
+        {action.result.serverError && (
           <Alert className='border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
-              {result.serverError}
+              {action.result.serverError}
             </AlertTitle>
           </Alert>
         )}

@@ -1,30 +1,17 @@
 'use server'
 
-import { checkBotId } from 'botid/server'
 import { Resend } from 'resend'
 import { env } from '@/env'
-import { ActionError, actionClient } from '@/lib/safe-action'
+import { ActionError, actionClient } from '@/lib/safe-action/client'
+import { botIdMiddleware } from '@/lib/safe-action/middleware'
 import { ContactSchema } from '@/lib/validators/contact'
 
 const resend = new Resend(env.RESEND_API_KEY as string)
 
 export const contact = actionClient
+  .use(botIdMiddleware)
   .inputSchema(ContactSchema)
   .action(async ({ parsedInput: { name, email, message } }) => {
-    const verification = await checkBotId({
-      developmentOptions: env.BOTID_DEV_BYPASS
-        ? {
-            bypass: env.BOTID_DEV_BYPASS,
-          }
-        : undefined,
-    })
-
-    if (verification.isBot) {
-      throw new ActionError(
-        'Bot protection blocked this request. Please refresh and try again.'
-      )
-    }
-
     try {
       const { error } = await resend.emails.send({
         from: env.EMAIL_FROM,

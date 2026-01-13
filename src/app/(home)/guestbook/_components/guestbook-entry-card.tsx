@@ -4,6 +4,8 @@ import { formatDistanceToNow } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
+import { toast } from 'sonner'
+
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -34,12 +36,15 @@ export const GuestbookEntryCard = ({
   })
   const deleteAction = useAction(removeGuestbookEntry, {
     onSuccess: () => {
+      setIsEditing(false)
       router.refresh()
     },
   })
 
-  const canEdit = currentUserId === entry.userId
+  const canEdit = !!currentUserId && currentUserId === entry.userId
   const editedLabel = entry.editedAt ? ' • Edited' : ''
+  const isBusy =
+    editAction.status === 'executing' || deleteAction.status === 'executing'
 
   const startEditing = () => {
     setIsEditing(true)
@@ -52,10 +57,25 @@ export const GuestbookEntryCard = ({
   }
 
   const submitEdit = () => {
-    editAction.execute({ entryId: entry.id, message: draftMessage })
+    const { message, id } = entry;
+
+    const trimmedMessage = draftMessage.trim()
+    const originalMessage = message.trim()
+
+    const disabled =
+      trimmedMessage.length === 0 || trimmedMessage === originalMessage
+
+    if (isBusy || disabled) {
+      toast.error('No changes to save or message is empty.')
+      setIsEditing(false)
+      return
+    }
+
+    editAction.execute({ entryId: id, message: trimmedMessage })
   }
 
   const deleteEntry = () => {
+    setIsEditing(false)
     deleteAction.execute({ entryId: entry.id })
   }
 
@@ -76,7 +96,7 @@ export const GuestbookEntryCard = ({
             <Button
               aria-label='Edit entry'
               className='rounded-none'
-              disabled={editAction.status === 'executing' || isEditing}
+              disabled={isBusy || isEditing}
               onClick={startEditing}
               size='icon'
               variant='ghost'
@@ -86,10 +106,7 @@ export const GuestbookEntryCard = ({
             <Button
               aria-label='Delete entry'
               className='rounded-none text-destructive'
-              disabled={
-                deleteAction.status === 'executing' ||
-                editAction.status === 'executing'
-              }
+              disabled={isBusy || isEditing}
               onClick={deleteEntry}
               size='icon'
               variant='ghost'
@@ -103,14 +120,14 @@ export const GuestbookEntryCard = ({
         <div className='space-y-3'>
           <Textarea
             className='min-h-[8rem] resize-y bg-background'
-            disabled={editAction.status === 'executing'}
+            disabled={isBusy}
             onChange={(event) => setDraftMessage(event.target.value)}
             value={draftMessage}
           />
           <div className='flex flex-wrap gap-2'>
             <Button
               className='px-4'
-              disabled={editAction.status === 'executing'}
+              disabled={isBusy}
               onClick={submitEdit}
               size='sm'
               type='button'
@@ -121,7 +138,7 @@ export const GuestbookEntryCard = ({
               Save
             </Button>
             <Button
-              disabled={editAction.status === 'executing'}
+              disabled={isBusy}
               onClick={cancelEditing}
               size='sm'
               type='button'

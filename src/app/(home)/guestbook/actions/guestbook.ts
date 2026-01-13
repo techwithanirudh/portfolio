@@ -1,91 +1,72 @@
 'use server'
 
-import { checkBotId } from 'botid/server'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
 
-import { env } from '@/env'
-import { ActionError, actionClient } from '@/lib/safe-action'
+import { ActionError, actionClient } from '@/lib/safe-action/client'
+import type { ActionContext } from '@/lib/safe-action/middleware'
+import { botIdMiddleware, userMiddleware } from '@/lib/safe-action/middleware'
 
 import {
+  type GuestbookDelete,
   GuestbookDeleteSchema,
+  type GuestbookEdit,
   GuestbookEditSchema,
+  type GuestbookEntry,
   GuestbookEntrySchema,
+  type GuestbookReaction,
   GuestbookReactionSchema,
 } from '@/lib/validators'
-import { getSession } from '@/server/auth'
 import { db } from '@/server/db'
 import { deleteGuestbookEntry } from '@/server/db/queries/guestbook'
 import { guestbookEntries, guestbookReactions } from '@/server/db/schema'
 
-const requireUser = async () => {
-  const session = await getSession()
-  const user = session?.user
+const protectedGuestbookAction = actionClient
+  .use(botIdMiddleware)
+  .use(userMiddleware)
 
-  if (!user) {
-    throw new ActionError('You must be signed in to do that.')
-  }
+export const createGuestbookEntry = protectedGuestbookAction
+  .inputSchema(GuestbookEntrySchema)
+  .action(
+    async ({
+      parsedInput,
+      ctx,
+    }: {
+      parsedInput: GuestbookEntry
+      ctx: ActionContext
+    }) => {
+      const { user } = ctx
+      const name = user.name ?? user.email ?? 'Guest'
 
-  return user
-}
+      await db.insert(guestbookEntries).values({
+        userId: user.id,
+        name,
+        message: parsedInput.message,
+      })
 
-const requireHuman = async () => {
-  const verification = await checkBotId({
-    developmentOptions: env.BOTID_DEV_BYPASS
-      ? {
-          bypass: env.BOTID_DEV_BYPASS,
-        }
-      : undefined,
-  })
+      revalidatePath('/guestbook')
+      updateTag('guestbook-entries')
 
-  if (verification.isBot) {
-    throw new ActionError(
-      'Bot protection blocked this request. Please refresh and try again.'
-    )
-  }
-}
+      return { success: true }
+    }
+  )
 
-export const createGuestbookEntry = actionClient
-  .schema(GuestbookEntrySchema)
-  .action(async ({ parsedInput }) => {
-    await requireHuman()
-    const user = await requireUser()
-    const name = user.name ?? user.email ?? 'Guest'
+export const toggleGuestbookReaction = protectedGuestbookAction
+  .inputSchema(GuestbookReactionSchema)
+  .action(
+    async ({
+      parsedInput,
+      ctx,
+    }: {
+      parsedInput: GuestbookReaction
+      ctx: ActionContext
+    }) => {
+      const { user } = ctx
+      const { entryId, emoji } = parsedInput
 
-    await db.insert(guestbookEntries).values({
-      userId: user.id,
-      name,
-      message: parsedInput.message,
-    })
-
-    revalidatePath('/guestbook')
-    updateTag('guestbook-entries')
-
-    return { success: true }
-  })
-
-export const toggleGuestbookReaction = actionClient
-  .schema(GuestbookReactionSchema)
-  .action(async ({ parsedInput }) => {
-    await requireHuman()
-    const user = await requireUser()
-    const { entryId, emoji } = parsedInput
-
-    const existing = await db
-      .select({ entryId: guestbookReactions.entryId })
-      .from(guestbookReactions)
-      .where(
-        and(
-          eq(guestbookReactions.entryId, entryId),
-          eq(guestbookReactions.userId, user.id),
-          eq(guestbookReactions.emoji, emoji)
-        )
-      )
-      .limit(1)
-
-    if (existing.length > 0) {
-      await db
-        .delete(guestbookReactions)
+      const existing = await db
+        .select({ entryId: guestbookReactions.entryId })
+        .from(guestbookReactions)
         .where(
           and(
             eq(guestbookReactions.entryId, entryId),
@@ -93,63 +74,90 @@ export const toggleGuestbookReaction = actionClient
             eq(guestbookReactions.emoji, emoji)
           )
         )
-    } else {
-      await db.insert(guestbookReactions).values({
-        entryId,
-        userId: user.id,
-        emoji,
-      })
+        .limit(1)
+
+      if (existing.length > 0) {
+        await db
+          .delete(guestbookReactions)
+          .where(
+            and(
+              eq(guestbookReactions.entryId, entryId),
+              eq(guestbookReactions.userId, user.id),
+              eq(guestbookReactions.emoji, emoji)
+            )
+          )
+      } else {
+        await db.insert(guestbookReactions).values({
+          entryId,
+          userId: user.id,
+          emoji,
+        })
+      }
+
+      revalidatePath('/guestbook')
+      updateTag('guestbook-entries')
+
+      return { success: true }
     }
+  )
 
-    revalidatePath('/guestbook')
-    updateTag('guestbook-entries')
+export const editGuestbookEntry = protectedGuestbookAction
+  .inputSchema(GuestbookEditSchema)
+  .action(
+    async ({
+      parsedInput,
+      ctx,
+    }: {
+      parsedInput: GuestbookEdit
+      ctx: ActionContext
+    }) => {
+      const { user } = ctx
 
-    return { success: true }
-  })
-
-export const editGuestbookEntry = actionClient
-  .schema(GuestbookEditSchema)
-  .action(async ({ parsedInput }) => {
-    await requireHuman()
-    const user = await requireUser()
-
-    const updated = await db
-      .update(guestbookEntries)
-      .set({
-        message: parsedInput.message,
-        editedAt: new Date(),
-      })
-      .where(
-        and(
-          eq(guestbookEntries.id, parsedInput.entryId),
-          eq(guestbookEntries.userId, user.id)
+      const updated = await db
+        .update(guestbookEntries)
+        .set({
+          message: parsedInput.message,
+          editedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(guestbookEntries.id, parsedInput.entryId),
+            eq(guestbookEntries.userId, user.id)
+          )
         )
-      )
-      .returning({ id: guestbookEntries.id })
+        .returning({ id: guestbookEntries.id })
 
-    if (updated.length === 0) {
-      throw new ActionError('Unable to edit this message.')
+      if (updated.length === 0) {
+        throw new ActionError('Unable to edit this message.')
+      }
+
+      revalidatePath('/guestbook')
+      updateTag('guestbook-entries')
+
+      return { success: true }
     }
+  )
 
-    revalidatePath('/guestbook')
-    updateTag('guestbook-entries')
+export const removeGuestbookEntry = protectedGuestbookAction
+  .inputSchema(GuestbookDeleteSchema)
+  .action(
+    async ({
+      parsedInput,
+      ctx,
+    }: {
+      parsedInput: GuestbookDelete
+      ctx: ActionContext
+    }) => {
+      const { user } = ctx
+      const removed = await deleteGuestbookEntry(parsedInput.entryId, user.id)
 
-    return { success: true }
-  })
+      if (!removed) {
+        throw new ActionError('Unable to delete this message.')
+      }
 
-export const removeGuestbookEntry = actionClient
-  .schema(GuestbookDeleteSchema)
-  .action(async ({ parsedInput }) => {
-    await requireHuman()
-    const user = await requireUser()
-    const removed = await deleteGuestbookEntry(parsedInput.entryId, user.id)
+      revalidatePath('/guestbook')
+      updateTag('guestbook-entries')
 
-    if (!removed) {
-      throw new ActionError('Unable to delete this message.')
+      return { success: true }
     }
-
-    revalidatePath('/guestbook')
-    updateTag('guestbook-entries')
-
-    return { success: true }
-  })
+  )

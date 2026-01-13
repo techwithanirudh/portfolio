@@ -2,7 +2,8 @@
 
 import { Resend } from 'resend'
 import { getContact, sendWelcomeEmail, updateContact } from '@/lib/resend'
-import { ActionError, actionClient } from '@/lib/safe-action'
+import { ActionError, actionClient } from '@/lib/safe-action/client'
+import { botIdMiddleware } from '@/lib/safe-action/middleware'
 import { getSortedByDatePosts } from '@/lib/source'
 import { NewsletterSchema } from '@/lib/validators'
 import { getSession } from '@/server/auth'
@@ -19,6 +20,7 @@ const splitName = (name = '') => {
 }
 
 export const subscribe = actionClient
+  .use(botIdMiddleware)
   .inputSchema(NewsletterSchema)
   .action(async ({ parsedInput: { email } }) => {
     const session = await getSession()

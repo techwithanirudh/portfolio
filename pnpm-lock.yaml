@@ -23,6 +23,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^1.0.0
         version: 1.0.0
+      '@next-safe-action/adapter-react-hook-form':
+        specifier: ^2.0.0
+        version: 2.0.0(@hookform/resolvers@5.2.2(react-hook-form@7.55.0(react@19.2.3)))(next-safe-action@8.0.11(next@16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(next@16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react-hook-form@7.55.0(react@19.2.3))(react@19.2.3)
       '@number-flow/react':
         specifier: ^0.5.9
         version: 0.5.9(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -1605,6 +1608,16 @@ packages:
   '@neondatabase/serverless@1.0.0':
     resolution: {integrity: sha512-XWmEeWpBXIoksZSDN74kftfTnXFEGZ3iX8jbANWBc+ag6dsiQuvuR4LgB0WdCOKMb5AQgjqgufc0TgAsZubUYw==}
     engines: {node: '>=19.0.0'}
+
+  '@next-safe-action/adapter-react-hook-form@2.0.0':
+    resolution: {integrity: sha512-vp3KAd5NKnBBCF/3b8kDxEYj0+BUYVjlSZOWHikz/Y2O+yLheRmtj8Vcm379itlqGUKcLV5O2o/dwKHvH8pYog==}
+    peerDependencies:
+      '@hookform/resolvers': '>= 5.0.0'
+      next: '>= 14.0.0'
+      next-safe-action: '>= 8.0.0'
+      react: '>= 18.2.0'
+      react-dom: '>= 18.2.0'
+      react-hook-form: '>= 7.0.0'
 
   '@next/bundle-analyzer@16.1.1':
     resolution: {integrity: sha512-aNJy301GGH8k36rDgrYdnyYEdjRQg6csMi1njzqHo+3qyZvOOWMHSv+p7SztNTzP5RU2KRwX0pPwYBtDcE+vVA==}
@@ -7060,6 +7073,15 @@ snapshots:
     dependencies:
       '@types/node': 22.13.1
       '@types/pg': 8.11.11
+
+  '@next-safe-action/adapter-react-hook-form@2.0.0(@hookform/resolvers@5.2.2(react-hook-form@7.55.0(react@19.2.3)))(next-safe-action@8.0.11(next@16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(next@16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react-hook-form@7.55.0(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@hookform/resolvers': 5.2.2(react-hook-form@7.55.0(react@19.2.3))
+      next: 16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      next-safe-action: 8.0.11(next@16.1.1(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      react-hook-form: 7.55.0(react@19.2.3)
 
   '@next/bundle-analyzer@16.1.1':
     dependencies:
