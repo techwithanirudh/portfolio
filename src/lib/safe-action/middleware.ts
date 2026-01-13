@@ -15,11 +15,12 @@ type UserMiddleware = MiddlewareFn<string, undefined, object, ActionContext>
 
 export const botIdMiddleware: BotIdMiddleware = async ({ next }) => {
   const verification = await checkBotId({
-    developmentOptions: env.BOTID_DEV_BYPASS
-      ? {
-          bypass: env.BOTID_DEV_BYPASS,
-        }
-      : undefined,
+    developmentOptions:
+      env.NODE_ENV !== 'production' && env.BOTID_DEV_BYPASS
+        ? {
+            bypass: env.BOTID_DEV_BYPASS,
+          }
+        : undefined,
   })
 
   if (verification.isBot) {

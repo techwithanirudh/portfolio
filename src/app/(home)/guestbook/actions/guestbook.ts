@@ -36,7 +36,7 @@ export const createGuestbookEntry = protectedGuestbookAction
       ctx: ActionContext
     }) => {
       const { user } = ctx
-      const name = user.name ?? user.email ?? 'Guest'
+      const name = user.name ?? 'Guest'
 
       await db.insert(guestbookEntries).values({
         userId: user.id,
@@ -64,9 +64,8 @@ export const toggleGuestbookReaction = protectedGuestbookAction
       const { user } = ctx
       const { entryId, emoji } = parsedInput
 
-      const existing = await db
-        .select({ entryId: guestbookReactions.entryId })
-        .from(guestbookReactions)
+      const deleted = await db
+        .delete(guestbookReactions)
         .where(
           and(
             eq(guestbookReactions.entryId, entryId),
@@ -74,24 +73,17 @@ export const toggleGuestbookReaction = protectedGuestbookAction
             eq(guestbookReactions.emoji, emoji)
           )
         )
-        .limit(1)
+        .returning({ entryId: guestbookReactions.entryId })
 
-      if (existing.length > 0) {
+      if (deleted.length === 0) {
         await db
-          .delete(guestbookReactions)
-          .where(
-            and(
-              eq(guestbookReactions.entryId, entryId),
-              eq(guestbookReactions.userId, user.id),
-              eq(guestbookReactions.emoji, emoji)
-            )
-          )
-      } else {
-        await db.insert(guestbookReactions).values({
-          entryId,
-          userId: user.id,
-          emoji,
-        })
+          .insert(guestbookReactions)
+          .values({
+            entryId,
+            userId: user.id,
+            emoji,
+          })
+          .onConflictDoNothing()
       }
 
       revalidatePath('/guestbook')

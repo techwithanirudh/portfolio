@@ -82,7 +82,7 @@ export const GuestbookForm = () => {
                 <FormMessage />
               ) : (
                 <FormDescription>
-                  Posting as {user.name ?? user.email}.
+                  Posting as {user.name ?? 'Guest'}.
                 </FormDescription>
               )}
             </FormItem>
