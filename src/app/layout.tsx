@@ -2,6 +2,7 @@ import { RootProvider } from 'fumadocs-ui/provider/next'
 import type { Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
+import { BotIdClient } from 'botid/client'
 import CustomSearchDialog from '@/components/search-dialog'
 import { baseUrl } from '@/lib/constants'
 import { createMetadata } from '@/lib/metadata'
@@ -87,6 +88,20 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       lang='en'
       suppressHydrationWarning
     >
+      <head>
+        <BotIdClient
+          protect={[
+            {
+              path: '/guestbook',
+              method: 'POST',
+            },
+            {
+              path: '/contact',
+              method: 'POST',
+            },
+          ]}
+        />
+      </head>
       <Body>
         <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw script

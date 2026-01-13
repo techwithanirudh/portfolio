@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import { and, desc, eq, sql } from 'drizzle-orm'
 
 import { db } from '@/server/db'
@@ -9,7 +10,7 @@ interface ReactionState {
   reacted: boolean
 }
 
-export const getGuestbookEntries = async (currentUserId?: string | null) => {
+const fetchGuestbookEntries = async (currentUserId?: string | null) => {
   const reactedExpression = currentUserId
     ? sql<boolean>`coalesce(bool_or(${guestbookReactions.userId} = ${currentUserId}), false)`
     : sql<boolean>`false`
@@ -90,6 +91,14 @@ export const getGuestbookEntries = async (currentUserId?: string | null) => {
     reactions: entry.reactions,
   }))
 }
+
+export const getGuestbookEntries = unstable_cache(
+  fetchGuestbookEntries,
+  ['guestbook-entries'],
+  {
+    tags: ['guestbook-entries'],
+  }
+)
 
 export const deleteGuestbookEntry = async (entryId: number, userId: string) => {
   const deleted = await db

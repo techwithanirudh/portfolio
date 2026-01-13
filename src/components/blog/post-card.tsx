@@ -13,7 +13,7 @@ interface PostCardProps {
   date: string
   author: string
   tags?: string[]
-  slugs?: string[]
+  slugs: string[]
   index?: number
 }
 
@@ -28,7 +28,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   slugs,
   index: _index,
 }) => {
-  const transitionName = slugs?.join('/') ?? url
+  const transitionName = slugs.join('/')
 
   return (
     <Link

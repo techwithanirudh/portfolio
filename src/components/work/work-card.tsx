@@ -8,10 +8,17 @@ interface WorkCardProps {
   description: string
   image?: string | null
   url: string
+  slugs: string[]
 }
 
-export const WorkCard = ({ title, description, image, url }: WorkCardProps) => {
-  const transitionName = url.split('/').filter(Boolean).pop() ?? url
+export const WorkCard = ({
+  title,
+  description,
+  image,
+  url,
+  slugs,
+}: WorkCardProps) => {
+  const transitionName = slugs.join('/')
 
   return (
     <Link

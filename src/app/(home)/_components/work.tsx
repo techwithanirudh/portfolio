@@ -35,6 +35,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
                 <WorkCard
                   description={work.data.description ?? ''}
                   image={work.data.image ?? null}
+                  slugs={work.slugs}
                   title={work.data.title ?? 'Untitled'}
                   url={work.url}
                 />

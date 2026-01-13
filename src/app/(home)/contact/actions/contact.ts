@@ -1,6 +1,7 @@
 'use server'
 
 import { Resend } from 'resend'
+import { checkBotId } from 'botid/server'
 import { env } from '@/env'
 import { ActionError, actionClient } from '@/lib/safe-action'
 import { ContactSchema } from '@/lib/validators/contact'
@@ -8,8 +9,14 @@ import { ContactSchema } from '@/lib/validators/contact'
 const resend = new Resend(env.RESEND_API_KEY as string)
 
 export const contact = actionClient
-  .schema(ContactSchema)
+  .inputSchema(ContactSchema)
   .action(async ({ parsedInput: { name, email, message } }) => {
+    const verification = await checkBotId()
+
+    if (verification.isBot) {
+      throw new ActionError('Access denied.')
+    }
+
     try {
       const { error } = await resend.emails.send({
         from: env.EMAIL_FROM,

@@ -1,7 +1,8 @@
 'use server'
 
 import { and, eq } from 'drizzle-orm'
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, updateTag } from 'next/cache'
+import { checkBotId } from 'botid/server'
 
 import { ActionError, actionClient } from '@/lib/safe-action'
 import {
@@ -26,9 +27,18 @@ const requireUser = async () => {
   return user
 }
 
+const requireHuman = async () => {
+  const verification = await checkBotId()
+
+  if (verification.isBot) {
+    throw new ActionError('Access denied.')
+  }
+}
+
 export const createGuestbookEntry = actionClient
   .schema(GuestbookEntrySchema)
   .action(async ({ parsedInput }) => {
+    await requireHuman()
     const user = await requireUser()
     const name = user.name ?? user.email ?? 'Guest'
 
@@ -39,6 +49,7 @@ export const createGuestbookEntry = actionClient
     })
 
     revalidatePath('/guestbook')
+    updateTag('guestbook-entries')
 
     return { success: true }
   })
@@ -46,6 +57,7 @@ export const createGuestbookEntry = actionClient
 export const toggleGuestbookReaction = actionClient
   .schema(GuestbookReactionSchema)
   .action(async ({ parsedInput }) => {
+    await requireHuman()
     const user = await requireUser()
     const { entryId, emoji } = parsedInput
 
@@ -80,6 +92,7 @@ export const toggleGuestbookReaction = actionClient
     }
 
     revalidatePath('/guestbook')
+    updateTag('guestbook-entries')
 
     return { success: true }
   })
@@ -87,6 +100,7 @@ export const toggleGuestbookReaction = actionClient
 export const editGuestbookEntry = actionClient
   .schema(GuestbookEditSchema)
   .action(async ({ parsedInput }) => {
+    await requireHuman()
     const user = await requireUser()
 
     const updated = await db
@@ -108,6 +122,7 @@ export const editGuestbookEntry = actionClient
     }
 
     revalidatePath('/guestbook')
+    updateTag('guestbook-entries')
 
     return { success: true }
   })
@@ -115,6 +130,7 @@ export const editGuestbookEntry = actionClient
 export const removeGuestbookEntry = actionClient
   .schema(GuestbookDeleteSchema)
   .action(async ({ parsedInput }) => {
+    await requireHuman()
     const user = await requireUser()
     const removed = await deleteGuestbookEntry(parsedInput.entryId, user.id)
 
@@ -123,6 +139,7 @@ export const removeGuestbookEntry = actionClient
     }
 
     revalidatePath('/guestbook')
+    updateTag('guestbook-entries')
 
     return { success: true }
   })

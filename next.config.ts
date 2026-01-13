@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url'
 import bundleAnalyzer from '@next/bundle-analyzer'
+import { withBotId } from 'botid/next/config'
 import { createMDX } from 'fumadocs-mdx/next'
 import type { NextConfig } from 'next'
 
@@ -75,7 +76,8 @@ const mdxPlugin = createMDX()
 const NextApp = async () => {
   const nextConfig = await createNextConfig()
   const plugins = [bundleAnalyzerPlugin, mdxPlugin]
-  return plugins.reduce((config, plugin) => plugin(config), nextConfig)
+  const config = plugins.reduce((config, plugin) => plugin(config), nextConfig)
+  return withBotId(config)
 }
 
 export default NextApp
