@@ -2,6 +2,7 @@
 
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -81,6 +82,11 @@ export const GuestbookReactions = ({
     {
       currentState: { reactions },
       updateFn: updateOptimisticReactions,
+      onError: ({ error }) => {
+        if (error.serverError) {
+          toast.error(error.serverError)
+        }
+      },
     }
   )
 

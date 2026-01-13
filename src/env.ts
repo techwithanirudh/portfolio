@@ -22,6 +22,8 @@ export const env = createEnv({
         ? z.string().min(1)
         : z.string().min(1).optional(),
     BETTER_AUTH_URL: z.string().min(1).optional(),
+    // BotID
+    BOTID_DEV_BYPASS: z.enum(['BAD-BOT', 'GOOD-BOT', 'HUMAN']).optional(),
     // Google
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),

@@ -4,7 +4,9 @@ import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
 import { checkBotId } from 'botid/server'
 
+import { env } from '@/env'
 import { ActionError, actionClient } from '@/lib/safe-action'
+
 import {
   GuestbookDeleteSchema,
   GuestbookEditSchema,
@@ -28,10 +30,18 @@ const requireUser = async () => {
 }
 
 const requireHuman = async () => {
-  const verification = await checkBotId()
+  const verification = await checkBotId({
+    developmentOptions: env.BOTID_DEV_BYPASS
+      ? {
+          bypass: env.BOTID_DEV_BYPASS,
+        }
+      : undefined,
+  })
 
   if (verification.isBot) {
-    throw new ActionError('Access denied.')
+    throw new ActionError(
+      'Bot protection blocked this request. Please refresh and try again.'
+    )
   }
 }
 
