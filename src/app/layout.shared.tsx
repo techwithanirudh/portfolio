@@ -35,6 +35,12 @@ export const linkItems: LinkItemType[] = [
     active: 'url',
   },
   {
+    icon: <Icons.messageSquare />,
+    text: 'Guestbook',
+    url: '/guestbook',
+    active: 'url',
+  },
+  {
     icon: <Icons.code />,
     text: 'Work',
     url: '/work',

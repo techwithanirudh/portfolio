@@ -37,9 +37,7 @@ export default function MdxLayout({
             ) : (
               <div className='py-2' />
             )}
-            <div className='prose min-w-0 flex-1 px-4'>
-              {children}
-            </div>
+            <div className='prose min-w-0 flex-1 px-4'>{children}</div>
             {comments ? (
               <PostComments
                 className='[&_form>div]:!rounded-none rounded-none border-0 border-border border-t border-dashed'

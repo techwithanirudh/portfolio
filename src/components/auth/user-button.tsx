@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -12,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { signOut, useSession } from '@/lib/auth-client'
+import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
 import type { UserAvatarClassNames } from './user-avatar'
@@ -40,6 +41,8 @@ export interface UserButtonProps {
 }
 
 export function UserButton({ className, classNames }: UserButtonProps) {
+  const router = useRouter()
+  const pathname = usePathname()
   const { data: sessionData, isPending } = useSession()
   const user = sessionData?.user ?? null
 
@@ -105,14 +108,17 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         {user ? (
           <DropdownMenuItem
             className={classNames?.content?.menuItem}
-            onClick={() => signOut()}
+            onClick={async () => {
+              await signOut()
+              router.refresh()
+            }}
           >
             <Icons.logOut className='size-4' />
             Log Out
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem asChild className={classNames?.content?.menuItem}>
-            <Link href={'/login'}>
+            <Link href={getLoginUrl(pathname)}>
               <Icons.logIn className='size-4' />
               Sign In
             </Link>

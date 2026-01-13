@@ -1,8 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAction } from 'next-safe-action/hooks'
-import { useForm } from 'react-hook-form'
+import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { subscribe } from '@/app/(home)/(blog)/newsletter/actions/newsletter'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
@@ -15,26 +14,26 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import type { Newsletter } from '@/lib/validators'
 import { NewsletterSchema } from '@/lib/validators'
 
 export const NewsletterForm = () => {
-  const form = useForm({
-    resolver: zodResolver(NewsletterSchema),
-    defaultValues: {
-      email: '',
-    },
-  })
-
-  const { execute, result, status } = useAction(subscribe)
-
-  const onSubmit = (values: Newsletter) => {
-    execute(values)
-  }
+  const { form, action, handleSubmitWithAction } = useHookFormAction(
+    subscribe,
+    zodResolver(NewsletterSchema),
+    {
+      actionProps: {},
+      formProps: {
+        defaultValues: {
+          email: '',
+        },
+      },
+      errorMapProps: {},
+    }
+  )
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-4' onSubmit={form.handleSubmit(onSubmit)}>
+      <form className='flex-1 space-y-4' onSubmit={handleSubmitWithAction}>
         <div className='flex h-full min-h-10 overflow-hidden rounded-md border bg-muted p-0'>
           <div className='flex-1'>
             <FormField
@@ -46,7 +45,7 @@ export const NewsletterForm = () => {
                     <Input
                       {...field}
                       className='h-full rounded-md rounded-r-none border-none px-4 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                      disabled={status === 'executing'}
+                      disabled={action.status === 'executing'}
                       placeholder='Email address'
                       type='email'
                     />
@@ -59,11 +58,11 @@ export const NewsletterForm = () => {
 
           <Button
             className='group size-auto w-15 rounded-md rounded-l-none px-3'
-            disabled={status === 'executing'}
+            disabled={action.status === 'executing'}
             size='icon'
             type='submit'
           >
-            {status === 'executing' ? (
+            {action.status === 'executing' ? (
               <Icons.spinner className='size-4 animate-spin' />
             ) : (
               <Icons.send className='size-4 transition-transform group-hover:-rotate-45' />
@@ -71,19 +70,20 @@ export const NewsletterForm = () => {
           </Button>
         </div>
 
-        {status === 'hasSucceeded' && (
+        {action.status === 'hasSucceeded' && (
           <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
-              {result.data?.message ?? "Hmm... Our server didn't respond."}
+              {action.result.data?.message ??
+                "Hmm... Our server didn't respond."}
             </AlertTitle>
           </Alert>
         )}
-        {result.serverError && (
+        {action.result.serverError && (
           <Alert className='border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
-              {result.serverError}
+              {action.result.serverError}
             </AlertTitle>
           </Alert>
         )}

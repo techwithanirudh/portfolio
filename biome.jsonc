@@ -35,6 +35,14 @@
         "useGenericFontNames": "off",
         "useSemanticElements": "warn"
       },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": {
+            "maxAllowedComplexity": 31
+          }
+        }
+      },
       "correctness": {
         "useUniqueElementIds": "off"
       },

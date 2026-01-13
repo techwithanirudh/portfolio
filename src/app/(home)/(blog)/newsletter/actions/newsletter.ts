@@ -1,14 +1,16 @@
 'use server'
 
 import { Resend } from 'resend'
+import { env } from '@/env'
 import { getContact, sendWelcomeEmail, updateContact } from '@/lib/resend'
-import { ActionError, actionClient } from '@/lib/safe-action'
+import { ActionError, actionClient } from '@/lib/safe-action/client'
+import { botIdMiddleware } from '@/lib/safe-action/middleware'
 import { getSortedByDatePosts } from '@/lib/source'
 import { NewsletterSchema } from '@/lib/validators'
 import { getSession } from '@/server/auth'
 
-const resend = new Resend(process.env.RESEND_API_KEY as string)
-const audienceId = process.env.RESEND_AUDIENCE_ID as string
+const resend = new Resend(env.RESEND_API_KEY)
+const audienceId = env.RESEND_AUDIENCE_ID
 
 const splitName = (name = '') => {
   const [firstName, ...lastName] = name.split(' ').filter(Boolean)
@@ -19,6 +21,7 @@ const splitName = (name = '') => {
 }
 
 export const subscribe = actionClient
+  .use(botIdMiddleware)
   .inputSchema(NewsletterSchema)
   .action(async ({ parsedInput: { email } }) => {
     const session = await getSession()

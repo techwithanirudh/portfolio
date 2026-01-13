@@ -1,5 +1,7 @@
+import { env } from '@/env'
+
 export { baseUrl } from './metadata'
-export const isProduction = process.env.NODE_ENV === 'production'
+export const isProduction = env.NODE_ENV === 'production'
 
 export const searchTags = [
   {

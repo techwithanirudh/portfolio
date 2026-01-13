@@ -10,6 +10,7 @@ import {
 } from '@/components/icons/animated/upload'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
+import { getLoginUrl } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
 export function Share({
@@ -56,7 +57,7 @@ export function PostComments({
       auth={{
         type: 'api',
         signIn: () => {
-          redirect('/login')
+          redirect(getLoginUrl(`/blog/${slug}`))
         },
       }}
       className={cn('w-full', className)}

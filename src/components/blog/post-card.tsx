@@ -1,6 +1,7 @@
 import { CalendarIcon, UserIcon } from 'lucide-react'
 import Link from 'next/link'
 import type React from 'react'
+import { ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
 
@@ -12,7 +13,7 @@ interface PostCardProps {
   date: string
   author: string
   tags?: string[]
-  slugs?: string[]
+  slugs: string[]
   index?: number
 }
 
@@ -24,9 +25,11 @@ export const PostCard: React.FC<PostCardProps> = ({
   date,
   author,
   tags: _tags,
-  slugs: _slugs,
+  slugs,
   index: _index,
 }) => {
+  const transitionName = slugs.join('/')
+
   return (
     <Link
       className='grid grid-cols-1 gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80 md:grid-cols-3 xl:grid-cols-4'
@@ -34,9 +37,11 @@ export const PostCard: React.FC<PostCardProps> = ({
     >
       <div className='order-2 flex h-full flex-col justify-between gap-4 md:order-1 md:col-span-2 xl:col-span-3'>
         <div className='flex-1 gap-4'>
-          <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-            {title}
-          </h2>
+          <ViewTransition name={transitionName} share='via-blur'>
+            <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
+              {title}
+            </h2>
+          </ViewTransition>
           <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
             <Balancer>{description}</Balancer>
           </p>
@@ -65,16 +70,18 @@ export const PostCard: React.FC<PostCardProps> = ({
       </div>
 
       {image && (
-        <div className='group relative order-1 col-span-1 inline-flex aspect-video items-center justify-center overflow-hidden transition-transform hover:scale-105 md:order-2'>
-          <BlurImage
-            alt={title}
-            className='relative h-full w-full rounded-lg'
-            height={554}
-            imageClassName='h-full w-full object-cover'
-            src={image}
-            width={853}
-          />
-        </div>
+        <ViewTransition name={`${transitionName}-image`} share='via-blur'>
+          <div className='group relative order-1 col-span-1 inline-flex aspect-video items-center justify-center overflow-hidden transition-transform hover:scale-105 md:order-2'>
+            <BlurImage
+              alt={title}
+              className='relative h-full w-full rounded-lg'
+              height={554}
+              imageClassName='h-full w-full object-cover'
+              src={image}
+              width={853}
+            />
+          </div>
+        </ViewTransition>
       )}
     </Link>
   )

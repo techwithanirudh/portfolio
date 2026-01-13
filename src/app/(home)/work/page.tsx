@@ -68,6 +68,7 @@ export default async function Page(props: {
               <WorkCard
                 description={entry.data.description ?? ''}
                 image={entry.data.image ?? null}
+                slugs={entry.slugs}
                 title={entry.data.title ?? 'Untitled'}
                 url={entry.url}
               />
