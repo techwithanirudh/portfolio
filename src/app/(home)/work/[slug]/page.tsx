@@ -46,10 +46,9 @@ function Header(props: { page: MDXPage }) {
         )}
       >
         {page.data.image && (
-          <ViewAnimation
-            delay={0.2}
-            initial={{ opacity: 0, translateY: -8 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
+          <ViewTransition
+            name={`${page.slugs.join('/')}-image`}
+            share='via-blur'
           >
             <BlurImage
               alt={page.data.title ?? 'Work cover image'}
@@ -59,42 +58,24 @@ function Header(props: { page: MDXPage }) {
               sizes='(min-width: 1024px) 1200px, 100vw'
               src={page.data.image}
             />
-          </ViewAnimation>
+          </ViewTransition>
         )}
         <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
-          <ViewTransition name={page.slugs.join('/')}>
-            <ViewAnimation
-              delay={0.4}
-              initial={{ opacity: 0, translateY: -8 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <h1 className='typography-hero font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-                <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
-              </h1>
-            </ViewAnimation>
-            <ViewAnimation
-              delay={0.6}
-              initial={{ opacity: 0, translateY: -8 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <p className='typography-body mx-auto'>
-                <Balancer>{page.data.description ?? ''}</Balancer>
-              </p>
-            </ViewAnimation>
-            <ViewAnimation
-              delay={0.8}
-              initial={{ opacity: 0, translateY: -8 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <p className='text-fd-muted-foreground text-sm'>
-                Created {new Date(page.data.date).toDateString()}
-              </p>
-            </ViewAnimation>
+          <ViewTransition name={page.slugs.join('/')} share='via-blur'>
+            <h1 className='typography-hero font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
+              <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
+            </h1>
+            <p className='typography-body mx-auto'>
+              <Balancer>{page.data.description ?? ''}</Balancer>
+            </p>
+            <p className='text-fd-muted-foreground text-sm'>
+              Created {new Date(page.data.date).toDateString()}
+            </p>
           </ViewTransition>
         </div>
         {links.length > 0 && (
           <ViewAnimation
-            delay={1}
+            delay={0.6}
             initial={{ opacity: 0, translateY: -8 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
