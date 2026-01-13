@@ -37,7 +37,7 @@ export function Provider({
       <Analytics />
       <Toaster />
       <TailwindIndicator />
-      <SmoothCursor disableRotation />
+      <SmoothCursor />
     </ThemeProvider>
   )
 }

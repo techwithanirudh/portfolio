@@ -1,9 +1,8 @@
 'use client'
 
 import { Icons } from '@/components/icons/icons'
-import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
-
 import { ViewAnimation } from '@/components/view-animation'
+import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { GuestbookEntryCard } from './entry-card'
 
 interface GuestbookEntriesProps {
@@ -33,9 +32,9 @@ export const GuestbookEntries = ({
       <div className='divide-y divide-dashed divide-border'>
         {entries.map((entry, index) => (
           <ViewAnimation
-            key={entry.id}
             delay={0.8 + 0.1 * index}
             initial={{ opacity: 0, translateY: 8 }}
+            key={entry.id}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <GuestbookEntryCard
