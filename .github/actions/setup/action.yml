@@ -23,6 +23,7 @@ runs:
         RESEND_API_KEY="re_dummy_key"
         RESEND_AUDIENCE_ID="aud_dummy"
         EMAIL_FROM="blog@example.com"
+        EMAIL_TO="receiver@gmail.com"
         BETTER_AUTH_URL="http://localhost:3000"
         BETTER_AUTH_SECRET="dummy_secret"
         GOOGLE_CLIENT_ID="dummy_client_id"

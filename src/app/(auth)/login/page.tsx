@@ -24,7 +24,7 @@ const Cross = () => (
   </div>
 )
 
-type SignInCardProps = {
+interface SignInCardProps {
   redirectTo: string
 }
 
