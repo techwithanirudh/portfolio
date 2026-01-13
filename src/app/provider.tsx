@@ -8,6 +8,7 @@ import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { SoundProvider } from '@/components/sound-provider'
 
 export function Provider({
   children,
@@ -15,29 +16,31 @@ export function Provider({
   children: ReactNode
 }): React.ReactElement {
   return (
-    <ThemeProvider
-      attribute='class'
-      defaultTheme='system'
-      disableTransitionOnChange
-      enableSystem
-    >
-      <ProgressProvider
-        color='var(--color-primary)'
-        delay={1000}
-        height='2px'
-        options={{
-          showSpinner: false,
-        }}
-        shallowRouting
-        startOnLoad
-        stopDelay={1000}
+    <SoundProvider>
+      <ThemeProvider
+        attribute='class'
+        defaultTheme='system'
+        disableTransitionOnChange
+        enableSystem
       >
-        <TooltipProvider>{children}</TooltipProvider>
-      </ProgressProvider>
-      <Analytics />
-      <Toaster />
-      <TailwindIndicator />
-      <SmoothCursor />
-    </ThemeProvider>
+        <ProgressProvider
+          color='var(--color-primary)'
+          delay={1000}
+          height='2px'
+          options={{
+            showSpinner: false,
+          }}
+          shallowRouting
+          startOnLoad
+          stopDelay={1000}
+        >
+          <TooltipProvider>{children}</TooltipProvider>
+        </ProgressProvider>
+        <Analytics />
+        <Toaster />
+        <TailwindIndicator />
+        <SmoothCursor />
+      </ThemeProvider>
+    </SoundProvider>
   )
 }
