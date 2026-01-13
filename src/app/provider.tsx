@@ -12,6 +12,7 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { authClient } from '@/lib/auth-client'
 import Link from "next/link"
+import Image from "next/image"
 
 export function Provider({
   children,
@@ -43,6 +44,12 @@ export function Provider({
           RESET_PASSWORD: "reset-password",
           MAGIC_LINK: "magic"
         }}
+        social={{
+          providers: ["github", "google"]
+        }}
+        multiSession
+        credentials={false}
+        localizeErrors={false}
       >
         <ProgressProvider
           color='var(--color-primary)'

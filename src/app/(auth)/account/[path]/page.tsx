@@ -16,12 +16,14 @@ export default async function AccountPage({
   const { path } = await params
 
   return (
-    <div className="self-center p-4 md:p-6">
+    <div className="p-4 md:p-6 flex-1">
       <AccountView
         classNames={{
           sidebar: {
             base: 'sticky top-20',
-          },
+            button: 'border',
+            buttonActive: 'bg-accent/50',
+          }
         }}
         path={path}
       />
