@@ -10,7 +10,7 @@ import {
 
 import { users } from './auth'
 
-const createTable = pgTableCreator((name) => `blog_${name}`)
+const createTable = pgTableCreator((name) => `portfolio_${name}`)
 
 export const guestbookEntries = createTable('guestbook_entries', {
   id: serial('id').primaryKey().notNull(),
