@@ -45,7 +45,7 @@ export const createGuestbookEntry = protectedGuestbookAction
       })
 
       revalidatePath('/guestbook')
-      updateTag('guestbook-entries')
+      updateTag('guestbook')
 
       return { success: true }
     }
@@ -95,7 +95,7 @@ export const toggleGuestbookReaction = protectedGuestbookAction
       }
 
       revalidatePath('/guestbook')
-      updateTag('guestbook-entries')
+      updateTag('guestbook')
 
       return { success: true }
     }
@@ -132,7 +132,7 @@ export const editGuestbookEntry = protectedGuestbookAction
       }
 
       revalidatePath('/guestbook')
-      updateTag('guestbook-entries')
+      updateTag('guestbook')
 
       return { success: true }
     }
@@ -156,7 +156,7 @@ export const removeGuestbookEntry = protectedGuestbookAction
       }
 
       revalidatePath('/guestbook')
-      updateTag('guestbook-entries')
+      updateTag('guestbook')
 
       return { success: true }
     }

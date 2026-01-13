@@ -5,8 +5,8 @@ import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'
-import { GuestbookEntries } from './_components/guestbook-entries'
-import { GuestbookForm } from './_components/guestbook-form'
+import { GuestbookEntries } from './_components/entries'
+import { GuestbookForm } from './_components/form'
 import { Hero } from './_components/hero'
 
 export default async function GuestbookPage() {

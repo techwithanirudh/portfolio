@@ -6,7 +6,7 @@ import { ActionError } from './client'
 
 type SessionUser = NonNullable<Awaited<ReturnType<typeof getSession>>>['user']
 
-export type ActionContext = {
+export interface ActionContext {
   user: SessionUser
 }
 

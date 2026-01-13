@@ -94,9 +94,9 @@ const fetchGuestbookEntries = async (currentUserId?: string | null) => {
 
 export const getGuestbookEntries = unstable_cache(
   fetchGuestbookEntries,
-  ['guestbook-entries'],
+  ['guestbook'],
   {
-    tags: ['guestbook-entries'],
+    tags: ['guestbook'],
   }
 )
 
