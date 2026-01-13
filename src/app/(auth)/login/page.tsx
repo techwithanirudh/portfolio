@@ -63,6 +63,21 @@ function SignInCard() {
                   <Icons.google />
                   Sign in with Google
                 </Button>
+                <Button
+                  className={cn(
+                    'w-full gap-2 rounded-none border border-border border-dashed'
+                  )}
+                  onClick={async () => {
+                    await signIn.social({
+                      provider: 'github',
+                      callbackURL: '/',
+                    })
+                  }}
+                  variant='outline'
+                >
+                  <Icons.gitHub />
+                  Sign in with Github
+                </Button>
               </div>
             </div>
           </CardContent>
