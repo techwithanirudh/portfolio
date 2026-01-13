@@ -197,7 +197,7 @@ export function SmoothCursor({
         <Cursor cursorType={cursorType} isOverPointer={isOverPointer} />
       ) : (
         <>
-            <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
+          <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
           <div
             className={
               'pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-all duration-300 ease-out will-change-transform'
