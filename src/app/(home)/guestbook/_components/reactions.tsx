@@ -121,7 +121,7 @@ export const GuestbookReactions = ({
           <PopoverTrigger asChild>
             <Button
               className='gap-2 rounded-none border border-border border-dashed bg-transparent px-3 text-xs'
-              disabled={!canReact}
+              disabled={!canReact || status === 'executing'}
               size='sm'
               type='button'
               variant='ghost'

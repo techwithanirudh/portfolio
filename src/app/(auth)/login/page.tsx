@@ -4,15 +4,15 @@ import { Header } from '@/components/sections/header'
 import { SignInCard } from './_components/sign-in-card'
 
 export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
-  const params = await searchParams;
+  const params = await searchParams
 
   const redirectTo = (() => {
     const value = Array.isArray(params?.redirectTo)
       ? params.redirectTo[0]
-      : params?.redirectTo;
+      : params?.redirectTo
 
-    return typeof value === "string" && value.startsWith("/") ? value : "/";
-  })();
+    return typeof value === 'string' && value.startsWith('/') ? value : '/'
+  })()
 
   return (
     <HomeLayout

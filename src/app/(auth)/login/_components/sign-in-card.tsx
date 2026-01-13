@@ -77,7 +77,7 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
                   variant='outline'
                 >
                   <Icons.gitHub />
-                  Sign in with Github
+                  Sign in with GitHub
                 </Button>
               </div>
             </div>

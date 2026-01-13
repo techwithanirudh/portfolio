@@ -6,7 +6,7 @@ import { ActionError, actionClient } from '@/lib/safe-action/client'
 import { botIdMiddleware } from '@/lib/safe-action/middleware'
 import { ContactSchema } from '@/lib/validators/contact'
 
-const resend = new Resend(env.RESEND_API_KEY as string)
+const resend = new Resend(env.RESEND_API_KEY)
 
 export const contact = actionClient
   .use(botIdMiddleware)

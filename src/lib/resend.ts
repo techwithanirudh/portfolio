@@ -1,9 +1,10 @@
 import { Resend, type UpdateContactOptions } from 'resend'
+import { env } from '@/env'
 import { baseUrl } from '@/lib/constants'
 import NewsletterWelcomeEmail from '../../emails/newsletter-welcome'
 import type { getPosts } from './source'
 
-const resend = new Resend(process.env.RESEND_API_KEY as string)
+const resend = new Resend(env.RESEND_API_KEY)
 
 export async function updateContact({
   email,
@@ -57,10 +58,8 @@ export async function sendWelcomeEmail({
   firstName: string
   to: string
 }) {
-  const EMAIL_FROM = process.env.EMAIL_FROM as string
-  if (!EMAIL_FROM) {
-    throw new Error('Missing EMAIL_FROM environment variable')
-  }
+  const EMAIL_FROM = env.EMAIL_FROM
+
   if (!(firstName && to)) {
     throw new Error('Missing required email fields')
   }

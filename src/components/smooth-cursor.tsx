@@ -139,7 +139,7 @@ export function SmoothCursor({
             setIsMoving(false)
             movingTimeoutRef.current = null
           },
-          prefersReducedMotion ? 0 : 500 // 1 second timeout when cursor stops
+          prefersReducedMotion ? 0 : 500
         )
       }
     }
