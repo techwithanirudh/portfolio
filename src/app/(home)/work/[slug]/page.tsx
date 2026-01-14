@@ -42,7 +42,7 @@ function Header(props: { page: MDXPage }) {
       <div
         className={cn(
           'flex flex-col items-start justify-center gap-4 py-8 md:gap-6',
-          'sm:items-center sm:rounded-lg sm:border sm:bg-card sm:px-8 sm:py-20 sm:shadow-xs'
+          'sm:items-center sm:rounded-lg sm:border sm:bg-card sm:p-10 sm:shadow-xs'
         )}
       >
         {page.data.image && (
@@ -52,7 +52,7 @@ function Header(props: { page: MDXPage }) {
           >
             <BlurImage
               alt={page.data.title ?? 'Work cover image'}
-              className='relative aspect-video w-full overflow-hidden rounded-2xl border border-border bg-card/50 sm:mx-auto'
+              className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
               fill
               imageClassName='object-cover'
               sizes='(min-width: 1024px) 1200px, 100vw'
@@ -67,9 +67,6 @@ function Header(props: { page: MDXPage }) {
             </h1>
             <p className='typography-body mx-auto'>
               <Balancer>{page.data.description ?? ''}</Balancer>
-            </p>
-            <p className='text-fd-muted-foreground text-sm'>
-              Created {new Date(page.data.date).toDateString()}
             </p>
           </ViewTransition>
         </div>
@@ -123,10 +120,14 @@ export default async function Page(props: {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-1 flex-col gap-4'>
-              <InlineTOC
-                className='rounded-none border-0 border-border border-b border-dashed'
-                items={toc}
-              />
+              {toc?.length ? (
+                <InlineTOC
+                  className='rounded-none border-0 border-border border-b border-dashed'
+                  items={toc}
+                />
+              ) : (
+                <div className='py-2' />
+              )}
               <div className='prose min-w-0 flex-1 px-4 pb-4'>
                 <Mdx
                   components={{

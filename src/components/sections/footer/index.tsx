@@ -1,5 +1,6 @@
 import { UserButton } from '@daveyplate/better-auth-ui'
 import { owner } from '@/app/layout.shared'
+import { Clock } from '@/components/clock'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
@@ -39,15 +40,15 @@ export const Footer = () => (
           </p>
         </ViewAnimation>
       </div>
-      <div className='flex items-center sm:justify-end'>
-        <ViewAnimation
-          delay={0.2}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <ThemeToggle mode='light-dark-system' />
-        </ViewAnimation>
-      </div>
+      <ViewAnimation
+        className='flex items-center gap-2 sm:justify-end'
+        delay={0.2}
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+      >
+        <Clock />
+        <ThemeToggle mode='light-dark-system' />
+      </ViewAnimation>
     </div>
   </footer>
 )

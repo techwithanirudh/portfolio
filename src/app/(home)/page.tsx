@@ -38,7 +38,7 @@ const getCachedContributions = unstable_cache(
     }
 
     const data = (await response.json()) as ContributionResponse
-    
+
     return data.contributions
   },
   ['github-contributions'],

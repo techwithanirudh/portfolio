@@ -1,0 +1,106 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
+
+interface ClockProps {
+  className?: string
+}
+
+interface TimeStyles extends React.CSSProperties {
+  '--time-hours': number
+  '--time-minutes': number
+  '--time-seconds': number
+}
+
+const HAND_BASE_STYLES =
+  'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
+const HAND_TRANSFORM_ORIGIN = { transformOrigin: '0px 0px' }
+
+export function Clock({ className }: ClockProps) {
+  const [time, setTime] = useState<Date>(new Date())
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTime(new Date())
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
+  const hours = time.getHours() % 12
+  const minutes = time.getMinutes()
+  const seconds = time.getSeconds()
+
+  const timeString = time.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  })
+
+  const timeStyles: TimeStyles = {
+    '--time-hours': hours,
+    '--time-minutes': minutes,
+    '--time-seconds': seconds,
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button className='rounded-full' size='icon' variant='ghost'>
+          <time
+            className={cn(
+              'relative block size-8 rotate-180 rounded-full border border-border',
+              className
+            )}
+            dateTime={time.toISOString()}
+            style={timeStyles}
+          >
+            <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
+
+            <div
+              className={cn(HAND_BASE_STYLES, 'h-1/4 w-px')}
+              style={{
+                ...HAND_TRANSFORM_ORIGIN,
+                transform:
+                  'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
+              }}
+            />
+
+            <div
+              className={cn(HAND_BASE_STYLES, 'h-2/5 w-px')}
+              style={{
+                ...HAND_TRANSFORM_ORIGIN,
+                transform:
+                  'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
+              }}
+            />
+
+            <div
+              className={cn(
+                HAND_BASE_STYLES,
+                'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
+              )}
+              style={{
+                ...HAND_TRANSFORM_ORIGIN,
+                transform:
+                  'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
+              }}
+            />
+          </time>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>
+        <p>{timeString}</p>
+      </TooltipContent>
+    </Tooltip>
+  )
+}

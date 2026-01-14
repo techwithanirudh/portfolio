@@ -25,7 +25,7 @@ export default async function AuthPage({
       <AuthView
         classNames={{
           base: 'border border-border border-dashed max-w-md rounded-none shadow-none',
-          content: '[&>div>div]:gap-2'
+          content: '[&>div>div]:gap-2',
         }}
         pathname={pathname}
       />

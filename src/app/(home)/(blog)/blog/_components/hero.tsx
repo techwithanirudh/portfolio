@@ -1,3 +1,5 @@
+import { Rss } from 'lucide-react'
+import Link from 'next/link'
 import { HeroSection } from '@/components/sections/hero'
 
 const CurrentPostsCount = ({
@@ -33,10 +35,17 @@ export const Hero = ({
   <HeroSection
     align={'start'}
     title={
-      <>
+      <span className='flex items-center gap-2'>
         All {totalPosts} Posts{' '}
         <CurrentPostsCount endIndex={endIndex} startIndex={startIndex} />
-      </>
+        <Link
+          aria-label='Subscribe to RSS feed'
+          className='inline-flex items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground'
+          href='/rss.xml'
+        >
+          <Rss className='size-5' />
+        </Link>
+      </span>
     }
     variant={'compact'}
   />

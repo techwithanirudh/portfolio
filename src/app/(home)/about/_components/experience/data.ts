@@ -17,8 +17,7 @@ export const experiences = [
     role: 'Full Stack Developer',
     company: 'Independent',
     timeframe: '2021 – Present',
-    summary:
-      'Built Coolify Tweaks, Shadcn SaaS Landing, etc.',
+    summary: 'Built Coolify Tweaks, Shadcn SaaS Landing, etc.',
   },
   {
     role: 'Web / PowerApps Developer',
@@ -31,8 +30,7 @@ export const experiences = [
     role: 'Python & AI Experiments',
     company: 'Independent',
     timeframe: '2019 – 2020',
-    summary:
-      'Built early AI experiments with Keras, OpenCV, Tensorflow.',
+    summary: 'Built early AI experiments with Keras, OpenCV, Tensorflow.',
   },
   {
     role: 'Mindstorms / Lego Boost Programmer',

@@ -19,3 +19,4 @@ https://jahir.dev/
 - Add rss.xml
 - Add Posthog & c15t cookie banner
 - Add inline search for blog & work
+- Make a constants directory and move all constants like experience about etc

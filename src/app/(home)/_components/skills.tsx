@@ -34,8 +34,7 @@ const features = [
     id: 2,
     Icon: BrainCircuitIcon,
     title: 'AI & Machine Learning',
-    description:
-      'Exploring AI features with Python, OpenCV, and LLMs.',
+    description: 'Exploring AI features with Python, OpenCV, and LLMs.',
     size: 'sm',
   },
   {
