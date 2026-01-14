@@ -39,7 +39,7 @@ ${item.summary.trim()}`
 }
 
 export function getSkillsText() {
-  return `# Skills & Expertise
+  return `# Skills
 
 ${skills
   .map(
