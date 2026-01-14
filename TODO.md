@@ -8,3 +8,10 @@
 - Take a look at the jace site, and look at his uses too
 - Add Snippets support
 - Add Attribution Page
+- Inspiration:
+https://chanhdai.com/
+https://honghong.me/
+https://ja.mt/
+https://jahir.dev/
+- Add a small clock to the footer
+- Take inspiration from here (https://github.com/ncdai/chanhdai.com/tree/main) adding a new command pallete, and Custom TOC
