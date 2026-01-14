@@ -52,7 +52,7 @@ function Header(props: { page: MDXPage }) {
           >
             <BlurImage
               alt={page.data.title ?? 'Work cover image'}
-              className='relative aspect-video w-[1200px] overflow-hidden rounded-2xl border border-border bg-card/50 sm:mx-auto'
+              className='relative aspect-video w-full overflow-hidden rounded-2xl border border-border bg-card/50 sm:mx-auto'
               fill
               imageClassName='object-cover'
               sizes='(min-width: 1024px) 1200px, 100vw'
