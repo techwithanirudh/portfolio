@@ -23,7 +23,7 @@ export default async function AuthPage({ params }: PageProps<'/auth/[pathname]'>
       <AuthView
         pathname={pathname}
         classNames={{
-          base: "border border-border border-dashed max-w-md rounded-none"
+          base: "border border-border border-dashed max-w-md rounded-none shadow-none"
         }}
       />
     </div>
