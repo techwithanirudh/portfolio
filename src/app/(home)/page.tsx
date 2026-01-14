@@ -61,7 +61,7 @@ export default async function Home() {
   const { contributions, total, year } = await getCachedContributions()
 
   return (
-    <Wrapper lenis={{}}>
+    <Wrapper>
       <Hero />
       <Separator />
       <About />

@@ -50,7 +50,7 @@ export default async function Page(props: {
   const work = getSortedByDateWork().slice(startIndex, endIndex)
 
   return (
-    <Wrapper lenis={{}}>
+    <Wrapper>
       <Hero
         endIndex={endIndex}
         startIndex={startIndex}
