@@ -77,7 +77,6 @@ export async function generateMetadata(
   props: Props,
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const _params = await props.params
   const searchParams = await props.searchParams
 
   const pageIndex = searchParams.page

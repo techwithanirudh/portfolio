@@ -72,6 +72,10 @@ async function createNextConfig(): Promise<NextConfig> {
           source: '/work/:path*.mdx',
           destination: '/work.mdx/:path*',
         },
+        {
+          source: '/rss.xml',
+          destination: '/blog/rss.xml',
+        },
       ]
     },
   }
