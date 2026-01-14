@@ -5,9 +5,11 @@ import { url } from '@/lib/url'
 const allPosts = getSortedByDatePosts()
 const allWork = getSortedByDateWork()
 
-const content = `# ${title} - Portfolio
+const content = `# ${title}
 
 > Developer who builds cool web and AI things, always learning and exploring.
+
+**Note:** For a comprehensive single-file version with all content, see [llms-full.txt](${url('/llms-full.txt')})
 
 ## About Me
 
