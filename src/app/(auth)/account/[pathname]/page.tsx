@@ -25,7 +25,7 @@ export default async function AccountPage({
             buttonActive: 'bg-accent/50',
           }
         }}
-        pathname={path}
+        pathname={pathname}
       />
     </div>
   )
