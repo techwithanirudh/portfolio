@@ -99,7 +99,7 @@ export default async function Page(props: {
                 items={toc}
               />
             ) : (
-              <div className='py-2' />
+              <div />
             )}
             <div className='prose min-w-0 flex-1 px-4'>
               <Mdx
