@@ -94,7 +94,7 @@ export const Header = ({
           </ViewAnimation>
           {nav.children}
         </div>
-        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 px-3 max-sm:hidden'>
+        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-sm:hidden'>
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
