@@ -14,4 +14,6 @@ https://honghong.me/
 https://ja.mt/
 https://jahir.dev/
 - Add a small clock to the footer
-- Take inspiration from here (https://github.com/ncdai/chanhdai.com/tree/main) adding a new command pallete, and Custom TOC
+- Take inspiration from here (https://github.com/ncdai/chanhdai.com/tree/main) adding a new command pallete, and Custom TOC (only show TOC when there is need)
+- Add Resume / Bosch Letter
+- Add rss.xml
