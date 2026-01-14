@@ -25,7 +25,7 @@ const Hero = () => {
       <motion.div
         animate={{ opacity: 1, translateY: 0 }}
         className='absolute inset-0 -z-10 h-full w-full'
-        initial={{ opacity: 0, translateY: -8 }}
+        initial={{ opacity: 0, translateY: -6 }}
         transition={{
           duration: 0.4,
           scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
@@ -43,8 +43,8 @@ const Hero = () => {
         />
       </motion.div>
       <ViewAnimation
-        delay={0.2}
-        initial={{ opacity: 0, translateY: -8 }}
+        delay={0.1}
+        initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <h1
@@ -58,8 +58,8 @@ const Hero = () => {
         </h1>
       </ViewAnimation>
       <ViewAnimation
-        delay={0.4}
-        initial={{ opacity: 0, translateY: -8 }}
+        delay={0.15}
+        initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <p className='typography-body text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
@@ -72,8 +72,8 @@ const Hero = () => {
 
       <div className='flex flex-wrap items-center justify-center gap-4'>
         <ViewAnimation
-          delay={0.6}
-          initial={{ opacity: 0, translateY: -8 }}
+          delay={0.2}
+          initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <Link
@@ -97,8 +97,8 @@ const Hero = () => {
             .map((item, i) => (
               <ViewAnimation
                 className='flex items-center'
-                delay={0.7 + i * 0.1}
-                initial={{ opacity: 0, translateY: -8, scale: 0.8 }}
+                delay={0.1 + i * 0.05}
+                initial={{ opacity: 0, translateY: -6, scale: 0.95 }}
                 key={i.toString()}
                 whileInView={{ opacity: 1, translateY: 0, scale: 1 }}
               >

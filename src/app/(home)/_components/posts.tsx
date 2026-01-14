@@ -17,8 +17,8 @@ export default function Posts({
           const date = new Date(post.data.date).toDateString()
           return (
             <ViewAnimation
-              delay={0.6 + 0.1 * index}
-              initial={{ opacity: 0, translateY: -8 }}
+              delay={0.05 * index}
+              initial={{ opacity: 0, translateY: -6 }}
               key={post.url}
               whileInView={{ opacity: 1, translateY: 0 }}
             >

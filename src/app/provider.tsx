@@ -52,14 +52,14 @@ export function Provider({
       >
         <ProgressProvider
           color='var(--color-primary)'
-          delay={1000}
+          delay={200}
           height='2px'
           options={{
             showSpinner: false,
           }}
           shallowRouting
           startOnLoad
-          stopDelay={1000}
+          stopDelay={200}
         >
           <TooltipProvider>{children}</TooltipProvider>
         </ProgressProvider>

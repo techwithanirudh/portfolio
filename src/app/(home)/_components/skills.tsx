@@ -53,7 +53,7 @@ const Skills = () => (
     <div className='flex flex-col gap-10'>
       <ViewAnimation
         className='flex flex-col gap-2 px-6'
-        initial={{ opacity: 0, translateY: -8 }}
+        initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <h2 className='typography-title text-left font-regular text-3xl tracking-tighter md:text-5xl'>
@@ -71,7 +71,7 @@ const Skills = () => (
               className={featureItemVariants({
                 size: feature.size as 'sm' | 'lg',
               })}
-              delay={0.6 + index * 0.1}
+              delay={0.05 * index}
               initial={{ opacity: 0 }}
               key={feature.id}
               whileInView={{ opacity: 1 }}

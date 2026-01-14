@@ -86,8 +86,8 @@ export const Links = () => {
       {lists.map((list, index) => (
         <ViewAnimation
           className='flex flex-col gap-6'
-          delay={0.6 + index * 0.1}
-          initial={{ opacity: 0, translateY: -8 }}
+          delay={0.05 * index}
+          initial={{ opacity: 0, translateY: -6 }}
           key={list.title}
           whileInView={{ opacity: 1, translateY: 0 }}
         >

@@ -14,7 +14,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
       <div className='flex flex-col gap-10'>
         <ViewAnimation
           className='flex flex-col gap-2 px-6'
-          initial={{ opacity: 0, translateY: -8 }}
+          initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <h2 className='typography-title text-left font-regular text-3xl tracking-tighter md:text-5xl'>
@@ -32,8 +32,8 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
                   key={post.url}
                 >
                   <ViewAnimation
-                    delay={0.6 + 0.1 * index}
-                    initial={{ opacity: 0, translateY: -8 }}
+                    delay={0.05 * index}
+                    initial={{ opacity: 0, translateY: -6 }}
                     whileInView={{ opacity: 1, translateY: 0 }}
                   >
                     <UpdateCard

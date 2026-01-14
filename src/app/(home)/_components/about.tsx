@@ -10,7 +10,7 @@ export default function About(): React.ReactElement {
     <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
       <ViewAnimation
         className='flex h-full flex-col gap-2 px-6 py-10 md:py-14'
-        initial={{ opacity: 0, translateY: -8 }}
+        initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <h4 className='text-left font-regular text-3xl tracking-tighter md:text-5xl'>
@@ -20,9 +20,9 @@ export default function About(): React.ReactElement {
 
       <ViewAnimation
         className='relative'
-        delay={0.6}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        delay={0.1}
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
       >
         <div className='space-y-4 px-6 py-10 md:py-14'>
           <div className='prose dark:prose-invert typography-body w-full space-y-4'>

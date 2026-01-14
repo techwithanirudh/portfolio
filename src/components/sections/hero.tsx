@@ -59,7 +59,7 @@ export const HeroSection = ({
       <div className='flex flex-col gap-4 sm:items-center'>
         {caption && (
           <ViewAnimation
-            initial={{ opacity: 0, translateY: -8 }}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <small className='block text-muted-foreground text-sm sm:text-base'>
