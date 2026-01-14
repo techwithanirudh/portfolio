@@ -1,3 +1,5 @@
-- Add Tools I Use section
+- Add Uses Section like tshzong
 - Add Spotify Now Listening
 - Add AI Chat
+- Add Github Activity section in about
+- Add a Attribution Page like pow or hexa

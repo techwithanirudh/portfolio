@@ -30,6 +30,7 @@ export const env = createEnv({
     // Github
     GITHUB_CLIENT_ID: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
+    GITHUB_TOKEN: z.string().min(1).startsWith('github_pat_'),
   },
 
   client: {

@@ -28,8 +28,8 @@ export default function About(): React.ReactElement {
           <div className='prose dark:prose-invert typography-body w-full space-y-4'>
             <p className='text-lg'>
               I'm Anirudh, a full-stack developer who builds practical web apps.
-              I started tinkering with Lego Mindstorms and kept
-              building from there.
+              I started tinkering with Lego Mindstorms and kept building from
+              there.
             </p>
             <p className='text-lg'>
               My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
