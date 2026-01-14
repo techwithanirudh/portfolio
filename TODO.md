@@ -21,3 +21,6 @@ https://jahir.dev/
 - Add inline search for blog & work
 - Make a constants directory and move all constants like experience about etc
 - Remove tags in footer replace with blog
+- Add .mdx at the end of a blog / work to open the mdx file
+- Optimize for LLMs like chanhdai
+- Add keyboard shortcuts
