@@ -35,8 +35,10 @@ export const FAQ = () => (
   <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
     <div className='px-6 py-10 md:py-14'>
       <ViewAnimation
+        blur={false}
         className='flex flex-col gap-2'
-        initial={{ opacity: 0, translateY: -8 }}
+        duration={0.3}
+        initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <div className='flex flex-col gap-2'>
@@ -60,8 +62,10 @@ export const FAQ = () => (
     >
       {faq.map((item, index) => (
         <ViewAnimation
-          delay={0.6 + index * 0.1}
-          initial={{ opacity: 0, translateY: -8 }}
+          blur={false}
+          delay={0.05 * index}
+          duration={0.25}
+          initial={{ opacity: 0, translateY: -6 }}
           key={`${item.question}-${index}`}
           whileInView={{ opacity: 1, translateY: 0 }}
         >

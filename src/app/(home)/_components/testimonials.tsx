@@ -43,7 +43,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
         api.scrollNext()
         setCurrent(current + 1)
       }
-    }, 4000)
+    }, 2500)
   }, [api, current])
 
   return (
@@ -58,8 +58,9 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
         />
 
         <ViewAnimation
-          delay={0.6}
-          initial={{ opacity: 0, translateY: 24 }}
+          blur={false}
+          duration={0.3}
+          initial={{ opacity: 0, translateY: 16 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <Carousel
@@ -73,9 +74,11 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
                   key={`${item.title}_${index}`}
                 >
                   <ViewAnimation
+                    blur={false}
                     className='h-full'
-                    delay={0.6 + index * 0.1}
-                    initial={{ opacity: 0, translateX: -20, scale: 0.95 }}
+                    delay={0.1 + index * 0.05}
+                    duration={0.3}
+                    initial={{ opacity: 0, translateX: -12, scale: 0.98 }}
                     whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
                   >
                     <div className='flex aspect-video flex-col justify-between p-6 transition-all duration-300 hover:bg-card lg:col-span-2'>

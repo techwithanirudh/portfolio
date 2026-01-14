@@ -8,6 +8,8 @@ interface ViewAnimationProps {
   whileInView?: Record<string, string | number>
   animate?: Record<string, string | number>
   delay?: number
+  duration?: number
+  blur?: boolean
   // className?: ComponentProps<typeof motion.div>['className'];
   className?: string
   children: ReactNode
@@ -18,6 +20,8 @@ export const ViewAnimation = ({
   whileInView,
   animate,
   delay,
+  duration,
+  blur = false,
   className,
   children,
 }: ViewAnimationProps) => {
@@ -27,14 +31,20 @@ export const ViewAnimation = ({
     return children
   }
 
+  const initialState = blur ? { filter: 'blur(4px)', ...initial } : initial
+  const whileInViewState = blur
+    ? { filter: 'blur(0px)', ...whileInView }
+    : whileInView
+  const normalizedDelay = delay ? Math.min(delay, 0.2) : delay
+
   return (
     <motion.div
       animate={animate}
       className={className}
-      initial={{ filter: 'blur(4px)', ...initial }}
-      transition={{ delay, duration: 0.8 }}
+      initial={initialState}
+      transition={{ delay: normalizedDelay, duration: duration ?? 0.3 }}
       viewport={{ once: true, amount: 0.5 }}
-      whileInView={{ filter: 'blur(0px)', ...whileInView }}
+      whileInView={whileInViewState}
     >
       {children}
     </motion.div>

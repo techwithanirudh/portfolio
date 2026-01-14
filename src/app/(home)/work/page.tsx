@@ -60,8 +60,10 @@ export default async function Page(props: {
         <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x'>
           {work.map((entry, index) => (
             <ViewAnimation
-              delay={0.6 + 0.1 * index}
-              initial={{ opacity: 0, translateY: -8 }}
+              blur={false}
+              delay={0.05 * index}
+              duration={0.25}
+              initial={{ opacity: 0, translateY: -6 }}
               key={entry.url}
               whileInView={{ opacity: 1, translateY: 0 }}
             >

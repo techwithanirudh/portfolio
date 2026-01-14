@@ -8,8 +8,10 @@ export default function Experience(): React.ReactElement {
       <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
         <div className='bg-dashed'>
           <ViewAnimation
+            blur={false}
             className='h-full'
-            initial={{ opacity: 0, translateY: -8 }}
+            duration={0.3}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
@@ -24,8 +26,10 @@ export default function Experience(): React.ReactElement {
           <div className='divide-y divide-dashed divide-border'>
             {experiences.map((experience, index) => (
               <ViewAnimation
-                delay={0.6 + 0.1 * index}
-                initial={{ opacity: 0, translateY: -8 }}
+                blur={false}
+                delay={0.05 * index}
+                duration={0.25}
+                initial={{ opacity: 0, translateY: -6 }}
                 key={experience.role}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >

@@ -12,17 +12,21 @@ export default function Contact(): React.ReactElement {
     <Wrapper>
       <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
         <ViewAnimation
+          blur={false}
           className='px-6 py-10 md:py-14'
-          initial={{ opacity: 0, translateY: -8 }}
+          duration={0.3}
+          initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <Hero />
         </ViewAnimation>
 
         <ViewAnimation
+          blur={false}
           className='flex w-full items-center px-6 py-10 md:py-14'
-          delay={0.4}
-          initial={{ opacity: 0, translateY: -8 }}
+          delay={0.1}
+          duration={0.3}
+          initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <ContactForm />
