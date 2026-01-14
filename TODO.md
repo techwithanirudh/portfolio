@@ -19,8 +19,8 @@ https://jahir.dev/
 - [x] Add rss.xml
 - Add Posthog & c15t cookie banner
 - Add inline search for blog & work
-- Make a constants directory and move all constants like experience about etc
+- [x] Make a constants directory and move all constants like experience about etc
 - [x] Remove tags in footer replace with blog
 - [x] Add .mdx at the end of a blog / work to open the mdx file
-- Optimize for LLMs like chanhdai
+- [x] Optimize for LLMs like chanhdai
 - Add keyboard shortcuts
