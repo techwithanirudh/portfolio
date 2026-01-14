@@ -11,7 +11,7 @@ export default function AboutPage() {
   const posts = getSortedByDatePosts()
 
   return (
-    <Wrapper>
+    <Wrapper lenis={{}}>
       <Hero />
       <Detailed />
       <Skills />

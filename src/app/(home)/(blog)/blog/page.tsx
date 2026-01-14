@@ -48,7 +48,7 @@ export default async function Page(props: {
   const posts = getSortedByDatePosts().slice(startIndex, endIndex)
 
   return (
-    <Wrapper>
+    <Wrapper lenis={{}}>
       <Hero
         endIndex={endIndex}
         startIndex={startIndex}

@@ -13,7 +13,7 @@ export default function Page() {
   const tags = getTags()
 
   return (
-    <Wrapper>
+    <Wrapper lenis={{}}>
       <Hero />
       <Section className='h-full' sectionClassName='flex flex-1'>
         <div className='grid grid-cols-1 divide-y divide-dashed divide-border sm:grid-cols-2 lg:grid-cols-4'>
