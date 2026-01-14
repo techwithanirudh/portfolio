@@ -24,9 +24,11 @@ const HAND_BASE_STYLES =
 const HAND_TRANSFORM_ORIGIN = { transformOrigin: '0px 0px' }
 
 export function Clock({ className }: ClockProps) {
+  const [mounted, setMounted] = useState(false)
   const [time, setTime] = useState<Date>(new Date())
 
   useEffect(() => {
+    setMounted(true)
     const interval = setInterval(() => {
       setTime(new Date())
     }, 1000)
@@ -50,6 +52,25 @@ export function Clock({ className }: ClockProps) {
     '--time-hours': hours,
     '--time-minutes': minutes,
     '--time-seconds': seconds,
+  }
+
+  if (!mounted) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button className='rounded-full' size='icon' variant='ghost'>
+            <div
+              className={cn(
+                'relative block size-8 rotate-180 rounded-full border border-border',
+                className
+              )}
+            >
+              <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
+            </div>
+          </Button>
+        </TooltipTrigger>
+      </Tooltip>
+    )
   }
 
   return (

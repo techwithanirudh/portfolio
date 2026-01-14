@@ -7,7 +7,7 @@ import { linkItems } from '@/constants/navigation'
 import { postsPerPage, worksPerPage } from '@/constants/pagination'
 import { baseOptions } from '@/constants/site'
 import { socials } from '@/constants/social'
-import { getSortedByDateWork, getTags } from '@/lib/source'
+import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
 
 interface ListItem {
   title: string
@@ -29,7 +29,7 @@ export const Links = () => {
   )
 
   const works = getSortedByDateWork()
-  const tags = getTags()
+  const posts = getSortedByDatePosts()
 
   const lists: ListItem[] = [
     {
@@ -57,10 +57,10 @@ export const Links = () => {
       })),
     },
     {
-      title: 'Tags',
-      items: tags.slice(0, postsPerPage).map((name) => ({
-        href: `/blog/tags/${name}`,
-        children: <span className='capitalize'>{name}</span>,
+      title: 'Blog',
+      items: posts.slice(0, postsPerPage).map((post) => ({
+        href: post.url,
+        children: post.data.title,
       })),
     },
     {

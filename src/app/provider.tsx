@@ -5,6 +5,7 @@ import { AuthUIProvider } from '@daveyplate/better-auth-ui'
 import { TooltipProvider } from '@radix-ui/react-tooltip'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import { Toaster } from 'sonner'
 import Analytics from '@/components/analytics'
@@ -12,7 +13,6 @@ import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { authClient } from '@/lib/auth-client'
-import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 export function Provider({
   children,
@@ -22,7 +22,6 @@ export function Provider({
   const router = useRouter()
 
   return (
-
     <ThemeProvider
       attribute='class'
       defaultTheme='system'

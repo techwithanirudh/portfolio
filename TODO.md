@@ -13,14 +13,14 @@ https://chanhdai.com/
 https://honghong.me/
 https://ja.mt/
 https://jahir.dev/
-- Add a small clock to the footer
+- [x] Add a small clock to the footer
 - Take inspiration from here (https://github.com/ncdai/chanhdai.com/tree/main) adding a new command pallete, and Custom TOC (only show TOC when there is need)
 - Add Resume / Bosch Letter
-- Add rss.xml
+- [x] Add rss.xml
 - Add Posthog & c15t cookie banner
 - Add inline search for blog & work
 - Make a constants directory and move all constants like experience about etc
-- Remove tags in footer replace with blog
-- Add .mdx at the end of a blog / work to open the mdx file
+- [x] Remove tags in footer replace with blog
+- [x] Add .mdx at the end of a blog / work to open the mdx file
 - Optimize for LLMs like chanhdai
 - Add keyboard shortcuts
