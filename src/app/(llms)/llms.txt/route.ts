@@ -1,4 +1,4 @@
-import { title } from '@/constants/site'
+import { description, title } from '@/constants/site'
 import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
 import { url } from '@/lib/url'
 
@@ -6,8 +6,7 @@ const allPosts = getSortedByDatePosts()
 const allWork = getSortedByDateWork()
 
 const content = `# ${title}
-
-> Developer who builds cool web and AI things, always learning and exploring.
+> ${description}
 
 **Note:** For a comprehensive single-file version with all content, see [llms-full.txt](${url('/llms-full.txt')})
 

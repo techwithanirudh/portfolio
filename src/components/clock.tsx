@@ -56,20 +56,16 @@ export function Clock({ className }: ClockProps) {
 
   if (!mounted) {
     return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button className='rounded-full' size='icon' variant='ghost'>
-            <div
-              className={cn(
-                'relative block size-8 rotate-180 rounded-full border border-border',
-                className
-              )}
-            >
-              <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
-            </div>
-          </Button>
-        </TooltipTrigger>
-      </Tooltip>
+      <Button className='rounded-full' size='icon' variant='ghost'>
+        <div
+          className={cn(
+            'relative block size-8 rotate-180 rounded-full border border-border',
+            className
+          )}
+        >
+          <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
+        </div>
+      </Button>
     )
   }
 
