@@ -12,6 +12,7 @@ import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { authClient } from '@/lib/auth-client'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 export function Provider({
   children,
@@ -21,53 +22,56 @@ export function Provider({
   const router = useRouter()
 
   return (
+
     <ThemeProvider
       attribute='class'
       defaultTheme='system'
       disableTransitionOnChange
       enableSystem
     >
-      <AuthUIProvider
-        authClient={authClient}
-        credentials={false}
-        Link={Link}
-        localizeErrors={false}
-        multiSession
-        navigate={router.push}
-        onSessionChange={() => {
-          router.refresh()
-        }}
-        replace={router.replace}
-        social={{
-          providers: ['github', 'google'],
-        }}
-        viewPaths={{
-          SIGN_IN: 'login',
-          SIGN_OUT: 'logout',
-          SIGN_UP: 'register',
-          FORGOT_PASSWORD: 'forgot-password',
-          RESET_PASSWORD: 'reset-password',
-          MAGIC_LINK: 'magic',
-        }}
-      >
-        <ProgressProvider
-          color='var(--color-primary)'
-          delay={200}
-          height='2px'
-          options={{
-            showSpinner: false,
+      <NuqsAdapter>
+        <AuthUIProvider
+          authClient={authClient}
+          credentials={false}
+          Link={Link}
+          localizeErrors={false}
+          multiSession
+          navigate={router.push}
+          onSessionChange={() => {
+            router.refresh()
           }}
-          shallowRouting
-          startOnLoad
-          stopDelay={200}
+          replace={router.replace}
+          social={{
+            providers: ['github', 'google'],
+          }}
+          viewPaths={{
+            SIGN_IN: 'login',
+            SIGN_OUT: 'logout',
+            SIGN_UP: 'register',
+            FORGOT_PASSWORD: 'forgot-password',
+            RESET_PASSWORD: 'reset-password',
+            MAGIC_LINK: 'magic',
+          }}
         >
-          <TooltipProvider>{children}</TooltipProvider>
-        </ProgressProvider>
-      </AuthUIProvider>
-      <Analytics />
-      <Toaster />
-      <TailwindIndicator />
-      <SmoothCursor />
+          <ProgressProvider
+            color='var(--color-primary)'
+            delay={200}
+            height='2px'
+            options={{
+              showSpinner: false,
+            }}
+            shallowRouting
+            startOnLoad
+            stopDelay={200}
+          >
+            <TooltipProvider>{children}</TooltipProvider>
+          </ProgressProvider>
+        </AuthUIProvider>
+        <Analytics />
+        <Toaster />
+        <TailwindIndicator />
+        <SmoothCursor />
+      </NuqsAdapter>
     </ThemeProvider>
   )
 }
