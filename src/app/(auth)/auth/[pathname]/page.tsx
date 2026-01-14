@@ -15,13 +15,13 @@ export function generateStaticParams() {
   }).map((pathname) => ({ pathname }))
 }
 
-export default async function AuthPage({ params }: PageProps<'/auth/[path]'>) {
-  const { path } = await params
+export default async function AuthPage({ params }: PageProps<'/auth/[pathname]'>) {
+  const { pathname } = await params
 
   return (
     <div className="flex grow flex-col items-center justify-center self-center p-4 md:p-6">
       <AuthView
-        pathname={path}
+        pathname={pathname}
         classNames={{
           base: "border border-border border-dashed max-w-md rounded-none"
         }}

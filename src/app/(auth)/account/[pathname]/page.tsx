@@ -12,8 +12,8 @@ export function generateStaticParams() {
 
 export default async function AccountPage({
   params,
-}: PageProps<'/auth/[path]'>) {
-  const { path } = await params
+}: PageProps<'/auth/[pathname]'>) {
+  const { pathname } = await params
 
   return (
     <div className="p-4 md:p-6 flex-1">
