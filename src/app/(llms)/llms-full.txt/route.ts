@@ -107,8 +107,6 @@ async function getContent() {
 
 # ${title}
 
-> ${description}
-
 ${aboutText}
 ${experienceText}
 ${skillsText}
