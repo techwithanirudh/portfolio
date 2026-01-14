@@ -1,23 +1,9 @@
-import { testimonials } from '@/constants/portfolio/testimonials'
-
-const content = `# Testimonials
-
-${testimonials
-  .map(
-    (item) =>
-      `## ${item.title}
-
-> ${item.description}
-
-— **${item.author.name}**`
-  )
-  .join('\n\n')}
-`
+import { getTestimonialsText } from '../utils'
 
 export const dynamic = 'force-static'
 
 export function GET() {
-  return new Response(content, {
+  return new Response(getTestimonialsText(), {
     headers: {
       'Content-Type': 'text/markdown;charset=utf-8',
     },
