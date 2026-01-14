@@ -5,8 +5,7 @@ export const Hero = () => (
     </p>
     <h1 className='typography-hero text-balance'>Leave a note</h1>
     <p className='typography-body text-muted-foreground'>
-      Share a quick hello, a thought about the work, or a suggestion. Signed-in
-      visitors can post and react to messages.
+      Share a quick hello, a thought about the work, or a suggestion.
     </p>
   </div>
 )

@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@bprogress/next": "^3.2.12",
+    "@daveyplate/better-auth-ui": "^3.3.15",
     "@fuma-comment/react": "^1.4.0",
     "@fuma-comment/server": "^1.4.0",
     "@hookform/resolvers": "^5.2.2",
@@ -48,7 +49,7 @@
     "@shikijs/transformers": "3.21.0",
     "@t3-oss/env-nextjs": "^0.13.10",
     "@takumi-rs/image-response": "^0.62.7",
-    "better-auth": "^1.2.5",
+    "better-auth": "^1.4.12",
     "botid": "^1.5.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
