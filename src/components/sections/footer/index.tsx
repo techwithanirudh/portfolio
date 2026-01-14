@@ -1,8 +1,8 @@
 import { UserButton } from '@daveyplate/better-auth-ui'
-import { owner } from '@/app/layout.shared'
 import { Clock } from '@/components/clock'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ViewAnimation } from '@/components/view-animation'
+import { owner } from '@/constants/site'
 import { cn } from '@/lib/utils'
 import { Links } from './links'
 

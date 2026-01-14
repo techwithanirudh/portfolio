@@ -7,12 +7,12 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
-import { description as homeDescription } from '@/app/layout.shared'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
 import { getWork, getWorkPages, type WorkPage as MDXPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
@@ -126,7 +126,7 @@ export default async function Page(props: {
                   items={toc}
                 />
               ) : (
-                <div className='py-2' />
+                <div />
               )}
               <div className='prose min-w-0 flex-1 px-4 pb-4'>
                 <Mdx

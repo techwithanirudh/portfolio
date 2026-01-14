@@ -1,6 +1,6 @@
 import { Feed } from 'feed'
-import { description, owner, title } from '@/app/layout.shared'
-import { baseUrl } from '@/lib/constants'
+import { baseUrl } from '@/constants'
+import { description, owner, title } from '@/constants/site'
 import { getPosts } from '@/lib/source'
 
 export const dynamic = 'force-static'

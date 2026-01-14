@@ -1,7 +1,6 @@
 import Script from 'next/script'
+import { isProduction } from '@/constants'
 import { env } from '@/env'
-
-import { isProduction } from '@/lib/constants'
 
 const Analytics = () => {
   if (!isProduction) {

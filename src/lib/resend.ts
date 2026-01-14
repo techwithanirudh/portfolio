@@ -1,6 +1,6 @@
 import { Resend, type UpdateContactOptions } from 'resend'
+import { baseUrl } from '@/constants'
 import { env } from '@/env'
-import { baseUrl } from '@/lib/constants'
 import NewsletterWelcomeEmail from '../../emails/newsletter-welcome'
 import type { getPosts } from './source'
 

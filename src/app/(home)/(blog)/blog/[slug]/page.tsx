@@ -6,7 +6,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
-import { description as homeDescription } from 'src/app/layout.shared'
 import {
   PostComments,
   Share,
@@ -16,6 +15,7 @@ import { PostJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
 import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
+import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts, type BlogPage as MDXPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
@@ -99,7 +99,7 @@ export default async function Page(props: {
                 items={toc}
               />
             ) : (
-              <div className='py-2' />
+              <div />
             )}
             <div className='prose min-w-0 flex-1 px-4'>
               <Mdx

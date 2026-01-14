@@ -13,8 +13,8 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components'
-import { title } from '@/app/layout.shared'
-import { baseUrl } from '@/lib/constants'
+import { baseUrl } from '@/constants'
+import { title } from '@/constants/site'
 
 interface NewsletterWelcomeEmailProps {
   firstName: string

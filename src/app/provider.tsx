@@ -5,6 +5,7 @@ import { AuthUIProvider } from '@daveyplate/better-auth-ui'
 import { TooltipProvider } from '@radix-ui/react-tooltip'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import { Toaster } from 'sonner'
 import Analytics from '@/components/analytics'
@@ -27,47 +28,49 @@ export function Provider({
       disableTransitionOnChange
       enableSystem
     >
-      <AuthUIProvider
-        authClient={authClient}
-        credentials={false}
-        Link={Link}
-        localizeErrors={false}
-        multiSession
-        navigate={router.push}
-        onSessionChange={() => {
-          router.refresh()
-        }}
-        replace={router.replace}
-        social={{
-          providers: ['github', 'google'],
-        }}
-        viewPaths={{
-          SIGN_IN: 'login',
-          SIGN_OUT: 'logout',
-          SIGN_UP: 'register',
-          FORGOT_PASSWORD: 'forgot-password',
-          RESET_PASSWORD: 'reset-password',
-          MAGIC_LINK: 'magic',
-        }}
-      >
-        <ProgressProvider
-          color='var(--color-primary)'
-          delay={200}
-          height='2px'
-          options={{
-            showSpinner: false,
+      <NuqsAdapter>
+        <AuthUIProvider
+          authClient={authClient}
+          credentials={false}
+          Link={Link}
+          localizeErrors={false}
+          multiSession
+          navigate={router.push}
+          onSessionChange={() => {
+            router.refresh()
           }}
-          shallowRouting
-          startOnLoad
-          stopDelay={200}
+          replace={router.replace}
+          social={{
+            providers: ['github', 'google'],
+          }}
+          viewPaths={{
+            SIGN_IN: 'login',
+            SIGN_OUT: 'logout',
+            SIGN_UP: 'register',
+            FORGOT_PASSWORD: 'forgot-password',
+            RESET_PASSWORD: 'reset-password',
+            MAGIC_LINK: 'magic',
+          }}
         >
-          <TooltipProvider>{children}</TooltipProvider>
-        </ProgressProvider>
-      </AuthUIProvider>
-      <Analytics />
-      <Toaster />
-      <TailwindIndicator />
-      <SmoothCursor />
+          <ProgressProvider
+            color='var(--color-primary)'
+            delay={200}
+            height='2px'
+            options={{
+              showSpinner: false,
+            }}
+            shallowRouting
+            startOnLoad
+            stopDelay={200}
+          >
+            <TooltipProvider>{children}</TooltipProvider>
+          </ProgressProvider>
+        </AuthUIProvider>
+        <Analytics />
+        <Toaster />
+        <TailwindIndicator />
+        <SmoothCursor />
+      </NuqsAdapter>
     </ThemeProvider>
   )
 }

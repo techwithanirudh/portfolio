@@ -1,9 +1,9 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import { postsPerPage } from '@/app/layout.shared'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { Section } from '@/components/section'
 import { Wrapper } from '@/components/wrapper'
+import { postsPerPage } from '@/constants/pagination'
 import { createMetadata } from '@/lib/metadata'
 import { getSortedByDatePosts } from '@/lib/source'
 import Posts from '../../_components/posts'
@@ -77,7 +77,6 @@ export async function generateMetadata(
   props: Props,
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const _params = await props.params
   const searchParams = await props.searchParams
 
   const pageIndex = searchParams.page

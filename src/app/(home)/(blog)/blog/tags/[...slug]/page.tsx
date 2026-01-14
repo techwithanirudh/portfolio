@@ -1,11 +1,11 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import { postsPerPage } from '@/app/layout.shared'
 import { PostCard } from '@/components/blog/post-card'
 import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { Section } from '@/components/section'
+import { postsPerPage } from '@/constants/pagination'
 import { createMetadata } from '@/lib/metadata'
 import { getPostsByTag, getTags } from '@/lib/source'
 
