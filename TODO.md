@@ -13,10 +13,9 @@ https://chanhdai.com/
 https://honghong.me/
 https://ja.mt/
 https://jahir.dev/
-- Add a small clock to the footer
-- Take inspiration from here (https://github.com/ncdai/chanhdai.com/tree/main) adding a new command pallete, and Custom TOC (only show TOC when there is need)
+- Take inspiration from here (https://github.com/ncdai/chanhdai.com/tree/main) adding a new command palette, and Custom TOC (only show TOC when there is need)
 - Add Resume / Bosch Letter
-- Add rss.xml
 - Add Posthog & c15t cookie banner
 - Add inline search for blog & work
-- Make a constants directory and move all constants like experience about etc
+- [x] Make a constants directory and move all constants like experience about etc
+- Add keyboard shortcuts

@@ -1,6 +1,6 @@
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
-import { experiences } from './data'
+import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
