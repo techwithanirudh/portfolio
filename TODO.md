@@ -20,3 +20,4 @@ https://jahir.dev/
 - Add Posthog & c15t cookie banner
 - Add inline search for blog & work
 - Make a constants directory and move all constants like experience about etc
+- Remove tags in footer replace with blog

@@ -1,7 +1,8 @@
 import { HomeLayout } from 'fumadocs-ui/layouts/home'
 import type { ReactNode } from 'react'
 import { Header } from '@/components/sections/header'
-import { baseOptions, linkItems } from '../layout.shared'
+import { linkItems } from '@/constants/navigation'
+import { baseOptions } from '@/constants/site'
 
 const Layout = ({ children }: { children: ReactNode }) => {
   return (

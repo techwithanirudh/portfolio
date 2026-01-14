@@ -22,7 +22,7 @@ import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { buttonVariants } from '@/components/ui/button'
-import { searchTags } from '@/lib/constants'
+import { tags } from '@/constants/search'
 import { cn } from '@/lib/utils'
 
 const filterLabel = 'Filter'
@@ -38,8 +38,7 @@ export default function CustomSearchDialog(props: SharedProps) {
     locale,
   })
 
-  const activeTagLabel =
-    searchTags.find((item) => item.value === tag)?.name ?? 'All'
+  const activeTagLabel = tags.find((item) => item.value === tag)?.name ?? 'All'
 
   return (
     <SearchDialog
@@ -72,7 +71,7 @@ export default function CustomSearchDialog(props: SharedProps) {
               <ChevronDown className='size-3.5 text-fd-muted-foreground' />
             </PopoverTrigger>
             <PopoverContent align='start' className='flex flex-col gap-1 p-1'>
-              {searchTags.map((item) => {
+              {tags.map((item) => {
                 const isSelected = item.value === tag
                 const key = item.value ?? 'all'
 

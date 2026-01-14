@@ -1,6 +1,6 @@
 import type { BlogPosting, BreadcrumbList, Graph } from 'schema-dts'
-import { title as homeTitle, owner } from '@/app/layout.shared'
-import { baseUrl } from '@/lib/constants'
+import { baseUrl } from '@/constants'
+import { title as homeTitle, owner } from '@/constants/site'
 import type { BlogPage } from '@/lib/source'
 
 export const PostJsonLd = ({ page }: { page: BlogPage }) => {
