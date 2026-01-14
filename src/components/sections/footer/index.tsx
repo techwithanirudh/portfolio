@@ -1,5 +1,5 @@
+import { UserButton } from '@daveyplate/better-auth-ui'
 import { owner } from '@/app/layout.shared'
-import { UserButton } from "@daveyplate/better-auth-ui";
 import { ThemeToggle } from '@/components/theme-toggle'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
@@ -22,10 +22,10 @@ export const Footer = () => (
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <UserButton
-          size="icon"
-          className='rounded-md'
           align='start'
+          className='rounded-md'
           sideOffset={10}
+          size='icon'
         />
       </ViewAnimation>
       <div className='flex items-center sm:justify-center'>

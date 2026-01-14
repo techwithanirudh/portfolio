@@ -1,10 +1,10 @@
 'use client'
 
+import { useAuthenticate } from '@daveyplate/better-auth-ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState, type BaseSyntheticEvent } from 'react'
+import { type BaseSyntheticEvent, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { useSession } from '@/lib/auth-client'
-import { useAuthenticate } from "@daveyplate/better-auth-ui"
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
@@ -27,7 +26,7 @@ export const GuestbookForm = () => {
   const router = useRouter()
   const { data: session } = useSession()
   const user = session?.user
-  const [authenticate, setAuthenticate] = useState(false);
+  const [authenticate, setAuthenticate] = useState(false)
 
   useAuthenticate({
     enabled: authenticate,

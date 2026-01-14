@@ -1,5 +1,7 @@
-import { inferAdditionalFields } from 'better-auth/client/plugins'
-import { multiSessionClient } from "better-auth/client/plugins"
+import {
+  inferAdditionalFields,
+  multiSessionClient,
+} from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
 import { toast } from 'sonner'
 

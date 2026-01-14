@@ -50,7 +50,7 @@ export default async function Page(props: {
   const work = getSortedByDateWork().slice(startIndex, endIndex)
 
   return (
-    <Wrapper lenis={{}}>
+    <Wrapper>
       <Hero
         endIndex={endIndex}
         startIndex={startIndex}
@@ -98,7 +98,6 @@ export async function generateMetadata(
   props: Props,
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const _params = await props.params
   const searchParams = await props.searchParams
 
   const pageIndex = searchParams.page

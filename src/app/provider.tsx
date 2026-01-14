@@ -1,8 +1,9 @@
 'use client'
 
 import { ProgressProvider } from '@bprogress/next/app'
-import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { AuthUIProvider } from '@daveyplate/better-auth-ui'
+import { TooltipProvider } from '@radix-ui/react-tooltip'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { Toaster } from 'sonner'
@@ -11,8 +12,6 @@ import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { authClient } from '@/lib/auth-client'
-import Link from "next/link"
-import Image from "next/image"
 
 export function Provider({
   children,
@@ -30,26 +29,26 @@ export function Provider({
     >
       <AuthUIProvider
         authClient={authClient}
+        credentials={false}
+        Link={Link}
+        localizeErrors={false}
+        multiSession
         navigate={router.push}
         onSessionChange={() => {
           router.refresh()
         }}
         replace={router.replace}
-        Link={Link}
-        viewPaths={{
-          SIGN_IN: "login",
-          SIGN_OUT: "logout",
-          SIGN_UP: "register",
-          FORGOT_PASSWORD: "forgot-password",
-          RESET_PASSWORD: "reset-password",
-          MAGIC_LINK: "magic"
-        }}
         social={{
-          providers: ["github", "google"]
+          providers: ['github', 'google'],
         }}
-        multiSession
-        credentials={false}
-        localizeErrors={false}
+        viewPaths={{
+          SIGN_IN: 'login',
+          SIGN_OUT: 'logout',
+          SIGN_UP: 'register',
+          FORGOT_PASSWORD: 'forgot-password',
+          RESET_PASSWORD: 'reset-password',
+          MAGIC_LINK: 'magic',
+        }}
       >
         <ProgressProvider
           color='var(--color-primary)'

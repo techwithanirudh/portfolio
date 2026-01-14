@@ -107,6 +107,7 @@
     "SendHorizonal",
     "lerp",
     "theatrejs",
-    "netcat"
+    "netcat",
+    "daveyplate"
   ]
 }

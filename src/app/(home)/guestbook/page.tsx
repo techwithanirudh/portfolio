@@ -15,7 +15,7 @@ export default async function GuestbookPage() {
   const entries = await getGuestbookEntries(currentUserId)
 
   return (
-    <Wrapper lenis={{}}>
+    <Wrapper>
       <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
         <ViewAnimation
           className='px-6 py-10 md:py-14'
