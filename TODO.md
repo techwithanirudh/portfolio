@@ -17,3 +17,5 @@ https://jahir.dev/
 - Take inspiration from here (https://github.com/ncdai/chanhdai.com/tree/main) adding a new command pallete, and Custom TOC (only show TOC when there is need)
 - Add Resume / Bosch Letter
 - Add rss.xml
+- Add Posthog & c15t cookie banner
+- Add inline search for blog & work

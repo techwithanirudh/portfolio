@@ -21,9 +21,6 @@ import { cn } from '@/lib/utils'
 
 interface ContributionsProps {
   data: Activity[]
-  githubUrl: string
-  total: number
-  year: number
 }
 
 const Contributions = ({ data }: ContributionsProps) => (
@@ -36,7 +33,7 @@ const Contributions = ({ data }: ContributionsProps) => (
       <TooltipProvider>
         <ContributionGraph
           blockMargin={2}
-          blockSize={20.5}
+          blockSize={23.5}
           className='w-full'
           data={data}
         >
