@@ -11,14 +11,14 @@ export const experiences = [
     company: 'Bosch',
     timeframe: 'Apr 2022 – May 2022',
     summary:
-      'Co-authored a research paper on privacy challenges for autonomous cars.',
+      'Co-authored a research paper on privacy challenges for autonomous vehicles.',
   },
   {
     role: 'Full Stack Developer',
     company: 'Independent',
     timeframe: '2021 – Present',
     summary:
-      'Built AniKode Studio, AniSlides, and AniAuthenticator across web and AI tooling.',
+      'Built Coolify Tweaks, Shadcn SaaS Landing, etc.',
   },
   {
     role: 'Web / PowerApps Developer',
@@ -32,7 +32,7 @@ export const experiences = [
     company: 'Independent',
     timeframe: '2019 – 2020',
     summary:
-      'Built early AI experiments with Keras, OpenCV, and GPT-based tooling.',
+      'Built early AI experiments with Keras, OpenCV, Tensorflow.',
   },
   {
     role: 'Mindstorms / Lego Boost Programmer',

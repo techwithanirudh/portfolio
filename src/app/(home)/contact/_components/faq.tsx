@@ -12,7 +12,7 @@ const faq = [
   {
     question: 'What technologies do you specialize in?',
     answer:
-      'I focus on full-stack web development with Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL. I use AI tools where they add value.',
+      'I focus on full-stack web development with Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.',
   },
   {
     question: 'What are you focusing on right now?',

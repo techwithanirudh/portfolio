@@ -62,10 +62,9 @@ const Hero = () => {
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
-        <p className='typography-body text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
+        <p className='max-w-xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
           <Balancer>
-            I'm Anirudh (techwithanirudh), a developer who builds web apps and
-            AI tools and keeps learning as I go.
+            I'm a self-taught software engineer with a foundation in full-stack development.
           </Balancer>
         </p>
       </ViewAnimation>

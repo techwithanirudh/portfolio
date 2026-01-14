@@ -33,13 +33,10 @@ export default function Detailed(): React.ReactElement {
           >
             <div className='space-y-6 p-8 text-lg text-muted-foreground'>
               <p>
-                Hi, I'm Anirudh. I'm a full-stack developer who builds web apps
-                and AI tools.
+                Hi, I'm Anirudh! I'm a full-stack developer.
               </p>
               <p>
                 My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
-                Python was part of my earlier AI experiments, but today I focus
-                on shipping product-grade web apps.
               </p>
               <p>
                 I've worked on research projects around privacy for autonomous
@@ -48,9 +45,6 @@ export default function Detailed(): React.ReactElement {
               <p>
                 I'm building projects like AI Tutor and Coolify Tweaks and
                 sharing them in open source.
-              </p>
-              <p>
-                In my free time, I enjoy 80s music and sharing my builds online.
               </p>
               <Link
                 className={cn(

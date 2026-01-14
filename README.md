@@ -1,9 +1,8 @@
-# Anirudh (techwithanirudh) Portfolio
+# Anirudh's Portfolio
 
 This is my personal portfolio built with Next.js and Fumadocs. It highlights my projects, writing, and experiments in a clean, minimal layout.
 
 I'm Anirudh, a full-stack developer who likes shipping small, thoughtful products.
-I build with Next.js, TypeScript, and a growing curiosity for AI tooling.
 
 ## Development
 
