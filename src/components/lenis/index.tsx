@@ -25,7 +25,7 @@ export function Lenis({ root, options }: LenisProps) {
     <ReactLenis
       options={{
         ...options,
-        lerp: options?.lerp ?? 0.125,
+        lerp: options?.lerp ?? 0.18,
         autoRaf: false,
         anchors: true,
         prevent: (node: Element | null) =>
