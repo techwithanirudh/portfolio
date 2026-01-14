@@ -12,7 +12,7 @@ export default function Detailed(): React.ReactElement {
         <div className='bg-dashed'>
           <ViewAnimation
             className='h-full'
-            initial={{ opacity: 0, translateY: -8 }}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
@@ -27,8 +27,8 @@ export default function Detailed(): React.ReactElement {
         <div className='sm:col-span-2'>
           <ViewAnimation
             className='h-full'
-            delay={0.6}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.1}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='space-y-6 p-8 text-lg text-muted-foreground'>

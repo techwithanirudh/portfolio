@@ -50,7 +50,7 @@ export const HeroSection = ({
     <div className={cn(heroVariants({ variant, align, className }))}>
       {image && (
         <ViewAnimation
-          initial={{ opacity: 0, translateY: -8 }}
+          initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           {image}
@@ -68,8 +68,8 @@ export const HeroSection = ({
           </ViewAnimation>
         )}
         <ViewAnimation
-          delay={0.2}
-          initial={{ opacity: 0, translateY: -8 }}
+          delay={0.1}
+          initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <h1
@@ -86,8 +86,8 @@ export const HeroSection = ({
         </ViewAnimation>
         {description && (
           <ViewAnimation
-            delay={0.4}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.15}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <p
@@ -104,8 +104,8 @@ export const HeroSection = ({
       </div>
       {Children.map(children, (child, index) => (
         <ViewAnimation
-          delay={0.6 + index * 0.1}
-          initial={{ opacity: 0, translateY: -8 }}
+          delay={0.1 + index * 0.05}
+          initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           {child}

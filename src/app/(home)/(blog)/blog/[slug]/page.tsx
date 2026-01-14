@@ -59,8 +59,8 @@ function Header(props: { page: MDXPage; tags?: string[] }) {
         <div className='flex flex-wrap gap-2'>
           {tags?.map((tag, index) => (
             <ViewAnimation
-              delay={1.2 + index * 0.4}
-              initial={{ opacity: 0, translateY: -8 }}
+              delay={0.1 + index * 0.05}
+              initial={{ opacity: 0, translateY: -6 }}
               key={tag}
               whileInView={{ opacity: 1, translateY: 0 }}
             >

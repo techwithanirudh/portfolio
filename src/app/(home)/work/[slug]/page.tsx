@@ -75,8 +75,8 @@ function Header(props: { page: MDXPage }) {
         </div>
         {links.length > 0 && (
           <ViewAnimation
-            delay={0.6}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.1}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-wrap gap-3'>
@@ -118,8 +118,8 @@ export default async function Page(props: {
       <Section className='h-full' sectionClassName='flex flex-1'>
         <article className='flex min-h-full flex-col'>
           <ViewAnimation
-            delay={0.2}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.1}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-1 flex-col gap-4'>

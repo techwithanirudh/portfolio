@@ -85,7 +85,7 @@ export const Header = ({
       <div className='relative flex w-full items-center'>
         <div className='flex items-center gap-2'>
           <ViewAnimation
-            initial={{ opacity: 0, translateY: -8 }}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             {renderTitleNav(nav, {
@@ -99,8 +99,8 @@ export const Header = ({
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
               <ViewAnimation
-                delay={0.4 + i * 0.1}
-                initial={{ opacity: 0, translateY: -8 }}
+                delay={0.05 * i}
+                initial={{ opacity: 0, translateY: -6 }}
                 key={i.toString()}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >
@@ -111,8 +111,8 @@ export const Header = ({
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
           <ViewAnimation
             className='w-60 flex-none'
-            delay={0.8}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.15}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             {searchToggle.enabled !== false &&
@@ -124,8 +124,8 @@ export const Header = ({
               ))}
           </ViewAnimation>
           <ViewAnimation
-            delay={0.8}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.15}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             {themeSwitch.enabled !== false &&
@@ -134,8 +134,8 @@ export const Header = ({
               ))}
           </ViewAnimation>
           <ViewAnimation
-            delay={0.8}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.15}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <ul className='flex flex-row items-center gap-2 empty:hidden'>
@@ -159,8 +159,8 @@ export const Header = ({
           ))}
         <NavigationMenuItem>
           <ViewAnimation
-            delay={0.8}
-            initial={{ opacity: 0, translateY: -8 }}
+            delay={0.15}
+            initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <NavigationMenuTrigger
