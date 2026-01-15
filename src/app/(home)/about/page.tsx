@@ -4,6 +4,7 @@ import CTA from '../_components/cta'
 import Skills from '../_components/skills'
 import Detailed from './_components/detailed'
 import Experience from './_components/experience'
+import Feed from './_components/feed'
 import Hero from './_components/hero'
 import Updates from './_components/updates'
 
@@ -17,6 +18,7 @@ export default function AboutPage() {
       <Skills />
       <Experience />
       <Updates posts={posts} />
+      <Feed />
       <CTA />
     </Wrapper>
   )
