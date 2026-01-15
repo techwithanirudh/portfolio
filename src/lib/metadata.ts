@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { owner, title } from '@/app/layout.shared'
+import { owner, title } from '@/constants/site'
 import { env } from '@/env'
 import type { BlogPage } from './source/blog'
 import type { WorkPage } from './source/work'

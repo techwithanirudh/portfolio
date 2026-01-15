@@ -1,4 +1,3 @@
-import { socials } from '@/app/layout.shared'
 import { SectionHeader } from '@/components/sections/section-header'
 import {
   Tooltip,
@@ -7,6 +6,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
+import { socials } from '@/constants/social'
 
 export const Hero = () => (
   <div className='flex flex-col gap-2'>

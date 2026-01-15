@@ -4,17 +4,13 @@ import type { Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 import CustomSearchDialog from '@/components/search-dialog'
-import { baseUrl } from '@/lib/constants'
+import { baseUrl } from '@/constants'
+import { description as homeDescription, owner, title } from '@/constants/site'
+import { socials } from '@/constants/social'
 import { createMetadata } from '@/lib/metadata'
 import '@/styles/globals.css'
 import 'katex/dist/katex.css'
 import { Body } from './layout.client'
-import {
-  description as homeDescription,
-  owner,
-  socials,
-  title,
-} from './layout.shared'
 import { Provider } from './provider'
 
 const geistSans = Geist({
@@ -97,6 +93,10 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             },
             {
               path: '/contact',
+              method: 'POST',
+            },
+            {
+              path: '/blog/newsletter',
               method: 'POST',
             },
           ]}

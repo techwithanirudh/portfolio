@@ -1,4 +1,3 @@
-import { transformerRemoveNotationEscape } from '@shikijs/transformers'
 import {
   defineCollections,
   defineConfig,
@@ -7,6 +6,9 @@ import {
 import jsonSchema from 'fumadocs-mdx/plugins/json-schema'
 import lastModified from 'fumadocs-mdx/plugins/last-modified'
 import { transformerTwoslash } from 'fumadocs-twoslash'
+import { createFileSystemTypesCache } from 'fumadocs-twoslash/cache-fs'
+import type { ElementContent } from 'hast'
+import type { ShikiTransformer } from 'shiki'
 import { z } from 'zod'
 
 export const blog = defineCollections({
@@ -32,6 +34,10 @@ export const blog = defineCollections({
     tags: z.array(z.string()).optional(),
     image: z.string().optional(),
   }),
+  postprocess: {
+    includeProcessedMarkdown: true,
+    extractLinkReferences: true,
+  },
 })
 
 export const work = defineCollections({
@@ -57,7 +63,31 @@ export const work = defineCollections({
     github: z.string().optional(),
     image: z.string().optional(),
   }),
+  postprocess: {
+    includeProcessedMarkdown: true,
+    extractLinkReferences: true,
+  },
 })
+
+function transformerEscape(): ShikiTransformer {
+  return {
+    name: '@shikijs/transformers:remove-notation-escape',
+    code(hast) {
+      function replace(node: ElementContent) {
+        if (node.type === 'text') {
+          node.value = node.value.replace('[\\!code', '[!code')
+        } else if ('children' in node) {
+          for (const child of node.children) {
+            replace(child)
+          }
+        }
+      }
+
+      replace(hast)
+      return hast
+    },
+  }
+}
 
 export default defineConfig({
   plugins: [
@@ -86,8 +116,10 @@ export default defineConfig({
         },
         transformers: [
           ...(rehypeCodeDefaultOptions.transformers ?? []),
-          transformerTwoslash(),
-          transformerRemoveNotationEscape(),
+          transformerTwoslash({
+            typesCache: createFileSystemTypesCache(),
+          }),
+          transformerEscape(),
         ],
       },
       remarkCodeTabOptions: {

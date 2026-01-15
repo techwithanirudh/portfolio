@@ -1,8 +1,9 @@
 import { unstable_cache } from 'next/cache'
-import { baseOptions } from '@/app/layout.shared'
 import type { Activity } from '@/components/kibo-ui/contribution-graph'
 import Separator from '@/components/separator'
 import { Wrapper } from '@/components/wrapper'
+import { testimonials } from '@/constants/portfolio/testimonials'
+import { baseOptions } from '@/constants/site'
 import { getSortedByDateWork } from '@/lib/source'
 import About from './_components/about'
 import Contributions from './_components/contributions'
@@ -10,7 +11,6 @@ import CTA from './_components/cta'
 import Hero from './_components/hero'
 import Skills from './_components/skills'
 import Testimonials from './_components/testimonials'
-import { testimonials } from './_components/testimonials/data'
 import WorkPreview from './_components/work'
 
 const githubUrl = baseOptions.githubUrl ?? ''
@@ -28,7 +28,7 @@ const getCachedContributions = unstable_cache(
     }
 
     const url = new URL(
-      `/v4/${githubUsername}`,
+      `/v4/${githubUsername}?y=last`,
       'https://github-contributions-api.jogruber.de'
     )
     const response = await fetch(url)
@@ -38,19 +38,8 @@ const getCachedContributions = unstable_cache(
     }
 
     const data = (await response.json()) as ContributionResponse
-    const year = new Date().getFullYear()
-    const total = data.total[String(year)] ?? 0
-    const totalSquares = 417
 
-    const sortedContributions = [...data.contributions].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    )
-
-    return {
-      contributions: sortedContributions.slice(0, totalSquares),
-      total,
-      year,
-    }
+    return data.contributions
   },
   ['github-contributions'],
   { revalidate: 60 * 60 * 24 }
@@ -58,7 +47,7 @@ const getCachedContributions = unstable_cache(
 
 export default async function Home() {
   const works = getSortedByDateWork().slice(0, 4)
-  const { contributions, total, year } = await getCachedContributions()
+  const contributions = await getCachedContributions()
 
   return (
     <Wrapper>
@@ -71,12 +60,7 @@ export default async function Home() {
       <WorkPreview works={works} />
       <Testimonials testimonials={testimonials} />
       <Separator />
-      <Contributions
-        data={contributions}
-        githubUrl={githubUrl}
-        total={total}
-        year={year}
-      />
+      <Contributions data={contributions} />
       <Separator />
       <CTA />
     </Wrapper>

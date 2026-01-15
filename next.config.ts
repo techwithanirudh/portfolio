@@ -62,6 +62,22 @@ async function createNextConfig(): Promise<NextConfig> {
       'shiki',
       '@takumi-rs/image-response',
     ],
+    async rewrites() {
+      return [
+        {
+          source: '/blog/:path*.mdx',
+          destination: '/blog.mdx/:path*',
+        },
+        {
+          source: '/work/:path*.mdx',
+          destination: '/work.mdx/:path*',
+        },
+        {
+          source: '/rss.xml',
+          destination: '/blog/rss.xml',
+        },
+      ]
+    },
   }
 
   return nextConfig

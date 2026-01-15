@@ -6,7 +6,6 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
-import { description as homeDescription } from 'src/app/layout.shared'
 import {
   PostComments,
   Share,
@@ -16,6 +15,7 @@ import { PostJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
 import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
+import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts, type BlogPage as MDXPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
@@ -28,7 +28,7 @@ function Header(props: { page: MDXPage; tags?: string[] }) {
       <div
         className={cn(
           'flex flex-col items-start justify-center gap-4 py-8 md:gap-6',
-          'sm:items-center sm:rounded-lg sm:border sm:bg-card sm:px-8 sm:py-20 sm:shadow-xs'
+          'sm:items-center sm:rounded-lg sm:border sm:bg-card sm:p-10 sm:shadow-xs'
         )}
       >
         {page.data.image ? (
@@ -38,7 +38,7 @@ function Header(props: { page: MDXPage; tags?: string[] }) {
           >
             <BlurImage
               alt={page.data.title ?? 'Blog cover image'}
-              className='relative aspect-video w-full overflow-hidden rounded-2xl border border-border bg-card/50 sm:mx-auto'
+              className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
               fill
               imageClassName='object-cover'
               sizes='(min-width: 1024px) 800px, 100vw'
@@ -93,10 +93,14 @@ export default async function Page(props: {
       <Section className='h-full' sectionClassName='flex flex-1'>
         <article className='flex min-h-full flex-col lg:flex-row'>
           <div className='flex flex-1 flex-col gap-4'>
-            <InlineTOC
-              className='rounded-none border-0 border-border border-b border-dashed'
-              items={toc}
-            />
+            {toc?.length ? (
+              <InlineTOC
+                className='rounded-none border-0 border-border border-b border-dashed'
+                items={toc}
+              />
+            ) : (
+              <div />
+            )}
             <div className='prose min-w-0 flex-1 px-4'>
               <Mdx
                 components={{

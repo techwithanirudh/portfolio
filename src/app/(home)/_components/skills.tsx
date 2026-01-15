@@ -1,9 +1,9 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
-import { BrainCircuitIcon, Code2Icon, LayersIcon } from 'lucide-react'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
+import { skills } from '@/constants/portfolio/skills'
 
 // Create a variant for feature items
 const featureItemVariants = cva(
@@ -20,32 +20,6 @@ const featureItemVariants = cva(
     },
   }
 )
-
-const features = [
-  {
-    id: 1,
-    Icon: Code2Icon,
-    title: 'Web Development',
-    description:
-      'Building modern web apps with Next.js, React, TypeScript, and UI frameworks.',
-    size: 'sm',
-  },
-  {
-    id: 2,
-    Icon: BrainCircuitIcon,
-    title: 'AI & Machine Learning',
-    description: 'Exploring AI features with Python, OpenCV, and LLMs.',
-    size: 'sm',
-  },
-  {
-    id: 3,
-    Icon: LayersIcon,
-    title: 'Full Stack Development',
-    description:
-      'Creating end-to-end solutions with Node.js, TypeScript, databases, and cloud technologies.',
-    size: 'sm',
-  },
-]
 
 const Skills = () => (
   <Section className='relative w-full pt-10'>
@@ -65,7 +39,7 @@ const Skills = () => (
 
       <div className='w-full space-y-4 border-border border-t border-dashed'>
         <div className='grid grid-cols-1 divide-x divide-dashed divide-border text-left sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 lg:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
-          {features.map((feature, index) => (
+          {skills.map((feature, index) => (
             <ViewAnimation
               className={featureItemVariants({
                 size: feature.size as 'sm' | 'lg',
