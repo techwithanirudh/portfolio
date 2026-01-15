@@ -1,8 +1,8 @@
+import { GitCommitIcon } from '@primer/octicons-react'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
 import { octokit } from '@/lib/github'
 import { cn } from '@/lib/utils'
-import { GitCommitIcon } from '@primer/octicons-react'
 
 const formatCommitMessage = (message: string) => {
   const [firstLine] = message.split('\n')
@@ -11,11 +11,11 @@ const formatCommitMessage = (message: string) => {
 
 const EventDate = ({ date }: { date: string | null }) => {
   if (!date) {
-    return <div className="shrink-0 text-muted-foreground">Recently</div>
+    return <div className='shrink-0 text-muted-foreground'>Recently</div>
   }
 
   return (
-    <div className="shrink-0 text-muted-foreground">
+    <div className='shrink-0 text-muted-foreground'>
       {new Date(date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
