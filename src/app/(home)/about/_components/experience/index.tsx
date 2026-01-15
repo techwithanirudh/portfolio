@@ -1,4 +1,5 @@
 import { Section } from '@/components/section'
+import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 
@@ -19,6 +20,11 @@ export default function Experience(): React.ReactElement {
               <p className='text-muted-foreground text-sm'>
                 A quick timeline of the roles shaping my work.
               </p>
+              <Button asChild className='mt-4 w-fit' size='sm' variant='outline'>
+                <a href='/resume.pdf' rel='noopener' target='_blank'>
+                  Resume
+                </a>
+              </Button>
             </div>
           </ViewAnimation>
         </div>

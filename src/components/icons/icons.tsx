@@ -1,3 +1,4 @@
+import type { ComponentProps, JSX } from 'react'
 import type { Icon as LucideIcon, LucideProps } from 'lucide-react'
 import {
   AlertTriangle,
@@ -45,8 +46,46 @@ import {
   User,
   X,
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { CssOld } from '@/components/icons/brands/cssOld'
+import { DrizzleOrmDark } from '@/components/icons/brands/drizzleOrmDark'
+import { DrizzleOrmLight } from '@/components/icons/brands/drizzleOrmLight'
+import { Expressjs } from '@/components/icons/brands/expressjs'
+import { ExpressjsDark } from '@/components/icons/brands/expressjsDark'
+import { Git } from '@/components/icons/brands/git'
+import { Hono } from '@/components/icons/brands/hono'
+import { Html5 } from '@/components/icons/brands/html5'
+import { Javascript } from '@/components/icons/brands/javascript'
+import { NextjsLogoDark } from '@/components/icons/brands/nextjsLogoDark'
+import { NextjsLogoLight } from '@/components/icons/brands/nextjsLogoLight'
+import { Nodejs } from '@/components/icons/brands/nodejs'
+import { ReactDark } from '@/components/icons/brands/reactDark'
+import { ReactLight } from '@/components/icons/brands/reactLight'
+import { ShadcnUi } from '@/components/icons/brands/shadcnUi'
+import { ShadcnUiDark } from '@/components/icons/brands/shadcnUiDark'
+import { Tailwindcss } from '@/components/icons/brands/tailwindcss'
+import { Typescript } from '@/components/icons/brands/typescript'
 
 export type Icon = typeof LucideIcon
+
+type SvgIcon = (props: ComponentProps<'svg'>) => JSX.Element
+
+const themedIcon = (LightIcon: SvgIcon, DarkIcon: SvgIcon): SvgIcon => {
+  const Themed = ({ className, ...props }: ComponentProps<'svg'>) => (
+    <span className='inline-flex'>
+      <LightIcon
+        {...props}
+        className={cn('dark:hidden', className)}
+      />
+      <DarkIcon
+        {...props}
+        className={cn('hidden dark:inline-flex', className)}
+      />
+    </span>
+  )
+
+  return Themed
+}
 
 export const Icons = {
   logo: Code,
@@ -177,3 +216,19 @@ export const Icons = {
     </svg>
   ),
 }
+
+export const SkillIcons = {
+  typescript: Typescript,
+  javascript: Javascript,
+  react: themedIcon(ReactLight, ReactDark),
+  nextjs: themedIcon(NextjsLogoLight, NextjsLogoDark),
+  tailwind: Tailwindcss,
+  html5: Html5,
+  css3: CssOld,
+  nodejs: Nodejs,
+  express: themedIcon(Expressjs, ExpressjsDark),
+  git: Git,
+  shadcn: themedIcon(ShadcnUi, ShadcnUiDark),
+  hono: Hono,
+  drizzleOrm: themedIcon(DrizzleOrmLight, DrizzleOrmDark),
+} as const

@@ -1,7 +1,9 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
+import { SkillIcons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
+import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
 import { skills } from '@/constants/portfolio/skills'
 
@@ -20,6 +22,22 @@ const featureItemVariants = cva(
     },
   }
 )
+
+const skillTags = [
+  { label: 'TypeScript', Icon: SkillIcons.typescript },
+  { label: 'JavaScript', Icon: SkillIcons.javascript },
+  { label: 'React', Icon: SkillIcons.react },
+  { label: 'Next.js', Icon: SkillIcons.nextjs },
+  { label: 'Tailwind CSS', Icon: SkillIcons.tailwind },
+  { label: 'HTML5', Icon: SkillIcons.html5 },
+  { label: 'CSS3', Icon: SkillIcons.css3 },
+  { label: 'Node.js', Icon: SkillIcons.nodejs },
+  { label: 'Express', Icon: SkillIcons.express },
+  { label: 'Git', Icon: SkillIcons.git },
+  { label: 'shadcn/ui', Icon: SkillIcons.shadcn },
+  { label: 'Hono', Icon: SkillIcons.hono },
+  { label: 'Drizzle ORM', Icon: SkillIcons.drizzleOrm },
+] as const
 
 const Skills = () => (
   <Section className='relative w-full pt-10'>
@@ -62,6 +80,24 @@ const Skills = () => (
           ))}
         </div>
       </div>
+      <ViewAnimation
+        className='border-border border-t border-dashed px-6 py-6'
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+      >
+        <div className='flex flex-wrap gap-2'>
+          {skillTags.map(({ label, Icon }) => (
+            <Badge
+              className='gap-2 rounded-md transition-transform hover:-rotate-4 hover:scale-105 px-3 py-1 text-xs sm:text-sm'
+              key={label}
+              variant='outline'
+            >
+              <Icon aria-hidden='true' className='size-4' />
+              {label}
+            </Badge>
+          ))}
+        </div>
+      </ViewAnimation>
     </div>
   </Section>
 )
