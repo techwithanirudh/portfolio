@@ -1,5 +1,5 @@
 import { format } from 'date-fns'
-import { owner, repo } from '@/lib/github'
+import { owner, repo } from '@/constants/github'
 import type { BlogPage, WorkPage } from '@/lib/source'
 
 type ContentPage = BlogPage | WorkPage

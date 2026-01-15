@@ -1,7 +1,8 @@
 import { GitCommitIcon } from '@primer/octicons-react'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
-import { octokit, owner } from '@/lib/github'
+import { owner } from '@/constants/github'
+import { octokit } from '@/lib/github'
 import { cn } from '@/lib/utils'
 
 const formatCommitMessage = (message: string) => {
