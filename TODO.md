@@ -7,7 +7,10 @@
 - Add Github Activity (Commits)
 - Take a look at the jace site, and look at his uses too
 - Add Snippets support
-- Add Attribution Page
+- Add Attribution/Colophon Page
+  ZaidMukkadam
+  Jahir
+  Hexaa
 - Inspiration:
 https://chanhdai.com/
 https://honghong.me/
