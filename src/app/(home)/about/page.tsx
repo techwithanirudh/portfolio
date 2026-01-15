@@ -17,8 +17,8 @@ export default function AboutPage() {
       <Detailed />
       <Skills />
       <Experience />
-      <Feed />
       <Updates posts={posts} />
+      <Feed />
       <CTA />
     </Wrapper>
   )
