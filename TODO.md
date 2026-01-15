@@ -28,3 +28,4 @@ https://jahir.dev/blog/people-websites-that-inspire
 https://web.archive.org/web/20250317142212mp_/https://jahir.dev/uses
 https://x.com/adrianoreis/status/1700251769836892297
 - Simplify footer like brandoncoyr
+- Add a Blur at the Bottom
