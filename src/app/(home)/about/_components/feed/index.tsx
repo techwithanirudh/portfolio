@@ -1,7 +1,7 @@
 import { GitCommitIcon } from '@primer/octicons-react'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
-import { octokit } from '@/lib/github'
+import { octokit, owner } from '@/lib/github'
 import { cn } from '@/lib/utils'
 
 const formatCommitMessage = (message: string) => {
@@ -28,9 +28,9 @@ const EventDate = ({ date }: { date: string | null }) => {
 export default async function Feed(): Promise<React.ReactElement | null> {
   try {
     const commits = await octokit.rest.repos.listCommits({
-      owner: 'techwithanirudh',
+      owner,
       repo: 'portfolio',
-      per_page: 20,
+      per_page: 15,
     })
     return (
       <Section>
@@ -60,7 +60,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
             >
               {commits.data.map((commit, index) => (
                 <ViewAnimation
-                  delay={index * 0.1}
+                  delay={0.05 * index}
                   initial={{ opacity: 0, translateY: -8 }}
                   key={commit.sha}
                   whileInView={{ opacity: 1, translateY: 0 }}
