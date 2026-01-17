@@ -1,14 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Section } from '@/components/section'
-import { cn } from '@/lib/utils'
 import { owner, repo } from '@/constants/github'
+import { cn } from '@/lib/utils'
 
-const ISSUE_URL =
-  `https://github.com/${owner}/${repo}/issues/new`
+const ISSUE_URL = `https://github.com/${owner}/${repo}/issues/new`
 
 const ErrorPage = ({ error }: { error: Error }) => {
   const errorStack = error.stack?.split(/\r?\n/).slice(1) ?? []
@@ -16,7 +13,7 @@ const ErrorPage = ({ error }: { error: Error }) => {
   return (
     <main className='flex flex-1'>
       <div className='container relative mx-auto min-h-full border-border border-x border-dashed'>
-        <div className='flex w-full flex-col gap-4 px-4 py-12 sm:px-8 self-center'>
+        <div className='flex w-full flex-col gap-4 self-center px-4 py-12 sm:px-8'>
           <h1 className='typography-hero text-destructive'>
             Something went wrong
           </h1>
@@ -29,8 +26,8 @@ const ErrorPage = ({ error }: { error: Error }) => {
             <Link
               className='text-primary underline-offset-4 hover:underline'
               href={ISSUE_URL}
-              target='_blank'
               rel='noopener noreferrer'
+              target='_blank'
             >
               share the details
             </Link>{' '}
@@ -45,7 +42,7 @@ const ErrorPage = ({ error }: { error: Error }) => {
                 className={cn(
                   'flex flex-col gap-1 p-3',
                   'overflow-x-auto text-nowrap',
-                  'text-2xs font-mono whitespace-pre-line',
+                  'whitespace-pre-line font-mono text-2xs',
                   'bg-primary/5 dark:bg-primary/10'
                 )}
               >
@@ -53,7 +50,7 @@ const ErrorPage = ({ error }: { error: Error }) => {
                   {error.name || 'Error'}: {error.message || 'Unknown error'}
                 </span>
                 {errorStack.map((line, index) => (
-                  <span key={`${line}-${index}`} className='pl-3'>
+                  <span className='pl-3' key={`${line}-${index}`}>
                     {line}
                   </span>
                 ))}
@@ -61,7 +58,7 @@ const ErrorPage = ({ error }: { error: Error }) => {
             </div>
           </details>
           <Button asChild className='mt-2 w-fit'>
-            <Link href='/' aria-label='Go back home'>
+            <Link aria-label='Go back home' href='/'>
               Go home
             </Link>
           </Button>
