@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'relative inline-flex items-center transition ring-1 ring-inset ring-black/40 hover:ring-black/50 hover:shadow hover:bg-primary/90 dark:ring-white/20 dark:hover:ring-white/30 after:pointer-events-none after:select-none after:absolute after:top-0 after:right-0 after:bottom-0 after:left-0 after:m-px after:rounded-[inherit] after:border-px after:border-white after:opacity-20 after:[mask:linear-gradient(to_bottom,rgba(0,0,0,1)_0%,rgba(0,0,0,0)_100%)] bg-primary text-primary-foreground',
+          'relative inline-flex items-center transition ring-1 ring-inset ring-black/40 hover:ring-black/50 hover:shadow-md hover:bg-primary/90 dark:ring-white/20 dark:hover:ring-white/30 after:pointer-events-none after:select-none after:absolute after:top-0 after:right-0 after:bottom-0 after:left-0 after:m-px after:rounded-[inherit] after:border-px after:border-white after:opacity-20 after:[mask:linear-gradient(to_bottom,rgba(0,0,0,1)_0%,rgba(0,0,0,0)_100%)] bg-primary text-primary-foreground',
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
         outline:
