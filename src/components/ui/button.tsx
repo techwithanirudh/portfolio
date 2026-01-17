@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'group relative isolate overflow-hidden transition duration-300 ease-[cubic-bezier(0.4,0.36,0,1)] shadow-[0_0_12px_rgba(56,103,214,0.3),0_1px_3px_rgba(0,0,0,0.2)] ring-1 ring-inset hover:shadow-[0_0_16px_rgba(56,103,214,0.4),0_2px_8px_rgba(0,0,0,0.3)] focus-visible:shadow-[0_0_16px_rgba(56,103,214,0.4),0_2px_8px_rgba(0,0,0,0.3)] after:pointer-events-none after:select-none after:absolute after:top-0 after:right-0 after:bottom-0 after:left-0 after:m-px after:rounded-[calc(0.375rem-1px)] after:border after:border-white after:opacity-20 after:[mask:linear-gradient(to_bottom,rgba(0,0,0,1)_0%,rgba(0,0,0,0)_100%)] dark:after:opacity-15 bg-gradient-to-br from-blue-500 to-blue-700 text-white ring-blue-600 dark:from-blue-400 dark:to-blue-600 dark:shadow-[0_0_20px_rgba(136,164,230,0.4),0_2px_8px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_0_28px_rgba(136,164,230,0.5),0_4px_12px_rgba(0,0,0,0.6)] dark:ring-blue-400',
+          'relative inline-flex items-center overflow-hidden transition ring-1 ring-inset hover:shadow hover:brightness-110 focus-visible:shadow focus-visible:brightness-110 after:pointer-events-none after:select-none after:absolute after:top-0 after:right-0 after:bottom-0 after:left-0 after:m-px after:rounded-[inherit] after:border after:border-white after:opacity-20 after:[mask:linear-gradient(to_bottom,rgba(0,0,0,1)_0%,rgba(0,0,0,0)_100%)] bg-primary text-primary-foreground ring-black/40 hover:ring-black/50 dark:ring-white/20 dark:hover:ring-white/30',
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
         outline:
