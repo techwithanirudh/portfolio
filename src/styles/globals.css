@@ -99,6 +99,18 @@
   }
 }
 
+@theme {
+  --color-fd-primary-foreground: hsl(0, 0%, 98%);
+  --color-fd-primary: hsl(226, 55%, 45%);
+  --color-fd-ring: hsl(0, 0%, 63.9%);
+}
+
+.dark {
+  --color-fd-ring: hsl(234, 100%, 83%);
+  --color-fd-primary: hsl(234, 100%, 83%);
+  --color-fd-primary-foreground: hsl(240, 7%, 11%);
+}
+
 @layer base {
   a {
     @apply [overflow-wrap:anywhere] decoration-wavy;
@@ -119,16 +131,14 @@
 
 @layer utilities {
   .bg-dashed {
-    background-image: linear-gradient(
-      45deg,
-      var(--color-border) 12.50%,
-      transparent 12.50%,
-      transparent 50%,
-      var(--color-border) 50%,
-      var(--color-border) 62.50%,
-      transparent 62.50%,
-      transparent 100%
-    );
+    background-image: linear-gradient(45deg,
+        var(--color-border) 12.50%,
+        transparent 12.50%,
+        transparent 50%,
+        var(--color-border) 50%,
+        var(--color-border) 62.50%,
+        transparent 62.50%,
+        transparent 100%);
     background-size: 0.25rem 0.25rem;
   }
 
@@ -180,10 +190,8 @@
     background-image: radial-gradient(transparent 1px, rgb(255, 255, 255) 1px);
     background-size: 4px 4px;
     backdrop-filter: blur(3px);
-    mask: linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgb(255, 255, 255, 0.6) 100%
-    );
+    mask: linear-gradient(rgba(255, 255, 255, 0) 0%,
+        rgb(255, 255, 255, 0.6) 100%);
     opacity: 1;
     position: absolute;
     inset: 0;
@@ -195,17 +203,13 @@
   .footer-gradient {
     position: absolute;
     inset: 0;
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 0% 50%,
-      rgba(255, 255, 255, 0.5) 100%
-    );
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 0% 50%,
+        rgba(255, 255, 255, 0.5) 100%);
   }
 
   .dark .footer-gradient {
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0) 0% 50%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
+    background-image: linear-gradient(rgba(0, 0, 0, 0) 0% 50%,
+        rgba(0, 0, 0, 0.5) 100%);
   }
 
   .dark .footer-grid {
