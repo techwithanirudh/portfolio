@@ -10,6 +10,7 @@ import {
   PostComments,
   Share,
 } from '@/app/(home)/(blog)/blog/[slug]/page.client'
+import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { PostJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
@@ -88,6 +89,7 @@ export default async function Page(props: {
 
   return (
     <>
+      <BlogProgressBar />
       <Header page={page} tags={tags} />
 
       <Section className='h-full' sectionClassName='flex flex-1'>

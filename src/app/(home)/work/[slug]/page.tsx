@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
+import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
@@ -110,6 +111,7 @@ export default async function Page(props: {
 
   return (
     <>
+      <BlogProgressBar />
       <Header page={page} />
 
       <Section className='h-full' sectionClassName='flex flex-1'>
