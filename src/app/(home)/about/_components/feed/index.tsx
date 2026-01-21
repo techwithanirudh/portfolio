@@ -1,6 +1,7 @@
+import { unstable_cache } from 'next/cache'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
-import { owner } from '@/constants/github'
+import { activity, owner } from '@/constants/github'
 import { octokit } from '@/lib/github'
 import { cn } from '@/lib/utils'
 import {
@@ -9,9 +10,7 @@ import {
   type PushCommit,
 } from './event'
 
-const activityLimit = 10
-const fetchLimit = 25
-const maxCommitsPerPush = 3
+const { limit } = activity;
 
 interface PushEventPayload {
   before?: string
@@ -23,75 +22,72 @@ interface ActivityEventItem {
   commits?: PushCommit[]
 }
 
-const getRepoFromEvent = (event: GitHubEvent) => {
-  if (!event.repo?.name) {
-    return null
-  }
-
-  const [repoOwner, repoName] = event.repo.name.split('/')
-  if (!(repoOwner && repoName)) {
-    return null
-  }
-
-  return { owner: repoOwner, repo: repoName, fullName: event.repo.name }
+const getFirstLine = (message: string) => {
+  const [firstLine] = message.split('\n')
+  return firstLine ?? message
 }
 
 const getPushEventCommits = async (
   event: GitHubEvent
 ): Promise<PushCommit[]> => {
   const payload = event.payload as PushEventPayload
-  const repo = getRepoFromEvent(event)
+  const repoName = event.repo?.name
 
-  if (!(repo && payload.before && payload.head)) {
+  if (!(repoName && payload.before && payload.head)) {
+    return []
+  }
+
+  const [repoOwner, repo] = repoName.split('/')
+  if (!(repoOwner && repo)) {
     return []
   }
 
   try {
     const comparison = await octokit.rest.repos.compareCommits({
-      owner: repo.owner,
-      repo: repo.repo,
+      owner: repoOwner,
+      repo,
       base: payload.before,
       head: payload.head,
     })
 
     return comparison.data.commits
-      .slice(0, maxCommitsPerPush)
+      .slice(0, 3)
       .map((commit) => ({
         sha: commit.sha,
-        message: commit.commit.message.split('\n')[0] ?? commit.commit.message,
+        message: getFirstLine(commit.commit.message),
       }))
   } catch {
     return []
   }
 }
 
-const buildActivityItems = async (events: GitHubEvent[]) => {
-  const items: ActivityEventItem[] = []
+const getCachedActivityItems = unstable_cache(
+  async (): Promise<ActivityEventItem[]> => {
+    const activity = await octokit.rest.activity.listPublicEventsForUser({
+      username: owner,
+      per_page: limit,
+    })
 
-  for (const event of events) {
-    if (items.length >= activityLimit) {
-      break
-    }
+    const events = activity.data.slice(0, limit)
+    const items = await Promise.all(
+      events.map(async (event) => ({
+        event,
+        commits:
+          event.type === 'PushEvent'
+            ? await getPushEventCommits(event)
+            : undefined,
+      }))
+    )
 
-    if (event.type === 'PushEvent') {
-      const commits = await getPushEventCommits(event)
-      items.push({ event, commits })
-      continue
-    }
-
-    items.push({ event })
-  }
-
-  return items
-}
+    return items
+  },
+  ['github-activity', owner],
+  { revalidate: 5 * 60 }
+)
 
 export default async function Feed(): Promise<React.ReactElement | null> {
   try {
-    const activity = await octokit.rest.activity.listPublicEventsForUser({
-      username: owner,
-      per_page: fetchLimit,
-    })
-    const items = await buildActivityItems(activity.data)
+    const items = await getCachedActivityItems()
 
     if (items.length === 0) {
       return null
