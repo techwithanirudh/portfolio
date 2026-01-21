@@ -1,5 +1,5 @@
 export const owner = 'techwithanirudh'
 export const repo = 'minimalistic-portfolio'
 export const activity = {
-  limit: 25,
+  limit: 15,
 } as const

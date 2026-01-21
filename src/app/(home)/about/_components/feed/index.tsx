@@ -132,7 +132,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
                   />
                 </ViewAnimation>
               ))}
-              <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-backdrop' />
+              <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
             </div>
           </div>
         </div>
