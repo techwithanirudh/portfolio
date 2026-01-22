@@ -6,6 +6,25 @@ interface GenerateProps {
   subtitle?: string
 }
 
+function CodeIcon({ ...props }): ReactElement {
+  return (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#a8a29e"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <polyline points="16 18 22 12 16 6" />
+      <polyline points="8 6 2 12 8 18" />
+    </svg>
+  )
+}
+
 export function getImageResponseOptions(): ImageResponseOptions {
   return {
     format: 'png',
@@ -14,108 +33,42 @@ export function getImageResponseOptions(): ImageResponseOptions {
   }
 }
 
-export function generate({
-  title = 'John Doe',
-  subtitle,
-}: GenerateProps): ReactElement {
-  const hasSubtitle = Boolean(subtitle)
+export function generate({ title = 'John Doe', subtitle }: GenerateProps): ReactElement {
+  const hasSubtitle = Boolean(subtitle && subtitle.length > 0);
 
   return (
     <div
-      style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#000000',
-        color: '#ffffff',
-        display: 'flex',
-        position: 'relative',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontFamily: 'Geist, ui-sans-serif, system-ui',
-      }}
+      style={{ fontFamily: 'Geist Sans' }}
+      tw='flex h-full w-full bg-black text-white'
     >
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 64,
-          width: 1,
-          borderLeft: '1px dashed #1c1917',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          right: 64,
-          width: 1,
-          borderLeft: '1px dashed #1c1917',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 64,
-          left: 0,
-          right: 0,
-          height: 1,
-          backgroundColor: '#1c1917',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          bottom: 64,
-          left: 0,
-          right: 0,
-          height: 1,
-          backgroundColor: '#1c1917',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 64,
-          right: 64,
-          bottom: 64,
-          left: 64,
-          width: 896,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <div tw='flex border absolute border-stone-900 border-dashed inset-y-0 left-16 w-[1px]' />
+      <div tw='flex border absolute border-stone-900 border-dashed inset-y-0 right-16 w-[1px]' />
+      <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] top-16' />
+      <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] bottom-16' />
+      <CodeIcon tw="absolute top-23 right-25" />
+      <div tw="flex flex-col absolute w-[896px] justify-end inset-26 items-start">
         <div
+          tw="tracking-tight flex flex-col justify-center leading-[1.1]"
           style={{
-            textWrap: 'balance',
+            textWrap: "balance",
             fontWeight: 600,
-            fontSize: title.length > 20 ? 64 : 80,
-            letterSpacing: '-0.04em',
-            lineHeight: 1.1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            gap: hasSubtitle ? 24 : 0,
+            fontSize: title && title.length > 20 ? 64 : 80,
+            letterSpacing: "-0.04em",
           }}
         >
-          <span>{title}</span>
-          {hasSubtitle ? (
-            <span
-              style={{
-                fontSize: 32,
-                fontWeight: 400,
-                letterSpacing: '-0.02em',
-                color: '#d4d4d8',
-                maxWidth: 760,
-              }}
-            >
-              {subtitle}
-            </span>
-          ) : null}
+          {title}
         </div>
+        {hasSubtitle && (
+          <div
+            tw="text-[40px] leading-[1.5] text-stone-400 truncate mt-4"
+            style={{
+              fontWeight: 500,
+              textWrap: "balance",
+            }}
+          >
+            {subtitle}
+          </div>
+        )}
       </div>
     </div>
   )
