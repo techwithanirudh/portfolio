@@ -6,10 +6,5 @@ interface HeroProps {
 }
 
 export default function Hero({ title, description }: HeroProps) {
-  return (
-    <HeroSection
-      description={description}
-      title={title}
-    />
-  )
+  return <HeroSection description={description} title={title} />
 }

@@ -20,7 +20,7 @@ export function generateMetadata(): Metadata {
 export default function UsesPage() {
   return (
     <Wrapper>
-      <Hero title={title} description={description} />
+      <Hero description={description} title={title} />
       <Apps />
     </Wrapper>
   )

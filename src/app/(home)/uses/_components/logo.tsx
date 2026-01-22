@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import type { Logo } from '@/types'
+import type { Logo as LogoType } from '@/types'
 
 interface LogoProps {
   alt: string
-  logo?: Logo
+  logo?: LogoType
   size?: number
   className?: string
 }

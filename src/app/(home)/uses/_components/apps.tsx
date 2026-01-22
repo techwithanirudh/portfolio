@@ -45,7 +45,7 @@ export default function Apps() {
                     >
                       <a
                         className={cn(
-                          'flex items-start gap-4 p-6 transition-colors hover:bg-secondary/50 group/app',
+                          'group/app flex items-start gap-4 p-6 transition-colors hover:bg-secondary/50',
                           'sm:p-8'
                         )}
                         href={app.url}
@@ -54,7 +54,7 @@ export default function Apps() {
                       >
                         <Logo
                           alt={app.name}
-                          className='rounded-md ring-1 ring-foreground/5  transition-transform group-hover/app:-rotate-12 group-hover/app:scale-115'
+                          className='rounded-md ring-1 ring-foreground/5 transition-transform group-hover/app:-rotate-12 group-hover/app:scale-115'
                           logo={app.logo}
                           size={40}
                         />

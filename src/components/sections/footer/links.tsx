@@ -3,10 +3,9 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/active-link'
 import { ViewAnimation } from '@/components/view-animation'
-import { linkItems } from '@/constants/navigation'
 import { postsPerPage, worksPerPage } from '@/constants/config'
+import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
-import { socials } from '@/constants/navigation'
 import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
 
 interface ListItem {
