@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 const ISSUE_URL = `https://github.com/${owner}/${repo}/issues/new`
 
 const ErrorPage = ({ error }: { error: Error }) => {
+  // biome-ignore lint/performance/useTopLevelRegex: small stack parsing on render
   const errorStack = error.stack?.split(/\r?\n/).slice(1) ?? []
 
   return (
@@ -50,6 +51,7 @@ const ErrorPage = ({ error }: { error: Error }) => {
                   {error.name || 'Error'}: {error.message || 'Unknown error'}
                 </span>
                 {errorStack.map((line, index) => (
+                  // biome-ignore lint/suspicious/noArrayIndexKey: stack order is stable
                   <span className='pl-3' key={`${line}-${index}`}>
                     {line}
                   </span>
