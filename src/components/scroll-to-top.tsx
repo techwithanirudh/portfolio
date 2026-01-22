@@ -1,7 +1,12 @@
 'use client'
 
 import { ArrowUp } from 'lucide-react'
-import { AnimatePresence, motion, useScroll, useMotionValueEvent } from 'motion/react'
+import {
+  AnimatePresence,
+  motion,
+  useMotionValueEvent,
+  useScroll,
+} from 'motion/react'
 import { useState } from 'react'
 
 export function ScrollToTop() {
@@ -21,18 +26,18 @@ export function ScrollToTop() {
       {show && (
         <motion.div
           animate={{ opacity: 1, y: 0 }}
-          className="fixed bottom-6 right-6 z-50"
+          className='fixed right-6 bottom-6 z-50'
           exit={{ opacity: 0, y: 16 }}
           initial={{ opacity: 0, y: 16 }}
           transition={{ duration: 0.2 }}
         >
           <button
-            aria-label="Scroll to top"
-            className="inline-flex items-center justify-center rounded-full border bg-background/80 p-2 text-muted-foreground backdrop-blur-sm transition-colors hover:text-foreground"
+            aria-label='Scroll to top'
+            className='inline-flex items-center justify-center rounded-full border bg-background/80 p-2 text-muted-foreground backdrop-blur-sm transition-colors hover:text-foreground'
             onClick={scrollToTop}
-            type="button"
+            type='button'
           >
-            <ArrowUp className="size-5" />
+            <ArrowUp className='size-5' />
           </button>
         </motion.div>
       )}

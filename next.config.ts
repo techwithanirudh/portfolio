@@ -24,6 +24,7 @@ async function createNextConfig(): Promise<NextConfig> {
       viewTransition: true,
     },
     images: {
+      dangerouslyAllowSVG: true,
       qualities: [100, 75, 85, 95],
       remotePatterns: [
         {
@@ -46,6 +47,11 @@ async function createNextConfig(): Promise<NextConfig> {
         {
           protocol: 'https',
           hostname: 'fumadocs.dev',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'svgl.app',
           port: '',
         },
       ],

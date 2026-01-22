@@ -7,11 +7,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
-import { Toaster } from '@/components/ui/sonner'
 import Analytics from '@/components/analytics'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/sonner'
 import { authClient } from '@/lib/auth-client'
 
 export function Provider({
