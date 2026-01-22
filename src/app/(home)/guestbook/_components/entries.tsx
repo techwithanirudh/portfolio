@@ -18,7 +18,7 @@ export const GuestbookEntries = ({
 }: GuestbookEntriesProps) => {
   if (entries.length === 0) {
     return (
-      <div className='max-h-[32rem] w-full overflow-y-auto'>
+      <div className='max-h-[32rem] w-full overflow-y-auto' data-lenis-prevent>
         <div className='flex flex-col items-center gap-2 px-6 py-10 text-center'>
           <Icons.mail className='size-6 text-muted-foreground' />
           <p className='text-muted-foreground text-sm'>No messages yet.</p>
@@ -28,7 +28,7 @@ export const GuestbookEntries = ({
   }
 
   return (
-    <div className='max-h-[32rem] w-full overflow-y-auto'>
+    <div className='max-h-[32rem] w-full overflow-y-auto' data-lenis-prevent>
       <div className='divide-y divide-dashed divide-border'>
         {entries.map((entry, index) => (
           <ViewAnimation

@@ -30,7 +30,8 @@ export function Lenis({ root, options }: LenisProps) {
         anchors: true,
         prevent: (node: Element | null) =>
           node?.nodeName === 'VERCEL-LIVE-FEEDBACK' ||
-          node?.id === 'theatrejs-studio-root',
+          node?.id === 'theatrejs-studio-root' ||
+          Boolean(node?.closest?.('[data-lenis-prevent]')),
       }}
       ref={lenisRef}
       root={root}
