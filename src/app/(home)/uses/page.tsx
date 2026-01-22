@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
 import Hero from './_components/hero'
-import UsesGrid from './_components/uses-grid'
+import { UsesContent } from './_components/uses-content'
 
 const title = 'Uses'
 const description =
-  'The software, services, and gadgets that keep my daily workflow smooth and focused.'
+  'The hardware, software, and tools that power my daily workflow.'
 
 export function generateMetadata(): Metadata {
   return createMetadata({
@@ -21,7 +21,7 @@ export default function UsesPage() {
   return (
     <Wrapper>
       <Hero description={description} title={title} />
-      <UsesGrid />
+      <UsesContent />
     </Wrapper>
   )
 }
