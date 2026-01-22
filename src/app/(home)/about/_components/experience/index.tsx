@@ -20,7 +20,12 @@ export default function Experience(): React.ReactElement {
               <p className='text-muted-foreground text-sm'>
                 A quick timeline of the roles shaping my work.
               </p>
-              <Button asChild className='mt-4 w-fit' size='sm' variant='outline'>
+              <Button
+                asChild
+                className='mt-4 w-fit'
+                size='sm'
+                variant='outline'
+              >
                 <a href='/resume.pdf' rel='noopener' target='_blank'>
                   Resume
                 </a>

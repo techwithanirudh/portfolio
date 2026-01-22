@@ -88,7 +88,7 @@ const Skills = () => (
           <div className='flex flex-wrap gap-2'>
             {skillTags.map(({ label, Icon }) => (
               <Badge
-                className='gap-2 rounded-md transition-transform hover:-rotate-4 hover:scale-105 px-3 py-1 text-xs sm:text-sm'
+                className='gap-2 rounded-md px-3 py-1 text-xs transition-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
                 key={label}
                 variant='outline'
               >

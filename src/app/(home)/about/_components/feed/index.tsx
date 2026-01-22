@@ -1,38 +1,96 @@
-import { GitCommitIcon } from '@primer/octicons-react'
+import { unstable_cache } from 'next/cache'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
-import { owner } from '@/constants/github'
+import { activity, owner } from '@/constants/github'
 import { octokit } from '@/lib/github'
 import { cn } from '@/lib/utils'
+import {
+  type GitHubEvent,
+  GitHubEvent as GitHubEventComponent,
+  type PushCommit,
+} from './event'
 
-const formatCommitMessage = (message: string) => {
-  const [firstLine] = message.split('\n')
-  return firstLine || message
+const { limit } = activity
+
+interface PushEventPayload {
+  before?: string
+  head?: string
 }
 
-const EventDate = ({ date }: { date: string | null }) => {
-  if (!date) {
-    return <div className='shrink-0 text-muted-foreground'>Recently</div>
+interface ActivityEventItem {
+  event: GitHubEvent
+  commits?: PushCommit[]
+}
+
+const getFirstLine = (message: string) => {
+  const [firstLine] = message.split('\n')
+  return firstLine ?? message
+}
+
+const getPushEventCommits = async (
+  event: GitHubEvent
+): Promise<PushCommit[]> => {
+  const payload = event.payload as PushEventPayload
+  const repoName = event.repo?.name
+
+  if (!(repoName && payload.before && payload.head)) {
+    return []
   }
 
-  return (
-    <div className='shrink-0 text-muted-foreground'>
-      {new Date(date).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      })}
-    </div>
-  )
+  const [repoOwner, repo] = repoName.split('/')
+  if (!(repoOwner && repo)) {
+    return []
+  }
+
+  try {
+    const comparison = await octokit.rest.repos.compareCommits({
+      owner: repoOwner,
+      repo,
+      base: payload.before,
+      head: payload.head,
+    })
+
+    return comparison.data.commits.slice(0, 3).map((commit) => ({
+      sha: commit.sha,
+      message: getFirstLine(commit.commit.message),
+    }))
+  } catch {
+    return []
+  }
 }
+
+const getCachedActivityItems = unstable_cache(
+  async (): Promise<ActivityEventItem[]> => {
+    const activity = await octokit.rest.activity.listPublicEventsForUser({
+      username: owner,
+      per_page: limit,
+    })
+
+    const events = activity.data.slice(0, limit)
+    const items = await Promise.all(
+      events.map(async (event) => ({
+        event,
+        commits:
+          event.type === 'PushEvent'
+            ? await getPushEventCommits(event)
+            : undefined,
+      }))
+    )
+
+    return items
+  },
+  ['github-activity', owner],
+  { revalidate: 5 * 60 }
+)
 
 export default async function Feed(): Promise<React.ReactElement | null> {
   try {
-    const commits = await octokit.rest.repos.listCommits({
-      owner,
-      repo: 'portfolio',
-      per_page: 15,
-    })
+    const items = await getCachedActivityItems()
+
+    if (items.length === 0) {
+      return null
+    }
+
     return (
       <Section>
         <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
@@ -45,9 +103,9 @@ export default async function Feed(): Promise<React.ReactElement | null> {
               whileInView={{ opacity: 1, translateY: 0 }}
             >
               <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
-                <h2 className='font-semibold text-2xl'>Recently Touched</h2>
+                <h2 className='font-semibold text-2xl'>Live Activity</h2>
                 <p className='text-muted-foreground text-sm'>
-                  My latest repository commits and updates.
+                  Fresh events from across my GitHub.
                 </p>
               </div>
             </ViewAnimation>
@@ -59,23 +117,20 @@ export default async function Feed(): Promise<React.ReactElement | null> {
                 'sm:px-8 sm:text-sm'
               )}
             >
-              {commits.data.map((commit, index) => (
+              {items.map((item, index) => (
                 <ViewAnimation
                   delay={0.05 * index}
                   initial={{ opacity: 0, translateY: -8 }}
-                  key={commit.sha}
+                  key={item.event.id}
                   whileInView={{ opacity: 1, translateY: 0 }}
                 >
-                  <div className='flex items-center gap-4'>
-                    <GitCommitIcon className='size-4 shrink-0 text-muted-foreground transition-transform hover:-rotate-12 hover:scale-125' />
-                    <div className='flex-1 truncate'>
-                      {formatCommitMessage(commit.commit.message)}
-                    </div>
-                    <EventDate date={commit.commit.author?.date ?? null} />
-                  </div>
+                  <GitHubEventComponent
+                    commits={item.commits}
+                    event={item.event}
+                  />
                 </ViewAnimation>
               ))}
-              <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-backdrop' />
+              <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
             </div>
           </div>
         </div>
