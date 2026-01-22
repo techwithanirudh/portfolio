@@ -1,21 +1,5 @@
 import Image from 'next/image'
 
-const coding = {
-  editor: {
-    name: 'Visual Studio Code',
-    url: 'https://code.visualstudio.com',
-  },
-  theme: {
-    name: 'GitHub Dark',
-    url: 'https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme',
-  },
-  font: {
-    name: 'JetBrains Mono',
-    url: 'https://www.jetbrains.com/lp/mono/',
-  },
-  screenshot: '/images/uses/vscode-setup.png',
-} as const
-
 export function Coding() {
   return (
     <div>
@@ -24,29 +8,29 @@ export function Coding() {
           I use{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href={coding.editor.url}
+            href='https://code.visualstudio.com'
             rel='noopener noreferrer'
             target='_blank'
           >
-            {coding.editor.name}
+            Visual Studio Code
           </a>{' '}
           as my primary editor, along with the{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href={coding.theme.url}
+            href='https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme'
             rel='noopener noreferrer'
             target='_blank'
           >
-            {coding.theme.name}
+            GitHub Dark
           </a>{' '}
           theme and the{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href={coding.font.url}
+            href='https://www.jetbrains.com/lp/mono/'
             rel='noopener noreferrer'
             target='_blank'
           >
-            {coding.font.name}
+            JetBrains Mono
           </a>{' '}
           font with ligatures enabled.
         </p>
@@ -58,7 +42,7 @@ export function Coding() {
             alt='My VS Code setup'
             className='w-full'
             height={720}
-            src={coding.screenshot}
+            src='/images/uses/vscode-setup.png'
             width={1280}
           />
         </div>

@@ -7,7 +7,7 @@ import { Wrapper } from '@/components/wrapper'
 import { hardware, software } from '@/constants/portfolio/uses'
 import { createMetadata } from '@/lib/metadata'
 import { Coding } from './_components/coding'
-import { DeskSetup } from './_components/desk-setup'
+import { Setup } from './_components/setup'
 import { HardwareGrid } from './_components/hardware'
 import Hero from './_components/hero'
 import { SoftwareGrid } from './_components/software'
@@ -28,7 +28,7 @@ export function generateMetadata(): Metadata {
 export default function UsesPage() {
   const sections: Array<{ title?: string | null; content: ReactNode }> = [
     {
-      content: <DeskSetup />,
+      content: <Setup />,
     },
     {
       title: 'Hardware',
