@@ -10,7 +10,22 @@ export interface UseItem {
   featured?: boolean
 }
 
-export interface UseCategory {
+export interface HardwareItem {
+  name: string
+  description: string
+  url?: string
+}
+
+export interface ApplicationCategory {
   category: string
+  type: 'applications'
   items: UseItem[]
 }
+
+export interface HardwareCategory {
+  category: string
+  type: 'hardware'
+  items: HardwareItem[]
+}
+
+export type UseCategory = ApplicationCategory | HardwareCategory

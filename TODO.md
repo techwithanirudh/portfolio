@@ -1,4 +1,3 @@
-- Add Spotify Now Listening
 - Add AI Chat
 - Add Uses Page
   Take inspiration from https://jahir.dev/uses (these apps are really cool)

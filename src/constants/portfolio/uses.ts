@@ -2,8 +2,10 @@ import type { UseCategory } from '@/types'
 
 export const uses: UseCategory[] = [
   {
-    category: 'Development',
+    category: 'Applications',
+    type: 'applications',
     items: [
+      // Development
       {
         name: 'VS Code',
         description: 'My primary code editor with vim keybindings.',
@@ -34,11 +36,7 @@ export const uses: UseCategory[] = [
         url: 'https://vercel.com',
         featured: true,
       },
-    ],
-  },
-  {
-    category: 'Design',
-    items: [
+      // Design
       {
         name: 'Figma',
         description: 'Design tool for creating interfaces and prototypes.',
@@ -51,11 +49,7 @@ export const uses: UseCategory[] = [
         description: 'Virtual whiteboard for sketching diagrams.',
         url: 'https://excalidraw.com',
       },
-    ],
-  },
-  {
-    category: 'Productivity',
-    items: [
+      // Productivity
       {
         name: 'Notion',
         description: 'All-in-one workspace for notes and docs.',
@@ -82,11 +76,7 @@ export const uses: UseCategory[] = [
         logo: { type: 'svgl', id: 'arc_browser' },
         url: 'https://arc.net',
       },
-    ],
-  },
-  {
-    category: 'AI & Research',
-    items: [
+      // AI & Research
       {
         name: 'Claude',
         description: 'AI assistant for coding and research.',
@@ -106,11 +96,7 @@ export const uses: UseCategory[] = [
         logo: { type: 'svgl', id: 'perplexity' },
         url: 'https://perplexity.ai',
       },
-    ],
-  },
-  {
-    category: 'Communication',
-    items: [
+      // Communication
       {
         name: 'Discord',
         description: 'Community chat and voice communication.',
@@ -122,6 +108,76 @@ export const uses: UseCategory[] = [
         description: 'Team communication and collaboration.',
         logo: { type: 'svgl', id: 'slack' },
         url: 'https://slack.com',
+      },
+    ],
+  },
+  {
+    category: 'Peripherals',
+    type: 'hardware',
+    items: [
+      {
+        name: 'Keychron K3 Pro',
+        description:
+          'Wireless custom mechanical keyboard with low-profile switches and excellent build quality.',
+        url: 'https://www.keychron.com/products/keychron-k3-pro-qmk-via-wireless-custom-mechanical-keyboard',
+      },
+      {
+        name: 'Logitech MX Master 3S',
+        description:
+          'Wireless mouse with ergonomic design and customizable buttons for productivity.',
+        url: 'https://www.logitech.com/products/mice/mx-master-3s.html',
+      },
+      {
+        name: 'Sony WH-1000XM5',
+        description:
+          'Premium wireless headphones with industry-leading noise cancellation.',
+        url: 'https://www.sony.com/electronics/headband-headphones/wh-1000xm5',
+      },
+    ],
+  },
+  {
+    category: 'Desk Setup',
+    type: 'hardware',
+    items: [
+      {
+        name: 'LG 27" 4K Monitor',
+        description:
+          'Crisp 4K display with excellent color accuracy for design and development work.',
+        url: 'https://www.lg.com/monitors',
+      },
+      {
+        name: 'Monitor Arm',
+        description:
+          'Adjustable monitor mount for ergonomic positioning and desk space optimization.',
+      },
+      {
+        name: 'Standing Desk',
+        description:
+          'Electric sit-stand desk for healthier work posture throughout the day.',
+      },
+    ],
+  },
+  {
+    category: 'Mobile Devices',
+    type: 'hardware',
+    items: [
+      {
+        name: 'iPhone 15 Pro',
+        description:
+          'Daily driver phone with excellent camera and seamless ecosystem integration.',
+        url: 'https://www.apple.com/iphone-15-pro',
+      },
+      {
+        name: 'AirPods Pro',
+        description:
+          'Wireless earbuds with active noise cancellation and spatial audio.',
+        url: 'https://www.apple.com/airpods-pro',
+      },
+      {
+        name: 'iPad Pro',
+        description:
+          'Tablet for sketching, reading, and portable productivity on the go.',
+        url: 'https://www.apple.com/ipad-pro',
       },
     ],
   },
