@@ -24,7 +24,7 @@ export function UsesContent() {
 
   return (
     <>
-      <Section className='p-6'>
+      <Section>
         <ViewAnimation
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}

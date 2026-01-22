@@ -13,7 +13,7 @@ interface UsesTabsProps {
 export function UsesTabs({ tabs, activeTab, onTabChange }: UsesTabsProps) {
   return (
     <div
-      className='flex gap-1 overflow-x-auto border-border border-b border-dashed'
+      className='flex gap-1 overflow-x-auto border-border border-dashed'
       role='tablist'
     >
       {tabs.map((tab) => {
