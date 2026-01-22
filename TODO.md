@@ -20,11 +20,9 @@ https://jahir.dev/
 - Add Posthog & c15t cookie banner
 - Add inline search for blog & work
 - Add keyboard shortcuts
-- Scroll To Top
 - https://www.braydoncoyer.dev/
 https://jahir.dev/blog/people-websites-that-inspire
 https://web.archive.org/web/20250317142212mp_/https://jahir.dev/uses
 https://x.com/adrianoreis/status/1700251769836892297
 - Simplify footer like brandoncoyr
-- Guestbook items aren't scrollable
 - Janky View Transitions
