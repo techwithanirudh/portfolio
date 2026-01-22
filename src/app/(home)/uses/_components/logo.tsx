@@ -1,80 +1,86 @@
-'use client'
-
 import Image from 'next/image'
-import { useTheme } from 'next-themes'
-import type { UseLogo } from '@/constants/uses'
 import { cn } from '@/lib/utils'
+import type { Logo } from '@/types/uses'
 
 interface LogoProps {
   alt: string
-  logo?: UseLogo
+  logo?: Logo
   size?: number
   className?: string
 }
 
-const buildLogoUrl = (logoId: string) =>
-  `https://svgl.app/library/${logoId}.svg`
+export function Logo({ alt, logo, size = 44, className }: LogoProps) {
+  const imgSize = size - 14
+  const wrapper = cn('flex items-center justify-center bg-muted', className)
 
-const getRouteForTheme = (
-  logoId: string | { light: string; dark: string },
-  theme: string
-) => {
-  if (typeof logoId === 'string') {
-    return buildLogoUrl(logoId)
-  }
-
-  if (theme === 'dark') {
-    return buildLogoUrl(logoId.light ?? logoId.dark)
-  }
-
-  return buildLogoUrl(logoId.dark ?? logoId.light)
-}
-
-const getFallbackLabel = (alt: string) =>
-  alt
-    .split(' ')
-    .filter(Boolean)
-    .map((word) => word[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase()
-
-export const Logo = ({ alt, logo, size = 44, className }: LogoProps) => {
-  const { resolvedTheme } = useTheme()
-  const theme = resolvedTheme ?? 'light'
-  let src: string | null = null
-
-  if (logo?.type === 'custom') {
-    src = logo.url
-  } else if (logo?.type === 'svgl') {
-    src = getRouteForTheme(logo.id, theme)
-  }
-
-  if (!src) {
+  if (!logo) {
+    const initials = alt
+      .split(' ')
+      .map((w) => w[0])
+      .join('')
+      .slice(0, 2)
+      .toUpperCase()
     return (
       <div
         aria-label={alt}
         className={cn(
-          'flex items-center justify-center bg-muted p-1 font-semibold text-[11px] text-muted-foreground',
-          className
+          wrapper,
+          'p-1 font-semibold text-[11px] text-muted-foreground'
         )}
         role='img'
         style={{ height: size, width: size }}
       >
-        {getFallbackLabel(alt)}
+        {initials}
+      </div>
+    )
+  }
+
+  if (logo.type === 'custom') {
+    return (
+      <div className={wrapper} style={{ height: size, width: size }}>
+        <Image
+          alt={alt}
+          className='rounded'
+          height={imgSize}
+          src={logo.url}
+          width={imgSize}
+        />
+      </div>
+    )
+  }
+
+  const src = (id: string) => `https://svgl.app/library/${id}.svg`
+
+  if (typeof logo.id === 'string') {
+    return (
+      <div className={wrapper} style={{ height: size, width: size }}>
+        <Image
+          alt={alt}
+          className='rounded'
+          height={imgSize}
+          src={src(logo.id)}
+          width={imgSize}
+        />
       </div>
     )
   }
 
   return (
-    <div
-      className={cn(
-        'flex items-center justify-center bg-muted',
-        className
-      )}
-      style={{ height: size, width: size }}
-    >
-      <Image alt={alt} height={size - 14} src={src} width={size - 14} className='rounded' />
+    <div className={wrapper} style={{ height: size, width: size }}>
+      <Image
+        alt={alt}
+        className='rounded dark:hidden'
+        height={imgSize}
+        src={src(logo.id.dark)}
+        width={imgSize}
+      />
+      <Image
+        alt={alt}
+        className='hidden rounded dark:block'
+        height={imgSize}
+        src={src(logo.id.light)}
+        width={imgSize}
+      />
     </div>
   )
 }

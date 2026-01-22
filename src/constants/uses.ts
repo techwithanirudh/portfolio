@@ -1,19 +1,4 @@
-export type UseLogo =
-  | { type: 'svgl'; id: string | { light: string; dark: string } }
-  | { type: 'custom'; url: string }
-
-export interface UseItem {
-  name: string
-  description: string
-  url: string
-  logo?: UseLogo
-  featured?: boolean
-}
-
-export interface UseCategory {
-  category: string
-  items: UseItem[]
-}
+import type { UseCategory } from '@/types/uses'
 
 export const uses: UseCategory[] = [
   {

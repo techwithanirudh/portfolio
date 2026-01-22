@@ -27,7 +27,7 @@ export default function Apps() {
             </div>
             <div className='grid sm:col-span-2 sm:grid-cols-2'>
               {group.items
-                .sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+                .toSorted((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
                 .map((app, index) => (
                   <div
                     className={cn(

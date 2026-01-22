@@ -25,7 +25,8 @@ https://web.archive.org/web/20250317142212mp_/https://jahir.dev/uses
 https://x.com/adrianoreis/status/1700251769836892297
 - Simplify footer like brandoncoyr
 - Janky View Transitions
-
+- C15T Consent Manager
+- TOS and Privacy Policy
 https://web.archive.org/web/20250114133857/https://www.haydenbleasel.com/stack (Use Logo.dev for logos)
 https://www.braydoncoyer.dev/toolbox
 https://jahirfiquitiva-os-website.vercel.app/uses
