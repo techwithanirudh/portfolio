@@ -40,9 +40,9 @@ export function Coding() {
         <div className='border-border border-b border-dashed'>
           <Image
             alt='My VS Code setup'
-            className='w-full'
+            className='w-full object-cover h-full'
             height={720}
-            src='/images/uses/vscode-setup.png'
+            src='/images/uses/vscode-light.png'
             width={1280}
           />
         </div>
