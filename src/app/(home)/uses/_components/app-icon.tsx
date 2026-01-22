@@ -7,27 +7,27 @@ type AppIconProps = UseItem
 export function AppIcon({ name, url, logo, featured }: AppIconProps) {
   return (
     <a
-      className='group inline-block text-center no-underline transition-all duration-500'
+      className='group flex flex-col items-center gap-3 p-6 text-center no-underline transition-colors hover:bg-card/50'
       href={url}
       rel='noopener noreferrer'
       target='_blank'
     >
-      <div className='relative h-28 w-28 rounded-[20px] border border-border bg-background p-2 transition-all duration-300 group-hover:-translate-y-3 group-hover:border-primary/40'>
+      <div className='relative group-hover:-translate-y-1 group-hover:scale-105 transition-transform duration-300'>
         <div
-          className='grid h-full place-items-center rounded-xl border-2 border-foreground/5 bg-muted'
+          className='grid size-20 place-items-center rounded-xl border-2 border-foreground/5 bg-muted'
           style={{
             boxShadow: '0px 2px 1.5px 0px rgba(165,174,184,0.32) inset',
           }}
         >
-          <Logo alt={name} className='bg-transparent' logo={logo} size={40} />
+          <Logo alt={name} className='bg-transparent' logo={logo} size={36} />
         </div>
         {featured && (
           <div className='absolute -top-1 -right-1 rounded-full bg-primary p-1'>
-            <BadgeCheckIcon className='h-3.5 w-3.5 text-primary-foreground' />
+            <BadgeCheckIcon className='size-3 text-primary-foreground' />
           </div>
         )}
       </div>
-      <p className='mt-3 text-muted-foreground text-sm'>{name}</p>
+      <span className='text-muted-foreground text-sm'>{name}</span>
     </a>
   )
 }
