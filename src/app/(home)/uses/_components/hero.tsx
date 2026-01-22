@@ -8,9 +8,8 @@ interface HeroProps {
 export default function Hero({ title, description }: HeroProps) {
   return (
     <HeroSection
-      caption={title}
       description={description}
-      title="Everyday tools and services"
+      title={title}
     />
   )
 }
