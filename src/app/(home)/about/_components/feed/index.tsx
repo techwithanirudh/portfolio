@@ -10,7 +10,7 @@ import {
   type PushCommit,
 } from './event'
 
-const { limit } = activity;
+const { limit } = activity
 
 interface PushEventPayload {
   before?: string
@@ -50,12 +50,10 @@ const getPushEventCommits = async (
       head: payload.head,
     })
 
-    return comparison.data.commits
-      .slice(0, 3)
-      .map((commit) => ({
-        sha: commit.sha,
-        message: getFirstLine(commit.commit.message),
-      }))
+    return comparison.data.commits.slice(0, 3).map((commit) => ({
+      sha: commit.sha,
+      message: getFirstLine(commit.commit.message),
+    }))
   } catch {
     return []
   }

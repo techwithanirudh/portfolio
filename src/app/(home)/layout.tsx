@@ -21,7 +21,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
         ),
       }}
     >
-      <main className='relative flex flex-1 flex-col divide-y divide-dashed divide-border border-border border-dashed sm:border-b after:pointer-events-none after:select-none after:sticky after:bottom-0 after:z-10 after:h-24 after:mt-[-3rem] after:bg-gradient-to-t after:from-background after:to-transparent after:backdrop-blur-sm after:[mask:linear-gradient(to_top,_rgba(0,_0,_0,_1)_0%,_rgba(0,_0,_0,_0)_100%)]'>
+      <main className='relative flex flex-1 flex-col divide-y divide-dashed divide-border border-border border-dashed after:pointer-events-none after:sticky after:bottom-0 after:z-10 after:mt-[-3rem] after:h-24 after:select-none after:bg-gradient-to-t after:from-background after:to-transparent after:backdrop-blur-sm sm:border-b after:[mask:linear-gradient(to_top,_rgba(0,_0,_0,_1)_0%,_rgba(0,_0,_0,_0)_100%)]'>
         {children}
         <Footer />
       </main>

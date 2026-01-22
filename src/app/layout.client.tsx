@@ -13,10 +13,7 @@ export function Body({
 
   return (
     <body
-      className={cn(
-        mode,
-        'relative flex min-h-svh flex-col overflow-x-hidden'
-      )}
+      className={cn(mode, 'relative flex min-h-svh flex-col overflow-x-hidden')}
     >
       {children}
     </body>
