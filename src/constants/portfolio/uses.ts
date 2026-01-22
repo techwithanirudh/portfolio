@@ -1,4 +1,4 @@
-import type { UseCategory } from '@/types/uses'
+import type { UseCategory } from '@/types'
 
 export const uses: UseCategory[] = [
   {
@@ -126,9 +126,3 @@ export const uses: UseCategory[] = [
     ],
   },
 ]
-
-export const usesPageMeta = {
-  title: 'Uses',
-  description:
-    'The software, services, and gadgets that keep my daily workflow smooth and focused.',
-}

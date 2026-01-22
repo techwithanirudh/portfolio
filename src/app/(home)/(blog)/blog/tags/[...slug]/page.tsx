@@ -5,7 +5,7 @@ import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { Section } from '@/components/section'
-import { postsPerPage } from '@/constants/pagination'
+import { postsPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
 import { getPostsByTag, getTags } from '@/lib/source'
 

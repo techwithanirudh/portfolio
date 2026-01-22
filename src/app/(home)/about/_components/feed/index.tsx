@@ -1,7 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
-import { activity, owner } from '@/constants/github'
+import { activity, owner } from '@/constants/config'
 import { octokit } from '@/lib/github'
 import { cn } from '@/lib/utils'
 import {

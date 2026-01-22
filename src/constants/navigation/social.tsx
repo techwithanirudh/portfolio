@@ -1,12 +1,5 @@
-import type { JSX } from 'react'
 import { Icons } from '@/components/icons/icons'
-
-export interface Social {
-  icon: JSX.Element
-  name: string
-  url: string
-  description?: string
-}
+import type { Social } from '@/types'
 
 export const socials: Social[] = [
   {

@@ -3,7 +3,7 @@ import { experiences } from '@/constants/portfolio/experiences'
 import { skills } from '@/constants/portfolio/skills'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { description, owner, title } from '@/constants/site'
-import { socials } from '@/constants/social'
+import { socials } from '@/constants/navigation'
 
 export function getAboutText() {
   return `# About

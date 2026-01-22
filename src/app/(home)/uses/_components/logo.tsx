@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import type { Logo } from '@/types/uses'
+import type { Logo } from '@/types'
 
 interface LogoProps {
   alt: string

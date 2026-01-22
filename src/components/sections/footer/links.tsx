@@ -4,9 +4,9 @@ import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/active-link'
 import { ViewAnimation } from '@/components/view-animation'
 import { linkItems } from '@/constants/navigation'
-import { postsPerPage, worksPerPage } from '@/constants/pagination'
+import { postsPerPage, worksPerPage } from '@/constants/config'
 import { baseOptions } from '@/constants/site'
-import { socials } from '@/constants/social'
+import { socials } from '@/constants/navigation'
 import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
 
 interface ListItem {

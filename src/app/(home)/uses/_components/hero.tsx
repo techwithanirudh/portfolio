@@ -1,12 +1,16 @@
 import { HeroSection } from '@/components/sections/hero'
-import { usesPageMeta } from '@/constants/uses'
 
-export default function Hero() {
+interface HeroProps {
+  title: string
+  description: string
+}
+
+export default function Hero({ title, description }: HeroProps) {
   return (
     <HeroSection
-      caption={usesPageMeta.title}
-      description={usesPageMeta.description}
-      title='Everyday tools and services'
+      caption={title}
+      description={description}
+      title="Everyday tools and services"
     />
   )
 }

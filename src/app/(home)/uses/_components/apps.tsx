@@ -1,7 +1,7 @@
 import { BadgeCheckIcon } from 'lucide-react'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
-import { uses } from '@/constants/uses'
+import { uses } from '@/constants/portfolio'
 import { cn } from '@/lib/utils'
 import { Logo } from './logo'
 
