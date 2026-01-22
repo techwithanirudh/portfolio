@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { BlurImage } from '@/components/blur-image'
 
 export function Setup() {
   return (
@@ -10,11 +10,12 @@ export function Setup() {
       </div>
       <figure>
         <div className='overflow-hidden border-border border-b border-dashed'>
-          <Image
+          <BlurImage
             alt='My desk setup in 2025'
-            className='w-full object-cover h-full grayscale-75 transition-filter hover:grayscale-0 duration-300'
+            className='h-full w-full'
             height={720}
-            priority
+            imageClassName='h-full w-full object-cover grayscale-75 transition-filter duration-300 hover:grayscale-0'
+            lazy={false}
             src='/images/uses/setup.png'
             width={1280}
           />

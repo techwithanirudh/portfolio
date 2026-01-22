@@ -1,49 +1,32 @@
 import { BadgeCheckIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import type { SoftwareItem } from '@/types'
 import { Logo } from './logo'
 
-interface SoftwareCardProps extends SoftwareItem {
-  index: number
-}
-
-function SoftwareCard({
-  name,
-  description,
-  url,
-  logo,
-  featured,
-  index,
-}: SoftwareCardProps) {
+function AppIcon({ name, url, logo, featured }: SoftwareItem) {
   return (
-    <div
-      className={cn(
-        index > 0 && 'border-border border-t border-dashed',
-        index < 2 && 'sm:border-t-0',
-        index % 2 === 0 && 'sm:border-border sm:border-r sm:border-dashed'
-      )}
+    <a
+      className='group flex flex-col items-center gap-3 p-6 text-center no-underline transition-colors hover:bg-card/50'
+      href={url}
+      rel='noopener noreferrer'
+      target='_blank'
     >
-      <a
-        className='group/app flex items-start gap-4 p-6 transition-colors hover:bg-secondary/50 sm:p-8'
-        href={url}
-        rel='noopener noreferrer'
-        target='_blank'
-      >
-        <Logo
-          alt={name}
-          className='rounded-md ring-1 ring-foreground/5 transition-transform group-hover/app:-rotate-12 group-hover/app:scale-115'
-          logo={logo}
-          size={40}
-        />
-        <div className='flex-1'>
-          <div className='flex items-center gap-1.5'>
-            <h3 className='font-semibold tracking-tight'>{name}</h3>
-            {featured && <BadgeCheckIcon className='text-primary' size={16} />}
-          </div>
-          <p className='text-muted-foreground text-sm'>{description}</p>
+      <div className='relative transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105'>
+        <div
+          className='grid size-20 place-items-center rounded-xl border-2 border-foreground/5 bg-muted'
+          style={{
+            boxShadow: '0px 2px 1.5px 0px rgba(165,174,184,0.32) inset',
+          }}
+        >
+          <Logo alt={name} className='bg-transparent' logo={logo} size={36} />
         </div>
-      </a>
-    </div>
+        {featured && (
+          <div className='absolute -top-1 -right-1 rounded-full bg-primary p-1'>
+            <BadgeCheckIcon className='size-3 text-primary-foreground' />
+          </div>
+        )}
+      </div>
+      <span className='text-muted-foreground text-sm'>{name}</span>
+    </a>
   )
 }
 
@@ -57,13 +40,12 @@ export function SoftwareGrid({ items }: SoftwareGridProps) {
   )
 
   return (
-    <div className='grid sm:grid-cols-2'>
-      {sortedItems.map((item, index) => (
-        <SoftwareCard index={index} key={item.name} {...item} />
+    <div className='grid grid-cols-3 gap-px bg-border sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8'>
+      {sortedItems.map((item) => (
+        <div className='bg-card' key={item.name}>
+          <AppIcon {...item} />
+        </div>
       ))}
-      {sortedItems.length % 2 === 1 && (
-        <div className='hidden size-full min-h-[104px] border-border border-dashed bg-dashed sm:block sm:border-t-0' />
-      )}
     </div>
   )
 }

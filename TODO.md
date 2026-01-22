@@ -30,3 +30,4 @@ https://web.archive.org/web/20250114133857/https://www.haydenbleasel.com/stack (
 https://www.braydoncoyer.dev/toolbox
 https://jahirfiquitiva-os-website.vercel.app/uses
 https://nelsonlai.dev/uses
+- Put apps back into the grid

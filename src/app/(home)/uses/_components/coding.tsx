@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { BlurImage } from '@/components/blur-image'
 
 export function Coding() {
   return (
@@ -56,17 +56,19 @@ export function Coding() {
 
       <figure>
         <div className='border-border border-b border-dashed'>
-          <Image
+          <BlurImage
             alt='My VS Code setup'
-            className='h-full w-full object-cover dark:hidden'
+            className='h-full w-full dark:hidden'
             height={720}
+            imageClassName='h-full w-full object-cover'
             src='/images/uses/vscode-light.png'
             width={1280}
           />
-          <Image
+          <BlurImage
             alt='My VS Code setup'
-            className='hidden h-full w-full object-cover dark:block'
+            className='hidden h-full w-full dark:block'
             height={720}
+            imageClassName='h-full w-full object-cover'
             src='/images/uses/vscode-dark.png'
             width={1280}
           />
