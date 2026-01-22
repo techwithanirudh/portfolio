@@ -52,9 +52,9 @@ export const hardware: HardwareItem[] = [
     url: 'https://www.apple.com/apple-watch-series-9',
   },
   {
-    name: 'Raspberry Pi 5',
-    description: '16GB RAM with SSD HAT and metal enclosure',
-    url: 'https://www.raspberrypi.com/products/raspberry-pi-5',
+    name: 'IKEA MITTLED Lighting',
+    description: 'TRADFRI driver with RODRET button',
+    url: 'https://www.ikea.com',
   },
 ]
 
