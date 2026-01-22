@@ -1,6 +1,7 @@
-export type Logo =
-  | { type: 'svgl'; id: string | { light: string; dark: string } }
-  | { type: 'custom'; url: string }
+export type Logo = {
+  type: 'custom'
+  url: string | { light: string; dark: string }
+}
 
 // Software/App item with logo
 export interface SoftwareItem {

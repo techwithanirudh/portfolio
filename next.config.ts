@@ -49,11 +49,6 @@ async function createNextConfig(): Promise<NextConfig> {
           hostname: 'fumadocs.dev',
           port: '',
         },
-        {
-          protocol: 'https',
-          hostname: 'svgl.app',
-          port: '',
-        },
       ],
     },
     typescript: {
