@@ -10,7 +10,6 @@ interface LogoProps {
 }
 
 export function Logo({ alt, logo, size = 44, className }: LogoProps) {
-  const imgSize = size - 14
   const wrapper = cn('flex items-center justify-center bg-muted', className)
 
   if (!logo) {
@@ -41,9 +40,7 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
         <Image
           alt={alt}
           className='rounded'
-          height={imgSize}
           src={logo.url}
-          width={imgSize}
         />
       </div>
     )
@@ -57,9 +54,9 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
         <Image
           alt={alt}
           className='rounded'
-          height={imgSize}
+          height={size}
+          width={size}
           src={src(logo.id)}
-          width={imgSize}
         />
       </div>
     )
@@ -70,16 +67,16 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
       <Image
         alt={alt}
         className='rounded dark:hidden'
-        height={imgSize}
+        height={size}
         src={src(logo.id.dark)}
-        width={imgSize}
+        width={size}
       />
       <Image
         alt={alt}
         className='hidden rounded dark:block'
-        height={imgSize}
+        height={size}
         src={src(logo.id.light)}
-        width={imgSize}
+        width={size}
       />
     </div>
   )
