@@ -18,11 +18,3 @@ export interface HardwareItem {
   url?: string
   image?: string // Path to product image
 }
-
-// Tab categories
-export type UsesTabId = 'all' | 'hardware' | 'software' | 'coding'
-
-export interface UsesTab {
-  id: UsesTabId
-  title: string
-}

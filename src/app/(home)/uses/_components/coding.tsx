@@ -1,17 +1,22 @@
 import Image from 'next/image'
 
-interface CodingConfig {
-  editor: { name: string; url: string }
-  theme: { name: string; url: string }
-  font: { name: string; url: string }
-  screenshot: string
-}
+const coding = {
+  editor: {
+    name: 'Visual Studio Code',
+    url: 'https://code.visualstudio.com',
+  },
+  theme: {
+    name: 'GitHub Dark',
+    url: 'https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme',
+  },
+  font: {
+    name: 'JetBrains Mono',
+    url: 'https://www.jetbrains.com/lp/mono/',
+  },
+  screenshot: '/images/uses/vscode-setup.png',
+} as const
 
-interface CodingSectionProps {
-  config: CodingConfig
-}
-
-export function CodingSection({ config }: CodingSectionProps) {
+export function Coding() {
   return (
     <div>
       <div className='border-border border-b border-dashed p-6'>
@@ -19,29 +24,29 @@ export function CodingSection({ config }: CodingSectionProps) {
           I use{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href={config.editor.url}
+            href={coding.editor.url}
             rel='noopener noreferrer'
             target='_blank'
           >
-            {config.editor.name}
+            {coding.editor.name}
           </a>{' '}
           as my primary editor, along with the{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href={config.theme.url}
+            href={coding.theme.url}
             rel='noopener noreferrer'
             target='_blank'
           >
-            {config.theme.name}
+            {coding.theme.name}
           </a>{' '}
           theme and the{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href={config.font.url}
+            href={coding.font.url}
             rel='noopener noreferrer'
             target='_blank'
           >
-            {config.font.name}
+            {coding.font.name}
           </a>{' '}
           font with ligatures enabled.
         </p>
@@ -53,7 +58,7 @@ export function CodingSection({ config }: CodingSectionProps) {
             alt='My VS Code setup'
             className='w-full'
             height={720}
-            src={config.screenshot}
+            src={coding.screenshot}
             width={1280}
           />
         </div>

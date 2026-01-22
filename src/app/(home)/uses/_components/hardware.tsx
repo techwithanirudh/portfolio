@@ -38,8 +38,7 @@ function HardwareCard({ name, description, url, image }: HardwareCardProps) {
       <div className='min-w-0 flex-1'>
         <p
           className={cn(
-            'font-medium text-foreground',
-            url && 'hover:text-primary hover:underline'
+            'font-medium text-foreground'
           )}
         >
           {name}

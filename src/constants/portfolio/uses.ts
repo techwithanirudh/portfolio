@@ -1,11 +1,4 @@
-import type { HardwareItem, SoftwareItem, UsesTab } from '@/types'
-
-export const usesTabs: UsesTab[] = [
-  { id: 'all', title: 'All' },
-  { id: 'hardware', title: 'Hardware' },
-  { id: 'software', title: 'Software' },
-  { id: 'coding', title: 'Coding' },
-]
+import type { HardwareItem, SoftwareItem } from '@/types'
 
 export const hardware: HardwareItem[] = [
   {
@@ -139,19 +132,3 @@ export const software: SoftwareItem[] = [
     url: 'https://slack.com',
   },
 ]
-
-export const coding = {
-  editor: {
-    name: 'Visual Studio Code',
-    url: 'https://code.visualstudio.com',
-  },
-  theme: {
-    name: 'GitHub Dark',
-    url: 'https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme',
-  },
-  font: {
-    name: 'JetBrains Mono',
-    url: 'https://www.jetbrains.com/lp/mono/',
-  },
-  screenshot: '/images/uses/vscode-setup.png',
-}
