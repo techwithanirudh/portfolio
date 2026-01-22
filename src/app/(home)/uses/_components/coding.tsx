@@ -14,16 +14,25 @@ export function Coding() {
           >
             Visual Studio Code
           </a>{' '}
-          as my primary editor, along with the{' '}
+          as my primary editor with the{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href='https://marketplace.visualstudio.com/items?itemName=GitHub.github-vscode-theme'
+            href='https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme'
             rel='noopener noreferrer'
             target='_blank'
           >
-            GitHub Dark
+            Cursor theme
           </a>{' '}
-          theme and the{' '}
+          ,{' '}
+          <a
+            className='font-medium text-primary hover:underline'
+            href='https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style'
+            rel='noopener noreferrer'
+            target='_blank'
+          >
+            Custom UI Style
+          </a>{' '}
+          tweaks, and the{' '}
           <a
             className='font-medium text-primary hover:underline'
             href='https://www.jetbrains.com/lp/mono/'
@@ -32,7 +41,16 @@ export function Coding() {
           >
             JetBrains Mono
           </a>{' '}
-          font with ligatures enabled.
+          font with ligatures enabled. If you want the config, it lives{' '}
+          <a
+            className='font-medium text-primary hover:underline'
+            href='https://github.com/techwithanirudh/dotfiles/blob/main/vscode/settings.json'
+            rel='noopener noreferrer'
+            target='_blank'
+          >
+            here
+          </a>
+          .
         </p>
       </div>
 
@@ -40,14 +58,14 @@ export function Coding() {
         <div className='border-border border-b border-dashed'>
           <Image
             alt='My VS Code setup'
-            className='w-full object-cover h-full dark:hidden'
+            className='h-full w-full object-cover dark:hidden'
             height={720}
             src='/images/uses/vscode-light.png'
             width={1280}
           />
           <Image
             alt='My VS Code setup'
-            className='hidden w-full object-cover h-full dark:block'
+            className='hidden h-full w-full object-cover dark:block'
             height={720}
             src='/images/uses/vscode-dark.png'
             width={1280}
