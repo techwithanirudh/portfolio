@@ -6,7 +6,7 @@ set -euo pipefail
 if [[ -f ".env" ]]; then
   echo ".env already exists; skipping copy"
 else
-  cp .env.example .env
+  sudo cp .env.example .env
 fi
 
 # Install dependencies
