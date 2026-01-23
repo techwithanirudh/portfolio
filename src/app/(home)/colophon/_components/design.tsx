@@ -1,11 +1,5 @@
 import { cn } from '@/lib/utils'
 
-const intro = [
-  'A measured layout with generous spacing, sharp rules, and a quiet sense of depth.',
-  'Geist Sans handles headings and body copy, while Geist Mono keeps code and labels crisp.',
-  'Subtle glow and texture soften the edges without overpowering the neutral base.',
-]
-
 const palette = [
   { label: 'Background', className: 'bg-background' },
   { label: 'Card', className: 'bg-card' },
@@ -22,9 +16,11 @@ const palette = [
 export const Design = () => (
   <div className='flex flex-col divide-y divide-dashed divide-border text-left'>
     <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
-      {intro.map((line) => (
-        <p key={line}>{line}</p>
-      ))}
+      <p>
+        A measured layout with generous spacing, sharp rules, and a quiet sense
+        of depth. Geist Sans handles headings and body copy while Geist Mono
+        keeps code and labels crisp.
+      </p>
     </div>
     <div className='bg-card/50 p-6'>
       <div className='pb-3 font-medium text-foreground text-sm'>Palette</div>
