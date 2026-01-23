@@ -9,18 +9,18 @@ interface GenerateProps {
 function CodeIcon({ ...props }): ReactElement {
   return (
     <svg
-      width="48"
-      height="48"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#a8a29e"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      fill='none'
+      height='48'
+      stroke='#a8a29e'
+      strokeLinecap='round'
+      strokeLinejoin='round'
+      strokeWidth='2'
+      viewBox='0 0 24 24'
+      width='48'
       {...props}
     >
-      <polyline points="16 18 22 12 16 6" />
-      <polyline points="8 6 2 12 8 18" />
+      <polyline points='16 18 22 12 16 6' />
+      <polyline points='8 6 2 12 8 18' />
     </svg>
   )
 }
@@ -33,8 +33,11 @@ export function getImageResponseOptions(): ImageResponseOptions {
   }
 }
 
-export function generate({ title = 'John Doe', subtitle }: GenerateProps): ReactElement {
-  const hasSubtitle = Boolean(subtitle && subtitle.length > 0);
+export function generate({
+  title = 'John Doe',
+  subtitle,
+}: GenerateProps): ReactElement {
+  const hasSubtitle = Boolean(subtitle && subtitle.length > 0)
 
   return (
     <div
@@ -45,26 +48,26 @@ export function generate({ title = 'John Doe', subtitle }: GenerateProps): React
       <div tw='flex border absolute border-stone-900 border-dashed inset-y-0 right-16 w-[1px]' />
       <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] top-16' />
       <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] bottom-16' />
-      <CodeIcon tw="absolute top-23 right-25" />
-      <div tw="flex flex-col absolute w-[896px] justify-end inset-26 items-start">
+      <CodeIcon tw='absolute top-22 right-23' />
+      <div tw='flex flex-col absolute w-[896px] justify-end inset-24 items-start'>
         <div
-          tw="tracking-tight flex flex-col justify-center leading-[1.1]"
           style={{
-            textWrap: "balance",
+            textWrap: 'balance',
             fontWeight: 600,
             fontSize: title && title.length > 20 ? 64 : 80,
-            letterSpacing: "-0.04em",
+            letterSpacing: '-0.04em',
           }}
+          tw='tracking-tight flex flex-col justify-center leading-[1.1]'
         >
           {title}
         </div>
         {hasSubtitle && (
           <div
-            tw="text-[40px] leading-[1.5] text-stone-400 truncate mt-4"
             style={{
               fontWeight: 500,
-              textWrap: "balance",
+              textWrap: 'balance',
             }}
+            tw='text-[40px] leading-[1.5] text-stone-400 truncate mt-4'
           >
             {subtitle}
           </div>

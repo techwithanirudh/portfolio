@@ -25,6 +25,14 @@
 - No automated test runner is configured (no `test` script or test config files found).
 - Single-test command: not available until a test runner is added.
 
+## Philosophy
+
+This codebase will outlive you. Every shortcut becomes someone else's burden. Every hack compounds into technical debt that slows the whole team down.
+
+You are not just writing code. You are shaping the future of this project. The patterns you establish will be copied. The corners you cut will be cut again.
+
+Fight entropy. Leave the codebase better than you found it.
+
 ## Editor Rules
 - Cursor rules: none found in `.cursor/rules/` or `.cursorrules`.
 - Copilot rules: none found in `.github/copilot-instructions.md`.

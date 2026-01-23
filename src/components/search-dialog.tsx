@@ -22,7 +22,7 @@ import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
 import { buttonVariants } from '@/components/ui/button'
-import { tags } from '@/constants/search'
+import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
 const filterLabel = 'Filter'

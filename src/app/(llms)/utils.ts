@@ -1,9 +1,9 @@
 import { baseUrl } from '@/constants'
+import { socials } from '@/constants/navigation'
 import { experiences } from '@/constants/portfolio/experiences'
 import { skills } from '@/constants/portfolio/skills'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { description, owner, title } from '@/constants/site'
-import { socials } from '@/constants/social'
 
 export function getAboutText() {
   return `# About

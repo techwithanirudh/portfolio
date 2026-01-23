@@ -19,9 +19,30 @@ interface TimeStyles extends React.CSSProperties {
   '--time-seconds': number
 }
 
-const HAND_BASE_STYLES =
+const HAND_BASE_CLASSES =
   'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
-const HAND_TRANSFORM_ORIGIN = { transformOrigin: '0px 0px' }
+const HAND_ORIGIN = { transformOrigin: '0px 0px' }
+const FORMATTER = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'Asia/Kolkata',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: true,
+  timeZoneName: 'short',
+})
+
+const getParts = (date: Date) => {
+  const parts = FORMATTER.formatToParts(date)
+  const getPart = (type: string) =>
+    parts.find((part) => part.type === type)?.value ?? '0'
+
+  return {
+    hours: Number.parseInt(getPart('hour'), 10) % 12,
+    minutes: Number.parseInt(getPart('minute'), 10),
+    seconds: Number.parseInt(getPart('second'), 10),
+    timeString: FORMATTER.format(date),
+  }
+}
 
 export function Clock({ className }: ClockProps) {
   const [mounted, setMounted] = useState(false)
@@ -38,15 +59,7 @@ export function Clock({ className }: ClockProps) {
     }
   }, [])
 
-  const hours = time.getHours() % 12
-  const minutes = time.getMinutes()
-  const seconds = time.getSeconds()
-
-  const timeString = time.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  })
+  const { hours, minutes, seconds, timeString } = getParts(time)
 
   const timeStyles: TimeStyles = {
     '--time-hours': hours,
@@ -84,18 +97,18 @@ export function Clock({ className }: ClockProps) {
             <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
 
             <div
-              className={cn(HAND_BASE_STYLES, 'h-1/4 w-px')}
+              className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
               style={{
-                ...HAND_TRANSFORM_ORIGIN,
+                ...HAND_ORIGIN,
                 transform:
                   'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
               }}
             />
 
             <div
-              className={cn(HAND_BASE_STYLES, 'h-2/5 w-px')}
+              className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
               style={{
-                ...HAND_TRANSFORM_ORIGIN,
+                ...HAND_ORIGIN,
                 transform:
                   'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
               }}
@@ -103,11 +116,11 @@ export function Clock({ className }: ClockProps) {
 
             <div
               className={cn(
-                HAND_BASE_STYLES,
+                HAND_BASE_CLASSES,
                 'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
               )}
               style={{
-                ...HAND_TRANSFORM_ORIGIN,
+                ...HAND_ORIGIN,
                 transform:
                   'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
               }}

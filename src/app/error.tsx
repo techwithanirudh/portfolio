@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { owner, repo } from '@/constants/github'
+import { owner, repo } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
 const ISSUE_URL = `https://github.com/${owner}/${repo}/issues/new`

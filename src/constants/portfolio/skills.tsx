@@ -1,15 +1,5 @@
-import type { LucideIcon } from 'lucide-react'
 import { BrainCircuitIcon, Code2Icon, LayersIcon } from 'lucide-react'
-
-export type SkillSize = 'sm' | 'md' | 'lg'
-
-export interface Skill {
-  id: number
-  Icon: LucideIcon
-  title: string
-  description: string
-  size: SkillSize
-}
+import type { Skill } from '@/types'
 
 export const skills: Skill[] = [
   {

@@ -3,11 +3,9 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/active-link'
 import { ViewAnimation } from '@/components/view-animation'
-import { linkItems } from '@/constants/navigation'
-import { postsPerPage, worksPerPage } from '@/constants/pagination'
+import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
-import { socials } from '@/constants/social'
-import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
+import { getSortedByDateWork } from '@/lib/source'
 
 interface ListItem {
   title: string
@@ -29,11 +27,10 @@ export const Links = () => {
   )
 
   const works = getSortedByDateWork()
-  const posts = getSortedByDatePosts()
 
   const lists: ListItem[] = [
     {
-      title: 'Pages',
+      title: 'Navigate',
       items: [
         { href: '/', children: 'Home' },
         ...navItems
@@ -50,17 +47,19 @@ export const Links = () => {
       ],
     },
     {
-      title: 'Work',
-      items: works.slice(0, worksPerPage).map((work) => ({
-        href: work.url,
-        children: work.data.title,
-      })),
+      title: 'More',
+      items: [
+        { href: '/uses', children: 'Uses' },
+        { href: '/colophon', children: 'Colophon' },
+        { href: '/rss.xml', children: 'RSS Feed' },
+        { href: '/sitemap.xml', children: 'Sitemap' },
+      ],
     },
     {
-      title: 'Blog',
-      items: posts.slice(0, postsPerPage).map((post) => ({
-        href: post.url,
-        children: post.data.title,
+      title: 'Work',
+      items: works.slice(0, 5).map((work) => ({
+        href: work.url,
+        children: work.data.title,
       })),
     },
     {

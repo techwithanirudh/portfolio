@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
-import { socials } from '@/constants/social'
+import { socials } from '@/constants/navigation'
 
 export const Hero = () => (
   <div className='flex flex-col gap-2'>

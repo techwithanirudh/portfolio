@@ -4,75 +4,17 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ViewTransition } from 'react'
-import Balancer from 'react-wrap-balancer'
 import {
   PostComments,
   Share,
 } from '@/app/(home)/(blog)/blog/[slug]/page.client'
 import BlogProgressBar from '@/components/blog/progress-bar'
-import { BlurImage } from '@/components/blur-image'
 import { PostJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
-import { TagCard } from '@/components/tags/tag-card'
-import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
-import { getPost, getPosts, type BlogPage as MDXPage } from '@/lib/source'
-import { cn } from '@/lib/utils'
-
-function Header(props: { page: MDXPage; tags?: string[] }) {
-  const { page, tags } = props
-
-  return (
-    <Section className='p-4 lg:p-6'>
-      <div
-        className={cn(
-          'flex flex-col items-start justify-center gap-4 py-8 md:gap-6',
-          'sm:items-center sm:rounded-lg sm:border sm:bg-card sm:p-10 sm:shadow-xs'
-        )}
-      >
-        {page.data.image ? (
-          <ViewTransition
-            name={`${page.slugs.join('/')}-image`}
-            share='via-blur'
-          >
-            <BlurImage
-              alt={page.data.title ?? 'Blog cover image'}
-              className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
-              fill
-              imageClassName='object-cover'
-              sizes='(min-width: 1024px) 800px, 100vw'
-              src={page.data.image}
-            />
-          </ViewTransition>
-        ) : null}
-        <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
-          <ViewTransition name={page.slugs.join('/')} share='via-blur'>
-            <h1 className='typography-hero font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-              <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
-            </h1>
-            <p className='typography-body mx-auto'>
-              <Balancer>{page.data.description ?? ''}</Balancer>
-            </p>
-          </ViewTransition>
-        </div>
-        <div className='flex flex-wrap gap-2'>
-          {tags?.map((tag, index) => (
-            <ViewAnimation
-              delay={0.1 + index * 0.05}
-              initial={{ opacity: 0, translateY: -6 }}
-              key={tag}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <TagCard className='border border-border' name={tag} />
-            </ViewAnimation>
-          ))}
-        </div>
-      </div>
-    </Section>
-  )
-}
+import { getPost, getPosts } from '@/lib/source'
+import { Header } from './_components/header'
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>
