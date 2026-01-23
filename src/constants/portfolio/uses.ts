@@ -95,7 +95,7 @@ export const software: SoftwareItem[] = [
   {
     name: 'Antinote',
     description: 'Quick notes',
-    url: 'https://antinote.app',
+    url: 'https://antinote.io',
   },
   {
     name: 'Bartender',
@@ -180,12 +180,12 @@ export const software: SoftwareItem[] = [
   {
     name: 'Notion',
     description: 'Notes and docs',
-    url: 'https://www.notion.so',
+    url: 'https://www.notion.com',
   },
   {
     name: 'Notion Calendar',
     description: 'Calendar client',
-    url: 'https://www.notion.so/product/calendar',
+    url: 'https://www.notion.com/product/calendar',
   },
   {
     name: 'OpenCode',
@@ -235,7 +235,7 @@ export const software: SoftwareItem[] = [
   {
     name: 'Supercharge',
     description: 'Mac productivity utilities',
-    url: 'https://supercharge.app',
+    url: 'https://sindresorhus.com/supercharge',
   },
   {
     name: 'Termius',
@@ -255,7 +255,7 @@ export const software: SoftwareItem[] = [
   {
     name: 'Vesktop',
     description: 'Discord client',
-    url: 'https://vesktop.app',
+    url: 'https://vesktop.dev',
   },
   {
     name: 'Visual Studio Code',
