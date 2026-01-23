@@ -1,19 +1,10 @@
-export const colophonSections = {
-  technology: {
-    title: 'Technology',
-  },
-  typography: {
-    title: 'Typography',
-  },
-  attribution: {
-    title: 'Attribution',
-  },
-  design: {
-    title: 'Design & Colors',
-  },
-} satisfies Record<string, { title: string }>
+import type {
+  AttributionItem,
+  TechnologyItem,
+  TypographyContent,
+} from '@/types/colophon'
 
-export const colophonTechnology = [
+export const technology = [
   {
     name: 'Next.js',
     description: 'App Router foundation with server components and streaming.',
@@ -59,9 +50,9 @@ export const colophonTechnology = [
     description: 'Edge-ready hosting and automatic previews.',
     url: 'https://vercel.com',
   },
-] as const
+] satisfies TechnologyItem[]
 
-export const colophonAttributions = [
+export const attributions = [
   { name: 'Braydon Coyer', url: 'https://www.braydoncoyer.dev' },
   { name: 'Nelson Lai', url: 'https://nelsonlai.dev' },
   { name: 'Chanh Dai', url: 'https://chanhdai.com' },
@@ -74,35 +65,9 @@ export const colophonAttributions = [
   { name: 'Shu Ding', url: 'https://shud.in' },
   { name: 'Emil Kowalski', url: 'https://emilkowal.ski' },
   { name: 'shadcn/ui', url: 'https://ui.shadcn.com' },
-] as const
+] satisfies AttributionItem[]
 
-export const colophonDesign = {
-  intro: [
-    'A measured layout with generous spacing, sharp rules, and a quiet sense of depth.',
-    'Geist Sans handles headings and body copy, while Geist Mono keeps code and labels crisp.',
-    'Subtle glow and texture soften the edges without overpowering the neutral base.',
-  ],
-  palette: [
-    { label: 'Background', className: 'bg-background' },
-    { label: 'Card', className: 'bg-card' },
-    { label: 'Muted', className: 'bg-muted' },
-    { label: 'Muted F.G', className: 'bg-muted-foreground' },
-    { label: 'Border', className: 'bg-border' },
-    { label: 'Foreground', className: 'bg-foreground' },
-    { label: 'Primary', className: 'bg-primary' },
-    { label: 'Primary Soft', className: 'bg-primary/30' },
-    { label: 'Accent', className: 'bg-accent' },
-    { label: 'Accent F.G', className: 'bg-accent-foreground' },
-  ],
-  typography: {
-    heading: 'Geist Sans',
-    mono: 'Geist Mono',
-    bodySample: 'The quick brown fox jumps over the lazy dog.',
-    inlineLink: 'Precise motion and spacing.',
-  },
-} as const
-
-export const colophonTypography = {
+export const typography = {
   intro:
     'Geist Sans anchors the interface while Geist Mono keeps code and labels crisp.',
   samples: [
@@ -113,4 +78,4 @@ export const colophonTypography = {
     { label: 'Geist Mono', className: 'font-mono' },
     { label: 'Geist Mono Italic', className: 'font-mono italic' },
   ],
-} as const
+} satisfies TypographyContent

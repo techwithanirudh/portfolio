@@ -1,28 +1,21 @@
-import {
-  colophonSections,
-  colophonTechnology,
-} from '@/constants/portfolio/colophon'
+import { technology } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
   colophonCardBorderClasses,
   colophonGridClassName,
 } from './colophon-grid'
-import { ColophonSection } from './colophon-section'
 
 export const Technology = () => {
-  const fillerCount = (3 - (colophonTechnology.length % 3 || 3)) % 3
+  const fillerCount = (3 - (technology.length % 3 || 3)) % 3
   const fillerKeys = Array.from(
     { length: fillerCount },
     (_, fillerIndex) => `tech-filler-${fillerIndex + 1}`
   )
 
   return (
-    <ColophonSection
-      className={colophonGridClassName}
-      title={colophonSections.technology.title}
-    >
-      {colophonTechnology.map((item, index) => {
-        const hasLink = 'url' in item
+    <div className={colophonGridClassName}>
+      {technology.map((item, index) => {
+        const hasLink = Boolean(item.url)
         const WrapperTag = hasLink ? 'a' : 'div'
         const linkProps = hasLink
           ? {
@@ -53,6 +46,6 @@ export const Technology = () => {
           key={key}
         />
       ))}
-    </ColophonSection>
+    </div>
   )
 }

@@ -1,3 +1,4 @@
+export * from './colophon'
 export * from './experience'
 export * from './skill'
 export * from './social'

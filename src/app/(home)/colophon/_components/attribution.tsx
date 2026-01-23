@@ -1,6 +1,6 @@
 import {
-  colophonAttributions,
-  colophonSections,
+  attributions,
+  sections,
 } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
@@ -12,12 +12,12 @@ import { ColophonSection } from './colophon-section'
 export const Attribution = () => (
   <ColophonSection
     className={colophonGridClassName}
-    title={colophonSections.attribution.title}
+    title={sections.attribution.title}
   >
     <div className='flex h-full flex-col gap-2 border-border border-b border-dashed bg-card/50 p-6 text-muted-foreground text-sm sm:col-span-2 lg:col-span-3'>
       Borrowed code and design cues from these thoughtful creators.
     </div>
-    {colophonAttributions.map((creator, index) => (
+    {attributions.map((creator, index) => (
       <a
         className={cn(
           'flex items-center gap-2 bg-card/50 p-6 text-muted-foreground text-sm transition-colors hover:bg-card/80 hover:text-foreground',
