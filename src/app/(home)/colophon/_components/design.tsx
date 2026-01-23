@@ -1,17 +1,28 @@
-import {
-  colophonDesign,
-  colophonSections,
-} from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
-import { ColophonSection } from './colophon-section'
+
+const intro = [
+  'A measured layout with generous spacing, sharp rules, and a quiet sense of depth.',
+  'Geist Sans handles headings and body copy, while Geist Mono keeps code and labels crisp.',
+  'Subtle glow and texture soften the edges without overpowering the neutral base.',
+]
+
+const palette = [
+  { label: 'Background', className: 'bg-background' },
+  { label: 'Card', className: 'bg-card' },
+  { label: 'Muted', className: 'bg-muted' },
+  { label: 'Muted F.G', className: 'bg-muted-foreground' },
+  { label: 'Border', className: 'bg-border' },
+  { label: 'Foreground', className: 'bg-foreground' },
+  { label: 'Primary', className: 'bg-primary' },
+  { label: 'Primary Soft', className: 'bg-primary/30' },
+  { label: 'Accent', className: 'bg-accent' },
+  { label: 'Accent F.G', className: 'bg-accent-foreground' },
+]
 
 export const Design = () => (
-  <ColophonSection
-    className='flex flex-col divide-y divide-dashed divide-border text-left'
-    title={colophonSections.design.title}
-  >
+  <div className='flex flex-col divide-y divide-dashed divide-border text-left'>
     <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
-      {colophonDesign.intro.map((line) => (
+      {intro.map((line) => (
         <p key={line}>{line}</p>
       ))}
     </div>
@@ -19,7 +30,7 @@ export const Design = () => (
       <div className='pb-3 font-medium text-foreground text-sm'>Palette</div>
       <div className='grid gap-3'>
         <div className='flex overflow-auto rounded-md border border-border'>
-          {colophonDesign.palette.map((tone) => (
+          {palette.map((tone) => (
             <div
               className={cn(
                 'relative flex flex-1 items-center justify-center px-3 py-3 lg:min-w-20 xl:min-w-30',
@@ -39,5 +50,5 @@ export const Design = () => (
         </p>
       </div>
     </div>
-  </ColophonSection>
+  </div>
 )

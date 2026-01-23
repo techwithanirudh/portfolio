@@ -1,19 +1,12 @@
-import {
-  attributions,
-  sections,
-} from '@/constants/portfolio/colophon'
+import { attributions } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
   colophonCardBorderClasses,
   colophonGridClassName,
 } from './colophon-grid'
-import { ColophonSection } from './colophon-section'
 
 export const Attribution = () => (
-  <ColophonSection
-    className={colophonGridClassName}
-    title={sections.attribution.title}
-  >
+  <div className={colophonGridClassName}>
     <div className='flex h-full flex-col gap-2 border-border border-b border-dashed bg-card/50 p-6 text-muted-foreground text-sm sm:col-span-2 lg:col-span-3'>
       Borrowed code and design cues from these thoughtful creators.
     </div>
@@ -34,5 +27,5 @@ export const Attribution = () => (
         </span>
       </a>
     ))}
-  </ColophonSection>
+  </div>
 )
