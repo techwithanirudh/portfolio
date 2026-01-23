@@ -16,9 +16,6 @@
       "version": "24",
       "additionalVersions": "22"
     },
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "os-provided"
-    },
     "ghcr.io/devcontainers/features/git-lfs:1": {
       "version": "latest"
     },
@@ -42,7 +39,6 @@
     "ghcr.io/devcontainers/features/git",
     "ghcr.io/devcontainers/features/node",
     "ghcr.io/devcontainers-extra/features/bun",
-    "ghcr.io/devcontainers/features/python",
     "ghcr.io/devcontainers/features/git-lfs",
     "ghcr.io/devcontainers/features/github-cli",
     "ghcr.io/devcontainers/features/docker-in-docker",
@@ -53,10 +49,7 @@
   "containerUser": "coder",
   "customizations": {
     "vscode": {
-      "extensions": ["biomejs.biome"],
-      "settings": {
-        "python.defaultInterpreterPath": "/home/coder/.python/current/bin/python3"
-      }
+      "extensions": ["biomejs.biome"]
     },
     "coder": {
       "apps": [
