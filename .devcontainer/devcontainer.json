@@ -4,6 +4,14 @@
     "context": "."
   },
   "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "coder",
+      "userUid": "1000",
+      "userGid": "1000"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+			"version": "none"
+		},
     "ghcr.io/devcontainers/features/git:1": {
       "version": "os-provided"
     },

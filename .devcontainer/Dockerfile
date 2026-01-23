@@ -3,7 +3,8 @@
 # Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
 #-------------------------------------------------------------------------------------------------------------
 
-FROM mcr.microsoft.com/devcontainers/typescript-node:24
+ARG VARIANT=24-trixie
+FROM node:${VARIANT}
 
 ENV LANG="C.UTF-8"
 ARG DEBIAN_FRONTEND="noninteractive"
