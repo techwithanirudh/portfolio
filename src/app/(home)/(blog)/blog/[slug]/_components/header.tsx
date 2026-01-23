@@ -7,69 +7,6 @@ import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage as MDXPage } from '@/lib/source'
 
-const frame = [
-  {
-    key: 'line-top',
-    className:
-      'absolute top-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12',
-  },
-  {
-    key: 'line-bottom',
-    className:
-      'absolute bottom-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12',
-  },
-  {
-    key: 'line-left',
-    className:
-      'absolute left-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12',
-  },
-  {
-    key: 'line-right',
-    className:
-      'absolute right-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12',
-  },
-  {
-    key: 'tick-top-left-h',
-    className:
-      'absolute top-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
-  },
-  {
-    key: 'tick-top-left-v',
-    className:
-      'absolute top-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block',
-  },
-  {
-    key: 'tick-top-right-h',
-    className:
-      'absolute top-12 right-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
-  },
-  {
-    key: 'tick-top-right-v',
-    className:
-      'absolute top-[44.5px] right-[48px] z-20 hidden h-2 w-px bg-white md:block',
-  },
-  {
-    key: 'tick-bottom-left-h',
-    className:
-      'absolute bottom-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
-  },
-  {
-    key: 'tick-bottom-left-v',
-    className:
-      'absolute bottom-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block',
-  },
-  {
-    key: 'tick-bottom-right-h',
-    className:
-      'absolute bottom-12 right-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
-  },
-  {
-    key: 'tick-bottom-right-v',
-    className:
-      'absolute bottom-[44.5px] right-[48px] z-20 hidden h-2 w-px bg-white md:block',
-  },
-]
-
 const formatPostDate = (date: Date) =>
   date.toLocaleDateString('en-US', {
     month: 'long',
@@ -89,10 +26,8 @@ export const Header = ({ page, tags }: HeaderProps) => {
 
   return (
     <Section>
+      <FrameDecoration />
       <div className='relative h-[350px] md:h-[600px]'>
-        {frame.map((item) => (
-          <span className={item.className} key={item.key} />
-        ))}
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image ? (
             <ViewTransition name={`${transitionName}-image`} share='via-blur'>
@@ -154,3 +89,20 @@ export const Header = ({ page, tags }: HeaderProps) => {
     </Section>
   )
 }
+
+const FrameDecoration = () => (
+  <>
+    <span className='absolute top-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12' />
+    <span className='absolute bottom-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12' />
+    <span className='absolute left-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12' />
+    <span className='absolute right-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12' />
+    <span className='absolute top-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute top-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute top-12 right-[44.5px] z-20 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute top-[44.5px] right-[48px] z-20 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute bottom-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute bottom-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute right-[44.5px] bottom-12 z-20 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute right-[48px] bottom-[44.5px] z-20 hidden h-2 w-px bg-white md:block' />
+  </>
+)
