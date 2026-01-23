@@ -7,11 +7,14 @@ export const colophonSections = {
   technology: {
     title: 'Technology',
   },
+  typography: {
+    title: 'Typography',
+  },
   attribution: {
     title: 'Attribution',
   },
   design: {
-    title: 'Design Details',
+    title: 'Design & Colors',
   },
 } satisfies Record<string, { title: string }>
 
@@ -80,9 +83,9 @@ export const colophonAttributions = [
 
 export const colophonDesign = {
   intro: [
-    'A calm, precise layout built around generous spacing, crisp rules, and soft depth.',
-    'The UI relies on Geist Sans for headlines and body copy, with Geist Mono for code accents.',
-    'Gradients and noise add glow without overwhelming the neutral foundation.',
+    'A measured layout with generous spacing, sharp rules, and a quiet sense of depth.',
+    'Geist Sans handles headings and body copy, while Geist Mono keeps code and labels crisp.',
+    'Subtle glow and texture soften the edges without overpowering the neutral base.',
   ],
   palette: [
     { label: 'Background', className: 'bg-background' },
@@ -102,4 +105,17 @@ export const colophonDesign = {
     bodySample: 'The quick brown fox jumps over the lazy dog.',
     inlineLink: 'Precise motion and spacing.',
   },
+} as const
+
+export const colophonTypography = {
+  intro:
+    'Geist Sans anchors the interface while Geist Mono keeps code and labels crisp.',
+  samples: [
+    { label: 'Geist Regular', className: 'font-normal' },
+    { label: 'Geist Medium', className: 'font-medium' },
+    { label: 'Geist Semibold', className: 'font-semibold' },
+    { label: 'Geist Bold', className: 'font-bold' },
+    { label: 'Geist Mono', className: 'font-mono' },
+    { label: 'Geist Mono Italic', className: 'font-mono italic' },
+  ],
 } as const

@@ -14,13 +14,13 @@ export const AttributionSection = () => (
     className={colophonGridClassName}
     title={colophonSections.attribution.title}
   >
-    <div className='flex h-full flex-col gap-2 border-border border-b border-dashed bg-card/50 p-6 text-muted-foreground text-sm sm:col-span-2 lg:col-span-3'>
+    <div className='flex h-full flex-col gap-2 border-border border-b border-dashed bg-card p-6 text-muted-foreground text-sm sm:col-span-2 lg:col-span-3'>
       Borrowed code and design cues from these thoughtful creators.
     </div>
     {colophonAttributions.map((creator, index) => (
       <a
         className={cn(
-          'flex items-center gap-2 bg-card/50 p-6 text-muted-foreground text-sm transition-colors hover:bg-card/80 hover:text-foreground',
+          'flex items-center gap-2 bg-card p-6 text-muted-foreground text-sm transition-colors hover:bg-card/90 hover:text-foreground',
           colophonCardBorderClasses(index)
         )}
         href={creator.url}

@@ -35,9 +35,9 @@ export const TechnologySection = () => {
         return (
           <WrapperTag
             className={cn(
-              'flex h-full flex-col gap-2 bg-card/50 p-6 text-left transition-colors',
+              'flex h-full flex-col gap-2 bg-card p-6 text-left transition-colors',
               colophonCardBorderClasses(index),
-              hasLink && 'hover:bg-card/80'
+              hasLink && 'hover:bg-card/90'
             )}
             key={item.name}
             {...linkProps}

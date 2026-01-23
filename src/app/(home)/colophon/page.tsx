@@ -6,14 +6,16 @@ import { AttributionSection } from './_components/attribution'
 import { DesignSection } from './_components/design'
 import { Hero } from './_components/hero'
 import { TechnologySection } from './_components/technology'
+import { TypographySection } from './_components/typography'
 
 export default function ColophonPage() {
   return (
     <Wrapper>
       <Hero />
       <TechnologySection />
-      <AttributionSection />
+      <TypographySection />
       <DesignSection />
+      <AttributionSection />
     </Wrapper>
   )
 }
