@@ -4,105 +4,17 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { ViewTransition } from 'react'
-import Balancer from 'react-wrap-balancer'
 import {
   PostComments,
   Share,
 } from '@/app/(home)/(blog)/blog/[slug]/page.client'
 import BlogProgressBar from '@/components/blog/progress-bar'
-import { BlurImage } from '@/components/blur-image'
 import { PostJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
-import { TagCard } from '@/components/tags/tag-card'
-import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
-import { getPost, getPosts, type BlogPage as MDXPage } from '@/lib/source'
-
-function Header(props: { page: MDXPage; tags?: string[] }) {
-  const { page, tags } = props
-  const image = page.data.image
-  const formattedDate = page.data.date.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
-
-  return (
-    <Section>
-      <div className='relative h-[350px] md:h-[600px]'>
-        <span className='absolute top-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12' />
-        <span className='absolute bottom-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12' />
-        <span className='absolute left-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12' />
-        <span className='absolute right-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12' />
-        <span className='absolute top-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block' />
-        <span className='absolute top-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block' />
-        <span className='absolute top-12 right-[44.5px] z-20 hidden h-px w-2 bg-white md:block' />
-        <span className='absolute top-[44.5px] right-[48px] z-20 hidden h-2 w-px bg-white md:block' />
-        <span className='absolute bottom-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block' />
-        <span className='absolute bottom-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block' />
-        <span className='absolute right-[44.5px] bottom-12 z-20 hidden h-px w-2 bg-white md:block' />
-        <span className='absolute right-[48px] bottom-[44.5px] z-20 hidden h-2 w-px bg-white md:block' />
-        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
-          {image ? (
-            <ViewTransition
-              name={`${page.slugs.join('/')}-image`}
-              share='via-blur'
-            >
-              <BlurImage
-                alt={page.data.title ?? 'Blog cover image'}
-                className='absolute inset-0 h-full w-full'
-                fill
-                imageClassName='object-cover'
-                sizes='(min-width: 1024px) 800px, 100vw'
-                src={image}
-              />
-            </ViewTransition>
-          ) : (
-            <div className='absolute inset-0 bg-slate-900' />
-          )}
-          <div
-            className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent'
-            style={{ viewTransitionName: 'none' }}
-          />
-          <div className='relative z-10 mt-auto p-8 md:p-16'>
-            {tags?.length ? (
-              <div className='mb-4 hidden gap-2 md:flex md:flex-wrap'>
-                {tags.map((tag, index) => (
-                  <ViewAnimation
-                    delay={0.1 + index * 0.05}
-                    initial={{ opacity: 0, translateY: -6 }}
-                    key={tag}
-                    whileInView={{ opacity: 1, translateY: 0 }}
-                  >
-                    <TagCard
-                      className='border border-white/60 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
-                      name={tag}
-                    />
-                  </ViewAnimation>
-                ))}
-              </div>
-            ) : null}
-            <div className='mb-4 space-y-4 text-balance'>
-              <ViewTransition name={page.slugs.join('/')} share='via-blur'>
-                <h1 className='typography-hero max-w-2xl font-medium text-4xl text-white leading-[45px] tracking-tight md:text-5xl md:leading-[60px]'>
-                  <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
-                </h1>
-                <p className='typography-body hidden max-w-3xl text-slate-100 leading-8 md:block'>
-                  <Balancer>{page.data.description ?? ''}</Balancer>
-                </p>
-              </ViewTransition>
-            </div>
-            <div className='flex items-center gap-6 text-slate-200 text-xs'>
-              <span>{formattedDate}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Section>
-  )
-}
+import { getPost, getPosts } from '@/lib/source'
+import { Header } from './_components/header'
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>
