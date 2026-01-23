@@ -6,28 +6,69 @@ import { Section } from '@/components/section'
 import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage as MDXPage } from '@/lib/source'
-import { cn } from '@/lib/utils'
 
-const frameLineClassName = 'absolute z-10 bg-zinc-500/75 mix-blend-screen'
-const frameTickClassName = 'absolute z-20 hidden bg-white md:block'
-
-const frameLines = [
-  'top-6 h-px w-full md:top-12',
-  'bottom-6 h-px w-full md:bottom-12',
-  'left-6 h-full w-px md:left-12',
-  'right-6 h-full w-px md:right-12',
-] as const
-
-const frameTicks = [
-  'top-12 left-[44.5px] h-px w-2',
-  'top-[44.5px] left-[48px] h-2 w-px',
-  'top-12 right-[44.5px] h-px w-2',
-  'top-[44.5px] right-[48px] h-2 w-px',
-  'bottom-12 left-[44.5px] h-px w-2',
-  'bottom-[44.5px] left-[48px] h-2 w-px',
-  'bottom-12 right-[44.5px] h-px w-2',
-  'bottom-[44.5px] right-[48px] h-2 w-px',
-] as const
+const frame = [
+  {
+    key: 'line-top',
+    className:
+      'absolute top-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12',
+  },
+  {
+    key: 'line-bottom',
+    className:
+      'absolute bottom-6 z-10 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12',
+  },
+  {
+    key: 'line-left',
+    className:
+      'absolute left-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12',
+  },
+  {
+    key: 'line-right',
+    className:
+      'absolute right-6 z-10 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12',
+  },
+  {
+    key: 'tick-top-left-h',
+    className:
+      'absolute top-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
+  },
+  {
+    key: 'tick-top-left-v',
+    className:
+      'absolute top-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block',
+  },
+  {
+    key: 'tick-top-right-h',
+    className:
+      'absolute top-12 right-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
+  },
+  {
+    key: 'tick-top-right-v',
+    className:
+      'absolute top-[44.5px] right-[48px] z-20 hidden h-2 w-px bg-white md:block',
+  },
+  {
+    key: 'tick-bottom-left-h',
+    className:
+      'absolute bottom-12 left-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
+  },
+  {
+    key: 'tick-bottom-left-v',
+    className:
+      'absolute bottom-[44.5px] left-[48px] z-20 hidden h-2 w-px bg-white md:block',
+  },
+  {
+    key: 'tick-bottom-right-h',
+    className:
+      'absolute bottom-12 right-[44.5px] z-20 hidden h-px w-2 bg-white md:block',
+  },
+  {
+    key: 'tick-bottom-right-v',
+    className:
+      'absolute bottom-[44.5px] right-[48px] z-20 hidden h-2 w-px bg-white md:block',
+  },
+]
 
 const formatPostDate = (date: Date) =>
   date.toLocaleDateString('en-US', {
@@ -49,11 +90,8 @@ export const Header = ({ page, tags }: HeaderProps) => {
   return (
     <Section>
       <div className='relative h-[350px] md:h-[600px]'>
-        {frameLines.map((line) => (
-          <span className={cn(frameLineClassName, line)} key={line} />
-        ))}
-        {frameTicks.map((tick) => (
-          <span className={cn(frameTickClassName, tick)} key={tick} />
+        {frame.map((item) => (
+          <span className={item.className} key={item.key} />
         ))}
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image ? (
