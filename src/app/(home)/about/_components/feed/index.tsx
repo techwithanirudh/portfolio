@@ -110,11 +110,11 @@ export default async function Feed(): Promise<React.ReactElement | null> {
               </div>
             </ViewAnimation>
           </div>
-          <div className='sm:col-span-2'>
+          <div className='min-w-0 sm:col-span-2'>
             <div
               className={cn(
-                'relative flex flex-col gap-2 px-4 py-8 font-mono text-muted-foreground text-xs',
-                'sm:px-8 sm:text-sm'
+                'relative flex max-w-full flex-col gap-2 overflow-x-auto px-4 py-8 font-mono text-muted-foreground text-xs',
+                'sm:overflow-visible sm:px-8 sm:text-sm'
               )}
             >
               {items.map((item, index) => (
