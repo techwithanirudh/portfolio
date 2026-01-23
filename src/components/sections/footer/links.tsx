@@ -32,7 +32,7 @@ export const Links = () => {
 
   const lists: ListItem[] = [
     {
-      title: 'Pages',
+      title: 'Navigate',
       items: [
         { href: '/', children: 'Home' },
         ...navItems
@@ -49,17 +49,19 @@ export const Links = () => {
       ],
     },
     {
-      title: 'Work',
-      items: works.slice(0, worksPerPage).map((work) => ({
-        href: work.url,
-        children: work.data.title,
-      })),
+      title: 'More',
+      items: [
+        { href: '/uses', children: 'Uses' },
+        { href: '/colophon', children: 'Colophon' },
+        { href: '/rss.xml', children: 'RSS Feed' },
+        { href: '/sitemap.xml', children: 'Sitemap' },
+      ],
     },
     {
-      title: 'Blog',
-      items: posts.slice(0, postsPerPage).map((post) => ({
-        href: post.url,
-        children: post.data.title,
+      title: 'Work',
+      items: works.slice(0, 5).map((work) => ({
+        href: work.url,
+        children: work.data.title,
       })),
     },
     {

@@ -22,6 +22,28 @@ interface TimeStyles extends React.CSSProperties {
 const HAND_BASE_STYLES =
   'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
 const HAND_TRANSFORM_ORIGIN = { transformOrigin: '0px 0px' }
+const INDIA_TIME_ZONE = 'Asia/Kolkata'
+const INDIA_TIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
+  timeZone: INDIA_TIME_ZONE,
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: true,
+  timeZoneName: 'short',
+})
+
+const getIndiaTimeParts = (date: Date) => {
+  const parts = INDIA_TIME_FORMATTER.formatToParts(date)
+  const readPart = (type: string) =>
+    parts.find((part) => part.type === type)?.value ?? '0'
+
+  return {
+    hours: Number.parseInt(readPart('hour'), 10) % 12,
+    minutes: Number.parseInt(readPart('minute'), 10),
+    seconds: Number.parseInt(readPart('second'), 10),
+    timeString: INDIA_TIME_FORMATTER.format(date),
+  }
+}
 
 export function Clock({ className }: ClockProps) {
   const [mounted, setMounted] = useState(false)
@@ -38,15 +60,7 @@ export function Clock({ className }: ClockProps) {
     }
   }, [])
 
-  const hours = time.getHours() % 12
-  const minutes = time.getMinutes()
-  const seconds = time.getSeconds()
-
-  const timeString = time.toLocaleTimeString('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  })
+  const { hours, minutes, seconds, timeString } = getIndiaTimeParts(time)
 
   const timeStyles: TimeStyles = {
     '--time-hours': hours,

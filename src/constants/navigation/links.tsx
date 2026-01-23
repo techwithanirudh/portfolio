@@ -27,12 +27,6 @@ export const linkItems: LinkItemType[] = [
     active: 'url',
   },
   {
-    icon: <Icons.laptop />,
-    text: 'Uses',
-    url: '/uses',
-    active: 'url',
-  },
-  {
     type: 'menu',
     text: 'Blog',
     items: [
