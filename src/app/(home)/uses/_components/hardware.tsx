@@ -13,7 +13,7 @@ function HardwareCard({ name, description, url, image }: HardwareCardProps) {
   return (
     <Wrapper
       className={cn(
-        'flex items-center gap-4 bg-card/50 p-6 transition-colors',
+        'flex items-center gap-4 bg-card/50 p-6 transition-colors group/item',
         url && 'hover:bg-card/80'
       )}
       {...linkProps}
@@ -24,7 +24,7 @@ function HardwareCard({ name, description, url, image }: HardwareCardProps) {
             alt={name}
             className={cn(
               'max-h-14 w-auto object-contain drop-shadow-md transition-transform',
-              url && 'group-hover:scale-105'
+              url && 'group-hover/item:scale-105'
             )}
             height={56}
             src={image}
