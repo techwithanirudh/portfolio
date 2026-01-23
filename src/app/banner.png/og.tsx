@@ -48,8 +48,8 @@ export function generate({
       <div tw='flex border absolute border-stone-900 border-dashed inset-y-0 right-16 w-[1px]' />
       <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] top-16' />
       <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] bottom-16' />
-      <CodeIcon tw='absolute top-23 right-25' />
-      <div tw='flex flex-col absolute w-[896px] justify-end inset-26 items-start'>
+      <CodeIcon tw='absolute top-22 right-23' />
+      <div tw='flex flex-col absolute w-[896px] justify-end inset-24 items-start'>
         <div
           style={{
             textWrap: 'balance',
