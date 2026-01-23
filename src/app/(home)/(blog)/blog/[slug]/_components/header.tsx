@@ -1,3 +1,4 @@
+// adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import { ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
@@ -5,6 +6,7 @@ import { Section } from '@/components/section'
 import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage as MDXPage } from '@/lib/source'
+import { cn } from '@/lib/utils'
 
 const frameLineClassName = 'absolute z-10 bg-zinc-500/75 mix-blend-screen'
 const frameTickClassName = 'absolute z-20 hidden bg-white md:block'
@@ -14,7 +16,7 @@ const frameLines = [
   'bottom-6 h-px w-full md:bottom-12',
   'left-6 h-full w-px md:left-12',
   'right-6 h-full w-px md:right-12',
-]
+] as const
 
 const frameTicks = [
   'top-12 left-[44.5px] h-px w-2',
@@ -25,7 +27,7 @@ const frameTicks = [
   'bottom-[44.5px] left-[48px] h-2 w-px',
   'bottom-12 right-[44.5px] h-px w-2',
   'bottom-[44.5px] right-[48px] h-2 w-px',
-]
+] as const
 
 const formatPostDate = (date: Date) =>
   date.toLocaleDateString('en-US', {
@@ -48,16 +50,10 @@ export const Header = ({ page, tags }: HeaderProps) => {
     <Section>
       <div className='relative h-[350px] md:h-[600px]'>
         {frameLines.map((line) => (
-          <span
-            className={`${frameLineClassName} ${line}`}
-            key={`line-${line}`}
-          />
+          <span className={cn(frameLineClassName, line)} key={line} />
         ))}
         {frameTicks.map((tick) => (
-          <span
-            className={`${frameTickClassName} ${tick}`}
-            key={`tick-${tick}`}
-          />
+          <span className={cn(frameTickClassName, tick)} key={tick} />
         ))}
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image ? (
