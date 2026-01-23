@@ -5,7 +5,7 @@ import { Logo } from './logo'
 function AppIcon({ name, url, logo, featured }: SoftwareItem) {
   return (
     <a
-      className='group flex flex-col items-center gap-3 p-6 text-center no-underline transition-colors hover:bg-card/50'
+      className='group flex flex-col items-center gap-3 bg-card/50 p-6 text-center no-underline transition-colors hover:bg-card/80'
       href={url}
       rel='noopener noreferrer'
       target='_blank'

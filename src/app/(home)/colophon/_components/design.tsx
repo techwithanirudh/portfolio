@@ -7,29 +7,27 @@ import { ColophonSection } from './colophon-section'
 
 export const DesignSection = () => (
   <ColophonSection
-    className='grid grid-cols-1 gap-px bg-border text-left sm:grid-cols-2'
+    className='flex flex-col divide-y divide-dashed divide-border text-left'
     title={colophonSections.design.title}
   >
-    <div className='space-y-4 bg-card p-6 text-muted-foreground text-sm sm:col-span-2'>
+    <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
       {colophonDesign.intro.map((line) => (
-        <p key={line}>
-          {line}
-        </p>
+        <p key={line}>{line}</p>
       ))}
     </div>
-    <div className='bg-card p-6 sm:col-span-2'>
+    <div className='bg-card/50 p-6'>
       <div className='pb-3 font-medium text-foreground text-sm'>Palette</div>
       <div className='grid gap-3'>
-        <div className='flex overflow-hidden rounded-md border border-border/70'>
+        <div className='flex overflow-auto rounded-md border border-border'>
           {colophonDesign.palette.map((tone) => (
             <div
               className={cn(
-                'relative flex min-w-[3rem] flex-1 items-center justify-center px-3 py-3',
+                'relative flex flex-1 items-center justify-center px-3 py-3 lg:min-w-20 xl:min-w-30',
                 tone.className
               )}
               key={tone.label}
             >
-              <span className='inline-flex h-6 items-center justify-center rounded-sm border bg-white/80 px-2 font-medium text-[11px] text-black dark:bg-black/80 dark:text-white'>
+              <span className='hidden h-6 items-center justify-center truncate rounded-sm border bg-white/80 px-2 font-medium text-[11px] text-black lg:inline-flex dark:bg-black/80 dark:text-white'>
                 {tone.label}
               </span>
             </div>

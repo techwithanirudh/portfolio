@@ -22,7 +22,7 @@ export const WorkCard = ({
 
   return (
     <Link
-      className='group flex h-full flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+      className='group flex h-full flex-col gap-4 bg-card/60 p-6 transition-colors hover:bg-card'
       href={url}
     >
       {image && (

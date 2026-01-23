@@ -12,7 +12,10 @@ function HardwareCard({ name, description, url, image }: HardwareCardProps) {
 
   return (
     <Wrapper
-      className='flex items-center gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+      className={cn(
+        'flex items-center gap-4 bg-card/50 p-6 transition-colors',
+        url && 'hover:bg-card/80'
+      )}
       {...linkProps}
     >
       {image ? (
@@ -36,13 +39,7 @@ function HardwareCard({ name, description, url, image }: HardwareCardProps) {
         </div>
       )}
       <div className='min-w-0 flex-1'>
-        <p
-          className={cn(
-            'font-medium text-foreground'
-          )}
-        >
-          {name}
-        </p>
+        <p className={cn('font-medium text-foreground')}>{name}</p>
         {description && (
           <p className='text-muted-foreground text-sm'>{description}</p>
         )}
