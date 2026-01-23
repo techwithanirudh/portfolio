@@ -22,15 +22,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
-        make \
         unzip \
-        build-essential \
-        rsync \
         zip \
         jq \
-        python3 \
-        python3-pip \
-        inotify-tools \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get autoremove -y \
     && apt-get clean -y
