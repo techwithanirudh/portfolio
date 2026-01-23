@@ -3,10 +3,9 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/active-link'
 import { ViewAnimation } from '@/components/view-animation'
-import { postsPerPage, worksPerPage } from '@/constants/config'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
-import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
+import { getSortedByDateWork } from '@/lib/source'
 
 interface ListItem {
   title: string
@@ -28,7 +27,6 @@ export const Links = () => {
   )
 
   const works = getSortedByDateWork()
-  const posts = getSortedByDatePosts()
 
   const lists: ListItem[] = [
     {
