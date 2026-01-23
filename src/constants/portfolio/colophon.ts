@@ -1,7 +1,7 @@
 import type {
   AttributionItem,
   TechnologyItem,
-  TypographyContent,
+  TypographyItem,
 } from '@/types/colophon'
 
 export const technology = [
@@ -67,15 +67,11 @@ export const attributions = [
   { name: 'shadcn/ui', url: 'https://ui.shadcn.com' },
 ] satisfies AttributionItem[]
 
-export const typography = {
-  intro:
-    'Geist Sans anchors the interface while Geist Mono keeps code and labels crisp.',
-  samples: [
-    { label: 'Geist Regular', className: 'font-normal' },
-    { label: 'Geist Medium', className: 'font-medium' },
-    { label: 'Geist Semibold', className: 'font-semibold' },
-    { label: 'Geist Bold', className: 'font-bold' },
-    { label: 'Geist Mono', className: 'font-mono' },
-    { label: 'Geist Mono Italic', className: 'font-mono italic' },
-  ],
-} satisfies TypographyContent
+export const typography = [
+  { label: 'Geist Regular', className: 'font-normal' },
+  { label: 'Geist Medium', className: 'font-medium' },
+  { label: 'Geist Semibold', className: 'font-semibold' },
+  { label: 'Geist Bold', className: 'font-bold' },
+  { label: 'Geist Mono', className: 'font-mono' },
+  { label: 'Geist Mono Italic', className: 'font-mono italic' },
+] satisfies TypographyItem[]

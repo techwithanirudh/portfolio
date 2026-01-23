@@ -9,12 +9,7 @@ export interface AttributionItem {
   url: string
 }
 
-export interface TypographySample {
+export interface TypographyItem {
   label: string
   className: string
-}
-
-export interface TypographyContent {
-  intro: string
-  samples: TypographySample[]
 }
