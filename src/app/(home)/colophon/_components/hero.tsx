@@ -1,9 +1,10 @@
 import { HeroSection } from '@/components/sections/hero'
-import { colophonHero } from '@/constants/portfolio/colophon'
 
-export const Hero = () => (
-  <HeroSection
-    description={colophonHero.description}
-    title={colophonHero.title}
-  />
-)
+interface HeroProps {
+  title: string
+  description: string
+}
+
+export default function Hero({ title, description }: HeroProps) {
+  return <HeroSection description={description} title={title} />
+}

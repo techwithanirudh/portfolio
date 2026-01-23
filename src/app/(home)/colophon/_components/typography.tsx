@@ -5,9 +5,9 @@ import {
 import { cn } from '@/lib/utils'
 import { ColophonSection } from './colophon-section'
 
-export const TypographySection = () => (
+export const Typography = () => (
   <ColophonSection
-    className='flex flex-col divide-y divide-border divide-dashed text-left'
+    className='flex flex-col divide-y divide-dashed divide-border text-left'
     title={colophonSections.typography.title}
   >
     <div className='bg-card/50 p-6 text-muted-foreground text-sm'>

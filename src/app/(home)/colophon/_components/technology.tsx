@@ -9,7 +9,7 @@ import {
 } from './colophon-grid'
 import { ColophonSection } from './colophon-section'
 
-export const TechnologySection = () => {
+export const Technology = () => {
   const fillerCount = (3 - (colophonTechnology.length % 3 || 3)) % 3
   const fillerKeys = Array.from(
     { length: fillerCount },

@@ -9,7 +9,7 @@ import {
 } from './colophon-grid'
 import { ColophonSection } from './colophon-section'
 
-export const AttributionSection = () => (
+export const Attribution = () => (
   <ColophonSection
     className={colophonGridClassName}
     title={colophonSections.attribution.title}

@@ -1,8 +1,3 @@
-export const colophonHero = {
-  title: 'Colophon',
-  description: 'The tools, technologies, and inspirations behind this website.',
-} as const
-
 export const colophonSections = {
   technology: {
     title: 'Technology',
