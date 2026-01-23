@@ -29,7 +29,7 @@ export const DesignSection = () => (
               )}
               key={tone.label}
             >
-              <span className='inline-flex h-6 items-center justify-center rounded-sm border border-border/40 bg-background/70 px-2 font-medium text-[11px] text-foreground mix-blend-difference'>
+              <span className='inline-flex h-6 items-center justify-center rounded-sm border bg-white/80 px-2 font-medium text-[11px] text-black dark:bg-black/80 dark:text-white'>
                 {tone.label}
               </span>
             </div>
