@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
 import { skills } from '@/constants/portfolio/skills'
 
-// Create a variant for feature items
 const featureItemVariants = cva(
   'group flex flex-col justify-between gap-10 p-6 hover:bg-card hover:bg-card/80 sm:gap-22 md:gap-34 lg:gap-46',
   {
@@ -29,7 +28,6 @@ const skillTags = [
   { label: 'React', Icon: Icons.react },
   { label: 'Next.js', Icon: Icons.nextjs },
   { label: 'Tailwind CSS', Icon: Icons.tailwind },
-  { label: 'HTML5', Icon: Icons.html5 },
   { label: 'CSS3', Icon: Icons.css3 },
   { label: 'Node.js', Icon: Icons.nodejs },
   { label: 'Express', Icon: Icons.express },
