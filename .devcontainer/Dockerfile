@@ -3,18 +3,9 @@
 # Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
 #-------------------------------------------------------------------------------------------------------------
 
-FROM ubuntu:noble
-
-# Remove default 'ubuntu' user if it exists (harmless noop if it doesn't)
-RUN if id "ubuntu" &>/dev/null; then \
-        echo "Deleting user 'ubuntu' for noble" && userdel -f -r ubuntu || echo "Failed to delete ubuntu user for noble"; \
-    else \
-        echo "User 'ubuntu' does not exist for noble"; \
-    fi
+FROM mcr.microsoft.com/devcontainers/typescript-node:24
 
 ENV LANG="C.UTF-8"
-
-# Install packages from apt repositories
 ARG DEBIAN_FRONTEND="noninteractive"
 
 # Merging the mutiple layers to reduce the size of the image slightly
