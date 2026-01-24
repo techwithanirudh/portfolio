@@ -70,7 +70,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
     <div className='sticky top-14 flex w-full flex-col divide-y divide-dashed divide-border self-start lg:min-h-[calc(100vh-22rem)]'>
       <ViewAnimation initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
         <div className='flex h-10 items-center gap-2 px-4'>
-          <Icons.tag className='size-4 text-muted-foreground  transition-transform hover:scale-125' />
+          <Icons.tag className='size-4 text-muted-foreground transition-transform hover:scale-125' />
           <span className='font-medium text-sm'>Tags</span>
         </div>
       </ViewAnimation>

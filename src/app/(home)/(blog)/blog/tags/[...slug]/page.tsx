@@ -5,6 +5,8 @@ import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { Section } from '@/components/section'
+import { HeroSection } from '@/components/sections/hero'
+import { ViewAnimation } from '@/components/view-animation'
 import { postsPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
 import { getPostsByTag, getTags } from '@/lib/source'
@@ -45,22 +47,26 @@ const Header = ({
   startIndex: number
   endIndex: number
 }) => (
-  <Section className='p-4 lg:p-6'>
-    <div className='flex items-center gap-2'>
-      <Icons.tag
-        className='text-muted-foreground transition-transform hover:rotate-12 hover:scale-125'
-        size={20}
-      />
-      <h1 className='font-bold text-3xl leading-tight tracking-tighter md:text-4xl'>
-        {tag} <span className='text-muted-foreground'>Posts</span>{' '}
-        <CurrentPostsCount
-          endIndex={endIndex}
-          startIndex={startIndex}
-          tag={tag}
-        />
-      </h1>
-    </div>
-  </Section>
+  <HeroSection
+    align='start'
+    title={
+      <div className='flex items-center justify-between gap-4'>
+        <span className='flex items-center gap-2'>
+          <Icons.tag
+            className='text-muted-foreground transition-transform hover:rotate-12 hover:scale-125'
+            size={20}
+          />
+          {tag} <span className='text-muted-foreground'>Posts</span>{' '}
+          <CurrentPostsCount
+            endIndex={endIndex}
+            startIndex={startIndex}
+            tag={tag}
+          />
+        </span>
+      </div>
+    }
+    variant='compact'
+  />
 )
 
 const Pagination = ({ pageIndex, tag }: { pageIndex: number; tag: string }) => {
@@ -110,20 +116,24 @@ export default async function Page(props: {
       <Header endIndex={endIndex} startIndex={startIndex} tag={tag} />
       <Section className='h-full' sectionClassName='flex flex-1'>
         <div className='grid divide-y divide-dashed divide-border text-left'>
-          {posts.map((post) => {
+          {posts.map((post, index) => {
             const date = new Date(post.data.date).toDateString()
             return (
-              <PostCard
-                author={post.data.author ?? 'Unknown'}
-                date={date}
-                description={post.data.description ?? ''}
-                image={post.data.image ?? null}
+              <ViewAnimation
+                delay={0.05 * index}
+                initial={{ opacity: 0, translateY: -6 }}
                 key={post.url}
-                slugs={post.slugs}
-                tags={post.data.tags}
-                title={post.data.title ?? 'Untitled'}
-                url={post.url}
-              />
+                whileInView={{ opacity: 1, translateY: 0 }}
+              >
+                <PostCard
+                  author={post.data.author ?? 'Unknown'}
+                  date={date}
+                  description={post.data.description ?? ''}
+                  slugs={post.slugs}
+                  title={post.data.title ?? 'Untitled'}
+                  url={post.url}
+                />
+              </ViewAnimation>
             )
           })}
         </div>

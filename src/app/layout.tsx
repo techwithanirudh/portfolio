@@ -96,7 +96,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
               method: 'POST',
             },
             {
-              path: '/blog/newsletter',
+              path: '/blog',
               method: 'POST',
             },
           ]}
