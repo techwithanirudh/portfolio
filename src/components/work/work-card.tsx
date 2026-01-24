@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
+import { Icons } from '@/components/icons'
 
 interface WorkCardProps {
   title: string
@@ -53,7 +54,7 @@ export const WorkCard = ({
         </div>
         <span className='inline-flex items-center gap-2 text-muted-foreground text-sm transition-colors group-hover:text-foreground'>
           View case study
-          <span aria-hidden='true'>→</span>
+          <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
         </span>
       </div>
     </Link>
