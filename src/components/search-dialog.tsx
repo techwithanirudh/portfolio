@@ -10,6 +10,7 @@ import {
   SearchDialogIcon,
   SearchDialogInput,
   SearchDialogList,
+  SearchDialogListItem,
   SearchDialogOverlay,
   type SharedProps,
 } from 'fumadocs-ui/components/dialog/search'
@@ -54,7 +55,18 @@ export default function CustomSearchDialog(props: SharedProps) {
           <SearchDialogInput />
           <SearchDialogClose />
         </SearchDialogHeader>
-        <SearchDialogList items={query.data !== 'empty' ? query.data : null} />
+        <SearchDialogList
+          className='[&>div]:!p-0'
+          data-lenis-prevent
+          Item={({ item, onClick }) => (
+            <SearchDialogListItem
+              className='rounded-none border-border border-b border-dashed p-2 last:border-b-0'
+              item={item}
+              onClick={onClick}
+            />
+          )}
+          items={query.data !== 'empty' ? query.data : null}
+        />
         <SearchDialogFooter className='flex flex-row flex-wrap items-center gap-2'>
           <Popover onOpenChange={setIsOpen} open={isOpen}>
             <PopoverTrigger
@@ -70,7 +82,10 @@ export default function CustomSearchDialog(props: SharedProps) {
               {activeTagLabel}
               <ChevronDown className='size-3.5 text-fd-muted-foreground' />
             </PopoverTrigger>
-            <PopoverContent align='start' className='flex flex-col gap-1 p-1'>
+            <PopoverContent
+              align='start'
+              className='flex flex-col gap-0 divide-y divide-dashed divide-border rounded-md border-dashed p-0  bg-popover'
+            >
               {tags.map((item) => {
                 const isSelected = item.value === tag
                 const key = item.value ?? 'all'
@@ -78,7 +93,7 @@ export default function CustomSearchDialog(props: SharedProps) {
                 return (
                   <button
                     className={cn(
-                      'rounded-lg px-2 py-1.5 text-start',
+                      'px-2 py-1.5 text-start',
                       isSelected
                         ? 'bg-fd-primary/10 text-fd-primary'
                         : 'hover:bg-fd-accent hover:text-fd-accent-foreground'
