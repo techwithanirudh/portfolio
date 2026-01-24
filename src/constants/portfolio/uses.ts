@@ -4,13 +4,13 @@ export const hardware: HardwareItem[] = [
   {
     name: 'MacBook Air 15"',
     description: 'M2 chip, 8GB RAM, 256GB SSD',
-    url: 'https://support.apple.com/en-gb/111346',
+    url: 'https://support.apple.com/en-us/111346',
     image: '/images/uses/hardware/macbook-air.png',
   },
   {
     name: 'Mac mini',
     description: 'M4 chip, 16GB RAM, 256GB SSD',
-    url: 'https://support.apple.com/en-in/121555',
+    url: 'https://support.apple.com/en-us/121555',
     image: '/images/uses/hardware/mac-mini.png',
   },
   {
@@ -52,14 +52,14 @@ export const hardware: HardwareItem[] = [
   {
     name: 'iPhone 16 Pro',
     description: 'Desert Titanium, 256GB',
-    url: 'https://support.apple.com/en-in/111840',
+    url: 'https://support.apple.com/en-us/111840',
     image: '/images/uses/hardware/iphone-16-pro.png',
   },
   {
     name: 'iPad 10th Gen',
     description:
       'Silver, 128GB, Wi-Fi + Cellular, Apple Pencil, Magic Keyboard Folio',
-    url: 'https://support.apple.com/en-in/111833',
+    url: 'https://support.apple.com/en-us/111833',
     image: '/images/uses/hardware/ipad.png',
   },
   {
@@ -71,7 +71,7 @@ export const hardware: HardwareItem[] = [
   {
     name: 'IKEA Lighting',
     description: 'IKEA MITTLED, TRADFRI driver with RODRET button',
-    url: 'https://www.ikea.com/in/en/p/mittled-led-kitchen-worktop-lighting-strip-dimmable-white-20455424/',
+    url: 'https://www.ikea.com/us/en/p/mittled-led-kitchen-cntrtp-lighting-strip-dimmable-white-10455434/',
     image: '/images/uses/hardware/mittled.png',
   },
 ]
