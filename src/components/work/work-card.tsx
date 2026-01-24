@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ViewTransition } from 'react'
 import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
-import { Icons } from '@/components/icons'
+import { Icons } from '@/components/icons/icons'
 
 interface WorkCardProps {
   title: string
