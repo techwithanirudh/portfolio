@@ -8,6 +8,7 @@ FROM node:${VARIANT}
 
 ENV LANG="C.UTF-8"
 ARG DEBIAN_FRONTEND="noninteractive"
+ARG USERNAME=coder
 
 # Merging the mutiple layers to reduce the size of the image slightly
 RUN apt-get update \
