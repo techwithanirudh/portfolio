@@ -282,11 +282,33 @@
 
   @keyframes via-blur {
     30% {
-      filter: blur(10px);
+      filter: blur(8px);
     }
   }
 
   ::view-transition-image-pair(.via-blur) {
     animation-name: via-blur;
+  }
+
+  ::view-transition-old(.via-blur) {
+    animation-duration: 180ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+  }
+
+  ::view-transition-new(.via-blur) {
+    animation-duration: 350ms;
+    animation-delay: 100ms;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+
+  ::view-transition-group(.via-blur) {
+    animation-duration: 450ms;
+  }
+
+  /* Prevent background color flash during transition */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
   }
 }

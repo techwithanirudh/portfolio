@@ -37,7 +37,7 @@ export const PostCard: React.FC<PostCardProps> = ({
     >
       <div className='order-2 flex h-full flex-col justify-between gap-4 md:order-1 md:col-span-2 xl:col-span-3'>
         <div className='flex-1 gap-4'>
-          <ViewTransition name={transitionName} share='via-blur'>
+          <ViewTransition name={transitionName}>
             <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
               {title}
             </h2>
@@ -70,18 +70,16 @@ export const PostCard: React.FC<PostCardProps> = ({
       </div>
 
       {image && (
-        <ViewTransition name={`${transitionName}-image`} share='via-blur'>
-          <div className='group relative order-1 col-span-1 inline-flex aspect-video items-center justify-center overflow-hidden transition-transform hover:scale-105 md:order-2'>
-            <BlurImage
-              alt={title}
-              className='relative h-full w-full rounded-lg'
-              height={554}
-              imageClassName='h-full w-full object-cover'
-              src={image}
-              width={853}
-            />
-          </div>
-        </ViewTransition>
+        <div className='group relative order-1 col-span-1 inline-flex aspect-video items-center justify-center overflow-clip transition-transform hover:scale-105 md:order-2'>
+          <BlurImage
+            alt={title}
+            className='relative h-full w-full rounded-lg'
+            height={554}
+            imageClassName='h-full w-full object-cover'
+            src={image}
+            width={853}
+          />
+        </div>
       )}
     </Link>
   )
