@@ -1,6 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import { NumberedPagination } from '@/components/numbered-pagination'
+import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
 import { WorkCard } from '@/components/work/work-card'
@@ -57,6 +58,16 @@ export default async function Page(props: {
         totalWorks={totalWorks}
       />
       <Section className='h-full' sectionClassName='flex flex-1'>
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -6 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+        >
+          <SearchRedirectInput
+            className='min-w-full'
+            placeholder='Search work...'
+            tag='projects'
+          />
+        </ViewAnimation>
         <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x'>
           {work.map((entry, index) => (
             <ViewAnimation

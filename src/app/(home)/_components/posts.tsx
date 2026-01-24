@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from 'react'
 import { PostCard } from '@/components/blog/post-card'
+import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
@@ -12,6 +13,16 @@ export default function Posts({
 } & HTMLAttributes<HTMLDivElement>) {
   return (
     <Section {...props}>
+      <ViewAnimation
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+      >
+        <SearchRedirectInput
+          className='min-w-full'
+          placeholder='Search posts...'
+          tag='blog'
+        />
+      </ViewAnimation>
       <div className='grid divide-y divide-dashed divide-border text-left'>
         {posts.map((post, index) => {
           const date = new Date(post.data.date).toDateString()
