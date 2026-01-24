@@ -51,6 +51,9 @@ export function Provider({
             RESET_PASSWORD: 'reset-password',
             MAGIC_LINK: 'magic',
           }}
+          account={{
+            basePath: '/account',
+          }}
         >
           <ProgressProvider
             color='var(--color-primary)'
