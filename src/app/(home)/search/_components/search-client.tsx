@@ -17,6 +17,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
+import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
@@ -24,7 +25,7 @@ const renderHighlights = (
   highlights: HighlightedText<ReactNode>[],
   badge?: string
 ) => (
-  <span className='inline-flex justify-between items-center w-full'>
+  <span className='inline-flex w-full items-center justify-between'>
     <span>
       {highlights.map((node, index) => {
         if (node.styles?.highlight) {
@@ -107,55 +108,72 @@ export function SearchClient() {
     >
       <Section className='flex flex-1 flex-col' sectionClassName='h-full'>
         <div className='flex flex-col'>
-          <InputGroup className='rounded-none border-0'>
-            <InputGroupAddon className='border-0 text-muted-foreground'>
-              <Search className='size-4' />
-            </InputGroupAddon>
-            <InputGroupInput
-              className={cn('text-sm')}
-              onChange={(event) => {
-                handleSearchChange(event.target.value)
-              }}
-              placeholder='Search posts and work...'
-              value={search}
-            />
-            {search.length > 0 && (
-              <InputGroupAddon align='inline-end'>
-                {resultCount} results
+          <ViewAnimation
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <InputGroup className='rounded-none border-0'>
+              <InputGroupAddon className='border-0 text-muted-foreground'>
+                <Search className='size-4' />
               </InputGroupAddon>
-            )}
-          </InputGroup>
-          <div className='flex w-full flex-wrap justify-between divide-x divide-dashed divide-border border-border border-y border-dashed'>
-            {tags.map((scopeOption) => {
-              const value = scopeOption.value ?? 'all'
-              const isActive = scopeParam === value
-              return (
-                <button
-                  aria-pressed={isActive}
-                  className={cn(
-                    'inline-flex flex-1 items-center gap-2 p-2 px-3 text-sm transition-colors',
-                    isActive
-                      ? 'bg-card text-card-foreground'
-                      : 'bg-transparent text-muted-foreground hover:text-card-foreground'
-                  )}
-                  key={value}
-                  onClick={() => {
-                    setScopeParam(value)
-                  }}
-                  type='button'
-                >
-                  {scopeOption.name}
-                </button>
-              )
-            })}
-          </div>
+              <InputGroupInput
+                className={cn('text-sm')}
+                onChange={(event) => {
+                  handleSearchChange(event.target.value)
+                }}
+                placeholder='Search posts and work...'
+                value={search}
+              />
+              {search.length > 0 && (
+                <InputGroupAddon align='inline-end'>
+                  {resultCount} results
+                </InputGroupAddon>
+              )}
+            </InputGroup>
+          </ViewAnimation>
+          <ViewAnimation
+            delay={0.05}
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <div className='flex w-full flex-wrap justify-between divide-x divide-dashed divide-border border-border border-y border-dashed'>
+              {tags.map((scopeOption) => {
+                const value = scopeOption.value ?? 'all'
+                const isActive = scopeParam === value
+                return (
+                  <button
+                    aria-pressed={isActive}
+                    className={cn(
+                      'inline-flex flex-1 items-center gap-2 p-2 px-3 text-sm transition-colors',
+                      isActive
+                        ? 'bg-card text-card-foreground'
+                        : 'bg-transparent text-muted-foreground hover:text-card-foreground'
+                    )}
+                    key={value}
+                    onClick={() => {
+                      setScopeParam(value)
+                    }}
+                    type='button'
+                  >
+                    {scopeOption.name}
+                  </button>
+                )
+              })}
+            </div>
+          </ViewAnimation>
         </div>
         {!hasQuery && (
-          <div className='flex max-h-[460px] w-full flex-col overflow-y-auto p-1'>
-            <div className='py-12 text-center text-fd-muted-foreground text-sm'>
-              Start typing to search.
+          <ViewAnimation
+            delay={0.1}
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <div className='flex max-h-[460px] w-full flex-col overflow-y-auto p-1'>
+              <div className='py-12 text-center text-fd-muted-foreground text-sm'>
+                Start typing to search.
+              </div>
             </div>
-          </div>
+          </ViewAnimation>
         )}
         <SearchDialogList
           className='[&>div]:!p-0'

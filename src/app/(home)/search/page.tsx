@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { BackButton } from '@/components/back-button'
 import { HeroSection } from '@/components/sections/hero'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Wrapper } from '@/components/wrapper'
 import { title as homeTitle } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
@@ -16,7 +18,20 @@ export default function Page() {
       >
         <BackButton />
       </HeroSection>
-      <SearchClient />
+      <Suspense
+        fallback={
+          <div className='flex flex-1 flex-col gap-4 px-4 pb-10 sm:px-6'>
+            <Skeleton className='h-9 w-full' />
+            <div className='grid gap-2'>
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Skeleton className='h-14 w-full' key={index.toString()} />
+              ))}
+            </div>
+          </div>
+        }
+      >
+        <SearchClient />
+      </Suspense>
     </Wrapper>
   )
 }

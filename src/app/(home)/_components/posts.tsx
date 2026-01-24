@@ -24,7 +24,7 @@ export default function Posts({
           tag='blog'
         />
       </ViewAnimation>
-      <div className='grid divide-y divide-dashed divide-border text-left border-t border-border border-dashed'>
+      <div className='grid divide-y divide-dashed divide-border border-border border-t border-dashed text-left'>
         {posts.map((post, index) => {
           const date = new Date(post.data.date).toDateString()
           return (

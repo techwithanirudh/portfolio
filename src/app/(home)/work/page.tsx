@@ -69,7 +69,7 @@ export default async function Page(props: {
             tag='projects'
           />
         </ViewAnimation>
-        <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x border-t border-border border-dashed'>
+        <div className='grid grid-cols-1 divide-y divide-dashed divide-border border-border border-t border-dashed md:grid-cols-2 md:divide-x'>
           {work.map((entry, index) => (
             <ViewAnimation
               blur={false}
