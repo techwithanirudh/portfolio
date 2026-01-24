@@ -84,7 +84,7 @@ export default function CustomSearchDialog(props: SharedProps) {
             </PopoverTrigger>
             <PopoverContent
               align='start'
-              className='flex flex-col gap-0 divide-y divide-dashed divide-border rounded-md border-dashed p-0  bg-popover'
+              className='flex flex-col gap-0 divide-y divide-dashed divide-border rounded-md border-dashed bg-popover p-0'
             >
               {tags.map((item) => {
                 const isSelected = item.value === tag
