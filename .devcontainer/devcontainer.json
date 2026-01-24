@@ -4,16 +4,17 @@
     "context": "."
   },
   "features": {
-		"ghcr.io/devcontainers/features/common-utils:2": {
-			"installZsh": "true",
-			"username": "coder",
-			"upgradePackages": "true"
-		},
-    "ghcr.io/devcontainers/features/node:1": {
-			"version": "none"
-		},
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "coder",
+      "userUid": "1000",
+      "userGid": "1000"
+    },
     "ghcr.io/devcontainers/features/git:1": {
       "version": "os-provided"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "24",
+      "nodeGypDependencies": "false"
     },
     "ghcr.io/devcontainers/features/github-cli:1": {
       "version": "latest"
@@ -34,6 +35,7 @@
   "overrideFeatureInstallOrder": [
     "ghcr.io/devcontainers/features/common-utils",
     "ghcr.io/devcontainers/features/git",
+    "ghcr.io/devcontainers/features/node",
     "ghcr.io/devcontainers-extra/features/bun",
     "ghcr.io/devcontainers/features/github-cli",
     "ghcr.io/devcontainers/features/docker-in-docker",
@@ -97,5 +99,6 @@
   ],
   "postStartCommand": {
     "docker": "sudo service docker start"
-  }
+  },
+  "postCreateCommand": ["./.devcontainer/scripts/post-create.sh"]
 }

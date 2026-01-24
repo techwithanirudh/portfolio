@@ -3,12 +3,10 @@
 # Licensed under the MIT License. See https://go.microsoft.com/fwlink/?linkid=2090316 for license information.
 #-------------------------------------------------------------------------------------------------------------
 
-ARG VARIANT=24-trixie
-FROM node:${VARIANT}
+FROM debian:bookworm-slim
 
 ENV LANG="C.UTF-8"
 ARG DEBIAN_FRONTEND="noninteractive"
-ARG USERNAME=coder
 
 # Merging the mutiple layers to reduce the size of the image slightly
 RUN apt-get update \
