@@ -27,27 +27,9 @@ export const linkItems: LinkItemType[] = [
     active: 'url',
   },
   {
-    type: 'menu',
     text: 'Blog',
-    items: [
-      {
-        text: 'Posts',
-        description: 'View all blog posts',
-        url: '/blog',
-        icon: <Icons.posts />,
-      },
-      {
-        text: 'Tags',
-        description: 'View blog posts by tags',
-        url: '/blog/tags',
-        icon: <Icons.tags />,
-      },
-      {
-        text: 'Newsletter',
-        description: 'Subscribe to our newsletter',
-        url: '/blog/newsletter',
-        icon: <Icons.mail />,
-      },
-    ],
+    icon: <Icons.posts />,
+    url: '/blog',
+    active: 'nested-url',
   },
 ]

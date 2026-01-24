@@ -4,15 +4,23 @@ import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { Section } from '@/components/section'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
+import { cn } from '@/lib/utils'
 
 export default function Posts({
   posts,
+  className,
   ...props
 }: { posts: BlogPage[] } & {
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>) {
   return (
-    <Section {...props}>
+    <Section
+      {...props}
+      className={cn(
+        'flex flex-col divide-y divide-dashed divide-border',
+        className
+      )}
+    >
       <ViewAnimation
         delay={0.05}
         initial={{ opacity: 0, translateY: -6 }}
@@ -24,7 +32,7 @@ export default function Posts({
           tag='blog'
         />
       </ViewAnimation>
-      <div className='grid divide-y divide-dashed divide-border border-border border-t border-dashed text-left'>
+      <div className='grid divide-y divide-dashed divide-border text-left'>
         {posts.map((post, index) => {
           const date = new Date(post.data.date).toDateString()
           return (

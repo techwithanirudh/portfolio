@@ -47,14 +47,6 @@ export const PostCard: React.FC<PostCardProps> = ({
           </p>
         </div>
         <div className='flex flex-col justify-center gap-4'>
-          {/* <div className='flex flex-wrap gap-2'>
-            {tags?.map((tag) => (
-              <>
-                <TagCard name={tag} key={tag} className='p-0 [&_svg]:size-4 [&_span]:text-muted-foreground gap-1' />
-                {index < tags.length - 1 && <span className='text-muted-foreground'>•</span>}
-              </>
-            ))}
-          </div> */}
           <div className='group inline-flex items-center gap-2 text-muted-foreground text-sm'>
             <span className='inline-flex items-center gap-1 capitalize'>
               <UserIcon className='size-4 transition-transform hover:scale-125' />

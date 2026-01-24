@@ -57,7 +57,10 @@ export default async function Page(props: {
         startIndex={startIndex}
         totalWorks={totalWorks}
       />
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <Section
+        className='flex flex-col divide-y divide-dashed divide-border'
+        sectionClassName='flex flex-1'
+      >
         <ViewAnimation
           delay={0.05}
           initial={{ opacity: 0, translateY: -6 }}
@@ -69,7 +72,7 @@ export default async function Page(props: {
             tag='projects'
           />
         </ViewAnimation>
-        <div className='grid grid-cols-1 divide-y divide-dashed divide-border border-border border-t border-dashed md:grid-cols-2 md:divide-x'>
+        <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x'>
           {work.map((entry, index) => (
             <ViewAnimation
               blur={false}

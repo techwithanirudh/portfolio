@@ -5,14 +5,24 @@ import { Section } from '@/components/section'
 import { Wrapper } from '@/components/wrapper'
 import { postsPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
-import { getSortedByDatePosts } from '@/lib/source'
+import { getPostsByTag, getSortedByDatePosts, getTags } from '@/lib/source'
 import Posts from '../../_components/posts'
 import { Hero } from './_components/hero'
+import { NewsletterSection } from './_components/newsletter-section'
+import { TagsAccordion, TagsSidebar } from './_components/tags-sidebar'
 
 export const dynamicParams = false
 
 const totalPosts = getSortedByDatePosts().length
 const pageCount = Math.ceil(totalPosts / postsPerPage)
+
+const getTagsWithCount = () => {
+  const tagNames = getTags()
+  return tagNames.map((name) => ({
+    name,
+    count: getPostsByTag(name).length,
+  }))
+}
 
 const Pagination = ({ pageIndex }: { pageIndex: number }) => {
   const handlePageChange = async (page: number) => {
@@ -46,6 +56,7 @@ export default async function Page(props: {
   const startIndex = pageIndex * postsPerPage
   const endIndex = startIndex + postsPerPage
   const posts = getSortedByDatePosts().slice(startIndex, endIndex)
+  const tags = getTagsWithCount()
 
   return (
     <Wrapper>
@@ -54,8 +65,25 @@ export default async function Page(props: {
         startIndex={startIndex}
         totalPosts={totalPosts}
       />
-      <Posts className='h-full' posts={posts} sectionClassName='flex flex-1' />
+      <Section className='h-full' sectionClassName='flex flex-1'>
+        <div className='grid h-full lg:grid-cols-[1fr_280px]'>
+          <div className='min-w-0 lg:border-border lg:border-r lg:border-dashed'>
+            <div className='border-border border-b border-dashed px-4 py-2.5 lg:hidden'>
+              <TagsAccordion tags={tags} />
+            </div>
+            <Posts
+              className='h-full border-none'
+              posts={posts}
+              sectionClassName='flex flex-1'
+            />
+          </div>
+          <aside className='hidden lg:block'>
+            <TagsSidebar tags={tags} />
+          </aside>
+        </div>
+      </Section>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
+      <NewsletterSection />
     </Wrapper>
   )
 }
