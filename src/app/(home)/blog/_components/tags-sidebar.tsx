@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import {
@@ -22,43 +20,49 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
   const hasMoreTags = tags.length > MAX_TAGS
 
   return (
-    <Accordion collapsible type='single'>
-      <AccordionItem className='border-0' value='tags'>
-        <AccordionTrigger className='py-0 hover:no-underline'>
-          <span className='flex items-center gap-2 text-sm'>
-            <Icons.tag className='size-4' />
-            Browse by Tag
-          </span>
-        </AccordionTrigger>
-        <AccordionContent className='pt-3 pb-0'>
-          <div className='grid grid-cols-2 gap-px border border-border border-dashed bg-border'>
-            {displayedTags.map((tag, index) => (
-              <ViewAnimation
-                delay={0.05 * index}
-                initial={{ opacity: 0 }}
-                key={tag.name}
-                whileInView={{ opacity: 1 }}
-              >
-                <Link
-                  className='flex items-center justify-between bg-background p-3 text-muted-foreground text-sm transition-colors hover:bg-card/80'
-                  href={`/blog/tags/${tag.name}`}
+    <ViewAnimation
+      delay={0.05}
+      initial={{ opacity: 0, translateY: -6 }}
+      whileInView={{ opacity: 1, translateY: 0 }}
+    >
+      <Accordion collapsible type='single'>
+        <AccordionItem className='border-0 px-3 py-2.5' value='tags'>
+          <AccordionTrigger className='!p-0 hover:no-underline'>
+            <span className='flex items-center gap-2 text-muted-foreground'>
+              <Icons.tag className='size-4' />
+              Browse by Tag
+            </span>
+          </AccordionTrigger>
+          <AccordionContent className='pt-6'>
+            <div className='grid grid-cols-2 gap-px border border-border border-dashed bg-border'>
+              {displayedTags.map((tag, index) => (
+                <ViewAnimation
+                  delay={0.05 * index}
+                  initial={{ opacity: 0 }}
+                  key={tag.name}
+                  whileInView={{ opacity: 1 }}
                 >
-                  <span>{tag.name}</span>
-                  <span className='text-xs'>({tag.count})</span>
-                </Link>
-              </ViewAnimation>
-            ))}
-          </div>
-          <Link
-            className='group mt-3 flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
-            href='/blog/tags'
-          >
-            {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}
-            <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
-          </Link>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+                  <Link
+                    className='flex items-center justify-between bg-background p-3 text-muted-foreground text-sm transition-colors hover:bg-card/80'
+                    href={`/blog/tags/${tag.name}`}
+                  >
+                    <span>{tag.name}</span>
+                    <span className='text-xs'>({tag.count})</span>
+                  </Link>
+                </ViewAnimation>
+              ))}
+            </div>
+            <Link
+              className='group mt-3 flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
+              href='/blog/tags'
+            >
+              {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}
+              <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
+            </Link>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </ViewAnimation>
   )
 }
 
@@ -69,9 +73,11 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
   return (
     <div className='sticky top-14 flex w-full flex-col divide-y divide-dashed divide-border self-start lg:min-h-[calc(100vh-22rem)]'>
       <ViewAnimation initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-        <div className='flex h-10 items-center gap-2 px-4'>
+        <div className='flex h-10 items-center gap-2 px-3'>
           <Icons.tag className='size-4 text-muted-foreground transition-transform hover:scale-125' />
-          <span className='font-medium text-sm'>Tags</span>
+          <span className='font-medium text-muted-foreground text-sm'>
+            Tags
+          </span>
         </div>
       </ViewAnimation>
       <div className='flex flex-col divide-y divide-dashed divide-border'>

@@ -114,7 +114,7 @@ export function SearchClient() {
           >
             <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none'>
               <InputGroupAddon className='border-0 text-muted-foreground'>
-                <Search className='size-4' />
+                <Search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
               </InputGroupAddon>
               <InputGroupInput
                 className={cn('text-sm')}
