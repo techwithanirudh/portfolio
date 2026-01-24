@@ -11,4 +11,4 @@ export const tags = [
     name: 'Projects',
     value: 'projects',
   },
-]
+] as const

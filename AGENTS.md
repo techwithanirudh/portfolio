@@ -5,6 +5,7 @@
 - TypeScript in strict mode with path aliases (`@/*`, `@/public/*`).
 - Tailwind CSS (v4) with PostCSS, plus Radix UI and shadcn/ui components.
 - Content lives in `content/` and Fumadocs-generated `.source/`.
+- Always use Context7 MCP when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
 
 ## Repo Layout
 - `src/app`: App Router routes, layouts, and metadata.
