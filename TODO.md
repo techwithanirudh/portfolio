@@ -15,3 +15,4 @@ https://jahirfiquitiva-os-website.vercel.app/
 - Guestbook Admin (Logo / Permissions to delete other things)
 - View Transitions are Janky / Half Broken
 - The Account Settings Page is broken
+- Bun Migration
