@@ -4,8 +4,8 @@ import { accountViewPaths } from '@daveyplate/better-auth-ui/server'
 export const dynamicParams = false
 
 export function generateStaticParams() {
-  return Object.values(accountViewPaths).map((path) => ({
-    path,
+  return Object.values(accountViewPaths).map((pathname) => ({
+    pathname,
   }))
 }
 
