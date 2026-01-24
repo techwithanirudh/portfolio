@@ -10,4 +10,4 @@ else
 fi
 
 # Install dependencies
-pnpm install
+bun install

@@ -9,13 +9,13 @@ I'm Anirudh, a full-stack developer who likes shipping small, thoughtful product
 Install dependencies:
 
 ```bash
-pnpm install
+bun install
 ```
 
 Run the development server:
 
 ```bash
-pnpm dev
+bun dev
 ```
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser to view the site.

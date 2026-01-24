@@ -4,10 +4,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import {
-  PostComments,
-  Share,
-} from '@/app/(home)/(blog)/blog/[slug]/page.client'
+import { PostComments, Share } from '@/app/(home)/blog/[slug]/page.client'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'

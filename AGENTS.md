@@ -14,13 +14,13 @@
 - `emails/`, `scripts/`, `public/`: email templates, tooling, and static assets.
 
 ## Commands
-- Install: `pnpm install`
-- Dev/build: `pnpm dev`, `pnpm build`, `pnpm preview`, `pnpm start`
-- Types: `pnpm run typegen`, `pnpm run typecheck`
-- Lint: `pnpm run check` (fix: `check:write`, unsafe: `check:unsafe`)
-- QA: `pnpm run check:links`, `pnpm run check:spelling`
-- DB: `pnpm run db:generate`, `pnpm run db:migrate`, `pnpm run db:push`
-- Email: `pnpm run email:dev`, `pnpm run email:build`, `pnpm run email:export`
+- Install: `bun install`
+- Dev/build: `bun dev`, `bun run build`
+- Types: `bun run typegen`, `bun run typecheck`
+- Lint: `bun run check` (fix: `check:write`, unsafe: `check:unsafe`)
+- QA: `bun run check:links`, `bun run check:spelling`
+- DB: `bun run db:generate`, `bun run db:migrate`, `bun run db:push`
+- Email: `bun run email:dev`, `bun run email:build`, `bun run email:export`
 
 ## Testing
 - No automated test runner is configured (no `test` script or test config files found).
@@ -47,7 +47,7 @@ Fight entropy. Leave the codebase better than you found it.
 
 ## Content & Docs
 - Author content in `content/`; generated content lives in `.source/` (never edit by hand).
-- `pnpm install` runs `fumadocs-mdx` via `postinstall` to sync MDX types.
+- `bun install` runs `fumadocs-mdx` via `postinstall` to sync MDX types.
 - Prefer MDX frontmatter for metadata (title, description, dates).
 
 ## UI & Styling
@@ -58,16 +58,16 @@ Fight entropy. Leave the codebase better than you found it.
 
 ## Data & Email
 - Drizzle schema lives in `src/server/db/schema/index.ts` and uses the `portfolio_*` table prefix.
-- Use `pnpm run db:generate` after schema changes to regenerate migrations.
+- Use `bun run db:generate` after schema changes to regenerate migrations.
 - Email templates live in `emails/` and are built/exported via the `email:*` scripts.
 - Resend credentials are required for email functionality.
 
 ## Coding Standards
 Write code that is **accessible, performant, type-safe, and maintainable**. Focus on clarity and explicit intent over brevity.
 
-- **Format code**: `pnpm dlx ultracite fix`
-- **Check for issues**: `pnpm dlx ultracite check`
-- **Diagnose setup**: `pnpm dlx ultracite doctor`
+- **Format code**: `bun x ultracite fix`
+- **Check for issues**: `bun x ultracite check`
+- **Diagnose setup**: `bun x ultracite doctor`
 Biome (the underlying engine) provides robust linting and formatting. Most issues are automatically fixable.
 
 ### Type Safety & Explicitness
@@ -186,4 +186,4 @@ Biome's linter will catch most issues automatically. Focus your attention on:
 5. **User experience** - Accessibility, performance, and usability considerations
 6. **Documentation** - Add comments for complex logic, but prefer self-documenting code
 
-Most formatting and common issues are automatically fixed by Biome. Run `pnpm dlx ultracite fix` before committing to ensure compliance.
+Most formatting and common issues are automatically fixed by Biome. Run `bun x ultracite fix` before committing to ensure compliance.
