@@ -22,7 +22,6 @@ interface HeaderProps {
 export const Header = ({ page, tags }: HeaderProps) => {
   const image = page.data.image
   const formattedDate = formatPostDate(page.data.date)
-  const _transitionName = page.slugs.join('/')
 
   return (
     <Section>

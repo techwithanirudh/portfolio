@@ -39,12 +39,17 @@ export const WorkCard = ({
       )}
       <div className='flex flex-1 flex-col gap-3'>
         <div className='flex flex-1 flex-col gap-2'>
-          <ViewTransition name={transitionName} share='via-blur'>
+          <ViewTransition name={`${transitionName}-title`} share='via-blur'>
             <h2 className='font-medium text-lg md:text-xl'>{title}</h2>
           </ViewTransition>
-          <p className='line-clamp-3 text-muted-foreground text-sm'>
-            <Balancer>{description}</Balancer>
-          </p>
+          <ViewTransition
+            name={`${transitionName}-description`}
+            share='via-blur'
+          >
+            <p className='line-clamp-3 text-muted-foreground text-sm'>
+              <Balancer>{description}</Balancer>
+            </p>
+          </ViewTransition>
         </div>
         <span className='inline-flex items-center gap-2 text-muted-foreground text-sm transition-colors group-hover:text-foreground'>
           View case study

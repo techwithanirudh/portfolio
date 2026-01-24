@@ -62,10 +62,18 @@ function Header(props: { page: MDXPage }) {
           </ViewTransition>
         )}
         <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
-          <ViewTransition name={page.slugs.join('/')} share='via-blur'>
+          <ViewTransition
+            name={`${page.slugs.join('/')}-title`}
+            share='via-blur'
+          >
             <h1 className='typography-hero font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
               <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
             </h1>
+          </ViewTransition>
+          <ViewTransition
+            name={`${page.slugs.join('/')}-description`}
+            share='via-blur'
+          >
             <p className='typography-body mx-auto'>
               <Balancer>{page.data.description ?? ''}</Balancer>
             </p>
