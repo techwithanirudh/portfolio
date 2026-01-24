@@ -1,5 +1,6 @@
 'use client'
 
+import type { HighlightedText } from 'fumadocs-core/search'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import {
   SearchDialog,
@@ -9,7 +10,7 @@ import {
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { Search } from 'lucide-react'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
-import { useEffect } from 'react'
+import { Fragment, type ReactNode, useEffect } from 'react'
 import { Section } from '@/components/section'
 import {
   InputGroup,
@@ -18,6 +19,43 @@ import {
 } from '@/components/ui/input-group'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
+
+const renderHighlights = (
+  highlights: HighlightedText<ReactNode>[],
+  badge?: string
+) => (
+  <span className='inline-flex justify-between items-center w-full'>
+    <span>
+      {highlights.map((node, index) => {
+        if (node.styles?.highlight) {
+          return (
+            <span className='text-primary underline' key={index.toString()}>
+              {node.content}
+            </span>
+          )
+        }
+
+        return <Fragment key={index.toString()}>{node.content}</Fragment>
+      })}
+    </span>
+
+    {badge ? (
+      <span className='mr-2 rounded-full border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
+        {badge}
+      </span>
+    ) : null}
+  </span>
+)
+
+const getItemTag = (url: string) => {
+  if (url.startsWith('/work')) {
+    return 'work'
+  }
+  if (url.startsWith('/blog')) {
+    return 'blog'
+  }
+  return 'page'
+}
 
 const tagValues = tags
   .map((tag) => tag.value)
@@ -127,6 +165,12 @@ export function SearchClient() {
               className='rounded-none border-border border-b border-dashed px-3 py-3 last:border-b-0'
               item={item}
               onClick={onClick}
+              renderHighlights={(highlights) =>
+                renderHighlights(
+                  highlights,
+                  item.type === 'page' ? getItemTag(item.url) : undefined
+                )
+              }
             />
           )}
           items={query.data !== 'empty' ? query.data : null}
