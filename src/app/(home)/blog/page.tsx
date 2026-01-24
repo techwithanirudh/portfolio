@@ -68,9 +68,7 @@ export default async function Page(props: {
       <Section className='h-full' sectionClassName='flex flex-1'>
         <div className='grid h-full lg:grid-cols-[1fr_280px]'>
           <div className='min-w-0 divide-y divide-dashed divide-border lg:border-border lg:border-r lg:border-dashed'>
-            <div className='lg:hidden'>
-              <TagsAccordion tags={tags} />
-            </div>
+            <TagsAccordion tags={tags} />
             <Posts
               className='h-full border-none'
               posts={posts}
