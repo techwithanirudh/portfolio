@@ -34,38 +34,36 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
     )
   }
 
-  if (logo.type === 'custom') {
-    if (typeof logo.url === 'string') {
-      return (
-        <div className={wrapper} style={{ height: size, width: size }}>
-          <Image
-            alt={alt}
-            className='rounded'
-            height={size}
-            src={logo.url}
-            width={size}
-          />
-        </div>
-      )
-    }
-
+  if (typeof logo === 'string') {
     return (
       <div className={wrapper} style={{ height: size, width: size }}>
         <Image
           alt={alt}
-          className='rounded dark:hidden'
+          className='rounded'
           height={size}
-          src={logo.url.light}
-          width={size}
-        />
-        <Image
-          alt={alt}
-          className='hidden rounded dark:block'
-          height={size}
-          src={logo.url.dark}
+          src={logo}
           width={size}
         />
       </div>
     )
   }
+
+  return (
+    <div className={wrapper} style={{ height: size, width: size }}>
+      <Image
+        alt={alt}
+        className='rounded dark:hidden'
+        height={size}
+        src={logo.light}
+        width={size}
+      />
+      <Image
+        alt={alt}
+        className='hidden rounded dark:block'
+        height={size}
+        src={logo.dark}
+        width={size}
+      />
+    </div>
+  )
 }

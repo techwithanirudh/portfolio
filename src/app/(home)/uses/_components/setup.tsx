@@ -12,7 +12,7 @@ export function Setup() {
         <div className='overflow-hidden border-border border-b border-dashed'>
           <BlurImage
             alt='My desk setup in 2025'
-            className='h-full w-full'
+            className='aspect-[21/9] w-full'
             height={720}
             imageClassName='h-full w-full object-cover grayscale-75 transition-filter duration-300 hover:grayscale-0'
             lazy={false}

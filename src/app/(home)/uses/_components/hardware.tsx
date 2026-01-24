@@ -2,9 +2,7 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import type { HardwareItem } from '@/types'
 
-interface HardwareCardProps extends HardwareItem {}
-
-function HardwareCard({ name, description, url, image }: HardwareCardProps) {
+function HardwareCard({ name, description, url, image }: HardwareItem) {
   const Wrapper = url ? 'a' : 'div'
   const linkProps = url
     ? { href: url, target: '_blank', rel: 'noopener noreferrer' }
@@ -13,7 +11,7 @@ function HardwareCard({ name, description, url, image }: HardwareCardProps) {
   return (
     <Wrapper
       className={cn(
-        'flex items-center gap-4 bg-card/50 p-6 transition-colors group/item',
+        'group/item flex items-center gap-3 bg-card/50 p-4 transition-colors sm:gap-4 sm:p-6',
         url && 'hover:bg-card/80'
       )}
       {...linkProps}

@@ -1,7 +1,4 @@
-export interface Logo {
-  type: 'custom'
-  url: string | { light: string; dark: string }
-}
+export type Logo = string | { light: string; dark: string }
 
 export interface SoftwareItem {
   name: string

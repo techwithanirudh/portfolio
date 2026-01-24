@@ -81,11 +81,8 @@ export const software: SoftwareItem[] = [
     name: '1Password',
     description: 'Password manager',
     logo: {
-      type: 'custom',
-      url: {
-        light: '/images/uses/software/1password-light.svg',
-        dark: '/images/uses/software/1password-dark.svg',
-      },
+      light: '/images/uses/software/1password-light.svg',
+      dark: '/images/uses/software/1password-dark.svg',
     },
     url: 'https://1password.com',
     featured: true,
@@ -158,7 +155,7 @@ export const software: SoftwareItem[] = [
   {
     name: 'Ghostty',
     description: 'Terminal emulator',
-    logo: { type: 'custom', url: '/images/uses/software/ghostty.svg' },
+    logo: '/images/uses/software/ghostty.svg',
     url: 'https://ghostty.org',
   },
   {
@@ -189,7 +186,7 @@ export const software: SoftwareItem[] = [
   {
     name: 'Notion',
     description: 'Notes and docs',
-    logo: { type: 'custom', url: '/images/uses/software/notion.svg' },
+    logo: '/images/uses/software/notion.svg',
     url: 'https://www.notion.com',
     featured: true,
   },
@@ -226,13 +223,13 @@ export const software: SoftwareItem[] = [
   {
     name: 'Raindrop.io',
     description: 'Bookmark manager',
-    logo: { type: 'custom', url: '/images/uses/software/raindrop.svg' },
+    logo: '/images/uses/software/raindrop.svg',
     url: 'https://raindrop.io',
   },
   {
     name: 'Raycast',
     description: 'Productivity launcher',
-    logo: { type: 'custom', url: '/images/uses/software/raycast.svg' },
+    logo: '/images/uses/software/raycast.svg',
     url: 'https://raycast.com',
     featured: true,
   },
@@ -244,7 +241,7 @@ export const software: SoftwareItem[] = [
   {
     name: 'Spotify',
     description: 'Music streaming',
-    logo: { type: 'custom', url: '/images/uses/software/spotify.svg' },
+    logo: '/images/uses/software/spotify.svg',
     url: 'https://spotify.com',
   },
   {
@@ -275,14 +272,14 @@ export const software: SoftwareItem[] = [
   {
     name: 'Visual Studio Code',
     description: 'Code editor',
-    logo: { type: 'custom', url: '/images/uses/software/vscode.svg' },
+    logo: '/images/uses/software/vscode.svg',
     url: 'https://code.visualstudio.com',
     featured: true,
   },
   {
     name: 'Warp',
     description: 'Terminal',
-    logo: { type: 'custom', url: '/images/uses/software/warp.svg' },
+    logo: '/images/uses/software/warp.svg',
     url: 'https://warp.dev',
   },
   {

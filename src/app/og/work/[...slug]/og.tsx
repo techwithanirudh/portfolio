@@ -4,6 +4,7 @@ import type { ReactElement } from 'react'
 interface GenerateProps {
   title: string
   description?: string
+  backgroundImage?: string | null
 }
 
 export function getImageResponseOptions(): ImageResponseOptions {

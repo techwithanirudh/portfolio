@@ -40,9 +40,12 @@ export const Technology = () => {
           </WrapperTag>
         )
       })}
-      {fillerKeys.map((key) => (
+      {fillerKeys.map((key, fillerIndex) => (
         <div
-          className='hidden size-full border-border border-t border-dashed bg-dashed lg:block'
+          className={cn(
+            'hidden size-full bg-dashed lg:block',
+            colophonCardBorderClasses(technology.length + fillerIndex)
+          )}
           key={key}
         />
       ))}

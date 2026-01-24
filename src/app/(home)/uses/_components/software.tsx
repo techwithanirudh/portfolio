@@ -5,7 +5,7 @@ import { Logo } from './logo'
 function AppIcon({ name, url, logo, featured }: SoftwareItem) {
   return (
     <a
-      className='group flex flex-col items-center gap-3 bg-card/50 p-6 text-center no-underline transition-colors hover:bg-card/80'
+      className='group flex flex-col items-center gap-2 bg-card/50 p-4 text-center no-underline transition-colors hover:bg-card/80 sm:gap-3 sm:p-6'
       href={url}
       rel='noopener noreferrer'
       target='_blank'
@@ -40,7 +40,7 @@ export function SoftwareGrid({ items }: SoftwareGridProps) {
   )
 
   return (
-    <div className='grid grid-cols-3 gap-px bg-border sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8'>
+    <div className='grid grid-cols-2 gap-px bg-border sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8'>
       {sortedItems.map((item) => (
         <div className='bg-card' key={item.name}>
           <AppIcon {...item} />
