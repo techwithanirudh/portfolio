@@ -24,7 +24,7 @@ export const linkItems: LinkItemType[] = [
     icon: <Icons.code />,
     text: 'Work',
     url: '/work',
-    active: 'url',
+    active: 'nested-url',
   },
   {
     text: 'Blog',

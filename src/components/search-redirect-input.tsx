@@ -1,12 +1,12 @@
 'use client'
 
-import { Search } from 'lucide-react'
+import { ArrowRight, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { useDebounceValue } from 'usehooks-ts'
+import { useCallback, useState } from 'react'
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
 import { cn } from '@/lib/utils'
@@ -24,16 +24,20 @@ export function SearchRedirectInput({
 }: SearchRedirectInputProps) {
   const router = useRouter()
   const [value, setValue] = useState('')
-  const [debouncedValue] = useDebounceValue(value, 500)
+  const hasValue = value.trim().length > 0
 
-  useEffect(() => {
-    if (!debouncedValue.trim()) {
-      return
-    }
+  const handleSubmit = useCallback(
+    (nextValue: string) => {
+      const trimmedValue = nextValue.trim()
+      if (!trimmedValue) {
+        return
+      }
 
-    const params = new URLSearchParams({ tag, q: debouncedValue.trim() })
-    router.push(`/search?${params.toString()}`)
-  }, [debouncedValue, router, tag])
+      const params = new URLSearchParams({ tag, q: trimmedValue })
+      router.push(`/search?${params.toString()}`)
+    },
+    [router, tag]
+  )
 
   return (
     <InputGroup
@@ -48,9 +52,34 @@ export function SearchRedirectInput({
       <InputGroupInput
         className='text-sm'
         onChange={(event) => setValue(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter') {
+            event.preventDefault()
+            handleSubmit(event.currentTarget.value)
+          }
+        }}
         placeholder={placeholder}
         value={value}
       />
+      <InputGroupAddon
+        align='inline-end'
+        className={cn(
+          'transition-all duration-150 ease-out',
+          hasValue
+            ? 'scale-100 opacity-100'
+            : 'pointer-events-none scale-95 opacity-0'
+        )}
+      >
+        <InputGroupButton
+          aria-label='Submit search'
+          className='group/button rounded-none'
+          onClick={() => handleSubmit(value)}
+          size='icon-sm'
+          variant={'default'}
+        >
+          <ArrowRight className='size-3.5 transition-transform group-hover/button:-rotate-45' />
+        </InputGroupButton>
+      </InputGroupAddon>
     </InputGroup>
   )
 }
