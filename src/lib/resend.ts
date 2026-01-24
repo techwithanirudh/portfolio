@@ -1,6 +1,7 @@
 import { Resend, type UpdateContactOptions } from 'resend'
 import { baseUrl } from '@/constants'
 import { env } from '@/env'
+import { retryWithBackoff } from '@/lib/retry'
 import NewsletterWelcomeEmail from '../../emails/newsletter-welcome'
 import type { getPosts } from './source'
 
@@ -70,14 +71,47 @@ export async function sendWelcomeEmail({
     url: `${baseUrl}${post.url}`,
   }))
 
-  const { error } = await resend.emails.send({
-    from: EMAIL_FROM,
-    to,
-    subject: 'Welcome to my newsletter!',
-    react: NewsletterWelcomeEmail({ firstName, posts: formattedPosts }),
-  })
+  try {
+    await retryWithBackoff(
+      async () => {
+        const { error } = await resend.emails.send({
+          from: EMAIL_FROM,
+          to,
+          subject: 'Welcome to my newsletter!',
+          react: NewsletterWelcomeEmail({ firstName, posts: formattedPosts }),
+        })
 
-  if (error) {
+        if (error) {
+          throw error
+        }
+      },
+      {
+        attempts: 3,
+        baseDelayMs: 650,
+        shouldRetry: isRateLimitError,
+      }
+    )
+  } catch (error) {
+    if (isRateLimitError(error)) {
+      return { sent: false, reason: 'rate_limit_exceeded' as const }
+    }
+
     throw new Error(`Failed to send welcome email: ${JSON.stringify(error)}`)
   }
+
+  return { sent: true }
+}
+
+interface ResendError {
+  name?: string
+  statusCode?: number | null
+}
+
+const isRateLimitError = (error: unknown) => {
+  if (!error || typeof error !== 'object') {
+    return false
+  }
+
+  const { name, statusCode } = error as ResendError
+  return name === 'rate_limit_exceeded' || statusCode === 429
 }
