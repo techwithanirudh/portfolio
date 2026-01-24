@@ -36,7 +36,7 @@ export function SearchRedirectInput({
   }, [debouncedValue, router, tag])
 
   return (
-    <InputGroup className={cn('h-9 max-w-xs rounded-none border-0 !bg-background shadow-none border-b border-dashed border-border', className)}>
+    <InputGroup className={cn('h-9 max-w-xs rounded-none border-0 !bg-background shadow-none', className)}>
       <InputGroupAddon className='border-0 text-muted-foreground'>
         <Search className='size-4' />
       </InputGroupAddon>

@@ -59,6 +59,7 @@ export default async function Page(props: {
       />
       <Section className='h-full' sectionClassName='flex flex-1'>
         <ViewAnimation
+          delay={0.05}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
@@ -68,7 +69,7 @@ export default async function Page(props: {
             tag='projects'
           />
         </ViewAnimation>
-        <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x'>
+        <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x border-t border-border border-dashed'>
           {work.map((entry, index) => (
             <ViewAnimation
               blur={false}

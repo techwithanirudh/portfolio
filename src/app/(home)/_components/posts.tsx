@@ -14,6 +14,7 @@ export default function Posts({
   return (
     <Section {...props}>
       <ViewAnimation
+        delay={0.05}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
@@ -23,7 +24,7 @@ export default function Posts({
           tag='blog'
         />
       </ViewAnimation>
-      <div className='grid divide-y divide-dashed divide-border text-left'>
+      <div className='grid divide-y divide-dashed divide-border text-left border-t border-border border-dashed'>
         {posts.map((post, index) => {
           const date = new Date(post.data.date).toDateString()
           return (

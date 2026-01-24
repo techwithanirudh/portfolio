@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { BackButton } from '@/components/back-button'
 import { HeroSection } from '@/components/sections/hero'
 import { Wrapper } from '@/components/wrapper'
 import { title as homeTitle } from '@/constants/site'
@@ -12,7 +13,9 @@ export default function Page() {
         align='center'
         description='Search across blog posts and work.'
         title='Search'
-      />
+      >
+        <BackButton />
+      </HeroSection>
       <SearchClient />
     </Wrapper>
   )
