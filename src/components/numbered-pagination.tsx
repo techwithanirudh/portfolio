@@ -39,22 +39,23 @@ function NumberedPagination({
   return (
     <Pagination>
       <PaginationContent className='inline-flex w-full gap-0 -space-x-px rtl:space-x-reverse'>
-        <PaginationItem>
-          <PaginationLink
-            aria-disabled={currentPage === 1}
-            aria-label='Go to previous page'
-            className={cn(
-              buttonVariants({
-                variant: 'ghost',
-              }),
-              'rounded-none shadow-none focus-visible:z-10 aria-disabled:pointer-events-none [&[aria-disabled]>svg]:opacity-50'
-            )}
-            href='#'
-            onClick={handlePageChange(currentPage - 1)}
-          >
-            <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
-          </PaginationLink>
-        </PaginationItem>
+        {currentPage > 1 && (
+          <PaginationItem>
+            <PaginationLink
+              aria-label='Go to previous page'
+              className={cn(
+                buttonVariants({
+                  variant: 'ghost',
+                }),
+                'rounded-none shadow-none focus-visible:z-10'
+              )}
+              href='#'
+              onClick={handlePageChange(currentPage - 1)}
+            >
+              <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
+            </PaginationLink>
+          </PaginationItem>
+        )}
 
         <div className='inline-flex w-full justify-center'>
           {showLeftEllipsis && (
@@ -107,22 +108,27 @@ function NumberedPagination({
             </PaginationItem>
           )}
         </div>
-        <PaginationItem>
-          <PaginationLink
-            aria-disabled={currentPage === totalPages}
-            aria-label='Go to next page'
-            className={cn(
-              buttonVariants({
-                variant: 'ghost',
-              }),
-              'rounded-none shadow-none focus-visible:z-10 aria-disabled:pointer-events-none [&[aria-disabled]>svg]:opacity-50'
-            )}
-            href='#'
-            onClick={handlePageChange(currentPage + 1)}
-          >
-            <Icons.chevronRight aria-hidden='true' size={16} strokeWidth={2} />
-          </PaginationLink>
-        </PaginationItem>
+        {currentPage < totalPages && (
+          <PaginationItem>
+            <PaginationLink
+              aria-label='Go to next page'
+              className={cn(
+                buttonVariants({
+                  variant: 'ghost',
+                }),
+                'rounded-none shadow-none focus-visible:z-10'
+              )}
+              href='#'
+              onClick={handlePageChange(currentPage + 1)}
+            >
+              <Icons.chevronRight
+                aria-hidden='true'
+                size={16}
+                strokeWidth={2}
+              />
+            </PaginationLink>
+          </PaginationItem>
+        )}
       </PaginationContent>
     </Pagination>
   )
