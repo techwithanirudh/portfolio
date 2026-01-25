@@ -81,7 +81,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
                     initial={{ opacity: 0, translateX: -12, scale: 0.98 }}
                     whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
                   >
-                    <div className='flex h-full min-h-[280px] flex-col justify-between p-6 transition-all duration-300 hover:bg-card lg:col-span-2 lg:aspect-video lg:min-h-0'>
+                    <div className='flex h-full min-h-[320px] flex-col justify-between p-6 transition-all duration-300 hover:bg-card lg:col-span-2 lg:aspect-video lg:min-h-0'>
                       <User className='h-8 w-8 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
                       <div className='flex flex-col gap-4'>
                         <div className='flex flex-col'>
