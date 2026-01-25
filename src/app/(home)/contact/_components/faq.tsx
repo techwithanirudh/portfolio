@@ -1,5 +1,6 @@
 import { InlineLink } from '@/components/inline-link'
 import { Section } from '@/components/section'
+import { SectionHeader } from '@/components/sections/section-header'
 import {
   Accordion,
   AccordionContent,
@@ -33,32 +34,20 @@ const faq = [
 
 export const FAQ = () => (
   <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
-    <div className='flex flex-col gap-2 px-6 py-10 md:py-14'>
-      <ViewAnimation
-        blur={false}
-        duration={0.3}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
-        <h4 className='typography-title text-left font-normal text-3xl tracking-tighter md:text-5xl'>
-          Frequently Asked Questions
-        </h4>
-      </ViewAnimation>
-      <ViewAnimation
-        blur={false}
-        delay={0.1}
-        duration={0.3}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
-        <p className='typography-body text-left text-lg text-muted-foreground leading-relaxed tracking-tight'>
+    <SectionHeader
+      align='left'
+      className='px-6 py-10 md:py-14'
+      description={
+        <>
           Still have questions?{' '}
           <InlineLink className='no-underline' href='/contact'>
             Contact Me
           </InlineLink>
-        </p>
-      </ViewAnimation>
-    </div>
+        </>
+      }
+      size='large'
+      title='Frequently Asked Questions'
+    />
 
     <Accordion
       className='w-full divide-dashed divide-border'

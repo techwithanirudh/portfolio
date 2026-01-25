@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
+import { SectionHeader } from '@/components/sections/section-header'
 import { buttonVariants } from '@/components/ui/button'
-
 import { ViewAnimation } from '@/components/view-animation'
 import { WorkCard } from '@/components/work/work-card'
 import type { WorkPage } from '@/lib/source'
@@ -11,29 +11,13 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
   return (
     <Section className='relative w-full pt-10'>
       <div className='flex flex-col gap-10'>
-        <div className='flex flex-col gap-2 px-6'>
-          <ViewAnimation
-            blur={false}
-            duration={0.3}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <h2 className='typography-title text-left font-normal text-3xl tracking-tighter md:text-5xl'>
-              Work
-            </h2>
-          </ViewAnimation>
-          <ViewAnimation
-            blur={false}
-            delay={0.1}
-            duration={0.3}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <p className='typography-body text-left text-lg text-muted-foreground leading-relaxed tracking-tight'>
-              A snapshot of recent projects and collaborations.
-            </p>
-          </ViewAnimation>
-        </div>
+        <SectionHeader
+          align='left'
+          className='px-6'
+          description='A snapshot of recent projects and collaborations.'
+          size='large'
+          title='Work'
+        />
         <div className='w-full border-border border-t border-dashed'>
           <div className='grid grid-cols-1 divide-x divide-dashed divide-border text-left sm:grid-cols-2 [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
             {works.map((work, index) => (
