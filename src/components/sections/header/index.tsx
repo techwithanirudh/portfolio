@@ -20,7 +20,7 @@ import {
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import { type ComponentProps, Fragment, useMemo, useState } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
@@ -178,7 +178,8 @@ export const Header = ({
                   : (event) => event.preventDefault()
               }
             >
-              <ChevronDown className='transition-transform duration-300 group-data-[state=open]:rotate-180' />
+              <Menu className='transition-all duration-300 group-data-[state=open]:hidden' />
+              <X className='hidden transition-all duration-300 group-data-[state=open]:block' />
             </NavigationMenuTrigger>
           </ViewAnimation>
           <NavigationMenuContent className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end'>

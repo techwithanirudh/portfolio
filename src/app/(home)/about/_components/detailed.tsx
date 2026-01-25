@@ -16,7 +16,7 @@ export default function Detailed(): React.ReactElement {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
-              <h2 className='font-semibold text-2xl'>About</h2>
+              <h2 className='font-semibold text-2xl'>Overview</h2>
               <p className='text-muted-foreground text-sm'>
                 A quick look at my background, focus, and what I'm building
                 next.
@@ -56,7 +56,7 @@ export default function Detailed(): React.ReactElement {
                 href='/work'
               >
                 View Work
-                <Icons.arrowUpRight className='size-4 transition-transform group-hover:-rotate-12' />
+                <Icons.arrowUpRight className='size-4 transition-transform group-hover:-rotate-45 group-hover:translate-x-0.5' />
               </Link>
             </div>
           </ViewAnimation>

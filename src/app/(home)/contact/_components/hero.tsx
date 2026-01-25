@@ -1,4 +1,3 @@
-import { SectionHeader } from '@/components/sections/section-header'
 import {
   Tooltip,
   TooltipContent,
@@ -10,11 +9,26 @@ import { socials } from '@/constants/navigation'
 
 export const Hero = () => (
   <div className='flex flex-col gap-2'>
-    <SectionHeader
-      align='left'
-      description='Have a question or want to connect? Send a message and expect a response within a week.'
-      title='Contact Me'
-    />
+    <div className='flex flex-col gap-4 text-left'>
+      <ViewAnimation
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+      >
+        <h1 className='typography-title font-normal text-3xl tracking-tighter md:text-5xl'>
+          Contact Me
+        </h1>
+      </ViewAnimation>
+      <ViewAnimation
+        delay={0.1}
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+      >
+        <p className='typography-body text-muted-foreground'>
+          Have a question or want to connect? Send a message and expect a
+          response within a week.
+        </p>
+      </ViewAnimation>
+    </div>
     <TooltipProvider>
       <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>
         {socials.map((social, index) => (
