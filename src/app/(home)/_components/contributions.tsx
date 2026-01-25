@@ -37,7 +37,7 @@ const Contributions = ({ data }: ContributionsProps) => (
           className='w-full'
           data={data}
         >
-          <ContributionGraphCalendar className='overflow-hidden'>
+          <ContributionGraphCalendar className='overflow-auto'>
             {({ activity, dayIndex, weekIndex }) => (
               <Tooltip>
                 <TooltipTrigger asChild>
