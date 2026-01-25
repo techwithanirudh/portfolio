@@ -153,16 +153,16 @@ export const Header = ({
         </div>
       </div>
       <ul className='ms-auto -me-1.5 flex flex-row items-center lg:hidden'>
-        <ViewAnimation
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {searchToggle.enabled !== false &&
-            (searchToggle.components?.sm ?? (
+        {searchToggle.enabled !== false &&
+          (searchToggle.components?.sm ?? (
+            <ViewAnimation
+              delay={0.1}
+              initial={{ opacity: 0, translateY: -6 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+            >
               <SearchToggle className='p-2' hideIfDisabled />
-            ))}
-        </ViewAnimation>
+            </ViewAnimation>
+          ))}
         <NavigationMenuItem>
           <ViewAnimation
             delay={0.15}
