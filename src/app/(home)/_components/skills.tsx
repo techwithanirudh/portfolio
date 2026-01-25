@@ -40,18 +40,25 @@ const skillTags = [
 const Skills = () => (
   <Section className='relative w-full pt-10'>
     <div className='flex flex-col gap-10'>
-      <ViewAnimation
-        className='flex flex-col gap-2 px-6'
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
-        <h2 className='typography-title text-left font-regular text-3xl tracking-tighter md:text-5xl'>
-          My Expertise
-        </h2>
-        <p className='typography-body text-left text-lg text-muted-foreground leading-relaxed tracking-tight'>
-          Focused on building practical projects with modern tools
-        </p>
-      </ViewAnimation>
+      <div className='flex flex-col gap-2 px-6'>
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -6 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+        >
+          <h2 className='typography-title text-left font-normal text-3xl tracking-tighter md:text-5xl'>
+            My Expertise
+          </h2>
+        </ViewAnimation>
+        <ViewAnimation
+          delay={0.1}
+          initial={{ opacity: 0, translateY: -6 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+        >
+          <p className='typography-body text-left text-lg text-muted-foreground leading-relaxed tracking-tight'>
+            Focused on building practical projects with modern tools
+          </p>
+        </ViewAnimation>
+      </div>
 
       <div className='w-full border-border border-t border-dashed'>
         <div className='grid grid-cols-1 divide-x divide-dashed divide-border text-left sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 lg:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
