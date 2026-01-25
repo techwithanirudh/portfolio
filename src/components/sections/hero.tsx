@@ -9,7 +9,7 @@ const heroVariants = cva('flex flex-col', {
   variants: {
     variant: {
       default:
-        'gap-8 py-8 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20 sm:shadow-sm',
+        'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
       compact: 'gap-4 lg:p-2',
     },
     align: {
@@ -46,7 +46,7 @@ export const HeroSection = ({
   VariantProps<typeof heroVariants> & {
     asChild?: boolean
   }) => (
-  <Section className='p-4'>
+  <Section className='px-6 sm:p-4'>
     <div className={cn(heroVariants({ variant, align, className }))}>
       {image && (
         <ViewAnimation
@@ -74,7 +74,7 @@ export const HeroSection = ({
         >
           <h1
             className={cn(
-              'typography-hero font-bold text-3xl leading-tight tracking-tight',
+              'typography-hero font-normal text-3xl leading-tight tracking-tighter',
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
               variant === 'compact' &&

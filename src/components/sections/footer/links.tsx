@@ -78,10 +78,10 @@ export const Links = () => {
   ]
 
   return (
-    <div className='grid gap-8 text-muted-foreground text-sm sm:grid-cols-4'>
+    <div className='grid grid-cols-2 gap-6 text-muted-foreground text-sm sm:grid-cols-4 sm:gap-8'>
       {lists.map((list, index) => (
         <ViewAnimation
-          className='flex flex-col gap-6'
+          className='flex flex-col gap-3 sm:gap-6'
           delay={0.05 * index}
           initial={{ opacity: 0, translateY: -6 }}
           key={list.title}
@@ -94,7 +94,7 @@ export const Links = () => {
               <p>{list.title}</p>
             )}
           </div>
-          <ul className='flex flex-col gap-3'>
+          <ul className='flex flex-col gap-2 sm:gap-3'>
             {list.items.map((item) => (
               <li key={item.href}>
                 <ActiveLink

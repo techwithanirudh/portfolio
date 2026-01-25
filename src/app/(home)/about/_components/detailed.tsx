@@ -10,19 +10,24 @@ export default function Detailed(): React.ReactElement {
     <Section>
       <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
         <div className='bg-dashed'>
-          <ViewAnimation
-            className='h-full'
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
-              <h2 className='font-semibold text-2xl'>About</h2>
+          <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
+            <ViewAnimation
+              initial={{ opacity: 0, translateY: -6 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+            >
+              <h2 className='font-semibold text-2xl'>Overview</h2>
+            </ViewAnimation>
+            <ViewAnimation
+              delay={0.1}
+              initial={{ opacity: 0, translateY: -6 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+            >
               <p className='text-muted-foreground text-sm'>
                 A quick look at my background, focus, and what I'm building
                 next.
               </p>
-            </div>
-          </ViewAnimation>
+            </ViewAnimation>
+          </div>
         </div>
         <div className='sm:col-span-2'>
           <ViewAnimation
@@ -56,7 +61,7 @@ export default function Detailed(): React.ReactElement {
                 href='/work'
               >
                 View Work
-                <Icons.arrowUpRight className='size-4 transition-transform group-hover:-rotate-12' />
+                <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
               </Link>
             </div>
           </ViewAnimation>

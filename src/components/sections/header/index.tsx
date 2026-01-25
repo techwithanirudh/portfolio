@@ -20,7 +20,7 @@ import {
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Menu, X } from 'lucide-react'
 import { type ComponentProps, Fragment, useMemo, useState } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
@@ -155,7 +155,13 @@ export const Header = ({
       <ul className='ms-auto -me-1.5 flex flex-row items-center lg:hidden'>
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
-            <SearchToggle className='p-2' hideIfDisabled />
+            <ViewAnimation
+              delay={0.1}
+              initial={{ opacity: 0, translateY: -6 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
+            >
+              <SearchToggle className='p-2' hideIfDisabled />
+            </ViewAnimation>
           ))}
         <NavigationMenuItem>
           <ViewAnimation
@@ -178,7 +184,8 @@ export const Header = ({
                   : (event) => event.preventDefault()
               }
             >
-              <ChevronDown className='transition-transform duration-300 group-data-[state=open]:rotate-180' />
+              <Menu className='transition-all duration-300 group-data-[state=open]:hidden' />
+              <X className='hidden transition-all duration-300 group-data-[state=open]:block' />
             </NavigationMenuTrigger>
           </ViewAnimation>
           <NavigationMenuContent className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end'>
