@@ -56,7 +56,7 @@ export default function Detailed(): React.ReactElement {
                 href='/work'
               >
                 View Work
-                <Icons.arrowUpRight className='size-4 transition-transform group-hover:-rotate-45 group-hover:translate-x-0.5' />
+                <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45 group-hover:translate-x-0.5' />
               </Link>
             </div>
           </ViewAnimation>
