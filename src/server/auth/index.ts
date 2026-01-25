@@ -6,6 +6,7 @@ import { env } from '@/env'
 import { db } from '@/server/db'
 
 export const auth = betterAuth({
+  baseURL: env.NEXT_PUBLIC_BASE_URL,
   database: drizzleAdapter(db, {
     provider: 'pg',
     usePlural: true,
