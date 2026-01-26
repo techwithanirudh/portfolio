@@ -42,8 +42,8 @@ function Header() {
   const { setOpen, chat } = use(Context)!
 
   return (
-    <div className='sticky top-0 flex items-start gap-2'>
-      <div className='flex flex-1 items-center justify-between rounded-xl bg-fd-card px-3 py-2 text-fd-card-foreground'>
+    <div className='sticky top-0 flex items-start'>
+      <div className='flex flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
         <p className='font-medium text-sm'>Ask AI</p>
         <div className='flex items-center gap-1.5'>
           <button
@@ -67,7 +67,7 @@ function Header() {
           buttonVariants({
             size: 'icon-sm',
             color: 'secondary',
-            className: 'rounded-full',
+            className: 'rounded-none size-10 border-none',
           })
         )}
         onClick={() => setOpen(false)}
@@ -91,7 +91,7 @@ function SearchAIActions() {
           color: 'secondary',
           size: 'icon-sm',
           className:
-            'gap-1.5 rounded-t-md rounded-br-md rounded-bl-lg transition-opacity duration-200 [&_svg]:size-4',
+            'gap-1.5 rounded-none border border-dashed transition-opacity duration-200 [&_svg]:size-4',
         }),
         !isLoading &&
           messages?.length > 0 &&
@@ -156,7 +156,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
               color: 'secondary',
               size: 'icon-sm',
               className:
-                'mt-2 rounded-b-md rounded-tl-md rounded-tr-lg transition-all [&_svg]:size-3.5',
+                'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-3.5',
             })
           )}
           key='bn'
@@ -172,7 +172,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
               color: 'secondary',
               size: 'icon-sm',
               className:
-                'mt-2 rounded-b-md rounded-tl-md rounded-tr-lg transition-all [&_svg]:size-4',
+                'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-4',
             })
           )}
           disabled={input.length === 0}
@@ -229,11 +229,11 @@ function List(props: Omit<ComponentProps<'div'>, 'dir'>) {
     <div
       ref={containerRef}
       {...props}
-      data-lenis-prevent
       className={cn(
         'fd-scroll-container flex min-w-0 flex-col overflow-y-auto',
         props.className
       )}
+      data-lenis-prevent
     >
       {props.children}
     </div>
@@ -328,7 +328,7 @@ export function AISearchTrigger() {
         buttonVariants({
           variant: 'secondary',
         }),
-        'fixed end-4 bottom-4 z-20 w-24 gap-3 rounded-2xl text-fd-muted-foreground shadow-lg transition-all',
+        'fixed end-4 bottom-4 z-20 w-24 gap-3 rounded-none border border-dashed text-fd-muted-foreground shadow-none transition-all',
         open && 'translate-y-10 opacity-0'
       )}
       onClick={() => setOpen(true)}
@@ -395,25 +395,26 @@ export function AISearchPanel() {
         <div
           className={cn(
             'z-30 overflow-hidden bg-fd-popover text-fd-popover-foreground',
-            'max-lg:fixed max-lg:inset-x-2 max-lg:top-4 max-lg:rounded-2xl max-lg:border max-lg:shadow-xl',
-            'fixed inset-y-2 z-30 flex flex-col rounded-2xl border bg-fd-popover text-fd-popover-foreground shadow-xl max-sm:inset-x-2 sm:end-2 sm:w-[460px]',
+            'max-lg:fixed max-lg:inset-x-2 max-lg:top-4 max-lg:rounded-none max-lg:border max-lg:border-dashed max-lg:shadow-none',
+            'fixed inset-y-2 z-30 flex flex-col rounded-none border border-dashed bg-fd-popover text-fd-popover-foreground shadow-none max-sm:inset-x-2 sm:end-2 sm:w-[460px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >
-          <div className='flex size-full flex-col p-2 xl:p-4'>
+          <div className='flex size-full flex-col divide-y divide-dashed divide-border'>
             <Header />
             <List
-              className='flex-1 overscroll-contain px-3 py-4'
+              className='flex-1 overscroll-contain px-3'
               style={{
                 maskImage:
                   'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent 100%)',
               }}
             >
-              <div className='flex flex-col gap-4'>
+              <div className='flex flex-col divide-y divide-dashed divide-border'>
                 {chat.messages
                   .filter((msg) => msg.role !== 'system')
                   .map((item, idx) => (
                     <Message
+                      className='py-4'
                       isInProgress={
                         chat.messages.length - 1 === idx &&
                         (chat.status === 'streaming' ||
@@ -425,7 +426,7 @@ export function AISearchPanel() {
                   ))}
               </div>
             </List>
-            <div className='rounded-xl border bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
+            <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
               <SearchAIInput />
               <div className='flex items-center gap-1.5 p-2'>
                 <SearchAIActions />
