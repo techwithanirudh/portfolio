@@ -8,7 +8,6 @@ export function NewsletterSection() {
       <div className='grid gap-6 px-6 py-10 md:grid-cols-2 md:items-center md:gap-10 md:py-14'>
         <div className='space-y-2'>
           <ViewAnimation
-            blur={false}
             duration={0.3}
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
@@ -18,7 +17,6 @@ export function NewsletterSection() {
             </h3>
           </ViewAnimation>
           <ViewAnimation
-            blur={false}
             delay={0.1}
             duration={0.3}
             initial={{ opacity: 0, translateY: -6 }}
@@ -31,7 +29,6 @@ export function NewsletterSection() {
           </ViewAnimation>
         </div>
         <ViewAnimation
-          blur={false}
           delay={0.15}
           duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}

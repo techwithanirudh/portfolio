@@ -22,7 +22,6 @@ export default function Posts({
       )}
     >
       <ViewAnimation
-        blur={false}
         delay={0.1}
         duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
@@ -39,7 +38,6 @@ export default function Posts({
           const date = new Date(post.data.date).toDateString()
           return (
             <ViewAnimation
-              blur={false}
               delay={0.05 * index}
               duration={0.3}
               initial={{ opacity: 0, translateY: -6 }}

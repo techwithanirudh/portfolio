@@ -62,7 +62,6 @@ export default async function Page(props: {
         sectionClassName='flex flex-1'
       >
         <ViewAnimation
-          blur={false}
           delay={0.05}
           duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}

@@ -81,7 +81,6 @@ export const Links = () => {
     <div className='grid grid-cols-2 gap-6 text-muted-foreground text-sm sm:grid-cols-4 sm:gap-8'>
       {lists.map((list, index) => (
         <ViewAnimation
-          blur={false}
           className='flex flex-col gap-3 sm:gap-6'
           delay={0.05 * index}
           duration={0.3}

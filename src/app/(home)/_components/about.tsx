@@ -17,7 +17,6 @@ export default function About(): React.ReactElement {
       />
 
       <ViewAnimation
-        blur={false}
         className='relative'
         delay={0.1}
         duration={0.3}

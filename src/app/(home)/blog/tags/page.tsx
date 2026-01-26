@@ -19,7 +19,6 @@ export default function Page() {
         <div className='grid grid-cols-1 divide-y divide-dashed divide-border sm:grid-cols-2 lg:grid-cols-4'>
           {tags.map((tag, index) => (
             <ViewAnimation
-              blur={false}
               className='size-full'
               delay={0.05 * index}
               duration={0.3}
@@ -38,7 +37,6 @@ export default function Page() {
           ))}
           {tags.length % 2 === 1 && (
             <ViewAnimation
-              blur={false}
               delay={0.05 * tags.length}
               duration={0.3}
               initial={{ opacity: 0 }}

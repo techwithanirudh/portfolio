@@ -25,7 +25,6 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
                   key={post.url}
                 >
                   <ViewAnimation
-                    blur={false}
                     delay={0.05 * index}
                     duration={0.3}
                     initial={{ opacity: 0, translateY: -6 }}

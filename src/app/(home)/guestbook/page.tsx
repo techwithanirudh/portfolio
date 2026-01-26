@@ -18,7 +18,6 @@ export default async function GuestbookPage() {
     <Wrapper>
       <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
         <ViewAnimation
-          blur={false}
           className='px-6 py-10 md:py-14'
           duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}
@@ -28,7 +27,6 @@ export default async function GuestbookPage() {
         </ViewAnimation>
 
         <ViewAnimation
-          blur={false}
           className='flex w-full items-center px-6 py-10 md:py-14'
           delay={0.1}
           duration={0.3}
@@ -40,7 +38,6 @@ export default async function GuestbookPage() {
       </Section>
       <Section className='p-6'>
         <ViewAnimation
-          blur={false}
           delay={0.1}
           duration={0.3}
           initial={{ opacity: 0, translateY: 6 }}
@@ -51,7 +48,6 @@ export default async function GuestbookPage() {
       </Section>
       <Section>
         <ViewAnimation
-          blur={false}
           delay={0.15}
           duration={0.3}
           initial={{ opacity: 0, translateY: 6 }}
