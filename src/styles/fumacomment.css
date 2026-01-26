@@ -1,0 +1,23 @@
+:root,
+.dark {
+  --color-fc-background: var(--color-fd-background);
+  --color-fc-foreground: var(--color-fd-foreground);
+  --color-fc-muted: var(--color-fd-muted);
+  --color-fc-muted-foreground: var(--color-fd-muted-foreground);
+  --color-fc-popover: var(--color-fd-popover);
+  --color-fc-popover-foreground: var(--color-fd-popover-foreground);
+  --color-fc-card: var(--color-fd-card);
+  --color-fc-card-foreground: var(--color-fd-card-foreground);
+  --color-fc-border: var(--color-fd-border);
+  --color-fc-primary: var(--color-fd-primary);
+  --color-fc-primary-foreground: var(--color-fd-primary-foreground);
+  --color-fc-secondary: var(--color-fd-secondary);
+  --color-fc-secondary-foreground: var(--color-fd-secondary-foreground);
+  --color-fc-accent: var(--color-fd-accent);
+  --color-fc-accent-foreground: var(--color-fd-accent-foreground);
+  --color-fc-ring: var(--color-fd-ring);
+}
+
+@theme static {
+  --color-fc-error: hsl(0 84.2% 60.2%);
+}

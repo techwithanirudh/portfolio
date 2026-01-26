@@ -7,6 +7,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
+import { DownloadIcon } from 'lucide-react'
 
 export default function Experience(): React.ReactElement {
   return (
@@ -22,9 +23,10 @@ export default function Experience(): React.ReactElement {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <Button asChild className='w-fit' size='sm' variant='outline'>
+            <Button asChild className='w-fit' size='sm' variant='default'>
               <a href='/resume.pdf' rel='noopener' target='_blank'>
                 Resume
+                <DownloadIcon className='inline-block' />
               </a>
             </Button>
           </ViewAnimation>

@@ -38,8 +38,8 @@ export const SectionHeader = ({
     >
       <h2
         className={cn(
-          'font-normal text-3xl leading-tight tracking-tighter',
-          'md:text-4xl',
+          'font-regular text-3xl leading-tight tracking-tighter typography-title',
+          'md:text-5xl',
           titleClassName
         )}
       >
