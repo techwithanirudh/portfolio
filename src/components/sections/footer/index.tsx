@@ -17,8 +17,10 @@ export const Footer = () => (
     <Links />
     <div className='grid items-center gap-4 sm:grid-cols-3'>
       <ViewAnimation
+        blur={false}
         className='w-min'
         delay={0.1}
+        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
@@ -31,7 +33,9 @@ export const Footer = () => (
       </ViewAnimation>
       <div className='flex items-center sm:justify-center'>
         <ViewAnimation
+          blur={false}
           delay={0.15}
+          duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
@@ -41,8 +45,10 @@ export const Footer = () => (
         </ViewAnimation>
       </div>
       <ViewAnimation
+        blur={false}
         className='flex items-center gap-2 sm:justify-end'
         delay={0.2}
+        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
