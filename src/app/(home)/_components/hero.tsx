@@ -71,7 +71,7 @@ const Hero = () => {
         </p>
       </ViewAnimation>
 
-      <div className='flex flex-wrap items-center justify-center gap-4 mt-2'>
+      <div className='mt-2 flex flex-wrap items-center justify-center gap-4'>
         <ViewAnimation
           delay={0.2}
           initial={{ opacity: 0, translateY: -6 }}

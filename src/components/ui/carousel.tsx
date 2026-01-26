@@ -50,7 +50,7 @@ function Carousel({
   className,
   children,
   ...props
-}: React.ComponentProps<'section'> & CarouselProps) {
+}: React.ComponentProps<'div'> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -78,7 +78,7 @@ function Carousel({
   }, [api])
 
   const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent<HTMLElement>) => {
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (event.key === 'ArrowLeft') {
         event.preventDefault()
         scrollPrev()
@@ -124,14 +124,17 @@ function Carousel({
         canScrollNext,
       }}
     >
-      <section
+      {/* biome-ignore lint/a11y/useSemanticElements: keep region role for carousel landmarks */}
+      <div
+        aria-roledescription='carousel'
         className={cn('relative', className)}
         data-slot='carousel'
         onKeyDownCapture={handleKeyDown}
+        role='region'
         {...props}
       >
         {children}
-      </section>
+      </div>
     </CarouselContext.Provider>
   )
 }
@@ -157,21 +160,20 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function CarouselItem({
-  className,
-  ...props
-}: React.ComponentProps<'fieldset'>) {
+function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
   const { orientation } = useCarousel()
 
   return (
-    <fieldset
+    // biome-ignore lint/a11y/useSemanticElements: carousel items need group role for slide semantics
+    <div
       aria-roledescription='slide'
       className={cn(
-        'min-w-0 shrink-0 grow-0 basis-full border-0 p-0',
+        'min-w-0 shrink-0 grow-0 basis-full',
         orientation === 'horizontal' ? 'pl-4' : 'pt-4',
         className
       )}
       data-slot='carousel-item'
+      role='group'
       {...props}
     />
   )

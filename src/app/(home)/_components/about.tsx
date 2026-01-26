@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
+import { Prose } from '@/components/prose'
 import { SectionHeader } from '@/components/sections/section-header'
 import {
   SplitSection,
@@ -9,7 +10,6 @@ import {
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
-import { Prose } from '@/components/prose'
 
 export default function About(): React.ReactElement {
   return (

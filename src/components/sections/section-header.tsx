@@ -38,7 +38,7 @@ export const SectionHeader = ({
     >
       <h2
         className={cn(
-          'font-regular text-3xl leading-tight tracking-tighter typography-title',
+          'typography-title font-regular text-3xl leading-tight tracking-tighter',
           'md:text-5xl',
           titleClassName
         )}

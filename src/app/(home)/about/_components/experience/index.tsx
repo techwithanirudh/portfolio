@@ -1,3 +1,4 @@
+import { DownloadIcon } from 'lucide-react'
 import {
   SplitSection,
   SplitSectionContent,
@@ -7,7 +8,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
-import { DownloadIcon } from 'lucide-react'
 
 export default function Experience(): React.ReactElement {
   return (
