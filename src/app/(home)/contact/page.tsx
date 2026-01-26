@@ -25,7 +25,7 @@ export default function Contact(): React.ReactElement {
           </ViewAnimation>
         </SplitSectionSidebar>
 
-        <SplitSectionContent className='flex w-full items-center'>
+        <SplitSectionContent className='flex w-full items-center' inset>
           <ViewAnimation
             blur={false}
             delay={0.1}

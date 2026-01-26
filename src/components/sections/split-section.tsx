@@ -16,11 +16,15 @@ const splitSectionVariants = cva('grid divide-y divide-dashed divide-border', {
   },
 })
 
-const splitSectionSidebarVariants = cva('flex flex-col gap-4 px-6 py-8', {
+const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
   variants: {
     background: {
       default: '',
       dashed: 'bg-dashed',
+    },
+    inset: {
+      true: 'px-6 py-8',
+      false: '',
     },
     sticky: {
       true: 'sm:sticky sm:top-16',
@@ -29,6 +33,7 @@ const splitSectionSidebarVariants = cva('flex flex-col gap-4 px-6 py-8', {
   },
   defaultVariants: {
     background: 'default',
+    inset: true,
     sticky: false,
   },
 })
@@ -59,13 +64,14 @@ interface SplitSectionSidebarProps
 export const SplitSectionSidebar = ({
   children,
   background,
+  inset,
   sticky,
   className,
 }: SplitSectionSidebarProps) => {
   return (
     <div
       className={cn(
-        splitSectionSidebarVariants({ background, sticky }),
+        splitSectionSidebarVariants({ background, inset, sticky }),
         className
       )}
     >
@@ -86,14 +92,30 @@ export const SplitSectionHeader = ({
   <SectionHeader align='left' description={description} title={title} />
 )
 
-interface SplitSectionContentProps {
+const splitSectionContentVariants = cva('', {
+  variants: {
+    inset: {
+      true: 'px-6 py-8',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    inset: false,
+  },
+})
+
+interface SplitSectionContentProps
+  extends VariantProps<typeof splitSectionContentVariants> {
   children: ReactNode
   className?: string
 }
 
 export const SplitSectionContent = ({
   children,
+  inset,
   className,
 }: SplitSectionContentProps) => (
-  <div className={cn('px-6 py-8', className)}>{children}</div>
+  <div className={cn(splitSectionContentVariants({ inset }), className)}>
+    {children}
+  </div>
 )

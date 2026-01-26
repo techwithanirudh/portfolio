@@ -17,7 +17,7 @@ export default function About(): React.ReactElement {
         <SectionHeader align='left' title='About Me' />
       </SplitSectionSidebar>
 
-      <SplitSectionContent>
+      <SplitSectionContent inset>
         <ViewAnimation
           className='relative'
           delay={0.1}

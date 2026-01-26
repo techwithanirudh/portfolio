@@ -53,7 +53,7 @@ export const FAQ = () => (
       />
     </SplitSectionSidebar>
 
-    <SplitSectionContent>
+    <SplitSectionContent inset>
       <Accordion
         className='w-full divide-dashed divide-border'
         collapsible

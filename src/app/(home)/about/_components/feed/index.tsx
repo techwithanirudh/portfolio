@@ -110,6 +110,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
             'relative flex max-w-full flex-col gap-2 overflow-x-auto font-mono text-muted-foreground text-xs',
             'sm:overflow-visible sm:text-sm'
           )}
+          inset
         >
           {items.map((item, index) => (
             <ViewAnimation
