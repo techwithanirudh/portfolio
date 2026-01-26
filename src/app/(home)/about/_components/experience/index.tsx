@@ -26,7 +26,7 @@ export default function Experience(): React.ReactElement {
                 A quick timeline of the roles shaping my work.
               </p>
             </ViewAnimation>
-              <ViewAnimation
+            <ViewAnimation
               blur={false}
               delay={0.15}
               initial={{ opacity: 0, translateY: -6 }}
