@@ -36,7 +36,7 @@ export default function Experience(): React.ReactElement {
             <ViewAnimation
               delay={0.05 * index}
               initial={{ opacity: 0, translateY: -6 }}
-              key={experience.role}
+              key={`${experience.role}-${index}`}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
               <div className='flex flex-col gap-3 p-6 sm:p-8'>

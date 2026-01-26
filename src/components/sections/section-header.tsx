@@ -64,8 +64,8 @@ export const SectionHeader = ({
     )}
     {Children.map(Children.toArray(children), (child, index) => {
       const key = isValidElement(child)
-        ? (child.key ?? 'section-header-child')
-        : String(child)
+        ? (child.key ?? `section-header-child-${index}`)
+        : `${String(child)}-${index}`
 
       return child ? (
         <ViewAnimation
