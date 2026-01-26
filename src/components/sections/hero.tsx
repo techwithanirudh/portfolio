@@ -77,8 +77,7 @@ export const HeroSection = ({
               'typography-hero font-normal text-3xl leading-tight tracking-tighter',
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
-              variant === 'compact' &&
-                'text-left font-normal font-regular tracking-tighter sm:text-left'
+              variant === 'compact' && 'text-left sm:text-left'
             )}
           >
             <Balancer>{title}</Balancer>

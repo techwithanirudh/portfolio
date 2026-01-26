@@ -44,13 +44,15 @@ const Hero = () => {
         />
       </motion.div>
       <ViewAnimation
+        blur={false}
         delay={0.1}
+        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <h1
           className={cn(
-            'typography-hero font-bold text-3xl leading-tight tracking-tight',
+            'typography-hero font-normal text-3xl leading-tight tracking-tighter',
             'sm:text-center sm:text-4xl sm:leading-tight',
             'md:text-5xl md:leading-tight'
           )}
@@ -59,7 +61,9 @@ const Hero = () => {
         </h1>
       </ViewAnimation>
       <ViewAnimation
+        blur={false}
         delay={0.15}
+        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
@@ -73,7 +77,9 @@ const Hero = () => {
 
       <div className='flex flex-wrap items-center justify-center gap-4'>
         <ViewAnimation
+          blur={false}
           delay={0.2}
+          duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
@@ -97,8 +103,10 @@ const Hero = () => {
             .filter((item) => item.type === 'icon')
             .map((item, i) => (
               <ViewAnimation
+                blur={false}
                 className='flex items-center'
                 delay={0.1 + i * 0.05}
+                duration={0.25}
                 initial={{ opacity: 0, translateY: -6, scale: 0.95 }}
                 key={i.toString()}
                 whileInView={{ opacity: 1, translateY: 0, scale: 1 }}
