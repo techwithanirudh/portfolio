@@ -95,12 +95,14 @@ export default async function Feed(): Promise<React.ReactElement | null> {
     return (
       <Section>
         <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
-          <div className='p-6 sm:sticky sm:top-16 sm:p-8'>
-            <SectionHeader
-              align='left'
-              description='Fresh events from across my GitHub.'
-              title='Live Activity'
-            />
+          <div className='bg-dashed'>
+            <div className='p-6 sm:sticky sm:top-16 sm:p-8'>
+              <SectionHeader
+                align='left'
+                description='Fresh events from across my GitHub.'
+                title='Live Activity'
+              />
+            </div>
           </div>
           <div className='min-w-0 sm:col-span-2'>
             <div

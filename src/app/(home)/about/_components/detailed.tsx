@@ -10,12 +10,14 @@ export default function Detailed(): React.ReactElement {
   return (
     <Section>
       <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
-        <div className='p-6 sm:sticky sm:top-16 sm:p-8'>
-          <SectionHeader
-            align='left'
-            description="A quick look at my background, focus, and what I'm building next."
-            title='Overview'
-          />
+        <div className='bg-dashed'>
+          <div className='p-6 sm:sticky sm:top-16 sm:p-8'>
+            <SectionHeader
+              align='left'
+              description="A quick look at my background, focus, and what I'm building next."
+              title='Overview'
+            />
+          </div>
         </div>
         <div className='sm:col-span-2'>
           <ViewAnimation
@@ -24,7 +26,7 @@ export default function Detailed(): React.ReactElement {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <div className='space-y-6 p-6 text-muted-foreground text-lg sm:p-8'>
+            <div className='space-y-6 p-6 text-lg text-muted-foreground sm:p-8'>
               <p>
                 Hi, I'm Anirudh. I'm a self-taught software engineer and a
                 student who loves building things with code. I grew up playing
