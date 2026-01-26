@@ -1,5 +1,10 @@
 import { unstable_cache } from 'next/cache'
-import { StickySection } from '@/components/sections/sticky-section'
+import {
+  StickySection,
+  StickySectionContent,
+  StickySectionHeader,
+  StickySectionSidebar,
+} from '@/components/sections/sticky-section'
 import { ViewAnimation } from '@/components/view-animation'
 import { activity, owner } from '@/constants/config'
 import { octokit } from '@/lib/github'
@@ -92,14 +97,14 @@ export default async function Feed(): Promise<React.ReactElement | null> {
     }
 
     return (
-      <StickySection.Root>
-        <StickySection.Sidebar>
-          <StickySection.Header
+      <StickySection>
+        <StickySectionSidebar>
+          <StickySectionHeader
             description='Fresh events from across my GitHub.'
             title='Live Activity'
           />
-        </StickySection.Sidebar>
-        <StickySection.Content>
+        </StickySectionSidebar>
+        <StickySectionContent>
           <div
             className={cn(
               'relative flex max-w-full flex-col gap-2 overflow-x-auto px-4 py-8 font-mono text-muted-foreground text-xs',
@@ -121,8 +126,8 @@ export default async function Feed(): Promise<React.ReactElement | null> {
             ))}
             <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
           </div>
-        </StickySection.Content>
-      </StickySection.Root>
+        </StickySectionContent>
+      </StickySection>
     )
   } catch {
     return null

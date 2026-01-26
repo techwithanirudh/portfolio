@@ -1,13 +1,18 @@
-import { StickySection } from '@/components/sections/sticky-section'
+import {
+  StickySection,
+  StickySectionContent,
+  StickySectionHeader,
+  StickySectionSidebar,
+} from '@/components/sections/sticky-section'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
-    <StickySection.Root>
-      <StickySection.Sidebar>
-        <StickySection.Header
+    <StickySection>
+      <StickySectionSidebar>
+        <StickySectionHeader
           description='A quick timeline of the roles shaping my work.'
           title='Experience'
         />
@@ -22,8 +27,8 @@ export default function Experience(): React.ReactElement {
             </a>
           </Button>
         </ViewAnimation>
-      </StickySection.Sidebar>
-      <StickySection.Content>
+      </StickySectionSidebar>
+      <StickySectionContent>
         <div className='divide-y divide-dashed divide-border'>
           {experiences.map((experience, index) => (
             <ViewAnimation
@@ -51,7 +56,7 @@ export default function Experience(): React.ReactElement {
             </ViewAnimation>
           ))}
         </div>
-      </StickySection.Content>
-    </StickySection.Root>
+      </StickySectionContent>
+    </StickySection>
   )
 }
