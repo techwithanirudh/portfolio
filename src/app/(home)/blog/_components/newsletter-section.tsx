@@ -5,7 +5,7 @@ import { ViewAnimation } from '@/components/view-animation'
 export function NewsletterSection() {
   return (
     <Section className='bg-dashed'>
-      <div className='grid gap-6 px-6 py-10 md:grid-cols-2 md:items-center md:gap-10 md:py-14'>
+      <div className='grid gap-6 md:grid-cols-2 md:items-center md:gap-10 md:py-14'>
         <div className='space-y-2'>
           <ViewAnimation
             initial={{ opacity: 0, translateY: -6 }}

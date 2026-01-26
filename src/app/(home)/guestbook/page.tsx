@@ -1,5 +1,10 @@
 import type { Metadata } from 'next'
 import { Section } from '@/components/section'
+import {
+  SplitSection,
+  SplitSectionContent,
+  SplitSectionSidebar,
+} from '@/components/sections/split-section'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
@@ -16,24 +21,27 @@ export default async function GuestbookPage() {
 
   return (
     <Wrapper>
-      <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
-        <ViewAnimation
-          className='px-6 py-10'
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <Hero />
-        </ViewAnimation>
+      <SplitSection>
+        <SplitSectionSidebar>
+          <ViewAnimation
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <Hero />
+          </ViewAnimation>
+        </SplitSectionSidebar>
 
-        <ViewAnimation
-          className='flex w-full items-center px-6 py-10'
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <GuestbookForm />
-        </ViewAnimation>
-      </Section>
+        <SplitSectionContent className='flex w-full items-center'>
+          <ViewAnimation
+            delay={0.1}
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+            className='w-full'
+          >
+            <GuestbookForm />
+          </ViewAnimation>
+        </SplitSectionContent>
+      </SplitSection>
       <Section className='p-6'>
         <ViewAnimation
           delay={0.1}

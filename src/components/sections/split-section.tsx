@@ -4,33 +4,47 @@ import { Section } from '@/components/section'
 import { SectionHeader } from '@/components/sections/section-header'
 import { cn } from '@/lib/utils'
 
-const splitSectionSidebarVariants = cva(
-  'flex flex-col gap-4 px-6 py-10 sm:px-8',
-  {
-    variants: {
-      background: {
-        default: '',
-        dashed: 'bg-dashed',
-      },
-      sticky: {
-        true: 'sm:sticky sm:top-16',
-        false: '',
-      },
+const splitSectionVariants = cva('grid divide-y divide-dashed divide-border', {
+  variants: {
+    cols: {
+      two: 'sm:grid-cols-2 sm:divide-x sm:divide-y-0',
+      three: 'sm:grid-cols-3 sm:divide-x sm:divide-y-0',
     },
-    defaultVariants: {
-      background: 'default',
-      sticky: false,
-    },
-  }
-)
+  },
+  defaultVariants: {
+    cols: 'two',
+  },
+})
 
-interface SplitSectionProps {
+const splitSectionSidebarVariants = cva('flex flex-col gap-4 px-6 py-8', {
+  variants: {
+    background: {
+      default: '',
+      dashed: 'bg-dashed',
+    },
+    sticky: {
+      true: 'sm:sticky sm:top-16',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    background: 'default',
+    sticky: false,
+  },
+})
+
+interface SplitSectionProps extends VariantProps<typeof splitSectionVariants> {
   children: ReactNode
+  className?: string
 }
 
-export const SplitSection = ({ children }: SplitSectionProps) => (
+export const SplitSection = ({
+  children,
+  cols,
+  className,
+}: SplitSectionProps) => (
   <Section>
-    <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
+    <div className={cn(splitSectionVariants({ cols }), className)}>
       {children}
     </div>
   </Section>
@@ -48,17 +62,16 @@ export const SplitSectionSidebar = ({
   sticky,
   className,
 }: SplitSectionSidebarProps) => {
-  const content = (
-    <div className={cn(splitSectionSidebarVariants({ sticky }), className)}>
+  return (
+    <div
+      className={cn(
+        splitSectionSidebarVariants({ background, sticky }),
+        className
+      )}
+    >
       {children}
     </div>
   )
-
-  if (background === 'dashed') {
-    return <div className='bg-dashed'>{content}</div>
-  }
-
-  return content
 }
 
 interface SplitSectionHeaderProps {
@@ -82,5 +95,5 @@ export const SplitSectionContent = ({
   children,
   className,
 }: SplitSectionContentProps) => (
-  <div className={cn('sm:col-span-2', className)}>{children}</div>
+  <div className={cn('px-6 py-8', className)}>{children}</div>
 )

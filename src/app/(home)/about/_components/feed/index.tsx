@@ -97,35 +97,31 @@ export default async function Feed(): Promise<React.ReactElement | null> {
     }
 
     return (
-      <SplitSection>
+      <SplitSection cols='three'>
         <SplitSectionSidebar background='dashed' sticky>
           <SplitSectionHeader
             description='Fresh events from across my GitHub.'
             title='Live Activity'
           />
         </SplitSectionSidebar>
-        <SplitSectionContent>
-          <div
-            className={cn(
-              'relative flex max-w-full flex-col gap-2 overflow-x-auto px-4 py-8 font-mono text-muted-foreground text-xs',
-              'sm:overflow-visible sm:px-8 sm:text-sm'
-            )}
-          >
-            {items.map((item, index) => (
-              <ViewAnimation
-                delay={0.05 * index}
-                initial={{ opacity: 0, translateY: -8 }}
-                key={item.event.id}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
-                <GitHubEventComponent
-                  commits={item.commits}
-                  event={item.event}
-                />
-              </ViewAnimation>
-            ))}
-            <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
-          </div>
+        <SplitSectionContent
+          className={cn(
+            'sm:col-span-2',
+            'relative flex max-w-full flex-col gap-2 overflow-x-auto font-mono text-muted-foreground text-xs',
+            'sm:overflow-visible sm:text-sm'
+          )}
+        >
+          {items.map((item, index) => (
+            <ViewAnimation
+              delay={0.05 * index}
+              initial={{ opacity: 0, translateY: -8 }}
+              key={item.event.id}
+              whileInView={{ opacity: 1, translateY: 0 }}
+            >
+              <GitHubEventComponent commits={item.commits} event={item.event} />
+            </ViewAnimation>
+          ))}
+          <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
         </SplitSectionContent>
       </SplitSection>
     )

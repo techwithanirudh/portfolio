@@ -12,21 +12,21 @@ import { cn } from '@/lib/utils'
 
 export default function Detailed(): React.ReactElement {
   return (
-    <SplitSection>
+    <SplitSection cols='three'>
       <SplitSectionSidebar background='dashed' sticky>
         <SplitSectionHeader
           description="A quick look at my background, focus, and what I'm building next."
           title='Overview'
         />
       </SplitSectionSidebar>
-      <SplitSectionContent>
+      <SplitSectionContent className='sm:col-span-2 !p-6 sm:!p-8'>
         <ViewAnimation
           className='h-full'
           delay={0.1}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <div className='space-y-6 p-6 text-lg text-muted-foreground sm:p-8'>
+          <div className='text-lg text-muted-foreground space-y-6'>
             <p>
               Hi, I'm Anirudh. I'm a self-taught software engineer and a student
               who loves building things with code. I grew up playing with

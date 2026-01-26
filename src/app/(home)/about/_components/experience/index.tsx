@@ -10,7 +10,7 @@ import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
-    <SplitSection>
+    <SplitSection cols='three'>
       <SplitSectionSidebar background='dashed' sticky>
         <SplitSectionHeader
           description='A quick timeline of the roles shaping my work.'
@@ -28,7 +28,7 @@ export default function Experience(): React.ReactElement {
           </Button>
         </ViewAnimation>
       </SplitSectionSidebar>
-      <SplitSectionContent>
+      <SplitSectionContent className='px-0 py-0 sm:col-span-2'>
         <div className='divide-y divide-dashed divide-border'>
           {experiences.map((experience, index) => (
             <ViewAnimation
