@@ -14,7 +14,6 @@ export default function Contact(): React.ReactElement {
         <ViewAnimation
           blur={false}
           className='px-6 py-10 md:py-14'
-          duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
@@ -25,7 +24,6 @@ export default function Contact(): React.ReactElement {
           blur={false}
           className='flex w-full items-center px-6 py-10 md:py-14'
           delay={0.1}
-          duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >

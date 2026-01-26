@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
+import { SectionHeader } from '@/components/sections/section-header'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
@@ -8,15 +9,12 @@ import { cn } from '@/lib/utils'
 export default function About(): React.ReactElement {
   return (
     <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
-      <ViewAnimation
-        className='flex h-full flex-col gap-2 px-6 py-10 md:py-14'
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
-        <h4 className='text-left font-regular text-3xl tracking-tighter md:text-5xl'>
-          About Me
-        </h4>
-      </ViewAnimation>
+      <SectionHeader
+        align='left'
+        className='px-6 py-10 md:py-14'
+        size='large'
+        title='About Me'
+      />
 
       <ViewAnimation
         className='relative'

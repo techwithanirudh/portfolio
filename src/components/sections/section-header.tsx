@@ -33,7 +33,7 @@ export const SectionHeader = ({
       initial={{ opacity: 0, translateY: -6 }}
       whileInView={{ opacity: 1, translateY: 0 }}
     >
-      <h1
+      <h2
         className={cn(
           'typography-title font-normal leading-tight tracking-tighter',
           size === 'large'
@@ -43,7 +43,7 @@ export const SectionHeader = ({
         )}
       >
         <Balancer>{title}</Balancer>
-      </h1>
+      </h2>
     </ViewAnimation>
     {description && (
       <ViewAnimation

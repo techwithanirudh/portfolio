@@ -95,20 +95,25 @@ export default async function Feed(): Promise<React.ReactElement | null> {
       <Section>
         <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
           <div className='bg-dashed'>
-            <ViewAnimation
-              blur={false}
-              className='h-full'
-              duration={0.3}
-              initial={{ opacity: 0, translateY: -6 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
+            <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
+              <ViewAnimation
+                blur={false}
+                initial={{ opacity: 0, translateY: -6 }}
+                whileInView={{ opacity: 1, translateY: 0 }}
+              >
                 <h2 className='font-semibold text-2xl'>Live Activity</h2>
+              </ViewAnimation>
+              <ViewAnimation
+                blur={false}
+                delay={0.1}
+                initial={{ opacity: 0, translateY: -6 }}
+                whileInView={{ opacity: 1, translateY: 0 }}
+              >
                 <p className='text-muted-foreground text-sm'>
                   Fresh events from across my GitHub.
                 </p>
-              </div>
-            </ViewAnimation>
+              </ViewAnimation>
+            </div>
           </div>
           <div className='min-w-0 sm:col-span-2'>
             <div

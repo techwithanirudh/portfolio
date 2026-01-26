@@ -20,7 +20,7 @@ import {
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
-import { ChevronDown, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { type ComponentProps, Fragment, useMemo, useState } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'

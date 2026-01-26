@@ -1,4 +1,5 @@
 import { Section } from '@/components/section'
+import { SectionHeader } from '@/components/sections/section-header'
 import {
   Carousel,
   CarouselContent,
@@ -12,15 +13,12 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
   return (
     <Section className='relative w-full pt-10'>
       <div className='flex flex-col gap-10'>
-        <ViewAnimation
-          className='flex flex-col gap-2 px-6'
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <h2 className='typography-title text-left font-regular text-3xl tracking-tighter md:text-5xl'>
-            Blog
-          </h2>
-        </ViewAnimation>
+        <SectionHeader
+          align='left'
+          className='px-6'
+          size='large'
+          title='Blog'
+        />
 
         <Carousel className='w-full border-border border-t border-dashed'>
           <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
