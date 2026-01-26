@@ -9,7 +9,7 @@ export default function Experience(): React.ReactElement {
     <Section>
       <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
         <div className='bg-dashed'>
-          <div className='flex flex-col gap-4 p-6 sm:sticky sm:top-16 sm:p-8'>
+          <div className='flex flex-col gap-4 px-6 py-10 sm:sticky sm:top-16 sm:px-8'>
             <SectionHeader
               align='left'
               description='A quick timeline of the roles shaping my work.'
