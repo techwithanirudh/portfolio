@@ -10,7 +10,7 @@ const heroVariants = cva('flex flex-col', {
     variant: {
       default:
         'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
-      compact: 'gap-4 lg:p-2',
+      compact: 'gap-4 py-10 lg:p-2',
     },
     align: {
       center: 'items-start justify-center sm:items-center',
