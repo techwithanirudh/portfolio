@@ -13,7 +13,7 @@ export default function Detailed(): React.ReactElement {
         <div className='p-6 sm:sticky sm:top-16 sm:p-8'>
           <SectionHeader
             align='left'
-            description='A quick look at my background, focus, and what I'm building next.'
+            description="A quick look at my background, focus, and what I'm building next."
             title='Overview'
           />
         </div>

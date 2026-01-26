@@ -12,7 +12,6 @@ export default function About(): React.ReactElement {
       <SectionHeader
         align='left'
         className='px-6 py-10 md:py-14'
-        size='large'
         title='About Me'
       />
 

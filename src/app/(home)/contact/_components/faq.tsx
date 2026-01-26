@@ -45,7 +45,6 @@ export const FAQ = () => (
           </InlineLink>
         </>
       }
-      size='large'
       title='Frequently Asked Questions'
     />
 

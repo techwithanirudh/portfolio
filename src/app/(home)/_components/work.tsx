@@ -15,7 +15,6 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           align='left'
           className='px-6'
           description='A snapshot of recent projects and collaborations.'
-          size='large'
           title='Work'
         />
         <div className='w-full border-border border-t border-dashed'>

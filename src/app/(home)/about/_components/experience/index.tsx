@@ -12,7 +12,7 @@ export default function Experience(): React.ReactElement {
           <SectionHeader
             align='left'
             description='A quick timeline of the roles shaping my work.'
-          title='Experience'
+            title='Experience'
           />
           <ViewAnimation
             delay={0.15}
@@ -38,7 +38,9 @@ export default function Experience(): React.ReactElement {
                 <div className='flex flex-col gap-3 p-6 sm:p-8'>
                   <div className='flex flex-wrap items-center justify-between gap-2'>
                     <div>
-                      <h3 className='font-semibold text-lg'>{experience.role}</h3>
+                      <h3 className='font-semibold text-lg'>
+                        {experience.role}
+                      </h3>
                       <p className='text-muted-foreground text-sm'>
                         {experience.company}
                       </p>

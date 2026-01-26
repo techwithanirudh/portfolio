@@ -14,7 +14,6 @@ export default function CTA(): React.ReactElement {
           align='center'
           description='Have questions or want to connect? Reach out through the contact form or find me on social platforms.'
           descriptionClassName='sm:text-xl'
-          size='large'
           title="Let's Collaborate"
         />
         <ViewAnimation
