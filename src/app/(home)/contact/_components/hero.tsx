@@ -22,9 +22,9 @@ export const Hero = () => (
             blur={false}
             delay={0.05 * index}
             duration={0.25}
-            initial={{ opacity: 0, translateY: -6, scale: 0.95 }}
+            initial={{ opacity: 0, translateY: -6 }}
             key={social.url}
-            whileInView={{ opacity: 1, translateY: 0, scale: 1 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
           >
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
