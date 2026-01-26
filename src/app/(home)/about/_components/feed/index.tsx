@@ -1,10 +1,10 @@
 import { unstable_cache } from 'next/cache'
 import {
-  StickySection,
-  StickySectionContent,
-  StickySectionHeader,
-  StickySectionSidebar,
-} from '@/components/sections/sticky-section'
+  SplitSection,
+  SplitSectionContent,
+  SplitSectionHeader,
+  SplitSectionSidebar,
+} from '@/components/sections/split-section'
 import { ViewAnimation } from '@/components/view-animation'
 import { activity, owner } from '@/constants/config'
 import { octokit } from '@/lib/github'
@@ -97,14 +97,14 @@ export default async function Feed(): Promise<React.ReactElement | null> {
     }
 
     return (
-      <StickySection>
-        <StickySectionSidebar>
-          <StickySectionHeader
+      <SplitSection>
+        <SplitSectionSidebar background='dashed' sticky>
+          <SplitSectionHeader
             description='Fresh events from across my GitHub.'
             title='Live Activity'
           />
-        </StickySectionSidebar>
-        <StickySectionContent>
+        </SplitSectionSidebar>
+        <SplitSectionContent>
           <div
             className={cn(
               'relative flex max-w-full flex-col gap-2 overflow-x-auto px-4 py-8 font-mono text-muted-foreground text-xs',
@@ -126,8 +126,8 @@ export default async function Feed(): Promise<React.ReactElement | null> {
             ))}
             <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
           </div>
-        </StickySectionContent>
-      </StickySection>
+        </SplitSectionContent>
+      </SplitSection>
     )
   } catch {
     return null

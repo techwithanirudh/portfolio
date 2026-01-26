@@ -1,25 +1,25 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import {
-  StickySection,
-  StickySectionContent,
-  StickySectionHeader,
-  StickySectionSidebar,
-} from '@/components/sections/sticky-section'
+  SplitSection,
+  SplitSectionContent,
+  SplitSectionHeader,
+  SplitSectionSidebar,
+} from '@/components/sections/split-section'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 export default function Detailed(): React.ReactElement {
   return (
-    <StickySection>
-      <StickySectionSidebar>
-        <StickySectionHeader
+    <SplitSection>
+      <SplitSectionSidebar background='dashed' sticky>
+        <SplitSectionHeader
           description="A quick look at my background, focus, and what I'm building next."
           title='Overview'
         />
-      </StickySectionSidebar>
-      <StickySectionContent>
+      </SplitSectionSidebar>
+      <SplitSectionContent>
         <ViewAnimation
           className='h-full'
           delay={0.1}
@@ -54,7 +54,7 @@ export default function Detailed(): React.ReactElement {
             </Link>
           </div>
         </ViewAnimation>
-      </StickySectionContent>
-    </StickySection>
+      </SplitSectionContent>
+    </SplitSection>
   )
 }

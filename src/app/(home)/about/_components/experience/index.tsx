@@ -1,18 +1,18 @@
 import {
-  StickySection,
-  StickySectionContent,
-  StickySectionHeader,
-  StickySectionSidebar,
-} from '@/components/sections/sticky-section'
+  SplitSection,
+  SplitSectionContent,
+  SplitSectionHeader,
+  SplitSectionSidebar,
+} from '@/components/sections/split-section'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
-    <StickySection>
-      <StickySectionSidebar>
-        <StickySectionHeader
+    <SplitSection>
+      <SplitSectionSidebar background='dashed' sticky>
+        <SplitSectionHeader
           description='A quick timeline of the roles shaping my work.'
           title='Experience'
         />
@@ -27,8 +27,8 @@ export default function Experience(): React.ReactElement {
             </a>
           </Button>
         </ViewAnimation>
-      </StickySectionSidebar>
-      <StickySectionContent>
+      </SplitSectionSidebar>
+      <SplitSectionContent>
         <div className='divide-y divide-dashed divide-border'>
           {experiences.map((experience, index) => (
             <ViewAnimation
@@ -56,7 +56,7 @@ export default function Experience(): React.ReactElement {
             </ViewAnimation>
           ))}
         </div>
-      </StickySectionContent>
-    </StickySection>
+      </SplitSectionContent>
+    </SplitSection>
   )
 }
