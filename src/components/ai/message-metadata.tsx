@@ -3,7 +3,7 @@ import {
   Brain,
   ChevronDownIcon,
   LinkIcon,
-  Loader2,
+  PawPrint,
   SearchIcon,
   WrenchIcon,
 } from 'lucide-react'
@@ -16,7 +16,7 @@ import {
   SourcesTrigger,
 } from '@/components/ai/sources'
 
-type MessageMetadataProps = {
+interface MessageMetadataProps {
   parts: MyUIMessage['parts']
   inProgress: boolean
 }
@@ -37,10 +37,10 @@ export const MessageMetadata = ({
         {reasoning ? (
           <>
             <Brain className='size-4' />
-            <Shimmer>Thinking...</Shimmer>
+            <Shimmer>Sniffing around...</Shimmer>
           </>
         ) : (
-          <Loader2 className='size-4 animate-spin' />
+          <PawPrint className='size-4 animate-spin text-fd-primary' />
         )}
       </div>
     )
@@ -92,11 +92,11 @@ export const MessageMetadata = ({
     switch (tool.type) {
       case 'tool-searchDocs':
         Icon = SearchIcon
-        label = 'Searching docs'
+        label = 'Sniffing the docs'
         break
       case 'tool-getPageContent':
         Icon = LinkIcon
-        label = 'Fetching page'
+        label = 'Fetching a page'
         break
       default:
         label = `Running ${name}`

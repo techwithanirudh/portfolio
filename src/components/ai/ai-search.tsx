@@ -5,7 +5,7 @@ import { DefaultChatTransport } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
   ArrowUpIcon,
-  MessageCircleIcon,
+  PawPrint,
   RefreshCw,
   SquareIcon,
   TrashIcon,
@@ -44,7 +44,10 @@ function Header() {
   return (
     <div className='sticky top-0 flex items-start'>
       <div className='flex flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
-        <p className='font-medium text-sm'>Ask AI</p>
+        <div className='flex items-center gap-2'>
+          <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:rotate-90' />
+          <p className='font-medium text-sm'>Ask Simba</p>
+        </div>
         <div className='flex items-center gap-1.5'>
           <button
             className={cn(
@@ -146,7 +149,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
             onStart(event)
           }
         }}
-        placeholder={isLoading ? 'Generating...' : 'Ask a question'}
+        placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
         value={input}
       />
       {isLoading ? (
@@ -328,14 +331,14 @@ export function AISearchTrigger() {
         buttonVariants({
           variant: 'secondary',
         }),
-        'fixed end-4 bottom-4 z-20 w-24 gap-3 rounded-none border border-dashed text-fd-muted-foreground shadow-none transition-all',
+        'group fixed end-4 bottom-4 z-20 w-auto gap-3 rounded-none border border-dashed text-fd-muted-foreground shadow-none transition-all',
         open && 'translate-y-10 opacity-0'
       )}
       onClick={() => setOpen(true)}
       type='button'
     >
-      <MessageCircleIcon className='size-4.5' />
-      Ask AI
+      <PawPrint className='size-4.5 transition-transform duration-200 group-hover:-rotate-50' />
+      Ask Simba
     </button>
   )
 }
@@ -384,7 +387,7 @@ export function AISearchPanel() {
       </style>
       <Presence present={open}>
         <button
-          aria-label='Close AI panel'
+          aria-label='Close Simba panel'
           className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in lg:hidden'
           data-state={open ? 'open' : 'closed'}
           onClick={() => setOpen(false)}
