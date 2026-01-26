@@ -98,9 +98,10 @@ export default async function Feed(): Promise<React.ReactElement | null> {
 
     return (
       <SplitSection cols='three'>
-        <SplitSectionSidebar background='dashed' sticky>
+        <SplitSectionSidebar background='dashed'>
           <SplitSectionHeader
             description='Fresh events from across my GitHub.'
+            sticky
             title='Live Activity'
           />
         </SplitSectionSidebar>

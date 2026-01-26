@@ -13,9 +13,10 @@ import { cn } from '@/lib/utils'
 export default function Detailed(): React.ReactElement {
   return (
     <SplitSection cols='three'>
-      <SplitSectionSidebar background='dashed' sticky>
+      <SplitSectionSidebar background='dashed'>
         <SplitSectionHeader
           description="A quick look at my background, focus, and what I'm building next."
+          sticky
           title='Overview'
         />
       </SplitSectionSidebar>

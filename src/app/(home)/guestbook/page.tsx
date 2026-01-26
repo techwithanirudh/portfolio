@@ -3,6 +3,7 @@ import { Section } from '@/components/section'
 import {
   SplitSection,
   SplitSectionContent,
+  SplitSectionHeader,
   SplitSectionSidebar,
 } from '@/components/sections/split-section'
 import { ViewAnimation } from '@/components/view-animation'
@@ -12,7 +13,6 @@ import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'
 import { GuestbookEntries } from './_components/entries'
 import { GuestbookForm } from './_components/form'
-import { Hero } from './_components/hero'
 
 export default async function GuestbookPage() {
   const session = await getSession()
@@ -23,12 +23,10 @@ export default async function GuestbookPage() {
     <Wrapper>
       <SplitSection>
         <SplitSectionSidebar>
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <Hero />
-          </ViewAnimation>
+          <SplitSectionHeader
+            description='Share a quick hello, a thought about the work, or a suggestion.'
+            title='Guestbook'
+          />
         </SplitSectionSidebar>
 
         <SplitSectionContent className='flex w-full items-center' inset>

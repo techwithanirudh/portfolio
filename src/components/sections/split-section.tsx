@@ -1,7 +1,10 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import type { ReactNode } from 'react'
 import { Section } from '@/components/section'
-import { SectionHeader } from '@/components/sections/section-header'
+import {
+  SectionHeader,
+  type SectionHeaderProps,
+} from '@/components/sections/section-header'
 import { cn } from '@/lib/utils'
 
 const splitSectionVariants = cva('grid divide-y divide-dashed divide-border', {
@@ -26,15 +29,10 @@ const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
       true: 'px-6 py-8',
       false: '',
     },
-    sticky: {
-      true: 'sm:sticky sm:top-16',
-      false: '',
-    },
   },
   defaultVariants: {
     background: 'default',
     inset: true,
-    sticky: false,
   },
 })
 
@@ -65,13 +63,12 @@ export const SplitSectionSidebar = ({
   children,
   background,
   inset,
-  sticky,
   className,
 }: SplitSectionSidebarProps) => {
   return (
     <div
       className={cn(
-        splitSectionSidebarVariants({ background, inset, sticky }),
+        splitSectionSidebarVariants({ background, inset }),
         className
       )}
     >
@@ -80,17 +77,14 @@ export const SplitSectionSidebar = ({
   )
 }
 
-interface SplitSectionHeaderProps {
-  title: string
-  description: string
+type SplitSectionHeaderProps = Omit<SectionHeaderProps, 'align'> & {
+  align?: SectionHeaderProps['align']
 }
 
 export const SplitSectionHeader = ({
-  title,
-  description,
-}: SplitSectionHeaderProps) => (
-  <SectionHeader align='left' description={description} title={title} />
-)
+  align = 'left',
+  ...props
+}: SplitSectionHeaderProps) => <SectionHeader align={align} {...props} />
 
 const splitSectionContentVariants = cva('', {
   variants: {
