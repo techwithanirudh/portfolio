@@ -66,7 +66,7 @@ function Header() {
         className={cn(
           buttonVariants({
             size: 'icon-sm',
-            color: 'secondary',
+            color: 'primary',
             className: 'rounded-none size-10 border-none',
           })
         )}
@@ -169,7 +169,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
         <button
           className={cn(
             buttonVariants({
-              color: 'secondary',
+              color: 'primary',
               size: 'icon-sm',
               className:
                 'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-4',
