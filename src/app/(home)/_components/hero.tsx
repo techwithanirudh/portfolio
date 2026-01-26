@@ -22,7 +22,7 @@ const Hero = () => {
   )
 
   return (
-    <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
+    <Section className='relative flex flex-col items-center justify-center gap-4 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
       <motion.div
         animate={{ opacity: 1, translateY: 0 }}
         className='absolute inset-0 -z-10 h-full w-full'
@@ -71,7 +71,7 @@ const Hero = () => {
         </p>
       </ViewAnimation>
 
-      <div className='flex flex-wrap items-center justify-center gap-4'>
+      <div className='mt-2 flex flex-wrap items-center justify-center gap-4'>
         <ViewAnimation
           delay={0.2}
           initial={{ opacity: 0, translateY: -6 }}

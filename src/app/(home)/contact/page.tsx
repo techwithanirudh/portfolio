@@ -1,5 +1,9 @@
 import type { Metadata } from 'next'
-import { Section } from '@/components/section'
+import {
+  SplitSection,
+  SplitSectionContent,
+  SplitSectionSidebar,
+} from '@/components/sections/split-section'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
@@ -10,26 +14,29 @@ import { Hero } from './_components/hero'
 export default function Contact(): React.ReactElement {
   return (
     <Wrapper>
-      <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
-        <ViewAnimation
-          blur={false}
-          className='px-6 py-10 md:py-14'
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <Hero />
-        </ViewAnimation>
+      <SplitSection>
+        <SplitSectionSidebar>
+          <ViewAnimation
+            blur={false}
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <Hero />
+          </ViewAnimation>
+        </SplitSectionSidebar>
 
-        <ViewAnimation
-          blur={false}
-          className='flex w-full items-center px-6 py-10 md:py-14'
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <ContactForm />
-        </ViewAnimation>
-      </Section>
+        <SplitSectionContent className='flex w-full items-center px-6 py-8'>
+          <ViewAnimation
+            blur={false}
+            className='w-full'
+            delay={0.1}
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <ContactForm />
+          </ViewAnimation>
+        </SplitSectionContent>
+      </SplitSection>
       <FAQ />
     </Wrapper>
   )

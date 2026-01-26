@@ -13,12 +13,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
   return (
     <Section className='relative w-full pt-10'>
       <div className='flex flex-col gap-10'>
-        <SectionHeader
-          align='left'
-          className='px-6'
-          size='large'
-          title='Blog'
-        />
+        <SectionHeader align='left' className='px-6' title='Blog' />
 
         <Carousel className='w-full border-border border-t border-dashed'>
           <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>

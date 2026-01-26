@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import Posts from '@/app/(home)/_components/posts'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { Section } from '@/components/section'
+import { SectionBody } from '@/components/section-body'
 import { Wrapper } from '@/components/wrapper'
 import { postsPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
@@ -65,7 +66,7 @@ export default async function Page(props: {
         startIndex={startIndex}
         totalPosts={totalPosts}
       />
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <SectionBody>
         <div className='grid h-full lg:grid-cols-[1fr_280px]'>
           <div className='min-w-0 divide-y divide-dashed divide-border lg:border-border lg:border-r lg:border-dashed'>
             <TagsAccordion tags={tags} />
@@ -79,7 +80,7 @@ export default async function Page(props: {
             <TagsSidebar tags={tags} />
           </aside>
         </div>
-      </Section>
+      </SectionBody>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <NewsletterSection />
     </Wrapper>

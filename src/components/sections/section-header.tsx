@@ -1,31 +1,34 @@
-import type { ReactNode } from 'react'
+import { Children, isValidElement, type ReactNode } from 'react'
 import { Balancer } from 'react-wrap-balancer'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
-interface SectionHeaderProps {
+export interface SectionHeaderProps {
   title: string | ReactNode
   description?: string | ReactNode | null
+  children?: ReactNode
   className?: string
   titleClassName?: string
   descriptionClassName?: string
   align?: 'left' | 'center'
-  size?: 'default' | 'large'
+  sticky?: boolean
 }
 
 export const SectionHeader = ({
   title,
   description,
+  children,
   className,
   titleClassName,
   descriptionClassName,
   align = 'center',
-  size = 'default',
+  sticky = false,
 }: SectionHeaderProps) => (
   <div
     className={cn(
       'flex flex-col gap-4',
       align === 'center' ? 'items-center text-center' : 'items-start text-left',
+      sticky ? 'sm:sticky sm:top-16' : null,
       className
     )}
   >
@@ -35,9 +38,8 @@ export const SectionHeader = ({
     >
       <h2
         className={cn(
-          'typography-hero font-normal text-3xl leading-tight tracking-tighter',
-          'sm:text-4xl sm:leading-tight',
-          'md:text-5xl md:leading-tight',
+          'typography-title font-regular text-3xl leading-tight tracking-tighter',
+          'md:text-5xl',
           titleClassName
         )}
       >
@@ -52,8 +54,7 @@ export const SectionHeader = ({
       >
         <p
           className={cn(
-            'typography-body text-muted-foreground',
-            size === 'large' ? 'text-lg' : 'text-base',
+            'text-base text-muted-foreground',
             descriptionClassName
           )}
         >
@@ -61,5 +62,21 @@ export const SectionHeader = ({
         </p>
       </ViewAnimation>
     )}
+    {Children.map(Children.toArray(children), (child, index) => {
+      const key = isValidElement(child)
+        ? (child.key ?? `section-header-child-${index}`)
+        : `${String(child)}-${index}`
+
+      return child ? (
+        <ViewAnimation
+          delay={0.1 + index * 0.05}
+          initial={{ opacity: 0, translateY: -6 }}
+          key={key}
+          whileInView={{ opacity: 1, translateY: 0 }}
+        >
+          {child}
+        </ViewAnimation>
+      ) : null
+    })}
   </div>
 )

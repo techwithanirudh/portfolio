@@ -54,7 +54,6 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
           className='px-6'
           description="I've had the pleasure of working with some amazing people. Here is what they have to say about my work."
           title='What others are saying'
-          titleClassName='text-3xl tracking-tighter md:text-5xl font-normal'
         />
 
         <ViewAnimation
@@ -69,7 +68,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {testimonials.map((item, index) => (
                 <CarouselItem
-                  className='pl-0 lg:basis-1/2'
+                  className='pl-0 sm:basis-1/2'
                   key={`${item.title}_${index}`}
                 >
                   <ViewAnimation
@@ -79,9 +78,9 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
                     initial={{ opacity: 0, translateX: -12, scale: 0.98 }}
                     whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
                   >
-                    <div className='flex h-full min-h-64 shrink-0 flex-col justify-between p-6 transition-all duration-300 hover:bg-card lg:col-span-2 lg:aspect-video'>
-                      <User className='h-8 w-8 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
-                      <div className='mt-6 flex flex-col gap-4 lg:mt-0'>
+                    <div className='flex min-h-full flex-col justify-between gap-6 p-6 transition-all duration-300 hover:bg-card sm:p-8'>
+                      <User className='size-8 shrink-0 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
+                      <div className='flex flex-col gap-4'>
                         <div className='flex flex-col'>
                           <h3 className='text-xl tracking-tight'>
                             {item.title}

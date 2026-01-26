@@ -1,6 +1,10 @@
 import { InlineLink } from '@/components/inline-link'
-import { Section } from '@/components/section'
 import { SectionHeader } from '@/components/sections/section-header'
+import {
+  SplitSection,
+  SplitSectionContent,
+  SplitSectionSidebar,
+} from '@/components/sections/split-section'
 import {
   Accordion,
   AccordionContent,
@@ -33,44 +37,46 @@ const faq = [
 ]
 
 export const FAQ = () => (
-  <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
-    <SectionHeader
-      align='left'
-      className='px-6 py-10 md:py-14'
-      description={
-        <>
-          Still have questions?{' '}
-          <InlineLink className='no-underline' href='/contact'>
-            Contact Me
-          </InlineLink>
-        </>
-      }
-      size='large'
-      title='Frequently Asked Questions'
-    />
+  <SplitSection>
+    <SplitSectionSidebar>
+      <SectionHeader
+        align='left'
+        description={
+          <>
+            Still have questions?{' '}
+            <InlineLink className='no-underline' href='/contact'>
+              Contact Me
+            </InlineLink>
+          </>
+        }
+        title='Frequently Asked Questions'
+      />
+    </SplitSectionSidebar>
 
-    <Accordion
-      className='w-full divide-dashed divide-border'
-      collapsible
-      type='single'
-    >
-      {faq.map((item, index) => (
-        <ViewAnimation
-          blur={false}
-          delay={0.05 * index}
-          duration={0.25}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={`${item.question}-${index}`}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <AccordionItem value={`index-${index}`}>
-            <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline data-[state=open]:bg-card'>
-              {item.question}
-            </AccordionTrigger>
-            <AccordionContent className='p-4'>{item.answer}</AccordionContent>
-          </AccordionItem>
-        </ViewAnimation>
-      ))}
-    </Accordion>
-  </Section>
+    <SplitSectionContent inset>
+      <Accordion
+        className='w-full divide-dashed divide-border'
+        collapsible
+        type='single'
+      >
+        {faq.map((item, index) => (
+          <ViewAnimation
+            blur={false}
+            delay={0.05 * index}
+            duration={0.25}
+            initial={{ opacity: 0, translateY: -6 }}
+            key={`${item.question}-${index}`}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <AccordionItem value={`index-${index}`}>
+              <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline data-[state=open]:bg-card'>
+                {item.question}
+              </AccordionTrigger>
+              <AccordionContent className='p-4'>{item.answer}</AccordionContent>
+            </AccordionItem>
+          </ViewAnimation>
+        ))}
+      </Accordion>
+    </SplitSectionContent>
+  </SplitSection>
 )

@@ -45,7 +45,6 @@ const Skills = () => (
         align='left'
         className='px-6'
         description='Focused on building practical projects with modern tools'
-        size='large'
         title='My Expertise'
       />
 

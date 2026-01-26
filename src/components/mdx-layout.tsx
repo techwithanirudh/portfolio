@@ -1,7 +1,9 @@
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
 import type { ComponentProps, ReactNode } from 'react'
 import { PostComments } from '@/app/(home)/blog/[slug]/page.client'
-import { Section } from './section'
+import { Section } from '@/components/section'
+import { SectionBody } from '@/components/section-body'
+import { cn } from '@/lib/utils'
 
 interface MdxLayoutProps {
   children: ReactNode
@@ -10,6 +12,62 @@ interface MdxLayoutProps {
   comments?: boolean
   slug: string
 }
+
+interface InlineTocBlockProps {
+  items?: ComponentProps<typeof InlineTOC>['items']
+  className?: string
+}
+
+export const InlineTocBlock = ({ items, className }: InlineTocBlockProps) =>
+  items?.length ? (
+    <InlineTOC
+      className={cn(
+        'rounded-none border-0 border-border border-b border-dashed',
+        className
+      )}
+      items={items}
+    />
+  ) : (
+    <div className='py-2' />
+  )
+
+interface MdxContentProps {
+  children: ReactNode
+  toc?: ComponentProps<typeof InlineTOC>['items']
+  comments?: boolean
+  slug?: string
+  className?: string
+  proseClassName?: string
+  commentsClassName?: string
+}
+
+export const MdxContent = ({
+  children,
+  toc,
+  comments,
+  slug,
+  className,
+  proseClassName,
+  commentsClassName,
+}: MdxContentProps) => (
+  <div className={cn('flex flex-1 flex-col gap-4', className)}>
+    <InlineTocBlock items={toc} />
+    <div className={cn('prose min-w-0 flex-1 px-4', proseClassName)}>
+      {children}
+    </div>
+    {comments && slug ? (
+      <PostComments
+        className={cn(
+          '[&_form>div]:!rounded-none rounded-none border-0 border-border border-t border-dashed',
+          commentsClassName
+        )}
+        slug={slug}
+      />
+    ) : (
+      <div className='py-2' />
+    )}
+  </div>
+)
 
 export default function MdxLayout({
   children,
@@ -26,29 +84,13 @@ export default function MdxLayout({
         </h1>
       </Section>
 
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
-          <div className='flex flex-1 flex-col gap-4'>
-            {toc?.length ? (
-              <InlineTOC
-                className='rounded-none border-0 border-border border-b border-dashed'
-                items={toc}
-              />
-            ) : (
-              <div className='py-2' />
-            )}
-            <div className='prose min-w-0 flex-1 px-4'>{children}</div>
-            {comments ? (
-              <PostComments
-                className='[&_form>div]:!rounded-none rounded-none border-0 border-border border-t border-dashed'
-                slug={slug}
-              />
-            ) : (
-              <div className='py-2' />
-            )}
-          </div>
+          <MdxContent comments={comments} slug={slug} toc={toc}>
+            {children}
+          </MdxContent>
         </article>
-      </Section>
+      </SectionBody>
     </>
   )
 }

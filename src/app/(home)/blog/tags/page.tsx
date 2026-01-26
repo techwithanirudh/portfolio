@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Section } from '@/components/section'
+import { SectionBody } from '@/components/section-body'
 import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
@@ -15,7 +15,7 @@ export default function Page() {
   return (
     <Wrapper>
       <Hero />
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <SectionBody>
         <div className='grid grid-cols-1 divide-y divide-dashed divide-border sm:grid-cols-2 lg:grid-cols-4'>
           {tags.map((tag, index) => (
             <ViewAnimation
@@ -44,7 +44,7 @@ export default function Page() {
             </ViewAnimation>
           )}
         </div>
-      </Section>
+      </SectionBody>
     </Wrapper>
   )
 }

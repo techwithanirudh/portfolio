@@ -3,6 +3,7 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "@fuma-comment/react/preset.css";
 @import "@daveyplate/better-auth-ui/css";
+@import "./fumacomment.css";
 
 @plugin "tailwindcss-animate";
 @plugin "tailwind-scrollbar";
