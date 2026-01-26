@@ -87,7 +87,7 @@ export const Links = () => {
           key={list.title}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <div className='font-medium text-foreground'>
+          <div className='font-medium text-foreground border-b pb-1 sm:border-none sm:pb-0'>
             {list.href ? (
               <Link href={list.href}>{list.title}</Link>
             ) : (
