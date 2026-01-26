@@ -5,9 +5,12 @@ import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
-    <StickySection
-      description='A quick timeline of the roles shaping my work.'
-      sidebarContent={
+    <StickySection.Root>
+      <StickySection.Sidebar>
+        <StickySection.Header
+          description='A quick timeline of the roles shaping my work.'
+          title='Experience'
+        />
         <ViewAnimation
           delay={0.15}
           initial={{ opacity: 0, translateY: -6 }}
@@ -19,36 +22,36 @@ export default function Experience(): React.ReactElement {
             </a>
           </Button>
         </ViewAnimation>
-      }
-      title='Experience'
-    >
-      <div className='divide-y divide-dashed divide-border'>
-        {experiences.map((experience, index) => (
-          <ViewAnimation
-            delay={0.05 * index}
-            initial={{ opacity: 0, translateY: -6 }}
-            key={experience.role}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <div className='flex flex-col gap-3 p-6 sm:p-8'>
-              <div className='flex flex-wrap items-center justify-between gap-2'>
-                <div>
-                  <h3 className='font-semibold text-lg'>{experience.role}</h3>
-                  <p className='text-muted-foreground text-sm'>
-                    {experience.company}
-                  </p>
+      </StickySection.Sidebar>
+      <StickySection.Content>
+        <div className='divide-y divide-dashed divide-border'>
+          {experiences.map((experience, index) => (
+            <ViewAnimation
+              delay={0.05 * index}
+              initial={{ opacity: 0, translateY: -6 }}
+              key={experience.role}
+              whileInView={{ opacity: 1, translateY: 0 }}
+            >
+              <div className='flex flex-col gap-3 p-6 sm:p-8'>
+                <div className='flex flex-wrap items-center justify-between gap-2'>
+                  <div>
+                    <h3 className='font-semibold text-lg'>{experience.role}</h3>
+                    <p className='text-muted-foreground text-sm'>
+                      {experience.company}
+                    </p>
+                  </div>
+                  <span className='text-muted-foreground text-sm'>
+                    {experience.timeframe}
+                  </span>
                 </div>
-                <span className='text-muted-foreground text-sm'>
-                  {experience.timeframe}
-                </span>
+                <p className='text-muted-foreground text-sm'>
+                  {experience.summary}
+                </p>
               </div>
-              <p className='text-muted-foreground text-sm'>
-                {experience.summary}
-              </p>
-            </div>
-          </ViewAnimation>
-        ))}
-      </div>
-    </StickySection>
+            </ViewAnimation>
+          ))}
+        </div>
+      </StickySection.Content>
+    </StickySection.Root>
   )
 }
