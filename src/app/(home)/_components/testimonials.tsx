@@ -26,6 +26,48 @@ interface TestimonialsProps {
   testimonials: Testimonial[]
 }
 
+const TestimonialCard = ({
+  testimonial,
+  index,
+}: {
+  testimonial: Testimonial
+  index: number
+}) => (
+  <ViewAnimation
+    blur={false}
+    className='h-full'
+    delay={0.1 + index * 0.05}
+    initial={{ opacity: 0, translateX: -12, scale: 0.98 }}
+    whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
+  >
+    <div className='flex min-h-full flex-col justify-between gap-6 p-6 transition-all duration-300 hover:bg-card sm:p-8 lg:aspect-video'>
+      <User className='size-8 shrink-0 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
+      <div className='flex flex-col gap-4'>
+        <div className='flex flex-col'>
+          <h3 className='text-xl tracking-tight'>{testimonial.title}</h3>
+          <p className='text-base text-muted-foreground'>
+            {testimonial.description}
+          </p>
+        </div>
+        <p className='flex flex-row items-center gap-2 text-sm'>
+          <span className='text-muted-foreground'>By</span>
+          <Avatar className='h-6 w-6'>
+            <AvatarImage src={testimonial.author.image} />
+            <AvatarFallback>
+              {testimonial.author.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')
+                .toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <span>{testimonial.author.name}</span>
+        </p>
+      </div>
+    </div>
+  </ViewAnimation>
+)
+
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
@@ -71,41 +113,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
                   className='pl-0 sm:basis-1/2'
                   key={`${item.title}_${index}`}
                 >
-                  <ViewAnimation
-                    blur={false}
-                    className='h-full'
-                    delay={0.1 + index * 0.05}
-                    initial={{ opacity: 0, translateX: -12, scale: 0.98 }}
-                    whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
-                  >
-                    <div className='flex min-h-full flex-col justify-between gap-6 p-6 transition-all duration-300 hover:bg-card sm:p-8'>
-                      <User className='size-8 shrink-0 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
-                      <div className='flex flex-col gap-4'>
-                        <div className='flex flex-col'>
-                          <h3 className='text-xl tracking-tight'>
-                            {item.title}
-                          </h3>
-                          <p className='text-base text-muted-foreground'>
-                            {item.description}
-                          </p>
-                        </div>
-                        <p className='flex flex-row items-center gap-2 text-sm'>
-                          <span className='text-muted-foreground'>By</span>
-                          <Avatar className='h-6 w-6'>
-                            <AvatarImage src={item.author.image} />
-                            <AvatarFallback>
-                              {item.author.name
-                                .split(' ')
-                                .map((n) => n[0])
-                                .join('')
-                                .toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span>{item.author.name}</span>
-                        </p>
-                      </div>
-                    </div>
-                  </ViewAnimation>
+                  <TestimonialCard index={index} testimonial={item} />
                 </CarouselItem>
               ))}
             </CarouselContent>
