@@ -1,6 +1,5 @@
 import { unstable_cache } from 'next/cache'
-import { Section } from '@/components/section'
-import { SectionHeader } from '@/components/sections/section-header'
+import { StickySection } from '@/components/sections/sticky-section'
 import { ViewAnimation } from '@/components/view-animation'
 import { activity, owner } from '@/constants/config'
 import { octokit } from '@/lib/github'
@@ -93,42 +92,29 @@ export default async function Feed(): Promise<React.ReactElement | null> {
     }
 
     return (
-      <Section>
-        <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
-          <div className='bg-dashed'>
-            <div className='px-6 py-10 sm:sticky sm:top-16 sm:px-8 md:py-14'>
-              <SectionHeader
-                align='left'
-                description='Fresh events from across my GitHub.'
-                title='Live Activity'
-              />
-            </div>
-          </div>
-          <div className='min-w-0 sm:col-span-2'>
-            <div
-              className={cn(
-                'relative flex max-w-full flex-col gap-2 overflow-x-auto px-4 py-8 font-mono text-muted-foreground text-xs',
-                'sm:overflow-visible sm:px-8 sm:text-sm'
-              )}
+      <StickySection
+        description='Fresh events from across my GitHub.'
+        title='Live Activity'
+      >
+        <div
+          className={cn(
+            'relative flex max-w-full flex-col gap-2 overflow-x-auto px-4 py-8 font-mono text-muted-foreground text-xs',
+            'sm:overflow-visible sm:px-8 sm:text-sm'
+          )}
+        >
+          {items.map((item, index) => (
+            <ViewAnimation
+              delay={0.05 * index}
+              initial={{ opacity: 0, translateY: -8 }}
+              key={item.event.id}
+              whileInView={{ opacity: 1, translateY: 0 }}
             >
-              {items.map((item, index) => (
-                <ViewAnimation
-                  delay={0.05 * index}
-                  initial={{ opacity: 0, translateY: -8 }}
-                  key={item.event.id}
-                  whileInView={{ opacity: 1, translateY: 0 }}
-                >
-                  <GitHubEventComponent
-                    commits={item.commits}
-                    event={item.event}
-                  />
-                </ViewAnimation>
-              ))}
-              <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
-            </div>
-          </div>
+              <GitHubEventComponent commits={item.commits} event={item.event} />
+            </ViewAnimation>
+          ))}
+          <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
         </div>
-      </Section>
+      </StickySection>
     )
   } catch {
     return null
