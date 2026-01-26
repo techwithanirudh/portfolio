@@ -22,7 +22,7 @@ const Hero = () => {
   )
 
   return (
-    <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
+    <Section className='relative flex flex-col items-center justify-center gap-6 overflow-hidden px-6 py-16 sm:px-16 sm:py-24 md:py-32'>
       <motion.div
         animate={{ opacity: 1, translateY: 0 }}
         className='absolute inset-0 -z-10 h-full w-full'
@@ -50,7 +50,7 @@ const Hero = () => {
       >
         <h1
           className={cn(
-            'typography-hero font-normal text-3xl leading-tight tracking-tighter',
+            'typography-title font-normal text-3xl leading-tight tracking-tighter',
             'sm:text-center sm:text-4xl sm:leading-tight',
             'md:text-5xl md:leading-tight'
           )}
