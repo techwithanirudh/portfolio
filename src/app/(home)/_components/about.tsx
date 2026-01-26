@@ -19,7 +19,6 @@ export default function About(): React.ReactElement {
       <ViewAnimation
         className='relative'
         delay={0.1}
-        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >

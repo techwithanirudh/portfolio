@@ -23,7 +23,6 @@ export default function Posts({
     >
       <ViewAnimation
         delay={0.1}
-        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
@@ -39,7 +38,6 @@ export default function Posts({
           return (
             <ViewAnimation
               delay={0.05 * index}
-              duration={0.3}
               initial={{ opacity: 0, translateY: -6 }}
               key={post.url}
               whileInView={{ opacity: 1, translateY: 0 }}

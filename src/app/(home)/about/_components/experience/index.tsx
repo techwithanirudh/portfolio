@@ -11,7 +11,6 @@ export default function Experience(): React.ReactElement {
           <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
             <ViewAnimation
               blur={false}
-              duration={0.3}
               initial={{ opacity: 0, translateY: -6 }}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
@@ -20,7 +19,6 @@ export default function Experience(): React.ReactElement {
             <ViewAnimation
               blur={false}
               delay={0.1}
-              duration={0.3}
               initial={{ opacity: 0, translateY: -6 }}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
@@ -31,7 +29,6 @@ export default function Experience(): React.ReactElement {
               <ViewAnimation
               blur={false}
               delay={0.15}
-              duration={0.3}
               initial={{ opacity: 0, translateY: -6 }}
               whileInView={{ opacity: 1, translateY: 0 }}
             >

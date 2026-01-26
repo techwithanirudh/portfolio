@@ -20,7 +20,6 @@ export default function CTA(): React.ReactElement {
         <ViewAnimation
           blur={false}
           delay={0.2}
-          duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >

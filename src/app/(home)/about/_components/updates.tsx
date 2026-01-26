@@ -26,7 +26,6 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
                 >
                   <ViewAnimation
                     delay={0.05 * index}
-                    duration={0.3}
                     initial={{ opacity: 0, translateY: -6 }}
                     whileInView={{ opacity: 1, translateY: 0 }}
                   >

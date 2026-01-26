@@ -21,7 +21,6 @@ export default function Page() {
             <ViewAnimation
               className='size-full'
               delay={0.05 * index}
-              duration={0.3}
               initial={{ opacity: 0 }}
               key={tag}
               whileInView={{ opacity: 1 }}
@@ -38,7 +37,6 @@ export default function Page() {
           {tags.length % 2 === 1 && (
             <ViewAnimation
               delay={0.05 * tags.length}
-              duration={0.3}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
             >

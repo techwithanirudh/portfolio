@@ -45,7 +45,6 @@ const Hero = () => {
       </motion.div>
       <ViewAnimation
         delay={0.1}
-        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
@@ -61,7 +60,6 @@ const Hero = () => {
       </ViewAnimation>
       <ViewAnimation
         delay={0.15}
-        duration={0.3}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
@@ -76,7 +74,6 @@ const Hero = () => {
       <div className='flex flex-wrap items-center justify-center gap-4'>
         <ViewAnimation
           delay={0.2}
-          duration={0.3}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >

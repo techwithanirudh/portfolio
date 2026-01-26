@@ -59,7 +59,6 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
 
         <ViewAnimation
           blur={false}
-          duration={0.3}
           initial={{ opacity: 0, translateY: 16 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
@@ -77,7 +76,6 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
                     blur={false}
                     className='h-full'
                     delay={0.1 + index * 0.05}
-                    duration={0.3}
                     initial={{ opacity: 0, translateX: -12, scale: 0.98 }}
                     whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
                   >
