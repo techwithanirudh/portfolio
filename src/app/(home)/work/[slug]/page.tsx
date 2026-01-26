@@ -11,6 +11,7 @@ import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
+import { SectionBody } from '@/components/section-body'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
@@ -122,7 +123,7 @@ export default async function Page(props: {
       <BlogProgressBar />
       <Header page={page} />
 
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <SectionBody>
         <article className='flex min-h-full flex-col'>
           <ViewAnimation
             delay={0.1}
@@ -146,7 +147,7 @@ export default async function Page(props: {
             </div>
           </ViewAnimation>
         </article>
-      </Section>
+      </SectionBody>
     </>
   )
 }

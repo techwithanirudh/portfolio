@@ -7,7 +7,7 @@ import { Share } from '@/app/(home)/blog/[slug]/page.client'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
 import { MdxContent } from '@/components/mdx-layout'
-import { Section } from '@/components/section'
+import { SectionBody } from '@/components/section-body'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
@@ -31,7 +31,7 @@ export default async function Page(props: {
       <BlogProgressBar />
       <Header page={page} tags={tags} />
 
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
           <MdxContent comments slug={params.slug} toc={toc}>
             <Mdx
@@ -65,7 +65,7 @@ export default async function Page(props: {
             <Share url={page.url} />
           </div>
         </article>
-      </Section>
+      </SectionBody>
       <PostJsonLd page={page} />
     </>
   )

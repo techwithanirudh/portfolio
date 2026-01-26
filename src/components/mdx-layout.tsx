@@ -1,8 +1,9 @@
 import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
 import type { ComponentProps, ReactNode } from 'react'
 import { PostComments } from '@/app/(home)/blog/[slug]/page.client'
+import { Section } from '@/components/section'
+import { SectionBody } from '@/components/section-body'
 import { cn } from '@/lib/utils'
-import { Section } from './section'
 
 interface MdxLayoutProps {
   children: ReactNode
@@ -83,13 +84,13 @@ export default function MdxLayout({
         </h1>
       </Section>
 
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
           <MdxContent comments={comments} slug={slug} toc={toc}>
             {children}
           </MdxContent>
         </article>
-      </Section>
+      </SectionBody>
     </>
   )
 }

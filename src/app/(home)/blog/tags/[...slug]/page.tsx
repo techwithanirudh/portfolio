@@ -5,6 +5,7 @@ import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { Section } from '@/components/section'
+import { SectionBody } from '@/components/section-body'
 import { HeroSection } from '@/components/sections/hero'
 import { ViewAnimation } from '@/components/view-animation'
 import { postsPerPage } from '@/constants/config'
@@ -114,7 +115,7 @@ export default async function Page(props: {
   return (
     <>
       <Header endIndex={endIndex} startIndex={startIndex} tag={tag} />
-      <Section className='h-full' sectionClassName='flex flex-1'>
+      <SectionBody>
         <div className='grid divide-y divide-dashed divide-border text-left'>
           {posts.map((post, index) => {
             const date = new Date(post.data.date).toDateString()
@@ -137,7 +138,7 @@ export default async function Page(props: {
             )
           })}
         </div>
-      </Section>
+      </SectionBody>
       {pageCount(tag) > 1 && <Pagination pageIndex={pageIndex} tag={tag} />}
       <TagJsonLd tag={tag} />
     </>
