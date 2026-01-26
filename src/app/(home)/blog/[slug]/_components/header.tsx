@@ -66,7 +66,7 @@ export const Header = ({ page, tags }: HeaderProps) => {
               </div>
             ) : null}
             <div className='mb-4 space-y-4 text-balance'>
-              <h1 className='typography-hero max-w-2xl font-medium text-4xl text-white leading-[45px] tracking-tight md:text-5xl md:leading-[60px]'>
+              <h1 className='typography-hero max-w-2xl font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
                 <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
               </h1>
               <p className='typography-body hidden max-w-3xl text-muted-foreground leading-8 md:block'>
