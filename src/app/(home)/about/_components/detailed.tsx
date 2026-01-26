@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
+import { SectionHeader } from '@/components/sections/section-header'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
@@ -9,25 +10,12 @@ export default function Detailed(): React.ReactElement {
   return (
     <Section>
       <div className='grid divide-y divide-dashed divide-border sm:grid-cols-3 sm:divide-x sm:divide-y-0'>
-        <div className='bg-dashed'>
-          <div className='flex flex-col gap-1.5 p-8 sm:sticky sm:top-16'>
-            <ViewAnimation
-              initial={{ opacity: 0, translateY: -6 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <h2 className='font-semibold text-2xl'>Overview</h2>
-            </ViewAnimation>
-            <ViewAnimation
-              delay={0.1}
-              initial={{ opacity: 0, translateY: -6 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <p className='text-muted-foreground text-sm'>
-                A quick look at my background, focus, and what I'm building
-                next.
-              </p>
-            </ViewAnimation>
-          </div>
+        <div className='p-6 sm:sticky sm:top-16 sm:p-8'>
+          <SectionHeader
+            align='left'
+            description='A quick look at my background, focus, and what I'm building next.'
+            title='Overview'
+          />
         </div>
         <div className='sm:col-span-2'>
           <ViewAnimation
@@ -36,7 +24,7 @@ export default function Detailed(): React.ReactElement {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <div className='space-y-6 p-8 text-lg text-muted-foreground'>
+            <div className='space-y-6 p-6 text-muted-foreground text-lg sm:p-8'>
               <p>
                 Hi, I'm Anirudh. I'm a self-taught software engineer and a
                 student who loves building things with code. I grew up playing

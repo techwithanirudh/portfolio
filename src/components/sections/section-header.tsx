@@ -10,7 +10,6 @@ interface SectionHeaderProps {
   titleClassName?: string
   descriptionClassName?: string
   align?: 'left' | 'center'
-  size?: 'default' | 'large'
 }
 
 export const SectionHeader = ({
@@ -20,7 +19,6 @@ export const SectionHeader = ({
   titleClassName,
   descriptionClassName,
   align = 'center',
-  size = 'default',
 }: SectionHeaderProps) => (
   <div
     className={cn(
@@ -35,9 +33,9 @@ export const SectionHeader = ({
     >
       <h2
         className={cn(
-          'typography-hero font-normal text-3xl leading-tight tracking-tighter',
-          'sm:text-4xl sm:leading-tight',
-          'md:text-5xl md:leading-tight',
+          'font-normal text-2xl leading-tight tracking-tighter',
+          'sm:text-3xl',
+          'md:text-4xl',
           titleClassName
         )}
       >
@@ -52,8 +50,7 @@ export const SectionHeader = ({
       >
         <p
           className={cn(
-            'typography-body text-muted-foreground',
-            size === 'large' ? 'text-lg' : 'text-base',
+            'text-muted-foreground text-base',
             descriptionClassName
           )}
         >
