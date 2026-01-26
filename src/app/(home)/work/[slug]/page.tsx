@@ -1,5 +1,4 @@
 import { File, Files, Folder } from 'fumadocs-ui/components/files'
-import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
@@ -10,6 +9,7 @@ import Balancer from 'react-wrap-balancer'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
+import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
@@ -130,14 +130,7 @@ export default async function Page(props: {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-1 flex-col gap-4'>
-              {toc?.length ? (
-                <InlineTOC
-                  className='rounded-none border-0 border-border border-b border-dashed'
-                  items={toc}
-                />
-              ) : (
-                <div />
-              )}
+              <InlineTocBlock items={toc} />
               <div className='prose min-w-0 flex-1 px-4 pb-4'>
                 <Mdx
                   components={{

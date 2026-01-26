@@ -26,12 +26,12 @@ const themes = [
 ]
 
 const itemVariants = cva(
-  'relative size-6.5 rounded-full p-1.5 text-fd-muted-foreground',
+  'relative size-6.5 rounded-full p-1.5 text-muted-foreground',
   {
     variants: {
       active: {
-        true: 'text-fd-accent-foreground',
-        false: 'text-fd-muted-foreground',
+        true: 'text-foreground',
+        false: 'text-muted-foreground',
       },
     },
   }
@@ -50,7 +50,7 @@ export function ThemeToggle({
   const [mounted, setMounted] = useState(false)
 
   const container = cn(
-    'relative flex items-center rounded-full p-1 ring-1 ring-border',
+    'relative flex items-center rounded-full border border-border p-1',
     className
   )
 
