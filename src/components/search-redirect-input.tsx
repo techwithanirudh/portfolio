@@ -42,7 +42,7 @@ export function SearchRedirectInput({
   return (
     <InputGroup
       className={cn(
-        '!bg-background h-10 rounded-none border-0 shadow-none overflow-hidden',
+        '!bg-background h-10 overflow-hidden rounded-none border-0 shadow-none',
         className
       )}
     >

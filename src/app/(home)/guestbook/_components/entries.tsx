@@ -20,7 +20,7 @@ export const GuestbookEntries = ({
   if (entries.length === 0) {
     return (
       <ScrollArea className='h-[32rem] w-full' data-lenis-prevent>
-        <div className='flex flex-col items-center gap-2 text-center'>
+        <div className='flex flex-col items-center gap-2 px-6 py-10 text-center'>
           <Icons.mail className='size-6 text-muted-foreground' />
           <p className='text-muted-foreground text-sm'>No messages yet.</p>
         </div>
