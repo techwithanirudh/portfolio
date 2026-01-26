@@ -17,7 +17,7 @@ export const Footer = () => (
     <Links />
     <div className='grid items-center gap-4 sm:grid-cols-3'>
       <ViewAnimation
-        className='w-min'
+        className='hidden w-min sm:flex'
         delay={0.1}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
@@ -29,7 +29,7 @@ export const Footer = () => (
           size='icon'
         />
       </ViewAnimation>
-      <div className='flex items-center sm:justify-center'>
+      <div className='flex items-center justify-center'>
         <ViewAnimation
           delay={0.15}
           initial={{ opacity: 0, translateY: -6 }}
@@ -41,7 +41,7 @@ export const Footer = () => (
         </ViewAnimation>
       </div>
       <ViewAnimation
-        className='flex items-center gap-2 sm:justify-end'
+        className='hidden items-center gap-2 sm:flex sm:justify-end'
         delay={0.2}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
@@ -49,6 +49,30 @@ export const Footer = () => (
         <Clock />
         <ThemeToggle mode='light-dark-system' />
       </ViewAnimation>
+      <div className='flex items-center justify-between sm:hidden'>
+        <ViewAnimation
+          className='w-min'
+          delay={0.1}
+          initial={{ opacity: 0, translateY: -6 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+        >
+          <UserButton
+            align='start'
+            className='rounded-md'
+            sideOffset={10}
+            size='icon'
+          />
+        </ViewAnimation>
+        <ViewAnimation
+          className='flex items-center gap-2'
+          delay={0.2}
+          initial={{ opacity: 0, translateY: -6 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+        >
+          <Clock />
+          <ThemeToggle mode='light-dark-system' />
+        </ViewAnimation>
+      </div>
     </div>
   </footer>
 )
