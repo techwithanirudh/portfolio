@@ -11,7 +11,7 @@ export default function About(): React.ReactElement {
     <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
       <SectionHeader
         align='left'
-        className='px-6 py-10 md:py-14'
+        className='px-6 py-10'
         title='About Me'
       />
 
@@ -21,7 +21,7 @@ export default function About(): React.ReactElement {
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
-        <div className='space-y-4 px-6 py-10 md:py-14'>
+        <div className='space-y-4 px-6 py-10'>
           <div className='prose dark:prose-invert typography-body w-full space-y-4'>
             <p className='text-lg'>
               I'm Anirudh, a full-stack developer who builds practical web apps.

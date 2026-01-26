@@ -36,7 +36,7 @@ export const FAQ = () => (
   <Section className='grid divide-y divide-dashed divide-border lg:grid-cols-2 lg:divide-x lg:divide-y-0'>
     <SectionHeader
       align='left'
-      className='px-6 py-10 md:py-14'
+      className='px-6 py-10'
       description={
         <>
           Still have questions?{' '}
