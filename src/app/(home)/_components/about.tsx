@@ -9,6 +9,7 @@ import {
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
+import { Prose } from '@/components/prose'
 
 export default function About(): React.ReactElement {
   return (
@@ -25,7 +26,7 @@ export default function About(): React.ReactElement {
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='space-y-4'>
-            <div className='prose dark:prose-invert typography-body w-full space-y-4'>
+            <Prose className='typography-body w-full space-y-4'>
               <p className='text-lg'>
                 I'm Anirudh, a full-stack developer who builds practical web
                 apps. I started tinkering with Lego Mindstorms and kept building
@@ -36,7 +37,7 @@ export default function About(): React.ReactElement {
                 Python was part of my early experiments. I build open-source
                 projects like AI Tutor and Coolify Tweaks.
               </p>
-            </div>
+            </Prose>
             <Link
               className={cn(
                 buttonVariants({
