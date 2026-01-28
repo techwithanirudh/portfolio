@@ -31,15 +31,6 @@ function ClippyTriggerInner() {
     clippy.moveTo(x, y, 0)
 
     const handleClick = (event: Event) => {
-      const target = event.target
-      if (!(target instanceof Element)) {
-        return
-      }
-
-      if (!target.closest('.clippy')) {
-        return
-      }
-
       event.preventDefault()
       event.stopPropagation()
       setOpen(!openRef.current)
@@ -50,11 +41,11 @@ function ClippyTriggerInner() {
       clippy.moveTo(x, y, 0)
     }
 
-    document.addEventListener('click', handleClick, true)
+    clippy.on('click', handleClick)
     window.addEventListener('resize', handleResize)
 
     return () => {
-      document.removeEventListener('click', handleClick, true)
+      clippy.off('click', handleClick)
       window.removeEventListener('resize', handleResize)
     }
   }, [clippy, setOpen])

@@ -2,9 +2,20 @@
 
 import clippyts, { type Agent } from 'clippyts'
 import type { AgentType } from 'clippyts/dist/types'
-import { type ReactNode, useCallback, useEffect, useState } from 'react'
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import AGENTS from './agents'
-import { ClippyContext } from './clippy-context'
+import {
+  ClippyContext,
+  type ClippyEventHandler,
+  type ClippyInstance,
+} from './clippy-context'
 import clippyStyle from './style'
 
 let sharedAgent: Agent | null = null
@@ -21,8 +32,16 @@ export function ClippyProvider({
   children,
   agentName = AGENTS.CLIPPY,
 }: ClippyProviderProps) {
-  const [clippy, setClippy] = useState<Agent>()
-  const [debugText, setDebugText] = useState('clippy: loading')
+  const [clippy, setClippy] = useState<ClippyInstance>()
+  const clippyRef = useRef<ClippyInstance | null>(null)
+  const elementRef = useRef<HTMLElement | null>(null)
+  const listenersRef = useRef<
+    Map<string, Map<ClippyEventHandler, EventListener>>
+  >(new Map())
+
+  useEffect(() => {
+    clippyRef.current = clippy ?? null
+  }, [clippy])
 
   const hideAgent = useCallback((agent: Agent | undefined, cb?: () => void) => {
     if (!agent) {
@@ -34,6 +53,53 @@ export function ClippyProvider({
       cb?.()
     })
   }, [])
+
+  const attachListener = useCallback(
+    (eventName: string, handler: ClippyEventHandler) => {
+      let eventMap = listenersRef.current.get(eventName)
+      if (!eventMap) {
+        eventMap = new Map()
+        listenersRef.current.set(eventName, eventMap)
+      }
+
+      if (eventMap.has(handler)) {
+        return
+      }
+
+      const wrapped: EventListener = (event) => {
+        const current = clippyRef.current
+        if (!current) {
+          return
+        }
+        handler(event, current)
+      }
+
+      eventMap.set(handler, wrapped)
+      document.addEventListener(eventName, wrapped, true)
+    },
+    []
+  )
+
+  const detachListener = useCallback(
+    (eventName: string, handler: ClippyEventHandler) => {
+      const eventMap = listenersRef.current.get(eventName)
+      if (!eventMap) {
+        return
+      }
+
+      const wrapped = eventMap.get(handler)
+      if (!wrapped) {
+        return
+      }
+
+      document.removeEventListener(eventName, wrapped, true)
+      eventMap.delete(handler)
+      if (eventMap.size === 0) {
+        listenersRef.current.delete(eventName)
+      }
+    },
+    []
+  )
 
   useEffect(() => {
     sharedUsers += 1
@@ -64,18 +130,22 @@ export function ClippyProvider({
   }, [hideAgent])
 
   useEffect(() => {
-    return () => {
-      hideAgent(clippy)
-    }
-  }, [clippy, hideAgent])
-
-  useEffect(() => {
-    let cancelled = false
-
-    async function getAgent() {
+    function loadAgent() {
       if (sharedAgent) {
-        sharedAgent.show(false)
-        setClippy(sharedAgent)
+        sharedAgent.show(true)
+        const el = document.querySelector('.clippy') as HTMLElement | null
+        elementRef.current = el
+
+        const instance = Object.assign(sharedAgent, {
+          on: (eventName: string, handler: ClippyEventHandler) => {
+            attachListener(eventName, handler)
+          },
+          off: (eventName: string, handler: ClippyEventHandler) => {
+            detachListener(eventName, handler)
+          },
+        }) as ClippyInstance
+
+        setClippy(instance)
         return
       }
 
@@ -89,81 +159,61 @@ export function ClippyProvider({
         })
       }
 
-      try {
-        const agent = await sharedLoading
-        if (cancelled) {
-          return
-        }
-        sharedAgent = agent
-        agent.show(true)
-        setClippy(agent)
-      } catch (error) {
-        console.error('Failed to load Clippy:', error)
-        if (!cancelled) {
-          setClippy(undefined)
-        }
-        sharedAgent = null
-        sharedLoading = null
+      const loading = sharedLoading
+      if (!loading) {
+        return
       }
+
+      loading
+        .then((agent) => {
+          sharedAgent = agent
+          agent.show(true)
+          const el = document.querySelector('.clippy') as HTMLElement | null
+          elementRef.current = el
+
+          const instance = Object.assign(agent, {
+            on: (eventName: string, handler: ClippyEventHandler) => {
+              attachListener(eventName, handler)
+            },
+            off: (eventName: string, handler: ClippyEventHandler) => {
+              detachListener(eventName, handler)
+            },
+          }) as ClippyInstance
+
+          setClippy(instance)
+
+          if (el) {
+            for (const [eventName, handlers] of listenersRef.current) {
+              for (const [handler] of handlers) {
+                attachListener(eventName, handler)
+              }
+            }
+          }
+        })
+        .catch((error) => {
+          console.error('Failed to load Clippy:', error)
+          setClippy(undefined)
+          sharedAgent = null
+          sharedLoading = null
+        })
     }
 
-    getAgent()
-
-    return () => {
-      cancelled = true
+    if (clippy) {
+      hideAgent(clippy, () => loadAgent())
+    } else {
+      loadAgent()
     }
-  }, [agentName])
+  }, [agentName, attachListener, detachListener, clippy, hideAgent])
 
   useEffect(() => {
-    if (!clippy) {
-      setDebugText('clippy: loading')
-      return
-    }
-
-    const interval = window.setInterval(() => {
-      const element = document.querySelector('.clippy') as HTMLElement | null
-      const hidden = element?.hasAttribute('hidden') ? 'yes' : 'no'
-      const display = element ? window.getComputedStyle(element).display : 'n/a'
-      const top = element?.style.top ?? 'n/a'
-      const left = element?.style.left ?? 'n/a'
-      const internal = clippy as unknown as {
-        _animator?: { currentAnimationName?: string }
-      }
-      const currentAnimation =
-        internal._animator?.currentAnimationName ?? 'none'
-
-      setDebugText(
-        `clippy: loaded\ncurrent: ${currentAnimation}\nhidden: ${hidden}\ndisplay: ${display}\nposition: ${left}, ${top}\nanimations: ${clippy.animations().length}`
-      )
-    }, 500)
-
     return () => {
-      window.clearInterval(interval)
+      hideAgent(clippy)
     }
-  }, [clippy])
+  }, [clippy, hideAgent])
+
+  const value = useMemo(() => ({ clippy }), [clippy])
 
   return (
-    <ClippyContext.Provider value={{ clippy }}>
-      {children}
-      <div
-        style={{
-          position: 'fixed',
-          right: 12,
-          bottom: 12,
-          zIndex: 9999,
-          maxWidth: 320,
-          padding: 10,
-          background: 'rgba(0, 0, 0, 0.8)',
-          color: '#fff',
-          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas',
-          fontSize: 12,
-          borderRadius: 8,
-          pointerEvents: 'none',
-          whiteSpace: 'pre-wrap',
-        }}
-      >
-        {debugText}
-      </div>
-    </ClippyContext.Provider>
+    <ClippyContext.Provider value={value}>{children}</ClippyContext.Provider>
   )
 }
