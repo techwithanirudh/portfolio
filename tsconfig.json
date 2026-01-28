@@ -32,7 +32,8 @@
       "@/*": ["./src/*"],
       "@/public/*": ["./public/*"],
       "fumadocs-mdx:collections/*": ["./.source/*"]
-    }
+    },
+    "allowImportingTsExtensions": true
   },
   "include": [
     ".eslintrc.cjs",
