@@ -124,14 +124,18 @@ const StorageKeyInput = '__ai_search_input'
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop } = useChatContext()
   const { playAnimation, isAgentVisible, showAgent, currentAgent } = useClippy()
+  const pendingRef = useRef(false)
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
   const playSearching = useEffectEvent(() => {
     if (!isAgentVisible) {
+      pendingRef.current = true
       showAgent(currentAgent ?? 'Rover')
+      return
     }
+    pendingRef.current = false
     playAnimation(animations.submit)
   })
   const onStart = async (event?: SyntheticEvent) => {
@@ -142,6 +146,15 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   }
 
   localStorage.setItem(StorageKeyInput, input)
+
+  useEffect(() => {
+    if (!(pendingRef.current && isAgentVisible)) {
+      return
+    }
+
+    pendingRef.current = false
+    playAnimation(animations.submit)
+  }, [isAgentVisible, playAnimation])
 
   useEffect(() => {
     if (isLoading) {
@@ -347,6 +360,7 @@ export function AISearchPanel() {
   const chat = useChatContext()
   const { cancelAnimation, playAnimation } = useClippy()
   const lastToolRef = useRef<string | null>(null)
+  const lastOpenRef = useRef(open)
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === 'Escape' && open) {
@@ -377,11 +391,12 @@ export function AISearchPanel() {
   }, [chat.messages, chat.status, cancelAnimation])
 
   useEffect(() => {
-    if (open) {
-      playAnimation(animations.open)
-    } else {
-      playAnimation(animations.bye)
+    if (lastOpenRef.current === open) {
+      return
     }
+
+    lastOpenRef.current = open
+    playAnimation(open ? animations.open : animations.bye)
   }, [open, playAnimation])
 
   useEffect(() => {

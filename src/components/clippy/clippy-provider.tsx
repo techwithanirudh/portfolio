@@ -128,7 +128,6 @@ export function ClippyProvider({
           setIsLoadingAgent(false)
 
           agent.show(fast)
-          console.log('[clippy] animations', agent.animations())
           agentRef.current = agent
           setClippyInstance(Object.assign(agent, { on, off }))
           setCurrentAgent(name)
