@@ -1,0 +1,48 @@
+{
+  "name": "clippyts",
+  "version": "1.0.5",
+  "description": "Same old Clippy. Modern JavaScript.",
+  "main": "dist/index.js",
+  "web": "dist/index.js",
+  "module": "dist/index.js",
+  "jsnext:main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "increase-mem": "export NODE_OPTIONS=--max_old_space_size=4096",
+    "build-js": "rollup -c rollup.config.js",
+    "build": "npm run clean && npm run build-js",
+    "clean": "rimraf dist",
+    "watch": "rollup -c -w",
+    "prepublish": "npm run build",
+    "start": "npm run build && npm run open",
+    "demo": "concurrently \"http-server -a localhost -p 1234\" \"open http://localhost:1234/demo\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lizozom/clippyts.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lizozom/clippyts/issues"
+  },
+  "homepage": "https://github.com/lizozom/clippyts#readme",
+  "devDependencies": {
+    "@lopatnov/rollup-plugin-uglify": "^2.1.5",
+    "@open-wc/building-rollup": "^2.2.1",
+    "@rollup/plugin-buble": "^1.0.2",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-image": "^3.0.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-terser": "^0.4.0",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/jquery": "^3.5.16",
+    "concurrently": "^8.0.1",
+    "copyfiles": "^2.4.1",
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
+    "rimraf": "^5.0.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-styles": "^4.0.0",
+    "typescript": "^5.0.4"
+  }
+}
