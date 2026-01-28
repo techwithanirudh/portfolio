@@ -10,9 +10,9 @@ import type { ClippyAction, ClippyState } from './clippy-state'
 import { registerListener, unregisterListener } from './events'
 
 interface UseClippyControllerOptions {
-  stateRef: React.MutableRefObject<ClippyState>
-  elementRef: React.MutableRefObject<HTMLElement | null>
-  listenersRef: React.MutableRefObject<
+  stateRef: React.RefObject<ClippyState>
+  elementRef: React.RefObject<HTMLElement | null>
+  listenersRef: React.RefObject<
     Map<string, Map<ClippyEventHandler, EventListener>>
   >
   setElementRef: () => void

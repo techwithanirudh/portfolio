@@ -1,5 +1,5 @@
 import type { Agent } from 'clippyts'
-import type { MutableRefObject } from 'react'
+import type { RefObject } from 'react'
 import type { ClippyEventHandler } from './clippy-context'
 
 export type ListenerRegistry = Map<
@@ -10,7 +10,7 @@ export type ListenerRegistry = Map<
 export function registerListener(
   registry: ListenerRegistry,
   element: HTMLElement | null,
-  agentRef: MutableRefObject<Agent | null>,
+  agentRef: RefObject<Agent | null>,
   eventName: string,
   handler: ClippyEventHandler
 ) {

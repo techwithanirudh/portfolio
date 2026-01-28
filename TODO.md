@@ -6,3 +6,4 @@
 - Populate App Images
 - Add Raycast and Browser Extension Sections
 - Guestbook Admin (Logo / Permissions to delete other things)
+- Lighthouse Scores / Perf is bad after clippy.js
