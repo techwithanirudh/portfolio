@@ -5,6 +5,7 @@ import { DefaultChatTransport, isToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
   ArrowUpIcon,
+  DogIcon,
   PawPrint,
   RefreshCw,
   SquareIcon,
@@ -467,10 +468,17 @@ export function AISearchPanel() {
                   'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent 100%)',
               }}
             >
-              <div className='flex flex-col divide-y divide-dashed divide-border'>
-                {chat.messages
-                  .filter((msg) => msg.role !== 'system')
-                  .map((item, idx) => (
+              <div className='flex flex-1 flex-col divide-y divide-dashed divide-border'>
+                {chat.messages.length === 0 ? (
+                  <div className='flex flex-1 min-h-full flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
+                    <DogIcon className='size-8 hover:-rotate-12 transition-transform text-fd-primary' />
+                    <p>
+                      heya! im simba, anirudh's dog. i can answer questions
+                      about him, his work, or the site.
+                    </p>
+                  </div>
+                ) : (
+                  chat.messages.map((item, idx) => (
                     <Message
                       className='py-4'
                       isInProgress={
@@ -481,7 +489,8 @@ export function AISearchPanel() {
                       key={item.id}
                       message={item}
                     />
-                  ))}
+                  ))
+                )}
               </div>
             </List>
             <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
