@@ -196,6 +196,9 @@ export function ClippyProvider({
       return
     }
 
+    agent.stopCurrent()
+    agent.stop()
+
     if (animationName) {
       agent.play(animationName)
       return

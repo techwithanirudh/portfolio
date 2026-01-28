@@ -21,9 +21,9 @@ export const technology = [
     url: 'https://tailwindcss.com',
   },
   {
-    name: 'Fumadocs + MDX',
+    name: 'Fumadocs',
     description: 'Typed MDX content with a docs-friendly layout engine.',
-    url: 'https://fumadocs.vercel.app',
+    url: 'https://fumadocs.dev',
   },
   {
     name: 'Radix UI + shadcn/ui',
