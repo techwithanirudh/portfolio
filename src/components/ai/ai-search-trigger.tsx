@@ -1,9 +1,8 @@
 'use client'
 
-import type { Agent } from 'clippyts'
 import dynamic from 'next/dynamic'
-import { useCallback } from 'react'
-import { ClippyProvider } from '@/components/clippy'
+import { useEffect, useRef } from 'react'
+import { useClippy } from '@/components/clippy'
 import { useAISearchContext } from './ai-search'
 
 function getPosition() {
@@ -15,31 +14,52 @@ function getPosition() {
 
 function ClippyTriggerInner() {
   const { open, setOpen } = useAISearchContext()
+  const { clippy } = useClippy()
+  const openRef = useRef(open)
 
-  const handleLoad = useCallback(
-    (agent: Agent) => {
-      agent.show(true)
+  useEffect(() => {
+    openRef.current = open
+  }, [open])
+
+  useEffect(() => {
+    if (!clippy) {
+      return
+    }
+
+    clippy.show(true)
+    const { x, y } = getPosition()
+    clippy.moveTo(x, y, 0)
+
+    const handleClick = (event: Event) => {
+      const target = event.target
+      if (!(target instanceof Element)) {
+        return
+      }
+
+      if (!target.closest('.clippy')) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      setOpen(!openRef.current)
+    }
+
+    const handleResize = () => {
       const { x, y } = getPosition()
-      agent.moveTo(x, y, 0)
+      clippy.moveTo(x, y, 0)
+    }
 
-      const el = document.querySelector('.clippy-container')
-      el?.addEventListener('click', (e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        setOpen(!open)
-      })
+    document.addEventListener('click', handleClick, true)
+    window.addEventListener('resize', handleResize)
 
-      window.addEventListener('resize', () => {
-        const { x, y } = getPosition()
-        agent.moveTo(x, y, 0)
-      })
-    },
-    [open, setOpen]
-  )
+    return () => {
+      document.removeEventListener('click', handleClick, true)
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [clippy, setOpen])
 
-  return (
-    <ClippyProvider agentName='Clippy' draggable={false} onLoad={handleLoad} />
-  )
+  return null
 }
 
 export const AISearchTrigger = dynamic(

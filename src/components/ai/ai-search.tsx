@@ -24,7 +24,7 @@ import {
   useState,
 } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
-import { useClippy } from '@/components/clippy'
+import { ClippyProvider, useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -122,14 +122,30 @@ function SearchAIActions() {
 const StorageKeyInput = '__ai_search_input'
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop } = useChatContext()
-  const { speak } = useClippy()
+  const { clippy } = useClippy()
+  const pendingRef = useRef(false)
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
+  const playSearching = useEffectEvent(() => {
+    if (!clippy) {
+      pendingRef.current = true
+      return
+    }
+
+    pendingRef.current = false
+    clippy.show(true)
+    if (clippy.hasAnimation('Searching')) {
+      clippy.play('Searching')
+    } else {
+      clippy.animate()
+    }
+    clippy.speak('Searching', false)
+  })
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
-    speak('hola')
+    playSearching()
     await sendMessage({ text: input })
     setInput('')
   }
@@ -141,6 +157,21 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       document.getElementById('nd-ai-input')?.focus()
     }
   }, [isLoading])
+
+  useEffect(() => {
+    if (!(clippy && pendingRef.current)) {
+      return
+    }
+
+    pendingRef.current = false
+    clippy.show(true)
+    if (clippy.hasAnimation('Searching')) {
+      clippy.play('Searching')
+    } else {
+      clippy.animate()
+    }
+    clippy.speak('Searching', false)
+  }, [clippy])
 
   return (
     <form
@@ -327,9 +358,11 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <Context value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}>
-      {children}
-    </Context>
+    <ClippyProvider>
+      <Context value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}>
+        {children}
+      </Context>
+    </ClippyProvider>
   )
 }
 

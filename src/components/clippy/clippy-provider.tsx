@@ -1,93 +1,169 @@
 'use client'
 
-import type { Agent } from 'clippyts'
+import clippyts, { type Agent } from 'clippyts'
 import type { AgentType } from 'clippyts/dist/types'
-import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
+import { type ReactNode, useCallback, useEffect, useState } from 'react'
+import AGENTS from './agents'
 import { ClippyContext } from './clippy-context'
+import clippyStyle from './style'
 
-const AGENTS = {
-  BONZI: 'Bonzi',
-  CLIPPY: 'Clippy',
-  F1: 'F1',
-  GENIE: 'Genie',
-  GENIUS: 'Genius',
-  LINKS: 'Links',
-  MERLIN: 'Merlin',
-  PEEDY: 'Peedy',
-  ROCKY: 'Rocky',
-  ROVER: 'Rover',
-} as const
+let sharedAgent: Agent | null = null
+let sharedLoading: Promise<Agent> | null = null
+let sharedUsers = 0
+let disposeTimer: number | null = null
 
 interface ClippyProviderProps {
   children?: ReactNode
   agentName?: AgentType
-  selector?: string
-  draggable?: boolean
-  onLoad?: (agent: Agent) => void
 }
 
 export function ClippyProvider({
   children,
-  agentName = AGENTS.ROVER,
-  selector = 'clippy-container',
-  draggable = false,
-  onLoad,
+  agentName = AGENTS.CLIPPY,
 }: ClippyProviderProps) {
-  const [agent, setAgent] = useState<Agent | undefined>()
-  const [isLoaded, setIsLoaded] = useState(false)
-  const agentRef = useRef<Agent | null>(null)
+  const [clippy, setClippy] = useState<Agent>()
+  const [debugText, setDebugText] = useState('clippy: loading')
+
+  const hideAgent = useCallback((agent: Agent | undefined, cb?: () => void) => {
+    if (!agent) {
+      cb?.()
+      return
+    }
+
+    agent.hide(false, () => {
+      cb?.()
+    })
+  }, [])
 
   useEffect(() => {
-    let mounted = true
-
-    async function loadClippy() {
-      const clippy = (await import('clippyts')).default
-
-      clippy.load({
-        name: agentName,
-        selector,
-        successCb: (loadedAgent) => {
-          if (!mounted) {
-            loadedAgent.hide(true, () => undefined)
-            return
-          }
-
-          agentRef.current = loadedAgent
-          setAgent(loadedAgent)
-          setIsLoaded(true)
-
-          if (!draggable) {
-            for (const el of document.querySelectorAll('.clippy')) {
-              el.addEventListener(
-                'mousedown',
-                (e) => e.stopImmediatePropagation(),
-                true
-              )
-            }
-          }
-
-          onLoad?.(loadedAgent)
-        },
-        failCb: (err) => console.error('Failed to load Clippy:', err),
-      })
+    sharedUsers += 1
+    if (disposeTimer) {
+      window.clearTimeout(disposeTimer)
+      disposeTimer = null
     }
 
-    loadClippy()
+    const styleEl = document.createElement('style')
+    styleEl.dataset.clippy = 'true'
+    styleEl.appendChild(document.createTextNode(clippyStyle))
+    document.head.appendChild(styleEl)
 
     return () => {
-      mounted = false
-      agentRef.current?.hide(true, () => undefined)
+      styleEl.remove()
+      sharedUsers = Math.max(0, sharedUsers - 1)
+      if (sharedUsers === 0) {
+        disposeTimer = window.setTimeout(() => {
+          if (sharedUsers === 0 && sharedAgent) {
+            hideAgent(sharedAgent)
+            sharedAgent = null
+            sharedLoading = null
+          }
+          disposeTimer = null
+        }, 200)
+      }
     }
-  }, [agentName, selector, draggable, onLoad])
+  }, [hideAgent])
 
-  const value = useMemo(() => ({ agent, isLoaded }), [agent, isLoaded])
+  useEffect(() => {
+    return () => {
+      hideAgent(clippy)
+    }
+  }, [clippy, hideAgent])
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function getAgent() {
+      if (sharedAgent) {
+        sharedAgent.show(false)
+        setClippy(sharedAgent)
+        return
+      }
+
+      if (!sharedLoading) {
+        sharedLoading = new Promise((resolve, reject) => {
+          clippyts.load({
+            name: agentName,
+            successCb: (agent) => resolve(agent),
+            failCb: (error) => reject(error),
+          })
+        })
+      }
+
+      try {
+        const agent = await sharedLoading
+        if (cancelled) {
+          return
+        }
+        sharedAgent = agent
+        agent.show(true)
+        setClippy(agent)
+      } catch (error) {
+        console.error('Failed to load Clippy:', error)
+        if (!cancelled) {
+          setClippy(undefined)
+        }
+        sharedAgent = null
+        sharedLoading = null
+      }
+    }
+
+    getAgent()
+
+    return () => {
+      cancelled = true
+    }
+  }, [agentName])
+
+  useEffect(() => {
+    if (!clippy) {
+      setDebugText('clippy: loading')
+      return
+    }
+
+    const interval = window.setInterval(() => {
+      const element = document.querySelector('.clippy') as HTMLElement | null
+      const hidden = element?.hasAttribute('hidden') ? 'yes' : 'no'
+      const display = element ? window.getComputedStyle(element).display : 'n/a'
+      const top = element?.style.top ?? 'n/a'
+      const left = element?.style.left ?? 'n/a'
+      const internal = clippy as unknown as {
+        _animator?: { currentAnimationName?: string }
+      }
+      const currentAnimation =
+        internal._animator?.currentAnimationName ?? 'none'
+
+      setDebugText(
+        `clippy: loaded\ncurrent: ${currentAnimation}\nhidden: ${hidden}\ndisplay: ${display}\nposition: ${left}, ${top}\nanimations: ${clippy.animations().length}`
+      )
+    }, 500)
+
+    return () => {
+      window.clearInterval(interval)
+    }
+  }, [clippy])
 
   return (
-    <>
-      <div className={selector} />
-      <ClippyContext value={value}>{children}</ClippyContext>
-    </>
+    <ClippyContext.Provider value={{ clippy }}>
+      {children}
+      <div
+        style={{
+          position: 'fixed',
+          right: 12,
+          bottom: 12,
+          zIndex: 9999,
+          maxWidth: 320,
+          padding: 10,
+          background: 'rgba(0, 0, 0, 0.8)',
+          color: '#fff',
+          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas',
+          fontSize: 12,
+          borderRadius: 8,
+          pointerEvents: 'none',
+          whiteSpace: 'pre-wrap',
+        }}
+      >
+        {debugText}
+      </div>
+    </ClippyContext.Provider>
   )
 }
-
-export { AGENTS }

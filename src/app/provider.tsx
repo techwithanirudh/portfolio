@@ -9,7 +9,6 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import { AISearch, AISearchPanel } from '@/components/ai/ai-search'
 import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
-import { ClippyProvider } from '@/components/clippy'
 import Analytics from '@/components/analytics'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -32,9 +31,8 @@ export function Provider({
       enableSystem
     >
       <NuqsAdapter>
-        <ClippyProvider agentName="Rover" draggable={false}>
-          <AISearch>
-            <AuthUIProvider
+        <AISearch>
+          <AuthUIProvider
             account={{
               basePath: '/account',
             }}
@@ -77,7 +75,6 @@ export function Provider({
           <AISearchTrigger />
           <AISearchPanel />
         </AISearch>
-        </ClippyProvider>
         <Analytics />
         <Toaster />
         <TailwindIndicator />

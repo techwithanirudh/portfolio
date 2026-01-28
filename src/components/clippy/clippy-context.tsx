@@ -4,11 +4,9 @@ import type { Agent } from 'clippyts'
 import { createContext } from 'react'
 
 export interface ClippyContextValue {
-  agent: Agent | undefined
-  isLoaded: boolean
+  clippy: Agent | undefined
 }
 
 export const ClippyContext = createContext<ClippyContextValue>({
-  agent: undefined,
-  isLoaded: false,
+  clippy: undefined,
 })
