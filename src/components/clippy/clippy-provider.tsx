@@ -2,14 +2,7 @@
 
 import type { Agent } from 'clippyts'
 import type { AgentType } from 'clippyts/dist/types'
-import {
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { ClippyContext } from './clippy-context'
 
 const AGENTS = {
@@ -26,14 +19,11 @@ const AGENTS = {
 } as const
 
 interface ClippyProviderProps {
-  children: ReactNode
+  children?: ReactNode
   agentName?: AgentType
   selector?: string
   draggable?: boolean
-  onClick?: () => void
-  onDoubleClick?: () => void
-  initialPosition?: { x: number; y: number }
-  resetPositionOnResize?: boolean
+  onLoad?: (agent: Agent) => void
 }
 
 export function ClippyProvider({
@@ -41,27 +31,14 @@ export function ClippyProvider({
   agentName = AGENTS.ROVER,
   selector = 'clippy-container',
   draggable = false,
-  onClick,
-  onDoubleClick,
-  initialPosition,
-  resetPositionOnResize = true,
+  onLoad,
 }: ClippyProviderProps) {
   const [agent, setAgent] = useState<Agent | undefined>()
   const [isLoaded, setIsLoaded] = useState(false)
   const agentRef = useRef<Agent | null>(null)
 
-  const getPosition = useCallback(() => {
-    return (
-      initialPosition ?? {
-        x: window.innerWidth - 90,
-        y: window.innerHeight - 100,
-      }
-    )
-  }, [initialPosition])
-
   useEffect(() => {
     let mounted = true
-    const cleanupFns: (() => void)[] = []
 
     async function loadClippy() {
       const clippy = (await import('clippyts')).default
@@ -79,59 +56,19 @@ export function ClippyProvider({
           setAgent(loadedAgent)
           setIsLoaded(true)
 
-          loadedAgent.show(true)
-          const { x, y } = getPosition()
-          loadedAgent.moveTo(x, y, 0)
-
-          const el = document.querySelector(`.${selector}`)
-
-          if (onClick) {
-            const handleClick = (e: Event) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onClick()
-            }
-            el?.addEventListener('click', handleClick)
-            cleanupFns.push(() => el?.removeEventListener('click', handleClick))
-          }
-
-          if (onDoubleClick) {
-            const handleDblClick = (e: Event) => {
-              e.preventDefault()
-              e.stopPropagation()
-              onDoubleClick()
-            }
-            el?.addEventListener('dblclick', handleDblClick)
-            cleanupFns.push(() =>
-              el?.removeEventListener('dblclick', handleDblClick)
-            )
-          }
-
           if (!draggable) {
-            for (const clippyEl of document.querySelectorAll('.clippy')) {
-              const blockDrag = (e: Event) => e.stopImmediatePropagation()
-              clippyEl.addEventListener('mousedown', blockDrag, true)
-              cleanupFns.push(() =>
-                clippyEl.removeEventListener('mousedown', blockDrag, true)
+            for (const el of document.querySelectorAll('.clippy')) {
+              el.addEventListener(
+                'mousedown',
+                (e) => e.stopImmediatePropagation(),
+                true
               )
             }
           }
 
-          if (resetPositionOnResize) {
-            const handleResize = () => {
-              const { x, y } = getPosition()
-              loadedAgent.moveTo(x, y, 0)
-            }
-            window.addEventListener('resize', handleResize)
-            cleanupFns.push(() =>
-              window.removeEventListener('resize', handleResize)
-            )
-          }
+          onLoad?.(loadedAgent)
         },
-        failCb: (err) => {
-          console.error('Failed to load Clippy:', err)
-          setIsLoaded(false)
-        },
+        failCb: (err) => console.error('Failed to load Clippy:', err),
       })
     }
 
@@ -139,20 +76,9 @@ export function ClippyProvider({
 
     return () => {
       mounted = false
-      for (const cleanup of cleanupFns) {
-        cleanup()
-      }
       agentRef.current?.hide(true, () => undefined)
     }
-  }, [
-    agentName,
-    selector,
-    draggable,
-    onClick,
-    onDoubleClick,
-    getPosition,
-    resetPositionOnResize,
-  ])
+  }, [agentName, selector, draggable, onLoad])
 
   const value = useMemo(() => ({ agent, isLoaded }), [agent, isLoaded])
 

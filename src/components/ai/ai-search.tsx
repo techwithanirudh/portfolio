@@ -24,6 +24,7 @@ import {
   useState,
 } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
+import { useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -121,12 +122,14 @@ function SearchAIActions() {
 const StorageKeyInput = '__ai_search_input'
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop } = useChatContext()
+  const { speak } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
+    speak('hola')
     await sendMessage({ text: input })
     setInput('')
   }
