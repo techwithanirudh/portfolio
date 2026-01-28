@@ -1,7 +1,6 @@
 'use client'
 
 import clippyts, { type Agent } from 'clippyts'
-import 'clippyts/src/clippy.css'
 import type { AgentType } from 'clippyts/dist/types'
 import {
   type ReactNode,
@@ -14,14 +13,11 @@ import {
 import AGENTS from './agents'
 import {
   ClippyContext,
+  type ClippyContextValue,
   type ClippyEventHandler,
   type ClippyInstance,
 } from './clippy-context'
-
-let sharedAgent: Agent | null = null
-let sharedLoading: Promise<Agent> | null = null
-let sharedUsers = 0
-let disposeTimer: number | null = null
+import { registerListener, syncListeners, unregisterListener } from './events'
 
 interface ClippyProviderProps {
   children?: ReactNode
@@ -34,219 +30,230 @@ export function ClippyProvider({
   agentName = AGENTS.CLIPPY,
   draggable = false,
 }: ClippyProviderProps) {
-  const [clippy, setClippy] = useState<ClippyInstance>()
-  const clippyRef = useRef<ClippyInstance | null>(null)
+  const [clippyInstance, setClippyInstance] = useState<
+    ClippyInstance | undefined
+  >()
+  const [currentAgent, setCurrentAgent] = useState<AgentType | null>(null)
+  const [isAgentVisible, setIsAgentVisible] = useState(false)
+  const [isLoadingAgent, setIsLoadingAgent] = useState(false)
+
+  const agentRef = useRef<Agent | null>(null)
   const elementRef = useRef<HTMLElement | null>(null)
-  const listenersRef = useRef<
-    Map<string, Map<ClippyEventHandler, EventListener>>
-  >(new Map())
+  const listenersRef = useRef(
+    new Map<string, Map<ClippyEventHandler, EventListener>>()
+  )
+  const loadingRef = useRef(false)
+  const visibleRef = useRef(false)
+  const currentAgentRef = useRef<AgentType | null>(null)
 
   useEffect(() => {
-    clippyRef.current = clippy ?? null
-  }, [clippy])
+    visibleRef.current = isAgentVisible
+  }, [isAgentVisible])
 
-  const hideAgent = useCallback((agent: Agent | undefined, cb?: () => void) => {
+  useEffect(() => {
+    currentAgentRef.current = currentAgent
+  }, [currentAgent])
+
+  const setElementRef = useCallback(() => {
+    elementRef.current = document.querySelector('.clippy') as HTMLElement | null
+    syncListeners(listenersRef.current, elementRef.current)
+
+    if (!draggable && elementRef.current) {
+      const blockDrag = (event: MouseEvent) => {
+        event.stopImmediatePropagation()
+      }
+
+      elementRef.current.addEventListener('mousedown', blockDrag, true)
+      return () => {
+        elementRef.current?.removeEventListener('mousedown', blockDrag, true)
+      }
+    }
+
+    return () => undefined
+  }, [draggable])
+
+  const hideAgent = useCallback((fast = false, cb?: () => void) => {
+    const agent = agentRef.current
     if (!agent) {
       cb?.()
       return
     }
 
-    agent.hide(false, () => {
+    agent.hide(fast, () => {
+      agentRef.current = null
+      setClippyInstance(undefined)
+      setCurrentAgent(null)
+      setIsAgentVisible(false)
+      visibleRef.current = false
       cb?.()
     })
   }, [])
 
-  const attachListener = useCallback(
-    (eventName: string, handler: ClippyEventHandler) => {
-      let eventMap = listenersRef.current.get(eventName)
-      if (!eventMap) {
-        eventMap = new Map()
-        listenersRef.current.set(eventName, eventMap)
-      }
+  const on = useCallback((eventName: string, handler: ClippyEventHandler) => {
+    registerListener(
+      listenersRef.current,
+      elementRef.current,
+      agentRef,
+      eventName,
+      handler
+    )
+  }, [])
 
-      if (eventMap.has(handler)) {
+  const off = useCallback((eventName: string, handler: ClippyEventHandler) => {
+    unregisterListener(
+      listenersRef.current,
+      elementRef.current,
+      eventName,
+      handler
+    )
+  }, [])
+
+  const loadAgent = useCallback(
+    (name: AgentType, fast = true) => {
+      if (loadingRef.current) {
         return
       }
 
-      const wrapped: EventListener = (event) => {
-        const current = clippyRef.current
-        if (!current) {
-          return
-        }
-        handler(event, current)
-      }
+      loadingRef.current = true
+      setIsLoadingAgent(true)
 
-      eventMap.set(handler, wrapped)
+      clippyts.load({
+        name,
+        successCb: (agent) => {
+          loadingRef.current = false
+          setIsLoadingAgent(false)
 
-      const element = elementRef.current
-      if (element) {
-        element.addEventListener(eventName, wrapped)
-      }
+          agent.show(fast)
+          agentRef.current = agent
+          setClippyInstance(Object.assign(agent, { on, off }))
+          setCurrentAgent(name)
+          setIsAgentVisible(true)
+          visibleRef.current = true
+
+          const cleanup = setElementRef()
+          cleanup()
+        },
+        failCb: (error) => {
+          console.error('Failed to load Clippy:', error)
+          loadingRef.current = false
+          setIsLoadingAgent(false)
+          agentRef.current = null
+          setCurrentAgent(null)
+          setIsAgentVisible(false)
+          visibleRef.current = false
+        },
+      })
     },
-    []
+    [off, on, setElementRef]
   )
 
-  const detachListener = useCallback(
-    (eventName: string, handler: ClippyEventHandler) => {
-      const eventMap = listenersRef.current.get(eventName)
-      if (!eventMap) {
+  const showAgent = useCallback(
+    (name: AgentType, fast = true) => {
+      if (!Object.values(AGENTS).includes(name)) {
+        console.warn('ClippyProvider: invalid agent name', name)
         return
       }
 
-      const wrapped = eventMap.get(handler)
-      if (!wrapped) {
+      if (loadingRef.current) {
         return
       }
 
-      const element = elementRef.current
-      if (element) {
-        element.removeEventListener(eventName, wrapped)
+      if (currentAgentRef.current === name && visibleRef.current) {
+        return
       }
 
-      eventMap.delete(handler)
-      if (eventMap.size === 0) {
-        listenersRef.current.delete(eventName)
+      if (agentRef.current) {
+        hideAgent(false, () => loadAgent(name, fast))
+        return
       }
+
+      loadAgent(name, fast)
     },
-    []
+    [hideAgent, loadAgent]
   )
 
-  const syncListeners = useCallback(() => {
-    const element = elementRef.current
-    if (!element) {
+  const showMessage = useCallback((message: string, timeoutMs?: number) => {
+    const agent = agentRef.current
+    if (!agent) {
       return
     }
 
-    for (const [eventName, handlers] of listenersRef.current) {
-      for (const [, wrapped] of handlers) {
-        element.removeEventListener(eventName, wrapped)
-        element.addEventListener(eventName, wrapped)
-      }
+    agent.speak(message, true)
+
+    if (timeoutMs && timeoutMs > 0) {
+      window.setTimeout(() => {
+        agentRef.current?.closeBalloon()
+      }, timeoutMs)
     }
   }, [])
 
-  useEffect(() => {
-    sharedUsers += 1
-    if (disposeTimer) {
-      window.clearTimeout(disposeTimer)
-      disposeTimer = null
-    }
-
-    return () => {
-      sharedUsers = Math.max(0, sharedUsers - 1)
-      if (sharedUsers === 0) {
-        disposeTimer = window.setTimeout(() => {
-          if (sharedUsers === 0 && sharedAgent) {
-            hideAgent(sharedAgent)
-            sharedAgent = null
-            sharedLoading = null
-          }
-          disposeTimer = null
-        }, 200)
-      }
-    }
-  }, [hideAgent])
-
-  useEffect(() => {
-    function loadAgent() {
-      if (sharedAgent) {
-        sharedAgent.show(true)
-        const el = document.querySelector('.clippy') as HTMLElement | null
-        elementRef.current = el
-
-        const instance = Object.assign(sharedAgent, {
-          on: (eventName: string, handler: ClippyEventHandler) => {
-            attachListener(eventName, handler)
-          },
-          off: (eventName: string, handler: ClippyEventHandler) => {
-            detachListener(eventName, handler)
-          },
-        }) as ClippyInstance
-
-        setClippy(instance)
-        syncListeners()
-        return
-      }
-
-      if (!sharedLoading) {
-        sharedLoading = new Promise((resolve, reject) => {
-          clippyts.load({
-            name: agentName,
-            successCb: (agent) => resolve(agent),
-            failCb: (error) => reject(error),
-          })
-        })
-      }
-
-      const loading = sharedLoading
-      if (!loading) {
-        return
-      }
-
-      loading
-        .then((agent) => {
-          sharedAgent = agent
-          agent.show(true)
-          const el = document.querySelector('.clippy') as HTMLElement | null
-          elementRef.current = el
-
-          const instance = Object.assign(agent, {
-            on: (eventName: string, handler: ClippyEventHandler) => {
-              attachListener(eventName, handler)
-            },
-            off: (eventName: string, handler: ClippyEventHandler) => {
-              detachListener(eventName, handler)
-            },
-          }) as ClippyInstance
-
-          setClippy(instance)
-          syncListeners()
-        })
-        .catch((error) => {
-          console.error('Failed to load Clippy:', error)
-          setClippy(undefined)
-          sharedAgent = null
-          sharedLoading = null
-        })
-    }
-
-    if (clippy) {
-      hideAgent(clippy, () => loadAgent())
-    } else {
-      loadAgent()
-    }
-  }, [
-    agentName,
-    attachListener,
-    detachListener,
-    clippy,
-    hideAgent,
-    syncListeners,
-  ])
-
-  useEffect(() => {
-    return () => {
-      hideAgent(clippy)
-    }
-  }, [clippy, hideAgent])
-
-  useEffect(() => {
-    const element = elementRef.current
-    if (!element || draggable) {
+  const playAnimation = useCallback((animationName?: string) => {
+    const agent = agentRef.current
+    if (!agent) {
       return
     }
 
-    const blockDrag = (event: MouseEvent) => {
-      event.stopImmediatePropagation()
+    if (animationName) {
+      agent.play(animationName)
+      return
     }
 
-    element.addEventListener('mousedown', blockDrag, true)
+    agent.animate()
+  }, [])
+
+  const cancelAnimation = useCallback(() => {
+    const agent = agentRef.current
+    if (!agent) {
+      return
+    }
+
+    agent.stopCurrent()
+    agent.stop()
+  }, [])
+
+  const moveTo = useCallback((x: number, y: number, durationMs = 1000) => {
+    agentRef.current?.moveTo(x, y, durationMs)
+  }, [])
+
+  const gestureAt = useCallback((x: number, y: number) => {
+    agentRef.current?.gestureAt(x, y)
+  }, [])
+
+  useEffect(() => {
+    showAgent(agentName, true)
     return () => {
-      element.removeEventListener('mousedown', blockDrag, true)
+      hideAgent(true)
     }
-  }, [draggable])
+  }, [agentName, showAgent, hideAgent])
 
-  const value = useMemo(() => ({ clippy }), [clippy])
+  const value = useMemo<ClippyContextValue>(
+    () => ({
+      clippy: clippyInstance,
+      currentAgent,
+      isAgentVisible,
+      isLoadingAgent,
+      showAgent,
+      hideAgent,
+      showMessage,
+      playAnimation,
+      cancelAnimation,
+      moveTo,
+      gestureAt,
+    }),
+    [
+      clippyInstance,
+      currentAgent,
+      isAgentVisible,
+      isLoadingAgent,
+      showAgent,
+      hideAgent,
+      showMessage,
+      playAnimation,
+      cancelAnimation,
+      moveTo,
+      gestureAt,
+    ]
+  )
 
   return (
     <ClippyContext.Provider value={value}>{children}</ClippyContext.Provider>

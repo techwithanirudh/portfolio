@@ -122,26 +122,21 @@ function SearchAIActions() {
 const StorageKeyInput = '__ai_search_input'
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop } = useChatContext()
-  const { clippy } = useClippy()
+  const { showMessage, playAnimation, isAgentVisible } = useClippy()
   const pendingRef = useRef(false)
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
   const playSearching = useEffectEvent(() => {
-    if (!clippy) {
+    if (!isAgentVisible) {
       pendingRef.current = true
       return
     }
 
     pendingRef.current = false
-    clippy.show(true)
-    if (clippy.hasAnimation('Searching')) {
-      clippy.play('Searching')
-    } else {
-      clippy.animate()
-    }
-    clippy.speak('Searching', false)
+    playAnimation('Searching')
+    showMessage('Searching', 2000)
   })
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
@@ -159,19 +154,14 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   }, [isLoading])
 
   useEffect(() => {
-    if (!(clippy && pendingRef.current)) {
+    if (!(pendingRef.current && isAgentVisible)) {
       return
     }
 
     pendingRef.current = false
-    clippy.show(true)
-    if (clippy.hasAnimation('Searching')) {
-      clippy.play('Searching')
-    } else {
-      clippy.animate()
-    }
-    clippy.speak('Searching', false)
-  }, [clippy])
+    playAnimation('Searching')
+    showMessage('Searching', 2000)
+  }, [isAgentVisible, playAnimation, showMessage])
 
   return (
     <form
@@ -358,7 +348,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider draggable={false}>
+    <ClippyProvider draggable={false} agentName='Rover'>
       <Context value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}>
         {children}
       </Context>
