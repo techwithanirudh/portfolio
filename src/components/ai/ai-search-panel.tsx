@@ -30,13 +30,13 @@ function Header() {
             buttonVariants({
               color: 'secondary',
               size: 'icon-sm',
-              className: '[&_svg]:size-3.5 w-10 flex-1 rounded-none border-none',
+              className: '[&_svg]:size-4 w-10 flex-1 rounded-none border-none group/button',
             })
           )}
           onClick={() => chat.setMessages([])}
           type='button'
         >
-          <PlusIcon />
+          <PlusIcon className='group-hover/button:rotate-90 transition-transform' />
         </button>
         <button
           aria-label='Close'
@@ -44,14 +44,14 @@ function Header() {
             buttonVariants({
               size: 'icon-sm',
               color: 'primary',
-              className: 'w-10 flex-1 rounded-none border-none',
+              className: '[&_svg]:size-4 w-10 flex-1 rounded-none border-none group/button',
             })
           )}
           onClick={() => setOpen(false)}
           tabIndex={-1}
           type='button'
         >
-          <X />
+          <X className='group-hover/button:rotate-90 transition-transform' />
         </button>
       </div>
     </div>
