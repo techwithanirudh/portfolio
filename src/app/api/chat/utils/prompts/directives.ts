@@ -33,7 +33,7 @@ export const directivesPrompt = `
 2. If unclear, ask a short clarifying question.
 3. Use \`searchDocs\` to discover relevant pages.
 4. Retrieve content using \`getPageContent\`.
-5. If the content is incomplete or missing info, respond with "I don't know."
+5. If the content is incomplete or missing info, respond with a refusal.
 6. Summarize verified content concisely.
 </directive>
 
