@@ -39,6 +39,7 @@ export function ClippyProvider({
 
   const agentRef = useRef<Agent | null>(null)
   const elementRef = useRef<HTMLElement | null>(null)
+  const elementCleanupRef = useRef<(() => void) | null>(null)
   const listenersRef = useRef(
     new Map<string, Map<ClippyEventHandler, EventListener>>()
   )
@@ -55,6 +56,8 @@ export function ClippyProvider({
   }, [currentAgent])
 
   const setElementRef = useCallback(() => {
+    elementCleanupRef.current?.()
+    elementCleanupRef.current = null
     elementRef.current = document.querySelector('.clippy') as HTMLElement | null
     syncListeners(listenersRef.current, elementRef.current)
 
@@ -64,9 +67,10 @@ export function ClippyProvider({
       }
 
       elementRef.current.addEventListener('mousedown', blockDrag, true)
-      return () => {
+      elementCleanupRef.current = () => {
         elementRef.current?.removeEventListener('mousedown', blockDrag, true)
       }
+      return () => undefined
     }
 
     return () => undefined
@@ -124,14 +128,14 @@ export function ClippyProvider({
           setIsLoadingAgent(false)
 
           agent.show(fast)
+          console.log('[clippy] animations', agent.animations())
           agentRef.current = agent
           setClippyInstance(Object.assign(agent, { on, off }))
           setCurrentAgent(name)
           setIsAgentVisible(true)
           visibleRef.current = true
 
-          const cleanup = setElementRef()
-          cleanup()
+          setElementRef()
         },
         failCb: (error) => {
           console.error('Failed to load Clippy:', error)

@@ -1,7 +1,7 @@
 'use client'
 import { type UIMessage, type UseChatHelpers, useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
-import { DefaultChatTransport } from 'ai'
+import { DefaultChatTransport, isToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
   ArrowUpIcon,
@@ -25,6 +25,7 @@ import {
 } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { ClippyProvider, useClippy } from '@/components/clippy'
+import { animations } from '@/components/clippy/animations'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -122,21 +123,16 @@ function SearchAIActions() {
 const StorageKeyInput = '__ai_search_input'
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop } = useChatContext()
-  const { showMessage, playAnimation, isAgentVisible } = useClippy()
-  const pendingRef = useRef(false)
+  const { playAnimation, isAgentVisible, showAgent, currentAgent } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
   const playSearching = useEffectEvent(() => {
     if (!isAgentVisible) {
-      pendingRef.current = true
-      return
+      showAgent(currentAgent ?? 'Rover')
     }
-
-    pendingRef.current = false
-    playAnimation('Searching')
-    showMessage('Searching', 2000)
+    playAnimation(animations.submit)
   })
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
@@ -152,16 +148,6 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       document.getElementById('nd-ai-input')?.focus()
     }
   }, [isLoading])
-
-  useEffect(() => {
-    if (!(pendingRef.current && isAgentVisible)) {
-      return
-    }
-
-    pendingRef.current = false
-    playAnimation('Searching')
-    showMessage('Searching', 2000)
-  }, [isAgentVisible, playAnimation, showMessage])
 
   return (
     <form
@@ -348,7 +334,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider draggable={false} agentName='Rover'>
+    <ClippyProvider agentName='Rover' draggable={false}>
       <Context value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}>
         {children}
       </Context>
@@ -359,6 +345,8 @@ export function AISearch({ children }: { children: ReactNode }) {
 export function AISearchPanel() {
   const { open, setOpen } = use(Context)!
   const chat = useChatContext()
+  const { cancelAnimation, playAnimation } = useClippy()
+  const lastToolRef = useRef<string | null>(null)
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === 'Escape' && open) {
@@ -376,6 +364,47 @@ export function AISearchPanel() {
     window.addEventListener('keydown', onKeyPress)
     return () => window.removeEventListener('keydown', onKeyPress)
   }, [])
+
+  useEffect(() => {
+    if (chat.status !== 'ready') {
+      return
+    }
+
+    const last = chat.messages.at(-1)
+    if (last?.role === 'assistant') {
+      cancelAnimation()
+    }
+  }, [chat.messages, chat.status, cancelAnimation])
+
+  useEffect(() => {
+    if (open) {
+      playAnimation(animations.open)
+    } else {
+      playAnimation(animations.bye)
+    }
+  }, [open, playAnimation])
+
+  useEffect(() => {
+    const lastMessage = chat.messages.at(-1)
+    const parts = lastMessage?.parts ?? []
+    const toolPart = parts.find((part) => isToolUIPart(part))
+    if (!toolPart) {
+      lastToolRef.current = null
+      return
+    }
+
+    if (chat.status === 'ready') {
+      lastToolRef.current = null
+      return
+    }
+
+    if (lastToolRef.current === toolPart.type) {
+      return
+    }
+
+    lastToolRef.current = toolPart.type
+    playAnimation(animations.tool)
+  }, [chat.messages, chat.status, playAnimation])
 
   return (
     <>
@@ -410,7 +439,7 @@ export function AISearchPanel() {
       <Presence present={open}>
         <div
           className={cn(
-            'fixed right-4 bottom-28 z-50 flex max-h-[500px] w-[360px] flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg',
+            'fixed inset-x-4 top-4 bottom-24 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >
