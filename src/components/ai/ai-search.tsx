@@ -5,7 +5,7 @@ import { DefaultChatTransport } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
   ArrowUpIcon,
-  PawPrint,
+  Dog,
   RefreshCw,
   SquareIcon,
   TrashIcon,
@@ -34,6 +34,14 @@ const Context = createContext<{
   chat: UseChatHelpers<UIMessage>
 } | null>(null)
 
+export function useAISearchContext() {
+  const ctx = use(Context)
+  if (!ctx) {
+    throw new Error('useAISearchContext must be used within AISearch')
+  }
+  return ctx
+}
+
 function useChatContext() {
   return use(Context)!.chat
 }
@@ -45,8 +53,8 @@ function Header() {
     <div className='sticky top-0 flex items-start'>
       <div className='flex flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
         <div className='flex items-center gap-2'>
-          <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:rotate-90' />
-          <p className='font-medium text-sm'>Ask Simba</p>
+          <Dog className='size-4 text-fd-primary transition-transform duration-200 hover:rotate-12' />
+          <p className='font-medium text-sm'>Ask Rover</p>
         </div>
         <div className='flex items-center gap-1.5'>
           <button
@@ -70,7 +78,7 @@ function Header() {
           buttonVariants({
             size: 'icon-sm',
             color: 'primary',
-            className: 'rounded-none size-10 border-none',
+            className: 'size-10 rounded-none border-none',
           })
         )}
         onClick={() => setOpen(false)}
@@ -149,7 +157,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
             onStart(event)
           }
         }}
-        placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
+        placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Rover'}
         value={input}
       />
       {isLoading ? (
@@ -322,27 +330,6 @@ export function AISearch({ children }: { children: ReactNode }) {
   )
 }
 
-export function AISearchTrigger() {
-  const { open, setOpen } = use(Context)!
-
-  return (
-    <button
-      className={cn(
-        buttonVariants({
-          variant: 'secondary',
-        }),
-        'group fixed end-4 bottom-4 z-20 w-auto gap-3 rounded-none border border-dashed text-fd-muted-foreground shadow-none transition-all',
-        open && 'translate-y-10 opacity-0'
-      )}
-      onClick={() => setOpen(true)}
-      type='button'
-    >
-      <PawPrint className='size-4.5 transition-transform duration-200 group-hover:-rotate-50' />
-      Ask Simba
-    </button>
-  )
-}
-
 export function AISearchPanel() {
   const { open, setOpen } = use(Context)!
   const chat = useChatContext()
@@ -387,7 +374,7 @@ export function AISearchPanel() {
       </style>
       <Presence present={open}>
         <button
-          aria-label='Close Simba panel'
+          aria-label='Close Rover panel'
           className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in lg:hidden'
           data-state={open ? 'open' : 'closed'}
           onClick={() => setOpen(false)}

@@ -58,6 +58,7 @@
     "better-auth": "^1.4.17",
     "botid": "^1.5.10",
     "class-variance-authority": "^0.7.1",
+    "clippyts": "^1.0.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.45.1",

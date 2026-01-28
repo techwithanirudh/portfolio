@@ -36,6 +36,7 @@
         "better-auth": "^1.4.17",
         "botid": "^1.5.10",
         "class-variance-authority": "^0.7.1",
+        "clippyts": "^1.0.4",
         "clsx": "^2.1.1",
         "date-fns": "^4.1.0",
         "drizzle-orm": "^0.45.1",
@@ -1090,6 +1091,8 @@
     "cli-spinners": ["cli-spinners@2.9.2", "", {}, "sha512-ywqV+5MmyL4E7ybXgKys4DugZbX0FC6LnwrhjuykIjnK9k8OQacQ7axGKnjDXWNhns0xot3bZI5h55H8yo9cJg=="],
 
     "client-only": ["client-only@0.0.1", "", {}, "sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA=="],
+
+    "clippyts": ["clippyts@1.0.4", "", {}, "sha512-oo78IuzrUKzTiMjyF1t5Xh0MFrsQ7/MxG9wXYek1TPiFC2F6aNnO8ioiPwLNOw3EYHwzMAQAWwGRMWEc6Lms6g=="],
 
     "cliui": ["cliui@8.0.1", "", { "dependencies": { "string-width": "^4.2.0", "strip-ansi": "^6.0.1", "wrap-ansi": "^7.0.0" } }, "sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ=="],
 
