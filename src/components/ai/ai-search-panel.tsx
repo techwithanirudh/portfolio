@@ -3,7 +3,7 @@
 import { Presence } from '@radix-ui/react-presence'
 import { isToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { PawPrint, RefreshCw, TrashIcon, X } from 'lucide-react'
+import { PawPrint, RefreshCw, PlusIcon, X } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useRef } from 'react'
 import { useClippy } from '@/components/clippy'
 import { animations } from '@/components/clippy/animations'
@@ -16,43 +16,44 @@ function Header() {
   const { setOpen, chat } = useAISearchContext()
 
   return (
-    <div className='sticky top-0 flex items-start'>
-      <div className='flex flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
+    <div className='sticky top-0 flex items-start h-10'>
+      <div className='flex flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground min-h-full'>
         <div className='flex items-center gap-2'>
-          <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-55' />
+          <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
           <p className='font-medium text-sm'>Ask Simba</p>
         </div>
-        <div className='flex items-center gap-1.5'>
-          <button
-            className={cn(
-              buttonVariants({
-                color: 'secondary',
-                size: 'icon-xs',
-                className: '[&_svg]:size-3.5',
-              })
-            )}
-            onClick={() => chat.setMessages([])}
-            type='button'
-          >
-            <TrashIcon />
-          </button>
-        </div>
       </div>
-      <button
-        aria-label='Close'
-        className={cn(
-          buttonVariants({
-            size: 'icon-sm',
-            color: 'primary',
-            className: 'size-10 rounded-none border-none',
-          })
-        )}
-        onClick={() => setOpen(false)}
-        tabIndex={-1}
-        type='button'
-      >
-        <X />
-      </button>
+
+      <div className='flex min-h-full'>
+        <button
+          className={cn(
+            buttonVariants({
+              color: 'secondary',
+              size: 'icon-sm',
+              className: '[&_svg]:size-3.5 w-10 flex-1 rounded-none border-none',
+            })
+          )}
+          onClick={() => chat.setMessages([])}
+          type='button'
+        >
+          <PlusIcon />
+        </button>
+        <button
+          aria-label='Close'
+          className={cn(
+            buttonVariants({
+              size: 'icon-sm',
+              color: 'primary',
+              className: 'w-10 flex-1 rounded-none border-none',
+            })
+          )}
+          onClick={() => setOpen(false)}
+          tabIndex={-1}
+          type='button'
+        >
+          <X />
+        </button>
+      </div>
     </div>
   )
 }

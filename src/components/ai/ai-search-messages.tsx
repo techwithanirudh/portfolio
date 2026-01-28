@@ -1,6 +1,6 @@
 'use client'
 
-import { DogIcon } from 'lucide-react'
+import { PawPrint } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { useEffect, useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
@@ -27,7 +27,7 @@ export function MessageList({
       <div className='flex flex-1 flex-col divide-y divide-dashed divide-border'>
         {messages.length === 0 ? (
           <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
-            <DogIcon className='size-8 text-fd-primary transition-transform hover:-rotate-12' />
+            <PawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />
             <p>
               heya! im simba, anirudh's dog. i can answer questions about him,
               his work, or the site.
