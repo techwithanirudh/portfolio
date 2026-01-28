@@ -1,6 +1,7 @@
 'use client'
 
 import clippyts, { type Agent } from 'clippyts'
+import 'clippyts/src/clippy.css'
 import type { AgentType } from 'clippyts/dist/types'
 import {
   type ReactNode,
@@ -16,7 +17,6 @@ import {
   type ClippyEventHandler,
   type ClippyInstance,
 } from './clippy-context'
-import clippyStyle from './style'
 
 let sharedAgent: Agent | null = null
 let sharedLoading: Promise<Agent> | null = null
@@ -26,11 +26,13 @@ let disposeTimer: number | null = null
 interface ClippyProviderProps {
   children?: ReactNode
   agentName?: AgentType
+  draggable?: boolean
 }
 
 export function ClippyProvider({
   children,
   agentName = AGENTS.CLIPPY,
+  draggable = false,
 }: ClippyProviderProps) {
   const [clippy, setClippy] = useState<ClippyInstance>()
   const clippyRef = useRef<ClippyInstance | null>(null)
@@ -75,7 +77,11 @@ export function ClippyProvider({
       }
 
       eventMap.set(handler, wrapped)
-      document.addEventListener(eventName, wrapped, true)
+
+      const element = elementRef.current
+      if (element) {
+        element.addEventListener(eventName, wrapped)
+      }
     },
     []
   )
@@ -92,7 +98,11 @@ export function ClippyProvider({
         return
       }
 
-      document.removeEventListener(eventName, wrapped, true)
+      const element = elementRef.current
+      if (element) {
+        element.removeEventListener(eventName, wrapped)
+      }
+
       eventMap.delete(handler)
       if (eventMap.size === 0) {
         listenersRef.current.delete(eventName)
@@ -101,6 +111,20 @@ export function ClippyProvider({
     []
   )
 
+  const syncListeners = useCallback(() => {
+    const element = elementRef.current
+    if (!element) {
+      return
+    }
+
+    for (const [eventName, handlers] of listenersRef.current) {
+      for (const [, wrapped] of handlers) {
+        element.removeEventListener(eventName, wrapped)
+        element.addEventListener(eventName, wrapped)
+      }
+    }
+  }, [])
+
   useEffect(() => {
     sharedUsers += 1
     if (disposeTimer) {
@@ -108,13 +132,7 @@ export function ClippyProvider({
       disposeTimer = null
     }
 
-    const styleEl = document.createElement('style')
-    styleEl.dataset.clippy = 'true'
-    styleEl.appendChild(document.createTextNode(clippyStyle))
-    document.head.appendChild(styleEl)
-
     return () => {
-      styleEl.remove()
       sharedUsers = Math.max(0, sharedUsers - 1)
       if (sharedUsers === 0) {
         disposeTimer = window.setTimeout(() => {
@@ -146,6 +164,7 @@ export function ClippyProvider({
         }) as ClippyInstance
 
         setClippy(instance)
+        syncListeners()
         return
       }
 
@@ -181,14 +200,7 @@ export function ClippyProvider({
           }) as ClippyInstance
 
           setClippy(instance)
-
-          if (el) {
-            for (const [eventName, handlers] of listenersRef.current) {
-              for (const [handler] of handlers) {
-                attachListener(eventName, handler)
-              }
-            }
-          }
+          syncListeners()
         })
         .catch((error) => {
           console.error('Failed to load Clippy:', error)
@@ -203,13 +215,36 @@ export function ClippyProvider({
     } else {
       loadAgent()
     }
-  }, [agentName, attachListener, detachListener, clippy, hideAgent])
+  }, [
+    agentName,
+    attachListener,
+    detachListener,
+    clippy,
+    hideAgent,
+    syncListeners,
+  ])
 
   useEffect(() => {
     return () => {
       hideAgent(clippy)
     }
   }, [clippy, hideAgent])
+
+  useEffect(() => {
+    const element = elementRef.current
+    if (!element || draggable) {
+      return
+    }
+
+    const blockDrag = (event: MouseEvent) => {
+      event.stopImmediatePropagation()
+    }
+
+    element.addEventListener('mousedown', blockDrag, true)
+    return () => {
+      element.removeEventListener('mousedown', blockDrag, true)
+    }
+  }, [draggable])
 
   const value = useMemo(() => ({ clippy }), [clippy])
 

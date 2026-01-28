@@ -358,7 +358,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider>
+    <ClippyProvider draggable={false}>
       <Context value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}>
         {children}
       </Context>
