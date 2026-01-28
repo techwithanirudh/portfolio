@@ -10,9 +10,11 @@ import { skills } from '@/constants/portfolio/skills'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { hardware, software } from '@/constants/portfolio/uses'
 import { description, owner, title } from '@/constants/site'
+import { url } from '@/lib/url'
 
 export function getAboutText() {
-  return `# About
+  return `# About 
+Route: ${url('/about')}
 
 ${description}
 
@@ -30,6 +32,7 @@ ${socials.map((item) => `- [${item.name}](${item.url})${item.description ? ` - $
 
 export function getExperienceText() {
   return `# Experience
+Route: ${url('/about')}
 
 ${experiences
   .map(
@@ -46,6 +49,7 @@ ${item.summary.trim()}`
 
 export function getSkillsText() {
   return `# Skills
+Route: ${url('/about')}
 
 ${skills
   .map(
@@ -60,6 +64,7 @@ ${item.description}`
 
 export function getTestimonialsText() {
   return `# Testimonials
+Route: ${url('/about')}
 
 ${testimonials
   .map(
@@ -76,6 +81,7 @@ ${testimonials
 
 export function getUsesText() {
   return `# Uses
+Route: ${url('/uses')}
 
 ## Hardware
 
@@ -99,6 +105,7 @@ ${software
 
 export function getColophonText() {
   return `# Colophon
+Route: ${url('/colophon')}
 
 ## Technology
 

@@ -15,7 +15,8 @@ export const directivesPrompt = `
 
 <directive name="format">
 - Write all responses in **MDX**.
-- Use \`###\` and \`####\` for headings (no deeper nesting).
+- If you want to use headings, use \`###\` and \`####\` for headings (no deeper nesting).
+- Start responses with plain text, not a heading. Use headings only when needed.
 - Format code with fenced blocks using language tags (\`\`\`ts, \`\`\`js, etc.).
 - CRITICAL: When citing content from specific pages, add inline reference numbers directly in your text like [1](/blog/example) or [1](https://example.com)
   - Use sequential numbers starting from [1]
