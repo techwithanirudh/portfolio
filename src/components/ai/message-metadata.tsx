@@ -92,7 +92,7 @@ export const MessageMetadata = ({
     switch (tool.type) {
       case 'tool-searchDocs':
         Icon = SearchIcon
-        label = 'Sniffing the docs'
+        label = 'Sniffing the pages'
         break
       case 'tool-getPageContent':
         Icon = LinkIcon

@@ -12,10 +12,15 @@ const content = `# ${title}
 
 ## About Me
 
-- [About](${url('/about.md')}): Personal information, tech stack, and how to connect
-- [Experience](${url('/experience.md')}): Career timeline and key roles
-- [Skills](${url('/skills.md')}): Technical expertise and focus areas
-- [Testimonials](${url('/testimonials.md')}): What people say about working with me
+- [About](${url('/about')}): Personal information, tech stack, and how to connect
+- [Experience](${url('/about')}): Career timeline and key roles
+- [Skills](${url('/about')}): Technical expertise and focus areas
+- [Testimonials](${url('/')}): What people say about working with me
+
+## Site
+
+- [Uses](${url('/uses.md')}): Hardware and software in the setup
+- [Colophon](${url('/colophon.md')}): Technology, typography, and attribution
 
 ## Work
 

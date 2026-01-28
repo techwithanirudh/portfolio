@@ -1,8 +1,14 @@
 import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
+import {
+  attributions,
+  technology,
+  typography,
+} from '@/constants/portfolio/colophon'
 import { experiences } from '@/constants/portfolio/experiences'
 import { skills } from '@/constants/portfolio/skills'
 import { testimonials } from '@/constants/portfolio/testimonials'
+import { hardware, software } from '@/constants/portfolio/uses'
 import { description, owner, title } from '@/constants/site'
 
 export function getAboutText() {
@@ -65,5 +71,52 @@ ${testimonials
 — **${item.author.name}**`
   )
   .join('\n\n')}
+`
+}
+
+export function getUsesText() {
+  return `# Uses
+
+## Hardware
+
+${hardware
+  .map(
+    (item) =>
+      `- ${item.name}: ${item.description}${item.url ? ` (${item.url})` : ''}`
+  )
+  .join('\n')}
+
+## Software
+
+${software
+  .map(
+    (item) =>
+      `- ${item.name}: ${item.description}${item.url ? ` (${item.url})` : ''}`
+  )
+  .join('\n')}
+`
+}
+
+export function getColophonText() {
+  return `# Colophon
+
+## Technology
+
+${technology
+  .map(
+    (item) =>
+      `- ${item.name}: ${item.description}${item.url ? ` (${item.url})` : ''}`
+  )
+  .join('\n')}
+
+## Typography
+
+${typography.map((item) => `- ${item.label}`).join('\n')}
+
+## Attribution
+
+${attributions
+  .map((item) => `- ${item.name}${item.url ? ` (${item.url})` : ''}`)
+  .join('\n')}
 `
 }
