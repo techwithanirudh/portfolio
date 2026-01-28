@@ -41,7 +41,9 @@ export function SearchAIInput(props: ComponentProps<'form'>) {
     setInput('')
   }
 
-  localStorage.setItem(StorageKeyInput, input)
+  useEffect(() => {
+    localStorage.setItem(StorageKeyInput, input)
+  }, [input])
 
   useEffect(() => {
     if (!(pendingRef.current && isAgentVisible)) {

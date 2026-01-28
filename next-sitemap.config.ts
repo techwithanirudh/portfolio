@@ -1,8 +1,13 @@
 import type { IConfig } from 'next-sitemap'
-import { env } from './src/env.ts'
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_BASE_URL ??
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:3000')
 
 const config: IConfig = {
-  siteUrl: env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
+  siteUrl,
   generateRobotsTxt: true,
 }
 
