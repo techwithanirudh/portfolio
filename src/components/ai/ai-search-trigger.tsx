@@ -26,9 +26,13 @@ function ClippyTriggerInner() {
       return
     }
 
+    const reposition = () => {
+      const { x, y } = getPosition()
+      clippy.moveTo(x, y, 0)
+    }
+
     clippy.show(true)
-    const { x, y } = getPosition()
-    clippy.moveTo(x, y, 0)
+    reposition()
 
     const handleClick = (event: Event) => {
       event.preventDefault()
@@ -37,8 +41,7 @@ function ClippyTriggerInner() {
     }
 
     const handleResize = () => {
-      const { x, y } = getPosition()
-      clippy.moveTo(x, y, 0)
+      window.requestAnimationFrame(() => reposition())
     }
 
     clippy.on('click', handleClick)
@@ -49,6 +52,15 @@ function ClippyTriggerInner() {
       window.removeEventListener('resize', handleResize)
     }
   }, [clippy, setOpen])
+
+  useEffect(() => {
+    if (!(clippy && open)) {
+      return
+    }
+
+    const { x, y } = getPosition()
+    clippy.moveTo(x, y, 0)
+  }, [clippy, open])
 
   return null
 }
