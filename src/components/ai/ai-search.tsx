@@ -39,7 +39,7 @@ export function useAISearchContext() {
   if (!ctx) {
     throw new Error('useAISearchContext must be used within AISearch')
   }
-  return ctx
+  return { open: ctx.open, setOpen: ctx.setOpen, chat: ctx.chat }
 }
 
 function useChatContext() {
@@ -384,16 +384,14 @@ export function AISearchPanel() {
       <Presence present={open}>
         <div
           className={cn(
-            'z-30 overflow-hidden bg-fd-popover text-fd-popover-foreground',
-            'max-lg:fixed max-lg:inset-x-2 max-lg:top-4 max-lg:rounded-none max-lg:border max-lg:border-dashed max-lg:shadow-none',
-            'fixed inset-y-2 z-30 flex flex-col rounded-none border border-dashed bg-fd-popover text-fd-popover-foreground shadow-none max-sm:inset-x-2 sm:end-2 sm:w-[460px]',
+            'fixed right-4 bottom-28 z-50 flex max-h-[500px] w-[360px] flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >
-          <div className='flex size-full flex-col divide-y divide-dashed divide-border'>
+          <div className='flex h-full flex-col divide-y divide-dashed divide-border'>
             <Header />
             <List
-              className='flex-1 overscroll-contain px-3'
+              className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-3'
               style={{
                 maskImage:
                   'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent 100%)',
