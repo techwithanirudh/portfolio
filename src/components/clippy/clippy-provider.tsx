@@ -23,29 +23,58 @@ export function ClippyProvider({
 
   useEffect(() => {
     let cancelled = false
+    let idleId: number | null = null
 
-    import('clippyts').then(({ default: clippyts }) => {
-      if (cancelled) {
+    const startLoad = () => {
+      import('clippyts').then(({ default: clippyts }) => {
+        if (cancelled) {
+          return
+        }
+
+        clippyts.load({
+          name: agentName,
+          successCb: (agent) => {
+            if (cancelled) {
+              return
+            }
+            instance.current = agent
+            setClippy(agent)
+          },
+          failCb: (error) => {
+            console.error('Failed to load Clippy:', error)
+          },
+        })
+      })
+    }
+
+    const scheduleLoad = () => {
+      const idle = window.requestIdleCallback
+      if (idle) {
+        idleId = idle(startLoad, { timeout: 2000 })
         return
       }
 
-      clippyts.load({
-        name: agentName,
-        successCb: (agent) => {
-          if (cancelled) {
-            return
-          }
-          instance.current = agent
-          setClippy(agent)
-        },
-        failCb: (error) => {
-          console.error('Failed to load Clippy:', error)
-        },
-      })
-    })
+      idleId = window.setTimeout(startLoad, 0)
+    }
+
+    const cancelLoad = () => {
+      if (idleId === null) {
+        return
+      }
+
+      const cancelIdle = window.cancelIdleCallback
+      if (cancelIdle) {
+        cancelIdle(idleId)
+      } else {
+        window.clearTimeout(idleId)
+      }
+    }
+
+    scheduleLoad()
 
     return () => {
       cancelled = true
+      cancelLoad()
       instance.current?.hide(false, () => {
         instance.current = null
       })
