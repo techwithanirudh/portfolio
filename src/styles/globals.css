@@ -88,7 +88,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring/50 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border;
   }
 
   body {
@@ -96,7 +96,7 @@
   }
 
   html {
-    @apply scroll-smooth accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-track-transparent;
+    @apply scroll-smooth accent-primary;
   }
 }
 
