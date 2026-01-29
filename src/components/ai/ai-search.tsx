@@ -26,6 +26,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { animations, ClippyProvider, useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
@@ -156,6 +157,10 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
+  const saveInput = useDebounceCallback(
+    (value: string) => localStorage.setItem(StorageKeyInput, value),
+    300
+  )
 
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
@@ -167,12 +172,10 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     setInput('')
   }
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      localStorage.setItem(StorageKeyInput, input)
-    }, 300)
-    return () => clearTimeout(timeout)
-  }, [input])
+  const handleInputChange = (value: string) => {
+    setInput(value)
+    saveInput(value)
+  }
 
   useEffect(() => {
     if (isLoading) {
@@ -190,7 +193,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
         autoFocus
         className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
         disabled={isLoading}
-        onChange={(event) => setInput(event.target.value)}
+        onChange={(event) => handleInputChange(event.target.value)}
         onKeyDown={(event) => {
           if (!event.shiftKey && event.key === 'Enter') {
             onStart(event)
