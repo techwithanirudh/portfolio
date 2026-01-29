@@ -15,6 +15,7 @@ import { getLLMsTxt } from './utils/llms'
 import { systemPrompt } from './utils/prompts'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
+import { createShowContactFormTool } from './utils/tools/show-contact-form'
 
 export async function POST(request: Request) {
   try {
@@ -59,6 +60,7 @@ export async function POST(request: Request) {
           tools: {
             searchDocs: createSearchDocsTool(writer),
             getPageContent,
+            showContactForm: createShowContactFormTool(writer),
           },
           messages: modelMessages,
           toolChoice: 'auto',

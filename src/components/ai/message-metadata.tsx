@@ -3,6 +3,7 @@ import {
   Brain,
   ChevronDownIcon,
   LinkIcon,
+  MailIcon,
   PawPrint,
   SearchIcon,
   WrenchIcon,
@@ -97,6 +98,10 @@ export const MessageMetadata = ({
       case 'tool-getPageContent':
         Icon = LinkIcon
         label = 'Fetching a page'
+        break
+      case 'tool-showContactForm':
+        Icon = MailIcon
+        label = 'Fetching contact form'
         break
       default:
         label = `Running ${name}`

@@ -89,15 +89,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         <BotIdClient
           protect={[
             {
-              path: '/guestbook',
-              method: 'POST',
-            },
-            {
-              path: '/contact',
-              method: 'POST',
-            },
-            {
-              path: '/blog',
+              path: '/*',
               method: 'POST',
             },
           ]}

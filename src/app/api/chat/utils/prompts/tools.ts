@@ -27,5 +27,24 @@ IMPORTANT:
 
 Example:
 getPageContent(path: "blog/introducing-my-stack")
+
+### 3) showContactForm
+Purpose: Show an inline contact form so the user can message Anirudh directly from the chat.
+
+When to use:
+- User wants to "talk to Anirudh", "contact a human", "get in touch", "reach out", "send a message", "hire", etc.
+- User has questions you genuinely can't answer and needs human help
+- User wants to discuss work, collaborations, freelance, or job opportunities
+
+Inputs:
+- prefill: (optional) Object to prefill form fields based on conversation context:
+  - name: user's name if they mentioned it
+  - email: user's email if they mentioned it
+  - message: suggested message based on what they want to discuss
+
+After calling this tool, briefly acknowledge the form is ready. Keep it short, the form speaks for itself.
+
+Example:
+showContactForm({ prefill: { name: "Jane", message: "Hi! I'd like to discuss a potential collaboration on..." } })
 </tools>
 `

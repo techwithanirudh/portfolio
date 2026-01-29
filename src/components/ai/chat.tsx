@@ -27,8 +27,14 @@ import {
   useState,
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
-import type { MyUIMessage } from '@/app/api/chat/types'
-import { AGENTS, animations, ClippyProvider, useClippy } from '@/components/clippy'
+import type { ContactFormPart, MyUIMessage } from '@/app/api/chat/types'
+import { AIContactForm } from '@/components/ai/tools/contact-form'
+import {
+  AGENTS,
+  animations,
+  ClippyProvider,
+  useClippy,
+} from '@/components/clippy'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -47,8 +53,12 @@ export function useAISearchContext() {
   return ctx
 }
 
-function useChatContext() {
-  return use(AISearchContext)!.chat
+export function useChatContext() {
+  const ctx = use(AISearchContext)
+  if (!ctx) {
+    throw new Error('useChatContext must be used within AISearch')
+  }
+  return ctx.chat
 }
 
 export function AISearch({ children }: { children: ReactNode }) {
@@ -339,6 +349,15 @@ function MessageList({
   )
 }
 
+function isContactFormPart(part: unknown): part is ContactFormPart {
+  return (
+    typeof part === 'object' &&
+    part !== null &&
+    'type' in part &&
+    part.type === 'data-contact-form'
+  )
+}
+
 const Message = memo(function Message({
   message,
   isInProgress,
@@ -362,14 +381,22 @@ const Message = memo(function Message({
       <div className='flex flex-col gap-2'>
         <MessageMetadata inProgress={isInProgress} parts={parts} />
         {parts.map((part, idx) => {
-          if (part.type !== 'text') {
-            return null
+          if (part.type === 'text') {
+            return (
+              <div className='prose text-sm' key={`${message.id}-text-${idx}`}>
+                <Markdown text={part.text} />
+              </div>
+            )
           }
-          return (
-            <div className='prose text-sm' key={`${message.id}-text-${idx}`}>
-              <Markdown text={part.text} />
-            </div>
-          )
+          if (isContactFormPart(part)) {
+            return (
+              <AIContactForm
+                key={`${message.id}-form-${idx}`}
+                prefill={part.data.prefill}
+              />
+            )
+          }
+          return null
         })}
       </div>
     </div>
