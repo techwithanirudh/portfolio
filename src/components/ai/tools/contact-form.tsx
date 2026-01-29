@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { CheckCircle, Loader2, Send } from 'lucide-react'
 import { useEffect } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/ai/chat'
 import { Icons } from '@/components/icons/icons'
@@ -22,11 +23,16 @@ import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
 interface AIContactFormProps {
+  formId: string
   prefill?: Partial<Contact>
 }
 
-export function AIContactForm({ prefill }: AIContactFormProps) {
+export function AIContactForm({ formId, prefill }: AIContactFormProps) {
   const { sendMessage } = useChatContext()
+  const [wasSubmitted, setWasSubmitted] = useLocalStorage(
+    `__ai_contact_submitted_${formId}`,
+    false
+  )
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
@@ -46,17 +52,22 @@ export function AIContactForm({ prefill }: AIContactFormProps) {
   )
 
   const isExecuting = action.status === 'executing'
-  const hasSucceeded = action.status === 'hasSucceeded'
+  const hasSucceeded = action.status === 'hasSucceeded' || wasSubmitted
 
   useEffect(() => {
-    if (hasSucceeded) {
+    if (action.status === 'hasSucceeded' && !wasSubmitted) {
+      setWasSubmitted(true)
       const { name, email, message } = form.getValues()
       sendMessage(
         { text: '(form submitted)' },
-        { body: { context: { name, email, message, toolName: 'showContactForm' } } }
+        {
+          body: {
+            context: { name, email, message, toolName: 'showContactForm' },
+          },
+        }
       )
     }
-  }, [hasSucceeded, form, sendMessage])
+  }, [action.status, wasSubmitted, form])
 
   if (hasSucceeded) {
     return (

@@ -180,6 +180,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     }
     await sendMessage({ text: input })
     setInput('')
+    localStorage.removeItem(StorageKeyInput)
   }
 
   const handleInputChange = (value: string) => {
@@ -391,6 +392,7 @@ const Message = memo(function Message({
           if (isContactFormPart(part)) {
             return (
               <AIContactForm
+                formId={`${message.id}-form-${idx}`}
                 key={`${message.id}-form-${idx}`}
                 prefill={part.data.prefill}
               />
