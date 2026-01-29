@@ -28,7 +28,7 @@ import {
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
-import { animations, ClippyProvider, useClippy } from '@/components/clippy'
+import { AGENTS, animations, ClippyProvider, useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -61,7 +61,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider agentName='Rover' draggable={false}>
+    <ClippyProvider agentName={AGENTS.ROVER} draggable={false}>
       <AISearchContext
         value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}
       >
@@ -453,7 +453,7 @@ function AISearchPanel() {
     <>
       <Presence present={open}>
         <button
-          aria-label='Close Rover panel'
+          aria-label='Close AI panel'
           className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in lg:hidden'
           data-state={open ? 'open' : 'closed'}
           onClick={() => setOpen(false)}
