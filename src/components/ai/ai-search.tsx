@@ -1,19 +1,22 @@
 'use client'
-import { type UIMessage, type UseChatHelpers, useChat } from '@ai-sdk/react'
+
+import type { UIMessage, UseChatHelpers } from '@ai-sdk/react'
+import { useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
-import { DefaultChatTransport } from 'ai'
+import { DefaultChatTransport, isToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
   ArrowUpIcon,
   PawPrint,
+  PlusIcon,
   RefreshCw,
   SquareIcon,
-  TrashIcon,
   X,
 } from 'lucide-react'
 import {
   type ComponentProps,
   createContext,
+  memo,
   type ReactNode,
   type SyntheticEvent,
   use,
@@ -23,62 +26,96 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
+import { animations, ClippyProvider, useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
 
-const Context = createContext<{
+const AISearchContext = createContext<{
   open: boolean
   setOpen: (open: boolean) => void
   chat: UseChatHelpers<UIMessage>
 } | null>(null)
 
+export function useAISearchContext() {
+  const ctx = use(AISearchContext)
+  if (!ctx) {
+    throw new Error('useAISearchContext must be used within AISearch')
+  }
+  return ctx
+}
+
 function useChatContext() {
-  return use(Context)!.chat
+  return use(AISearchContext)!.chat
+}
+
+export function AISearch({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false)
+  const chat = useChat({
+    id: 'search',
+    transport: new DefaultChatTransport({
+      api: '/api/chat',
+    }),
+  })
+
+  return (
+    <ClippyProvider agentName='Rover' draggable={false}>
+      <AISearchContext
+        value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}
+      >
+        {children}
+        <AISearchPanel />
+      </AISearchContext>
+    </ClippyProvider>
+  )
 }
 
 function Header() {
-  const { setOpen, chat } = use(Context)!
+  const { setOpen, chat } = useAISearchContext()
 
   return (
-    <div className='sticky top-0 flex items-start'>
-      <div className='flex flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
+    <div className='sticky top-0 flex h-10 items-start'>
+      <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
         <div className='flex items-center gap-2'>
-          <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:rotate-90' />
+          <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
           <p className='font-medium text-sm'>Ask Simba</p>
         </div>
-        <div className='flex items-center gap-1.5'>
-          <button
-            className={cn(
-              buttonVariants({
-                color: 'secondary',
-                size: 'icon-xs',
-                className: '[&_svg]:size-3.5',
-              })
-            )}
-            onClick={() => chat.setMessages([])}
-            type='button'
-          >
-            <TrashIcon />
-          </button>
-        </div>
       </div>
-      <button
-        aria-label='Close'
-        className={cn(
-          buttonVariants({
-            size: 'icon-sm',
-            color: 'primary',
-            className: 'rounded-none size-10 border-none',
-          })
-        )}
-        onClick={() => setOpen(false)}
-        tabIndex={-1}
-        type='button'
-      >
-        <X />
-      </button>
+
+      <div className='flex min-h-full'>
+        <button
+          className={cn(
+            buttonVariants({
+              color: 'secondary',
+              size: 'icon-sm',
+              className:
+                'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+            })
+          )}
+          onClick={() => chat.setMessages([])}
+          type='button'
+        >
+          <PlusIcon className='transition-transform group-hover/button:rotate-90' />
+        </button>
+        <button
+          aria-label='Close'
+          className={cn(
+            buttonVariants({
+              size: 'icon-sm',
+              color: 'primary',
+              className:
+                'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+            })
+          )}
+          onClick={() => setOpen(false)}
+          tabIndex={-1}
+          type='button'
+        >
+          <X className='transition-transform group-hover/button:rotate-90' />
+        </button>
+      </div>
     </div>
   )
 }
@@ -86,9 +123,12 @@ function Header() {
 function SearchAIActions() {
   const { messages, status, regenerate } = useChatContext()
   const isLoading = status === 'streaming'
+  const canShow =
+    !isLoading && messages?.length > 0 && messages.at(-1)?.role === 'assistant'
 
   return (
     <button
+      aria-hidden={!canShow}
       className={cn(
         buttonVariants({
           color: 'secondary',
@@ -96,13 +136,11 @@ function SearchAIActions() {
           className:
             'gap-1.5 rounded-none border border-dashed transition-opacity duration-200 [&_svg]:size-4',
         }),
-        !isLoading &&
-          messages?.length > 0 &&
-          messages.at(-1)?.role === 'assistant'
-          ? 'opacity-100'
-          : 'opacity-0'
+        canShow ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
+      disabled={!canShow}
       onClick={() => regenerate()}
+      tabIndex={canShow ? 0 : -1}
       type='button'
     >
       <RefreshCw />
@@ -111,19 +149,33 @@ function SearchAIActions() {
 }
 
 const StorageKeyInput = '__ai_search_input'
+
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop } = useChatContext()
+  const { clippy } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
+  const saveInput = useDebounceCallback(
+    (value: string) => localStorage.setItem(StorageKeyInput, value),
+    300
+  )
+
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
+    if (clippy) {
+      clippy.stopCurrent()
+      clippy.play(animations.submit)
+    }
     await sendMessage({ text: input })
     setInput('')
   }
 
-  localStorage.setItem(StorageKeyInput, input)
+  const handleInputChange = (value: string) => {
+    setInput(value)
+    saveInput(value)
+  }
 
   useEffect(() => {
     if (isLoading) {
@@ -137,13 +189,11 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       className={cn('flex items-start pe-2', props.className)}
       onSubmit={onStart}
     >
-      <Input
+      <TextInput
         autoFocus
         className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
-        disabled={status === 'streaming' || status === 'submitted'}
-        onChange={(event) => {
-          setInput(event.target.value)
-        }}
+        disabled={isLoading}
+        onChange={(event) => handleInputChange(event.target.value)}
         onKeyDown={(event) => {
           if (!event.shiftKey && event.key === 'Enter') {
             onStart(event)
@@ -162,7 +212,6 @@ function SearchAIInput(props: ComponentProps<'form'>) {
                 'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-3.5',
             })
           )}
-          key='bn'
           onClick={stop}
           type='button'
         >
@@ -179,7 +228,6 @@ function SearchAIInput(props: ComponentProps<'form'>) {
             })
           )}
           disabled={input.length === 0}
-          key='bn'
           type='submit'
         >
           <ArrowUpIcon />
@@ -189,62 +237,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   )
 }
 
-function List(props: Omit<ComponentProps<'div'>, 'dir'>) {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!containerRef.current) {
-      return
-    }
-    function callback() {
-      const container = containerRef.current
-      if (!container) {
-        return
-      }
-
-      const isNearBottom =
-        container.scrollHeight - container.scrollTop - container.clientHeight <
-        100
-
-      if (isNearBottom) {
-        container.scrollTo({
-          top: container.scrollHeight,
-          behavior: 'instant',
-        })
-      }
-    }
-
-    const observer = new ResizeObserver(callback)
-    callback()
-
-    const element = containerRef.current?.firstElementChild
-
-    if (element) {
-      observer.observe(element)
-    }
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
-
-  return (
-    <div
-      ref={containerRef}
-      {...props}
-      className={cn(
-        'fd-scroll-container flex min-w-0 flex-col overflow-y-auto',
-        props.className
-      )}
-      data-lenis-prevent
-    >
-      {props.children}
-    </div>
-  )
-}
-
-function Input(props: ComponentProps<'textarea'>) {
-  const ref = useRef<HTMLDivElement>(null)
+function TextInput(props: ComponentProps<'textarea'>) {
   const shared = cn('col-start-1 row-start-1', props.className)
 
   return (
@@ -257,7 +250,7 @@ function Input(props: ComponentProps<'textarea'>) {
           shared
         )}
       />
-      <div className={cn(shared, 'invisible break-all')} ref={ref}>
+      <div className={cn(shared, 'invisible break-all')}>
         {`${props.value?.toString() ?? ''}\n`}
       </div>
     </div>
@@ -269,7 +262,84 @@ const roleName: Record<string, string> = {
   assistant: 'assistant',
 }
 
-function Message({
+function MessageList({
+  messages,
+  status,
+  className,
+  style,
+}: {
+  messages: MyUIMessage[]
+  status: string
+} & ComponentProps<'div'>) {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) {
+      return
+    }
+
+    const scroll = () => {
+      if (!container) {
+        return
+      }
+      const isNearBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight <
+        100
+      if (isNearBottom) {
+        container.scrollTo({ top: container.scrollHeight, behavior: 'instant' })
+      }
+    }
+
+    const observer = new ResizeObserver(scroll)
+    scroll()
+
+    const element = container.firstElementChild
+    if (element) {
+      observer.observe(element)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div
+      className={cn(
+        'fd-scroll-container flex min-w-0 flex-col overflow-y-auto',
+        className
+      )}
+      data-lenis-prevent
+      ref={containerRef}
+      style={style}
+    >
+      <div className='flex flex-1 flex-col divide-y divide-dashed divide-border'>
+        {messages.length === 0 ? (
+          <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
+            <PawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />
+            <p>
+              heya! im simba, anirudh's dog. i can answer questions about him,
+              his work, or the site.
+            </p>
+          </div>
+        ) : (
+          messages.map((item, idx) => (
+            <Message
+              className='py-4'
+              isInProgress={
+                messages.length - 1 === idx &&
+                (status === 'streaming' || status === 'submitted')
+              }
+              key={item.id}
+              message={item}
+            />
+          ))
+        )}
+      </div>
+    </div>
+  )
+}
+
+const Message = memo(function Message({
   message,
   isInProgress,
   ...props
@@ -304,55 +374,20 @@ function Message({
       </div>
     </div>
   )
-}
+})
 
-export function AISearch({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false)
-  const chat = useChat({
-    id: 'search',
-    transport: new DefaultChatTransport({
-      api: '/api/chat',
-    }),
-  })
-
-  return (
-    <Context value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}>
-      {children}
-    </Context>
-  )
-}
-
-export function AISearchTrigger() {
-  const { open, setOpen } = use(Context)!
-
-  return (
-    <button
-      className={cn(
-        buttonVariants({
-          variant: 'secondary',
-        }),
-        'group fixed end-4 bottom-4 z-20 w-auto gap-3 rounded-none border border-dashed text-fd-muted-foreground shadow-none transition-all',
-        open && 'translate-y-10 opacity-0'
-      )}
-      onClick={() => setOpen(true)}
-      type='button'
-    >
-      <PawPrint className='size-4.5 transition-transform duration-200 group-hover:-rotate-50' />
-      Ask Simba
-    </button>
-  )
-}
-
-export function AISearchPanel() {
-  const { open, setOpen } = use(Context)!
+function AISearchPanel() {
+  const { open, setOpen } = useAISearchContext()
   const chat = useChatContext()
+  const { clippy } = useClippy()
+  const lastTool = useRef<string | null>(null)
+  const lastOpen = useRef(open)
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === 'Escape' && open) {
       setOpen(false)
       event.preventDefault()
     }
-
     if (event.key === '/' && (event.metaKey || event.ctrlKey) && !open) {
       setOpen(true)
       event.preventDefault()
@@ -364,30 +399,61 @@ export function AISearchPanel() {
     return () => window.removeEventListener('keydown', onKeyPress)
   }, [])
 
+  useEffect(() => {
+    if (chat.status !== 'ready' || !clippy) {
+      return
+    }
+    const last = chat.messages.at(-1)
+    if (last?.role === 'assistant') {
+      clippy.stopCurrent()
+    }
+  }, [chat.messages, chat.status, clippy])
+
+  useEffect(() => {
+    if (lastOpen.current === open || !clippy) {
+      return
+    }
+    lastOpen.current = open
+    clippy.stopCurrent()
+    clippy.play(open ? animations.open : animations.bye)
+  }, [open, clippy])
+
+  useEffect(() => {
+    if (!clippy) {
+      return
+    }
+
+    const lastMessage = chat.messages.at(-1)
+    const parts = lastMessage?.parts ?? []
+    const toolPart = parts.find((part) => isToolUIPart(part))
+
+    if (!toolPart || chat.status === 'ready') {
+      lastTool.current = null
+      return
+    }
+
+    if (lastTool.current === toolPart.type) {
+      return
+    }
+
+    lastTool.current = toolPart.type
+    clippy.stopCurrent()
+    clippy.play(animations.tool)
+  }, [chat.messages, chat.status, clippy])
+
+  const panelStyle = useMemo(
+    () => ({
+      maskImage:
+        'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent 100%)',
+    }),
+    []
+  )
+
   return (
     <>
-      <style>
-        {`
-        @keyframes ask-ai-open {
-          from {
-            width: 0px;
-          }
-          to {
-            width: var(--ai-chat-width);
-          }
-        }
-        @keyframes ask-ai-close {
-          from {
-            width: var(--ai-chat-width);
-          }
-          to {
-            width: 0px;
-          }
-        }`}
-      </style>
       <Presence present={open}>
         <button
-          aria-label='Close Simba panel'
+          aria-label='Close Rover panel'
           className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in lg:hidden'
           data-state={open ? 'open' : 'closed'}
           onClick={() => setOpen(false)}
@@ -397,38 +463,18 @@ export function AISearchPanel() {
       <Presence present={open}>
         <div
           className={cn(
-            'z-30 overflow-hidden bg-fd-popover text-fd-popover-foreground',
-            'max-lg:fixed max-lg:inset-x-2 max-lg:top-4 max-lg:rounded-none max-lg:border max-lg:border-dashed max-lg:shadow-none',
-            'fixed inset-y-2 z-30 flex flex-col rounded-none border border-dashed bg-fd-popover text-fd-popover-foreground shadow-none max-sm:inset-x-2 sm:end-2 sm:w-[460px]',
+            'fixed inset-x-4 top-4 bottom-28 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:h-[500px] sm:w-[360px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >
-          <div className='flex size-full flex-col divide-y divide-dashed divide-border'>
+          <div className='flex h-full flex-col divide-y divide-dashed divide-border'>
             <Header />
-            <List
-              className='flex-1 overscroll-contain px-3'
-              style={{
-                maskImage:
-                  'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent 100%)',
-              }}
-            >
-              <div className='flex flex-col divide-y divide-dashed divide-border'>
-                {chat.messages
-                  .filter((msg) => msg.role !== 'system')
-                  .map((item, idx) => (
-                    <Message
-                      className='py-4'
-                      isInProgress={
-                        chat.messages.length - 1 === idx &&
-                        (chat.status === 'streaming' ||
-                          chat.status === 'submitted')
-                      }
-                      key={item.id}
-                      message={item}
-                    />
-                  ))}
-              </div>
-            </List>
+            <MessageList
+              className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-3'
+              messages={chat.messages}
+              status={chat.status}
+              style={panelStyle}
+            />
             <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
               <SearchAIInput />
               <div className='flex items-center gap-1.5 p-2'>

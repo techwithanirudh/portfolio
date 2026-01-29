@@ -19,7 +19,7 @@ import { visit } from 'unist-util-visit'
 
 const WHITESPACE_LOOKAHEAD = /(?=\s)/
 
-export type Processor = {
+export interface Processor {
   process: (content: string) => Promise<ReactNode>
 }
 

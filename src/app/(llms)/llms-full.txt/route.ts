@@ -8,9 +8,11 @@ import {
 } from '@/lib/source'
 import {
   getAboutText,
+  getColophonText,
   getExperienceText,
   getSkillsText,
   getTestimonialsText,
+  getUsesText,
 } from '../utils'
 
 async function getFullText() {
@@ -52,6 +54,10 @@ ${getExperienceText()}
 ${getSkillsText()}
 
 ${getTestimonialsText()}
+
+${getUsesText()}
+
+${getColophonText()}
 
 ## Work
 

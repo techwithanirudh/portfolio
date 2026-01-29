@@ -7,11 +7,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
-import {
-  AISearch,
-  AISearchPanel,
-  AISearchTrigger,
-} from '@/components/ai/ai-search'
+import { AISearch } from '@/components/ai/ai-search'
+import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
 import Analytics from '@/components/analytics'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -76,7 +73,6 @@ export function Provider({
             </ProgressProvider>
           </AuthUIProvider>
           <AISearchTrigger />
-          <AISearchPanel />
         </AISearch>
         <Analytics />
         <Toaster />
