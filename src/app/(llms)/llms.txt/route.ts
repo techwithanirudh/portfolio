@@ -18,6 +18,7 @@ const content = `# ${title}
 - [Testimonials](${url('/testimonials.md')}): What people say about working with me
 - [Uses](${url('/uses.md')}): Hardware and software in the setup
 - [Colophon](${url('/colophon.md')}): Technology, typography, and attribution
+- [Guestbook](${url('/guestbook.md')}): Recent guestbook entries from site visitors
 
 ## Work
 

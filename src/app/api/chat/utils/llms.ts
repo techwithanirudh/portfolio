@@ -6,18 +6,25 @@ import {
   getTestimonialsText,
   getUsesText,
 } from '@/app/(llms)/utils'
+import { getCommitHistoryText } from '@/app/(llms)/utils/github-commits'
+import { getGuestbookText } from '@/app/(llms)/utils/guestbook'
 import { description, title } from '@/constants/site'
 import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
 import { url } from '@/lib/url'
 
-export function getLLMsTxt() {
+export async function getLLMsTxt() {
   const allPosts = getSortedByDatePosts()
   const allWork = getSortedByDateWork()
+  const [guestbook, commitHistory] = await Promise.all([
+    getGuestbookText(),
+    getCommitHistoryText(),
+  ])
 
   return `# ${title}
 > ${description}
 
 ${getAboutText()}
+${commitHistory}
 
 ${getExperienceText()}
 
@@ -28,6 +35,7 @@ ${getTestimonialsText()}
 ${getUsesText()}
 
 ${getColophonText()}
+${guestbook}
 
 ## Work
 

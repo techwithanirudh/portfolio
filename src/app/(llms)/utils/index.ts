@@ -1,0 +1,8 @@
+export { getAboutText } from './about'
+export { getColophonText } from './colophon'
+export { getExperienceText } from './experience'
+export { getCommitHistoryText } from './github-commits'
+export { getGuestbookText } from './guestbook'
+export { getSkillsText } from './skills'
+export { getTestimonialsText } from './testimonials'
+export { getUsesText } from './uses'

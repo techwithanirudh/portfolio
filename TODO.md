@@ -7,5 +7,7 @@
 - Add Raycast and Browser Extension Sections
 - Guestbook Admin (Logo / Permissions to delete other things)
 - Lighthouse Scores / Perf is bad after clippy.js
-- Flash of Clippy at top right
-- Code of clippy is very bad / vib
+- Scroll to bottom is broken
+- When you open and close a contact form, the state isnt restored so it thinks youve not subvmitted yet
+- The restoration of the message is very broken from local storage, sometimes its cleared sometimes it not very buggy
+- Scroll to bottom is broken

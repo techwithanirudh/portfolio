@@ -14,6 +14,8 @@ import {
   getTestimonialsText,
   getUsesText,
 } from '../utils'
+import { getCommitHistoryText } from '../utils/github-commits'
+import { getGuestbookText } from '../utils/guestbook'
 
 async function getFullText() {
   const allPosts = getSortedByDatePosts()
@@ -43,11 +45,17 @@ async function getFullText() {
     })
   )
 
+  const [commitHistory, guestbook] = await Promise.all([
+    getCommitHistoryText(),
+    getGuestbookText(),
+  ])
+
   return `<SYSTEM>This document contains comprehensive information about ${owner}'s professional profile, portfolio, and blog content. It includes personal details, work experience, technical skills, projects, testimonials, and all published blog posts and work projects. This data is formatted for consumption by Large Language Models (LLMs) to provide accurate and up-to-date information about ${owner}'s background, skills, and expertise.</SYSTEM>
 
 # ${title}
 
 ${getAboutText()}
+${commitHistory}
 
 ${getExperienceText()}
 
@@ -58,6 +66,7 @@ ${getTestimonialsText()}
 ${getUsesText()}
 
 ${getColophonText()}
+${guestbook}
 
 ## Work
 
@@ -68,7 +77,7 @@ ${workContent.filter(Boolean).join('\n\n')}
 ${blogContent.filter(Boolean).join('\n\n')}`
 }
 
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export async function GET() {
   return new Response(await getFullText(), {

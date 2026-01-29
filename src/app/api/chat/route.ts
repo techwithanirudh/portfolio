@@ -58,10 +58,12 @@ export async function POST(request: Request) {
           })
         }
 
+        const llms = await getLLMsTxt()
+
         const result = streamText({
           model: openai('gpt-5-mini'),
           system: systemPrompt({
-            llms: getLLMsTxt(),
+            llms,
           }),
           providerOptions: {
             openai: {
