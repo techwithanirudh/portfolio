@@ -14,7 +14,7 @@ function getPosition() {
 
 function ClippyTriggerInner() {
   const { open, setOpen } = useAISearchContext()
-  const { clippy } = useClippy()
+  const { clippy, element } = useClippy()
   const openRef = useRef(open)
 
   useEffect(() => {
@@ -34,6 +34,13 @@ function ClippyTriggerInner() {
     clippy.show(true)
     reposition()
 
+    if (element) {
+      element.style.visibility = 'hidden'
+      requestAnimationFrame(() => {
+        element.style.visibility = 'visible'
+      })
+    }
+
     const handleClick = (event: Event) => {
       event.preventDefault()
       event.stopPropagation()
@@ -44,14 +51,14 @@ function ClippyTriggerInner() {
       window.requestAnimationFrame(() => reposition())
     }
 
-    clippy.on('click', handleClick)
+    element?.addEventListener('click', handleClick)
     window.addEventListener('resize', handleResize)
 
     return () => {
-      clippy.off('click', handleClick)
+      element?.removeEventListener('click', handleClick)
       window.removeEventListener('resize', handleResize)
     }
-  }, [clippy, setOpen])
+  }, [clippy, element, setOpen])
 
   useEffect(() => {
     if (!(clippy && open)) {

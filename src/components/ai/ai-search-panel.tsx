@@ -5,8 +5,7 @@ import { isToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { PawPrint, PlusIcon, RefreshCw, X } from 'lucide-react'
 import { useEffect, useEffectEvent, useMemo, useRef } from 'react'
-import { useClippy } from '@/components/clippy'
-import { animations } from '@/components/clippy/animations'
+import { animations, useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
 import { useAISearchContext, useChatContext } from './ai-search-context'
 import { SearchAIInput } from './ai-search-input'
@@ -91,7 +90,7 @@ function SearchAIActions() {
 export function AISearchPanel() {
   const { open, setOpen } = useAISearchContext()
   const chat = useChatContext()
-  const { cancelAnimation, playAnimation } = useClippy()
+  const { clippy } = useClippy()
   const lastToolRef = useRef<string | null>(null)
   const lastOpenRef = useRef(open)
 
@@ -113,26 +112,31 @@ export function AISearchPanel() {
   }, [])
 
   useEffect(() => {
-    if (chat.status !== 'ready') {
+    if (chat.status !== 'ready' || !clippy) {
       return
     }
 
     const last = chat.messages.at(-1)
     if (last?.role === 'assistant') {
-      cancelAnimation()
+      clippy.stopCurrent()
     }
-  }, [chat.messages, chat.status, cancelAnimation])
+  }, [chat.messages, chat.status, clippy])
 
   useEffect(() => {
-    if (lastOpenRef.current === open) {
+    if (lastOpenRef.current === open || !clippy) {
       return
     }
 
     lastOpenRef.current = open
-    playAnimation(open ? animations.open : animations.bye)
-  }, [open, playAnimation])
+    clippy.stopCurrent()
+    clippy.play(open ? animations.open : animations.bye)
+  }, [open, clippy])
 
   useEffect(() => {
+    if (!clippy) {
+      return
+    }
+
     const lastMessage = chat.messages.at(-1)
     const parts = lastMessage?.parts ?? []
     const toolPart = parts.find((part) => isToolUIPart(part))
@@ -151,8 +155,9 @@ export function AISearchPanel() {
     }
 
     lastToolRef.current = toolPart.type
-    playAnimation(animations.tool)
-  }, [chat.messages, chat.status, playAnimation])
+    clippy.stopCurrent()
+    clippy.play(animations.tool)
+  }, [chat.messages, chat.status, clippy])
 
   const panelStyle = useMemo(
     () => ({

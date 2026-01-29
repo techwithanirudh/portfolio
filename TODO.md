@@ -7,3 +7,5 @@
 - Add Raycast and Browser Extension Sections
 - Guestbook Admin (Logo / Permissions to delete other things)
 - Lighthouse Scores / Perf is bad after clippy.js
+- Flash of Clippy at top right
+- Code of clippy is very bad / vib

@@ -1,23 +1,10 @@
 'use client'
 
+import clippyts, { type Agent } from 'clippyts'
 import type { AgentType } from 'clippyts/dist/types'
-import {
-  type ReactNode,
-  useEffect,
-  useMemo,
-  useReducer,
-  useRef,
-  useState,
-} from 'react'
+import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import AGENTS from './agents'
-import {
-  ClippyContext,
-  type ClippyContextValue,
-  type ClippyInstance,
-} from './clippy-context'
-import { clippyReducer, initialClippyState } from './clippy-state'
-import { useClippyController } from './use-clippy-controller'
-import { useClippyElement } from './use-clippy-element'
+import { ClippyContext, type ClippyContextValue } from './clippy-context'
 
 interface ClippyProviderProps {
   children?: ReactNode
@@ -30,67 +17,59 @@ export function ClippyProvider({
   agentName = AGENTS.CLIPPY,
   draggable = false,
 }: ClippyProviderProps) {
-  const [clippyInstance, setClippyInstance] = useState<
-    ClippyInstance | undefined
-  >()
-  const [state, dispatch] = useReducer(clippyReducer, initialClippyState)
-  const stateRef = useRef(state)
-  stateRef.current = state
-
-  const { elementRef, listenersRef, setElementRef } = useClippyElement({
-    draggable,
-  })
-  const {
-    hideAgent,
-    showAgent,
-    showMessage,
-    playAnimation,
-    cancelAnimation,
-    moveTo,
-    gestureAt,
-  } = useClippyController({
-    stateRef,
-    elementRef,
-    listenersRef,
-    setElementRef,
-    setClippyInstance,
-    dispatch,
-  })
+  const [clippy, setClippy] = useState<Agent | undefined>()
+  const [element, setElement] = useState<HTMLElement | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const instance = useRef<Agent | null>(null)
 
   useEffect(() => {
-    showAgent(agentName, true)
+    setIsLoading(true)
+
+    clippyts.load({
+      name: agentName,
+      successCb: (agent) => {
+        instance.current = agent
+        setClippy(agent)
+        setIsLoading(false)
+      },
+      failCb: (error) => {
+        console.error('Failed to load Clippy:', error)
+        setClippy(undefined)
+        setIsLoading(false)
+      },
+    })
+
     return () => {
-      hideAgent(true)
+      instance.current?.hide(false, () => {
+        instance.current = null
+      })
     }
-  }, [agentName, showAgent, hideAgent])
+  }, [agentName])
+
+  useEffect(() => {
+    if (!clippy) {
+      setElement(null)
+      return
+    }
+
+    const el = document.querySelector('.clippy') as HTMLElement | null
+    setElement(el)
+
+    if (!el || draggable) {
+      return
+    }
+
+    const blockDrag = (event: MouseEvent) => {
+      event.stopImmediatePropagation()
+    }
+
+    el.addEventListener('mousedown', blockDrag, true)
+    return () => el.removeEventListener('mousedown', blockDrag, true)
+  }, [clippy, draggable])
 
   const value = useMemo<ClippyContextValue>(
-    () => ({
-      clippy: clippyInstance,
-      currentAgent: state.currentAgent,
-      isAgentVisible: state.isAgentVisible,
-      isLoadingAgent: state.isLoadingAgent,
-      showAgent,
-      hideAgent,
-      showMessage,
-      playAnimation,
-      cancelAnimation,
-      moveTo,
-      gestureAt,
-    }),
-    [
-      clippyInstance,
-      state.currentAgent,
-      state.isAgentVisible,
-      state.isLoadingAgent,
-      showAgent,
-      hideAgent,
-      showMessage,
-      playAnimation,
-      cancelAnimation,
-      moveTo,
-      gestureAt,
-    ]
+    () => ({ clippy, element, agentName, isLoading }),
+    [clippy, element, agentName, isLoading]
   )
 
   return (

@@ -1,4 +1,4 @@
 export { default as AGENTS } from './agents'
-export { ClippyContext } from './clippy-context'
+export { animations } from './animations'
+export { ClippyContext, useClippy } from './clippy-context'
 export { ClippyProvider } from './clippy-provider'
-export { useClippy } from './use-clippy'

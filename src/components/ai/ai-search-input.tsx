@@ -6,12 +6,10 @@ import {
   type ComponentProps,
   type SyntheticEvent,
   useEffect,
-  useEffectEvent,
   useRef,
   useState,
 } from 'react'
-import { useClippy } from '@/components/clippy'
-import { animations } from '@/components/clippy/animations'
+import { animations, useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
 import { useChatContext } from './ai-search-context'
 
@@ -19,21 +17,21 @@ const StorageKeyInput = '__ai_search_input'
 
 export function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop } = useChatContext()
-  const { playAnimation, isAgentVisible, showAgent, currentAgent } = useClippy()
-  const pendingRef = useRef(false)
+  const { clippy } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const isLoading = status === 'streaming' || status === 'submitted'
-  const playSearching = useEffectEvent(() => {
-    if (!isAgentVisible) {
-      pendingRef.current = true
-      showAgent(currentAgent ?? 'Rover')
+  const hasPlayed = useRef(false)
+
+  const playSearching = () => {
+    if (!clippy) {
       return
     }
-    pendingRef.current = false
-    playAnimation(animations.submit)
-  })
+    clippy.stopCurrent()
+    clippy.play(animations.submit)
+  }
+
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
     playSearching()
@@ -46,13 +44,10 @@ export function SearchAIInput(props: ComponentProps<'form'>) {
   }, [input])
 
   useEffect(() => {
-    if (!(pendingRef.current && isAgentVisible)) {
-      return
+    if (clippy && !hasPlayed.current) {
+      hasPlayed.current = true
     }
-
-    pendingRef.current = false
-    playAnimation(animations.submit)
-  }, [isAgentVisible, playAnimation])
+  }, [clippy])
 
   useEffect(() => {
     if (isLoading) {
