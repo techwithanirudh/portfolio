@@ -10,12 +10,14 @@ const content = `# ${title}
 
 **Note:** For a comprehensive single-file version with all content, see [llms-full.txt](${url('/llms-full.txt')})
 
-## About Me
+## Site
 
 - [About](${url('/about.md')}): Personal information, tech stack, and how to connect
 - [Experience](${url('/experience.md')}): Career timeline and key roles
 - [Skills](${url('/skills.md')}): Technical expertise and focus areas
 - [Testimonials](${url('/testimonials.md')}): What people say about working with me
+- [Uses](${url('/uses.md')}): Hardware and software in the setup
+- [Colophon](${url('/colophon.md')}): Technology, typography, and attribution
 
 ## Work
 
