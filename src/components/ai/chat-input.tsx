@@ -93,36 +93,18 @@ export function ChatInput() {
         />
         <PromptInputFooter className='border-none px-2 pb-2'>
           <ChatActions />
-          {isLoading ? (
-            <button
-              className={cn(
-                buttonVariants({
-                  color: 'secondary',
-                  size: 'icon-sm',
-                  className:
-                    'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
-                })
-              )}
-              onClick={stop}
-              type='button'
-            >
-              <SquareIcon className='fill-fd-foreground' />
-            </button>
-          ) : (
-            <PromptInputSubmit
-              className={cn(
-                buttonVariants({
-                  color: 'primary',
-                  size: 'icon-sm',
-                  className:
-                    'rounded-none border border-dashed transition-all [&_svg]:size-4',
-                })
-              )}
-              disabled={input.length === 0}
-            >
-              <ArrowUpIcon />
-            </PromptInputSubmit>
-          )}
+          <PromptInputSubmit
+            className={cn(
+              buttonVariants({
+                color: 'primary',
+                size: 'icon-sm',
+                className:
+                  'rounded-none border border-dashed transition-all [&_svg]:size-4',
+              })
+            )}
+            status={status}
+            onStop={stop}
+          />
         </PromptInputFooter>
       </PromptInput>
     </div>

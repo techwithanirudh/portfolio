@@ -2,6 +2,7 @@
 
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from 'ai'
 import {
+  ArrowUpIcon,
   CornerDownLeftIcon,
   ImageIcon,
   Loader2Icon,
@@ -766,7 +767,7 @@ export const PromptInput = ({
         ref={formRef}
         {...props}
       >
-        <InputGroup className='overflow-hidden border-none rounded-none'>{children}</InputGroup>
+        <InputGroup className='overflow-hidden border-none rounded-none bg-transparent shadow-none dark:bg-transparent'>{children}</InputGroup>
       </form>
     </>
   )
@@ -1024,7 +1025,7 @@ export const PromptInputSubmit = ({
 }: PromptInputSubmitProps) => {
   const isGenerating = status === 'submitted' || status === 'streaming'
 
-  let Icon = <CornerDownLeftIcon className='size-4' />
+  let Icon = <ArrowUpIcon className='size-4' />
 
   if (status === 'submitted') {
     Icon = <Loader2Icon className='size-4 animate-spin' />
