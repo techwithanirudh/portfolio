@@ -31,4 +31,5 @@ runs:
         NEXT_PUBLIC_UMAMI_WEBSITE_ID="00000000-0000-0000-0000-000000000000"
         NEXT_PUBLIC_BASE_URL="http://localhost:3000"
         GITHUB_TOKEN="github_pat_1234567890"
+        OPENAI_API_KEY="sk-proj-1234567890"
         EOF
