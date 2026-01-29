@@ -313,3 +313,21 @@
     mix-blend-mode: normal;
   }
 }
+
+@keyframes ask-ai-open {
+  from {
+    width: 0px;
+  }
+  to {
+    width: var(--ai-chat-width);
+  }
+}
+
+@keyframes ask-ai-close {
+  from {
+    width: var(--ai-chat-width);
+  }
+  to {
+    width: 0px;
+  }
+}

@@ -16,6 +16,7 @@ import {
 import {
   type ComponentProps,
   createContext,
+  memo,
   type ReactNode,
   type SyntheticEvent,
   use,
@@ -167,7 +168,10 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   }
 
   useEffect(() => {
-    localStorage.setItem(StorageKeyInput, input)
+    const timeout = setTimeout(() => {
+      localStorage.setItem(StorageKeyInput, input)
+    }, 300)
+    return () => clearTimeout(timeout)
   }, [input])
 
   useEffect(() => {
@@ -332,7 +336,7 @@ function MessageList({
   )
 }
 
-function Message({
+const Message = memo(function Message({
   message,
   isInProgress,
   ...props
@@ -367,7 +371,7 @@ function Message({
       </div>
     </div>
   )
-}
+})
 
 function AISearchPanel() {
   const { open, setOpen } = useAISearchContext()
@@ -444,17 +448,6 @@ function AISearchPanel() {
 
   return (
     <>
-      <style>
-        {`
-        @keyframes ask-ai-open {
-          from { width: 0px; }
-          to { width: var(--ai-chat-width); }
-        }
-        @keyframes ask-ai-close {
-          from { width: var(--ai-chat-width); }
-          to { width: 0px; }
-        }`}
-      </style>
       <Presence present={open}>
         <button
           aria-label='Close Rover panel'
