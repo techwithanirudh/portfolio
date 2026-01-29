@@ -51,9 +51,10 @@ export function AIContactForm({ prefill }: AIContactFormProps) {
   useEffect(() => {
     if (hasSucceeded) {
       const { name, email, message } = form.getValues()
-      sendMessage({
-        text: `[Contact form submitted]\nFrom: ${name} <${email}>\nMessage: ${message}`,
-      })
+      sendMessage(
+        { text: '(form submitted)' },
+        { body: { context: { name, email, message, toolName: 'showContactForm' } } }
+      )
     }
   }, [hasSucceeded, form, sendMessage])
 

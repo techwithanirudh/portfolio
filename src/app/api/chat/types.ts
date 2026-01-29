@@ -12,6 +12,12 @@ export interface ContactFormPart {
   }
 }
 
+export interface ContextPart {
+  type: 'data-context'
+  id: string
+  data: Record<string, unknown>
+}
+
 export type MyUIMessage = UIMessage & {
   parts: Array<
     | UIMessage['parts'][number]
@@ -21,5 +27,6 @@ export type MyUIMessage = UIMessage & {
         title: string
       }
     | ContactFormPart
+    | ContextPart
   >
 }

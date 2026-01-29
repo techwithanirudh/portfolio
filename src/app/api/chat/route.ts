@@ -19,7 +19,11 @@ import { createShowContactFormTool } from './utils/tools/show-contact-form'
 
 export async function POST(request: Request) {
   try {
-    const { messages }: { messages: MyUIMessage[] } = await request.json()
+    const {
+      messages,
+      context,
+    }: { messages: MyUIMessage[]; context?: Record<string, unknown> } =
+      await request.json()
 
     const handleStreamError = (error: unknown) => {
       if (env.NODE_ENV !== 'production') {
@@ -46,9 +50,19 @@ export async function POST(request: Request) {
           ignoreIncompleteToolCalls: true,
         })
 
+        if (context) {
+          writer.write({
+            type: 'data-context',
+            id: `context-${Date.now()}`,
+            data: context,
+          })
+        }
+
         const result = streamText({
           model: openai('gpt-5-mini'),
-          system: systemPrompt({ llms: getLLMsTxt() }),
+          system: systemPrompt({
+            llms: getLLMsTxt(),
+          }),
           providerOptions: {
             openai: {
               reasoningEffort: 'minimal',
