@@ -1,6 +1,6 @@
 'use client'
 
-import clippyts, { type Agent } from 'clippyts'
+import type { Agent } from 'clippyts'
 import type { AgentType } from 'clippyts/dist/types'
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import AGENTS from './agents'
@@ -19,27 +19,33 @@ export function ClippyProvider({
 }: ClippyProviderProps) {
   const [clippy, setClippy] = useState<Agent | undefined>()
   const [element, setElement] = useState<HTMLElement | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const instance = useRef<Agent | null>(null)
 
   useEffect(() => {
-    setIsLoading(true)
+    let cancelled = false
 
-    clippyts.load({
-      name: agentName,
-      successCb: (agent) => {
-        instance.current = agent
-        setClippy(agent)
-        setIsLoading(false)
-      },
-      failCb: (error) => {
-        console.error('Failed to load Clippy:', error)
-        setClippy(undefined)
-        setIsLoading(false)
-      },
+    import('clippyts').then(({ default: clippyts }) => {
+      if (cancelled) {
+        return
+      }
+
+      clippyts.load({
+        name: agentName,
+        successCb: (agent) => {
+          if (cancelled) {
+            return
+          }
+          instance.current = agent
+          setClippy(agent)
+        },
+        failCb: (error) => {
+          console.error('Failed to load Clippy:', error)
+        },
+      })
     })
 
     return () => {
+      cancelled = true
       instance.current?.hide(false, () => {
         instance.current = null
       })
@@ -68,8 +74,8 @@ export function ClippyProvider({
   }, [clippy, draggable])
 
   const value = useMemo<ClippyContextValue>(
-    () => ({ clippy, element, agentName, isLoading }),
-    [clippy, element, agentName, isLoading]
+    () => ({ clippy, element, agentName }),
+    [clippy, element, agentName]
   )
 
   return (

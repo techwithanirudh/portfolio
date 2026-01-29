@@ -8,7 +8,6 @@ export interface ClippyContextValue {
   clippy: Agent | undefined
   element: HTMLElement | null
   agentName: AgentType
-  isLoading: boolean
 }
 
 export const ClippyContext = createContext<ClippyContextValue | undefined>(
