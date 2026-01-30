@@ -27,19 +27,17 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
 }) => {
   return (
     <Link
-      className='flex flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+      className='flex flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80 group'
       href={url}
     >
       {image && (
-        <div className='relative inline-flex items-center justify-center transition-transform hover:scale-105'>
-          <BlurImage
-            alt={title}
-            className='relative rounded-lg'
-            height={554}
-            src={image}
-            width={853}
-          />
-        </div>
+        <BlurImage
+          alt={title}
+          className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform group-hover:scale-102'
+          height={554}
+          src={image}
+          width={853}
+        />
       )}
 
       <div className='flex h-full flex-col justify-between gap-4'>

@@ -1,5 +1,6 @@
 import { BrainCircuitIcon, Code2Icon, LayersIcon } from 'lucide-react'
 import type { Skill } from '@/types'
+import { Icons } from '@/components/icons/icons'
 
 export const skills: Skill[] = [
   {
@@ -26,3 +27,18 @@ export const skills: Skill[] = [
     size: 'sm',
   },
 ]
+
+export const technologies = [
+  { label: 'TypeScript', Icon: Icons.typescript },
+  { label: 'JavaScript', Icon: Icons.javascript },
+  { label: 'React', Icon: Icons.react },
+  { label: 'Next.js', Icon: Icons.nextjs },
+  { label: 'Tailwind CSS', Icon: Icons.tailwind },
+  { label: 'CSS3', Icon: Icons.css3 },
+  { label: 'Node.js', Icon: Icons.nodejs },
+  { label: 'Express', Icon: Icons.express },
+  { label: 'Git', Icon: Icons.git },
+  { label: 'shadcn/ui', Icon: Icons.shadcn },
+  { label: 'Hono', Icon: Icons.hono },
+  { label: 'Drizzle ORM', Icon: Icons.drizzleOrm },
+] as const

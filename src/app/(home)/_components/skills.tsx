@@ -6,7 +6,7 @@ import { Section } from '@/components/section'
 import { SectionHeader } from '@/components/sections/section-header'
 import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
-import { skills } from '@/constants/portfolio/skills'
+import { skills, technologies } from '@/constants/portfolio/skills'
 
 const featureItemVariants = cva(
   'group flex flex-col justify-between gap-10 p-6 hover:bg-card hover:bg-card/80 sm:gap-22 md:gap-34 lg:gap-46',
@@ -22,21 +22,6 @@ const featureItemVariants = cva(
     },
   }
 )
-
-const skillTags = [
-  { label: 'TypeScript', Icon: Icons.typescript },
-  { label: 'JavaScript', Icon: Icons.javascript },
-  { label: 'React', Icon: Icons.react },
-  { label: 'Next.js', Icon: Icons.nextjs },
-  { label: 'Tailwind CSS', Icon: Icons.tailwind },
-  { label: 'CSS3', Icon: Icons.css3 },
-  { label: 'Node.js', Icon: Icons.nodejs },
-  { label: 'Express', Icon: Icons.express },
-  { label: 'Git', Icon: Icons.git },
-  { label: 'shadcn/ui', Icon: Icons.shadcn },
-  { label: 'Hono', Icon: Icons.hono },
-  { label: 'Drizzle ORM', Icon: Icons.drizzleOrm },
-] as const
 
 const Skills = () => (
   <Section className='relative w-full pt-10'>
@@ -79,7 +64,7 @@ const Skills = () => (
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='flex flex-wrap gap-2'>
-            {skillTags.map(({ label, Icon }) => (
+            {technologies.map(({ label, Icon }) => (
               <Badge
                 className='gap-2 rounded-md px-3 py-1 text-xs transition-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
                 key={label}
