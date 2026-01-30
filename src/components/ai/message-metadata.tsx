@@ -1,4 +1,4 @@
-import { isToolUIPart } from 'ai'
+import { getStaticToolName, isStaticToolUIPart, isToolUIPart } from 'ai'
 import {
   Brain,
   ChevronDownIcon,
@@ -8,7 +8,7 @@ import {
   SearchIcon,
   WrenchIcon,
 } from 'lucide-react'
-import type { MyUIMessage } from '@/app/api/chat/types'
+import type { ChatTools, MyUIMessage } from '@/app/api/chat/types'
 import { Shimmer } from '@/components/ai/shimmer'
 import {
   Source,
@@ -82,24 +82,22 @@ export const MessageMetadata = ({
     )
   }
 
-  if (tool && inProgress) {
+  if (tool && inProgress && isStaticToolUIPart<ChatTools>(tool)) {
     let Icon = WrenchIcon
     let label = 'Working'
-    const name = tool.type
-      .replace('tool-', '')
-      .replace(/([A-Z])/g, ' $1')
-      .trim()
+    const toolName = getStaticToolName(tool)
+    const name = toolName.replace(/([A-Z])/g, ' $1').trim()
 
-    switch (tool.type) {
-      case 'tool-searchDocs':
+    switch (toolName) {
+      case 'searchDocs':
         Icon = SearchIcon
         label = 'Sniffing the pages'
         break
-      case 'tool-getPageContent':
+      case 'getPageContent':
         Icon = LinkIcon
         label = 'Fetching a page'
         break
-      case 'tool-showContactForm':
+      case 'showContactForm':
         Icon = MailIcon
         label = 'Fetching contact form'
         break
@@ -120,5 +118,5 @@ export const MessageMetadata = ({
     return null
   }
 
-  return <div className='h-8' />
+  return <div />
 }

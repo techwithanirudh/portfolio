@@ -3,8 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { CheckCircle, Loader2, Send } from 'lucide-react'
-import { useEffect } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/ai/chat'
 import { Icons } from '@/components/icons/icons'
@@ -23,22 +21,40 @@ import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
 interface AIContactFormProps {
-  formId: string
+  toolCallId: string
   prefill?: Partial<Contact>
+  isSubmitted: boolean
+  submittedData?: Contact
 }
 
-export function AIContactForm({ formId, prefill }: AIContactFormProps) {
-  const { sendMessage } = useChatContext()
-  const [wasSubmitted, setWasSubmitted] = useLocalStorage(
-    `__ai_contact_submitted_${formId}`,
-    false
-  )
+export function AIContactForm({
+  toolCallId,
+  prefill,
+  isSubmitted,
+  submittedData,
+}: AIContactFormProps) {
+  const { addToolOutput, sendMessage } = useChatContext()
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
     zodResolver(ContactSchema),
     {
-      actionProps: {},
+      actionProps: {
+        onSuccess: () => {
+          const { name, email, message } = form.getValues()
+          addToolOutput({
+            tool: 'showContactForm',
+            toolCallId,
+            output: {
+              success: true,
+              name,
+              email,
+              message,
+            },
+          })
+          sendMessage()
+        },
+      },
       formProps: {
         mode: 'onBlur',
         defaultValues: {
@@ -52,28 +68,24 @@ export function AIContactForm({ formId, prefill }: AIContactFormProps) {
   )
 
   const isExecuting = action.status === 'executing'
-  const hasSucceeded = action.status === 'hasSucceeded' || wasSubmitted
 
-  useEffect(() => {
-    if (action.status === 'hasSucceeded' && !wasSubmitted) {
-      setWasSubmitted(true)
-      const { name, email, message } = form.getValues()
-      sendMessage(
-        { text: '(form submitted)' },
-        {
-          body: {
-            context: { name, email, message, toolName: 'showContactForm' },
-          },
-        }
-      )
-    }
-  }, [action.status, wasSubmitted, form])
-
-  if (hasSucceeded) {
+  if (isSubmitted && submittedData) {
     return (
-      <div className='flex items-center gap-2 rounded-md border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
-        <CheckCircle className='size-4 shrink-0' />
-        <p>message sent! anirudh will get back to you soon.</p>
+      <div className='flex flex-col gap-2 rounded-md border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
+        <div className='flex items-center gap-2'>
+          <CheckCircle className='size-4 shrink-0' />
+          <p>message sent! anirudh will get back to you soon.</p>
+        </div>
+        <div className='mt-1 space-y-1 text-xs opacity-80'>
+          <p>
+            <span className='font-medium'>from:</span> {submittedData.name} (
+            {submittedData.email})
+          </p>
+          <p>
+            <span className='font-medium'>message:</span>{' '}
+            {submittedData.message}
+          </p>
+        </div>
       </div>
     )
   }

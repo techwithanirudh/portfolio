@@ -15,15 +15,11 @@ import { getLLMsTxt } from './utils/llms'
 import { systemPrompt } from './utils/prompts'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
-import { createShowContactFormTool } from './utils/tools/show-contact-form'
+import { showContactFormTool } from './utils/tools/show-contact-form'
 
 export async function POST(request: Request) {
   try {
-    const {
-      messages,
-      context,
-    }: { messages: MyUIMessage[]; context?: Record<string, unknown> } =
-      await request.json()
+    const { messages }: { messages: MyUIMessage[] } = await request.json()
 
     const handleStreamError = (error: unknown) => {
       if (env.NODE_ENV !== 'production') {
@@ -50,14 +46,6 @@ export async function POST(request: Request) {
           ignoreIncompleteToolCalls: true,
         })
 
-        if (context) {
-          writer.write({
-            type: 'data-context',
-            id: `context-${Date.now()}`,
-            data: context,
-          })
-        }
-
         const llms = await getLLMsTxt()
 
         const result = streamText({
@@ -76,7 +64,7 @@ export async function POST(request: Request) {
           tools: {
             searchDocs: createSearchDocsTool(writer),
             getPageContent,
-            showContactForm: createShowContactFormTool(writer),
+            showContactForm: showContactFormTool,
           },
           messages: modelMessages,
           toolChoice: 'auto',
