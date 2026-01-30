@@ -3,7 +3,12 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
-import { DefaultChatTransport, isToolUIPart } from 'ai'
+import {
+  DefaultChatTransport,
+  getStaticToolName,
+  isStaticToolUIPart,
+  isToolUIPart,
+} from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
   ArrowUpIcon,
@@ -28,6 +33,10 @@ import {
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
+import {
+  getToolsRequiringConfirmation,
+  type ToolName,
+} from '@/app/api/chat/utils/tools/confirmation'
 import {
   AIContactForm,
   AIContactFormSkeleton,
@@ -166,13 +175,18 @@ const StorageKeyInput = '__ai_search_input'
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { clippy } = useClippy()
+  const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
   const hasPendingToolInput = messages.some((message) =>
-    message.parts?.some(
-      (part) => isToolUIPart(part) && part.state === 'input-available'
-    )
+    message.parts?.some((part) => {
+      if (!isStaticToolUIPart(part) || part.state !== 'input-available') {
+        return false
+      }
+      const toolName = getStaticToolName(part) as ToolName
+      return toolsRequiringConfirmation.includes(toolName)
+    })
   )
   const isLoading =
     status === 'streaming' || status === 'submitted' || hasPendingToolInput

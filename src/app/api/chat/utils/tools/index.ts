@@ -18,4 +18,4 @@ export const tools = {
   getPageContent,
   showContactForm: showContactFormTool,
   searchDocs: searchDocsToolType,
-} satisfies ToolSet;
+} satisfies ToolSet

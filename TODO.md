@@ -8,6 +8,6 @@
 - Guestbook Admin (Logo / Permissions to delete other things)
 - Lighthouse Scores / Perf is bad after clippy.js
 - Scroll to bottom is broken
-- When you open and close a contact form, the state isnt restored so it thinks youve not subvmitted yet
-- The restoration of the message is very broken from local storage, sometimes its cleared sometimes it not very buggy
+- When you open and close a contact form, the state isn't restored so it thinks you've not submitted yet
+- The restoration of the message is very broken from local storage, sometimes it's cleared sometimes it's not very buggy
 - Scroll to bottom is broken
