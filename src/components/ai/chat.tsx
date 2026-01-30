@@ -28,7 +28,10 @@ import {
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
-import { AIContactForm } from '@/components/ai/tools/contact-form'
+import {
+  AIContactForm,
+  AIContactFormSkeleton,
+} from '@/components/ai/tools/contact-form'
 import {
   AGENTS,
   animations,
@@ -161,12 +164,18 @@ function SearchAIActions() {
 const StorageKeyInput = '__ai_search_input'
 
 function SearchAIInput(props: ComponentProps<'form'>) {
-  const { status, sendMessage, stop } = useChatContext()
+  const { status, sendMessage, stop, messages } = useChatContext()
   const { clippy } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
-  const isLoading = status === 'streaming' || status === 'submitted'
+  const hasPendingToolInput = messages.some((message) =>
+    message.parts?.some(
+      (part) => isToolUIPart(part) && part.state === 'input-available'
+    )
+  )
+  const isLoading =
+    status === 'streaming' || status === 'submitted' || hasPendingToolInput
   const saveInput = useDebounceCallback(
     (value: string) => localStorage.setItem(StorageKeyInput, value),
     300
@@ -174,6 +183,9 @@ function SearchAIInput(props: ComponentProps<'form'>) {
 
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
+    if (hasPendingToolInput) {
+      return
+    }
     if (clippy) {
       clippy.stopCurrent()
       clippy.play(animations.submit)
@@ -238,7 +250,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
                 'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-4',
             })
           )}
-          disabled={input.length === 0}
+          disabled={input.length === 0 || hasPendingToolInput}
           type='submit'
         >
           <ArrowUpIcon />
@@ -382,23 +394,29 @@ const Message = memo(function Message({
           }
           if (part.type === 'tool-showContactForm') {
             const isSubmitted = part.state === 'output-available'
-            const output = isSubmitted ? part.output : undefined
-            const prefill = part.input?.prefill ?? undefined;
-    
+            const submittedData =
+              isSubmitted &&
+              part.output?.success &&
+              part.output.name &&
+              part.output.email &&
+              part.output.message
+                ? {
+                    name: part.output.name,
+                    email: part.output.email,
+                    message: part.output.message,
+                  }
+                : undefined
+
+            if (!isSubmitted && part.state !== 'input-available') {
+              return <AIContactFormSkeleton key={part.toolCallId} />
+            }
+
             return (
               <AIContactForm
                 isSubmitted={isSubmitted}
                 key={part.toolCallId}
-                prefill={prefill}
-                submittedData={
-                  output?.success
-                    ? {
-                        name: output.name,
-                        email: output.email,
-                        message: output.message,
-                      }
-                    : undefined
-                }
+                prefill={part.input?.prefill ?? undefined}
+                submittedData={submittedData}
                 toolCallId={part.toolCallId}
               />
             )

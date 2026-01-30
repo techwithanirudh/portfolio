@@ -14,9 +14,10 @@ const prefillSchema = z
 
 export const contactFormOutputSchema = z.object({
   success: z.boolean(),
-  name: z.string(),
-  email: z.string(),
-  message: z.string(),
+  reason: z.string().optional(),
+  name: z.string().optional(),
+  email: z.string().optional(),
+  message: z.string().optional(),
 })
 
 export type ContactFormOutput = z.infer<typeof contactFormOutputSchema>

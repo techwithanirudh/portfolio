@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
@@ -88,6 +89,29 @@ export function AIContactForm({
         </div>
       </div>
     )
+  }
+
+  if (isSubmitted && !submittedData) {
+    return (
+      <div className='flex flex-col gap-2 rounded-md border border-muted-foreground/30 border-dashed bg-muted/40 p-3 text-muted-foreground text-sm'>
+        <div className='flex items-center gap-2'>
+          <CheckCircle className='size-4 shrink-0' />
+          <p>message canceled. you can keep chatting.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const handleCancel = () => {
+    addToolOutput({
+      tool: 'showContactForm',
+      toolCallId,
+      output: {
+        success: false,
+        reason: 'user canceled the form',
+      },
+    })
+    sendMessage()
   }
 
   return (
@@ -169,25 +193,61 @@ export function AIContactForm({
           </div>
         )}
 
-        <Button
-          className='h-8 gap-1.5 text-sm'
-          disabled={isExecuting}
-          size='sm'
-          type='submit'
-        >
-          {isExecuting ? (
-            <>
-              <Loader2 className='size-3.5 animate-spin' />
-              sending...
-            </>
-          ) : (
-            <>
-              <Send className='size-3.5' />
-              send message
-            </>
-          )}
-        </Button>
+        <div className='flex items-center gap-2'>
+          <Button
+            className='h-8 flex-1 gap-1.5 text-sm'
+            disabled={isExecuting}
+            size='sm'
+            type='submit'
+          >
+            {isExecuting ? (
+              <>
+                <Loader2 className='size-3.5 animate-spin' />
+                sending...
+              </>
+            ) : (
+              <>
+                <Send className='size-3.5' />
+                send message
+              </>
+            )}
+          </Button>
+          <Button
+            className='h-8 text-sm'
+            disabled={isExecuting}
+            onClick={handleCancel}
+            size='sm'
+            type='button'
+            variant='secondary'
+          >
+            cancel
+          </Button>
+        </div>
       </form>
     </Form>
+  )
+}
+
+export function AIContactFormSkeleton() {
+  return (
+    <div className='flex flex-col gap-3 rounded-md border border-dashed p-3'>
+      <Skeleton className='h-3 w-48' />
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-12' />
+        <Skeleton className='h-8 w-full' />
+      </div>
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-14' />
+        <Skeleton className='h-8 w-full' />
+      </div>
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-16' />
+        <Skeleton className='h-20 w-full' />
+      </div>
+      <div className='flex items-center gap-2'>
+        <Skeleton className='h-8 w-28 flex-1' />
+        <Skeleton className='h-8 w-20' />
+      </div>
+    </div>
   )
 }
