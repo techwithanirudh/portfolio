@@ -1,6 +1,6 @@
 'use client'
 
-import type { UIMessage, UseChatHelpers } from '@ai-sdk/react'
+import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
 import { DefaultChatTransport, isToolUIPart } from 'ai'
@@ -27,8 +27,11 @@ import {
   useState,
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
-import type { ContactFormPart, MyUIMessage } from '@/app/api/chat/types'
-import { AIContactForm } from '@/components/ai/tools/contact-form'
+import type { MyUIMessage } from '@/app/api/chat/types'
+import {
+  AIContactForm,
+  AIContactFormSkeleton,
+} from '@/components/ai/tools/contact-form'
 import {
   AGENTS,
   animations,
@@ -42,7 +45,7 @@ import { MessageMetadata } from './message-metadata'
 const AISearchContext = createContext<{
   open: boolean
   setOpen: (open: boolean) => void
-  chat: UseChatHelpers<UIMessage>
+  chat: UseChatHelpers<MyUIMessage>
 } | null>(null)
 
 export function useAISearchContext() {
@@ -63,7 +66,7 @@ export function useChatContext() {
 
 export function AISearch({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
-  const chat = useChat({
+  const chat = useChat<MyUIMessage>({
     id: 'search',
     transport: new DefaultChatTransport({
       api: '/api/chat',
@@ -161,12 +164,18 @@ function SearchAIActions() {
 const StorageKeyInput = '__ai_search_input'
 
 function SearchAIInput(props: ComponentProps<'form'>) {
-  const { status, sendMessage, stop } = useChatContext()
+  const { status, sendMessage, stop, messages } = useChatContext()
   const { clippy } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
-  const isLoading = status === 'streaming' || status === 'submitted'
+  const hasPendingToolInput = messages.some((message) =>
+    message.parts?.some(
+      (part) => isToolUIPart(part) && part.state === 'input-available'
+    )
+  )
+  const isLoading =
+    status === 'streaming' || status === 'submitted' || hasPendingToolInput
   const saveInput = useDebounceCallback(
     (value: string) => localStorage.setItem(StorageKeyInput, value),
     300
@@ -174,6 +183,9 @@ function SearchAIInput(props: ComponentProps<'form'>) {
 
   const onStart = async (event?: SyntheticEvent) => {
     event?.preventDefault()
+    if (hasPendingToolInput) {
+      return
+    }
     if (clippy) {
       clippy.stopCurrent()
       clippy.play(animations.submit)
@@ -238,7 +250,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
                 'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-4',
             })
           )}
-          disabled={input.length === 0}
+          disabled={input.length === 0 || hasPendingToolInput}
           type='submit'
         >
           <ArrowUpIcon />
@@ -350,15 +362,6 @@ function MessageList({
   )
 }
 
-function isContactFormPart(part: unknown): part is ContactFormPart {
-  return (
-    typeof part === 'object' &&
-    part !== null &&
-    'type' in part &&
-    part.type === 'data-contact-form'
-  )
-}
-
 const Message = memo(function Message({
   message,
   isInProgress,
@@ -389,12 +392,32 @@ const Message = memo(function Message({
               </div>
             )
           }
-          if (isContactFormPart(part)) {
+          if (part.type === 'tool-showContactForm') {
+            const isSubmitted = part.state === 'output-available'
+            const submittedData =
+              isSubmitted &&
+              part.output?.success &&
+              part.output.name &&
+              part.output.email &&
+              part.output.message
+                ? {
+                    name: part.output.name,
+                    email: part.output.email,
+                    message: part.output.message,
+                  }
+                : undefined
+
+            if (!isSubmitted && part.state !== 'input-available') {
+              return <AIContactFormSkeleton key={part.toolCallId} />
+            }
+
             return (
               <AIContactForm
-                formId={`${message.id}-form-${idx}`}
-                key={`${message.id}-form-${idx}`}
-                prefill={part.data.prefill}
+                isSubmitted={isSubmitted}
+                key={part.toolCallId}
+                prefill={part.input?.prefill ?? undefined}
+                submittedData={submittedData}
+                toolCallId={part.toolCallId}
               />
             )
           }

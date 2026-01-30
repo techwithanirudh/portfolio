@@ -3,8 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { CheckCircle, Loader2, Send } from 'lucide-react'
-import { useEffect } from 'react'
-import { useLocalStorage } from 'usehooks-ts'
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/ai/chat'
 import { Icons } from '@/components/icons/icons'
@@ -18,27 +16,46 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
 interface AIContactFormProps {
-  formId: string
+  toolCallId: string
   prefill?: Partial<Contact>
+  isSubmitted: boolean
+  submittedData?: Contact
 }
 
-export function AIContactForm({ formId, prefill }: AIContactFormProps) {
-  const { sendMessage } = useChatContext()
-  const [wasSubmitted, setWasSubmitted] = useLocalStorage(
-    `__ai_contact_submitted_${formId}`,
-    false
-  )
+export function AIContactForm({
+  toolCallId,
+  prefill,
+  isSubmitted,
+  submittedData,
+}: AIContactFormProps) {
+  const { addToolOutput, sendMessage } = useChatContext()
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
     zodResolver(ContactSchema),
     {
-      actionProps: {},
+      actionProps: {
+        onSuccess: () => {
+          const { name, email, message } = form.getValues()
+          addToolOutput({
+            tool: 'showContactForm',
+            toolCallId,
+            output: {
+              success: true,
+              name,
+              email,
+              message,
+            },
+          })
+          sendMessage()
+        },
+      },
       formProps: {
         mode: 'onBlur',
         defaultValues: {
@@ -52,30 +69,49 @@ export function AIContactForm({ formId, prefill }: AIContactFormProps) {
   )
 
   const isExecuting = action.status === 'executing'
-  const hasSucceeded = action.status === 'hasSucceeded' || wasSubmitted
 
-  useEffect(() => {
-    if (action.status === 'hasSucceeded' && !wasSubmitted) {
-      setWasSubmitted(true)
-      const { name, email, message } = form.getValues()
-      sendMessage(
-        { text: '(form submitted)' },
-        {
-          body: {
-            context: { name, email, message, toolName: 'showContactForm' },
-          },
-        }
-      )
-    }
-  }, [action.status, wasSubmitted, form])
-
-  if (hasSucceeded) {
+  if (isSubmitted && submittedData) {
     return (
-      <div className='flex items-center gap-2 rounded-md border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
-        <CheckCircle className='size-4 shrink-0' />
-        <p>message sent! anirudh will get back to you soon.</p>
+      <div className='flex flex-col gap-2 rounded-md border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
+        <div className='flex items-center gap-2'>
+          <CheckCircle className='size-4 shrink-0' />
+          <p>message sent! anirudh will get back to you soon.</p>
+        </div>
+        <div className='mt-1 space-y-1 text-xs opacity-80'>
+          <p>
+            <span className='font-medium'>from:</span> {submittedData.name} (
+            {submittedData.email})
+          </p>
+          <p>
+            <span className='font-medium'>message:</span>{' '}
+            {submittedData.message}
+          </p>
+        </div>
       </div>
     )
+  }
+
+  if (isSubmitted && !submittedData) {
+    return (
+      <div className='flex flex-col gap-2 rounded-md border border-muted-foreground/30 border-dashed bg-muted/40 p-3 text-muted-foreground text-sm'>
+        <div className='flex items-center gap-2'>
+          <CheckCircle className='size-4 shrink-0' />
+          <p>message canceled. you can keep chatting.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const handleCancel = () => {
+    addToolOutput({
+      tool: 'showContactForm',
+      toolCallId,
+      output: {
+        success: false,
+        reason: 'user canceled the form',
+      },
+    })
+    sendMessage()
   }
 
   return (
@@ -157,25 +193,61 @@ export function AIContactForm({ formId, prefill }: AIContactFormProps) {
           </div>
         )}
 
-        <Button
-          className='h-8 gap-1.5 text-sm'
-          disabled={isExecuting}
-          size='sm'
-          type='submit'
-        >
-          {isExecuting ? (
-            <>
-              <Loader2 className='size-3.5 animate-spin' />
-              sending...
-            </>
-          ) : (
-            <>
-              <Send className='size-3.5' />
-              send message
-            </>
-          )}
-        </Button>
+        <div className='flex items-center gap-2'>
+          <Button
+            className='h-8 flex-1 gap-1.5 text-sm'
+            disabled={isExecuting}
+            size='sm'
+            type='submit'
+          >
+            {isExecuting ? (
+              <>
+                <Loader2 className='size-3.5 animate-spin' />
+                sending...
+              </>
+            ) : (
+              <>
+                <Send className='size-3.5' />
+                send message
+              </>
+            )}
+          </Button>
+          <Button
+            className='h-8 text-sm'
+            disabled={isExecuting}
+            onClick={handleCancel}
+            size='sm'
+            type='button'
+            variant='secondary'
+          >
+            cancel
+          </Button>
+        </div>
       </form>
     </Form>
+  )
+}
+
+export function AIContactFormSkeleton() {
+  return (
+    <div className='flex flex-col gap-3 rounded-md border border-dashed p-3'>
+      <Skeleton className='h-3 w-48' />
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-12' />
+        <Skeleton className='h-8 w-full' />
+      </div>
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-14' />
+        <Skeleton className='h-8 w-full' />
+      </div>
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-16' />
+        <Skeleton className='h-20 w-full' />
+      </div>
+      <div className='flex items-center gap-2'>
+        <Skeleton className='h-8 w-28 flex-1' />
+        <Skeleton className='h-8 w-20' />
+      </div>
+    </div>
   )
 }

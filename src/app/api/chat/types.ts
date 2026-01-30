@@ -1,32 +1,15 @@
-import type { UIMessage } from 'ai'
+import type { InferUITools, UIDataTypes, UIMessage } from 'ai'
+import type { tools } from './utils/tools'
 
-export type ContactFormStatus = 'idle' | 'submitting' | 'success' | 'error'
+export type ChatTools = InferUITools<typeof tools>
 
-export interface ContactFormPart {
-  type: 'data-contact-form'
-  id: string
-  data: {
-    status: ContactFormStatus
-    prefill?: { name?: string; email?: string; message?: string }
-    error?: string
-  }
-}
-
-export interface ContextPart {
-  type: 'data-context'
-  id: string
-  data: Record<string, unknown>
-}
-
-export type MyUIMessage = UIMessage & {
+export type MyUIMessage = UIMessage<never, UIDataTypes, ChatTools> & {
   parts: Array<
-    | UIMessage['parts'][number]
+    | UIMessage<never, UIDataTypes, ChatTools>['parts'][number]
     | {
         type: 'source-url'
         url: string
         title: string
       }
-    | ContactFormPart
-    | ContextPart
   >
 }

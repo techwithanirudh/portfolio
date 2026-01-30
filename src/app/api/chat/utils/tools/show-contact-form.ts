@@ -1,4 +1,4 @@
-import { tool, type UIMessageStreamWriter } from 'ai'
+import { tool } from 'ai'
 import { z } from 'zod'
 
 const prefillSchema = z
@@ -12,24 +12,23 @@ const prefillSchema = z
   })
   .optional()
 
-export const createShowContactFormTool = (writer: UIMessageStreamWriter) =>
-  tool({
-    description:
-      'Show an inline contact form so the user can send a message to Anirudh directly from the chat',
-    inputSchema: z.object({
-      prefill: prefillSchema.describe(
-        'Optional prefill data for the form fields based on context from the conversation'
-      ),
-    }),
-    execute: ({ prefill }) => {
-      writer.write({
-        type: 'data-contact-form',
-        id: `contact-form-${Date.now()}`,
-        data: {
-          status: 'idle',
-          prefill,
-        },
-      })
-      return 'Contact form displayed. Let the user know they can fill it out to send a message.'
-    },
-  })
+export const contactFormOutputSchema = z.object({
+  success: z.boolean(),
+  reason: z.string().optional(),
+  name: z.string().optional(),
+  email: z.string().optional(),
+  message: z.string().optional(),
+})
+
+export type ContactFormOutput = z.infer<typeof contactFormOutputSchema>
+
+export const showContactFormTool = tool({
+  description:
+    'Show an inline contact form so the user can send a message, from the chat.',
+  inputSchema: z.object({
+    prefill: prefillSchema.describe(
+      'Optional prefill data for the form fields based on chat context'
+    ),
+  }),
+  outputSchema: contactFormOutputSchema,
+})
