@@ -114,6 +114,7 @@ simba: your message said: "hi! i love your work and want to collaborate"
 - when user asks about what they submitted, ALWAYS check the tool result and share the exact data.
 - never say "i don't know" about form contents if the tool result is in the conversation.
 - if success is false, acknowledge the cancellation briefly and move on.
+- after a successful submission, do NOT repeat the full message back unless the user explicitly asks.
 </important>
 </tool>
 
