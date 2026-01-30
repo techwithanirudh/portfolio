@@ -44,7 +44,7 @@ export const Header = ({ page, tags }: HeaderProps) => {
           />
           <motion.div
             animate={{ opacity: 1 }}
-            className='relative z-0 mt-auto p-8 md:p-16'
+            className='relative z-5 mt-auto p-8 md:p-16'
             initial={{ opacity: 0 }}
             transition={{ delay: 0.3, duration: 0.3 }}
           >
@@ -85,17 +85,17 @@ export const Header = ({ page, tags }: HeaderProps) => {
 
 const FrameDecoration = () => (
   <>
-    <span className='absolute top-6 z-0 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12' />
-    <span className='absolute bottom-6 z-0 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12' />
-    <span className='absolute left-6 z-0 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12' />
-    <span className='absolute right-6 z-0 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12' />
-    <span className='absolute top-12 left-[44.5px] z-1 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute top-[44.5px] left-[48px] z-1 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute top-12 right-[44.5px] z-1 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute top-[44.5px] right-[48px] z-1 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute bottom-12 left-[44.5px] z-1 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute bottom-[44.5px] left-[48px] z-1 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute right-[44.5px] bottom-12 z-1 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute right-[48px] bottom-[44.5px] z-1 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute top-6 z-4 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12' />
+    <span className='absolute bottom-6 z-4 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12' />
+    <span className='absolute left-6 z-4 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12' />
+    <span className='absolute right-6 z-4 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12' />
+    <span className='absolute top-12 left-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute top-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute top-12 right-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute top-[44.5px] right-[48px] z-5 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute bottom-12 left-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute bottom-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute right-[44.5px] bottom-12 z-5 hidden h-px w-2 bg-white md:block' />
+    <span className='absolute right-[48px] bottom-[44.5px] z-5 hidden h-2 w-px bg-white md:block' />
   </>
 )
