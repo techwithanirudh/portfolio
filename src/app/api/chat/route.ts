@@ -72,7 +72,11 @@ export async function POST(request: Request) {
             delayInMs: 20,
             chunking: 'line',
           }),
-          stopWhen: stepCountIs(10)
+          experimental_telemetry: {
+            isEnabled: true,
+            functionId: 'portfolio-chat',
+          },
+          stopWhen: stepCountIs(10),
         })
 
         writer.merge(

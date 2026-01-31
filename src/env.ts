@@ -33,6 +33,10 @@ export const env = createEnv({
     GITHUB_TOKEN: z.string().min(1).startsWith('github_pat_'),
     // OpenAI
     OPENAI_API_KEY: z.string().min(1),
+    // Langfuse
+    LANGFUSE_SECRET_KEY: z.string().min(1).startsWith('sk-lf-').optional(),
+    LANGFUSE_PUBLIC_KEY: z.string().min(1).startsWith('pk-lf-').optional(),
+    LANGFUSE_BASE_URL: z.url().optional(),
   },
 
   client: {
