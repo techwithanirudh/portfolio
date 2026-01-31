@@ -2,6 +2,7 @@ import { type ToolSet, tool } from 'ai'
 import { z } from 'zod'
 import { getPageContent } from './get-page-content'
 import { showContactFormTool } from './show-contact-form'
+import { webSearchTool } from './web-search'
 
 const searchDocsToolType = tool({
   description: 'Search the portfolio content',
@@ -18,4 +19,5 @@ export const tools = {
   getPageContent,
   showContactForm: showContactFormTool,
   searchDocs: searchDocsToolType,
+  webSearch: webSearchTool,
 } satisfies ToolSet

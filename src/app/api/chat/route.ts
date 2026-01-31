@@ -16,6 +16,7 @@ import { systemPrompt } from './utils/prompts'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
+import { webSearchTool } from './utils/tools/web-search'
 
 export async function POST(request: Request) {
   try {
@@ -65,6 +66,7 @@ export async function POST(request: Request) {
             searchDocs: createSearchDocsTool(writer),
             getPageContent,
             showContactForm: showContactFormTool,
+            webSearch: webSearchTool,
           },
           messages: modelMessages,
           toolChoice: 'auto',
