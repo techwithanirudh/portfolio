@@ -58,7 +58,7 @@ export const MdxContent = ({
     {comments && slug ? (
       <PostComments
         className={cn(
-          '[&_form>div]:!rounded-none rounded-none border-0 border-border border-t border-dashed',
+          '[&_form>div]:!rounded-none rounded-none border-0 border-border border-t border-b border-dashed lg:border-b-0',
           commentsClassName
         )}
         slug={slug}
