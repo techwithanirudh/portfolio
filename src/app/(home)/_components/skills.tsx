@@ -1,7 +1,6 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
-import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import { SectionHeader } from '@/components/sections/section-header'
 import { Badge } from '@/components/ui/badge'

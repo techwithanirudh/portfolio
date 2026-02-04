@@ -1,6 +1,6 @@
 import { BrainCircuitIcon, Code2Icon, LayersIcon } from 'lucide-react'
-import type { Skill } from '@/types'
 import { Icons } from '@/components/icons/icons'
+import type { Skill } from '@/types'
 
 export const skills: Skill[] = [
   {

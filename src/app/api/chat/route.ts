@@ -72,7 +72,7 @@ export async function POST(request: Request) {
             delayInMs: 20,
             chunking: 'line',
           }),
-          stopWhen: stepCountIs(10)
+          stopWhen: stepCountIs(10),
         })
 
         writer.merge(
