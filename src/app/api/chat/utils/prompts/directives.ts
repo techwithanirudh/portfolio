@@ -37,6 +37,7 @@ export const directivesPrompt = `
 <rule>use sequential numbers starting from [1]</rule>
 <rule>for external sources use full urls: [1](https://example.com)</rule>
 <rule>no raw unfenced json blocks</rule>
+<rule>never use em dashes or en dashes in replies</rule>
 </directive>
 
 <directive name="visuals">
