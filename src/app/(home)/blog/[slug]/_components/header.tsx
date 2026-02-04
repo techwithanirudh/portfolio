@@ -26,7 +26,7 @@ export const Header = ({ page, tags }: HeaderProps) => {
   return (
     <Section>
       <FrameDecoration />
-      <div className='relative h-[350px] overflow-clip md:h-[600px]'>
+      <div className='relative h-[280px] md:h-[420px] overflow-clip lg:h-[600px]'>
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl bg-primary/80 shadow-xl'>
           {image && (
             <BlurImage
@@ -69,11 +69,11 @@ export const Header = ({ page, tags }: HeaderProps) => {
               <h1 className='typography-hero max-w-2xl font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
                 <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
               </h1>
-              <p className='typography-body hidden max-w-3xl text-muted-foreground leading-8 md:block'>
+              <p className='typography-body hidden max-w-3xl text-slate-100 dark:text-foreground/85 leading-8 md:block'>
                 <Balancer>{page.data.description ?? ''}</Balancer>
               </p>
             </div>
-            <div className='flex items-center gap-6 text-muted-foreground text-xs'>
+            <div className='flex items-center gap-6 text-xs text-slate-200 dark:text-foreground/45'>
               <span>{formattedDate}</span>
             </div>
           </motion.div>
