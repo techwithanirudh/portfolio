@@ -24,7 +24,7 @@ export const directivesPrompt = `
 3. use searchDocs to find relevant pages
 4. use getPageContent to fetch the actual content
 5. if content is missing or incomplete, refuse honestly
-6. summarize the verified content concisely with citations
+6. summarize the verified content concisely with citations and a playful doggie tone
 </steps>
 </directive>
 
