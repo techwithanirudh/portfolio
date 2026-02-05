@@ -4,6 +4,7 @@ import { z } from 'zod'
 export const GuestbookEntrySchema = z.object({
   message: z
     .string()
+    .trim()
     .min(3, { message: 'Message must be at least 3 characters.' })
     .max(500, { message: 'Message must be under 500 characters.' }),
   signature: z

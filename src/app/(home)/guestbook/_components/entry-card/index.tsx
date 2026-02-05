@@ -11,7 +11,10 @@ import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
+import {
+  GuestbookEntrySchema,
+  type GuestbookEntryItem,
+} from '@/lib/validators/guestbook'
 import {
   banGuestbookUser,
   editGuestbookEntry,
@@ -89,9 +92,17 @@ export const GuestbookEntryCard = ({
 
     const trimmedMessage = draftMessage.trim()
     const originalMessage = message.trim()
-
     const disabled =
       trimmedMessage.length === 0 || trimmedMessage === originalMessage
+
+    const validation = GuestbookEntrySchema.safeParse({
+      message: trimmedMessage,
+    })
+
+    if (!validation.success) {
+      toast.error(validation.error.issues[0]?.message ?? 'Invalid message.')
+      return
+    }
 
     if (isBusy || disabled) {
       toast.error('No changes to save or message is empty.')
@@ -197,10 +208,10 @@ export const GuestbookEntryCard = ({
         <Image
           alt={`Signature by ${entry.name}`}
           className='absolute right-6 bottom-6 rounded border border-border border-dashed dark:invert'
-          height={48}
+          height={72}
           src={entry.signature}
           unoptimized
-          width={100}
+          width={160}
         />
       ) : null}
       {deleteAction.result.serverError ? (
