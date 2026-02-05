@@ -33,6 +33,7 @@ export const env = createEnv({
     GITHUB_TOKEN: z.string().min(1).startsWith('github_pat_'),
     // OpenAI
     OPENAI_API_KEY: z.string().min(1),
+    GOOGLE_GENERATIVE_AI_API_KEY: z.string().min(1),
     // Vercel Blob
     BLOB_READ_WRITE_TOKEN: z.string().min(1),
   },

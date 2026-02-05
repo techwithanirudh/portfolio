@@ -4,6 +4,7 @@ import { put } from '@vercel/blob'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
 import { headers } from 'next/headers'
+import { parseB64File } from '@/lib/files'
 import { ActionError, actionClient } from '@/lib/safe-action/client'
 import type { ActionContext } from '@/lib/safe-action/middleware'
 import { botIdMiddleware, userMiddleware } from '@/lib/safe-action/middleware'
@@ -24,8 +25,6 @@ import { db } from '@/server/db'
 import { deleteGuestbookEntry } from '@/server/db/queries/guestbook'
 import { guestbookEntries, guestbookReactions, users } from '@/server/db/schema'
 import { moderateGuestbookEntry } from './utils/moderation'
-
-const BASE64_PNG_PREFIX = /^data:image\/png;base64,/
 
 const protectedGuestbookAction = actionClient
   .use(botIdMiddleware)
@@ -56,8 +55,13 @@ export const createGuestbookEntry = protectedGuestbookAction
       let signatureUrl: string | null = null
 
       if (parsedInput.signature) {
-        const base64Data = parsedInput.signature.replace(BASE64_PNG_PREFIX, '')
-        const buffer = Buffer.from(base64Data, 'base64')
+        const parsedSignature = parseB64File(parsedInput.signature)
+
+        if (!parsedSignature || parsedSignature.mediaType !== 'image/png') {
+          throw new ActionError('Signature must be a PNG data URL.')
+        }
+
+        const buffer = Buffer.from(parsedSignature.data, 'base64')
         const blob = await put(
           `guestbook/signatures/${user.id}-${Date.now()}.png`,
           buffer,
@@ -219,6 +223,7 @@ export const banGuestbookUser = protectedGuestbookAction
       const [targetUser] = await db
         .select({
           role: users.role,
+          banned: users.banned,
         })
         .from(users)
         .where(eq(users.id, parsedInput.userId))
@@ -232,13 +237,32 @@ export const banGuestbookUser = protectedGuestbookAction
         throw new ActionError('Admin accounts cannot be banned from here.')
       }
 
-      await auth.api.banUser({
-        body: {
-          userId: parsedInput.userId,
-          banReason: 'Banned by an admin from the guestbook.',
-        },
-        headers: await headers(),
-      })
+      if (parsedInput.action === 'ban') {
+        if (targetUser.banned) {
+          throw new ActionError('This user is already banned.')
+        }
+
+        await auth.api.banUser({
+          body: {
+            userId: parsedInput.userId,
+            banReason: 'Banned by an admin from the guestbook.',
+          },
+          headers: await headers(),
+        })
+      }
+
+      if (parsedInput.action === 'unban') {
+        if (!targetUser.banned) {
+          throw new ActionError('This user is not banned.')
+        }
+
+        await auth.api.unbanUser({
+          body: {
+            userId: parsedInput.userId,
+          },
+          headers: await headers(),
+        })
+      }
 
       revalidatePath('/guestbook')
       updateTag('guestbook')

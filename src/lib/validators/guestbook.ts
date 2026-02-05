@@ -31,6 +31,7 @@ export const GuestbookEditSchema = GuestbookEntrySchema.merge(
 export const GuestbookDeleteSchema = GuestbookEntryIdSchema
 export const GuestbookBanUserSchema = z.object({
   userId: z.string().min(1),
+  action: z.enum(['ban', 'unban']),
 })
 
 export const GuestbookModerationInputSchema = GuestbookEntrySchema.pick({
@@ -57,6 +58,7 @@ export const GuestbookEntryItemSchema = z.object({
   signature: z.string().nullable(),
   userId: z.string(),
   role: z.string(),
+  banned: z.boolean(),
   createdAt: z.string(),
   editedAt: z.string().nullable(),
   reactions: z.array(GuestbookReactionItemSchema),

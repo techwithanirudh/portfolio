@@ -16,8 +16,11 @@ import {
   banGuestbookUser,
   editGuestbookEntry,
   removeGuestbookEntry,
-} from '../actions/guestbook'
-import { GuestbookReactions } from './reactions'
+} from '../../actions/guestbook'
+import { GuestbookReactions } from '../reactions'
+import { EntryCardActions } from './actions'
+import { BanUserModal } from './ban-user-modal'
+import { DeleteEntryModal } from './delete-entry-modal'
 
 interface GuestbookEntryCardProps {
   entry: GuestbookEntryItem
@@ -35,6 +38,8 @@ export const GuestbookEntryCard = ({
   const router = useRouter()
   const [isEditing, setIsEditing] = useState(false)
   const [draftMessage, setDraftMessage] = useState(entry.message)
+  const [isBanModalOpen, setIsBanModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const editAction = useAction(editGuestbookEntry, {
     onSuccess: () => {
@@ -45,14 +50,18 @@ export const GuestbookEntryCard = ({
   const deleteAction = useAction(removeGuestbookEntry, {
     onSuccess: () => {
       setIsEditing(false)
+      setIsDeleteModalOpen(false)
       router.refresh()
     },
   })
   const banAction = useAction(banGuestbookUser, {
     onSuccess: () => {
       setIsEditing(false)
+      setIsBanModalOpen(false)
       router.refresh()
-      toast.success(`Banned ${entry.name}.`)
+      toast.success(
+        entry.banned ? `Unbanned ${entry.name}.` : `Banned ${entry.name}.`
+      )
     },
   })
 
@@ -100,7 +109,10 @@ export const GuestbookEntryCard = ({
 
   const banUser = () => {
     setIsEditing(false)
-    banAction.execute({ userId: entry.userId })
+    banAction.execute({
+      userId: entry.userId,
+      action: entry.banned ? 'unban' : 'ban',
+    })
   }
 
   return (
@@ -123,46 +135,16 @@ export const GuestbookEntryCard = ({
             {editedLabel}
           </p>
         </div>
-        {canEdit || canBan ? (
-          <div className='flex items-center'>
-            {canEdit ? (
-              <>
-                <Button
-                  aria-label='Edit entry'
-                  className='rounded-none'
-                  disabled={isBusy || isEditing}
-                  onClick={startEditing}
-                  size='icon'
-                  variant='ghost'
-                >
-                  <Icons.pencil className='size-4' />
-                </Button>
-                <Button
-                  aria-label='Delete entry'
-                  className='rounded-none text-destructive'
-                  disabled={isBusy || isEditing}
-                  onClick={deleteEntry}
-                  size='icon'
-                  variant='ghost'
-                >
-                  <Icons.trash className='size-4' />
-                </Button>
-              </>
-            ) : null}
-            {canBan ? (
-              <Button
-                aria-label='Ban user'
-                className='rounded-none text-destructive'
-                disabled={isBusy}
-                onClick={banUser}
-                size='icon'
-                variant='ghost'
-              >
-                <Icons.warning className='size-4' />
-              </Button>
-            ) : null}
-          </div>
-        ) : null}
+        <EntryCardActions
+          canBan={canBan}
+          canEdit={canEdit}
+          isBanned={entry.banned}
+          isBusy={isBusy}
+          isEditing={isEditing}
+          onBanModalOpen={() => setIsBanModalOpen(true)}
+          onDeleteModalOpen={() => setIsDeleteModalOpen(true)}
+          onEdit={startEditing}
+        />
       </div>
       {isEditing ? (
         <div className='space-y-3'>
@@ -231,6 +213,21 @@ export const GuestbookEntryCard = ({
           {banAction.result.serverError}
         </p>
       ) : null}
+      <BanUserModal
+        isBanned={entry.banned}
+        isBusy={isBusy}
+        isOpen={isBanModalOpen}
+        name={entry.name}
+        onConfirm={banUser}
+        onOpenChange={setIsBanModalOpen}
+      />
+      <DeleteEntryModal
+        isBusy={isBusy}
+        isOpen={isDeleteModalOpen}
+        name={entry.name}
+        onConfirm={deleteEntry}
+        onOpenChange={setIsDeleteModalOpen}
+      />
     </div>
   )
 }

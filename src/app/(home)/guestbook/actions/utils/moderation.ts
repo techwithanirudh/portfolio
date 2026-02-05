@@ -1,7 +1,7 @@
-import { openai } from '@ai-sdk/openai'
 import { generateText, Output, type UserContent } from 'ai'
-import { parseBase64DataUrl } from '@/lib/base64-data-url'
 import { guestbookModerationPrompt } from '@/lib/ai/prompts/moderation'
+import { provider } from '@/lib/ai/providers'
+import { parseB64File } from '@/lib/files'
 import { GuestbookModerationResultSchema } from '@/lib/validators'
 
 export interface ModerateGuestbookEntryInput {
@@ -17,30 +17,30 @@ export const moderateGuestbookEntry = async (
   const userContent: UserContent = [
     {
       type: 'text',
-      text: `Moderate this guestbook entry:\n\nMessage:\n${message}`,
+      text: `Moderate this guestbook entry:\n\nMessage:\n${message}. If a signature image is included, also moderate the content of the signature.`,
     },
   ]
 
   if (signature) {
-    userContent.push({
-      type: 'text',
-      text: 'A signature image is attached. Analyze the image content for safety.',
-    })
+    const parsedSignature = parseB64File(signature)
 
-    const parsedSignature = parseBase64DataUrl(signature)
-
-    if (parsedSignature) {
-      userContent.push({
-        type: 'image',
-        image: parsedSignature.data,
-        mediaType: parsedSignature.mediaType,
-      })
+    if (!parsedSignature) {
+      return {
+        allowed: false,
+        reason: 'Signature format is invalid.',
+      }
     }
+
+    userContent.push({
+      type: 'image',
+      image: parsedSignature.data,
+      mediaType: parsedSignature.mediaType,
+    })
   }
 
   try {
     const { output } = await generateText({
-      model: openai('gpt-5-mini'),
+      model: provider.languageModel('moderation-model'),
       system: guestbookModerationPrompt,
       output: Output.object({
         schema: GuestbookModerationResultSchema,
@@ -54,7 +54,7 @@ export const moderateGuestbookEntry = async (
     })
 
     return output
-  } catch {
+  } catch (_error) {
     return {
       allowed: false,
       reason: 'Could not verify content safety. Please try again.',

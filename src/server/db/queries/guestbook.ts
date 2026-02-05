@@ -17,6 +17,7 @@ const fetchGuestbookEntries = async (
       signature: guestbookEntries.signature,
       userId: guestbookEntries.userId,
       role: users.role,
+      banned: users.banned,
       createdAt: guestbookEntries.createdAt,
       editedAt: guestbookEntries.editedAt,
       // Reactions
@@ -39,6 +40,7 @@ const fetchGuestbookEntries = async (
       guestbookEntries.signature,
       guestbookEntries.userId,
       users.role,
+      users.banned,
       guestbookEntries.createdAt,
       guestbookEntries.editedAt,
       guestbookReactions.emoji
@@ -56,6 +58,7 @@ const fetchGuestbookEntries = async (
         signature: row.signature ?? null,
         userId: row.userId,
         role: row.role,
+        banned: row.banned ?? false,
         createdAt: row.createdAt,
         editedAt: row.editedAt,
         reactions: [],
