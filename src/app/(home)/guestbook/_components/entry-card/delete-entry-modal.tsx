@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -23,6 +24,8 @@ export const DeleteEntryModal = ({
   onConfirm,
   onOpenChange,
 }: DeleteEntryModalProps) => {
+  const actionLabel = isBusy ? 'Deleting...' : 'Delete entry'
+
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
       <DialogContent>
@@ -46,7 +49,8 @@ export const DeleteEntryModal = ({
             type='button'
             variant='destructive'
           >
-            Delete entry
+            {isBusy ? <Loader2 className='size-4 animate-spin' /> : null}
+            {actionLabel}
           </Button>
         </DialogFooter>
       </DialogContent>
