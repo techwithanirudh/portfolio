@@ -9,9 +9,7 @@ export interface ModerateGuestbookEntryInput {
   signature?: string
 }
 
-export const moderateGuestbookEntry = async (
-  input: ModerateGuestbookEntryInput
-) => {
+export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
   const { message, signature } = input
 
   const userContent: UserContent = [

@@ -24,7 +24,7 @@ import { auth } from '@/server/auth'
 import { db } from '@/server/db'
 import { deleteGuestbookEntry } from '@/server/db/queries/guestbook'
 import { guestbookEntries, guestbookReactions, users } from '@/server/db/schema'
-import { moderateGuestbookEntry } from './utils/moderation'
+import { moderateEntry } from './utils/moderation'
 
 const protectedGuestbookAction = actionClient
   .use(botIdMiddleware)
@@ -43,7 +43,7 @@ export const createGuestbookEntry = protectedGuestbookAction
       const { user } = ctx
       const name = user.name ?? 'Guest'
 
-      const moderation = await moderateGuestbookEntry({
+      const moderation = await moderateEntry({
         message: parsedInput.message,
         signature: parsedInput.signature,
       })
@@ -142,6 +142,15 @@ export const editGuestbookEntry = protectedGuestbookAction
     }) => {
       const { user } = ctx
       const isAdmin = user.role === 'admin'
+
+      const moderation = await moderateEntry({
+        message: parsedInput.message,
+        signature: undefined,
+      })
+
+      if (!moderation.allowed) {
+        throw new ActionError(moderation.reason)
+      }
 
       const updated = await db
         .update(guestbookEntries)
