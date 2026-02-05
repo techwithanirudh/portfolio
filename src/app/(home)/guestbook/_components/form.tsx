@@ -158,7 +158,7 @@ export const GuestbookForm = () => {
               </Button>
               <Button className='flex-1' disabled={isExecuting} type='submit'>
                 {isExecuting ? (
-                  <Icons.spinner className='mr-2 size-4 animate-spin' />
+                  <Icons.spinner className='size-4 animate-spin' />
                 ) : null}
                 Submit
               </Button>

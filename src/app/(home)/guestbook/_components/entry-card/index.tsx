@@ -163,7 +163,7 @@ export const GuestbookEntryCard = ({
               type='button'
             >
               {editAction.status === 'executing' ? (
-                <Icons.spinner className='mr-2 size-4 animate-spin' />
+                <Icons.spinner className='size-4 animate-spin' />
               ) : null}
               Save
             </Button>
