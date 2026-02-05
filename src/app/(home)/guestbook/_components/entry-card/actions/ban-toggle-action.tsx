@@ -1,5 +1,10 @@
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 interface BanToggleActionButtonProps {
   disabled: boolean
@@ -13,19 +18,24 @@ export const BanToggleActionButton = ({
   onClick,
 }: BanToggleActionButtonProps) => {
   return (
-    <Button
-      aria-label={isBanned ? 'Unban user' : 'Ban user'}
-      className='rounded-none text-destructive'
-      disabled={disabled}
-      onClick={onClick}
-      size='icon'
-      variant='ghost'
-    >
-      {isBanned ? (
-        <Icons.check className='size-4' />
-      ) : (
-        <Icons.warning className='size-4' />
-      )}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          aria-label={isBanned ? 'Unban user' : 'Ban user'}
+          className='rounded-none text-destructive'
+          disabled={disabled}
+          onClick={onClick}
+          size='icon'
+          variant='ghost'
+        >
+          {isBanned ? (
+            <Icons.check className='size-4' />
+          ) : (
+            <Icons.warning className='size-4' />
+          )}
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>{isBanned ? 'Unban user' : 'Ban user'}</TooltipContent>
+    </Tooltip>
   )
 }

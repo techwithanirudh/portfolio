@@ -1,5 +1,10 @@
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 interface DeleteActionButtonProps {
   disabled: boolean
@@ -11,15 +16,20 @@ export const DeleteActionButton = ({
   onClick,
 }: DeleteActionButtonProps) => {
   return (
-    <Button
-      aria-label='Delete entry'
-      className='rounded-none text-destructive'
-      disabled={disabled}
-      onClick={onClick}
-      size='icon'
-      variant='ghost'
-    >
-      <Icons.trash className='size-4' />
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          aria-label='Delete entry'
+          className='rounded-none text-destructive'
+          disabled={disabled}
+          onClick={onClick}
+          size='icon'
+          variant='ghost'
+        >
+          <Icons.trash className='size-4' />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>Delete entry</TooltipContent>
+    </Tooltip>
   )
 }

@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { Loader2 } from 'lucide-react'
 
 interface BanUserModalProps {
   isOpen: boolean
@@ -51,7 +52,8 @@ export const BanUserModal = ({
             type='button'
             variant='destructive'
           >
-            {isBanned ? 'Unban user' : 'Ban user'}
+            {isBusy ? <Loader2 className='animate-spin' /> : null}
+            {isBusy ? isBanned ? 'Unbanning...' : 'Banning...' : isBanned ? 'Unban user' : 'Ban user'}
           </Button>
         </DialogFooter>
       </DialogContent>
