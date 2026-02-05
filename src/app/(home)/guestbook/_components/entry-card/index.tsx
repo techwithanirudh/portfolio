@@ -40,6 +40,7 @@ export const GuestbookEntryCard = ({
   const [draftMessage, setDraftMessage] = useState(entry.message)
   const [isBanModalOpen, setIsBanModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isBanned, setIsBanned] = useState(entry.banned)
 
   const editAction = useAction(editGuestbookEntry, {
     onSuccess: () => {
@@ -58,10 +59,14 @@ export const GuestbookEntryCard = ({
     onSuccess: () => {
       setIsEditing(false)
       setIsBanModalOpen(false)
+      setIsBanned((previous) => {
+        const next = !previous
+        toast.success(
+          next ? `Banned ${entry.name}.` : `Unbanned ${entry.name}.`
+        )
+        return next
+      })
       router.refresh()
-      toast.success(
-        entry.banned ? `Unbanned ${entry.name}.` : `Banned ${entry.name}.`
-      )
     },
   })
 
@@ -111,7 +116,7 @@ export const GuestbookEntryCard = ({
     setIsEditing(false)
     banAction.execute({
       userId: entry.userId,
-      action: entry.banned ? 'unban' : 'ban',
+      action: isBanned ? 'unban' : 'ban',
     })
   }
 
@@ -138,7 +143,7 @@ export const GuestbookEntryCard = ({
         <EntryCardActions
           canBan={canBan}
           canEdit={canEdit}
-          isBanned={entry.banned}
+          isBanned={isBanned}
           isBusy={isBusy}
           isEditing={isEditing}
           onBanModalOpen={() => setIsBanModalOpen(true)}
@@ -214,7 +219,7 @@ export const GuestbookEntryCard = ({
         </p>
       ) : null}
       <BanUserModal
-        isBanned={entry.banned}
+        isBanned={isBanned}
         isBusy={isBusy}
         isOpen={isBanModalOpen}
         name={entry.name}
