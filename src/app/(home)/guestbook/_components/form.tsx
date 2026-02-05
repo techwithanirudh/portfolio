@@ -141,9 +141,6 @@ export const GuestbookForm = () => {
                 onClear={() => form.setValue('signature', undefined)}
                 ref={signaturePad}
               />
-              <FormDescription>
-                Draw your signature with your mouse or finger.
-              </FormDescription>
             </FormItem>
             <div className='flex gap-2'>
               <Button

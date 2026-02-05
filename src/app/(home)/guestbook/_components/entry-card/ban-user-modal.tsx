@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -7,7 +8,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Loader2 } from 'lucide-react'
 
 interface BanUserModalProps {
   isOpen: boolean
@@ -26,6 +26,16 @@ export const BanUserModal = ({
   onConfirm,
   onOpenChange,
 }: BanUserModalProps) => {
+  let actionLabel = 'Ban user'
+
+  if (isBanned) {
+    actionLabel = 'Unban user'
+  }
+
+  if (isBusy) {
+    actionLabel = isBanned ? 'Unbanning...' : 'Banning...'
+  }
+
   return (
     <Dialog onOpenChange={onOpenChange} open={isOpen}>
       <DialogContent>
@@ -53,7 +63,7 @@ export const BanUserModal = ({
             variant='destructive'
           >
             {isBusy ? <Loader2 className='animate-spin' /> : null}
-            {isBusy ? isBanned ? 'Unbanning...' : 'Banning...' : isBanned ? 'Unban user' : 'Ban user'}
+            {actionLabel}
           </Button>
         </DialogFooter>
       </DialogContent>
