@@ -10,9 +10,9 @@ import {
   streamText,
 } from 'ai'
 import { env } from '@/env'
+import { systemPrompt } from '@/lib/ai/prompts/chat'
 import type { MyUIMessage } from './types'
 import { getLLMsTxt } from './utils/llms'
-import { systemPrompt } from './utils/prompts'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'

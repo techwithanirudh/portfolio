@@ -1,4 +1,5 @@
 import {
+  adminClient,
   inferAdditionalFields,
   multiSessionClient,
 } from 'better-auth/client/plugins'
@@ -10,7 +11,11 @@ import type { auth } from '@/server/auth'
 // @see https://github.com/better-auth/better-auth/issues/1391
 export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
   {
-    plugins: [inferAdditionalFields<typeof auth>(), multiSessionClient()],
+    plugins: [
+      adminClient(),
+      inferAdditionalFields<typeof auth>(),
+      multiSessionClient(),
+    ],
     fetchOptions: {
       onError(e) {
         if (e.error.status === 429) {

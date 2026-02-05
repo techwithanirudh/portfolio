@@ -30,6 +30,16 @@ export const GuestbookEditSchema = GuestbookEntrySchema.merge(
 
 export const GuestbookDeleteSchema = GuestbookEntryIdSchema
 
+export const GuestbookModerationInputSchema = GuestbookEntrySchema.pick({
+  message: true,
+  signature: true,
+})
+
+export const GuestbookModerationResultSchema = z.object({
+  allowed: z.boolean(),
+  reason: z.string().min(1).max(120),
+})
+
 // Output schemas
 export const GuestbookReactionItemSchema = z.object({
   emoji: z.string(),
@@ -43,6 +53,7 @@ export const GuestbookEntryItemSchema = z.object({
   message: z.string(),
   signature: z.string().nullable(),
   userId: z.string(),
+  role: z.string(),
   createdAt: z.string(),
   editedAt: z.string().nullable(),
   reactions: z.array(GuestbookReactionItemSchema),
@@ -53,5 +64,11 @@ export type GuestbookEntry = z.infer<typeof GuestbookEntrySchema>
 export type GuestbookReaction = z.infer<typeof GuestbookReactionSchema>
 export type GuestbookEdit = z.infer<typeof GuestbookEditSchema>
 export type GuestbookDelete = z.infer<typeof GuestbookDeleteSchema>
+export type GuestbookModerationInput = z.infer<
+  typeof GuestbookModerationInputSchema
+>
+export type GuestbookModerationResult = z.infer<
+  typeof GuestbookModerationResultSchema
+>
 export type GuestbookReactionItem = z.infer<typeof GuestbookReactionItemSchema>
 export type GuestbookEntryItem = z.infer<typeof GuestbookEntryItemSchema>

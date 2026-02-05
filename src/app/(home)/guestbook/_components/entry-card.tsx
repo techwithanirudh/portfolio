@@ -1,6 +1,7 @@
 'use client'
 
 import { formatDistanceToNow } from 'date-fns'
+import { BadgeCheck } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
@@ -17,12 +18,14 @@ import { GuestbookReactions } from './reactions'
 interface GuestbookEntryCardProps {
   entry: GuestbookEntryItem
   currentUserId: string | null
+  isAdmin: boolean
   isSignedIn: boolean
 }
 
 export const GuestbookEntryCard = ({
   entry,
   currentUserId,
+  isAdmin,
   isSignedIn,
 }: GuestbookEntryCardProps) => {
   const router = useRouter()
@@ -42,7 +45,7 @@ export const GuestbookEntryCard = ({
     },
   })
 
-  const canEdit = !!currentUserId && currentUserId === entry.userId
+  const canEdit = !!currentUserId && (isAdmin || currentUserId === entry.userId)
   const editedLabel = entry.editedAt ? ' • Edited' : ''
   const isBusy =
     editAction.status === 'executing' || deleteAction.status === 'executing'
@@ -84,7 +87,15 @@ export const GuestbookEntryCard = ({
     <div className='relative grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'>
       <div className='flex flex-wrap items-start justify-between gap-3'>
         <div className='space-y-1'>
-          <h3 className='font-medium text-sm'>{entry.name}</h3>
+          <h3 className='flex items-center gap-1.5 font-medium text-sm'>
+            {entry.name}
+            {entry.role === 'admin' ? (
+              <BadgeCheck
+                aria-label='Verified admin'
+                className='size-4 text-primary'
+              />
+            ) : null}
+          </h3>
           <p className='text-muted-foreground text-xs'>
             {formatDistanceToNow(new Date(entry.createdAt), {
               addSuffix: true,

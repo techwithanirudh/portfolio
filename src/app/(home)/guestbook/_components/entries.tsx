@@ -9,12 +9,14 @@ import { GuestbookEntryCard } from './entry-card'
 interface GuestbookEntriesProps {
   currentUserId: string | null
   entries: GuestbookEntryItem[]
+  isAdmin: boolean
   isSignedIn: boolean
 }
 
 export const GuestbookEntries = ({
   currentUserId,
   entries,
+  isAdmin,
   isSignedIn,
 }: GuestbookEntriesProps) => {
   if (entries.length === 0) {
@@ -41,6 +43,7 @@ export const GuestbookEntries = ({
             <GuestbookEntryCard
               currentUserId={currentUserId}
               entry={entry}
+              isAdmin={isAdmin}
               isSignedIn={isSignedIn}
             />
           </ViewAnimation>

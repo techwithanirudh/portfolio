@@ -3,6 +3,7 @@
 import { put } from '@vercel/blob'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
+import { moderateGuestbookEntry } from './utils/moderation'
 
 import { ActionError, actionClient } from '@/lib/safe-action/client'
 import type { ActionContext } from '@/lib/safe-action/middleware'
@@ -40,6 +41,15 @@ export const createGuestbookEntry = protectedGuestbookAction
     }) => {
       const { user } = ctx
       const name = user.name ?? 'Guest'
+
+      const moderation = await moderateGuestbookEntry({
+        message: parsedInput.message,
+        signature: parsedInput.signature,
+      })
+
+      if (!moderation.allowed) {
+        throw new ActionError(moderation.reason)
+      }
 
       let signatureUrl: string | null = null
 
@@ -125,6 +135,7 @@ export const editGuestbookEntry = protectedGuestbookAction
       ctx: ActionContext
     }) => {
       const { user } = ctx
+      const isAdmin = user.role === 'admin'
 
       const updated = await db
         .update(guestbookEntries)
@@ -133,10 +144,12 @@ export const editGuestbookEntry = protectedGuestbookAction
           editedAt: new Date(),
         })
         .where(
-          and(
-            eq(guestbookEntries.id, parsedInput.entryId),
-            eq(guestbookEntries.userId, user.id)
-          )
+          isAdmin
+            ? eq(guestbookEntries.id, parsedInput.entryId)
+            : and(
+                eq(guestbookEntries.id, parsedInput.entryId),
+                eq(guestbookEntries.userId, user.id)
+              )
         )
         .returning({ id: guestbookEntries.id })
 
@@ -162,7 +175,12 @@ export const removeGuestbookEntry = protectedGuestbookAction
       ctx: ActionContext
     }) => {
       const { user } = ctx
-      const removed = await deleteGuestbookEntry(parsedInput.entryId, user.id)
+      const isAdmin = user.role === 'admin'
+      const removed = await deleteGuestbookEntry(
+        parsedInput.entryId,
+        user.id,
+        isAdmin
+      )
 
       if (!removed) {
         throw new ActionError('Unable to delete this message.')

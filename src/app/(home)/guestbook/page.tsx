@@ -17,6 +17,7 @@ import { GuestbookForm } from './_components/form'
 export default async function GuestbookPage() {
   const session = await getSession()
   const currentUserId = session?.user.id
+  const isAdmin = session?.user.role === 'admin'
   const entries = await getGuestbookEntries(currentUserId)
 
   return (
@@ -58,6 +59,7 @@ export default async function GuestbookPage() {
           <GuestbookEntries
             currentUserId={currentUserId ?? null}
             entries={entries}
+            isAdmin={isAdmin ?? false}
             isSignedIn={Boolean(currentUserId)}
           />
         </ViewAnimation>
