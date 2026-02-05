@@ -81,7 +81,7 @@ export const GuestbookEntryCard = ({
   }
 
   return (
-    <div className='grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'>
+    <div className='relative grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'>
       <div className='flex flex-wrap items-start justify-between gap-3'>
         <div className='space-y-1'>
           <h3 className='font-medium text-sm'>{entry.name}</h3>
@@ -155,19 +155,7 @@ export const GuestbookEntryCard = ({
           ) : null}
         </div>
       ) : (
-        <>
-          <p className='text-muted-foreground text-sm'>{entry.message}</p>
-          {entry.signature ? (
-            <Image
-              alt={`Signature by ${entry.name}`}
-              className='mt-2 rounded border border-border p-2 dark:invert'
-              height={96}
-              src={entry.signature}
-              unoptimized
-              width={200}
-            />
-          ) : null}
-        </>
+        <p className='text-muted-foreground text-sm'>{entry.message}</p>
       )}
       {isEditing ? null : (
         <GuestbookReactions
@@ -176,6 +164,16 @@ export const GuestbookEntryCard = ({
           reactions={entry.reactions}
         />
       )}
+      {entry.signature && !isEditing ? (
+        <Image
+          alt={`Signature by ${entry.name}`}
+          className='absolute right-6 bottom-6 rounded border border-border border-dashed dark:invert'
+          height={48}
+          src={entry.signature}
+          unoptimized
+          width={100}
+        />
+      ) : null}
       {deleteAction.result.serverError ? (
         <p className='text-destructive text-xs'>
           {deleteAction.result.serverError}
