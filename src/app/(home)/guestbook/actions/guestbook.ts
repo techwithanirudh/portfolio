@@ -1,6 +1,6 @@
 'use server'
 
-import { put } from '@vercel/blob'
+import { del, put } from '@vercel/blob'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
 import { headers } from 'next/headers'
@@ -199,6 +199,21 @@ export const removeGuestbookEntry = protectedGuestbookAction
 
       if (!removed) {
         throw new ActionError('Unable to delete this message.')
+      }
+
+      if (removed.signature) {
+        try {
+          await del(removed.signature)
+        } catch (error) {
+          console.error('Failed to delete guestbook signature blob:', {
+            entryId: parsedInput.entryId,
+            signature: removed.signature,
+            error:
+              error instanceof Error
+                ? { name: error.name, message: error.message }
+                : String(error),
+          })
+        }
       }
 
       revalidatePath('/guestbook')
