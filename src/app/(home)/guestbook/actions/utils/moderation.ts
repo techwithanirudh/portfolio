@@ -1,8 +1,8 @@
 import { generateText, Output, type UserContent } from 'ai'
 import { guestbookModerationPrompt } from '@/lib/ai/prompts/moderation'
-import { provider } from '@/lib/ai/providers'
 import { parseB64File } from '@/lib/files'
 import { GuestbookModerationResultSchema } from '@/lib/validators'
+import { provider } from '@/lib/ai/providers'
 
 export interface ModerateGuestbookEntryInput {
   message: string
@@ -54,7 +54,14 @@ export const moderateGuestbookEntry = async (
     })
 
     return output
-  } catch (_error) {
+  } catch (error) {
+    console.error('Guestbook moderation failed:', {
+      error:
+        error instanceof Error
+          ? { name: error.name, message: error.message }
+          : String(error)
+    })
+
     return {
       allowed: false,
       reason: 'Could not verify content safety. Please try again.',
