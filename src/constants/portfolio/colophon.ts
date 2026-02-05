@@ -67,7 +67,7 @@ export const attributions = [
   { name: 'shadcn/ui', url: 'https://ui.shadcn.com' },
   { name: 'Steve', url: 'https://iamsteve.me' },
   { name: 'Visitors', url: 'https://visitors.now' },
-  { name: 'Twingate', url: 'https://www.twingate.com' },
+  { name: 'Ephraim Duncan', url: 'https://ephraimduncan.com/' },
 ] satisfies AttributionItem[]
 
 export const typography = [

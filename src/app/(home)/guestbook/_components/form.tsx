@@ -24,7 +24,7 @@ import { createGuestbookEntry } from '../actions/guestbook'
 
 export const GuestbookForm = () => {
   const router = useRouter()
-  const { data: session } = useSession()
+  const { data: session, isPending } = useSession()
   const user = session?.user
   const [authenticate, setAuthenticate] = useState(false)
 
@@ -53,7 +53,15 @@ export const GuestbookForm = () => {
     }
   }
 
-  if (!user) {
+  if (isPending) {
+    return (
+      <div className='flex w-full flex-col items-center justify-center size-full text-sm text-muted-foreground'>
+        <Icons.spinner className='size-4 animate-spin' />
+      </div>
+    )
+  }
+
+  if (!user && !isPending) {
     return (
       <div className='flex w-full flex-col gap-4 text-center'>
         <p className='text-muted-foreground text-sm'>
