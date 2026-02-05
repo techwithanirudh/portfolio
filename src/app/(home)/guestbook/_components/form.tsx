@@ -32,6 +32,7 @@ export const GuestbookForm = () => {
   const user = session?.user
   const [authenticate, setAuthenticate] = useState(false)
   const [step, setStep] = useState<1 | 2>(1)
+  const [formKey, setFormKey] = useState(0)
   const signaturePad = useRef<SignaturePadHandle>(null)
 
   useAuthenticate({
@@ -44,9 +45,13 @@ export const GuestbookForm = () => {
     {
       actionProps: {
         onSuccess: () => {
-          form.reset()
+          form.reset({
+            message: '',
+            signature: undefined,
+          })
           setStep(1)
           signaturePad.current?.clear()
+          setFormKey((current) => current + 1)
           router.refresh()
         },
       },
@@ -93,7 +98,11 @@ export const GuestbookForm = () => {
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-6' onSubmit={handleSubmitWithAction}>
+      <form
+        className='flex-1 space-y-6'
+        key={formKey}
+        onSubmit={handleSubmitWithAction}
+      >
         <Activity mode={step === 1 ? 'visible' : 'hidden'}>
           <div className='space-y-6'>
             <FormField

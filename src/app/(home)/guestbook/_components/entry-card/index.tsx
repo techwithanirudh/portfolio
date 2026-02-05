@@ -124,7 +124,7 @@ export const GuestbookEntryCard = ({
             {entry.role === 'admin' ? (
               <BadgeCheck
                 aria-label='Verified admin'
-                className='size-4 text-primary'
+                className='size-4 text-primary hover:scale-125 transition-transform'
               />
             ) : null}
           </h3>
