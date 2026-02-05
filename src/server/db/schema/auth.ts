@@ -24,6 +24,7 @@ export const sessions = createTable('sessions', {
   updatedAt: timestamp('updated_at').notNull(),
   ipAddress: text('ip_address'),
   userAgent: text('user_agent'),
+  impersonatedBy: text('impersonated_by'),
   userId: text('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),

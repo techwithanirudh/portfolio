@@ -4,7 +4,7 @@ import { useAuthenticate } from '@daveyplate/better-auth-ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
+import { Activity, useRef, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -94,8 +94,8 @@ export const GuestbookForm = () => {
   return (
     <Form {...form}>
       <form className='flex-1 space-y-6' onSubmit={handleSubmitWithAction}>
-        {step === 1 && (
-          <>
+        <Activity mode={step === 1 ? 'visible' : 'hidden'}>
+          <div className='space-y-6'>
             <FormField
               control={form.control}
               name='message'
@@ -129,10 +129,10 @@ export const GuestbookForm = () => {
               Next{' '}
               <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
             </Button>
-          </>
-        )}
-        {step === 2 && (
-          <>
+          </div>
+        </Activity>
+        <Activity mode={step === 2 ? 'visible' : 'hidden'}>
+          <div className='space-y-6'>
             <FormItem>
               <FormLabel>Signature</FormLabel>
               <SignaturePad
@@ -163,8 +163,8 @@ export const GuestbookForm = () => {
                 Submit
               </Button>
             </div>
-          </>
-        )}
+          </div>
+        </Activity>
         {action.status === 'hasSucceeded' && (
           <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />

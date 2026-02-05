@@ -29,6 +29,9 @@ export const GuestbookEditSchema = GuestbookEntrySchema.merge(
 )
 
 export const GuestbookDeleteSchema = GuestbookEntryIdSchema
+export const GuestbookBanUserSchema = z.object({
+  userId: z.string().min(1),
+})
 
 export const GuestbookModerationInputSchema = GuestbookEntrySchema.pick({
   message: true,
@@ -64,6 +67,7 @@ export type GuestbookEntry = z.infer<typeof GuestbookEntrySchema>
 export type GuestbookReaction = z.infer<typeof GuestbookReactionSchema>
 export type GuestbookEdit = z.infer<typeof GuestbookEditSchema>
 export type GuestbookDelete = z.infer<typeof GuestbookDeleteSchema>
+export type GuestbookBanUser = z.infer<typeof GuestbookBanUserSchema>
 export type GuestbookModerationInput = z.infer<
   typeof GuestbookModerationInputSchema
 >

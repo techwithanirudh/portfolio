@@ -12,7 +12,11 @@ import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
-import { editGuestbookEntry, removeGuestbookEntry } from '../actions/guestbook'
+import {
+  banGuestbookUser,
+  editGuestbookEntry,
+  removeGuestbookEntry,
+} from '../actions/guestbook'
 import { GuestbookReactions } from './reactions'
 
 interface GuestbookEntryCardProps {
@@ -44,11 +48,22 @@ export const GuestbookEntryCard = ({
       router.refresh()
     },
   })
+  const banAction = useAction(banGuestbookUser, {
+    onSuccess: () => {
+      setIsEditing(false)
+      router.refresh()
+      toast.success(`Banned ${entry.name}.`)
+    },
+  })
 
   const canEdit = !!currentUserId && (isAdmin || currentUserId === entry.userId)
+  const canBan =
+    isAdmin && entry.role !== 'admin' && currentUserId !== entry.userId
   const editedLabel = entry.editedAt ? ' • Edited' : ''
   const isBusy =
-    editAction.status === 'executing' || deleteAction.status === 'executing'
+    editAction.status === 'executing' ||
+    deleteAction.status === 'executing' ||
+    banAction.status === 'executing'
 
   const startEditing = () => {
     setIsEditing(true)
@@ -83,6 +98,11 @@ export const GuestbookEntryCard = ({
     deleteAction.execute({ entryId: entry.id })
   }
 
+  const banUser = () => {
+    setIsEditing(false)
+    banAction.execute({ userId: entry.userId })
+  }
+
   return (
     <div className='relative grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'>
       <div className='flex flex-wrap items-start justify-between gap-3'>
@@ -103,28 +123,44 @@ export const GuestbookEntryCard = ({
             {editedLabel}
           </p>
         </div>
-        {canEdit ? (
+        {canEdit || canBan ? (
           <div className='flex items-center'>
-            <Button
-              aria-label='Edit entry'
-              className='rounded-none'
-              disabled={isBusy || isEditing}
-              onClick={startEditing}
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.pencil className='size-4' />
-            </Button>
-            <Button
-              aria-label='Delete entry'
-              className='rounded-none text-destructive'
-              disabled={isBusy || isEditing}
-              onClick={deleteEntry}
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.trash className='size-4' />
-            </Button>
+            {canEdit ? (
+              <>
+                <Button
+                  aria-label='Edit entry'
+                  className='rounded-none'
+                  disabled={isBusy || isEditing}
+                  onClick={startEditing}
+                  size='icon'
+                  variant='ghost'
+                >
+                  <Icons.pencil className='size-4' />
+                </Button>
+                <Button
+                  aria-label='Delete entry'
+                  className='rounded-none text-destructive'
+                  disabled={isBusy || isEditing}
+                  onClick={deleteEntry}
+                  size='icon'
+                  variant='ghost'
+                >
+                  <Icons.trash className='size-4' />
+                </Button>
+              </>
+            ) : null}
+            {canBan ? (
+              <Button
+                aria-label='Ban user'
+                className='rounded-none text-destructive'
+                disabled={isBusy}
+                onClick={banUser}
+                size='icon'
+                variant='ghost'
+              >
+                <Icons.warning className='size-4' />
+              </Button>
+            ) : null}
           </div>
         ) : null}
       </div>
@@ -188,6 +224,11 @@ export const GuestbookEntryCard = ({
       {deleteAction.result.serverError ? (
         <p className='text-destructive text-xs'>
           {deleteAction.result.serverError}
+        </p>
+      ) : null}
+      {banAction.result.serverError ? (
+        <p className='text-destructive text-xs'>
+          {banAction.result.serverError}
         </p>
       ) : null}
     </div>

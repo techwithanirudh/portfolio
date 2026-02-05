@@ -1,13 +1,12 @@
 import { openai } from '@ai-sdk/openai'
 import { generateText, Output, type UserContent } from 'ai'
+import { parseBase64DataUrl } from '@/lib/base64-data-url'
 import { guestbookModerationPrompt } from '@/lib/ai/prompts/moderation'
 import { GuestbookModerationResultSchema } from '@/lib/validators'
 
-type ModerationImageInput = string | URL | ArrayBuffer | Uint8Array | Buffer
-
 export interface ModerateGuestbookEntryInput {
   message: string
-  signature?: ModerationImageInput
+  signature?: string
 }
 
 export const moderateGuestbookEntry = async (
@@ -24,9 +23,19 @@ export const moderateGuestbookEntry = async (
 
   if (signature) {
     userContent.push({
-      type: 'image',
-      image: signature,
+      type: 'text',
+      text: 'A signature image is attached. Analyze the image content for safety.',
     })
+
+    const parsedSignature = parseBase64DataUrl(signature)
+
+    if (parsedSignature) {
+      userContent.push({
+        type: 'image',
+        image: parsedSignature.data,
+        mediaType: parsedSignature.mediaType,
+      })
+    }
   }
 
   try {

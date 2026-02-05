@@ -3,13 +3,13 @@
 import { put } from '@vercel/blob'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
-import { moderateGuestbookEntry } from './utils/moderation'
-
+import { headers } from 'next/headers'
 import { ActionError, actionClient } from '@/lib/safe-action/client'
 import type { ActionContext } from '@/lib/safe-action/middleware'
 import { botIdMiddleware, userMiddleware } from '@/lib/safe-action/middleware'
-
 import {
+  type GuestbookBanUser,
+  GuestbookBanUserSchema,
   type GuestbookDelete,
   GuestbookDeleteSchema,
   type GuestbookEdit,
@@ -19,9 +19,11 @@ import {
   type GuestbookReaction,
   GuestbookReactionSchema,
 } from '@/lib/validators'
+import { auth } from '@/server/auth'
 import { db } from '@/server/db'
 import { deleteGuestbookEntry } from '@/server/db/queries/guestbook'
-import { guestbookEntries, guestbookReactions } from '@/server/db/schema'
+import { guestbookEntries, guestbookReactions, users } from '@/server/db/schema'
+import { moderateGuestbookEntry } from './utils/moderation'
 
 const BASE64_PNG_PREFIX = /^data:image\/png;base64,/
 
@@ -185,6 +187,58 @@ export const removeGuestbookEntry = protectedGuestbookAction
       if (!removed) {
         throw new ActionError('Unable to delete this message.')
       }
+
+      revalidatePath('/guestbook')
+      updateTag('guestbook')
+
+      return { success: true }
+    }
+  )
+
+export const banGuestbookUser = protectedGuestbookAction
+  .inputSchema(GuestbookBanUserSchema)
+  .action(
+    async ({
+      parsedInput,
+      ctx,
+    }: {
+      parsedInput: GuestbookBanUser
+      ctx: ActionContext
+    }) => {
+      const { user } = ctx
+      const isAdmin = user.role === 'admin'
+
+      if (!isAdmin) {
+        throw new ActionError('Only admins can ban users.')
+      }
+
+      if (parsedInput.userId === user.id) {
+        throw new ActionError('You cannot ban your own account.')
+      }
+
+      const [targetUser] = await db
+        .select({
+          role: users.role,
+        })
+        .from(users)
+        .where(eq(users.id, parsedInput.userId))
+        .limit(1)
+
+      if (!targetUser) {
+        throw new ActionError('User not found.')
+      }
+
+      if (targetUser.role === 'admin') {
+        throw new ActionError('Admin accounts cannot be banned from here.')
+      }
+
+      await auth.api.banUser({
+        body: {
+          userId: parsedInput.userId,
+          banReason: 'Banned by an admin from the guestbook.',
+        },
+        headers: await headers(),
+      })
 
       revalidatePath('/guestbook')
       updateTag('guestbook')
