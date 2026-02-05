@@ -1,6 +1,7 @@
 'use client'
 
 import { formatDistanceToNow } from 'date-fns'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
@@ -154,7 +155,19 @@ export const GuestbookEntryCard = ({
           ) : null}
         </div>
       ) : (
-        <p className='text-muted-foreground text-sm'>{entry.message}</p>
+        <>
+          <p className='text-muted-foreground text-sm'>{entry.message}</p>
+          {entry.signature ? (
+            <Image
+              alt={`Signature by ${entry.name}`}
+              className='mt-2 rounded border border-border p-2 dark:invert'
+              height={96}
+              src={entry.signature}
+              unoptimized
+              width={200}
+            />
+          ) : null}
+        </>
       )}
       {isEditing ? null : (
         <GuestbookReactions

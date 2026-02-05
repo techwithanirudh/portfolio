@@ -6,6 +6,13 @@ export const GuestbookEntrySchema = z.object({
     .string()
     .min(3, { message: 'Message must be at least 3 characters.' })
     .max(500, { message: 'Message must be under 500 characters.' }),
+  signature: z
+    .string()
+    .startsWith('data:image/png;base64,', {
+      message: 'Signature must be a PNG data URL.',
+    })
+    .max(200_000, { message: 'Signature is too large.' })
+    .optional(),
 })
 
 export const GuestbookReactionSchema = z.object({
@@ -34,6 +41,7 @@ export const GuestbookEntryItemSchema = z.object({
   id: z.number(),
   name: z.string(),
   message: z.string(),
+  signature: z.string().nullable(),
   userId: z.string(),
   createdAt: z.string(),
   editedAt: z.string().nullable(),

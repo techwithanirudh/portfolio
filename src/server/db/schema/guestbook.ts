@@ -19,6 +19,7 @@ export const guestbookEntries = createTable('guestbook_entries', {
     .references(() => users.id, { onDelete: 'cascade' }),
   name: text('name').notNull(),
   message: text('message').notNull(),
+  signature: text('signature'),
   editedAt: timestamp('edited_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()

@@ -95,6 +95,7 @@ function EmojiPickerContent({
   return (
     <EmojiPickerPrimitive.Viewport
       className={cn('relative flex-1 outline-hidden', className)}
+      data-lenis-prevent
       data-slot='emoji-picker-viewport'
       {...props}
     >

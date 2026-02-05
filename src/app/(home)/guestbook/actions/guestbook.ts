@@ -1,5 +1,6 @@
 'use server'
 
+import { put } from '@vercel/blob'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
 
@@ -21,6 +22,8 @@ import { db } from '@/server/db'
 import { deleteGuestbookEntry } from '@/server/db/queries/guestbook'
 import { guestbookEntries, guestbookReactions } from '@/server/db/schema'
 
+const BASE64_PNG_PREFIX = /^data:image\/png;base64,/
+
 const protectedGuestbookAction = actionClient
   .use(botIdMiddleware)
   .use(userMiddleware)
@@ -38,10 +41,28 @@ export const createGuestbookEntry = protectedGuestbookAction
       const { user } = ctx
       const name = user.name ?? 'Guest'
 
+      let signatureUrl: string | null = null
+
+      if (parsedInput.signature) {
+        const base64Data = parsedInput.signature.replace(BASE64_PNG_PREFIX, '')
+        const buffer = Buffer.from(base64Data, 'base64')
+        const blob = await put(
+          `guestbook/signatures/${user.id}-${Date.now()}.png`,
+          buffer,
+          {
+            access: 'public',
+            contentType: 'image/png',
+            cacheControlMaxAge: 31_536_000,
+          }
+        )
+        signatureUrl = blob.url
+      }
+
       await db.insert(guestbookEntries).values({
         userId: user.id,
         name,
         message: parsedInput.message,
+        signature: signatureUrl,
       })
 
       revalidatePath('/guestbook')

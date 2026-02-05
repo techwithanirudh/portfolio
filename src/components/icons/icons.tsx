@@ -1,6 +1,7 @@
 import type { Icon as LucideIcon, LucideProps } from 'lucide-react'
 import {
   AlertTriangle,
+  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   AtSign,
@@ -115,6 +116,7 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
+  arrowLeft: ArrowLeft,
   help: HelpCircle,
   pizza: Pizza,
   sun: SunMedium,
