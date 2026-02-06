@@ -211,14 +211,14 @@ export const GuestbookEntryCard = ({
           />
         )}
         {entry.signature && !isEditing ? (
-          <div className='h-[64px] w-[140px] rounded border border-border border-dashed bg-transparent bg-card'>
+          <div className='h-[72px] w-[160px] rounded border border-border border-dashed bg-card'>
             <Image
               alt={`Signature by ${entry.name}`}
-              className='h-[64px] w-[140px] object-contain dark:invert'
-              height={64}
+              className='h-[72px] w-[160px] object-contain dark:invert'
+              height={72}
               src={entry.signature}
               unoptimized
-              width={140}
+              width={160}
             />
           </div>
         ) : null}

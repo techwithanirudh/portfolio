@@ -32,45 +32,19 @@ function getThemeColor(theme: string | undefined): string {
   return theme === 'dark' ? '#fff' : '#000'
 }
 
-const SIGNATURE_OUTPUT_WIDTH = 640
-const SIGNATURE_OUTPUT_HEIGHT = 288
-
 function exportCanvas(source: HTMLCanvasElement): string {
-  const temp = document.createElement('canvas')
-  temp.width = source.width
-  temp.height = source.height
-  const tempCtx = temp.getContext('2d')
-  if (!tempCtx) {
+  const canvas = document.createElement('canvas')
+  canvas.width = source.width
+  canvas.height = source.height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) {
     return source.toDataURL('image/png')
   }
-
-  tempCtx.drawImage(source, 0, 0)
-  tempCtx.globalCompositeOperation = 'source-in'
-  tempCtx.fillStyle = '#000'
-  tempCtx.fillRect(0, 0, temp.width, temp.height)
-
-  const output = document.createElement('canvas')
-  output.width = SIGNATURE_OUTPUT_WIDTH
-  output.height = SIGNATURE_OUTPUT_HEIGHT
-  const outputCtx = output.getContext('2d')
-  if (!outputCtx) {
-    return temp.toDataURL('image/png')
-  }
-
-  outputCtx.fillStyle = '#fff'
-  outputCtx.fillRect(0, 0, output.width, output.height)
-
-  const scale = Math.min(
-    output.width / temp.width,
-    output.height / temp.height
-  )
-  const drawWidth = temp.width * scale
-  const drawHeight = temp.height * scale
-  const dx = (output.width - drawWidth) / 2
-  const dy = (output.height - drawHeight) / 2
-
-  outputCtx.drawImage(temp, dx, dy, drawWidth, drawHeight)
-  return output.toDataURL('image/png')
+  ctx.drawImage(source, 0, 0)
+  ctx.globalCompositeOperation = 'source-in'
+  ctx.fillStyle = '#000'
+  ctx.fillRect(0, 0, canvas.width, canvas.height)
+  return canvas.toDataURL('image/png')
 }
 
 export function SignaturePad({
