@@ -9,6 +9,13 @@ text: "love this portfolio, keep building!"
 
 <example>
 <input>
+text: "this is damn good work"
+</input>
+<output>{"allowed":true,"reason":"Mild profanity is allowed."}</output>
+</example>
+
+<example>
+<input>
 text: "you are trash, go die"
 </input>
 <output>{"allowed":false,"reason":"Denied for harassment and violent language."}</output>
