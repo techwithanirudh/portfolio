@@ -44,7 +44,7 @@ export function Coding() {
           font with ligatures enabled. If you want the config, it lives{' '}
           <a
             className='font-medium text-primary hover:underline'
-            href='https://github.com/techwithanirudh/dotfiles/blob/main/vscode/settings.json'
+            href='https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json'
             rel='noopener noreferrer'
             target='_blank'
           >
