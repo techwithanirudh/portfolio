@@ -68,6 +68,12 @@ export const attributions = [
   { name: 'Steve', url: 'https://iamsteve.me' },
   { name: 'Visitors', url: 'https://visitors.now' },
   { name: 'Ephraim Duncan', url: 'https://ephraimduncan.com/' },
+  { name: 'Suraj Gaud', url: 'https://www.surajgaud.com/' },
+  { name: 'Kinfish', url: 'https://kinfish.farmui.com/' },
+  { name: 'Enscribe', url: 'https://enscribe.dev/' },
+  { name: 'Lean Rada', url: 'https://leanrada.com/' },
+  { name: 'Victor Eke', url: 'https://victoreke.com/' },
+  { name: 'Noah Dunnagan', url: 'https://noahdunnagan.com/' },
 ] satisfies AttributionItem[]
 
 export const typography = [
