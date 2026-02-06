@@ -1,6 +1,7 @@
 'use client'
 import { useAuthenticate } from '@daveyplate/better-auth-ui'
-import { Comments } from '@fuma-comment/react'
+import { Comments, type StorageContext } from '@fuma-comment/react'
+import { upload } from '@vercel/blob/client'
 import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { useCopyToClipboard } from 'usehooks-ts'
@@ -57,6 +58,31 @@ export function PostComments({
     enabled: authenticate,
   })
 
+  const storage: StorageContext = {
+    enabled: true,
+    async upload(file) {
+      const ext =
+        file instanceof File
+          ? file.name.split('.').pop()?.toLowerCase() ?? 'png'
+          : 'png'
+      const pathname = `comments/${crypto.randomUUID()}.${ext}`
+      const [dimensions, blob] = await Promise.all([
+        getImageDimensions(file),
+        upload(pathname, file, {
+          access: 'public',
+          contentType: file.type || undefined,
+          handleUploadUrl: '/api/blob/comment-upload',
+        }),
+      ])
+
+      return {
+        url: blob.url,
+        width: dimensions.width,
+        height: dimensions.height,
+      }
+    },
+  }
+
   return (
     <Comments
       auth={{
@@ -67,6 +93,31 @@ export function PostComments({
       }}
       className={cn('w-full', className)}
       page={slug}
+      storage={storage}
     />
   )
+}
+
+const getImageDimensions = async (file: Blob) => {
+  if ('createImageBitmap' in globalThis) {
+    const bitmap = await createImageBitmap(file)
+    const dimensions = { width: bitmap.width, height: bitmap.height }
+    bitmap.close()
+    return dimensions
+  }
+
+  return new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const url = URL.createObjectURL(file)
+    const image = new Image()
+
+    image.onload = () => {
+      URL.revokeObjectURL(url)
+      resolve({ width: image.width, height: image.height })
+    }
+    image.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('Failed to read image dimensions.'))
+    }
+    image.src = url
+  })
 }

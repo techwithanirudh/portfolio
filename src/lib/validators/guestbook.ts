@@ -40,7 +40,7 @@ export const GuestbookModerationInputSchema = GuestbookEntrySchema.pick({
   signature: true,
 })
 
-export const GuestbookModerationResultSchema = z.object({
+export const ModerationResultSchema = z.object({
   allowed: z.boolean(),
   reason: z.string().min(1).max(120),
 })
@@ -74,8 +74,6 @@ export type GuestbookBanUser = z.infer<typeof GuestbookBanUserSchema>
 export type GuestbookModerationInput = z.infer<
   typeof GuestbookModerationInputSchema
 >
-export type GuestbookModerationResult = z.infer<
-  typeof GuestbookModerationResultSchema
->
+export type GuestbookModerationResult = z.infer<typeof ModerationResultSchema>
 export type GuestbookReactionItem = z.infer<typeof GuestbookReactionItemSchema>
 export type GuestbookEntryItem = z.infer<typeof GuestbookEntryItemSchema>

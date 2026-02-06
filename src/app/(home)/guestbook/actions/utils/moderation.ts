@@ -1,7 +1,7 @@
 import { generateText, Output, type UserContent } from 'ai'
-import { guestbookModerationPrompt } from '@/lib/ai/prompts/moderation'
+import { moderationPrompt } from '@/lib/ai/prompts/moderation'
 import { parseB64File } from '@/lib/files'
-import { GuestbookModerationResultSchema } from '@/lib/validators'
+import { ModerationResultSchema } from '@/lib/validators'
 import { provider } from '@/lib/ai/providers'
 
 export interface ModerateGuestbookEntryInput {
@@ -39,9 +39,9 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
   try {
     const { output } = await generateText({
       model: provider.languageModel('moderation-model'),
-      system: guestbookModerationPrompt,
+      system: moderationPrompt,
       output: Output.object({
-        schema: GuestbookModerationResultSchema,
+        schema: ModerationResultSchema,
       }),
       messages: [
         {
