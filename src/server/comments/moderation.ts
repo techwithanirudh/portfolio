@@ -8,7 +8,6 @@ import {
   parseCommentMentionNode,
 } from '@/lib/validators'
 import { provider } from '@/lib/ai/providers'
-import { moderateImageUrl } from '@/lib/ai/moderation/image'
 
 const normalizeWhitespace = (value: string) =>
   value.replace(/\s+/g, ' ').trim()
@@ -55,53 +54,14 @@ export const extractCommentImages = (content: Content) => {
   return extractContent(content).images
 }
 
-const cleanupRejectedImage = async (url: string) => {
-  try {
-    const parsed = new URL(url)
-    if (parsed.pathname.startsWith('/comments/')) {
-      await del(url)
-    }
-  } catch (error) {
-    console.error('Failed to delete rejected comment image blob:', {
-      url,
-      error:
-        error instanceof Error
-          ? { name: error.name, message: error.message }
-          : String(error),
-    })
-  }
-}
-
 export const moderateComment = async (content: Content) => {
   const { text, images } = extractContent(content)
 
-  for (const url of images) {
-    try {
-      const imageModeration = await moderateImageUrl(url)
-      if (!imageModeration.allowed) {
-        await cleanupRejectedImage(url)
-        throw new RouteError({
-          statusCode: 400,
-          message: imageModeration.reason,
-        })
-      }
-    } catch (error) {
-      if (error instanceof RouteError) {
-        throw error
-      }
-      console.error('Comment image moderation failed:', {
-        url,
-        error:
-          error instanceof Error
-            ? { name: error.name, message: error.message }
-            : String(error),
-      })
-      await cleanupRejectedImage(url)
-      throw new RouteError({
-        statusCode: 400,
-        message: 'Could not verify image safety. Please try again.',
-      })
-    }
+  if (images.length > 0) {
+    throw new RouteError({
+      statusCode: 400,
+      message: 'Images are not allowed in comments.',
+    })
   }
 
   const userContent: UserContent = [
