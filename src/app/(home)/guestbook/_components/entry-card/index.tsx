@@ -11,6 +11,7 @@ import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { cn } from '@/lib/utils'
 import {
   GuestbookEntrySchema,
   type GuestbookEntryItem,
@@ -127,7 +128,11 @@ export const GuestbookEntryCard = ({
   }
 
   return (
-    <div className='relative grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'>
+    <div
+      className={cn(
+        'relative grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
+      )}
+    >
       <div className='flex flex-wrap items-start justify-between gap-3'>
         <div className='space-y-1'>
           <h3 className='flex items-center gap-1.5 font-medium text-sm'>
@@ -197,23 +202,27 @@ export const GuestbookEntryCard = ({
       ) : (
         <p className='text-muted-foreground text-sm'>{entry.message}</p>
       )}
-      {isEditing ? null : (
-        <GuestbookReactions
-          canReact={isSignedIn}
-          entryId={entry.id}
-          reactions={entry.reactions}
-        />
-      )}
-      {entry.signature && !isEditing ? (
-        <Image
-          alt={`Signature by ${entry.name}`}
-          className='absolute right-6 bottom-6 rounded border border-border border-dashed dark:invert'
-          height={72}
-          src={entry.signature}
-          unoptimized
-          width={160}
-        />
-      ) : null}
+      <div className='flex w-full justify-between items-end flex-wrap gap-4 empty:hidden'>
+        {isEditing ? null : (
+          <GuestbookReactions
+            canReact={isSignedIn}
+            entryId={entry.id}
+            reactions={entry.reactions}
+          />
+        )}
+        {entry.signature && !isEditing ? (
+          <div className='h-[64px] w-[140px] rounded border border-border border-dashed bg-transparent bg-card'>
+            <Image
+              alt={`Signature by ${entry.name}`}
+              className='h-[64px] w-[140px] object-contain dark:invert'
+              height={64}
+              src={entry.signature}
+              unoptimized
+              width={140}
+            />
+          </div>
+        ) : null}
+      </div>
       {deleteAction.result.serverError ? (
         <p className='text-destructive text-xs'>
           {deleteAction.result.serverError}
