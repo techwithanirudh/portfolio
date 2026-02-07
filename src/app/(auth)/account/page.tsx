@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 import { getLoginUrl } from '@/lib/auth-client'
 import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { AccountSettings } from './_components/account-settings'
 import { ActiveSessions } from './_components/active-sessions'
+import { ActiveSessionsSkeleton } from './_components/active-sessions-skeleton'
 
 export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
@@ -40,7 +42,9 @@ export default async function AccountPage() {
         <AccountSettings user={session.user} />
         <div className='space-y-4'>
           <h2 className='font-medium text-lg'>Active Sessions</h2>
-          <ActiveSessions currentToken={session.session.token} />
+          <Suspense fallback={<ActiveSessionsSkeleton />}>
+            <ActiveSessions currentToken={session.session.token} />
+          </Suspense>
         </div>
       </main>
     </div>

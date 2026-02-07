@@ -29,3 +29,18 @@ export const getSession = async () => {
     headers: await headers(),
   })
 }
+
+export const listSessions = async () => {
+  return await auth.api.listSessions({
+    headers: await headers(),
+  })
+}
+
+export const revokeSession = async (token: string) => {
+  return await auth.api.revokeSession({
+    body: {
+      token,
+    },
+    headers: await headers(),
+  })
+}

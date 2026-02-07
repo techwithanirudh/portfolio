@@ -173,7 +173,7 @@ function EditNameDialog({ name }: { name: string }) {
 }
 
 function formatAccountDate(date: Date | string) {
-  return new Date(date).toLocaleDateString('en-US', {
+  return new Date(date).toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
