@@ -1,6 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -43,6 +44,7 @@ export function AccountSettings({ user }: AccountSettingsProps) {
           <UserAvatar className='size-16' user={user} />
         </div>
       </div>
+
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Display Name</span>
@@ -50,22 +52,18 @@ export function AccountSettings({ user }: AccountSettingsProps) {
         </div>
         <EditNameDialog name={user.name ?? ''} />
       </div>
+
       <div className='p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Email</span>
           <span className='text-sm'>{user.email}</span>
         </div>
       </div>
+
       <div className='p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Account Created</span>
-          <span className='text-sm'>
-            {new Date(user.createdAt).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </span>
+          <span className='text-sm'>{formatAccountDate(user.createdAt)}</span>
         </div>
       </div>
     </Card>
@@ -74,6 +72,8 @@ export function AccountSettings({ user }: AccountSettingsProps) {
 
 function EditNameDialog({ name }: { name: string }) {
   const [open, setOpen] = useState(false)
+  const router = useRouter()
+
   const form = useForm<Account>({
     resolver: zodResolver(AccountSchema),
     defaultValues: {
@@ -93,7 +93,7 @@ function EditNameDialog({ name }: { name: string }) {
 
     toast.success('Name updated successfully.')
     setOpen(false)
-    window.location.reload()
+    router.refresh()
   }
 
   return (
@@ -107,7 +107,7 @@ function EditNameDialog({ name }: { name: string }) {
       open={open}
     >
       <DialogTrigger asChild>
-        <Button className='rounded-none' size='sm' variant='outline'>
+        <Button className='rounded-none' size='sm' variant='secondary'>
           Edit
         </Button>
       </DialogTrigger>
@@ -150,7 +150,7 @@ function EditNameDialog({ name }: { name: string }) {
             <Button
               className='rounded-none'
               disabled={form.formState.isSubmitting}
-              variant='outline'
+              variant='secondary'
             >
               Cancel
             </Button>
@@ -170,4 +170,12 @@ function EditNameDialog({ name }: { name: string }) {
       </DialogContent>
     </Dialog>
   )
+}
+
+function formatAccountDate(date: Date | string) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
 }

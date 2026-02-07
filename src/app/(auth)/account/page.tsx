@@ -12,19 +12,21 @@ export default async function AccountPage() {
 
   return (
     <div className='flex w-full grow flex-col p-4 md:p-6'>
-      <div className='w-full space-y-8'>
-        <div>
-          <h1 className='font-medium text-xl'>Account Settings</h1>
-          <p className='text-muted-foreground text-sm'>
+      <main className='w-full space-y-8'>
+        <header className='space-y-2'>
+          <h1 className='typography-title font-medium text-2xl'>
+            Account Settings
+          </h1>
+          <p className='typography-body text-muted-foreground text-sm'>
             Manage your account information.
           </p>
-        </div>
+        </header>
         <AccountSettings user={session.user} />
         <div className='space-y-4'>
           <h2 className='font-medium text-lg'>Active Sessions</h2>
           <ActiveSessions currentToken={session.session.token} />
         </div>
-      </div>
+      </main>
     </div>
   )
 }

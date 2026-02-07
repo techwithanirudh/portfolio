@@ -1,45 +1,75 @@
 'use client'
 
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
 import { authClient } from '@/lib/auth-client'
+import { parseUserAgent } from '@/lib/user-agent'
 
-interface Session {
-  id: string
-  token: string
-  createdAt: Date
-  updatedAt: Date
-  expiresAt: Date
-  ipAddress?: string | null
-  userAgent?: string | null
-}
+import { ActiveSessionsSkeleton } from './active-sessions-skeleton'
+
+type Session = NonNullable<
+  Awaited<ReturnType<typeof authClient.listSessions>>['data']
+>[number]
+
+const PLATFORM_ICONS = {
+  desktop: MonitorIcon,
+  mobile: SmartphoneIcon,
+  tablet: TabletIcon,
+  unknown: MonitorIcon,
+} as const
 
 export function ActiveSessions({ currentToken }: { currentToken: string }) {
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
   const [revokingId, setRevokingId] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
-    authClient.listSessions().then(({ data }) => {
-      if (data) {
-        const sorted = [...data].sort((a, b) => {
+    let cancelled = false
+
+    const run = async () => {
+      try {
+        const { data, error } = await authClient.listSessions()
+
+        if (cancelled) {
+          return
+        }
+        if (error) {
+          toast.error('Failed to load active sessions.')
+          setSessions([])
+          return
+        }
+
+        const sorted = [...(data ?? [])].sort((a, b) => {
           const aIsCurrent = a.token === currentToken
           const bIsCurrent = b.token === currentToken
           if (aIsCurrent !== bIsCurrent) {
             return aIsCurrent ? -1 : 1
           }
-          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          return (
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          )
         })
+
         setSessions(sorted)
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
       }
-      setLoading(false)
-    })
+    }
+
+    run()
+
+    return () => {
+      cancelled = true
+    }
   }, [currentToken])
 
   const handleRevoke = async (token: string) => {
@@ -55,7 +85,8 @@ export function ActiveSessions({ currentToken }: { currentToken: string }) {
     toast.success('Session revoked.')
 
     if (token === currentToken) {
-      window.location.reload()
+      router.push('/')
+      router.refresh()
       return
     }
 
@@ -63,13 +94,7 @@ export function ActiveSessions({ currentToken }: { currentToken: string }) {
   }
 
   if (loading) {
-    return (
-      <div className='space-y-4'>
-        {Array.from({ length: 3 }, (_, i) => (
-          <Skeleton className='h-24 w-full rounded-none' key={i} />
-        ))}
-      </div>
-    )
+    return <ActiveSessionsSkeleton />
   }
 
   if (sessions.length === 0) {
@@ -85,7 +110,7 @@ export function ActiveSessions({ currentToken }: { currentToken: string }) {
       {sessions.map((session) => {
         const isCurrent = session.token === currentToken
         const parsed = parseUserAgent(session.userAgent)
-        const PlatformIcon = parsed.icon
+        const PlatformIcon = PLATFORM_ICONS[parsed.platform]
 
         return (
           <Card
@@ -145,46 +170,4 @@ export function ActiveSessions({ currentToken }: { currentToken: string }) {
       })}
     </div>
   )
-}
-
-function parseUserAgent(ua?: string | null) {
-  if (!ua) {
-    return { os: 'Unknown', browser: 'Unknown', browserVersion: '', icon: MonitorIcon }
-  }
-
-  let os = 'Unknown'
-  if (/android/i.test(ua)) os = 'Android'
-  else if (/iphone|ipad|ipod/i.test(ua)) os = 'iOS'
-  else if (/mac\s?os|macintosh/i.test(ua)) os = 'macOS'
-  else if (/windows/i.test(ua)) os = 'Windows'
-  else if (/linux/i.test(ua)) os = 'Linux'
-  else if (/cros/i.test(ua)) os = 'ChromeOS'
-
-  let browser = 'Unknown'
-  let browserVersion = ''
-
-  const edgeMatch = ua.match(/edg(?:e|a|ios)?\/(\d+[\d.]*)/i)
-  const chromeMatch = ua.match(/chrom(?:e|ium)\/(\d+[\d.]*)/i)
-  const firefoxMatch = ua.match(/firefox\/(\d+[\d.]*)/i)
-  const safariMatch = ua.match(/version\/(\d+[\d.]*).*safari/i)
-
-  if (edgeMatch) {
-    browser = 'Edge'
-    browserVersion = edgeMatch[1] ?? ''
-  } else if (firefoxMatch) {
-    browser = 'Firefox'
-    browserVersion = firefoxMatch[1] ?? ''
-  } else if (safariMatch) {
-    browser = 'Safari'
-    browserVersion = safariMatch[1] ?? ''
-  } else if (chromeMatch) {
-    browser = 'Chrome'
-    browserVersion = chromeMatch[1] ?? ''
-  }
-
-  let icon = MonitorIcon
-  if (/mobile|android|iphone/i.test(ua)) icon = SmartphoneIcon
-  else if (/tablet|ipad/i.test(ua)) icon = TabletIcon
-
-  return { os, browser, browserVersion, icon }
 }

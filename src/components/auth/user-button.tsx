@@ -79,9 +79,10 @@ export function UserButton({ className, classNames }: UserButtonProps) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align='end'
+        align='start'
         className={cn('max-w-64', classNames?.content?.base)}
         onCloseAutoFocus={(e) => e.preventDefault()}
+        side='top'
       >
         {user ? (
           <div className='flex items-center gap-2 p-2'>
@@ -106,16 +107,27 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         <DropdownMenuSeparator className={classNames?.content?.separator} />
 
         {user ? (
-          <DropdownMenuItem
-            className={classNames?.content?.menuItem}
-            onClick={async () => {
-              await signOut()
-              router.refresh()
-            }}
-          >
-            <Icons.logOut className='size-4' />
-            Log Out
-          </DropdownMenuItem>
+          <>
+            <DropdownMenuItem asChild className={classNames?.content?.menuItem}>
+              <Link href='/account'>
+                <Icons.user className='size-4' />
+                Account
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator className={classNames?.content?.separator} />
+
+            <DropdownMenuItem
+              className={classNames?.content?.menuItem}
+              onClick={async () => {
+                await signOut()
+                router.refresh()
+              }}
+            >
+              <Icons.logOut className='size-4' />
+              Log Out
+            </DropdownMenuItem>
+          </>
         ) : (
           <DropdownMenuItem asChild className={classNames?.content?.menuItem}>
             <Link href={getLoginUrl(pathname)}>
