@@ -50,6 +50,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild className={cn('rounded-md bg-transparent')}>
         <Button
+          aria-label={'User Menu'}
           className={cn(
             'size-auto rounded-md border-none bg-transparent p-0 hover:bg-accent dark:hover:bg-accent',
             'bg-secondary hover:bg-secondary/80',
