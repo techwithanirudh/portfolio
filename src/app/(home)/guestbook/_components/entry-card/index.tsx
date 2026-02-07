@@ -13,8 +13,8 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import {
-  GuestbookEntrySchema,
   type GuestbookEntryItem,
+  GuestbookEntrySchema,
 } from '@/lib/validators/guestbook'
 import {
   banGuestbookUser,
@@ -140,7 +140,7 @@ export const GuestbookEntryCard = ({
             {entry.role === 'admin' ? (
               <BadgeCheck
                 aria-label='Verified admin'
-                className='size-4 text-primary hover:scale-125 transition-transform'
+                className='size-4 text-primary transition-transform hover:scale-125'
               />
             ) : null}
           </h3>
@@ -202,7 +202,7 @@ export const GuestbookEntryCard = ({
       ) : (
         <p className='text-muted-foreground text-sm'>{entry.message}</p>
       )}
-      <div className='flex w-full justify-between items-end flex-wrap gap-4 empty:hidden'>
+      <div className='flex w-full flex-wrap items-end justify-between gap-4 empty:hidden'>
         {isEditing ? null : (
           <GuestbookReactions
             canReact={isSignedIn}

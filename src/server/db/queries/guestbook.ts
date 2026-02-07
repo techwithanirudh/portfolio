@@ -106,7 +106,10 @@ export const deleteGuestbookEntry = async (
             eq(guestbookEntries.userId, userId)
           )
     )
-    .returning({ id: guestbookEntries.id, signature: guestbookEntries.signature })
+    .returning({
+      id: guestbookEntries.id,
+      signature: guestbookEntries.signature,
+    })
 
   return deleted.length > 0 ? deleted[0] : null
 }

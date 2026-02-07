@@ -57,10 +57,7 @@ function exportCanvas(source: HTMLCanvasElement): string {
     return temp.toDataURL('image/png')
   }
 
-  const scale = Math.min(
-    output.width / temp.width,
-    output.height / temp.height
-  )
+  const scale = Math.min(output.width / temp.width, output.height / temp.height)
   const drawWidth = temp.width * scale
   const drawHeight = temp.height * scale
   const dx = (output.width - drawWidth) / 2

@@ -1,16 +1,19 @@
 import { type Content, RouteError } from '@fuma-comment/server'
-import { del } from '@vercel/blob'
 import { generateText, Output, type UserContent } from 'ai'
 import { moderationPrompt } from '@/lib/ai/prompts/moderation'
+import { provider } from '@/lib/ai/providers'
 import {
   ModerationResultSchema,
   parseCommentImageNode,
   parseCommentMentionNode,
 } from '@/lib/validators'
-import { provider } from '@/lib/ai/providers'
 
 const normalizeWhitespace = (value: string) =>
-  value.replace(/\s+/g, ' ').trim()
+  value
+    .split('\n')
+    .map((line) => line.replace(/[^\S\n]+/g, ' ').trim())
+    .filter(Boolean)
+    .join('\n')
 
 const extractContent = (content: Content) => {
   const textParts: string[] = []
@@ -45,7 +48,7 @@ const extractContent = (content: Content) => {
   visit(content)
 
   return {
-    text: normalizeWhitespace(textParts.join(' ')),
+    text: normalizeWhitespace(textParts.join('')),
     images,
   }
 }
@@ -71,23 +74,48 @@ export const moderateComment = async (content: Content) => {
     },
   ]
 
-  const { output } = await generateText({
-    model: provider.languageModel('moderation-model'),
-    system: moderationPrompt,
-    output: Output.object({
-      schema: ModerationResultSchema,
-    }),
-    messages: [
-      {
-        role: 'user',
-        content: userContent,
-      },
-    ],
-  })
+  try {
+    const { output } = await generateText({
+      model: provider.languageModel('moderation-model'),
+      system: moderationPrompt,
+      output: Output.object({
+        schema: ModerationResultSchema,
+      }),
+      messages: [
+        {
+          role: 'user',
+          content: userContent,
+        },
+      ],
+    })
 
-  if (!output.allowed) {
-    throw new RouteError({ statusCode: 400, message: output.reason })
+    if (!output) {
+      throw new RouteError({
+        statusCode: 500,
+        message: 'Could not verify content safety. Please try again.',
+      })
+    }
+
+    if (!output.allowed) {
+      throw new RouteError({ statusCode: 400, message: output.reason })
+    }
+
+    return output
+  } catch (error) {
+    if (error instanceof RouteError) {
+      throw error
+    }
+
+    console.error('Comment moderation failed:', {
+      error:
+        error instanceof Error
+          ? { name: error.name, message: error.message }
+          : String(error),
+    })
+
+    throw new RouteError({
+      statusCode: 500,
+      message: 'Could not verify content safety. Please try again.',
+    })
   }
-
-  return output
 }

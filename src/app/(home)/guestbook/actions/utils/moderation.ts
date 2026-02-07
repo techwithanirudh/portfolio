@@ -1,12 +1,12 @@
 import { generateText, Output, type UserContent } from 'ai'
 import { moderationPrompt } from '@/lib/ai/prompts/moderation'
-import { parseB64File } from '@/lib/files'
-import { ModerationResultSchema } from '@/lib/validators'
 import { provider } from '@/lib/ai/providers'
+import type { Base64FileParts } from '@/lib/files'
+import { ModerationResultSchema } from '@/lib/validators'
 
 export interface ModerateGuestbookEntryInput {
   message: string
-  signature?: string
+  signature?: Base64FileParts
 }
 
 export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
@@ -20,19 +20,10 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
   ]
 
   if (signature) {
-    const parsedSignature = parseB64File(signature)
-
-    if (!parsedSignature) {
-      return {
-        allowed: false,
-        reason: 'Signature format is invalid.',
-      }
-    }
-
     userContent.push({
       type: 'image',
-      image: parsedSignature.data,
-      mediaType: parsedSignature.mediaType,
+      image: signature.data,
+      mediaType: signature.mediaType,
     })
   }
 
@@ -57,7 +48,7 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
       error:
         error instanceof Error
           ? { name: error.name, message: error.message }
-          : String(error)
+          : String(error),
     })
 
     return {

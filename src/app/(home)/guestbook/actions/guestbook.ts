@@ -4,7 +4,7 @@ import { del, put } from '@vercel/blob'
 import { and, eq } from 'drizzle-orm'
 import { revalidatePath, updateTag } from 'next/cache'
 import { headers } from 'next/headers'
-import { parseB64File } from '@/lib/files'
+import { type Base64FileParts, parseB64File } from '@/lib/files'
 import { ActionError, actionClient } from '@/lib/safe-action/client'
 import type { ActionContext } from '@/lib/safe-action/middleware'
 import { botIdMiddleware, userMiddleware } from '@/lib/safe-action/middleware'
@@ -43,9 +43,19 @@ export const createGuestbookEntry = protectedGuestbookAction
       const { user } = ctx
       const name = user.name ?? 'Guest'
 
+      let parsedSignature: Base64FileParts | null = null
+
+      if (parsedInput.signature) {
+        parsedSignature = parseB64File(parsedInput.signature)
+
+        if (!parsedSignature || parsedSignature.mediaType !== 'image/png') {
+          throw new ActionError('Signature must be a PNG data URL.')
+        }
+      }
+
       const moderation = await moderateEntry({
         message: parsedInput.message,
-        signature: parsedInput.signature,
+        signature: parsedSignature ?? undefined,
       })
 
       if (!moderation.allowed) {
@@ -54,13 +64,7 @@ export const createGuestbookEntry = protectedGuestbookAction
 
       let signatureUrl: string | null = null
 
-      if (parsedInput.signature) {
-        const parsedSignature = parseB64File(parsedInput.signature)
-
-        if (!parsedSignature || parsedSignature.mediaType !== 'image/png') {
-          throw new ActionError('Signature must be a PNG data URL.')
-        }
-
+      if (parsedSignature) {
         const buffer = Buffer.from(parsedSignature.data, 'base64')
         const blob = await put(
           `guestbook/signatures/${user.id}-${Date.now()}.png`,
@@ -273,9 +277,7 @@ export const banGuestbookUser = protectedGuestbookAction
           },
           headers: await headers(),
         })
-      }
-
-      if (parsedInput.action === 'unban') {
+      } else {
         if (!targetUser.banned) {
           throw new ActionError('This user is not banned.')
         }

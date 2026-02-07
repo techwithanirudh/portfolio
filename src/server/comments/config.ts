@@ -4,9 +4,9 @@ import { createDrizzleAdapter } from '@fuma-comment/server/adapters/drizzle'
 import type { CustomRequest } from '@fuma-comment/server/custom'
 
 import { auth as betterAuth } from '@/server/auth'
+import { moderateComment } from '@/server/comments/moderation'
 import { db } from '@/server/db'
 import { comments, rates, roles, users } from '@/server/db/schema'
-import { moderateComment } from '@/server/comments/moderation'
 
 export const auth: AuthAdapter<CustomRequest> =
   createBetterAuthAdapter(betterAuth)

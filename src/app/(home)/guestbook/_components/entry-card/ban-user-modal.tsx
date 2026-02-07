@@ -26,19 +26,16 @@ export const BanUserModal = ({
   onConfirm,
   onOpenChange,
 }: BanUserModalProps) => {
-  let actionLabel = 'Ban user'
-
-  if (isBanned) {
-    actionLabel = 'Unban user'
-  }
-
-  if (isBusy) {
-    actionLabel = isBanned ? 'Unbanning...' : 'Banning...'
-  }
+  const banLabel = isBanned ? 'Unban user' : 'Ban user'
+  const busyLabel = isBanned ? 'Unbanning...' : 'Banning...'
+  const actionLabel = isBusy ? busyLabel : banLabel
 
   return (
-    <Dialog onOpenChange={onOpenChange} open={isOpen}>
-      <DialogContent>
+    <Dialog onOpenChange={isBusy ? undefined : onOpenChange} open={isOpen}>
+      <DialogContent
+        onEscapeKeyDown={isBusy ? (e) => e.preventDefault() : undefined}
+        onPointerDownOutside={isBusy ? (e) => e.preventDefault() : undefined}
+      >
         <DialogHeader>
           <DialogTitle>{isBanned ? 'Unban user?' : 'Ban user?'}</DialogTitle>
           <DialogDescription>
@@ -49,6 +46,7 @@ export const BanUserModal = ({
         </DialogHeader>
         <DialogFooter>
           <Button
+            disabled={isBusy}
             onClick={() => onOpenChange(false)}
             type='button'
             variant='ghost'
@@ -60,7 +58,7 @@ export const BanUserModal = ({
             disabled={isBusy}
             onClick={onConfirm}
             type='button'
-            variant='destructive'
+            variant={isBanned ? 'outline' : 'destructive'}
           >
             {isBusy ? <Loader2 className='animate-spin' /> : null}
             {actionLabel}
