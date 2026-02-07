@@ -1,6 +1,6 @@
 'use client'
 
-import { Eraser } from 'lucide-react'
+import { Eraser, Redo2, Undo2 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import {
   type PointerEvent,
@@ -11,12 +11,15 @@ import {
 } from 'react'
 
 import { Button } from '@/components/ui/button'
+import { useRefHistory } from '@/hooks/use-ref-history'
 import { cn } from '@/lib/utils'
 
 export interface SignaturePadHandle {
   clear: () => void
   isEmpty: () => boolean
   toDataURL: () => string
+  undo: () => void
+  redo: () => void
 }
 
 interface SignaturePadProps {
@@ -82,6 +85,7 @@ export function SignaturePad({
   const lastPoint = useRef<{ x: number; y: number } | null>(null)
   const strokes = useRef(0)
   const color = useRef(getThemeColor(resolvedTheme))
+  const snapshots = useRefHistory<ImageData>()
 
   useEffect(() => {
     color.current = getThemeColor(resolvedTheme)
@@ -210,7 +214,9 @@ export function SignaturePad({
     drawing.current = false
     lastPoint.current = null
     const canvas = canvasRef.current
-    if (canvas) {
+    const ctx = canvas?.getContext('2d')
+    if (canvas && ctx) {
+      snapshots.push(ctx.getImageData(0, 0, canvas.width, canvas.height))
       onChange?.(exportCanvas(canvas))
     }
   }
@@ -222,8 +228,42 @@ export function SignaturePad({
     }
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
     strokes.current = 0
+    snapshots.clear()
     onClear?.()
-  }, [onClear])
+  }, [onClear, snapshots])
+
+  const undo = useCallback(() => {
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (!(canvas && ctx && snapshots.canUndo())) {
+      return
+    }
+    const snapshot = snapshots.undo()
+    if (snapshot) {
+      ctx.putImageData(snapshot, 0, 0)
+      strokes.current -= 1
+      onChange?.(exportCanvas(canvas))
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      strokes.current = 0
+      onClear?.()
+    }
+  }, [onChange, onClear, snapshots])
+
+  const redo = useCallback(() => {
+    const canvas = canvasRef.current
+    const ctx = canvas?.getContext('2d')
+    if (!(canvas && ctx && snapshots.canRedo())) {
+      return
+    }
+    const snapshot = snapshots.redo()
+    if (!snapshot) {
+      return
+    }
+    ctx.putImageData(snapshot, 0, 0)
+    strokes.current += 1
+    onChange?.(exportCanvas(canvas))
+  }, [onChange, snapshots])
 
   useImperativeHandle(
     ref,
@@ -232,8 +272,10 @@ export function SignaturePad({
       isEmpty: () => strokes.current === 0,
       toDataURL: () =>
         canvasRef.current ? exportCanvas(canvasRef.current) : '',
+      undo,
+      redo,
     }),
-    [clear]
+    [clear, undo, redo]
   )
 
   return (
@@ -253,6 +295,28 @@ export function SignaturePad({
         ref={canvasRef}
         style={{ touchAction: 'none' }}
       />
+      <div className='absolute top-2 left-2 flex gap-1'>
+        <Button
+          aria-label='Undo stroke'
+          disabled={disabled}
+          onClick={undo}
+          size='icon'
+          type='button'
+          variant='ghost'
+        >
+          <Undo2 className='size-4' />
+        </Button>
+        <Button
+          aria-label='Redo stroke'
+          disabled={disabled}
+          onClick={redo}
+          size='icon'
+          type='button'
+          variant='ghost'
+        >
+          <Redo2 className='size-4' />
+        </Button>
+      </div>
       <Button
         aria-label='Clear signature'
         className='absolute top-2 right-2'
