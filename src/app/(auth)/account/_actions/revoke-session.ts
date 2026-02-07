@@ -10,27 +10,27 @@ export async function revokeSessionAction(options: { token: string }) {
   const session = await getSession()
   const currentToken = session?.session.token
   if (!currentToken) {
-    return { ok: false as const }
+    return { ok: false }
   }
 
   try {
     const sessions = await listSessions()
     const isUsersSession = sessions.some((s) => s.token === token)
     if (!isUsersSession) {
-      return { ok: false as const }
+      return { ok: false }
     }
   } catch {
-    return { ok: false as const }
+    return { ok: false }
   }
 
   try {
     const result = await revokeSession(token)
 
     if (!result.status) {
-      return { ok: false as const }
+      return { ok: false }
     }
   } catch {
-    return { ok: false as const }
+    return { ok: false }
   }
 
   revalidatePath('/account')
@@ -39,5 +39,5 @@ export async function revokeSessionAction(options: { token: string }) {
     redirect('/')
   }
 
-  return { ok: true as const }
+  return { ok: true }
 }
