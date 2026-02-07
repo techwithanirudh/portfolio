@@ -54,6 +54,11 @@ export const GuestbookForm = () => {
           setFormKey((current) => current + 1)
           router.refresh()
         },
+        onError: () => {
+          if (form.formState.errors.message) {
+            setStep(1)
+          }
+        },
       },
       formProps: {
         mode: 'onBlur',

@@ -165,6 +165,7 @@ export const GuestbookEntryCard = ({
       {isEditing ? (
         <div className='space-y-3'>
           <Textarea
+            aria-label='Edit message'
             className='min-h-[8rem] resize-y bg-background'
             disabled={isBusy}
             onChange={(event) => setDraftMessage(event.target.value)}
