@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -25,6 +27,27 @@ export interface SignInCardProps {
 }
 
 export function SignInCard({ redirectTo }: SignInCardProps) {
+  const [provider, setProvider] = useState<'google' | 'github' | null>(null)
+  const isSigningIn = provider !== null
+
+  const signInWithProvider = async (nextProvider: 'google' | 'github') => {
+    if (isSigningIn) {
+      return
+    }
+
+    try {
+      setProvider(nextProvider)
+      await signIn.social({
+        provider: nextProvider,
+        callbackURL: redirectTo,
+      })
+    } catch {
+      toast.error('Sign in failed. Please try again.')
+    } finally {
+      setProvider(null)
+    }
+  }
+
   return (
     <div className='relative mx-auto w-full max-w-xl'>
       <div className='absolute -top-3 -left-3 z-10 hidden h-6 sm:block'>
@@ -53,31 +76,35 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
                   className={cn(
                     'w-full gap-2 rounded-none border border-border border-dashed'
                   )}
-                  onClick={async () => {
-                    await signIn.social({
-                      provider: 'google',
-                      callbackURL: redirectTo,
-                    })
-                  }}
+                  disabled={isSigningIn}
+                  onClick={() => signInWithProvider('google')}
                   variant='outline'
                 >
-                  <Icons.google />
-                  Sign in with Google
+                  {provider === 'google' ? (
+                    <Icons.spinner className='size-4 animate-spin' />
+                  ) : (
+                    <Icons.google />
+                  )}
+                  {provider === 'google'
+                    ? 'Signing in...'
+                    : 'Sign in with Google'}
                 </Button>
                 <Button
                   className={cn(
                     'w-full gap-2 rounded-none border border-border border-dashed'
                   )}
-                  onClick={async () => {
-                    await signIn.social({
-                      provider: 'github',
-                      callbackURL: redirectTo,
-                    })
-                  }}
+                  disabled={isSigningIn}
+                  onClick={() => signInWithProvider('github')}
                   variant='outline'
                 >
-                  <Icons.gitHub />
-                  Sign in with GitHub
+                  {provider === 'github' ? (
+                    <Icons.spinner className='size-4 animate-spin' />
+                  ) : (
+                    <Icons.gitHub />
+                  )}
+                  {provider === 'github'
+                    ? 'Signing in...'
+                    : 'Sign in with GitHub'}
                 </Button>
               </div>
             </div>

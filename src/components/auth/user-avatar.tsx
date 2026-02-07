@@ -28,7 +28,7 @@ export function UserAvatar({
 
   return (
     <Avatar
-      className={cn('rounded-md', className, classNames?.base)}
+      className={cn('rounded-md', classNames?.base, className)}
       key={src}
       {...props}
     >

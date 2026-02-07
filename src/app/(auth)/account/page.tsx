@@ -1,13 +1,29 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import { getLoginUrl } from '@/lib/auth-client'
+import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { AccountSettings } from './_components/account-settings'
 import { ActiveSessions } from './_components/active-sessions'
+
+export async function generateMetadata(): Promise<Metadata> {
+  return createMetadata({
+    title: 'Account Settings',
+    description: 'Manage your account information and active sessions.',
+    openGraph: {
+      url: '/account',
+    },
+    alternates: {
+      canonical: '/account',
+    },
+  })
+}
 
 export default async function AccountPage() {
   const session = await getSession()
 
   if (!session?.user) {
-    redirect('/login?redirectTo=%2Faccount')
+    redirect(getLoginUrl('/account'))
   }
 
   return (

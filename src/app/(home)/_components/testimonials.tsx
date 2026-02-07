@@ -80,7 +80,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
       return
     }
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (api.selectedScrollSnap() + 1 === api.scrollSnapList().length) {
         setCurrent(0)
         api.scrollTo(0)
@@ -89,6 +89,8 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
         setCurrent(current + 1)
       }
     }, 2500)
+
+    return () => clearTimeout(timer)
   }, [api, current])
 
   return (

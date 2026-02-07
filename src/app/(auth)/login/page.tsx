@@ -1,14 +1,43 @@
+import type { Metadata } from 'next'
+import { createMetadata } from '@/lib/metadata'
 import { SignInCard } from './_components/sign-in-card'
 
-export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
-  const params = await searchParams
+export async function generateMetadata(): Promise<Metadata> {
+  return createMetadata({
+    title: 'Sign In',
+    description: 'Sign in to manage your account and sessions.',
+    openGraph: {
+      url: '/login',
+    },
+    alternates: {
+      canonical: '/login',
+    },
+  })
+}
+
+interface LoginPageProps {
+  searchParams?: {
+    redirectTo?: string | string[]
+  }
+}
+
+export default function LoginPage({ searchParams }: LoginPageProps) {
+  const params = searchParams
 
   const redirectTo = (() => {
     const value = Array.isArray(params?.redirectTo)
       ? params.redirectTo[0]
       : params?.redirectTo
 
-    return typeof value === 'string' && value.startsWith('/') ? value : '/'
+    if (typeof value !== 'string') {
+      return '/'
+    }
+
+    const candidate = value.trim()
+
+    return candidate.startsWith('/') && !candidate.startsWith('//')
+      ? candidate
+      : '/'
   })()
 
   return (
