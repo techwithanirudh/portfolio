@@ -14,6 +14,7 @@ interface ListItem {
   items: {
     href: string
     children: ReactNode
+    external?: boolean
   }[]
 }
 
@@ -51,6 +52,11 @@ export const Links = () => {
       items: [
         { href: '/uses', children: 'Uses' },
         { href: '/colophon', children: 'Colophon' },
+        {
+          href: 'https://v1.techwithanirudh.com/',
+          children: 'V1 Portfolio',
+          external: true,
+        },
         { href: '/rss.xml', children: 'RSS Feed' },
         { href: '/sitemap.xml', children: 'Sitemap' },
       ],
@@ -99,8 +105,8 @@ export const Links = () => {
               <li key={item.href}>
                 <ActiveLink
                   href={item.href}
-                  rel={list.external ? 'noopener noreferrer' : undefined}
-                  target={list.external ? '_blank' : undefined}
+                  rel={item.external ? 'noopener noreferrer' : undefined}
+                  target={item.external ? '_blank' : undefined}
                 >
                   {item.children}
                 </ActiveLink>

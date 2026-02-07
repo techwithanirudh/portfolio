@@ -4,7 +4,7 @@ import { useAuthenticate } from '@daveyplate/better-auth-ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
+import { Activity, useRef, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -32,6 +32,7 @@ export const GuestbookForm = () => {
   const user = session?.user
   const [authenticate, setAuthenticate] = useState(false)
   const [step, setStep] = useState<1 | 2>(1)
+  const [formKey, setFormKey] = useState(0)
   const signaturePad = useRef<SignaturePadHandle>(null)
 
   useAuthenticate({
@@ -44,10 +45,19 @@ export const GuestbookForm = () => {
     {
       actionProps: {
         onSuccess: () => {
-          form.reset()
+          form.reset({
+            message: '',
+            signature: undefined,
+          })
           setStep(1)
           signaturePad.current?.clear()
+          setFormKey((current) => current + 1)
           router.refresh()
+        },
+        onError: () => {
+          if (form.formState.errors.message) {
+            setStep(1)
+          }
         },
       },
       formProps: {
@@ -93,9 +103,13 @@ export const GuestbookForm = () => {
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-6' onSubmit={handleSubmitWithAction}>
-        {step === 1 && (
-          <>
+      <form
+        className='flex-1 space-y-6'
+        key={formKey}
+        onSubmit={handleSubmitWithAction}
+      >
+        <Activity mode={step === 1 ? 'visible' : 'hidden'}>
+          <div className='space-y-6'>
             <FormField
               control={form.control}
               name='message'
@@ -129,10 +143,10 @@ export const GuestbookForm = () => {
               Next{' '}
               <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
             </Button>
-          </>
-        )}
-        {step === 2 && (
-          <>
+          </div>
+        </Activity>
+        <Activity mode={step === 2 ? 'visible' : 'hidden'}>
+          <div className='space-y-6'>
             <FormItem>
               <FormLabel>Signature</FormLabel>
               <SignaturePad
@@ -141,9 +155,6 @@ export const GuestbookForm = () => {
                 onClear={() => form.setValue('signature', undefined)}
                 ref={signaturePad}
               />
-              <FormDescription>
-                Draw your signature with your mouse or finger.
-              </FormDescription>
             </FormItem>
             <div className='flex gap-2'>
               <Button
@@ -158,13 +169,13 @@ export const GuestbookForm = () => {
               </Button>
               <Button className='flex-1' disabled={isExecuting} type='submit'>
                 {isExecuting ? (
-                  <Icons.spinner className='mr-2 size-4 animate-spin' />
+                  <Icons.spinner className='size-4 animate-spin' />
                 ) : null}
                 Submit
               </Button>
             </div>
-          </>
-        )}
+          </div>
+        </Activity>
         {action.status === 'hasSucceeded' && (
           <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />

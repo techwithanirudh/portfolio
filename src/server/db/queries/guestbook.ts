@@ -3,7 +3,7 @@ import { unstable_cache } from 'next/cache'
 
 import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { db } from '@/server/db'
-import { guestbookEntries, guestbookReactions } from '@/server/db/schema'
+import { guestbookEntries, guestbookReactions, users } from '@/server/db/schema'
 
 const fetchGuestbookEntries = async (
   currentUserId?: string | null
@@ -16,6 +16,8 @@ const fetchGuestbookEntries = async (
       message: guestbookEntries.message,
       signature: guestbookEntries.signature,
       userId: guestbookEntries.userId,
+      role: users.role,
+      banned: users.banned,
       createdAt: guestbookEntries.createdAt,
       editedAt: guestbookEntries.editedAt,
       // Reactions
@@ -26,6 +28,7 @@ const fetchGuestbookEntries = async (
         : sql<boolean>`false`,
     })
     .from(guestbookEntries)
+    .innerJoin(users, eq(users.id, guestbookEntries.userId))
     .leftJoin(
       guestbookReactions,
       eq(guestbookReactions.entryId, guestbookEntries.id)
@@ -36,6 +39,8 @@ const fetchGuestbookEntries = async (
       guestbookEntries.message,
       guestbookEntries.signature,
       guestbookEntries.userId,
+      users.role,
+      users.banned,
       guestbookEntries.createdAt,
       guestbookEntries.editedAt,
       guestbookReactions.emoji
@@ -52,6 +57,8 @@ const fetchGuestbookEntries = async (
         message: row.message,
         signature: row.signature ?? null,
         userId: row.userId,
+        role: row.role,
+        banned: row.banned ?? false,
         createdAt: row.createdAt,
         editedAt: row.editedAt,
         reactions: [],
@@ -84,13 +91,25 @@ export const getGuestbookEntries = (currentUserId?: string | null) => {
   )()
 }
 
-export const deleteGuestbookEntry = async (entryId: number, userId: string) => {
+export const deleteGuestbookEntry = async (
+  entryId: number,
+  userId: string,
+  isAdmin = false
+) => {
   const deleted = await db
     .delete(guestbookEntries)
     .where(
-      and(eq(guestbookEntries.id, entryId), eq(guestbookEntries.userId, userId))
+      isAdmin
+        ? eq(guestbookEntries.id, entryId)
+        : and(
+            eq(guestbookEntries.id, entryId),
+            eq(guestbookEntries.userId, userId)
+          )
     )
-    .returning({ id: guestbookEntries.id })
+    .returning({
+      id: guestbookEntries.id,
+      signature: guestbookEntries.signature,
+    })
 
-  return deleted.length > 0
+  return deleted.length > 0 ? deleted[0] : null
 }

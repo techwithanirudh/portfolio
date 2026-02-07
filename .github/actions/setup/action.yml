@@ -32,4 +32,6 @@ runs:
         NEXT_PUBLIC_BASE_URL="http://localhost:3000"
         GITHUB_TOKEN="github_pat_1234567890"
         OPENAI_API_KEY="sk-proj-1234567890"
+        HACKCLUB_API_KEY="sk-hc-1234567890"
+        BLOB_READ_WRITE_TOKEN="vercel_blob_rw_dummy_token"
         EOF
