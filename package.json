@@ -30,7 +30,6 @@
     "@ai-sdk/openai": "^3.0.19",
     "@ai-sdk/react": "^3.0.51",
     "@bprogress/next": "^3.2.12",
-    "@daveyplate/better-auth-ui": "^3.3.15",
     "@fuma-comment/react": "^1.4.0",
     "@fuma-comment/server": "^1.4.0",
     "@hookform/resolvers": "^5.2.2",

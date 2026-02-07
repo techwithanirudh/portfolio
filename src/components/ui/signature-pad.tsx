@@ -14,7 +14,10 @@ import { Button } from '@/components/ui/button'
 import { useRefHistory } from '@/hooks/use-ref-history'
 import { cn } from '@/lib/utils'
 
-type Point = { x: number; y: number }
+interface Point {
+  x: number
+  y: number
+}
 
 export interface SignaturePadHandle {
   clear: () => void
@@ -45,7 +48,9 @@ function exportCanvas(source: HTMLCanvasElement): string {
   normalized.width = source.width
   normalized.height = source.height
   const nCtx = normalized.getContext('2d')
-  if (!nCtx) return source.toDataURL('image/png')
+  if (!nCtx) {
+    return source.toDataURL('image/png')
+  }
 
   nCtx.drawImage(source, 0, 0)
   nCtx.globalCompositeOperation = 'source-in'
@@ -56,7 +61,9 @@ function exportCanvas(source: HTMLCanvasElement): string {
   output.width = OUTPUT_WIDTH
   output.height = OUTPUT_HEIGHT
   const oCtx = output.getContext('2d')
-  if (!oCtx) return normalized.toDataURL('image/png')
+  if (!oCtx) {
+    return normalized.toDataURL('image/png')
+  }
 
   const scale = Math.min(
     OUTPUT_WIDTH / normalized.width,
@@ -99,7 +106,9 @@ export function SignaturePad({
 
     const canvas = canvasRef.current
     const ctx = ctxRef.current
-    if (!canvas || !ctx || strokes.current === 0) return
+    if (!(canvas && ctx) || strokes.current === 0) {
+      return
+    }
 
     ctx.save()
     ctx.setTransform(1, 0, 0, 1, 0, 0)
@@ -112,13 +121,17 @@ export function SignaturePad({
   const setupCanvas = useCallback(() => {
     const canvas = canvasRef.current
     const container = containerRef.current
-    if (!canvas || !container) return
+    if (!(canvas && container)) {
+      return
+    }
 
     const rect = container.getBoundingClientRect()
     const dpr = window.devicePixelRatio || 1
     const w = Math.round(rect.width * dpr)
     const h = Math.round(rect.height * dpr)
-    if (canvas.width === w && canvas.height === h) return
+    if (canvas.width === w && canvas.height === h) {
+      return
+    }
 
     const ctx = ctxRef.current
     const snapshot =
@@ -132,7 +145,9 @@ export function SignaturePad({
     canvas.style.height = `${rect.height}px`
 
     const newCtx = canvas.getContext('2d')
-    if (!newCtx) return
+    if (!newCtx) {
+      return
+    }
 
     ctxRef.current = newCtx
     newCtx.scale(dpr, dpr)
@@ -147,7 +162,9 @@ export function SignaturePad({
   useEffect(() => {
     setupCanvas()
     const container = containerRef.current
-    if (!container) return
+    if (!container) {
+      return
+    }
 
     const observer = new ResizeObserver(setupCanvas)
     observer.observe(container)
@@ -156,27 +173,35 @@ export function SignaturePad({
 
   const getPoint = (e: PointerEvent): Point | null => {
     const rect = canvasRef.current?.getBoundingClientRect()
-    if (!rect) return null
+    if (!rect) {
+      return null
+    }
     return { x: e.clientX - rect.left, y: e.clientY - rect.top }
   }
 
   const commitStroke = () => {
     const canvas = canvasRef.current
     const ctx = ctxRef.current
-    if (!canvas || !ctx) return
+    if (!(canvas && ctx)) {
+      return
+    }
 
     history.push(ctx.getImageData(0, 0, canvas.width, canvas.height))
     onChange?.(exportCanvas(canvas))
   }
 
   const onPointerDown = (e: PointerEvent) => {
-    if (disabled) return
+    if (disabled) {
+      return
+    }
     e.preventDefault()
 
     const canvas = canvasRef.current
     const ctx = ctxRef.current
     const point = getPoint(e)
-    if (!canvas || !ctx || !point) return
+    if (!(canvas && ctx && point)) {
+      return
+    }
 
     canvas.setPointerCapture(e.pointerId)
     isDrawing.current = true
@@ -190,13 +215,17 @@ export function SignaturePad({
   }
 
   const onPointerMove = (e: PointerEvent) => {
-    if (!isDrawing.current) return
+    if (!isDrawing.current) {
+      return
+    }
     e.preventDefault()
 
     const ctx = ctxRef.current
     const point = getPoint(e)
     const prev = lastPoint.current
-    if (!ctx || !point || !prev) return
+    if (!(ctx && point && prev)) {
+      return
+    }
 
     ctx.strokeStyle = strokeColor.current
     ctx.lineWidth = strokeWidth
@@ -208,7 +237,9 @@ export function SignaturePad({
   }
 
   const onPointerUp = () => {
-    if (!isDrawing.current) return
+    if (!isDrawing.current) {
+      return
+    }
     isDrawing.current = false
     lastPoint.current = null
     commitStroke()
@@ -217,7 +248,9 @@ export function SignaturePad({
   const clear = useCallback(() => {
     const canvas = canvasRef.current
     const ctx = ctxRef.current
-    if (!canvas || !ctx) return
+    if (!(canvas && ctx)) {
+      return
+    }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     strokes.current = 0
@@ -228,7 +261,9 @@ export function SignaturePad({
   const undo = useCallback(() => {
     const canvas = canvasRef.current
     const ctx = ctxRef.current
-    if (!canvas || !ctx || !history.canUndo()) return
+    if (!(canvas && ctx && history.canUndo())) {
+      return
+    }
 
     const snapshot = history.undo()
     if (snapshot) {
@@ -245,10 +280,14 @@ export function SignaturePad({
   const redo = useCallback(() => {
     const canvas = canvasRef.current
     const ctx = ctxRef.current
-    if (!canvas || !ctx || !history.canRedo()) return
+    if (!(canvas && ctx && history.canRedo())) {
+      return
+    }
 
     const snapshot = history.redo()
-    if (!snapshot) return
+    if (!snapshot) {
+      return
+    }
 
     ctx.putImageData(snapshot, 0, 0)
     strokes.current += 1

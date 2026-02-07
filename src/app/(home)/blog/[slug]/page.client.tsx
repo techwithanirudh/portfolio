@@ -1,7 +1,7 @@
 'use client'
-import { useAuthenticate } from '@daveyplate/better-auth-ui'
 import { Comments } from '@fuma-comment/react'
-import { useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useRef } from 'react'
 import { toast } from 'sonner'
 import { useCopyToClipboard } from 'usehooks-ts'
 import {
@@ -10,6 +10,7 @@ import {
 } from '@/components/icons/animated/upload'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
+import { getLoginUrl } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
 export function Share({
@@ -51,18 +52,14 @@ export function PostComments({
   slug: string
   className?: string
 }) {
-  const [authenticate, setAuthenticate] = useState(false)
-
-  useAuthenticate({
-    enabled: authenticate,
-  })
+  const router = useRouter()
 
   return (
     <Comments
       auth={{
         type: 'api',
         signIn: () => {
-          setAuthenticate(true)
+          router.push(getLoginUrl(`/blog/${slug}`))
         },
       }}
       className={cn('w-full', className)}

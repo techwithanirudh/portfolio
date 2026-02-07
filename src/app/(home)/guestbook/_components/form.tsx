@@ -1,8 +1,8 @@
 'use client'
 
-import { useAuthenticate } from '@daveyplate/better-auth-ui'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Activity, useRef, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
@@ -22,7 +22,7 @@ import {
   type SignaturePadHandle,
 } from '@/components/ui/signature-pad'
 import { Textarea } from '@/components/ui/textarea'
-import { useSession } from '@/lib/auth-client'
+import { getLoginUrl, useSession } from '@/lib/auth-client'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
@@ -30,14 +30,9 @@ export const GuestbookForm = () => {
   const router = useRouter()
   const { data: session, isPending } = useSession()
   const user = session?.user
-  const [authenticate, setAuthenticate] = useState(false)
   const [step, setStep] = useState<1 | 2>(1)
   const [formKey, setFormKey] = useState(0)
   const signaturePad = useRef<SignaturePadHandle>(null)
-
-  useAuthenticate({
-    enabled: authenticate,
-  })
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     createGuestbookEntry,
@@ -92,8 +87,8 @@ export const GuestbookForm = () => {
         <p className='text-muted-foreground text-sm'>
           Sign in to leave a guestbook message.
         </p>
-        <Button className='w-full' onClick={() => setAuthenticate(true)}>
-          Sign in to post
+        <Button asChild className='w-full'>
+          <Link href={getLoginUrl('/guestbook')}>Sign in to post</Link>
         </Button>
       </div>
     )
