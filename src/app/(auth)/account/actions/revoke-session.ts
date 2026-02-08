@@ -5,26 +5,17 @@ import { redirect } from 'next/navigation'
 import { ActionError, actionClient } from '@/lib/safe-action/client'
 import { userMiddleware } from '@/lib/safe-action/middleware'
 import { RevokeSessionSchema } from '@/lib/validators/session'
-import { getSession, listSessions, revokeSession } from '@/server/auth'
+import { getSession, revokeSession } from '@/server/auth'
 
 export const revokeSessionAction = actionClient
   .use(userMiddleware)
   .inputSchema(RevokeSessionSchema)
-  .action(async ({ parsedInput: { sessionId } }) => {
+  .action(async ({ parsedInput: { token } }) => {
     const session = await getSession()
     const currentToken = session?.session.token
 
-    const sessions = await listSessions()
-    const sessionToRevoke = sessions.find((s) => s.id === sessionId)
-
-    if (!sessionToRevoke?.token) {
-      throw new ActionError('Failed to revoke session.')
-    }
-
-    const tokenToRevoke = sessionToRevoke.token
-
     try {
-      const result = await revokeSession(tokenToRevoke)
+      const result = await revokeSession(token)
       if (!result.status) {
         throw new ActionError('Failed to revoke session.')
       }
@@ -34,7 +25,7 @@ export const revokeSessionAction = actionClient
 
     revalidatePath('/account')
 
-    if (currentToken && tokenToRevoke === currentToken) {
+    if (currentToken && token === currentToken) {
       redirect('/')
     }
 

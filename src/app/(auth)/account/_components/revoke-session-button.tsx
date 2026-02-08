@@ -7,8 +7,8 @@ import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { revokeSessionAction } from '../actions/revoke-session'
 
-export function RevokeSessionButton(props: { sessionId: string }) {
-  const { sessionId } = props
+export function RevokeSessionButton(props: { token: string }) {
+  const { token } = props
   const router = useRouter()
   const { execute, status } = useAction(revokeSessionAction, {
     onSuccess: () => {
@@ -28,7 +28,7 @@ export function RevokeSessionButton(props: { sessionId: string }) {
       className='rounded-none'
       disabled={status === 'executing'}
       onClick={() => {
-        execute({ sessionId })
+        execute({ token })
       }}
       size='sm'
       variant='destructive'
