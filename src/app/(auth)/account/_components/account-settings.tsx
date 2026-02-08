@@ -5,20 +5,21 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { format, formatDistanceToNow } from 'date-fns'
 import { UserAvatar } from '@/components/auth/user-avatar'
 import { Icons } from '@/components/icons/icons'
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -97,7 +98,7 @@ function EditNameDialog({ name }: { name: string }) {
   }
 
   return (
-    <Dialog
+    <AlertDialog
       onOpenChange={(value) => {
         setOpen(value)
         if (value) {
@@ -106,18 +107,18 @@ function EditNameDialog({ name }: { name: string }) {
       }}
       open={open}
     >
-      <DialogTrigger asChild>
+      <AlertDialogTrigger asChild>
         <Button className='rounded-none' size='sm' variant='secondary'>
           Edit
         </Button>
-      </DialogTrigger>
-      <DialogContent className='rounded-none border-dashed'>
-        <DialogHeader>
-          <DialogTitle>Edit Name</DialogTitle>
-          <DialogDescription>
+      </AlertDialogTrigger>
+      <AlertDialogContent className='rounded-none border-dashed'>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Edit Name</AlertDialogTitle>
+          <AlertDialogDescription>
             Enter your full name, or a display name you are comfortable with.
-          </DialogDescription>
-        </DialogHeader>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
         <Form {...form}>
           <form
             className='space-y-4'
@@ -145,16 +146,14 @@ function EditNameDialog({ name }: { name: string }) {
             />
           </form>
         </Form>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              className='rounded-none'
-              disabled={form.formState.isSubmitting}
-              variant='secondary'
-            >
-              Cancel
-            </Button>
-          </DialogClose>
+        <AlertDialogFooter>
+          <AlertDialogCancel
+            className='rounded-none'
+            disabled={form.formState.isSubmitting}
+            variant='secondary'
+          >
+            Cancel
+          </AlertDialogCancel>
           <Button
             className='rounded-none'
             disabled={form.formState.isSubmitting}
@@ -166,16 +165,17 @@ function EditNameDialog({ name }: { name: string }) {
             )}
             Save
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 
 function formatAccountDate(date: Date | string) {
-  return new Date(date).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+  const parsedDate = new Date(date)
+
+  const absoluteDate = format(parsedDate, 'MMMM d, yyyy')
+  const relativeDate = formatDistanceToNow(parsedDate, { addSuffix: true })
+
+  return `${absoluteDate} (${relativeDate})`
 }
