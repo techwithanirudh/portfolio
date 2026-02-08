@@ -14,19 +14,14 @@ export const revokeSessionAction = actionClient
     const session = await getSession()
     const currentToken = session?.session.token
 
-    let tokenToRevoke: string
-    try {
-      const sessions = await listSessions()
-      const sessionToRevoke = sessions.find((s) => s.id === sessionId)
+    const sessions = await listSessions()
+    const sessionToRevoke = sessions.find((s) => s.id === sessionId)
 
-      if (!sessionToRevoke?.token) {
-        throw new ActionError('Failed to revoke session.')
-      }
-
-      tokenToRevoke = sessionToRevoke.token
-    } catch {
+    if (!sessionToRevoke?.token) {
       throw new ActionError('Failed to revoke session.')
     }
+
+    const tokenToRevoke = sessionToRevoke.token
 
     try {
       const result = await revokeSession(tokenToRevoke)
