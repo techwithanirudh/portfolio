@@ -5,7 +5,9 @@ import { getSession } from '@/server/auth'
 
 export const getSessionCached = cache(getSession)
 
-export async function requireSession() {
+type Session = NonNullable<Awaited<ReturnType<typeof getSession>>>
+
+export async function requireSession(): Promise<Session> {
   const session = await getSessionCached()
 
   if (!session?.user) {
