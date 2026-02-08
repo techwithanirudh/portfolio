@@ -16,13 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 interface LoginPageProps {
-  searchParams?: {
+  searchParams?: Promise<{
     redirectTo?: string | string[]
-  }
+  }>
 }
 
-export default function LoginPage({ searchParams }: LoginPageProps) {
-  const params = searchParams
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams
 
   const redirectTo = (() => {
     const value = Array.isArray(params?.redirectTo)
