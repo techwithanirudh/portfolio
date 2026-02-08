@@ -235,7 +235,7 @@ const HeaderNavigationMenu = ({
         id='nd-nav'
         {...props}
         className={cn(
-          'sticky top-0 z-10 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors',
+          'sticky top-0 z-40 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors',
           props.className
         )}
       >
