@@ -15,12 +15,24 @@ const PLATFORM_ICONS = {
   unknown: MonitorIcon,
 } as const
 
+const compareSessionsByRecency =
+  (currentToken: string) => (a: Session, b: Session) => {
+    const aIsCurrent = a.token === currentToken
+    const bIsCurrent = b.token === currentToken
+
+    if (aIsCurrent !== bIsCurrent) {
+      return aIsCurrent ? -1 : 1
+    }
+
+    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+  }
+
 export async function ActiveSessions(props: { currentToken: string }) {
   const { currentToken } = props
 
-  let sessionsData: Session[] = []
+  let sessions: Session[]
   try {
-    sessionsData = await listSessions()
+    sessions = await listSessions()
   } catch {
     return (
       <Card className='gap-0 rounded-none border-dashed py-0'>
@@ -31,16 +43,11 @@ export async function ActiveSessions(props: { currentToken: string }) {
     )
   }
 
-  const sessions = [...sessionsData].sort((a, b) => {
-    const aIsCurrent = a.token === currentToken
-    const bIsCurrent = b.token === currentToken
-    if (aIsCurrent !== bIsCurrent) {
-      return aIsCurrent ? -1 : 1
-    }
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-  })
+  const sortedSessions = sessions
+    .slice()
+    .sort(compareSessionsByRecency(currentToken))
 
-  if (sessions.length === 0) {
+  if (sortedSessions.length === 0) {
     return (
       <Card className='rounded-none border-dashed py-12 text-center text-muted-foreground text-sm'>
         No active sessions found.
@@ -50,7 +57,7 @@ export async function ActiveSessions(props: { currentToken: string }) {
 
   return (
     <div className='space-y-4'>
-      {sessions.map((session) => (
+      {sortedSessions.map((session) => (
         <SessionCard
           currentToken={currentToken}
           key={session.id}
