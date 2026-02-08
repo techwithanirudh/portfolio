@@ -5,4 +5,3 @@ export const RevokeSessionSchema = z.object({
 })
 
 export type RevokeSession = z.infer<typeof RevokeSessionSchema>
-

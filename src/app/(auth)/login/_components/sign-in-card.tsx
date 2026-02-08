@@ -72,7 +72,7 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
               >
                 <Button
                   className={cn(
-                    'w-full gap-2 rounded-none border border-border border-dashed'
+                    'w-full gap-2 rounded-none border border-border border-dashed shadow-none'
                   )}
                   disabled={isLoading}
                   onClick={() => {
@@ -89,7 +89,7 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
                 </Button>
                 <Button
                   className={cn(
-                    'w-full gap-2 rounded-none border border-border border-dashed'
+                    'w-full gap-2 rounded-none border border-border border-dashed shadow-none'
                   )}
                   disabled={isLoading}
                   onClick={() => {

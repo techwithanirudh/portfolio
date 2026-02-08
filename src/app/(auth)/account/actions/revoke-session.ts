@@ -14,10 +14,6 @@ export const revokeSessionAction = actionClient
     const session = await getSession()
     const currentToken = session?.session.token
 
-    if (!currentToken) {
-      throw new ActionError('You must be signed in to do that.')
-    }
-
     try {
       const result = await revokeSession(token)
       if (!result.status) {
@@ -29,7 +25,7 @@ export const revokeSessionAction = actionClient
 
     revalidatePath('/account')
 
-    if (token === currentToken) {
+    if (currentToken && token === currentToken) {
       redirect('/')
     }
 
