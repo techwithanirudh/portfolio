@@ -3,7 +3,7 @@ import { cache } from 'react'
 import { getLoginUrl } from '@/lib/auth-client'
 import { getSession } from '@/server/auth'
 
-export const getSessionCached = cache(async () => await getSession())
+export const getSessionCached = cache(getSession)
 
 export async function requireSession() {
   const session = await getSessionCached()
