@@ -12,7 +12,7 @@ export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
         <Card className='gap-0 rounded-none border-dashed py-0' key={item}>
           <div className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
             <div className='flex gap-4'>
-              <Skeleton className='size-10 rounded-md shrink-0' />
+              <Skeleton className='size-10 shrink-0 rounded-md' />
 
               <div className='space-y-1'>
                 <div className='flex items-center gap-2'>
@@ -25,7 +25,7 @@ export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
                 </div>
               </div>
             </div>
-            <Skeleton className='h-8 w-full sm:w-18 rounded-none' />
+            <Skeleton className='h-8 w-full rounded-none sm:w-18' />
           </div>
         </Card>
       ))}

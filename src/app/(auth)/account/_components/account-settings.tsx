@@ -1,11 +1,11 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { format, formatDistanceToNow } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { format, formatDistanceToNow } from 'date-fns'
 import { UserAvatar } from '@/components/auth/user-avatar'
 import { Icons } from '@/components/icons/icons'
 import {

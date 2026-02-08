@@ -112,7 +112,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
   const parsed = parseUserAgent(session.userAgent)
   const PlatformIcon = PLATFORM_ICONS[parsed.platform]
 
-  const lastActive = format(new Date(session.updatedAt), 'MMM d, yyyy')
+  const lastActive = format(new Date(session.updatedAt), 'MMM d, yyyy, h:mm a')
 
   return (
     <Card className='gap-0 rounded-none border-dashed py-0'>
