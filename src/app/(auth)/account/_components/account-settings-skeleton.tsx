@@ -16,7 +16,7 @@ export function AccountSettingsSkeleton() {
           <span className='text-muted-foreground text-sm'>Display Name</span>
           <Skeleton className='h-4 w-56' />
         </div>
-        <Skeleton className='h-8 w-12.5 rounded-none' />
+        <Skeleton className='h-8 w-[3.125rem] rounded-none' />
       </div>
 
       <div className='p-4 sm:p-6'>

@@ -144,7 +144,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
             </div>
           </div>
         </div>
-        <RevokeSessionButton token={session.token} />
+        <RevokeSessionButton sessionId={session.id} />
       </div>
     </Card>
   )

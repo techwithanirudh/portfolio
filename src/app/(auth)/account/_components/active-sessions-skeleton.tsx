@@ -23,7 +23,7 @@ export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
                 </div>
               </div>
             </div>
-            <Skeleton className='h-8 w-full rounded-none sm:w-18' />
+            <Skeleton className='h-8 w-full rounded-none sm:w-[4.5rem]' />
           </div>
         </Card>
       ))}

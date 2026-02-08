@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const RevokeSessionSchema = z.object({
-  token: z.string().min(1, { message: 'Session token is required.' }),
+  sessionId: z.string().min(1, { message: 'Session id is required.' }),
 })
 
 export type RevokeSession = z.infer<typeof RevokeSessionSchema>
