@@ -1,31 +1,41 @@
 'use client'
 
-import { useTransition } from 'react'
+import { useAction } from 'next-safe-action/hooks'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
-import { revokeSessionAction } from '../_actions/revoke-session'
+import { revokeSessionAction } from '../actions/revoke-session'
 
 export function RevokeSessionButton(props: { token: string }) {
   const { token } = props
-  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
+  const { execute, status } = useAction(revokeSessionAction, {
+    onSuccess: () => {
+      router.refresh()
+    },
+    onError: ({ error }) => {
+      if (error.serverError) {
+        toast.error(error.serverError)
+      } else {
+        toast.error('Failed to revoke session.')
+      }
+    },
+  })
 
   return (
     <Button
       className='rounded-none'
-      disabled={isPending}
+      disabled={status === 'executing'}
       onClick={() => {
-        startTransition(async () => {
-          const result = await revokeSessionAction({ token })
-          if (!result.ok) {
-            toast.error('Failed to revoke session.')
-          }
-        })
+        execute({ token })
       }}
       size='sm'
       variant='destructive'
     >
-      {isPending ? <Icons.spinner className='size-4 animate-spin' /> : null}
+      {status === 'executing' ? (
+        <Icons.spinner className='size-4 animate-spin' />
+      ) : null}
       Revoke
     </Button>
   )

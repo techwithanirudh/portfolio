@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
-import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
-import { getLoginUrl } from '@/lib/auth-client'
 import { createMetadata } from '@/lib/metadata'
-import { getSession } from '@/server/auth'
-import { AccountSettings } from './_components/account-settings'
-import { ActiveSessions } from './_components/active-sessions'
+import { AccountSettingsSection } from './_components/account-settings-section'
+import { AccountSettingsSkeleton } from './_components/account-settings-skeleton'
+import { ActiveSessionsSection } from './_components/active-sessions-section'
 import { ActiveSessionsSkeleton } from './_components/active-sessions-skeleton'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,13 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
   })
 }
 
-export default async function AccountPage() {
-  const session = await getSession()
-
-  if (!session?.user) {
-    redirect(getLoginUrl('/account'))
-  }
-
+export default function AccountPage() {
   return (
     <div className='flex w-full grow flex-col p-4 md:p-6'>
       <main className='w-full space-y-8'>
@@ -39,11 +31,13 @@ export default async function AccountPage() {
             Manage your account information.
           </p>
         </header>
-        <AccountSettings user={session.user} />
+        <Suspense fallback={<AccountSettingsSkeleton />}>
+          <AccountSettingsSection />
+        </Suspense>
         <div className='space-y-4'>
           <h2 className='font-medium text-lg'>Active Sessions</h2>
           <Suspense fallback={<ActiveSessionsSkeleton />}>
-            <ActiveSessions currentToken={session.session.token} />
+            <ActiveSessionsSection />
           </Suspense>
         </div>
       </main>
