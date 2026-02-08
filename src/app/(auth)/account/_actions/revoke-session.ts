@@ -19,13 +19,8 @@ export async function revokeSessionAction(options: { token: string }) {
     if (!isUsersSession) {
       return { ok: false }
     }
-  } catch {
-    return { ok: false }
-  }
 
-  try {
     const result = await revokeSession(token)
-
     if (!result.status) {
       return { ok: false }
     }
