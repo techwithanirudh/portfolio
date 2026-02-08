@@ -58,6 +58,7 @@
     "ai-retry": "^1.2.0",
     "better-auth": "^1.4.17",
     "botid": "^1.5.10",
+    "bowser": "^2.13.1",
     "class-variance-authority": "^0.7.1",
     "clippyts": "^1.0.4",
     "clsx": "^2.1.1",

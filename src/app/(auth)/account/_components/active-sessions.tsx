@@ -1,7 +1,7 @@
-import { MonitorIcon, SmartphoneIcon, TabletIcon } from 'lucide-react'
+import Bowser from 'bowser'
+import { MonitorIcon, SmartphoneIcon, TabletIcon, TvIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { parseUserAgent } from '@/lib/user-agent'
 import { listSessions } from '@/server/auth'
 
 import { RevokeSessionButton } from './revoke-session-button'
@@ -12,8 +12,45 @@ const PLATFORM_ICONS = {
   desktop: MonitorIcon,
   mobile: SmartphoneIcon,
   tablet: TabletIcon,
+  tv: TvIcon,
   unknown: MonitorIcon,
 } as const
+
+type PlatformType = keyof typeof PLATFORM_ICONS
+
+function parseUserAgent(ua?: string | null): {
+  os: string
+  browser: string
+  browserVersion: string
+  platform: PlatformType
+} {
+  if (!ua) {
+    return {
+      os: 'Unknown',
+      browser: 'Unknown',
+      browserVersion: '',
+      platform: 'unknown',
+    }
+  }
+
+  const parsed = Bowser.parse(ua)
+  const platformType = parsed.platform.type
+
+  const platform: PlatformType =
+    platformType === 'desktop' ||
+    platformType === 'mobile' ||
+    platformType === 'tablet' ||
+    platformType === 'tv'
+      ? platformType
+      : 'unknown'
+
+  return {
+    os: parsed.os.name ?? 'Unknown',
+    browser: parsed.browser.name ?? 'Unknown',
+    browserVersion: parsed.browser.version ?? '',
+    platform,
+  }
+}
 
 const compareSessionsByRecency =
   (currentToken: string) => (a: Session, b: Session) => {
