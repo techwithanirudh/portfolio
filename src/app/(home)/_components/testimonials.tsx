@@ -52,7 +52,10 @@ const TestimonialCard = ({
         <p className='flex flex-row items-center gap-2 text-sm'>
           <span className='text-muted-foreground'>By</span>
           <Avatar className='h-6 w-6'>
-            <AvatarImage src={testimonial.author.image} />
+            <AvatarImage
+              alt={testimonial.author.name}
+              src={testimonial.author.image}
+            />
             <AvatarFallback>
               {testimonial.author.name
                 .split(' ')
@@ -77,7 +80,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
       return
     }
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (api.selectedScrollSnap() + 1 === api.scrollSnapList().length) {
         setCurrent(0)
         api.scrollTo(0)
@@ -86,6 +89,8 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
         setCurrent(current + 1)
       }
     }, 2500)
+
+    return () => clearTimeout(timer)
   }, [api, current])
 
   return (

@@ -1,5 +1,6 @@
 'use client'
 
+import 'clippyts/src/clippy.css'
 import type { Agent } from 'clippyts'
 import type { AgentType } from 'clippyts/dist/types'
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'

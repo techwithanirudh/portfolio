@@ -30,4 +30,12 @@ export const signIn: typeof authClient.signIn = authClient.signIn
 export const signOut: typeof authClient.signOut = authClient.signOut
 export const useSession: typeof authClient.useSession = authClient.useSession
 
+export const getLoginUrl = (redirectTo?: string): string => {
+  if (!redirectTo) {
+    return '/login'
+  }
+  const safe = redirectTo.startsWith('/') ? redirectTo : '/'
+  return `/login?redirectTo=${encodeURIComponent(safe)}`
+}
+
 export type User = (typeof authClient.$Infer.Session)['user']

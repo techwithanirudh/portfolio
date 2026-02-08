@@ -60,6 +60,7 @@ export function Clock({ className }: ClockProps) {
   }, [])
 
   const { hours, minutes, seconds, timeString } = getParts(time)
+  const accessibleLabel = mounted ? timeString : 'Clock'
 
   const timeStyles: TimeStyles = {
     '--time-hours': hours,
@@ -69,7 +70,12 @@ export function Clock({ className }: ClockProps) {
 
   if (!mounted) {
     return (
-      <Button className='rounded-full' size='icon' variant='ghost'>
+      <Button
+        aria-label={accessibleLabel}
+        className='rounded-full'
+        size='icon'
+        variant='ghost'
+      >
         <div
           className={cn(
             'relative block size-8 rotate-180 rounded-full border border-border',
@@ -85,7 +91,12 @@ export function Clock({ className }: ClockProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button className='rounded-full' size='icon' variant='ghost'>
+        <Button
+          aria-label={accessibleLabel}
+          className='rounded-full'
+          size='icon'
+          variant='ghost'
+        >
           <time
             className={cn(
               'relative block size-8 rotate-180 rounded-full border border-border',
