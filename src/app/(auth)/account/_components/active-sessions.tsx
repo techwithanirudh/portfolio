@@ -1,4 +1,5 @@
 import Bowser from 'bowser'
+import { format } from 'date-fns'
 import { MonitorIcon, SmartphoneIcon, TabletIcon, TvIcon } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
@@ -111,11 +112,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
   const parsed = parseUserAgent(session.userAgent)
   const PlatformIcon = PLATFORM_ICONS[parsed.platform]
 
-  const lastActive = new Date(session.updatedAt).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  })
+  const lastActive = format(new Date(session.updatedAt), 'MMM d, yyyy')
 
   return (
     <Card className='gap-0 rounded-none border-dashed py-0'>
