@@ -36,6 +36,18 @@ so, sandboxes.
   O --> G --> U"
 />
 
+## what stayed constant across versions
+
+from phase 1 onward, a few things were consistently important regardless of provider/agent:
+
+* syncing attachments into the sandbox
+* making tool status visible (so you can tell what it's doing, not just "thinking…" forever)
+* streaming updates back to slack instead of waiting for one giant final blob
+
+we use slack's ai implementation for the chat surface and interaction model, which lets us render interactive ui directly in slack:
+https://docs.slack.dev/ai/
+https://docs.slack.dev/reference/block-kit/blocks/plan-block/
+
 ## phase 1: vercel ai sdk tool loop agent + vercel sandboxes
 
 we were already using vercel's ai sdk ([ai-sdk.dev](https://ai-sdk.dev/) / [vercel docs](https://vercel.com/docs/ai-sdk)), and we saw that [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) had a generous free tier, so we tried the obvious combo.
@@ -294,7 +306,7 @@ it was fast.
 it was reliable.
 it didn't feel like a house of cards anymore.
 
-## tools, attachments, and why pi made life easier
+## tools and why pi made life easier
 
 one of the biggest wins with pi was how easy tool integration became.
 
@@ -314,14 +326,6 @@ with pi, we can just:
 * add metadata
 * extend it without inventing new plumbing
 
-also we added support for:
-
-* syncing attachments into the sandbox
-* making tool status visible (so you can tell what it's doing, not just "thinking…" forever)
-
-streaming also mattered a lot.
-people hate waiting for one giant final blob.
-streaming output feels alive.
 
 ## current architecture (tldr)
 
@@ -367,8 +371,9 @@ moving to daytona + pi rpc made it:
 
 now we can focus on making features, not babysitting infra.
 
-we recently merged vercel's **Chat SDK** for multi-platform bot flows, but we might rewrite that layer again in the future as things evolve.
-for the current result, use the `feat/refactor-pi` branch:
-https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi
-
 this blog post's style is inspired by [xyzeva](https://kibty.town/). this is probably the first blog post i've ever written 😭.
+
+vercel launched a new **Chat SDK** that supports multiple runtimes. we might rewrite that layer in the future as things evolve.
+
+this is the github link to the current result:
+https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi
