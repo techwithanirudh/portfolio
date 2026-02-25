@@ -131,6 +131,14 @@ also with e2b we had some pain:
 
 and we really wanted persistence-first.
 
+## state + persistence (how we actually track it)
+
+we persist sandbox state in our database so we can reattach per thread. the core idea:
+
+1. `threadId → sandboxId + sessionId`
+2. status transitions (`active`, `paused`, `resuming`, `error`, `destroyed`)
+3. reattach on the next message in the same thread
+
 ## phase 3: switching to daytona (persistence-first)
 
 so we switched to **[daytona](https://www.daytona.io/)**.
@@ -347,3 +355,10 @@ and moving to daytona + pi rpc made it:
 now we can focus on making features, not babysitting infra.
 
 the blog post's style is inspired by [xyzeva](https://kibty.town/), this is probably the first ever blog post i've written 😭.
+
+## note on vercel chat sdk
+
+vercel launched a new **Chat SDK** (open source, public beta) for building chat bots across multiple platforms with a single TypeScript codebase. 
+
+the newer implementation lives on the `feat/refactor-pi` branch here:
+https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi
