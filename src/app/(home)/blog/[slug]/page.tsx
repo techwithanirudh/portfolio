@@ -12,6 +12,7 @@ import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
 import { Header } from './_components/header'
+import { Mermaid } from '@/components/mdx/mermaid'
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>
@@ -42,6 +43,7 @@ export default async function Page(props: {
                 Folder,
                 Tabs,
                 Tab,
+                Mermaid,
               }}
             />
           </MdxContent>

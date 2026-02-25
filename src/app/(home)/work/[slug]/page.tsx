@@ -10,6 +10,7 @@ import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { InlineTocBlock } from '@/components/mdx-layout'
+import { Mermaid } from '@/components/mdx/mermaid'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
 import { Button } from '@/components/ui/button'
@@ -141,6 +142,7 @@ export default async function Page(props: {
                     Folder,
                     Tabs,
                     Tab,
+                    Mermaid,
                   }}
                 />
               </div>
