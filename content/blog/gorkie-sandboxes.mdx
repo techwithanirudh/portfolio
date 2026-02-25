@@ -22,9 +22,7 @@ like:
 * "inspect this repo"
 * "do the annoying terminal thing for me"
 
-at some point, you either say "sorry, i can't" or you give it a sandbox and let it cook.
-
-so, sandboxes.
+at some point, you either say "sorry, i can't" or you give it a sandbox and let it cook. so, sandboxes.
 
 <Mermaid
   chart="flowchart LR
@@ -76,9 +74,7 @@ the tool loop agent felt nice conceptually:
   G-->>G: final summary"
 />
 
-it worked.
-
-but it was also kinda janky.
+it worked, but it was also kinda janky.
 
 ### what sucked
 
@@ -92,9 +88,7 @@ things we missed or kept bumping into:
 * random bugs and weirdness
 * limits were easy to hit (bandwidth, storage, etc.)
 
-it was enough to prove that "yes, sandboxes make gorkie way more useful."
-
-but it was not the foundation.
+it was enough to prove that "yes, sandboxes make gorkie way more useful," but it was not the foundation.
 
 ## phase 2: e2b
 
@@ -109,28 +103,26 @@ users said it worked fine.
 
 ### but then reality hit
 
-the more we used it, the more we realized the sandbox provider was not even the main problem.
+as usage grew, it became clear the provider itself was not the biggest issue. the bigger issue was our **tool loop architecture**.
 
-the main problem was our tool loop agent did not handle what we actually needed long term.
-
-like:
+it could handle short tasks, but it struggled with long-term runtime needs:
 
 * compaction
 * skills
 * mcp plumbing
-* better coordination / orchestration
+* coordination and orchestration
 * stateful session handling
 * retries and failure recovery without spaghetti
 
-basically, we were slowly signing ourselves up to build an entire runtime.
+in other words, we were gradually building our own runtime by accident.
 
-we also had some pain with e2b:
+we also had provider-level friction with **e2b**:
 
-* having to keep extending timeouts
-* persistence existed, but it was beta and kinda buggy
-* it felt more like "create sandbox, kill sandbox" than "persistence first"
+* we had to keep extending timeouts
+* persistence existed, but it was beta and sometimes buggy
+* the model felt closer to "create sandbox, kill sandbox" than true persistence
 
-and we really wanted persistence-first.
+what we wanted was a persistence-first setup from day one.
 
 ## state + persistence
 
@@ -142,8 +134,7 @@ we persist sandbox state in our database so we can reattach per thread. the core
 
 ## phase 3: daytona
 
-so we switched to **[daytona](https://www.daytona.io/)**.
-**daytona** is a sandbox/runtime platform with strong lifecycle controls, which matched our persistence-first model better.
+so we switched to **[daytona](https://www.daytona.io/)**. **daytona** is a sandbox/runtime platform with strong lifecycle controls, which matched our persistence-first model better.
 
 daytona was the right fit because:
 
@@ -171,11 +162,7 @@ no custom janitor. just set the parameters and let the platform clean up.
   A -->|auto-delete 2 days| X[Deleted]"
 />
 
-once we picked daytona, the next question was:
-
-ok cool, now what coding agent do we run inside the sandbox?
-
-because we definitely did not want to keep building all of that orchestration ourselves.
+once we picked daytona, the next question was: what coding agent do we run inside the sandbox? we definitely did not want to keep building all of that orchestration ourselves.
 
 ## phase 4: sandbox agent + opencode
 
@@ -236,14 +223,7 @@ pi is lightweight and extensible, and it supports the things we cared about:
 * mcps
 * being easy to extend
 
-it worked decently.
-
-but we still had the same core issue: we were stuck with the "http server inside sandbox" shape, which we already felt was overcomplicating things.
-
-we also still hit reliability issues sometimes.
-crashes happen.
-life happens.
-but we wanted boring infra.
+it worked decently, but we still had the same core issue: we were stuck with the "http server inside sandbox" shape, which we already felt was overcomplicating things. we also still hit reliability issues sometimes. crashes happen, life happens, but we wanted boring infra.
 
 ## phase 6: pi rpc
 
@@ -257,10 +237,7 @@ because rpc is just:
 * send json
 * get json back
 
-no server.
-no extra daemon.
-no "did the http listener die?" problems.
-just a process.
+no server, no extra daemon, no "did the http listener die?" problems, just a process.
 
 ### what we built
 
@@ -285,10 +262,7 @@ we made a small rpc client inspired by pi's own client.
 * messages are **newline-delimited JSON**
 * resume uses `pi --mode rpc --session <id>`
 
-it was simple.
-it was fast.
-it was reliable.
-it didn't feel like a house of cards anymore.
+it was simple, fast, and reliable. it didn't feel like a house of cards anymore.
 
 ## tools with pi
 
@@ -328,6 +302,7 @@ with pi, we can just:
 
 ## demo video
 
+
 <div className="w-full flex items-center justify-center my-4">
    <VideoPlayer
    className="max-w-[360px]"
@@ -335,7 +310,6 @@ with pi, we can just:
    src="https://vimeo.com/1168112844"
    />
 </div>
-
 ## lessons learned
 
 the stuff we wish we knew earlier:

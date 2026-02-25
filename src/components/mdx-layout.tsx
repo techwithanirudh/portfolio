@@ -52,7 +52,12 @@ export const MdxContent = ({
 }: MdxContentProps) => (
   <div className={cn('flex flex-1 flex-col gap-4', className)}>
     <InlineTocBlock items={toc} />
-    <div className={cn('prose min-w-0 flex-1 px-4', proseClassName)}>
+    <div
+      className={cn(
+        'prose min-w-0 flex-1 px-4 text-fd-foreground/90',
+        proseClassName
+      )}
+    >
       {children}
     </div>
     {comments && slug ? (
