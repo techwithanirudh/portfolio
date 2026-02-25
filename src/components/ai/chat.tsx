@@ -90,9 +90,10 @@ export function AISearch({ children }: { children: ReactNode }) {
     id: 'search',
     transport: new DefaultChatTransport({
       api: '/api/chat',
-      prepareSendMessagesRequest: ({ body }) => ({
+      prepareSendMessagesRequest: ({ id, messages }) => ({
         body: {
-          ...body,
+          id,
+          messages,
           pageContext: {
             pathname,
           },
@@ -267,15 +268,18 @@ function SearchAIInput(props: ComponentProps<'form'>) {
             .map((source) => `- ${JSON.stringify(source)}`)
             .join('\n')}\n\n`
         : ''
+    const messageText = `${sourceContext}${trimmedInput}`.trim()
 
     if (clippy) {
       clippy.stopCurrent()
       clippy.play(animations.submit)
     }
-    await sendMessage({ text: `${sourceContext}${trimmedInput}`.trim() })
+
     setInput('')
     clearSources()
     localStorage.removeItem(StorageKeyInput)
+
+    await sendMessage({ text: messageText })
   }
 
   const handleInputChange = (value: string) => {
