@@ -35,16 +35,6 @@ so, sandboxes.
   O --> G --> U"
 />
 
-## quick glossary
-
-if you don't live in sandbox land, here's what these terms mean:
-
-* **sandbox**: an isolated runtime where you can run untrusted or ai-generated code safely.
-* **vercel sandbox**: vercel's ephemeral linux microvm service for running code safely with sdk/cli control. docs: https://vercel.com/docs/vercel-sandbox/
-* **e2b**: a sandbox platform focused on ai agents, where you can spin up isolated environments and run commands/files through sdk tools. docs: https://e2b.dev/docs
-* **daytona**: a sandbox runtime platform with lifecycle controls (auto-stop/archive/delete) and sdk-based management. docs: https://www.daytona.io/docs/en/sandboxes/
-* **acp**: a protocol used for agent communication (the mode we tried before moving to pi rpc). docs: https://zed.dev/acp
-
 ## what stayed constant
 
 from phase 1 onward, a few things were consistently important regardless of provider/agent:
@@ -385,7 +375,7 @@ now we can focus on making features, not babysitting infra.
 
 vercel launched a new **Chat SDK** that supports multiple runtimes. we might rewrite that layer in the future as things evolve.
 
-**current implementation repo:**
+## code
 
 [Gorkie Slack (`feat/refactor-pi`)](https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi)
 
