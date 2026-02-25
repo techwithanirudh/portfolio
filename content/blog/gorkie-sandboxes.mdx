@@ -53,13 +53,18 @@ tool loop agent felt nice conceptually:
 
 <Mermaid
   chart="sequenceDiagram
-  participant M as Model
   participant G as Gorkie
+  participant A as Subagent
   participant SB as Sandbox
-  M->>G: decide to execute
-  G->>SB: call sandbox tool
-  SB-->>G: run subagent + return output
-  G-->>M: results"
+  participant S as Slack
+  G->>A: build task + context
+  A->>SB: create/attach sandbox
+  A->>SB: sync attachments
+  A->>SB: run commands
+  A-->>SB: write outputs
+  A->>S: upload files (showFile)
+  A-->>G: summary
+  G-->>G: final summary"
 />
 
 it worked.
@@ -94,13 +99,12 @@ and honestly it went pretty well.
 
 users said it worked fine.
 
-**what we actually shipped (main branch)**:
+**what we actually shipped**:
 
 * provider: `@e2b/code-interpreter` with `Sandbox.betaCreate(...)`
-* timeouts: 10 minutes per sandbox (`timeoutMs`), 120s per command
-* network: `allowInternetAccess: true`
+* timeouts: 10 minutes per sandbox (`timeoutMs`), extend timeout on each tool
 * lifecycle: `autoPause: true` and a DB row keyed by `threadId`
-* cleanup: a janitor runs every 60s and kills paused sandboxes after 7 days
+* cleanup: a janitor runs and kills paused sandboxes after 7 days
 
 ### but then reality hit
 
@@ -145,33 +149,25 @@ we set it up so each thread gets its own sandbox and it persists while the threa
 daytona's lifecycle controls made the cleanup easy:
 
 * auto-stop after **5 minutes** of inactivity
-* auto-archive after **60 minutes** (only after stop)
+* auto-archive **2 hours** after stop
 * auto-delete after **2 days**
 
 no custom janitor. just set the parameters and let the platform clean up.
 
-**what we actually shipped (feat/refactor-pi)**:
-
-* daytona `autoStopInterval / autoArchiveInterval / autoDeleteInterval`
-* `startTimeoutSeconds = 5 minutes` for start/recover
-* a **snapshot** named `gorkie-sandbox` built from **Debian Slim 3.12**
-* preinstalls: python libs (requests, pillow, matplotlib, numpy, pandas), Node.js 24, pi-coding-agent, agent-browser skill, plus tools like git/curl/jq/ripgrep/ffmpeg/imagemagick/zip/unzip
-* workdir `/home/daytona`, with `/home/daytona/attachments` + `/home/daytona/output`
-* a persistent VM model: state is snapshotted between messages in a thread
+<Mermaid
+  chart="flowchart LR
+  T[Slack Thread] --> D[Daytona Sandbox]
+  D -->|active| P[Persisted FS]
+  D -->|auto-stop 5 min| S[Stopped]
+  S -->|auto-archive 2 hours| A[Object Storage]
+  A -->|auto-delete 2 days| X[Deleted]"
+/>
 
 once we picked daytona, the next question was:
 
 ok cool, now what coding agent do we run inside the sandbox?
 
 because we definitely did not want to keep building all that orchestration ourselves.
-
-<Mermaid
-  chart="flowchart LR
-  T[Slack Thread] --> D[Daytona Sandbox]
-  D -->|active| P[Persisted FS]
-  D -->|auto-stop| A[Object Storage]
-  A -->|auto-delete| X[Deleted]"
-/>
 
 ## phase 4: sandbox agent + opencode
 
@@ -189,7 +185,22 @@ we first tried **[opencode](https://opencode.ai/)** behind it.
 
 it worked like:
 
-gorkie → sandbox agent sdk → http server (in sandbox) → opencode → commands/files/output
+<Mermaid
+  chart="sequenceDiagram
+  participant G as Gorkie
+  participant T as Sandbox Tool
+  participant SA as Sandbox Agent (HTTP Server in Sandbox)
+  participant O as OpenCode
+  G->>T: delegate task
+  T->>SA: start sandbox-agent server
+  SA-->>T: return HTTP URL
+  T->>SA: health check + connect
+  T->>SA: start task + stream
+  SA->>O: run agent
+  O-->>SA: prompts + commands
+  SA-->>T: live updates + results
+  T-->>G: final summary"
+/>
 
 ### why it was better than tool loop agent
 
@@ -210,7 +221,7 @@ we wanted simple and efficient.
 
 ## phase 5: trying pi with sandbox agent
 
-so we tried **[pi](https://pi.dev/)** with sandbox agent ([repo](https://github.com/badlogic/pi-mono)).
+so we tried **[pi](https://pi.dev/)** with sandbox agent.
 
 pi is lightweight and extensible, and it supports the stuff we cared about:
 
@@ -248,8 +259,6 @@ no server.
 no extra daemon.
 no "did the http listener die".
 just a process.
-
-pi repo we used: [badlogic/pi-mono](https://github.com/badlogic/pi-mono)
 
 ### what we built
 
