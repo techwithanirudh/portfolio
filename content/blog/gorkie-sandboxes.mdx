@@ -74,6 +74,46 @@ the flow looked like this:
   G-->>G: final summary"
 />
 
+in code, this looked like get-or-create with snapshot restore plus redis TTLs for thread persistence:
+
+```ts
+// /tmp/gorkie-slack-feat-sandbox/server/lib/ai/tools/execute-code/sandbox.ts
+const live = await reconnect(ctxId);
+if (live) {
+  return live;
+}
+
+const restored = await restoreFromSnapshot(ctxId);
+const instance =
+  restored ??
+  (await Sandbox.create({
+    runtime: config.runtime,
+    timeout: config.timeoutMs,
+  }));
+
+await redis.set(redisKeys.sandbox(ctxId), instance.sandboxId);
+await redis.expire(redisKeys.sandbox(ctxId), config.sandboxTtlSeconds);
+```
+
+this made per-thread persistence possible before we had a full DB session model.
+
+on shutdown, we also snapshot and save the snapshot id with a TTL:
+
+```ts
+// /tmp/gorkie-slack-feat-sandbox/server/lib/ai/tools/execute-code/sandbox.ts
+const snap = await instance.snapshot().catch((error: unknown) => {
+  logger.warn({ sandboxId, error, ctxId }, 'Snapshot failed');
+  return null;
+});
+
+if (snap) {
+  await redis.set(redisKeys.snapshot(ctxId), snap.snapshotId);
+  await redis.expire(redisKeys.snapshot(ctxId), config.snapshotTtlSeconds);
+}
+```
+
+this let us resume work even after the running sandbox died.
+
 it worked, but it felt janky for anything beyond short runs.
 
 ### what sucked
@@ -91,6 +131,40 @@ phase 1 proved sandboxes made gorkie much more useful, but it wasn't the foundat
 next we moved to **[e2b](https://e2b.dev/)**. e2b is built for ai-agent execution, and it felt like a more serious provider.
 
 we kept the same architecture (tool loop agent), only swapping the sandbox layer. overall, this phase worked fine for users.
+
+at the data layer, we made thread ownership explicit with a thread-to-sandbox session table:
+
+```ts
+// /tmp/gorkie-slack-main/server/db/schema.ts
+export const sandboxSessions = pgTable('sandbox_sessions', {
+  threadId: text('thread_id').primaryKey(),
+  sandboxId: text('sandbox_id').notNull(),
+  status: text('status').notNull().default('creating'),
+  pausedAt: timestamp('paused_at', { withTimezone: true }),
+  resumedAt: timestamp('resumed_at', { withTimezone: true }),
+  destroyedAt: timestamp('destroyed_at', { withTimezone: true }),
+});
+```
+
+this made thread → sandbox ownership explicit and durable.
+
+cleanup still lived on our side, so we ran a janitor for expired sessions:
+
+```ts
+// /tmp/gorkie-slack-main/server/lib/sandbox/janitor.ts
+const cutoff = new Date(Date.now() - config.autoDeleteAfterMs);
+const candidates = await listExpired(cutoff);
+
+for (const session of candidates) {
+  const claimed = await claimExpired(session.threadId);
+  if (!claimed) continue;
+
+  await Sandbox.kill(session.sandboxId, { apiKey: env.E2B_API_KEY });
+  await clearDestroyed(session.threadId);
+}
+```
+
+this is exactly where operational burden started to grow for us.
 
 ### but then reality hit
 
@@ -142,6 +216,27 @@ daytona lifecycle settings made cleanup simple:
 
 no custom janitor needed.
 
+with daytona, lifecycle and session mapping became much simpler in code:
+
+```ts
+// /tmp/gorkie-slack-feat-daytona-pi/server/lib/sandbox/session.ts
+const sandbox = await daytona.create({
+  autoStopInterval: config.timeouts.stopMinutes,
+  autoArchiveInterval: config.timeouts.archiveMinutes,
+  autoDeleteInterval: config.timeouts.deleteMinutes,
+  snapshot: SANDBOX_SNAPSHOT,
+});
+
+await upsert({
+  threadId,
+  sandboxId: sandbox.id,
+  sessionId: session.id,
+  status: 'active',
+});
+```
+
+cleanup shifted from our cron logic to platform lifecycle settings.
+
 <Mermaid
   chart="flowchart LR
   T[Slack Thread] --> D[Daytona Sandbox]
@@ -158,6 +253,26 @@ once daytona was in place, the next question was: what coding agent should run i
 we tried [sandbox agent](https://sandboxagent.dev/) by [rivet.dev](https://rivet.dev), with **[opencode](https://opencode.ai/)** behind it.
 
 sandbox agent runs inside the sandbox, exposes an http interface, and communicates over [acp](https://zed.dev/acp).
+
+to keep sandbox-agent stable, we had to boot, health-check, and restart it when needed:
+
+```ts
+// /tmp/gorkie-slack-feat-daytona-pi/server/lib/sandbox/runtime.ts
+if (!(await isHealthy(access))) {
+  await killServer(sandbox);
+
+  try {
+    await startServer(sandbox);
+    await waitForHealth(access, config.timeouts.healthMs);
+  } catch {
+    await killServer(sandbox);
+    await startServer(sandbox);
+    await waitForHealth(access, config.timeouts.healthMs);
+  }
+}
+```
+
+this made the server-in-sandbox shape survivable, but it was still extra moving parts.
 
 <Mermaid
   chart="sequenceDiagram
@@ -236,6 +351,38 @@ we built a small rpc client inspired by pi's own client.
 * use newline-delimited JSON messages
 * resume with `pi --mode rpc --session <id>`
 
+the rpc boot path was just PTY startup, `stty -echo`, and optional session resume:
+
+```ts
+// /tmp/gorkie-slack/server/lib/sandbox/rpc.ts
+const piCmd = sessionId
+  ? `pi --mode rpc --session ${sessionId}`
+  : 'pi --mode rpc';
+
+await pty.sendInput(`stty -echo; exec ${piCmd}\n`);
+await client.waitUntilReady();
+```
+
+this removed the internal HTTP server and reduced failure points.
+
+events came back as newline-delimited JSON over the PTY stream:
+
+```ts
+// /tmp/gorkie-slack/server/lib/sandbox/rpc.ts
+this.buffer += chunk.replace(/\r/g, '');
+const lines = this.buffer.split('\n');
+this.buffer = lines.pop() ?? '';
+
+for (const line of lines) {
+  const trimmed = line.trim();
+  if (!trimmed) continue;
+  const parsed = JSON.parse(trimmed);
+  this.emit(parsed as AgentEvent);
+}
+```
+
+that kept transport simple and robust over stdout.
+
 this was simple, fast, and reliable.
 
 ## tools with pi
@@ -256,6 +403,31 @@ with pi, we can:
 * plug it in directly
 * add status and metadata
 * extend without inventing more plumbing
+
+for tools, we registered handlers directly (for example `showFile` for Slack uploads) with validation built in:
+
+```ts
+// /tmp/gorkie-slack/server/lib/sandbox/config/extensions/tools.ts
+pi.registerTool({
+  name: 'showFile',
+  label: 'showFile',
+  description:
+    'Signal the host to upload a sandbox file to Slack once it is ready.',
+  parameters: showFileParams,
+  execute: (_toolCallId, params) => {
+    const { path, title } = params as Static<typeof showFileParams>;
+    if (!nodePath.isAbsolute(path)) {
+      throw new Error('showFile.path must be absolute');
+    }
+    return Promise.resolve({
+      content: [{ type: 'text' as const, text: `Queued upload for ${path}` }],
+      details: { path, title: title ?? null },
+    });
+  },
+});
+```
+
+this made tools first-class instead of pushing them through a MCP server.
 
 ## current architecture
 
