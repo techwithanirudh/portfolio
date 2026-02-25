@@ -1,0 +1,84 @@
+---
+title: "my VSCode setup"
+description: A custom UI-styled VS Code setup, with links to my real config.
+date: 2026-02-25
+tags: ['setup', 'tools', 'learning']
+image: /images/blog/first-post.png
+author: Anirudh
+---
+
+i run a VS Code setup that is customized to feel cleaner and closer to zed.
+
+this post is the exact setup, with links to the real config.
+
+## setup at a glance
+
+* editor: VS Code
+* coding agent: [Codex](https://openai.com/codex/)
+* primary font: [JetBrainsMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/latest/JetBrainsMono.zip)
+* themes: [Cursor Light and Cursor Dark](https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme)
+* icon theme: [Quill Icons](https://marketplace.visualstudio.com/items?itemName=cdonohue.quill-icons)
+* UI Tweaks: [Custom UI Style](https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style) + custom stylesheet
+
+## why this setup
+
+i like zed's UI, but i still want VS Code's ecosystem and remote workflow.
+
+so instead of switching editors, i customized VS Code.
+
+the biggest difference is the custom UI layer, not the extension count.
+
+## how the custom ui started
+
+while scrolling twitter, i found stumbled upon a github discussion with a lot of VS Code custom styles.
+
+* discussion link: [apc extension thread](https://github.com/drcika/apc-extension/issues/5#issuecomment-2183959305)
+
+the original extension in that thread was deprecated, but i kept the ideas i liked and recreated the look using Custom UI Style.
+
+## config
+
+<GitHubCode
+  url="https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json"
+/>
+
+## screenshot
+
+  <img
+    alt='My VS Code setup'
+    className='h-full w-full dark:hidden  rounded-lg'
+    height={720}
+    src='/images/uses/vscode-light.png'
+    width={1280}
+  />
+  <img
+    alt='My VS Code setup'
+    className='hidden h-full w-full dark:block rounded-lg'
+    height={720}
+    src='/images/uses/vscode-dark.png'
+    width={1280}
+  />
+
+
+## extensions
+
+this list is intentionally simple:
+
+* [Auto Rename Tag](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-rename-tag)
+* [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
+* [Biome](https://marketplace.visualstudio.com/items?itemName=biomejs.biome)
+* [Coder](https://marketplace.visualstudio.com/items?itemName=Coder.coder)
+* [Codex](https://github.com/openai/codex)
+* [Cursor Midnight Theme (Muhammad Zaid)](https://marketplace.visualstudio.com/items?itemName=muhammadzaid.cursor-midnight-theme)
+* [Custom UI Style](https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style)
+* [ES7+ React/Redux/React-Native Snippets](https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets)
+* [GitHub Pull Requests](https://marketplace.visualstudio.com/items?itemName=GitHub.vscode-pull-request-github)
+* [GitLens](https://marketplace.visualstudio.com/items?itemName=eamodio.gitlens)
+* [Live Share](https://marketplace.visualstudio.com/items?itemName=MS-vsliveshare.vsliveshare)
+* [OpenCode](https://opencode.ai/)
+* [Pretty TypeScript Errors](https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors)
+* [Remote - SSH](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh)
+* [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+* [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml)
+
+thanks, again, for reading! 

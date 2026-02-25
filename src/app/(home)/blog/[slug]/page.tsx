@@ -14,6 +14,7 @@ import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
 import { Header } from './_components/header'
 import { Mermaid } from '@/components/mdx/mermaid'
+import { GitHubCode } from '@/components/mdx/github-code'
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>
@@ -46,6 +47,7 @@ export default async function Page(props: {
                 Tab,
                 Mermaid,
                 VideoPlayer,
+                GitHubCode,
               }}
             />
           </MdxContent>
