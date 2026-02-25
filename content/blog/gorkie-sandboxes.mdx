@@ -11,8 +11,7 @@ this blog post was a collaboration between two people. gorkie itself was built b
 
 ## intro
 
-gorkie is a helpful ai slack assistant.
-it started as "answer questions, help with tasks, and be useful in threads," then users started asking for stuff that is not just text.
+gorkie is a helpful ai slack assistant. it started as "answer questions, help with tasks, and be useful in threads," then users started asking for stuff that is not just text.
 
 like:
 
@@ -92,14 +91,9 @@ it was enough to prove that "yes, sandboxes make gorkie way more useful," but it
 
 ## phase 2: e2b
 
-next we moved to **e2b** ([e2b.dev](https://e2b.dev/)).
-**e2b** is a sandbox platform built for ai agents, and it felt more "real" as a provider for longer-running execution.
+next we moved to **e2b** ([e2b.dev](https://e2b.dev/)). **e2b** is a sandbox platform built for ai agents, and it felt more "real" as a provider for longer-running execution.
 
-we kept the same overall architecture (tool loop agent), just swapped the sandbox layer.
-
-honestly, it went pretty well.
-
-users said it worked fine.
+we kept the same overall architecture (tool loop agent), just swapped the sandbox layer. honestly, it went pretty well, and users said it worked fine.
 
 ### but then reality hit
 
@@ -166,8 +160,7 @@ once we picked daytona, the next question was: what coding agent do we run insid
 
 ## phase 4: sandbox agent + opencode
 
-we stumbled onto [sandbox agent](https://sandboxagent.dev/), a project by [rivet.dev](https://rivet.dev).
-**sandbox agent** runs inside the sandbox and exposes an agent interface we can talk to. the idea was:
+we stumbled onto [sandbox agent](https://sandboxagent.dev/), a project by [rivet.dev](https://rivet.dev). **sandbox agent** runs inside the sandbox and exposes an agent interface we can talk to. the idea was:
 
 * sandbox agent runs inside the sandbox
 * it runs a coding agent inside it
@@ -209,9 +202,7 @@ it introduced a whole new set of failure points:
 * more "if this dies, everything dies"
 * more complexity than we wanted
 
-also, opencode felt a bit over-engineered for our needs.
-it used more tokens than we wanted.
-we wanted simple and efficient.
+also, opencode felt a bit over-engineered for our needs. it used more tokens than we wanted, and we wanted something simpler and more efficient.
 
 ## phase 5: pi with sandbox agent
 
@@ -223,14 +214,13 @@ pi is lightweight and extensible, and it supports the things we cared about:
 * mcps
 * being easy to extend
 
-it worked decently, but we still had the same core issue: we were stuck with the "http server inside sandbox" shape, which we already felt was overcomplicating things. we also still hit reliability issues sometimes. crashes happen, life happens, but we wanted boring infra.
+it worked decently, but we still had the same core issue: we were stuck with the "http server inside sandbox" shape, and it still felt overcomplicated. we also still hit reliability issues sometimes. crashes happen, life happens, but we wanted boring infra.
 
 ## phase 6: pi rpc
 
 then we found the cleanest path.
 
-at this point, we had two integration paths: acp/http server mode or **rpc**.
-we picked **rpc** with pi.
+at this point, we had two integration paths: acp/http server mode or **rpc**, and we picked **rpc** with pi.
 
 because rpc is just:
 
@@ -302,7 +292,6 @@ with pi, we can just:
 
 ## demo video
 
-
 <div className="w-full flex items-center justify-center my-4">
    <VideoPlayer
    className="max-w-[360px]"
@@ -310,6 +299,7 @@ with pi, we can just:
    src="https://vimeo.com/1168112844"
    />
 </div>
+
 ## lessons learned
 
 the stuff we wish we knew earlier:
@@ -322,9 +312,7 @@ the stuff we wish we knew earlier:
 
 ## closing
 
-sandboxes basically upgraded gorkie from a "helpful chatbot" to something that "actually can do stuff."
-
-moving to daytona + pi rpc made it:
+sandboxes basically upgraded gorkie from a "helpful chatbot" to something that "actually can do stuff." moving to daytona + pi rpc made it:
 
 * simpler
 * cheaper (tokens and complexity)
