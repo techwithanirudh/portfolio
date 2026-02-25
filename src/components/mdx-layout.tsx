@@ -50,7 +50,7 @@ export const MdxContent = ({
   proseClassName,
   commentsClassName,
 }: MdxContentProps) => (
-  <div className={cn('flex flex-1 flex-col gap-4', className)}>
+  <div className={cn('flex min-w-0 flex-1 flex-col gap-4', className)}>
     <InlineTocBlock items={toc} />
     <div
       className={cn(
