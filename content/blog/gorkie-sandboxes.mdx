@@ -45,8 +45,8 @@ from phase 1 onward, a few things were consistently important regardless of prov
 * streaming updates back to slack instead of waiting for one giant final blob
 
 we use slack's ai implementation for the chat surface and interaction model, which lets us render interactive ui directly in slack:
-https://docs.slack.dev/ai/
-https://docs.slack.dev/reference/block-kit/blocks/plan-block/
+* https://docs.slack.dev/ai/
+* https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
 ## phase 1: vercel ai sdk tool loop agent + vercel sandboxes
 
@@ -326,7 +326,6 @@ with pi, we can just:
 * add metadata
 * extend it without inventing new plumbing
 
-
 ## current architecture (tldr)
 
 user in slack
@@ -349,6 +348,16 @@ user in slack
   P-->>G: structured events/output
   G-->>U: stream updates + final result"
 />
+
+## demo video
+
+<div className="w-full flex items-center justify-center my-4">
+   <VideoPlayer
+   className="max-w-[360px]"
+   aspectRatio="9/16"
+   src="https://vimeo.com/1168112844"
+   />
+</div>
 
 ## lessons learned (the stuff we wish we knew earlier)
 
@@ -374,6 +383,5 @@ now we can focus on making features, not babysitting infra.
 this blog post's style is inspired by [xyzeva](https://kibty.town/). this is probably the first blog post i've ever written 😭.
 
 vercel launched a new **Chat SDK** that supports multiple runtimes. we might rewrite that layer in the future as things evolve.
-
 this is the github link to the current result:
-https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi
+[Gorkie Slack](https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi)

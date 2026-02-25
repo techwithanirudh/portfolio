@@ -14,6 +14,7 @@ import { Mermaid } from '@/components/mdx/mermaid'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
 import { Button } from '@/components/ui/button'
+import { VideoPlayer } from '@/components/ui/video-player'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
@@ -143,6 +144,7 @@ export default async function Page(props: {
                     Tabs,
                     Tab,
                     Mermaid,
+                    VideoPlayer,
                   }}
                 />
               </div>

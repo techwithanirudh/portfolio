@@ -8,6 +8,7 @@ import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
 import { MdxContent } from '@/components/mdx-layout'
 import { SectionBody } from '@/components/section-body'
+import { VideoPlayer } from '@/components/ui/video-player'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
@@ -44,6 +45,7 @@ export default async function Page(props: {
                 Tabs,
                 Tab,
                 Mermaid,
+                VideoPlayer,
               }}
             />
           </MdxContent>
