@@ -233,7 +233,7 @@ we built a small rpc client inspired by pi's own client.
 
 * launch `pi --mode rpc` inside a **PTY**
 * disable PTY echo so JSON is not mirrored back
-* use newline-delimited json messages
+* use newline-delimited JSON messages
 * resume with `pi --mode rpc --session <id>`
 
 this was simple, fast, and reliable.
@@ -245,8 +245,8 @@ pi also made tool integration much cleaner.
 before (sandbox agent + opencode), tool wiring looked like:
 
 * define custom mcp server
-* place, and run the MCP Server in the sandbox
-* provide the MCP to the coding agent (opencode)
+* run that MCP server in the sandbox
+* connect the MCP server to the coding agent (opencode)
 * intercept the tool call
 * route it
 
