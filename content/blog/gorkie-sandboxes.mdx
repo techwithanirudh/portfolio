@@ -7,13 +7,13 @@ image: /images/blog/first-post.png
 author: Anirudh & Devarsh
 ---
 
-this blog post was a collaboration between two people. gorkie itself was built by [devarsh](http://github.com/imdevarsh), and the sandbox work was done by me, with devarsh helping along the way with testing, ideas, and sanity checks.
+this blog post was a collaboration between two people. gorkie itself was built by [devarsh](http://github.com/imdevarsh), and i led the sandbox/runtime work, with devarsh helping throughout with testing, ideas, and sanity checks.
 
 ## intro
 
-gorkie is a helpful ai slack assistant. it started as "answer questions, help with tasks, and be useful in threads," then users started asking for stuff that is not just text.
+gorkie started as a helpful ai slack assistant: answer questions, help with tasks, and be useful in threads. then users started asking for things that needed real execution, not just text.
 
-like:
+examples:
 
 * "run this script"
 * "convert this file"
@@ -21,7 +21,7 @@ like:
 * "inspect this repo"
 * "do the annoying terminal thing for me"
 
-at some point, you either say "sorry, i can't" or you give it a sandbox and let it cook. so, sandboxes.
+at some point, you either say "sorry, i can't" or you give it a sandbox. we chose sandboxes.
 
 <Mermaid
   chart="flowchart LR
@@ -34,27 +34,28 @@ at some point, you either say "sorry, i can't" or you give it a sandbox and let 
 
 ## what stayed constant
 
-from phase 1 onward, a few things were consistently important regardless of provider/agent:
+from phase 1 onward, a few things stayed important regardless of provider or agent:
 
 * syncing attachments into the sandbox
-* making tool status visible (so you can tell what it's doing, not just "thinking…" forever)
+* showing tool status (so users can see progress, not just "thinking…")
 * streaming updates back to slack instead of waiting for one giant final blob
 
-we use **slack's ai implementation** for the chat surface and interaction model, which lets us render **interactive ui** directly in slack:
+we also use **slack's ai implementation** for the chat surface and interaction model, which lets us render **interactive ui** directly in slack:
+
 * https://docs.slack.dev/ai/
 * https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
 ## phase 1: vercel sandboxes
 
-we were already using vercel's [ai sdk](https://ai-sdk.dev/). [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) are isolated execution environments you can spin up on demand, and they had a generous free tier, so we tried the obvious combo.
+we were already using vercel's [ai sdk](https://ai-sdk.dev/), so [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) were the obvious first step. they had a generous free tier and were easy to try.
 
-we gave gorkie a simple sandbox tool that spawned a **ToolLoopAgent** with tools to work in the sandbox.
+we gave gorkie a sandbox tool that spawned a **ToolLoopAgent** with tools to work inside the sandbox.
 
-the tool loop agent felt nice conceptually:
+the flow looked like this:
 
-1. model decides it needs to execute something
-2. it calls a "sandbox" tool
-3. the sandbox runs a subagent and completes the task.
+1. model decides it needs execution
+2. it calls a sandbox tool
+3. the sandbox runs a subagent and completes the task
 4. results go back to gorkie, then to slack
 
 <Mermaid
@@ -73,33 +74,29 @@ the tool loop agent felt nice conceptually:
   G-->>G: final summary"
 />
 
-it worked, but it was also kinda janky.
+it worked, but it felt janky for anything beyond short runs.
 
 ### what sucked
 
-vercel sandboxes felt "fine for quick runs," but not like "serious execution infra."
-
-things we missed or kept bumping into:
-
 * not as advanced as e2b/daytona-style sandboxes
-* lifecycle controls felt limited
-* snapshot support was not where we wanted it
+* limited lifecycle controls
+* snapshot support was not where we needed it
 * random bugs and weirdness
-* limits were easy to hit (bandwidth, storage, etc.)
+* easy-to-hit limits (bandwidth, storage, etc.)
 
-it was enough to prove that "yes, sandboxes make gorkie way more useful," but it was not the foundation.
+phase 1 proved sandboxes made gorkie much more useful, but it wasn't the foundation we wanted.
 
 ## phase 2: e2b
 
-next we moved to **e2b** ([e2b.dev](https://e2b.dev/)). **e2b** is a sandbox platform built for ai agents, and it felt more "real" as a provider for longer-running execution.
+next we moved to **[e2b](https://e2b.dev/)**. e2b is built for ai-agent execution, and it felt like a more serious provider.
 
-we kept the same overall architecture (tool loop agent), just swapped the sandbox layer. honestly, it went pretty well, and users said it worked fine.
+we kept the same architecture (tool loop agent), only swapping the sandbox layer. overall, this phase worked fine for users.
 
 ### but then reality hit
 
-as usage grew, it became clear the provider itself was not the biggest issue. the bigger issue was our **tool loop architecture**.
+as usage grew, we realized the provider was not the biggest issue. the bigger issue was our **tool loop architecture**.
 
-it could handle short tasks, but it struggled with long-term runtime needs:
+it handled short tasks, but it struggled with long-term runtime needs:
 
 * compaction
 * skills
@@ -108,44 +105,42 @@ it could handle short tasks, but it struggled with long-term runtime needs:
 * stateful session handling
 * retries and failure recovery without spaghetti
 
-in other words, we were gradually building our own runtime by accident.
+in practice, we were slowly building our own runtime by accident.
 
-we also had provider-level friction with **e2b**:
+we also hit provider-level friction with **e2b**:
 
 * we had to keep extending timeouts
 * persistence existed, but it was beta and sometimes buggy
 * the model felt closer to "create sandbox, kill sandbox" than true persistence
 
-what we wanted was a persistence-first setup from day one.
-
-## state + persistence
-
-we persist sandbox state in our database so we can reattach per thread. the core idea is:
-
-1. `threadId → sandboxId + sessionId`
-2. status transitions (`active`, `paused`, `resuming`, `error`, `destroyed`)
-3. reattach on the next message in the same thread
+what we wanted was persistence-first from day one.
 
 ## phase 3: daytona
 
-so we switched to **[daytona](https://www.daytona.io/)**. **daytona** is a sandbox/runtime platform with strong lifecycle controls, which matched our persistence-first model better.
+then we switched to **[daytona](https://www.daytona.io/)**. daytona is built around lifecycle control and persistence, which matched our model much better.
 
-daytona was the right fit because:
+daytona fit because:
 
-* great dx (developer experience)
-* built around persistence
-* lifecycle felt cleaner
-* it matched the model we wanted: “this thread owns a runtime”
+* great dx
+* persistence-first design
+* cleaner lifecycle controls
+* a natural mapping to "this thread owns a runtime"
 
-we set it up so each thread gets its own sandbox, and it persists while the thread stays active. we also store `threadId → sandboxId + sessionId`, so a thread always reattaches to the same runtime.
+### state model
 
-daytona's lifecycle controls made cleanup easy:
+we persist sandbox state in our database so each thread can reattach to its runtime. the core model is:
+
+1. `threadId -> sandboxId + sessionId`
+2. state transitions (`active`, `paused`, `resuming`, `error`, `destroyed`)
+3. automatic reattach on the next message in the same thread
+
+daytona lifecycle settings made cleanup simple:
 
 * auto-stop after **5 minutes** of inactivity
 * auto-archive **2 hours** after stop
 * auto-delete after **2 days**
 
-no custom janitor. just set the parameters and let the platform clean up.
+no custom janitor needed.
 
 <Mermaid
   chart="flowchart LR
@@ -156,21 +151,13 @@ no custom janitor. just set the parameters and let the platform clean up.
   A -->|auto-delete 2 days| X[Deleted]"
 />
 
-once we picked daytona, the next question was: what coding agent do we run inside the sandbox? we definitely did not want to keep building all of that orchestration ourselves.
+once daytona was in place, the next question was: what coding agent should run inside the sandbox?
 
 ## phase 4: sandbox agent + opencode
 
-we stumbled onto [sandbox agent](https://sandboxagent.dev/), a project by [rivet.dev](https://rivet.dev). **sandbox agent** runs inside the sandbox and exposes an agent interface we can talk to. the idea was:
+we tried [sandbox agent](https://sandboxagent.dev/) by [rivet.dev](https://rivet.dev), with **[opencode](https://opencode.ai/)** behind it.
 
-* sandbox agent runs inside the sandbox
-* it runs a coding agent inside it
-* it exposes an http server in the sandbox
-* we talk to that server using the sandbox agent sdk
-* communication uses [acp](https://zed.dev/acp) (an agent communication protocol)
-
-we first tried **[opencode](https://opencode.ai/)** behind it.
-
-it worked like:
+sandbox agent runs inside the sandbox, exposes an http interface, and communicates over [acp](https://zed.dev/acp).
 
 <Mermaid
   chart="sequenceDiagram
@@ -189,90 +176,86 @@ it worked like:
   T-->>G: final summary"
 />
 
-### why it was better than tool loop agent
+### why it was better
 
-because it offloaded a bunch of orchestration stuff to something purpose-built.
+it offloaded orchestration to something purpose-built.
 
-### why we still didn't love it
+### why we still moved on
 
-it introduced a whole new set of failure points:
+it added too many failure points:
 
 * an http server inside the sandbox
 * more moving parts
 * more "if this dies, everything dies"
-* more complexity than we wanted
 
-also, opencode felt a bit over-engineered for our needs. it used more tokens than we wanted, and we wanted something simpler and more efficient.
+opencode also felt over-engineered for our use case and used more tokens than we wanted.
 
 ## phase 5: pi with sandbox agent
 
-so we tried **[pi](https://pi.dev/)**, a coding agent, with **sandbox agent**.
+next we tried **[pi](https://pi.dev/)** (a coding agent) with sandbox agent.
 
-pi is lightweight and extensible, and it supports the things we cared about:
+pi gave us what we cared about:
 
 * skills
 * mcps
-* being easy to extend
+* easy extensibility
 
-it worked decently, but we still had the same core issue: we were stuck with the "http server inside sandbox" shape, and it still felt overcomplicated. we also still hit reliability issues sometimes. crashes happen, life happens, but we wanted boring infra.
+this phase was better, but the core shape was still "http server inside sandbox," and we still saw reliability issues. crashes happen. we wanted boring infra.
 
 ## phase 6: pi rpc
 
-then we found the cleanest path.
+the cleanest setup was **rpc with pi**.
 
-at this point, we had two integration paths: acp/http server mode or **rpc**, and we picked **rpc** with pi.
+at this point, our two integration paths were acp/http-server mode or rpc, and rpc won for simplicity.
 
-because rpc is just:
+rpc is basically:
 
 * send json
 * get json back
 
-no server, no extra daemon, no "did the http listener die?" problems, just a process.
+no extra daemon, no internal http listener to babysit, just a process.
 
 ### what we built
 
-we made a small rpc client inspired by pi's own client.
+we built a small rpc client inspired by pi's own client.
 
-**the flow**:
+**flow**:
 
-1. gorkie decides it needs execution
+1. gorkie decides execution is needed
 2. we spin up or attach to the thread's daytona sandbox
 3. we start pi in rpc mode
-4. our rpc client sends:
-   * prompt
-   * context
-5. pi runs commands, edits files, and does agent stuff
+4. rpc client sends prompt + context
+5. pi runs commands/edits
 6. rpc returns structured output
-7. we stream it back into slack using slack assistant api
+7. we stream progress/results back to slack
 
-**what the rpc path actually looks like**:
+**rpc path details**:
 
-* we launch `pi --mode rpc` inside a **PTY**
-* PTY echo is disabled so JSON doesn't get mirrored back
-* messages are **newline-delimited JSON**
-* resume uses `pi --mode rpc --session <id>`
+* launch `pi --mode rpc` inside a **PTY**
+* disable PTY echo so JSON is not mirrored back
+* use newline-delimited json messages
+* resume with `pi --mode rpc --session <id>`
 
-it was simple, fast, and reliable. it didn't feel like a house of cards anymore.
+this was simple, fast, and reliable.
 
 ## tools with pi
 
-one of the biggest wins with pi was how easy tool integration became.
+pi also made tool integration much cleaner.
 
-before, with sandbox agent + opencode, we had to do this weird dance:
+before (sandbox agent + opencode), tool wiring looked like:
 
-* define a custom mcp server
-* have the mcp server call our tool
+* define custom mcp server
+* place, and run the MCP Server in the sandbox
+* provide the MCP to the coding agent (opencode)
 * intercept the tool call
 * route it
-* pray
 
-with pi, we can just:
+with pi, we can:
 
 * define a custom tool
-* plug it in
-* add status
-* add metadata
-* extend it without inventing new plumbing
+* plug it in directly
+* add status and metadata
+* extend without inventing more plumbing
 
 ## current architecture
 
@@ -304,28 +287,33 @@ with pi, we can just:
 
 the stuff we wish we knew earlier:
 
-* sandboxes are easy, orchestration is the real boss fight
-* "just build it" turns into "we built a runtime" way too fast
-* persistence-first is a different world than spin-up/spin-down
-* fewer moving parts wins every time
-* running an http server inside your sandbox is cool until it isn't
+* sandboxes are easy; orchestration is the real boss fight
+* "just build it" becomes "we accidentally built a runtime" very quickly
+* persistence-first is a different world from spin-up/spin-down
+* fewer moving parts wins almost every time
+* running an http server inside your sandbox sounds cool until it isn't
 
 ## closing
 
-sandboxes basically upgraded gorkie from a "helpful chatbot" to something that "actually can do stuff." moving to daytona + pi rpc made it:
+sandboxes upgraded gorkie from a helpful chatbot to something that can actually do work.
+
+moving to daytona + pi rpc made the system:
 
 * simpler
-* cheaper (tokens and complexity)
+* cheaper (tokens + complexity)
 * more reliable
 * easier to extend
 
-now we can focus on making features, not babysitting infra.
+now we can spend time on features instead of babysitting infra.
 
-vercel launched a new **Chat SDK** that supports multiple runtimes. we might rewrite that layer in the future as things evolve.
+vercel also launched a new **Chat SDK** that supports multiple runtimes. we may rewrite Gorkie with the Chat SDK in the future.
 
 ## code
+
+the codebase is available on github:
 
 [Gorkie Slack (`feat/refactor-pi`)](https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi)
 
 ## credits
+
 this blog post's style is inspired by [xyzeva](https://kibty.town/). this is probably the first blog post i've ever written 😭.
