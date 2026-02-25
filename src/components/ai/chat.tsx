@@ -10,6 +10,7 @@ import {
   isToolUIPart,
 } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
+import { usePathname } from 'next/navigation'
 import {
   ArrowUpIcon,
   PawPrint,
@@ -20,6 +21,9 @@ import {
 } from 'lucide-react'
 import {
   type ComponentProps,
+  type Dispatch,
+  type SetStateAction,
+  useCallback,
   createContext,
   memo,
   type ReactNode,
@@ -48,13 +52,18 @@ import {
   useClippy,
 } from '@/components/clippy'
 import { cn } from '@/lib/utils'
+import { SelectionContextMenu } from './selection-context-menu'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
 
 const AISearchContext = createContext<{
   open: boolean
-  setOpen: (open: boolean) => void
+  setOpen: Dispatch<SetStateAction<boolean>>
   chat: UseChatHelpers<MyUIMessage>
+  sources: string[]
+  addSource: (text: string) => void
+  removeSource: (text: string) => void
+  clearSources: () => void
 } | null>(null)
 
 export function useAISearchContext() {
@@ -74,18 +83,63 @@ export function useChatContext() {
 }
 
 export function AISearch({ children }: { children: ReactNode }) {
+  const pathname = usePathname()
   const [open, setOpen] = useState(false)
+  const [sources, setSources] = useState<string[]>([])
   const chat = useChat<MyUIMessage>({
     id: 'search',
     transport: new DefaultChatTransport({
       api: '/api/chat',
+      prepareSendMessagesRequest: ({ body }) => ({
+        body: {
+          ...body,
+          pageContext: {
+            pathname,
+          },
+        },
+      }),
     }),
   })
+
+  const addSource = useCallback((text: string) => {
+    const normalized = text.trim()
+    if (!normalized) {
+      return
+    }
+
+    setSources((current) =>
+      current.includes(normalized) ? current : [...current, normalized]
+    )
+  }, [])
+
+  const clearSources = useCallback(() => {
+    setSources([])
+  }, [])
+
+  const removeSource = useCallback((text: string) => {
+    const normalized = text.trim()
+    if (!normalized) {
+      return
+    }
+
+    setSources((current) => current.filter((source) => source !== normalized))
+  }, [])
 
   return (
     <ClippyProvider agentName={AGENTS.ROVER} draggable={false}>
       <AISearchContext
-        value={useMemo(() => ({ chat, open, setOpen }), [chat, open])}
+        value={useMemo(
+          () => ({
+            addSource,
+            chat,
+            clearSources,
+            open,
+            removeSource,
+            sources,
+            setOpen,
+          }),
+          [addSource, chat, clearSources, open, removeSource, sources]
+        )}
       >
         {children}
         <AISearchPanel />
@@ -171,9 +225,11 @@ function SearchAIActions() {
 }
 
 const StorageKeyInput = '__ai_search_input'
+const MaxSourcePreviewChars = 120
 
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
+  const { clearSources, removeSource, sources } = useAISearchContext()
   const { clippy } = useClippy()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
@@ -200,12 +256,25 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     if (hasPendingToolInput) {
       return
     }
+    const trimmedInput = input.trim()
+    if (trimmedInput.length === 0 && sources.length === 0) {
+      return
+    }
+
+    const sourceContext =
+      sources.length > 0
+        ? `references:\n${sources
+            .map((source) => `- ${JSON.stringify(source)}`)
+            .join('\n')}\n\n`
+        : ''
+
     if (clippy) {
       clippy.stopCurrent()
       clippy.play(animations.submit)
     }
-    await sendMessage({ text: input })
+    await sendMessage({ text: `${sourceContext}${trimmedInput}`.trim() })
     setInput('')
+    clearSources()
     localStorage.removeItem(StorageKeyInput)
   }
 
@@ -226,19 +295,25 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       className={cn('flex items-start pe-2', props.className)}
       onSubmit={onStart}
     >
-      <TextInput
-        autoFocus
-        className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
-        disabled={isLoading}
-        onChange={(event) => handleInputChange(event.target.value)}
-        onKeyDown={(event) => {
-          if (!event.shiftKey && event.key === 'Enter') {
-            onStart(event)
-          }
-        }}
-        placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
-        value={input}
-      />
+      <div className='flex flex-1 flex-col'>
+        <PromptSources
+          onRemove={removeSource}
+          sources={sources}
+        />
+        <TextInput
+          autoFocus
+          className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
+          disabled={isLoading}
+          onChange={(event) => handleInputChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (!event.shiftKey && event.key === 'Enter') {
+              onStart(event)
+            }
+          }}
+          placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
+          value={input}
+        />
+      </div>
       {isLoading ? (
         <button
           className={cn(
@@ -264,13 +339,51 @@ function SearchAIInput(props: ComponentProps<'form'>) {
                 'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-4',
             })
           )}
-          disabled={input.length === 0 || hasPendingToolInput}
+          disabled={
+            (input.trim().length === 0 && sources.length === 0) ||
+            hasPendingToolInput
+          }
           type='submit'
         >
           <ArrowUpIcon />
         </button>
       )}
     </form>
+  )
+}
+
+function PromptSources({
+  sources,
+  onRemove,
+}: {
+  sources: string[]
+  onRemove: (source: string) => void
+}) {
+  if (sources.length === 0) {
+    return null
+  }
+
+  return (
+    <div className='flex flex-wrap gap-1.5 px-3 pt-3'>
+      {sources.map((source) => (
+        <div
+          className='inline-flex items-center gap-1 rounded-md border border-dashed border-border bg-fd-muted px-2 py-1 text-xs'
+          key={source}
+        >
+          <span className='max-w-[220px] truncate'>
+            {source.slice(0, MaxSourcePreviewChars)}
+          </span>
+          <button
+            aria-label='Remove source'
+            className='inline-flex items-center justify-center rounded-sm text-fd-muted-foreground transition-colors hover:text-fd-foreground'
+            onClick={() => onRemove(source)}
+            type='button'
+          >
+            <X className='size-3.5' />
+          </button>
+        </div>
+      ))}
+    </div>
   )
 }
 
@@ -443,7 +556,7 @@ const Message = memo(function Message({
 })
 
 function AISearchPanel() {
-  const { open, setOpen } = useAISearchContext()
+  const { addSource, open, setOpen } = useAISearchContext()
   const chat = useChatContext()
   const { clippy } = useClippy()
   const lastTool = useRef<string | null>(null)
@@ -550,6 +663,12 @@ function AISearchPanel() {
           </div>
         </div>
       </Presence>
+      <SelectionContextMenu
+        onSelect={(text) => {
+          addSource(text)
+          setOpen(true)
+        }}
+      />
     </>
   )
 }

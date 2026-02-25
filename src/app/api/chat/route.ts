@@ -17,9 +17,19 @@ import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
 
+type PageContext = {
+  pathname?: string
+}
+
 export async function POST(request: Request) {
   try {
-    const { messages }: { messages: MyUIMessage[] } = await request.json()
+    const {
+      messages,
+      pageContext,
+    }: {
+      messages: MyUIMessage[]
+      pageContext?: PageContext
+    } = await request.json()
 
     const handleStreamError = (error: unknown) => {
       if (env.NODE_ENV !== 'production') {
@@ -52,6 +62,7 @@ export async function POST(request: Request) {
           model: provider.languageModel('chat-model'),
           system: systemPrompt({
             llms,
+            pageContext,
           }),
           providerOptions: {
             openai: {
