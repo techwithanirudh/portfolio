@@ -43,15 +43,15 @@ from phase 1 onward, a few things were consistently important regardless of prov
 * making tool status visible (so you can tell what it's doing, not just "thinking…" forever)
 * streaming updates back to slack instead of waiting for one giant final blob
 
-we use slack's ai implementation for the chat surface and interaction model, which lets us render interactive ui directly in slack:
+we use **slack's ai implementation** for the chat surface and interaction model, which lets us render **interactive ui** directly in slack:
 * https://docs.slack.dev/ai/
 * https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
 ## phase 1: vercel sandboxes
 
-we were already using vercel's ([ai sdk](https://ai-sdk.dev/)). [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) are isolated execution environments you can spin up on demand, and they had a generous free tier, so we tried the obvious combo.
+we were already using vercel's **ai sdk** ([ai-sdk.dev](https://ai-sdk.dev/)). [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) are isolated execution environments you can spin up on demand, and they had a generous free tier, so we tried the obvious combo.
 
-we gave gorkie a simple sandbox tool that spawned a ToolLoopAgent with tools to work in the sandbox.
+we gave gorkie a simple sandbox tool that spawned a **ToolLoopAgent** with tools to work in the sandbox.
 
 the tool loop agent felt nice conceptually:
 
@@ -99,7 +99,7 @@ but it was not the foundation.
 ## phase 2: e2b
 
 next we moved to **e2b** ([e2b.dev](https://e2b.dev/)).
-e2b is a sandbox platform built for ai agents, and it felt more "real" as a provider for longer-running execution.
+**e2b** is a sandbox platform built for ai agents, and it felt more "real" as a provider for longer-running execution.
 
 we kept the same overall architecture (tool loop agent), just swapped the sandbox layer.
 
@@ -152,7 +152,7 @@ we persist sandbox state in our database so we can reattach per thread. the core
 ## phase 3: daytona
 
 so we switched to **[daytona](https://www.daytona.io/)**.
-daytona is a sandbox/runtime platform with strong lifecycle controls, which matched our persistence-first model better.
+**daytona** is a sandbox/runtime platform with strong lifecycle controls, which matched our persistence-first model better.
 
 daytona was the right fit because:
 
@@ -189,7 +189,7 @@ because we definitely did not want to keep building all of that orchestration ou
 ## phase 4: sandbox agent + opencode
 
 we stumbled onto [sandbox agent](https://sandboxagent.dev/), a project by [rivet.dev](https://rivet.dev).
-sandbox agent runs inside the sandbox and exposes an agent interface we can talk to. the idea was:
+**sandbox agent** runs inside the sandbox and exposes an agent interface we can talk to. the idea was:
 
 * sandbox agent runs inside the sandbox
 * it runs a coding agent inside it
@@ -237,7 +237,7 @@ we wanted simple and efficient.
 
 ## phase 5: pi with sandbox agent
 
-so we tried **[pi](https://pi.dev/)**, a coding agent, with sandbox agent.
+so we tried **[pi](https://pi.dev/)**, a coding agent, with **sandbox agent**.
 
 pi is lightweight and extensible, and it supports the things we cared about:
 
@@ -254,16 +254,12 @@ crashes happen.
 life happens.
 but we wanted boring infra.
 
-## phase 6: pi rpc (final form)
+## phase 6: pi rpc
 
 then we found the cleanest path.
 
-pi has **two ways** you can run it:
-
-1. pi via acp http server mode
-2. pi via **rpc**
-
-we picked **pi rpc**.
+at this point, we had two integration paths: acp/http server mode or **rpc**.
+we picked **rpc** with pi.
 
 because rpc is just:
 
@@ -279,13 +275,12 @@ just a process.
 
 we made a small rpc client inspired by pi's own client.
 
-the flow:
+**the flow**:
 
 1. gorkie decides it needs execution
 2. we spin up or attach to the thread's daytona sandbox
 3. we start pi in rpc mode
 4. our rpc client sends:
-
    * prompt
    * context
 5. pi runs commands, edits files, and does agent stuff
@@ -304,7 +299,7 @@ it was fast.
 it was reliable.
 it didn't feel like a house of cards anymore.
 
-## tools and why pi made life easier
+## tools with pi
 
 one of the biggest wins with pi was how easy tool integration became.
 
