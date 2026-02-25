@@ -12,8 +12,7 @@ this blog post was a collaboration between two people. gorkie itself was built b
 ## intro
 
 gorkie is a helpful ai slack assistant.
-it started as "answer questions, help with tasks, and be useful in threads."
-then users started asking for stuff that is not just text.
+it started as "answer questions, help with tasks, and be useful in threads," then users started asking for stuff that is not just text.
 
 like:
 
@@ -36,6 +35,16 @@ so, sandboxes.
   O --> G --> U"
 />
 
+## quick glossary
+
+if you don't live in sandbox land, here's what these terms mean:
+
+* **sandbox**: an isolated runtime where you can run untrusted or ai-generated code safely.
+* **vercel sandbox**: vercel's ephemeral linux microvm service for running code safely with sdk/cli control. docs: https://vercel.com/docs/vercel-sandbox/
+* **e2b**: a sandbox platform focused on ai agents, where you can spin up isolated environments and run commands/files through sdk tools. docs: https://e2b.dev/docs
+* **daytona**: a sandbox runtime platform with lifecycle controls (auto-stop/archive/delete) and sdk-based management. docs: https://www.daytona.io/docs/en/sandboxes/
+* **acp**: a protocol used for agent communication (the mode we tried before moving to pi rpc). docs: https://zed.dev/acp
+
 ## what stayed constant
 
 from phase 1 onward, a few things were consistently important regardless of provider/agent:
@@ -50,7 +59,7 @@ we use slack's ai implementation for the chat surface and interaction model, whi
 
 ## phase 1: vercel sandboxes
 
-we were already using vercel's ai sdk ([ai-sdk.dev](https://ai-sdk.dev/) / [vercel docs](https://vercel.com/docs/ai-sdk)), and we saw that [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) had a generous free tier, so we tried the obvious combo.
+we were already using vercel's ([ai sdk](https://ai-sdk.dev/)). [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) are isolated execution environments you can spin up on demand, and they had a generous free tier, so we tried the obvious combo.
 
 we gave gorkie a simple sandbox tool that spawned a ToolLoopAgent with tools to work in the sandbox.
 
@@ -100,8 +109,7 @@ but it was not the foundation.
 ## phase 2: e2b
 
 next we moved to **e2b** ([e2b.dev](https://e2b.dev/)).
-
-e2b is popular, lots of ai engineers use it, and it felt more "real" as a sandbox provider.
+e2b is a sandbox platform built for ai agents, and it felt more "real" as a provider for longer-running execution.
 
 we kept the same overall architecture (tool loop agent), just swapped the sandbox layer.
 
@@ -154,6 +162,7 @@ we persist sandbox state in our database so we can reattach per thread. the core
 ## phase 3: daytona
 
 so we switched to **[daytona](https://www.daytona.io/)**.
+daytona is a sandbox/runtime platform with strong lifecycle controls, which matched our persistence-first model better.
 
 daytona was the right fit because:
 
@@ -190,14 +199,13 @@ because we definitely did not want to keep building all of that orchestration ou
 ## phase 4: sandbox agent + opencode
 
 we stumbled onto [sandbox agent](https://sandboxagent.dev/), a project by [rivet.dev](https://rivet.dev).
-
-the idea was:
+sandbox agent runs inside the sandbox and exposes an agent interface we can talk to. the idea was:
 
 * sandbox agent runs inside the sandbox
 * it runs a coding agent inside it
 * it exposes an http server in the sandbox
 * we talk to that server using the sandbox agent sdk
-* communication uses [acp](https://zed.dev/acp)
+* communication uses [acp](https://zed.dev/acp) (an agent communication protocol)
 
 we first tried **[opencode](https://opencode.ai/)** behind it.
 
@@ -328,13 +336,6 @@ with pi, we can just:
 
 ## current architecture
 
-user in slack
-→ gorkie
-→ daytona sandbox (thread-scoped, persistent)
-→ pi rpc client
-→ pi runs tasks
-→ results stream back to slack
-
 <Mermaid
   chart="sequenceDiagram
   participant U as Slack User
@@ -382,8 +383,11 @@ moving to daytona + pi rpc made it:
 
 now we can focus on making features, not babysitting infra.
 
-this blog post's style is inspired by [xyzeva](https://kibty.town/). this is probably the first blog post i've ever written 😭.
-
 vercel launched a new **Chat SDK** that supports multiple runtimes. we might rewrite that layer in the future as things evolve.
-this is the github link to the current result:
-[Gorkie Slack](https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi)
+
+**current implementation repo:**
+
+[Gorkie Slack (`feat/refactor-pi`)](https://github.com/imdevarsh/gorkie-slack/tree/feat/refactor-pi)
+
+## credits
+this blog post's style is inspired by [xyzeva](https://kibty.town/). this is probably the first blog post i've ever written 😭.
