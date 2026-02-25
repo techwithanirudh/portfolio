@@ -49,7 +49,7 @@ we use **slack's ai implementation** for the chat surface and interaction model,
 
 ## phase 1: vercel sandboxes
 
-we were already using vercel's **ai sdk** ([ai-sdk.dev](https://ai-sdk.dev/)). [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) are isolated execution environments you can spin up on demand, and they had a generous free tier, so we tried the obvious combo.
+we were already using vercel's [ai sdk](https://ai-sdk.dev/). [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) are isolated execution environments you can spin up on demand, and they had a generous free tier, so we tried the obvious combo.
 
 we gave gorkie a simple sandbox tool that spawned a **ToolLoopAgent** with tools to work in the sandbox.
 
@@ -107,20 +107,11 @@ honestly, it went pretty well.
 
 users said it worked fine.
 
-**what we actually shipped**:
-
-* provider: `@e2b/code-interpreter` with `Sandbox.betaCreate(...)`
-* timeouts: 10 minutes per sandbox (`timeoutMs`), extend timeout on each tool
-* lifecycle: `autoPause: true` and a DB row keyed by `threadId`
-* cleanup: a janitor runs and kills paused sandboxes after 7 days
-
 ### but then reality hit
 
 the more we used it, the more we realized the sandbox provider was not even the main problem.
 
-the main problem was this:
-
-our tool loop agent did not handle what we actually needed long term.
+the main problem was our tool loop agent did not handle what we actually needed long term.
 
 like:
 
