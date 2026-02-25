@@ -36,7 +36,7 @@ so, sandboxes.
   O --> G --> U"
 />
 
-## what stayed constant across versions
+## what stayed constant
 
 from phase 1 onward, a few things were consistently important regardless of provider/agent:
 
@@ -48,7 +48,7 @@ we use slack's ai implementation for the chat surface and interaction model, whi
 * https://docs.slack.dev/ai/
 * https://docs.slack.dev/reference/block-kit/blocks/plan-block/
 
-## phase 1: vercel ai sdk tool loop agent + vercel sandboxes
+## phase 1: vercel sandboxes
 
 we were already using vercel's ai sdk ([ai-sdk.dev](https://ai-sdk.dev/) / [vercel docs](https://vercel.com/docs/ai-sdk)), and we saw that [vercel sandboxes](https://vercel.com/docs/vercel-sandbox/) had a generous free tier, so we tried the obvious combo.
 
@@ -97,7 +97,7 @@ it was enough to prove that "yes, sandboxes make gorkie way more useful."
 
 but it was not the foundation.
 
-## phase 2: e2b + tool loop agent
+## phase 2: e2b
 
 next we moved to **e2b** ([e2b.dev](https://e2b.dev/)).
 
@@ -143,7 +143,7 @@ we also had some pain with e2b:
 
 and we really wanted persistence-first.
 
-## state + persistence (how we actually track it)
+## state + persistence
 
 we persist sandbox state in our database so we can reattach per thread. the core idea is:
 
@@ -151,7 +151,7 @@ we persist sandbox state in our database so we can reattach per thread. the core
 2. status transitions (`active`, `paused`, `resuming`, `error`, `destroyed`)
 3. reattach on the next message in the same thread
 
-## phase 3: switching to daytona (persistence-first)
+## phase 3: daytona
 
 so we switched to **[daytona](https://www.daytona.io/)**.
 
@@ -237,7 +237,7 @@ also, opencode felt a bit over-engineered for our needs.
 it used more tokens than we wanted.
 we wanted simple and efficient.
 
-## phase 5: trying pi with sandbox agent
+## phase 5: pi with sandbox agent
 
 so we tried **[pi](https://pi.dev/)**, a coding agent, with sandbox agent.
 
@@ -326,7 +326,7 @@ with pi, we can just:
 * add metadata
 * extend it without inventing new plumbing
 
-## current architecture (tldr)
+## current architecture
 
 user in slack
 → gorkie
@@ -359,7 +359,9 @@ user in slack
    />
 </div>
 
-## lessons learned (the stuff we wish we knew earlier)
+## lessons learned
+
+the stuff we wish we knew earlier:
 
 * sandboxes are easy, orchestration is the real boss fight
 * "just build it" turns into "we built a runtime" way too fast
