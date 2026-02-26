@@ -13,6 +13,7 @@ import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { usePathname } from 'next/navigation'
 import {
   ArrowUpIcon,
+  Quote,
   PawPrint,
   PlusIcon,
   RefreshCw,
@@ -23,7 +24,6 @@ import {
   type ComponentProps,
   type Dispatch,
   type SetStateAction,
-  useCallback,
   createContext,
   memo,
   type ReactNode,
@@ -60,10 +60,8 @@ const AISearchContext = createContext<{
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   chat: UseChatHelpers<MyUIMessage>
-  sources: string[]
-  addSource: (text: string) => void
-  removeSource: (text: string) => void
-  clearSources: () => void
+  context: string | null
+  setContext: Dispatch<SetStateAction<string | null>>
 } | null>(null)
 
 export function useAISearchContext() {
@@ -85,7 +83,7 @@ export function useChatContext() {
 export function AISearch({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
-  const [sources, setSources] = useState<string[]>([])
+  const [context, setContext] = useState<string | null>(null)
   const chat = useChat<MyUIMessage>({
     id: 'search',
     transport: new DefaultChatTransport({
@@ -102,44 +100,18 @@ export function AISearch({ children }: { children: ReactNode }) {
     }),
   })
 
-  const addSource = useCallback((text: string) => {
-    const normalized = text.trim()
-    if (!normalized) {
-      return
-    }
-
-    setSources((current) =>
-      current.includes(normalized) ? current : [...current, normalized]
-    )
-  }, [])
-
-  const clearSources = useCallback(() => {
-    setSources([])
-  }, [])
-
-  const removeSource = useCallback((text: string) => {
-    const normalized = text.trim()
-    if (!normalized) {
-      return
-    }
-
-    setSources((current) => current.filter((source) => source !== normalized))
-  }, [])
-
   return (
     <ClippyProvider agentName={AGENTS.ROVER} draggable={false}>
       <AISearchContext
         value={useMemo(
           () => ({
-            addSource,
             chat,
-            clearSources,
+            context,
             open,
-            removeSource,
-            sources,
+            setContext,
             setOpen,
           }),
-          [addSource, chat, clearSources, open, removeSource, sources]
+          [chat, context, open]
         )}
       >
         {children}
@@ -150,7 +122,7 @@ export function AISearch({ children }: { children: ReactNode }) {
 }
 
 function Header() {
-  const { setOpen, chat } = useAISearchContext()
+  const { setOpen, chat, setContext } = useAISearchContext()
 
   return (
     <div className='sticky top-0 flex h-10 items-start'>
@@ -171,7 +143,10 @@ function Header() {
                 'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
             })
           )}
-          onClick={() => chat.setMessages([])}
+          onClick={() => {
+            chat.setMessages([])
+            setContext(null)
+          }}
           type='button'
         >
           <PlusIcon className='transition-transform group-hover/button:rotate-90' />
@@ -230,7 +205,7 @@ const MaxSourcePreviewChars = 120
 
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
-  const { clearSources, removeSource, sources } = useAISearchContext()
+  const { setContext, context } = useAISearchContext()
   const { clippy } = useClippy()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
@@ -258,17 +233,13 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       return
     }
     const trimmedInput = input.trim()
-    if (trimmedInput.length === 0 && sources.length === 0) {
+    if (trimmedInput.length === 0 && !context) {
       return
     }
 
-    const sourceContext =
-      sources.length > 0
-        ? `references:\n${sources
-            .map((source) => `- ${JSON.stringify(source)}`)
-            .join('\n')}\n\n`
-        : ''
-    const messageText = `${sourceContext}${trimmedInput}`.trim()
+    const contextValue = context?.trim()
+    const messageText =
+      trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
     if (clippy) {
       clippy.stopCurrent()
@@ -276,10 +247,15 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     }
 
     setInput('')
-    clearSources()
+    setContext(null)
     localStorage.removeItem(StorageKeyInput)
 
-    await sendMessage({ text: messageText })
+    await sendMessage({
+      text: messageText,
+      metadata: {
+        context: contextValue,
+      },
+    })
   }
 
   const handleInputChange = (value: string) => {
@@ -296,13 +272,13 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   return (
     <form
       {...props}
-      className={cn('flex items-start pe-2', props.className)}
+      className={cn('flex items-start', props.className)}
       onSubmit={onStart}
     >
       <div className='flex flex-1 flex-col'>
-        <PromptSources
-          onRemove={removeSource}
-          sources={sources}
+        <PromptContext
+          context={context}
+          onClear={() => setContext(null)}
         />
         <TextInput
           autoFocus
@@ -318,75 +294,76 @@ function SearchAIInput(props: ComponentProps<'form'>) {
           value={input}
         />
       </div>
-      {isLoading ? (
-        <button
-          className={cn(
-            buttonVariants({
-              color: 'secondary',
-              size: 'icon-sm',
-              className:
-                'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-3.5',
-            })
-          )}
-          onClick={stop}
-          type='button'
-        >
-          <SquareIcon className='fill-fd-foreground' />
-        </button>
-      ) : (
-        <button
-          className={cn(
-            buttonVariants({
-              color: 'primary',
-              size: 'icon-sm',
-              className:
-                'mt-2 rounded-none border border-dashed transition-all [&_svg]:size-4',
-            })
-          )}
-          disabled={
-            (input.trim().length === 0 && sources.length === 0) ||
-            hasPendingToolInput
-          }
-          type='submit'
-        >
-          <ArrowUpIcon />
-        </button>
-      )}
+      <div className={cn(
+        'h-full h-10 flex items-center justify-center pe-1.5',
+        {
+          'bg-fd-background': context,
+        },
+      )}>
+        {isLoading ? (
+          <button
+            className={cn(
+              buttonVariants({
+                color: 'secondary',
+                size: 'icon-sm',
+                className:
+                  'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
+              })
+            )}
+            onClick={stop}
+            type='button'
+          >
+            <SquareIcon className='fill-fd-foreground' />
+          </button>
+        ) : (
+          <button
+            className={cn(
+              buttonVariants({
+                color: 'primary',
+                size: 'icon-sm',
+                className:
+                  'rounded-none border border-dashed transition-all [&_svg]:size-4',
+              })
+            )}
+            disabled={
+              (input.trim().length === 0 && !context) ||
+              hasPendingToolInput
+            }
+            type='submit'
+          >
+            <ArrowUpIcon />
+          </button>
+        )}
+      </div>
     </form>
   )
 }
 
-function PromptSources({
-  sources,
-  onRemove,
+function PromptContext({
+  context,
+  onClear,
 }: {
-  sources: string[]
-  onRemove: (source: string) => void
+  context: string | null
+  onClear: () => void
 }) {
-  if (sources.length === 0) {
+  if (!context) {
     return null
   }
 
   return (
-    <div className='flex flex-wrap gap-1.5 px-3 pt-3'>
-      {sources.map((source) => (
-        <div
-          className='inline-flex items-center gap-1 rounded-md border border-dashed border-border bg-fd-muted px-2 py-1 text-xs'
-          key={source}
-        >
-          <span className='max-w-[220px] truncate'>
-            {source.slice(0, MaxSourcePreviewChars)}
-          </span>
-          <button
-            aria-label='Remove source'
-            className='inline-flex items-center justify-center rounded-sm text-fd-muted-foreground transition-colors hover:text-fd-foreground'
-            onClick={() => onRemove(source)}
-            type='button'
-          >
-            <X className='size-3.5' />
-          </button>
-        </div>
-      ))}
+    <div className='flex items-start gap-1.5 bg-fd-background px-2 py-1.5 text-xs h-10'>
+      <Quote className='mt-0.5 size-3 shrink-0 text-fd-muted-foreground' />
+      <span className='line-clamp-2 flex-1 break-words'>
+        {context.slice(0, MaxSourcePreviewChars)}
+      </span>
+      <button
+        aria-label='Remove context'
+        className='inline-flex items-center justify-center rounded-sm text-fd-muted-foreground transition-colors hover:text-fd-foreground'
+        onClick={onClear}
+        type='button'
+      >
+        <X className='size-3.5' />
+      </button>
     </div>
   )
 }
@@ -502,6 +479,7 @@ const Message = memo(function Message({
   isInProgress: boolean
 } & ComponentProps<'div'>) {
   const parts = (message.parts ?? []) as MyUIMessage['parts']
+  const context = message.metadata?.context?.trim()
 
   return (
     <div {...props}>
@@ -514,6 +492,14 @@ const Message = memo(function Message({
         {roleName[message.role] ?? 'unknown'}
       </p>
       <div className='flex flex-col gap-2'>
+        {message.role === 'user' && context ? (
+          <div className='not-prose rounded-md border border-dashed border-border bg-fd-muted/40 p-2 text-xs'>
+            <p className='mb-1 font-medium text-[11px] uppercase tracking-wide text-fd-muted-foreground'>
+              Context
+            </p>
+            <p className='line-clamp-3 break-words'>{context}</p>
+          </div>
+        ) : null}
         <MessageMetadata inProgress={isInProgress} parts={parts} />
         {parts.map((part, idx) => {
           if (part.type === 'text') {
@@ -527,15 +513,15 @@ const Message = memo(function Message({
             const isSubmitted = part.state === 'output-available'
             const submittedData =
               isSubmitted &&
-              part.output?.success &&
-              part.output.name &&
-              part.output.email &&
-              part.output.message
+                part.output?.success &&
+                part.output.name &&
+                part.output.email &&
+                part.output.message
                 ? {
-                    name: part.output.name,
-                    email: part.output.email,
-                    message: part.output.message,
-                  }
+                  name: part.output.name,
+                  email: part.output.email,
+                  message: part.output.message,
+                }
                 : undefined
 
             if (!isSubmitted && part.state !== 'input-available') {
@@ -560,7 +546,7 @@ const Message = memo(function Message({
 })
 
 function AISearchPanel() {
-  const { addSource, open, setOpen } = useAISearchContext()
+  const { setContext, open, setOpen } = useAISearchContext()
   const chat = useChatContext()
   const { clippy } = useClippy()
   const lastTool = useRef<string | null>(null)
@@ -669,7 +655,11 @@ function AISearchPanel() {
       </Presence>
       <SelectionContextMenu
         onSelect={(text) => {
-          addSource(text)
+          const normalized = text.trim()
+          if (!normalized) {
+            return
+          }
+          setContext(normalized)
           setOpen(true)
         }}
       />

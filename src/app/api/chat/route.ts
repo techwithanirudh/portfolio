@@ -11,7 +11,7 @@ import {
 import { env } from '@/env'
 import { systemPrompt } from '@/lib/ai/prompts/chat'
 import { provider } from '@/lib/ai/providers'
-import type { MyUIMessage } from './types'
+import { chatMessageMetadataSchema, type MyUIMessage } from './types'
 import { getLLMsTxt } from './utils/llms'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
@@ -20,6 +20,53 @@ import { showContactFormTool } from './utils/tools/show-contact-form'
 type PageContext = {
   pathname?: string
 }
+
+const processMessages = (messages: MyUIMessage[]): MyUIMessage[] =>
+  messages.map((message) => {
+    if (message.role !== 'user') {
+      return message
+    }
+
+    const parsed = chatMessageMetadataSchema.safeParse(message.metadata)
+    if (!parsed.success) {
+      return message
+    }
+
+    const context = parsed.data.context?.trim()
+    if (!context) {
+      return message
+    }
+
+    let injected = false
+    const nextParts = message.parts.map((part) => {
+      if (injected || part.type !== 'text') {
+        return part
+      }
+      injected = true
+      return {
+        ...part,
+        text: `${part.text}\n\nContext:\n${context}`,
+      }
+    })
+
+    if (injected) {
+      return {
+        ...message,
+        parts: nextParts,
+      }
+    }
+
+    return {
+      ...message,
+      parts: [
+        ...nextParts,
+        {
+          type: 'text',
+          text: `Context:\n${context}`,
+        },
+      ] as MyUIMessage['parts'],
+    }
+  })
 
 export async function POST(request: Request) {
   try {
@@ -30,6 +77,7 @@ export async function POST(request: Request) {
       messages: MyUIMessage[]
       pageContext?: PageContext
     } = await request.json()
+    const processedMessages = processMessages(messages)
 
     const handleStreamError = (error: unknown) => {
       if (env.NODE_ENV !== 'production') {
@@ -52,7 +100,7 @@ export async function POST(request: Request) {
     const stream = createUIMessageStream({
       originalMessages: messages,
       execute: async ({ writer }) => {
-        const modelMessages = await convertToModelMessages(messages, {
+        const modelMessages = await convertToModelMessages(processedMessages, {
           ignoreIncompleteToolCalls: true,
         })
 
