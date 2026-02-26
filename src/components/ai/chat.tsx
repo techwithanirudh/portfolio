@@ -37,6 +37,7 @@ import {
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
+import { contextDataSchema } from '@/app/api/chat/types'
 import {
   getToolsRequiringConfirmation,
   type ToolName,
@@ -251,10 +252,22 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     localStorage.removeItem(StorageKeyInput)
 
     await sendMessage({
-      text: messageText,
-      metadata: {
-        context: contextValue,
-      },
+      parts: [
+        {
+          type: 'text',
+          text: messageText,
+        },
+        ...(contextValue
+          ? [
+              {
+                type: 'data-context' as const,
+                data: {
+                  text: contextValue,
+                },
+              },
+            ]
+          : []),
+      ],
     })
   }
 
@@ -479,7 +492,13 @@ const Message = memo(function Message({
   isInProgress: boolean
 } & ComponentProps<'div'>) {
   const parts = (message.parts ?? []) as MyUIMessage['parts']
-  const context = message.metadata?.context?.trim()
+  const context = (() => {
+    const contextPart = parts.find((part) => part.type === 'data-context')
+    if (!contextPart || !('data' in contextPart)) {
+      return undefined
+    }
+    return contextDataSchema.safeParse(contextPart.data).data?.text
+  })()
 
   return (
     <div {...props}>
