@@ -53,6 +53,7 @@ import {
   useClippy,
 } from '@/components/clippy'
 import { cn } from '@/lib/utils'
+import { useOiiaMode } from '@/components/oiia'
 import { SelectionContextMenu } from './selection-context-menu'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -83,6 +84,7 @@ export function useChatContext() {
 
 export function AISearch({ children }: { children: ReactNode }) {
   const pathname = usePathname()
+  const { mode } = useOiiaMode()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
   const chat = useChat<MyUIMessage>({
@@ -96,6 +98,7 @@ export function AISearch({ children }: { children: ReactNode }) {
           pageContext: {
             pathname,
           },
+          mode,
         },
       }),
     }),
@@ -124,13 +127,16 @@ export function AISearch({ children }: { children: ReactNode }) {
 
 function Header() {
   const { setOpen, chat, setContext } = useAISearchContext()
+  const { mode } = useOiiaMode()
 
   return (
     <div className='sticky top-0 flex h-10 items-start'>
       <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
         <div className='flex items-center gap-2'>
           <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
-          <p className='font-medium text-sm'>Ask Simba</p>
+          <p className='font-medium text-sm'>
+            {mode === 'oiia' ? 'Ask OIIA' : 'Ask Simba'}
+          </p>
         </div>
       </div>
 
@@ -208,6 +214,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { setContext, context } = useAISearchContext()
   const { clippy } = useClippy()
+  const { mode } = useOiiaMode()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -303,50 +310,56 @@ function SearchAIInput(props: ComponentProps<'form'>) {
               onStart(event)
             }
           }}
-          placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
+          placeholder={
+            isLoading
+              ? mode === 'oiia'
+                ? 'Purring for answers...'
+                : 'Sniffing for answers...'
+              : mode === 'oiia'
+                ? 'Ask OIIA'
+                : 'Ask Simba'
+          }
           value={input}
         />
       </div>
-      <div className={cn(
-        'h-full h-10 flex items-center justify-center pe-1.5',
-        {
-          'bg-fd-background': context,
-        },
-      )}>
-        {isLoading ? (
-          <button
-            className={cn(
-              buttonVariants({
-                color: 'secondary',
-                size: 'icon-sm',
-                className:
-                  'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
-              })
-            )}
-            onClick={stop}
-            type='button'
-          >
-            <SquareIcon className='fill-fd-foreground' />
-          </button>
-        ) : (
-          <button
-            className={cn(
-              buttonVariants({
-                color: 'primary',
-                size: 'icon-sm',
-                className:
-                  'rounded-none border border-dashed transition-all [&_svg]:size-4',
-              })
-            )}
-            disabled={
-              (input.trim().length === 0 && !context) ||
-              hasPendingToolInput
-            }
-            type='submit'
-          >
-            <ArrowUpIcon />
-          </button>
-        )}
+      <div className='flex w-10 flex-col items-stretch pe-1.5'>
+        {context ? <div className='h-10 bg-fd-background' /> : null}
+        <div className='flex items-center justify-center pt-1.5'>
+          {isLoading ? (
+            <button
+              className={cn(
+                buttonVariants({
+                  color: 'secondary',
+                  size: 'icon-sm',
+                  className:
+                    'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
+                })
+              )}
+              onClick={stop}
+              type='button'
+            >
+              <SquareIcon className='fill-fd-foreground' />
+            </button>
+          ) : (
+            <button
+              className={cn(
+                buttonVariants({
+                  color: 'primary',
+                  size: 'icon-sm',
+                  className:
+                    'rounded-none border border-dashed transition-all [&_svg]:size-4',
+                })
+              )}
+              disabled={
+                (input.trim().length === 0 && !context) ||
+                hasPendingToolInput
+              }
+              type='submit'
+            >
+              <ArrowUpIcon />
+            </button>
+          )}
+        </div>
       </div>
     </form>
   )
@@ -416,6 +429,7 @@ function MessageList({
   status: string
 } & ComponentProps<'div'>) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { mode } = useOiiaMode()
 
   useEffect(() => {
     const container = containerRef.current
@@ -461,8 +475,9 @@ function MessageList({
           <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
             <PawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />
             <p>
-              heya! im simba, anirudh's dog. i can answer questions about him,
-              his work, or the site.
+              {mode === 'oiia'
+                ? "heya! im oiia, anirudh's cat. i can answer questions about him, his work, or the site."
+                : "heya! im simba, anirudh's dog. i can answer questions about him, his work, or the site."}
             </p>
           </div>
         ) : (
@@ -492,13 +507,7 @@ const Message = memo(function Message({
   isInProgress: boolean
 } & ComponentProps<'div'>) {
   const parts = (message.parts ?? []) as MyUIMessage['parts']
-  const context = (() => {
-    const contextPart = parts.find((part) => part.type === 'data-context')
-    if (!contextPart || !('data' in contextPart)) {
-      return undefined
-    }
-    return contextDataSchema.safeParse(contextPart.data).data?.text
-  })()
+  const context = getContextFromParts(parts)
 
   return (
     <div {...props}>
@@ -564,8 +573,25 @@ const Message = memo(function Message({
   )
 })
 
+const getContextFromParts = (
+  parts: MyUIMessage['parts']
+): string | undefined => {
+  for (const part of parts) {
+    if (part.type !== 'data-context' || !('data' in part)) {
+      continue
+    }
+    const parsed = contextDataSchema.safeParse(part.data)
+    if (parsed.success) {
+      return parsed.data.text
+    }
+  }
+
+  return undefined
+}
+
 function AISearchPanel() {
   const { setContext, open, setOpen } = useAISearchContext()
+  const { mode } = useOiiaMode()
   const chat = useChatContext()
   const { clippy } = useClippy()
   const lastTool = useRef<string | null>(null)
@@ -673,6 +699,7 @@ function AISearchPanel() {
         </div>
       </Presence>
       <SelectionContextMenu
+        label={mode === 'oiia' ? 'Ask OIIA' : 'Ask Simba'}
         onSelect={(text) => {
           const normalized = text.trim()
           if (!normalized) {

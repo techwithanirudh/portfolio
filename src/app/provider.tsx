@@ -7,6 +7,7 @@ import type { ReactNode } from 'react'
 import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
 import { AISearch } from '@/components/ai/chat'
 import Analytics from '@/components/analytics'
+import { OiiaFloaters, OiiaProvider } from '@/components/oiia'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -25,26 +26,29 @@ export function Provider({
       enableSystem
     >
       <NuqsAdapter>
-        <AISearch>
-          <ProgressProvider
-            color='var(--color-primary)'
-            delay={200}
-            height='2px'
-            options={{
-              showSpinner: false,
-            }}
-            shallowRouting
-            startOnLoad
-            stopDelay={200}
-          >
-            <TooltipProvider>{children}</TooltipProvider>
-          </ProgressProvider>
-          <AISearchTrigger />
-        </AISearch>
-        <Analytics />
-        <Toaster />
-        <TailwindIndicator />
-        <SmoothCursor />
+        <OiiaProvider>
+          <AISearch>
+            <ProgressProvider
+              color='var(--color-primary)'
+              delay={200}
+              height='2px'
+              options={{
+                showSpinner: false,
+              }}
+              shallowRouting
+              startOnLoad
+              stopDelay={200}
+            >
+              <TooltipProvider>{children}</TooltipProvider>
+            </ProgressProvider>
+            <AISearchTrigger />
+          </AISearch>
+          <Analytics />
+          <Toaster />
+          <TailwindIndicator />
+          <SmoothCursor />
+          <OiiaFloaters />
+        </OiiaProvider>
       </NuqsAdapter>
     </ThemeProvider>
   )

@@ -77,6 +77,20 @@ const jsonLd = {
   ],
 }
 
+const oiiaScript = `
+try {
+  const urlParams = new URLSearchParams(window.location.search)
+  const oiiaParam = urlParams.get('oiia')
+  if (typeof oiiaParam === 'string') {
+    localStorage.setItem('oiia-mode', oiiaParam === 'true' ? 'oiia' : 'default')
+  }
+  const item = localStorage.getItem('oiia-mode')
+  if (item === 'oiia') {
+    document.documentElement.classList.add('oiia')
+  }
+} catch {}
+`
+
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html
@@ -95,6 +109,10 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         />
       </head>
       <Body>
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: oiiaScript }}
+        />
         <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw script
           dangerouslySetInnerHTML={{

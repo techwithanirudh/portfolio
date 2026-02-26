@@ -1,9 +1,13 @@
+'use client'
+
 import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
 import Link from 'next/link'
 import Balancer from 'react-wrap-balancer'
+import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
+import { useOiiaMode } from '@/components/oiia'
 import { Section } from '@/components/section'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
@@ -13,6 +17,7 @@ import { cn } from '@/lib/utils'
 import heroImage from '../../../../public/images/gradient-noise-purple-azure-light.png'
 
 const Hero = () => {
+  const { mode, registerOiiaClick } = useOiiaMode()
   const links = resolveLinkItems({
     links: linkItems,
     githubUrl: baseOptions.githubUrl,
@@ -55,7 +60,46 @@ const Hero = () => {
             'md:text-5xl md:leading-tight'
           )}
         >
-          Hi! I'm Anirudh!
+          {mode === 'oiia' ? (
+            <>
+              Hi! I'm{' '}
+              <button
+                aria-pressed={mode === 'oiia'}
+                className='inline-flex items-baseline rounded-sm px-1 text-fd-primary transition-colors hover:bg-fd-muted hover:text-fd-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring'
+                onClick={() => {
+                  registerOiiaClick()
+                }}
+                type='button'
+              >
+                OIIA
+              </button>
+              !
+            </>
+          ) : (
+            <>
+              Hi! I'm{' '}
+              <button
+                aria-pressed={mode === 'oiia'}
+                className='inline-flex items-baseline rounded-sm px-1 text-fd-primary transition-colors hover:bg-fd-muted hover:text-fd-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring'
+                onClick={() => {
+                  const result = registerOiiaClick()
+                  if (result.mode === 'default' && result.remaining > 0) {
+                    toast(`${result.remaining} clicks remaining`)
+                  }
+                  if (result.mode === 'oiia') {
+                    toast('oiia mode enabled')
+                    if (typeof window !== 'undefined') {
+                      window.dispatchEvent(new Event('oiia:spawn'))
+                    }
+                  }
+                }}
+                type='button'
+              >
+                Anirudh
+              </button>
+              !
+            </>
+          )}
         </h1>
       </ViewAnimation>
       <ViewAnimation

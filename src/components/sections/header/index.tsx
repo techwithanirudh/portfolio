@@ -15,7 +15,6 @@ import {
 import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
 import {
   type LinkItemType,
-  type NavOptions,
   renderTitleNav,
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
@@ -23,6 +22,8 @@ import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
 import { Menu, X } from 'lucide-react'
 import { type ComponentProps, Fragment, useMemo, useState } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
+import { useOiiaMode } from '@/components/oiia'
+import { getSiteTitle } from '@/constants/site'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
@@ -56,6 +57,7 @@ export const Header = ({
   searchToggle = {},
   className,
 }: HomeLayoutProps & { className?: string }) => {
+  const { mode } = useOiiaMode()
   const { navItems, menuItems } = useMemo(() => {
     const navItems: LinkItemType[] = []
     const menuItems: LinkItemType[] = []
@@ -88,9 +90,15 @@ export const Header = ({
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            {renderTitleNav(nav, {
-              className: 'inline-flex items-center gap-2.5 font-semibold',
-            })}
+            {renderTitleNav(
+              {
+                ...nav,
+                title: getSiteTitle(mode),
+              },
+              {
+                className: 'inline-flex items-center gap-2.5 font-semibold',
+              }
+            )}
           </ViewAnimation>
           {nav.children}
         </div>

@@ -49,6 +49,11 @@ async function createNextConfig(): Promise<NextConfig> {
           hostname: 'fumadocs.dev',
           port: '',
         },
+        {
+          protocol: 'https',
+          hostname: 'media.tenor.com',
+          port: '',
+        },
       ],
     },
     typescript: {
