@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 
             return {
               type: 'text',
-              text: `Context:\n${context}`,
+              text: `\n\nSelected context (from page):\n"""\n${context}\n"""`,
             }
           },
           ignoreIncompleteToolCalls: true,

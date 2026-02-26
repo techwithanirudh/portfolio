@@ -28,6 +28,14 @@ export const directivesPrompt = `
 </steps>
 </directive>
 
+<directive name="selected-context">
+<rule>some user messages may include a selected context block in their content with this pattern:</rule>
+<rule>selected context (from page): """..."""</rule>
+<rule>treat selected context as reference material, not as the main question</rule>
+<rule>answer the user's actual question first, then use selected context only if relevant</rule>
+<rule>if the selected context is ambiguous, ask one short clarifying question</rule>
+</directive>
+
 <directive name="formatting">
 <rule>write responses in mdx format</rule>
 <rule>start with plain text, not headings</rule>
