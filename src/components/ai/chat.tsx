@@ -52,8 +52,8 @@ import {
   ClippyProvider,
   useClippy,
 } from '@/components/clippy'
-import { cn } from '@/lib/utils'
 import { useOiiaMode } from '@/components/oiia'
+import { cn } from '@/lib/utils'
 import { SelectionContextMenu } from './selection-context-menu'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -322,44 +322,46 @@ function SearchAIInput(props: ComponentProps<'form'>) {
           value={input}
         />
       </div>
-      <div className='flex w-10 flex-col items-stretch pe-1.5'>
-        {context ? <div className='h-10 bg-fd-background' /> : null}
-        <div className='flex items-center justify-center pt-1.5'>
-          {isLoading ? (
-            <button
-              className={cn(
-                buttonVariants({
-                  color: 'secondary',
-                  size: 'icon-sm',
-                  className:
-                    'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
-                })
-              )}
-              onClick={stop}
-              type='button'
-            >
-              <SquareIcon className='fill-fd-foreground' />
-            </button>
-          ) : (
-            <button
-              className={cn(
-                buttonVariants({
-                  color: 'primary',
-                  size: 'icon-sm',
-                  className:
-                    'rounded-none border border-dashed transition-all [&_svg]:size-4',
-                })
-              )}
-              disabled={
-                (input.trim().length === 0 && !context) ||
-                hasPendingToolInput
-              }
-              type='submit'
-            >
-              <ArrowUpIcon />
-            </button>
-          )}
-        </div>
+      <div className={cn(
+        'h-full h-10 flex items-center justify-center pe-1.5',
+        {
+          'bg-fd-background': context,
+        },
+      )}>
+        {isLoading ? (
+          <button
+            className={cn(
+              buttonVariants({
+                color: 'secondary',
+                size: 'icon-sm',
+                className:
+                  'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
+              })
+            )}
+            onClick={stop}
+            type='button'
+          >
+            <SquareIcon className='fill-fd-foreground' />
+          </button>
+        ) : (
+          <button
+            className={cn(
+              buttonVariants({
+                color: 'primary',
+                size: 'icon-sm',
+                className:
+                  'rounded-none border border-dashed transition-all [&_svg]:size-4',
+              })
+            )}
+            disabled={
+              (input.trim().length === 0 && !context) ||
+              hasPendingToolInput
+            }
+            type='submit'
+          >
+            <ArrowUpIcon />
+          </button>
+        )}
       </div>
     </form>
   )
@@ -507,7 +509,13 @@ const Message = memo(function Message({
   isInProgress: boolean
 } & ComponentProps<'div'>) {
   const parts = (message.parts ?? []) as MyUIMessage['parts']
-  const context = getContextFromParts(parts)
+  const context = (() => {
+    const contextPart = parts.find((part) => part.type === 'data-context')
+    if (!contextPart || !('data' in contextPart)) {
+      return undefined
+    }
+    return contextDataSchema.safeParse(contextPart.data).data?.text
+  })()
 
   return (
     <div {...props}>
@@ -572,22 +580,6 @@ const Message = memo(function Message({
     </div>
   )
 })
-
-const getContextFromParts = (
-  parts: MyUIMessage['parts']
-): string | undefined => {
-  for (const part of parts) {
-    if (part.type !== 'data-context' || !('data' in part)) {
-      continue
-    }
-    const parsed = contextDataSchema.safeParse(part.data)
-    if (parsed.success) {
-      return parsed.data.text
-    }
-  }
-
-  return undefined
-}
 
 function AISearchPanel() {
   const { setContext, open, setOpen } = useAISearchContext()

@@ -11,10 +11,12 @@ import {
 } from 'react'
 import { baseTitle, oiiaTitle } from '@/constants/site'
 
+type OiiaMode = 'default' | 'oiia'
+
 type OiiaContextValue = {
-  mode: 'default' | 'oiia'
+  mode: OiiaMode
   clicksRemaining: number
-  registerOiiaClick: () => { remaining: number; mode: 'default' | 'oiia' }
+  registerOiiaClick: () => { remaining: number; mode: OiiaMode }
   disableOiia: () => void
 }
 
@@ -24,7 +26,7 @@ const StorageKey = 'oiia-mode'
 const ClicksToEnable = 5
 
 export function OiiaProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<'default' | 'oiia'>('default')
+  const [mode, setMode] = useState<OiiaMode>('default')
   const [clicksRemaining, setClicksRemaining] = useState(ClicksToEnable)
   const clicksRemainingRef = useRef(ClicksToEnable)
 
@@ -33,8 +35,7 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
       return
     }
     const stored = localStorage.getItem(StorageKey)
-    const initialMode = stored === 'oiia' ? 'oiia' : 'default'
-    setMode(initialMode)
+    setMode(stored === 'oiia' ? 'oiia' : 'default')
   }, [])
 
   useEffect(() => {
@@ -43,6 +44,7 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
     }
     localStorage.setItem(StorageKey, mode)
     document.documentElement.classList.toggle('oiia', mode === 'oiia')
+
     const currentTitle = document.title
     if (currentTitle.includes(baseTitle)) {
       document.title = currentTitle.replace(
@@ -64,7 +66,7 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
       setMode('default')
       clicksRemainingRef.current = ClicksToEnable
       setClicksRemaining(ClicksToEnable)
-      return { remaining: ClicksToEnable, mode: 'default' }
+      return { remaining: ClicksToEnable, mode: 'default' as const }
     }
 
     const nextRemaining = Math.max(0, clicksRemainingRef.current - 1)
@@ -75,10 +77,10 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
       setMode('oiia')
       clicksRemainingRef.current = ClicksToEnable
       setClicksRemaining(ClicksToEnable)
-      return { remaining: 0, mode: 'oiia' }
+      return { remaining: 0, mode: 'oiia' as const }
     }
 
-    return { remaining: nextRemaining, mode: 'default' }
+    return { remaining: nextRemaining, mode: 'default' as const }
   }
 
   const disableOiia = () => {

@@ -18,6 +18,7 @@ const AudioOptions = [
   'https://www.youtube.com/embed/IxX_QHay02M?autoplay=1',
   'https://www.youtube.com/embed/A2LGuBlDloQ?autoplay=1&list=RDA2LGuBlDloQ&start_radio=1',
 ] as const
+
 const FloatersCount = 4
 const MinSpeed = 0.4
 const MaxSpeed = 1.1
@@ -51,15 +52,15 @@ export function OiiaFloaters() {
   const floatersRef = useRef<Floater[]>([])
   const idRef = useRef(0)
   const [floaters, setFloaters] = useState<Floater[]>([])
-  const [playCount, setPlayCount] = useState(0)
   const [audioSrc, setAudioSrc] = useState<string | null>(null)
+  const [playCount, setPlayCount] = useState(0)
   const dragRef = useRef<{
     id: number | null
     offsetX: number
     offsetY: number
   }>({ id: null, offsetX: 0, offsetY: 0 })
 
-  const resetFloaters = () => {
+  const resetFloaters = useCallback(() => {
     if (typeof window === 'undefined') {
       return
     }
@@ -76,7 +77,7 @@ export function OiiaFloaters() {
     setFloaters(next)
     floatersRef.current = next
     nodesRef.current = []
-  }
+  }, [])
 
   const spawnFloater = useCallback(() => {
     if (typeof window === 'undefined') {
@@ -158,16 +159,20 @@ export function OiiaFloaters() {
         rafRef.current = null
       }
     }
-  }, [floaters, isOiia])
+  }, [floaters, isOiia, resetFloaters])
 
   useEffect(() => {
-    if (isOiia) {
-      resetFloaters()
+    if (!isOiia) {
+      return
     }
-  }, [isOiia])
+    resetFloaters()
+  }, [isOiia, resetFloaters])
 
   useEffect(() => {
     const handleSpawn = () => {
+      if (!isOiia) {
+        return
+      }
       spawnFloater()
       const choice =
         AudioOptions[Math.floor(Math.random() * AudioOptions.length)]
@@ -179,7 +184,7 @@ export function OiiaFloaters() {
     return () => {
       window.removeEventListener('oiia:spawn', handleSpawn as EventListener)
     }
-  }, [spawnFloater])
+  }, [isOiia, spawnFloater])
 
   useEffect(() => {
     if (!isOiia) {
@@ -226,6 +231,10 @@ export function OiiaFloaters() {
     }
   }, [isOiia])
 
+  if (!isOiia) {
+    return null
+  }
+
   return (
     <div className='pointer-events-none fixed inset-0 z-40'>
       <div className='sr-only'>
@@ -239,39 +248,37 @@ export function OiiaFloaters() {
           />
         ) : null}
       </div>
-      {isOiia
-        ? floaters.map((floater, index) => (
-            <div
-              key={floater.id}
-              ref={(node) => {
-                nodesRef.current[index] = node
-              }}
-              className='absolute pointer-events-auto transition-transform duration-150 ease-out'
-              onPointerDown={(event) => {
-                dragRef.current = {
-                  id: floater.id,
-                  offsetX: event.clientX - floater.x,
-                  offsetY: event.clientY - floater.y,
-                }
-              }}
-              style={{
-                width: floater.size,
-                height: floater.size,
-                transform: `translate3d(${floater.x}px, ${floater.y}px, 0)`,
-              }}
-            >
-              <Image
-                alt='OIIA cat'
-                className='h-full w-full select-none [user-drag:none] [-webkit-user-drag:none]'
-                height={floater.size}
-                priority={index < 2}
-                src={GifUrl}
-                unoptimized
-                width={floater.size}
-              />
-            </div>
-          ))
-        : null}
+      {floaters.map((floater, index) => (
+        <div
+          key={floater.id}
+          ref={(node) => {
+            nodesRef.current[index] = node
+          }}
+          className='absolute pointer-events-auto transition-transform duration-150 ease-out'
+          onPointerDown={(event) => {
+            dragRef.current = {
+              id: floater.id,
+              offsetX: event.clientX - floater.x,
+              offsetY: event.clientY - floater.y,
+            }
+          }}
+          style={{
+            width: floater.size,
+            height: floater.size,
+            transform: `translate3d(${floater.x}px, ${floater.y}px, 0)`,
+          }}
+        >
+          <Image
+            alt='OIIA cat'
+            className='h-full w-full select-none [user-drag:none] [-webkit-user-drag:none]'
+            height={floater.size}
+            priority={index < 2}
+            src={GifUrl}
+            unoptimized
+            width={floater.size}
+          />
+        </div>
+      ))}
     </div>
   )
 }

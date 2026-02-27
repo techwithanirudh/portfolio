@@ -15,6 +15,7 @@ import {
 import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
 import {
   type LinkItemType,
+  type NavOptions,
   renderTitleNav,
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
