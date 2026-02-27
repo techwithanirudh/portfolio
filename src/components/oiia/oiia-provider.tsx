@@ -16,6 +16,8 @@ type OiiaMode = 'default' | 'oiia'
 type OiiaContextValue = {
   mode: OiiaMode
   clicksRemaining: number
+  playRequest: number
+  spawnRequest: number
   registerOiiaClick: () => { remaining: number; mode: OiiaMode }
   disableOiia: () => void
 }
@@ -28,6 +30,8 @@ const ClicksToEnable = 5
 export function OiiaProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<OiiaMode>('default')
   const [clicksRemaining, setClicksRemaining] = useState(ClicksToEnable)
+  const [playRequest, setPlayRequest] = useState(0)
+  const [spawnRequest, setSpawnRequest] = useState(0)
   const clicksRemainingRef = useRef(ClicksToEnable)
 
   useEffect(() => {
@@ -61,26 +65,43 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
     }
   }, [mode])
 
-  const registerOiiaClick = () => {
-    if (mode === 'oiia') {
-      setMode('default')
-      clicksRemainingRef.current = ClicksToEnable
-      setClicksRemaining(ClicksToEnable)
-      return { remaining: ClicksToEnable, mode: 'default' as const }
+  useEffect(() => {
+    if (mode !== 'oiia') {
+      return
     }
 
+    const handleClick = () => {
+      setPlayRequest((count) => count + 1)
+    }
+
+    window.addEventListener('pointerdown', handleClick)
+    return () => {
+      window.removeEventListener('pointerdown', handleClick)
+    }
+  }, [mode])
+
+  useEffect(() => {
+    if (mode !== 'oiia') {
+      return
+    }
+    setSpawnRequest((count) => count + 1)
+  }, [mode])
+
+  const registerOiiaClick = () => {
     const nextRemaining = Math.max(0, clicksRemainingRef.current - 1)
     clicksRemainingRef.current = nextRemaining
     setClicksRemaining(nextRemaining)
 
-    if (nextRemaining === 0) {
-      setMode('oiia')
-      clicksRemainingRef.current = ClicksToEnable
-      setClicksRemaining(ClicksToEnable)
-      return { remaining: 0, mode: 'oiia' as const }
+    if (nextRemaining !== 0) {
+      return { remaining: nextRemaining, mode }
     }
 
-    return { remaining: nextRemaining, mode: 'default' as const }
+    const nextMode: OiiaMode = mode === 'oiia' ? 'default' : 'oiia'
+    setMode(nextMode)
+    clicksRemainingRef.current = ClicksToEnable
+    setClicksRemaining(ClicksToEnable)
+
+    return { remaining: 0, mode: nextMode }
   }
 
   const disableOiia = () => {
@@ -93,10 +114,12 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
     () => ({
       mode,
       clicksRemaining,
+      playRequest,
+      spawnRequest,
       registerOiiaClick,
       disableOiia,
     }),
-    [clicksRemaining, mode]
+    [clicksRemaining, mode, playRequest, spawnRequest]
   )
 
   return <OiiaContext value={value}>{children}</OiiaContext>

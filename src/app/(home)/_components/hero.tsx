@@ -18,6 +18,7 @@ import heroImage from '../../../../public/images/gradient-noise-purple-azure-lig
 
 const Hero = () => {
   const { mode, registerOiiaClick } = useOiiaMode()
+  const isOiia = mode === 'oiia'
   const links = resolveLinkItems({
     links: linkItems,
     githubUrl: baseOptions.githubUrl,
@@ -60,11 +61,11 @@ const Hero = () => {
             'md:text-5xl md:leading-tight'
           )}
         >
-          {mode === 'oiia' ? (
+          {isOiia ? (
             <>
               Hi! I'm{' '}
               <button
-                aria-pressed={mode === 'oiia'}
+                aria-pressed={isOiia}
                 className='inline-flex items-baseline rounded-sm px-1 text-fd-primary transition-colors hover:bg-fd-muted hover:text-fd-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring'
                 onClick={() => {
                   registerOiiaClick()
@@ -79,18 +80,16 @@ const Hero = () => {
             <>
               Hi! I'm{' '}
               <button
-                aria-pressed={mode === 'oiia'}
+                aria-pressed={isOiia}
                 className='inline-flex items-baseline rounded-sm px-1 text-fd-primary transition-colors hover:bg-fd-muted hover:text-fd-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring'
                 onClick={() => {
                   const result = registerOiiaClick()
-                  if (result.mode === 'default' && result.remaining > 0) {
+                  if (result.remaining > 0) {
                     toast(`${result.remaining} clicks remaining`)
-                  }
-                  if (result.mode === 'oiia') {
+                  } else if (result.mode === 'oiia') {
                     toast('oiia mode enabled')
-                    if (typeof window !== 'undefined') {
-                      window.dispatchEvent(new Event('oiia:spawn'))
-                    }
+                  } else {
+                    toast('oiia mode disabled')
                   }
                 }}
                 type='button'

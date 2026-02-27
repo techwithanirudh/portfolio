@@ -7,7 +7,7 @@ import type { ReactNode } from 'react'
 import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
 import { AISearch } from '@/components/ai/chat'
 import Analytics from '@/components/analytics'
-import { OiiaFloaters, OiiaProvider } from '@/components/oiia'
+import { OiiaAudioWidget, OiiaFloaters, OiiaProvider } from '@/components/oiia'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -48,6 +48,7 @@ export function Provider({
           <TailwindIndicator />
           <SmoothCursor />
           <OiiaFloaters />
+          <OiiaAudioWidget />
         </OiiaProvider>
       </NuqsAdapter>
     </ThemeProvider>

@@ -11,15 +11,23 @@ type Floater = {
   y: number
   vx: number
   vy: number
+  bornAt: number
+}
+
+type Burst = {
+  id: number
+  x: number
+  y: number
+  size: number
+  src: string
 }
 
 const GifUrl = 'https://media.tenor.com/8VuZc8I8f7EAAAAj/oiia-cat.gif'
-const AudioOptions = [
-  'https://www.youtube.com/embed/IxX_QHay02M?autoplay=1',
-  'https://www.youtube.com/embed/A2LGuBlDloQ?autoplay=1&list=RDA2LGuBlDloQ&start_radio=1',
-] as const
-
+const BurstGifUrl =
+  'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2VheHloMDJwejloZHdmMXJ0dDRzcjZ0YWQ2MjducmlsOGZldjZldiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l41m6hqhosqjW2Rag/giphy.gif'
+const HeartsGifUrl = 'https://tenor.com/e5szhBKD19x.gif'
 const FloatersCount = 4
+const MaxFloaters = 18
 const MinSpeed = 0.4
 const MaxSpeed = 1.1
 const MinSize = 56
@@ -41,19 +49,21 @@ const createFloater = (id: number, width: number, height: number): Floater => {
     y,
     vx: Math.cos(angle) * speed,
     vy: Math.sin(angle) * speed,
+    bornAt: performance.now(),
   }
 }
 
 export function OiiaFloaters() {
-  const { mode } = useOiiaMode()
+  const { mode, spawnRequest } = useOiiaMode()
   const isOiia = mode === 'oiia'
   const nodesRef = useRef<Array<HTMLDivElement | null>>([])
   const rafRef = useRef<number | null>(null)
   const floatersRef = useRef<Floater[]>([])
   const idRef = useRef(0)
+  const burstIdRef = useRef(0)
+  const burstTimeoutsRef = useRef<number[]>([])
   const [floaters, setFloaters] = useState<Floater[]>([])
-  const [audioSrc, setAudioSrc] = useState<string | null>(null)
-  const [playCount, setPlayCount] = useState(0)
+  const [bursts, setBursts] = useState<Burst[]>([])
   const dragRef = useRef<{
     id: number | null
     offsetX: number
@@ -79,7 +89,8 @@ export function OiiaFloaters() {
     nodesRef.current = []
   }, [])
 
-  const spawnFloater = useCallback(() => {
+  const spawnFloater = useCallback(
+    (at?: { x: number; y: number; vx?: number; vy?: number }) => {
     if (typeof window === 'undefined') {
       return
     }
@@ -88,13 +99,44 @@ export function OiiaFloaters() {
       window.innerWidth,
       window.innerHeight
     )
+    if (at) {
+      const jitter = randomBetween(-12, 12)
+      const dirX = at.vx ? Math.sign(at.vx) : 1
+      const dirY = at.vy ? Math.sign(at.vy) : 1
+      const assOffsetX = -dirX * (next.size * 0.35)
+      const assOffsetY = -dirY * (next.size * 0.35)
+      next.x = Math.max(
+        0,
+        Math.min(window.innerWidth - next.size, at.x + assOffsetX + jitter)
+      )
+      next.y = Math.max(
+        0,
+        Math.min(window.innerHeight - next.size, at.y + assOffsetY + jitter)
+      )
+    }
+    const burstId = burstIdRef.current
+    burstIdRef.current += 1
+    const burstSize = next.size * 0.95
+    const burstX = next.x + next.size * 0.5 - burstSize * 0.5
+    const burstY = next.y + next.size * 0.5 - burstSize * 0.5
+    const burstSrc = Math.random() > 0.4 ? HeartsGifUrl : BurstGifUrl
+    setBursts((prev) => [
+      ...prev,
+      { id: burstId, x: burstX, y: burstY, size: burstSize, src: burstSrc },
+    ])
+    const timeout = window.setTimeout(() => {
+      setBursts((prev) => prev.filter((burst) => burst.id !== burstId))
+    }, 700)
+    burstTimeoutsRef.current.push(timeout)
     idRef.current += 1
     setFloaters((prev) => {
       const updated = [...prev, next]
       floatersRef.current = updated
       return updated
     })
-  }, [])
+  },
+  []
+  )
 
   useEffect(() => {
     if (!isOiia) {
@@ -123,6 +165,9 @@ export function OiiaFloaters() {
 
       for (let index = 0; index < floatersRef.current.length; index += 1) {
         const floater = floatersRef.current[index]
+        if (!floater) {
+          continue
+        }
         const isDragging = dragRef.current.id === floater.id
         const nextX = isDragging
           ? floater.x
@@ -148,6 +193,8 @@ export function OiiaFloaters() {
         }
       }
 
+      // collision-based reproduction removed; we spawn on a timed cadence instead
+
       rafRef.current = requestAnimationFrame(tick)
     }
 
@@ -159,7 +206,7 @@ export function OiiaFloaters() {
         rafRef.current = null
       }
     }
-  }, [floaters, isOiia, resetFloaters])
+  }, [floaters, isOiia, resetFloaters, spawnFloater])
 
   useEffect(() => {
     if (!isOiia) {
@@ -169,22 +216,33 @@ export function OiiaFloaters() {
   }, [isOiia, resetFloaters])
 
   useEffect(() => {
-    const handleSpawn = () => {
-      if (!isOiia) {
-        return
-      }
-      spawnFloater()
-      const choice =
-        AudioOptions[Math.floor(Math.random() * AudioOptions.length)]
-      setAudioSrc(`${choice}&cb=${Date.now()}`)
-      setPlayCount((count) => count + 1)
+    if (!isOiia) {
+      return
     }
 
-    window.addEventListener('oiia:spawn', handleSpawn as EventListener)
-    return () => {
-      window.removeEventListener('oiia:spawn', handleSpawn as EventListener)
-    }
+    const interval = window.setInterval(() => {
+      if (floatersRef.current.length >= MaxFloaters) {
+        return
+      }
+      const parent =
+        floatersRef.current[
+          Math.floor(Math.random() * floatersRef.current.length)
+        ]
+      if (!parent) {
+        return
+      }
+      spawnFloater({ x: parent.x, y: parent.y, vx: parent.vx, vy: parent.vy })
+    }, 1200)
+
+    return () => window.clearInterval(interval)
   }, [isOiia, spawnFloater])
+
+  useEffect(() => {
+    if (!isOiia || spawnRequest === 0) {
+      return
+    }
+    spawnFloater()
+  }, [isOiia, spawnRequest, spawnFloater])
 
   useEffect(() => {
     if (!isOiia) {
@@ -231,36 +289,57 @@ export function OiiaFloaters() {
     }
   }, [isOiia])
 
+  useEffect(() => {
+    return () => {
+      for (const timeout of burstTimeoutsRef.current) {
+        window.clearTimeout(timeout)
+      }
+      burstTimeoutsRef.current = []
+    }
+  }, [])
+
   if (!isOiia) {
     return null
   }
 
   return (
     <div className='pointer-events-none fixed inset-0 z-40'>
-      <div className='sr-only'>
-        {playCount > 0 && audioSrc ? (
-          <iframe
-            allow='autoplay; encrypted-media'
-            aria-hidden='true'
-            key={playCount}
-            src={audioSrc}
-            title='oiia-audio'
+      {bursts.map((burst) => (
+        <div
+          className='absolute pointer-events-none oiia-burst'
+          key={burst.id}
+          style={{
+            width: burst.size,
+            height: burst.size,
+            transform: `translate3d(${burst.x}px, ${burst.y}px, 0)`,
+          }}
+        >
+          <Image
+            alt='OIIA birth'
+            className='h-full w-full select-none [user-drag:none] [-webkit-user-drag:none]'
+            height={burst.size}
+            src={burst.src}
+            unoptimized
+            width={burst.size}
           />
-        ) : null}
-      </div>
+        </div>
+      ))}
       {floaters.map((floater, index) => (
         <div
           key={floater.id}
           ref={(node) => {
             nodesRef.current[index] = node
           }}
-          className='absolute pointer-events-auto transition-transform duration-150 ease-out'
+          className='absolute pointer-events-auto transition-transform duration-150 ease-out oiia-birth'
           onPointerDown={(event) => {
             dragRef.current = {
               id: floater.id,
               offsetX: event.clientX - floater.x,
               offsetY: event.clientY - floater.y,
             }
+          }}
+          onClick={() => {
+            spawnFloater({ x: floater.x, y: floater.y, vx: floater.vx, vy: floater.vy })
           }}
           style={{
             width: floater.size,

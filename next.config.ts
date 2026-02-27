@@ -51,7 +51,27 @@ async function createNextConfig(): Promise<NextConfig> {
         },
         {
           protocol: 'https',
+          hostname: 'tenor.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'clipart-library.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
           hostname: 'media.tenor.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'media.giphy.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'media4.giphy.com',
           port: '',
         },
       ],
