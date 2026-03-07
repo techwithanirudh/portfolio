@@ -27,7 +27,7 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
 }) => {
   return (
     <Link
-      className='group flex flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+      className='group flex flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80 min-h-full'
       href={url}
     >
       {image && (
