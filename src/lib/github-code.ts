@@ -12,7 +12,7 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN ?? process.env.GITHUB_ACCESS_TOKEN,
 })
 
-export type ParsedGitHubFileUrl = {
+export interface ParsedGitHubFileUrl {
   owner: string
   repo: string
   ref: string
@@ -56,7 +56,7 @@ export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
     const [owner, repo, blob, ref, ...pathParts] = segments
     const path = pathParts.join('/')
 
-    if (!owner || !repo || blob !== 'blob' || !ref || !path) {
+    if (!(owner && repo) || blob !== 'blob' || !ref || !path) {
       throw new Error(
         'Expected blob URL: https://github.com/{owner}/{repo}/blob/{ref}/{path}'
       )
@@ -76,7 +76,7 @@ export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
     const [owner, repo, ref, ...pathParts] = segments
     const path = pathParts.join('/')
 
-    if (!owner || !repo || !ref || !path) {
+    if (!(owner && repo && ref && path)) {
       throw new Error(
         'Expected raw URL: https://raw.githubusercontent.com/{owner}/{repo}/{ref}/{path}'
       )
@@ -92,7 +92,9 @@ export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
     }
   }
 
-  throw new Error('Only github.com and raw.githubusercontent.com URLs are supported.')
+  throw new Error(
+    'Only github.com and raw.githubusercontent.com URLs are supported.'
+  )
 }
 
 export const getGitHubFileContent = unstable_cache(
@@ -110,7 +112,7 @@ export const getGitHubFileContent = unstable_cache(
       throw new Error('Expected a file path but got a directory response.')
     }
 
-    if (!('content' in response.data) || !response.data.content) {
+    if (!('content' in response.data && response.data.content)) {
       throw new Error('GitHub API response did not include file content.')
     }
 
@@ -149,10 +151,7 @@ export const getCodeTitle = (
   return filename
 }
 
-export const resolveLanguage = (
-  path: string,
-  fallback: string = 'txt'
-): string => {
+export const resolveLanguage = (path: string, fallback = 'txt'): string => {
   const filename = path.split('/').pop() ?? ''
   const extension = filename.includes('.')
     ? filename.split('.').pop()?.toLowerCase()

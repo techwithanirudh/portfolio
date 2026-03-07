@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useEventListener, useWindowSize } from 'usehooks-ts'
 
-type SelectionData = {
+interface SelectionData {
   text: string
   x: number
   y: number
