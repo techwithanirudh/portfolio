@@ -1,12 +1,12 @@
 'use client'
 
-import { Github } from 'lucide-react'
-import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock'
 import type { CodeBlockProps } from 'fumadocs-ui/components/codeblock'
+import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
+import { Github } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-type GitHubCodeBlockClientProps = {
+interface GitHubCodeBlockClientProps {
   code: string
   lang: string
   sourceUrl: string

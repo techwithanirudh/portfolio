@@ -8,7 +8,7 @@ import {
   sliceLines,
 } from '@/lib/github-code'
 
-type GitHubCodeProps = {
+interface GitHubCodeProps {
   url: string
   language?: string
   startLine?: number
@@ -55,8 +55,7 @@ export async function GitHubCode({
   } catch (error) {
     return (
       <p>
-        Unable to load source snippet from{' '}
-        <code>{url}</code>
+        Unable to load source snippet from <code>{url}</code>
         {process.env.NODE_ENV !== 'production' &&
           error instanceof Error &&
           ` (${error.message})`}

@@ -10,23 +10,23 @@ import {
   isToolUIPart,
 } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { usePathname } from 'next/navigation'
 import {
   ArrowUpIcon,
-  Quote,
   PawPrint,
   PlusIcon,
+  Quote,
   RefreshCw,
   SquareIcon,
   X,
 } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 import {
   type ComponentProps,
-  type Dispatch,
-  type SetStateAction,
   createContext,
+  type Dispatch,
   memo,
   type ReactNode,
+  type SetStateAction,
   type SyntheticEvent,
   use,
   useEffect,
@@ -53,9 +53,9 @@ import {
   useClippy,
 } from '@/components/clippy'
 import { cn } from '@/lib/utils'
-import { SelectionContextMenu } from './selection-context-menu'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
+import { SelectionContextMenu } from './selection-context-menu'
 
 const AISearchContext = createContext<{
   open: boolean
@@ -289,10 +289,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       onSubmit={onStart}
     >
       <div className='flex flex-1 flex-col'>
-        <PromptContext
-          context={context}
-          onClear={() => setContext(null)}
-        />
+        <PromptContext context={context} onClear={() => setContext(null)} />
         <TextInput
           autoFocus
           className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
@@ -307,12 +304,11 @@ function SearchAIInput(props: ComponentProps<'form'>) {
           value={input}
         />
       </div>
-      <div className={cn(
-        'h-full h-10 flex items-center justify-center pe-1.5',
-        {
+      <div
+        className={cn('flex h-10 h-full items-center justify-center pe-1.5', {
           'bg-fd-background': context,
-        },
-      )}>
+        })}
+      >
         {isLoading ? (
           <button
             className={cn(
@@ -339,8 +335,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
               })
             )}
             disabled={
-              (input.trim().length === 0 && !context) ||
-              hasPendingToolInput
+              (input.trim().length === 0 && !context) || hasPendingToolInput
             }
             type='submit'
           >
@@ -364,7 +359,7 @@ function PromptContext({
   }
 
   return (
-    <div className='flex items-start gap-1.5 bg-fd-background px-2 py-1.5 text-xs h-10'>
+    <div className='flex h-10 items-start gap-1.5 bg-fd-background px-2 py-1.5 text-xs'>
       <Quote className='mt-0.5 size-3 shrink-0 text-fd-muted-foreground' />
       <span className='line-clamp-2 flex-1 break-words'>
         {context.slice(0, MaxSourcePreviewChars)}
@@ -494,7 +489,7 @@ const Message = memo(function Message({
   const parts = (message.parts ?? []) as MyUIMessage['parts']
   const context = (() => {
     const contextPart = parts.find((part) => part.type === 'data-context')
-    if (!contextPart || !('data' in contextPart)) {
+    if (!(contextPart && 'data' in contextPart)) {
       return undefined
     }
     return contextDataSchema.safeParse(contextPart.data).data?.text
@@ -512,8 +507,8 @@ const Message = memo(function Message({
       </p>
       <div className='flex flex-col gap-2'>
         {message.role === 'user' && context ? (
-          <div className='not-prose rounded-md border border-dashed border-border bg-fd-muted/40 p-2 text-xs'>
-            <p className='mb-1 font-medium text-[11px] uppercase tracking-wide text-fd-muted-foreground'>
+          <div className='not-prose rounded-md border border-border border-dashed bg-fd-muted/40 p-2 text-xs'>
+            <p className='mb-1 font-medium text-[11px] text-fd-muted-foreground uppercase tracking-wide'>
               Context
             </p>
             <p className='line-clamp-3 break-words'>{context}</p>
@@ -532,15 +527,15 @@ const Message = memo(function Message({
             const isSubmitted = part.state === 'output-available'
             const submittedData =
               isSubmitted &&
-                part.output?.success &&
-                part.output.name &&
-                part.output.email &&
-                part.output.message
+              part.output?.success &&
+              part.output.name &&
+              part.output.email &&
+              part.output.message
                 ? {
-                  name: part.output.name,
-                  email: part.output.email,
-                  message: part.output.message,
-                }
+                    name: part.output.name,
+                    email: part.output.email,
+                    message: part.output.message,
+                  }
                 : undefined
 
             if (!isSubmitted && part.state !== 'input-available') {

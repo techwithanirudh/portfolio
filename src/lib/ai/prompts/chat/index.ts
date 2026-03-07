@@ -5,7 +5,8 @@ import { llmsPrompt } from './llms'
 import { pageContextPrompt } from './page-context'
 import { personalityPrompt } from './personality'
 import { toolsPrompt } from './tools'
-type PageContext = {
+
+interface PageContext {
   pathname?: string
 }
 

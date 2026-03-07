@@ -357,7 +357,7 @@
   --checkbox-diameter: calc(var(--checkbox-height) - 4px);
 }
 
-:where(.vds-menu-item[aria-expanded='true']) {
+:where(.vds-menu-item[aria-expanded="true"]) {
   margin-bottom: 0 !important;
   background-color: var(--section-bg) !important;
 }

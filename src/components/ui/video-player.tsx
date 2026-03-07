@@ -3,12 +3,12 @@
 import '@vidstack/react/player/styles/default/theme.css'
 import '@vidstack/react/player/styles/default/layouts/video.css'
 
-import type { ComponentProps } from 'react'
 import { MediaPlayer, MediaProvider } from '@vidstack/react'
 import {
   DefaultVideoLayout,
   defaultLayoutIcons,
 } from '@vidstack/react/player/layouts/default'
+import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 
 export interface VideoPlayerProps extends ComponentProps<typeof MediaPlayer> {
