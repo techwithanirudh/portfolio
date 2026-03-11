@@ -46,7 +46,7 @@ export default function ColophonPage() {
         return (
           <Fragment key={section.title ?? `colophon-section-${index}`}>
             {section.title && (
-              <Section className='border-border border-t border-dashed p-8'>
+              <Section className='border-border border-t border-dashed px-6 py-8 sm:border-x'>
                 <ViewAnimation
                   delay={headingDelay}
                   initial={{ opacity: 0, translateY: 6 }}
@@ -56,7 +56,7 @@ export default function ColophonPage() {
                 </ViewAnimation>
               </Section>
             )}
-            <Section className='grid divide-y divide-dashed divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0'>
+            <Section className='border-border border-b border-dashed'>
               <ViewAnimation
                 delay={contentDelay}
                 initial={{ opacity: 0, translateY: 6 }}
