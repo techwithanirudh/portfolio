@@ -67,7 +67,7 @@ export default function ColophonPage() {
                 {section.content}
               </ViewAnimation>
             </Section>
-            {index < sections.length - 1 && <Separator />}
+            {index < sections.length - 1 && <Separator variant='transparent' />}
           </Fragment>
         )
       })}

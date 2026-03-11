@@ -76,7 +76,9 @@ export default function UsesPage() {
                 {section.content}
               </ViewAnimation>
             </Section>
-            {index < sections.length - 1 && <Separator />}
+            {index < sections.length - 1 && (
+                <Separator variant={index < 1 ? 'dashed' : 'transparent'} />
+              )}
           </Fragment>
         )
       })}

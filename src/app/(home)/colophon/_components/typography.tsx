@@ -2,27 +2,26 @@ import { typography } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 
 export const Typography = () => (
-  <div className='flex flex-col divide-y divide-dashed divide-border text-left'>
-    <div className='bg-card/50 p-6 text-muted-foreground text-sm'>
+  <div className='grid grid-cols-1 text-left sm:grid-cols-2'>
+    <div className='border-border border-b border-dashed bg-card/50 p-6 text-muted-foreground text-sm sm:col-span-2'>
       <p>
         Geist Sans anchors the interface while Geist Mono keeps code and labels
         crisp.
       </p>
     </div>
-    <div className='bg-card/50 p-6'>
-      <div className='grid grid-cols-1 divide-y divide-dashed divide-border border border-border/70 border-dashed text-center sm:grid-cols-2 sm:divide-x sm:divide-y-0'>
-        {typography.map((item) => (
-          <div
-            className={cn(
-              'flex items-center justify-center px-4 py-6 text-base text-foreground transition-colors hover:bg-card/80 sm:text-lg',
-              item.className
-            )}
-            key={item.label}
-          >
-            {item.label}
-          </div>
-        ))}
+    {typography.map((item, index) => (
+      <div
+        className={cn(
+          'flex items-center gap-2 border-border border-dashed bg-card/50 p-6 text-foreground text-sm transition-colors hover:bg-card/80',
+          index > 0 && 'border-t',
+          index < 2 && 'sm:border-t-0',
+          index % 2 === 0 && 'sm:border-r',
+          item.className
+        )}
+        key={item.label}
+      >
+        {item.label}
       </div>
-    </div>
+    ))}
   </div>
 )
