@@ -55,17 +55,17 @@ export default function UsesPage() {
         return (
           <Fragment key={section.title ?? `uses-section-${index}`}>
             {section.title && (
-              <Section className='p-6'>
+              <Section className='border-border border-t border-dashed p-8 sm:border-x'>
                 <ViewAnimation
                   delay={headingDelay}
                   initial={{ opacity: 0, translateY: 6 }}
                   whileInView={{ opacity: 1, translateY: 0 }}
                 >
-                  <h2 className='font-medium text-xl'>{section.title}</h2>
+                  <h2 className='font-medium text-3xl'>{section.title}</h2>
                 </ViewAnimation>
               </Section>
             )}
-            <Section>
+            <Section className='grid divide-y divide-dashed divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0'>
               <ViewAnimation
                 delay={contentDelay}
                 initial={{ opacity: 0, translateY: 6 }}

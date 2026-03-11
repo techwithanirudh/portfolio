@@ -56,7 +56,7 @@ export default function ColophonPage() {
                 </ViewAnimation>
               </Section>
             )}
-            <Section>
+            <Section className='grid divide-y divide-dashed divide-border sm:grid-cols-2 sm:divide-x sm:divide-y-0'>
               <ViewAnimation
                 delay={contentDelay}
                 initial={{ opacity: 0, translateY: 6 }}
