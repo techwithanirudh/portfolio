@@ -1,4 +1,4 @@
-type PageContext = {
+interface PageContext {
   pathname?: string
 }
 

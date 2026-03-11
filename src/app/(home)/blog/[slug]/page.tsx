@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation'
 import { Share } from '@/app/(home)/blog/[slug]/page.client'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
+import { GitHubCode } from '@/components/mdx/github-code'
+import { Mermaid } from '@/components/mdx/mermaid'
 import { MdxContent } from '@/components/mdx-layout'
 import { SectionBody } from '@/components/section-body'
 import { VideoPlayer } from '@/components/ui/video-player'
@@ -13,8 +15,6 @@ import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
 import { Header } from './_components/header'
-import { Mermaid } from '@/components/mdx/mermaid'
-import { GitHubCode } from '@/components/mdx/github-code'
 
 export default async function Page(props: {
   params: Promise<{ slug: string }>
