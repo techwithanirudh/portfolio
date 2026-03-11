@@ -41,7 +41,6 @@ export const FAQ = () => (
     <SplitSectionSidebar>
       <SectionHeader
         align='left'
-        className='-mt-10'
         description={
           <>
             Still have questions?{' '}
