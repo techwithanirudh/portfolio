@@ -11,4 +11,4 @@
 - When you open and close a contact form, the state isn't restored so it thinks you've not submitted yet
 - The restoration of the message is very broken from local storage, sometimes it's cleared sometimes it's not very buggy
 - Scroll to bottom is broken
-- ability to ask quewstions about blog post (current page), and on text select show a button to ask ai
+- ability to ask questions about blog post (current page), and on text select show a button to ask ai

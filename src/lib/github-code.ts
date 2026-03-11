@@ -7,6 +7,7 @@ const SHIKI_LANG_KEYS = new Set([
   ...Object.keys(bundledLanguages),
   ...Object.keys(bundledLanguagesAlias),
 ])
+const LINE_RANGE_REGEX = /#L(\d+)(?:-L(\d+))?$/
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN ?? process.env.GITHUB_ACCESS_TOKEN,
@@ -31,7 +32,7 @@ const parseLineRange = (
     return {}
   }
 
-  const match = value.match(/#L(\d+)(?:-L(\d+))?$/)
+  const match = value.match(LINE_RANGE_REGEX)
   if (!match) {
     return {}
   }
