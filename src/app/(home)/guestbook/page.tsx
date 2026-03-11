@@ -23,7 +23,7 @@ export default async function GuestbookPage() {
   return (
     <Wrapper>
       <SplitSection>
-        <SplitSectionSidebar className='border-border border-t border-dashed px-6 py-8 sm:border-x'>
+        <SplitSectionSidebar className='border-border border-t border-dashed px-6 py-14 sm:border-x'>
           <SplitSectionHeader
             description='Share a quick hello, a thought about the work, or a suggestion.'
             title='Guestbook'
