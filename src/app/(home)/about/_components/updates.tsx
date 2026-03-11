@@ -25,7 +25,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
                 const date = new Date(post.data.date).toDateString()
                 return (
                   <CarouselItem
-                    className='flex basis-full min-h-full pl-0 md:basis-1/2 lg:basis-1/3'
+                    className='flex min-h-full basis-full pl-0 md:basis-1/2 lg:basis-1/3'
                     key={post.url}
                   >
                     <ViewAnimation
