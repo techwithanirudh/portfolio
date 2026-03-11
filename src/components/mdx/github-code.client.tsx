@@ -60,11 +60,11 @@ export function GitHubCodeBlockClient({
   const Actions = useMemo(
     () =>
       ({
-        className,
+        className = '',
         children,
       }: {
-        className: string
-        children: React.ReactNode
+        className?: string
+        children?: React.ReactNode
       }) => (
         <GitHubCodeBlockActions className={className} sourceUrl={sourceUrl}>
           {children}
