@@ -14,7 +14,7 @@ import { Hero } from './_components/hero'
 export default function Contact(): React.ReactElement {
   return (
     <Wrapper>
-      <SplitSection>
+      <SplitSection className='pt-8'>
         <SplitSectionSidebar>
           <ViewAnimation
             blur={false}

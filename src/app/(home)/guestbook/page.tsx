@@ -22,7 +22,7 @@ export default async function GuestbookPage() {
 
   return (
     <Wrapper>
-      <SplitSection>
+      <SplitSection className='pt-8'>
         <SplitSectionSidebar>
           <SplitSectionHeader
             description='Share a quick hello, a thought about the work, or a suggestion.'
