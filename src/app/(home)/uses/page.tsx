@@ -56,7 +56,7 @@ export default function UsesPage() {
         return (
           <Fragment key={section.title ?? `uses-section-${index}`}>
             {section.title && (
-              <Section className='border-border border-t border-dashed px-6 py-14 sm:border-x'>
+              <Section className='px-6 py-14'>
                 <ViewAnimation
                   delay={headingDelay}
                   initial={{ opacity: 0, translateY: 6 }}

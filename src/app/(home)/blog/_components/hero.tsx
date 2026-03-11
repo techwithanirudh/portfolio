@@ -34,7 +34,7 @@ export const Hero = ({
 }) => (
   <HeroSection
     align={'start'}
-    className='border-border border-t border-dashed px-6 py-14 sm:border-x'
+    className='px-6 py-14'
     title={
       <div className='flex items-center justify-between gap-4'>
         <span className='flex items-center gap-2'>
