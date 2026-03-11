@@ -15,7 +15,7 @@ export default function Contact(): React.ReactElement {
   return (
     <Wrapper>
       <SplitSection>
-        <SplitSectionSidebar className='border-border border-t border-dashed px-6 py-14 sm:border-x'>
+        <SplitSectionSidebar className='px-6 py-14'>
           <ViewAnimation
             blur={false}
             initial={{ opacity: 0, translateY: -6 }}
