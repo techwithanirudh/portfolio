@@ -48,6 +48,7 @@ export default function UsesPage() {
   return (
     <Wrapper>
       <Hero description={description} title={title} />
+      <Separator />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
         const headingDelay = section.title ? baseDelay : 0
