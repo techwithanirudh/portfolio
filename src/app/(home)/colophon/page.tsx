@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { Fragment } from 'react'
 import { Section } from '@/components/section'
+import Separator from '@/components/separator'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
@@ -56,7 +57,7 @@ export default function ColophonPage() {
                 </ViewAnimation>
               </Section>
             )}
-            <Section className='border-border border-b border-dashed'>
+            <Section>
               <ViewAnimation
                 delay={contentDelay}
                 initial={{ opacity: 0, translateY: 6 }}
@@ -65,6 +66,7 @@ export default function ColophonPage() {
                 {section.content}
               </ViewAnimation>
             </Section>
+            {index < sections.length - 1 && <Separator />}
           </Fragment>
         )
       })}
