@@ -89,7 +89,8 @@ export const Header = ({
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             {renderTitleNav(nav, {
-              className: 'inline-flex items-center gap-2.5 font-semibold',
+              className:
+                'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
             })}
           </ViewAnimation>
           {nav.children}

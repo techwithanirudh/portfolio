@@ -23,14 +23,17 @@ export default async function GuestbookPage() {
   return (
     <Wrapper>
       <SplitSection>
-        <SplitSectionSidebar>
+        <SplitSectionSidebar className='px-6 py-14'>
           <SplitSectionHeader
             description='Share a quick hello, a thought about the work, or a suggestion.'
             title='Guestbook'
           />
         </SplitSectionSidebar>
 
-        <SplitSectionContent className='flex w-full items-center' inset>
+        <SplitSectionContent
+          className='flex w-full items-center px-6 py-14'
+          inset
+        >
           <ViewAnimation
             className='w-full'
             delay={0.1}

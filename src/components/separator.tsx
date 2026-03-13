@@ -1,9 +1,16 @@
 import { cn } from '@/lib/utils'
 import { Section } from './section'
 
-const Separator = ({ className }: { className?: string }) => (
+interface SeparatorProps {
+  className?: string
+  variant?: 'dashed' | 'transparent'
+}
+
+const Separator = ({ className, variant = 'dashed' }: SeparatorProps) => (
   <Section>
-    <div className={cn('h-8 bg-dashed', className)} />
+    <div
+      className={cn('h-8', variant === 'dashed' && 'bg-dashed', className)}
+    />
   </Section>
 )
 
