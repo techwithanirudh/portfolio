@@ -5,6 +5,7 @@ import { cva } from 'class-variance-authority'
 import { Airplay, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { type ComponentProps, useEffect, useState } from 'react'
+import { useWebHaptics } from 'web-haptics/react'
 
 const itemVariants = cva(
   'size-6.5 rounded-full p-1.5 text-fd-muted-foreground',
@@ -34,6 +35,7 @@ export function ThemeToggle({
   mode?: 'light-dark' | 'light-dark-system'
 }) {
   const { setTheme, theme, resolvedTheme } = useTheme()
+  const { trigger } = useWebHaptics()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export function ThemeToggle({
 
   const handleChangeTheme = async (theme: Theme) => {
     function update() {
+      trigger([{ duration: 30 }, { delay: 60, duration: 40, intensity: 1 }])
       setTheme(theme)
     }
 

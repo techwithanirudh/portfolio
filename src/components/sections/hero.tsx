@@ -10,7 +10,7 @@ const heroVariants = cva('flex flex-col', {
     variant: {
       default:
         'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
-      compact: 'gap-4 py-6 lg:p-2',
+      compact: 'gap-4 py-6 lg:py-12 lg:px-2',
     },
     align: {
       center: 'items-start justify-center sm:items-center',
@@ -31,6 +31,7 @@ interface HeroProps {
   description?: string | ReactNode | null
   children?: ReactNode
   className?: string
+  sectionClassName?: string
 }
 
 export const HeroSection = ({
@@ -40,13 +41,14 @@ export const HeroSection = ({
   description,
   children,
   className,
+  sectionClassName,
   variant,
   align,
 }: HeroProps &
   VariantProps<typeof heroVariants> & {
     asChild?: boolean
   }) => (
-  <Section className='px-6 sm:p-4'>
+  <Section className={cn('px-6 sm:p-4', sectionClassName)}>
     <div className={cn(heroVariants({ variant, align, className }))}>
       {image && (
         <ViewAnimation

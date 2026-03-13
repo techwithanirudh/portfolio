@@ -305,7 +305,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
         />
       </div>
       <div
-        className={cn('flex h-10 h-full items-center justify-center pe-1.5', {
+        className={cn('flex h-10 items-center justify-center pe-1.5', {
           'bg-fd-background': context,
         })}
       >
@@ -359,7 +359,7 @@ function PromptContext({
   }
 
   return (
-    <div className='flex h-10 items-start gap-1.5 bg-fd-background px-2 py-1.5 text-xs'>
+    <div className='flex h-10 items-start gap-1.5 bg-fd-background px-2 py-1 text-xs'>
       <Quote className='mt-0.5 size-3 shrink-0 text-fd-muted-foreground' />
       <span className='line-clamp-2 flex-1 break-words'>
         {context.slice(0, MaxSourcePreviewChars)}
