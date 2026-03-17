@@ -10,6 +10,10 @@ import {
   ReasoningContent,
   ReasoningTrigger,
 } from '@/components/ai-elements/reasoning'
+import {
+  AIContactForm,
+  AIContactFormSkeleton,
+} from '@/components/ai/tools/contact-form'
 import { cn } from '@/lib/utils'
 import { MessageMetadata } from './message-metadata'
 
@@ -62,6 +66,35 @@ function MessageParts({
             <MessageResponse key={`${message.id}-${i}`}>
               {part.text}
             </MessageResponse>
+          )
+        }
+        if (part.type === 'tool-showContactForm') {
+          const isSubmitted = part.state === 'output-available'
+          const submittedData =
+            isSubmitted &&
+            part.output?.success &&
+            part.output.name &&
+            part.output.email &&
+            part.output.message
+              ? {
+                  name: part.output.name,
+                  email: part.output.email,
+                  message: part.output.message,
+                }
+              : undefined
+
+          if (!isSubmitted && part.state !== 'input-available') {
+            return <AIContactFormSkeleton key={part.toolCallId} />
+          }
+
+          return (
+            <AIContactForm
+              isSubmitted={isSubmitted}
+              key={part.toolCallId}
+              prefill={part.input?.prefill ?? undefined}
+              submittedData={submittedData}
+              toolCallId={part.toolCallId}
+            />
           )
         }
         return null
