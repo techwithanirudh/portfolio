@@ -8,6 +8,8 @@ export interface ChatContextValue {
   open: boolean
   setOpen: (open: boolean) => void
   chat: UseChatHelpers<MyUIMessage>
+  pendingContext: string | null
+  setPendingContext: (ctx: string | null) => void
 }
 
 export const ChatContext = createContext<ChatContextValue | null>(null)

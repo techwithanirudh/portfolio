@@ -1,24 +1,28 @@
 'use client'
 
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { PlusIcon, RefreshCw } from 'lucide-react'
+import { PlusIcon, RefreshCw, XIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import {
   PromptInput,
   PromptInputFooter,
+  PromptInputHeader,
   PromptInputSubmit,
   PromptInputTextarea,
 } from '@/components/ai-elements/prompt-input'
 import { animations, useClippy } from '@/components/clippy'
 import { cn } from '@/lib/utils'
-import { useChatContext } from './chat-context'
+import { useChatContextValue } from './chat-context'
 
 const StorageKeyInput = '__ai_search_input'
 
 export function ChatInput() {
-  const { status, sendMessage, stop, messages, setMessages, regenerate } =
-    useChatContext()
+  const {
+    chat: { status, sendMessage, stop, messages, setMessages, regenerate },
+    pendingContext,
+    setPendingContext,
+  } = useChatContextValue()
   const { clippy } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -47,7 +51,19 @@ export function ChatInput() {
       clippy.stopCurrent()
       clippy.play(animations.submit)
     }
-    await sendMessage({ text })
+
+    if (pendingContext) {
+      await sendMessage({
+        parts: [
+          { type: 'data-context', data: { text: pendingContext } },
+          { type: 'text', text },
+        ],
+      })
+      setPendingContext(null)
+    } else {
+      await sendMessage({ text })
+    }
+
     setInput('')
   }
 
@@ -68,6 +84,23 @@ export function ChatInput() {
         className='bg-fd-card text-fd-card-foreground'
         onSubmit={onSubmit}
       >
+        {pendingContext && (
+          <PromptInputHeader className='px-3 pt-2 pb-0'>
+            <div className='flex w-full items-start justify-between gap-2 rounded border border-dashed bg-fd-muted/50 px-2 py-1.5 text-fd-muted-foreground text-xs'>
+              <p className='line-clamp-2 flex-1'>
+                <span className='font-medium text-fd-foreground'>Context:</span>{' '}
+                {pendingContext}
+              </p>
+              <button
+                className='mt-0.5 shrink-0 opacity-60 hover:opacity-100'
+                onClick={() => setPendingContext(null)}
+                type='button'
+              >
+                <XIcon className='size-3' />
+              </button>
+            </div>
+          </PromptInputHeader>
+        )}
         <PromptInputTextarea
           autoFocus
           className={cn(
