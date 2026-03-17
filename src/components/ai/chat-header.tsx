@@ -18,20 +18,22 @@ export function ChatHeader() {
       </div>
 
       <div className='flex min-h-full'>
-        <button
-          className={cn(
-            buttonVariants({
-              color: 'secondary',
-              size: 'icon-sm',
-              className:
-                'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
-            })
-          )}
-          onClick={() => chat.setMessages([])}
-          type='button'
-        >
-          <PlusIcon className='transition-transform group-hover/button:rotate-90' />
-        </button>
+        {chat.messages.length > 0 && (
+          <button
+            className={cn(
+              buttonVariants({
+                color: 'secondary',
+                size: 'icon-sm',
+                className:
+                  'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              })
+            )}
+            onClick={() => chat.setMessages([])}
+            type='button'
+          >
+            <PlusIcon className='transition-transform group-hover/button:rotate-90' />
+          </button>
+        )}
         <button
           aria-label='Close'
           className={cn(

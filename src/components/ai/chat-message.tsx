@@ -1,6 +1,5 @@
 'use client'
 
-import type { UIMessage } from 'ai'
 import type { ComponentProps } from 'react'
 import { memo } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
@@ -13,11 +12,6 @@ import {
   MessageContent,
   MessageResponse,
 } from '@/components/ai-elements/message'
-import {
-  Reasoning,
-  ReasoningContent,
-  ReasoningTrigger,
-} from '@/components/ai-elements/reasoning'
 import { cn } from '@/lib/utils'
 import { MessageMetadata } from './message-metadata'
 
@@ -32,40 +26,11 @@ export type ChatMessageProps = {
   isLastMessage: boolean
 } & ComponentProps<'div'>
 
-function MessageParts({
-  message,
-  isLastMessage,
-  isStreaming,
-}: {
-  message: MyUIMessage
-  isLastMessage: boolean
-  isStreaming: boolean
-}) {
+function MessageParts({ message }: { message: MyUIMessage }) {
   const parts = (message.parts ?? []) as MyUIMessage['parts']
-
-  // Consolidate all reasoning parts into one block
-  const reasoningParts = parts.filter(
-    (
-      part
-    ): part is Extract<UIMessage['parts'][number], { type: 'reasoning' }> =>
-      part.type === 'reasoning'
-  )
-  const reasoningText = reasoningParts.map((part) => part.text).join('\n\n')
-  const hasReasoning = reasoningParts.length > 0
-
-  // Check if reasoning is still streaming (last part is reasoning on last message)
-  const lastPart = parts.at(-1)
-  const isReasoningStreaming =
-    isLastMessage && isStreaming && lastPart?.type === 'reasoning'
 
   return (
     <>
-      {hasReasoning && (
-        <Reasoning className='w-full' isStreaming={isReasoningStreaming}>
-          <ReasoningTrigger />
-          <ReasoningContent>{reasoningText}</ReasoningContent>
-        </Reasoning>
-      )}
       {parts.map((part, i) => {
         if (part.type === 'text') {
           return (
@@ -112,11 +77,10 @@ function MessageParts({
 export const ChatMessage = memo(function ChatMessage({
   message,
   isInProgress,
-  isLastMessage,
+  isLastMessage: _isLastMessage,
   ...props
 }: ChatMessageProps) {
   const parts = (message.parts ?? []) as MyUIMessage['parts']
-  const isStreaming = isInProgress
 
   return (
     <Message
@@ -135,11 +99,7 @@ export const ChatMessage = memo(function ChatMessage({
       <MessageContent className='max-w-full bg-transparent p-0 text-fd-foreground'>
         <MessageMetadata inProgress={isInProgress} parts={parts} />
         {message.role === 'assistant' ? (
-          <MessageParts
-            isLastMessage={isLastMessage}
-            isStreaming={isStreaming}
-            message={message}
-          />
+          <MessageParts message={message} />
         ) : (
           parts.map((part, idx) => {
             if (part.type !== 'text') {

@@ -1,6 +1,5 @@
 import { getStaticToolName, isStaticToolUIPart, isToolUIPart } from 'ai'
 import {
-  Brain,
   ChevronDownIcon,
   LinkIcon,
   MailIcon,
@@ -30,19 +29,11 @@ export const MessageMetadata = ({
     .filter((part) => part.type === 'text' || isToolUIPart(part))
     .at(-1)
 
-  const reasoning = parts.at(-1)?.type === 'reasoning'
-
   if (!lastPart) {
     return (
-      <div className='flex items-center gap-2'>
-        {reasoning ? (
-          <>
-            <Brain className='size-4' />
-            <Shimmer>Sniffing around...</Shimmer>
-          </>
-        ) : (
-          <PawPrint className='size-4 animate-spin text-fd-primary' />
-        )}
+      <div className='flex items-center gap-2 text-fd-muted-foreground'>
+        <PawPrint className='size-4 animate-spin text-fd-primary' />
+        <Shimmer className='text-xs'>Thinking...</Shimmer>
       </div>
     )
   }

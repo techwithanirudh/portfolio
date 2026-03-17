@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import {
   PromptInput,
-  PromptInputFooter,
   PromptInputSubmit,
   PromptInputTextarea,
 } from '@/components/ai-elements/prompt-input'
@@ -45,7 +44,7 @@ function ChatActions() {
 }
 
 export function ChatInput() {
-  const { status, sendMessage, stop } = useChatContext()
+  const { status, sendMessage, stop, messages } = useChatContext()
   const { clippy } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -54,6 +53,12 @@ export function ChatInput() {
   const saveInput = useDebounceCallback(
     (value: string) => localStorage.setItem(StorageKeyInput, value),
     300
+  )
+
+  const lastAssistantMessage = messages.findLast((m) => m.role === 'assistant')
+  const hasPendingToolInput = (lastAssistantMessage?.parts ?? []).some(
+    (part) =>
+      part.type === 'tool-showContactForm' && part.state === 'input-available'
   )
 
   const onSubmit = async ({ text }: { text: string }) => {
@@ -94,7 +99,7 @@ export function ChatInput() {
           placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
           value={input}
         />
-        <PromptInputFooter className='border-none px-2 pb-2'>
+        <div className='order-last flex items-center gap-1 self-start p-2'>
           <ChatActions />
           <PromptInputSubmit
             className={cn(
@@ -105,10 +110,11 @@ export function ChatInput() {
                   'rounded-none border border-dashed transition-all [&_svg]:size-4',
               })
             )}
+            disabled={hasPendingToolInput}
             onStop={stop}
             status={status}
           />
-        </PromptInputFooter>
+        </div>
       </PromptInput>
     </div>
   )
