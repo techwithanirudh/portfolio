@@ -4,16 +4,20 @@ import type { UIMessage } from 'ai'
 import type { ComponentProps } from 'react'
 import { memo } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
-import { Message, MessageContent, MessageResponse } from '@/components/ai-elements/message'
+import {
+  AIContactForm,
+  AIContactFormSkeleton,
+} from '@/components/ai/tools/contact-form'
+import {
+  Message,
+  MessageContent,
+  MessageResponse,
+} from '@/components/ai-elements/message'
 import {
   Reasoning,
   ReasoningContent,
   ReasoningTrigger,
 } from '@/components/ai-elements/reasoning'
-import {
-  AIContactForm,
-  AIContactFormSkeleton,
-} from '@/components/ai/tools/contact-form'
 import { cn } from '@/lib/utils'
 import { MessageMetadata } from './message-metadata'
 
@@ -41,7 +45,9 @@ function MessageParts({
 
   // Consolidate all reasoning parts into one block
   const reasoningParts = parts.filter(
-    (part): part is Extract<UIMessage['parts'][number], { type: 'reasoning' }> =>
+    (
+      part
+    ): part is Extract<UIMessage['parts'][number], { type: 'reasoning' }> =>
       part.type === 'reasoning'
   )
   const reasoningText = reasoningParts.map((part) => part.text).join('\n\n')
@@ -115,7 +121,7 @@ export const ChatMessage = memo(function ChatMessage({
   return (
     <Message
       {...props}
-      className={cn('max-w-full py-4 gap-0.5', props.className)}
+      className={cn('max-w-full gap-0.5 py-4', props.className)}
       from={message.role}
     >
       <p

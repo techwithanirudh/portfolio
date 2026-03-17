@@ -3,7 +3,6 @@
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from 'ai'
 import {
   ArrowUpIcon,
-  CornerDownLeftIcon,
   ImageIcon,
   Loader2Icon,
   PlusIcon,
@@ -767,7 +766,9 @@ export const PromptInput = ({
         ref={formRef}
         {...props}
       >
-        <InputGroup className='overflow-hidden border-none rounded-none bg-transparent shadow-none dark:bg-transparent'>{children}</InputGroup>
+        <InputGroup className='overflow-hidden rounded-none border-none bg-transparent shadow-none dark:bg-transparent'>
+          {children}
+        </InputGroup>
       </form>
     </>
   )

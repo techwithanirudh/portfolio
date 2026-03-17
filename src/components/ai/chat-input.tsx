@@ -1,7 +1,7 @@
 'use client'
 
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { ArrowUpIcon, RefreshCw, SquareIcon } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import {
@@ -78,7 +78,10 @@ export function ChatInput() {
 
   return (
     <div className='border-t border-dashed'>
-      <PromptInput onSubmit={onSubmit} className='bg-fd-card text-fd-card-foreground'>
+      <PromptInput
+        className='bg-fd-card text-fd-card-foreground'
+        onSubmit={onSubmit}
+      >
         <PromptInputTextarea
           autoFocus
           className={cn(
@@ -102,8 +105,8 @@ export function ChatInput() {
                   'rounded-none border border-dashed transition-all [&_svg]:size-4',
               })
             )}
-            status={status}
             onStop={stop}
+            status={status}
           />
         </PromptInputFooter>
       </PromptInput>

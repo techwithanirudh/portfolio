@@ -26,6 +26,7 @@ function ButtonGroup({
   ...props
 }: React.ComponentProps<'div'> & VariantProps<typeof buttonGroupVariants>) {
   return (
+    // biome-ignore lint/a11y/useSemanticElements: keep group semantics without fieldset layout
     <div
       className={cn(buttonGroupVariants({ orientation }), className)}
       data-orientation={orientation}

@@ -31,10 +31,10 @@ export function ChatMessages({ messages, status }: ChatMessagesProps) {
       data-lenis-prevent
       style={panelStyle}
     >
-      <ConversationContent className='gap-0 divide-y divide-dashed divide-border px-1 py-0 flex-1 min-h-full'>
+      <ConversationContent className='min-h-full flex-1 gap-0 divide-y divide-dashed divide-border px-1 py-0'>
         {messages.length === 0 ? (
           <ConversationEmptyState
-            className='text-fd-muted-foreground text-sm min-h-full flex-1'
+            className='min-h-full flex-1 text-fd-muted-foreground text-sm'
             description="heya! im simba, anirudh's dog. i can answer questions about him, his work, or the site."
             icon={
               <PawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />

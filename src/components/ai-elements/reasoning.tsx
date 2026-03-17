@@ -1,12 +1,6 @@
 'use client'
 
 import { useControllableState } from '@radix-ui/react-use-controllable-state'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
-import { cn } from '@/lib/utils'
 import { cjk } from '@streamdown/cjk'
 import { code } from '@streamdown/code'
 import { math } from '@streamdown/math'
@@ -25,6 +19,12 @@ import {
 } from 'react'
 import { Streamdown } from 'streamdown'
 import { Shimmer } from '@/components/ai/shimmer'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { cn } from '@/lib/utils'
 
 interface ReasoningContextValue {
   isStreaming: boolean
@@ -150,10 +150,7 @@ export type ReasoningTriggerProps = ComponentProps<
   getThinkingMessage?: (isStreaming: boolean, duration?: number) => ReactNode
 }
 
-const defaultGetThinkingMessage = (
-  isStreaming: boolean,
-  duration?: number
-) => {
+const defaultGetThinkingMessage = (isStreaming: boolean, duration?: number) => {
   if (isStreaming || duration === 0) {
     return <Shimmer duration={1}>Thinking...</Shimmer>
   }
