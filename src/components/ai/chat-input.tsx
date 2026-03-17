@@ -1,11 +1,12 @@
 'use client'
 
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { RefreshCw } from 'lucide-react'
+import { PlusIcon, RefreshCw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import {
   PromptInput,
+  PromptInputFooter,
   PromptInputSubmit,
   PromptInputTextarea,
 } from '@/components/ai-elements/prompt-input'
@@ -15,36 +16,9 @@ import { useChatContext } from './chat-context'
 
 const StorageKeyInput = '__ai_search_input'
 
-function ChatActions() {
-  const { messages, status, regenerate } = useChatContext()
-  const isLoading = status === 'streaming'
-  const canShow =
-    !isLoading && messages?.length > 0 && messages.at(-1)?.role === 'assistant'
-
-  return (
-    <button
-      aria-hidden={!canShow}
-      className={cn(
-        buttonVariants({
-          color: 'secondary',
-          size: 'icon-sm',
-          className:
-            'gap-1.5 rounded-none border border-dashed transition-opacity duration-200 [&_svg]:size-4',
-        }),
-        canShow ? 'opacity-100' : 'pointer-events-none opacity-0'
-      )}
-      disabled={!canShow}
-      onClick={() => regenerate()}
-      tabIndex={canShow ? 0 : -1}
-      type='button'
-    >
-      <RefreshCw />
-    </button>
-  )
-}
-
 export function ChatInput() {
-  const { status, sendMessage, stop, messages } = useChatContext()
+  const { status, sendMessage, stop, messages, setMessages, regenerate } =
+    useChatContext()
   const { clippy } = useClippy()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -60,6 +34,13 @@ export function ChatInput() {
     (part) =>
       part.type === 'tool-showContactForm' && part.state === 'input-available'
   )
+
+  const canRegenerate =
+    status !== 'streaming' &&
+    messages.length > 0 &&
+    messages.at(-1)?.role === 'assistant'
+
+  const canRestart = messages.length > 0
 
   const onSubmit = async ({ text }: { text: string }) => {
     if (clippy) {
@@ -99,8 +80,44 @@ export function ChatInput() {
           placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
           value={input}
         />
-        <div className='order-last flex items-center gap-1 self-start p-2'>
-          <ChatActions />
+        <PromptInputFooter className='border-none px-2 pb-2'>
+          <div className='flex items-center gap-1'>
+            <button
+              aria-hidden={!canRestart}
+              className={cn(
+                buttonVariants({
+                  color: 'secondary',
+                  size: 'icon-sm',
+                  className:
+                    'rounded-none border border-dashed transition-opacity duration-200 [&_svg]:size-4',
+                }),
+                canRestart ? 'opacity-100' : 'pointer-events-none opacity-0'
+              )}
+              disabled={!canRestart}
+              onClick={() => setMessages([])}
+              type='button'
+            >
+              <PlusIcon className='transition-transform hover:rotate-90' />
+            </button>
+            <button
+              aria-hidden={!canRegenerate}
+              className={cn(
+                buttonVariants({
+                  color: 'secondary',
+                  size: 'icon-sm',
+                  className:
+                    'rounded-none border border-dashed transition-opacity duration-200 [&_svg]:size-4',
+                }),
+                canRegenerate ? 'opacity-100' : 'pointer-events-none opacity-0'
+              )}
+              disabled={!canRegenerate}
+              onClick={() => regenerate()}
+              tabIndex={canRegenerate ? 0 : -1}
+              type='button'
+            >
+              <RefreshCw />
+            </button>
+          </div>
           <PromptInputSubmit
             className={cn(
               buttonVariants({
@@ -114,7 +131,7 @@ export function ChatInput() {
             onStop={stop}
             status={status}
           />
-        </div>
+        </PromptInputFooter>
       </PromptInput>
     </div>
   )
