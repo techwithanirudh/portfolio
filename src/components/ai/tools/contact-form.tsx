@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { CheckCircle, Loader2, Send } from 'lucide-react'
 import { contact } from '@/app/(home)/contact/actions/contact'
-import { useChatContext } from '@/components/ai/chat'
+import { useChatContext } from '@/components/ai/chat-context'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {

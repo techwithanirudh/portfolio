@@ -9,8 +9,6 @@ import { ClippyProvider } from '@/components/clippy'
 import { ChatContext } from './chat-context'
 import { ChatPanel } from './chat-panel'
 
-export { useChatContextValue as useAISearchContext, useChatContext } from './chat-context'
-
 export function AISearch({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
   const chat = useChat<MyUIMessage>({
