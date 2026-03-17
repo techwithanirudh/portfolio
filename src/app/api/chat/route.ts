@@ -84,7 +84,7 @@ export async function POST(request: Request) {
           }),
           providerOptions: {
             openai: {
-              reasoningEffort: 'minimal',
+              reasoningEffort: 'medium',
               reasoningSummary: 'auto',
               textVerbosity: 'medium',
               serviceTier: 'priority',

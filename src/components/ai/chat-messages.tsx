@@ -48,6 +48,7 @@ export function ChatMessages({ messages, status }: ChatMessagesProps) {
                 messages.length - 1 === idx &&
                 (status === 'streaming' || status === 'submitted')
               }
+              isLastMessage={messages.length - 1 === idx}
               key={item.id}
               message={item}
             />

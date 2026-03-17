@@ -22,7 +22,7 @@ const moderationModel = createRetryable({
 
 export const provider = customProvider({
   languageModels: {
-    'chat-model': openai('gpt-5-mini'),
+    'chat-model': openai('gpt-5.4-mini'),
     'moderation-model': moderationModel,
   },
 })
