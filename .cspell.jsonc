@@ -191,6 +191,7 @@
     "mcps",
     "stty",
     "xyzeva",
-    "vidstack"
+    "vidstack",
+    "magicui"
   ]
 }
