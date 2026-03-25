@@ -4,6 +4,7 @@ import {
   SplitSectionHeader,
   SplitSectionSidebar,
 } from '@/components/sections/split-section'
+import { ProgressiveBlur } from '@/components/ui/progressive-blur'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import { getActivityItems } from './actions'
@@ -45,7 +46,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
               <GitHubEventComponent commits={item.commits} event={item.event} />
             </ViewAnimation>
           ))}
-          <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
+          <ProgressiveBlur height="50%" position="bottom" />
         </SplitSectionContent>
       </SplitSection>
     )
