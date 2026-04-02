@@ -1,10 +1,10 @@
 'use client'
 
-import { cn } from '@/lib/utils'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { type ComponentProps, useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { cn } from '@/lib/utils'
 
 const itemVariants = cva(
   'size-6.5 rounded-full p-1.5 text-fd-muted-foreground',
