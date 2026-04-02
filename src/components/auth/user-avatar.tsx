@@ -7,14 +7,14 @@ import { cn } from '@/lib/utils'
 
 export interface UserAvatarClassNames {
   base?: string
-  image?: string
   fallback?: string
   fallbackIcon?: string
+  image?: string
 }
 
 export interface UserAvatarProps {
-  user?: User | null
   classNames?: UserAvatarClassNames
+  user?: User | null
 }
 
 export function UserAvatar({

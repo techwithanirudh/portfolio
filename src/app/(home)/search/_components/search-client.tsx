@@ -191,7 +191,7 @@ export function SearchClient() {
               }
             />
           )}
-          items={query.data !== 'empty' ? query.data : null}
+          items={query.data === 'empty' ? null : query.data}
         />
       </Section>
     </SearchDialog>

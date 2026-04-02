@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/dialog'
 
 interface BanUserModalProps {
-  isOpen: boolean
   isBanned: boolean
   isBusy: boolean
+  isOpen: boolean
   name: string
   onConfirm: () => void
   onOpenChange: (open: boolean) => void

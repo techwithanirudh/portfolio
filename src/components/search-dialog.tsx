@@ -65,7 +65,7 @@ export default function CustomSearchDialog(props: SharedProps) {
               onClick={onClick}
             />
           )}
-          items={query.data !== 'empty' ? query.data : null}
+          items={query.data === 'empty' ? null : query.data}
         />
         <SearchDialogFooter className='flex flex-row flex-wrap items-center gap-2'>
           <Popover onOpenChange={setIsOpen} open={isOpen}>

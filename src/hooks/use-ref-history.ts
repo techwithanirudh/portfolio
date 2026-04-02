@@ -3,12 +3,12 @@
 import { useRef } from 'react'
 
 interface UseRefHistoryReturn<T> {
-  push: (value: T) => void
-  undo: () => T | undefined
-  redo: () => T | undefined
-  clear: () => void
-  canUndo: () => boolean
   canRedo: () => boolean
+  canUndo: () => boolean
+  clear: () => void
+  push: (value: T) => void
+  redo: () => T | undefined
+  undo: () => T | undefined
 }
 
 export function useRefHistory<T>(): UseRefHistoryReturn<T> {

@@ -22,10 +22,10 @@ import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
 interface AIContactFormProps {
-  toolCallId: string
-  prefill?: Partial<Contact>
   isSubmitted: boolean
+  prefill?: Partial<Contact>
   submittedData?: Contact
+  toolCallId: string
 }
 
 export function AIContactForm({

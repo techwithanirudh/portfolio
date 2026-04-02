@@ -5,9 +5,9 @@ import type { AgentType } from 'clippyts/dist/types'
 import { createContext, useContext } from 'react'
 
 export interface ClippyContextValue {
+  agentName: AgentType
   clippy: Agent | undefined
   element: HTMLElement | null
-  agentName: AgentType
 }
 
 export const ClippyContext = createContext<ClippyContextValue | undefined>(

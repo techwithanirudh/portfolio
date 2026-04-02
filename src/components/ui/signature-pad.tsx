@@ -22,18 +22,18 @@ interface Point {
 export interface SignaturePadHandle {
   clear: () => void
   isEmpty: () => boolean
+  redo: () => void
   toDataURL: () => string
   undo: () => void
-  redo: () => void
 }
 
 interface SignaturePadProps {
+  className?: string
+  disabled?: boolean
   onChange?: (dataUrl: string) => void
   onClear?: () => void
-  strokeWidth?: number
-  disabled?: boolean
-  className?: string
   ref?: React.Ref<SignaturePadHandle>
+  strokeWidth?: number
 }
 
 const OUTPUT_WIDTH = 560

@@ -20,8 +20,8 @@ export type GitHubEvent =
   RestEndpointMethodTypes['activity']['listPublicEventsForUser']['response']['data'][number]
 
 export interface PushCommit {
-  sha: string
   message: string
+  sha: string
 }
 
 type EventType =
@@ -70,8 +70,8 @@ interface PullRequestPayload {
 }
 
 interface CreatePayload {
-  ref_type?: 'branch' | 'repository' | 'tag'
   ref?: string | null
+  ref_type?: 'branch' | 'repository' | 'tag'
 }
 
 const EventDate = ({ date }: { date: string | null }) => {

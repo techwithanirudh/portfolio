@@ -24,26 +24,26 @@ import {
 import { cn } from '@/lib/utils'
 
 export interface Activity {
-  date: string
   count: number
+  date: string
   level: number
 }
 
 interface Week extends Array<Activity | undefined> {}
 
 export interface Labels {
-  months?: string[]
-  weekdays?: string[]
-  totalCount?: string
   legend?: {
     less?: string
     more?: string
   }
+  months?: string[]
+  totalCount?: string
+  weekdays?: string[]
 }
 
 interface MonthLabel {
-  weekIndex: number
   label: string
+  weekIndex: number
 }
 
 const DEFAULT_MONTH_LABELS = [
@@ -72,20 +72,20 @@ const DEFAULT_LABELS: Labels = {
 }
 
 interface ContributionGraphContextType {
-  data: Activity[]
-  weeks: Week[]
   blockMargin: number
   blockRadius: number
   blockSize: number
+  data: Activity[]
   fontSize: number
-  labels: Labels
+  height: number
   labelHeight: number
+  labels: Labels
   maxLevel: number
   totalCount: number
   weekStart: WeekDay
-  year: number
+  weeks: Week[]
   width: number
-  height: number
+  year: number
 }
 
 const ContributionGraphContext =
@@ -222,18 +222,18 @@ const getMonthLabels = (
 }
 
 export interface ContributionGraphProps extends HTMLAttributes<HTMLDivElement> {
-  data: Activity[]
   blockMargin?: number
   blockRadius?: number
   blockSize?: number
+  children: ReactNode
+  className?: string
+  data: Activity[]
   fontSize?: number
   labels?: Labels
   maxLevel?: number
   style?: CSSProperties
   totalCount?: number
   weekStart?: WeekDay
-  children: ReactNode
-  className?: string
 }
 
 export const ContributionGraph = ({
@@ -351,13 +351,13 @@ export const ContributionGraphBlock = ({
 
 export interface ContributionGraphCalendarProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
-  hideMonthLabels?: boolean
-  className?: string
   children: (props: {
     activity: Activity
     dayIndex: number
     weekIndex: number
   }) => ReactNode
+  className?: string
+  hideMonthLabels?: boolean
 }
 
 export const ContributionGraphCalendar = ({

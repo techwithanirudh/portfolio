@@ -27,8 +27,8 @@ import { BanUserModal } from './ban-user-modal'
 import { DeleteEntryModal } from './delete-entry-modal'
 
 interface GuestbookEntryCardProps {
-  entry: GuestbookEntryItem
   currentUserId: string | null
+  entry: GuestbookEntryItem
   isAdmin: boolean
   isSignedIn: boolean
 }

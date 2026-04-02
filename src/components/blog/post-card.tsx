@@ -3,12 +3,12 @@ import Link from 'next/link'
 import type React from 'react'
 
 interface PostCardProps {
-  title: string
-  description: string
-  url: string
-  date: string
   author: string
+  date: string
+  description: string
   slugs: string[]
+  title: string
+  url: string
 }
 
 export const PostCard: React.FC<PostCardProps> = ({

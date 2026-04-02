@@ -8,14 +8,14 @@ import { baseOptions } from '@/constants/site'
 import { getSortedByDateWork } from '@/lib/source'
 
 interface ListItem {
-  title: string
-  href?: string
   external?: boolean
+  href?: string
   items: {
     href: string
     children: ReactNode
     external?: boolean
   }[]
+  title: string
 }
 
 export const Links = () => {

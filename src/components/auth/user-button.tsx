@@ -21,17 +21,17 @@ import { UserAvatar } from './user-avatar'
 
 export interface UserButtonClassNames {
   base?: string
-  skeleton?: string
-  trigger?: {
-    base?: string
-    avatar?: UserAvatarClassNames
-    skeleton?: string
-  }
   content?: {
     base?: string
     avatar?: UserAvatarClassNames
     menuItem?: string
     separator?: string
+  }
+  skeleton?: string
+  trigger?: {
+    base?: string
+    avatar?: UserAvatarClassNames
+    skeleton?: string
   }
 }
 

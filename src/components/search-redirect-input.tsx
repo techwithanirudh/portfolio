@@ -12,9 +12,9 @@ import {
 import { cn } from '@/lib/utils'
 
 interface SearchRedirectInputProps {
-  tag: string
-  placeholder?: string
   className?: string
+  placeholder?: string
+  tag: string
 }
 
 export function SearchRedirectInput({

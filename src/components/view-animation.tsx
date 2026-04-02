@@ -4,15 +4,15 @@ import { motion, useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
 
 interface ViewAnimationProps {
-  initial?: Record<string, string | number>
-  whileInView?: Record<string, string | number>
   animate?: Record<string, string | number>
-  delay?: number
-  duration?: number
   blur?: boolean
+  children: ReactNode
   // className?: ComponentProps<typeof motion.div>['className'];
   className?: string
-  children: ReactNode
+  delay?: number
+  duration?: number
+  initial?: Record<string, string | number>
+  whileInView?: Record<string, string | number>
 }
 
 export const ViewAnimation = ({

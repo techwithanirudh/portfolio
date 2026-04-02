@@ -2,9 +2,9 @@ import type { ImageResponseOptions } from '@takumi-rs/image-response'
 import type { ReactElement } from 'react'
 
 interface GenerateProps {
-  title: string
-  description?: string
   backgroundImage?: string | null
+  description?: string
+  title: string
 }
 
 export function getImageResponseOptions(): ImageResponseOptions {

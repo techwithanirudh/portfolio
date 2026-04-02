@@ -14,12 +14,12 @@ import {
 import { ViewAnimation } from '@/components/view-animation'
 
 interface Testimonial {
-  title: string
-  description: string
   author: {
     name: string
     image: string
   }
+  description: string
+  title: string
 }
 
 interface TestimonialsProps {

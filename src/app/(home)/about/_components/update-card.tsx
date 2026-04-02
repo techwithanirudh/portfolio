@@ -5,14 +5,14 @@ import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
 
 interface UpdateCardProps {
-  title: string
+  author: string
+  date: string
   description: string
   image?: string | null
-  url: string
-  date: string
-  author: string
-  tags?: string[]
   slugs?: string[]
+  tags?: string[]
+  title: string
+  url: string
 }
 
 export const UpdateCard: React.FC<UpdateCardProps> = ({
