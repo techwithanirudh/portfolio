@@ -49,7 +49,7 @@ function Carousel({
   className,
   children,
   ...props
-}: React.ComponentProps<'div'> & CarouselProps) {
+}: React.ComponentProps<'section'> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -123,16 +123,14 @@ function Carousel({
         canScrollNext,
       }}
     >
-      <div
-        aria-roledescription='carousel'
+      <section
         className={cn('relative', className)}
         data-slot='carousel'
         onKeyDownCapture={handleKeyDown}
-        role='region'
         {...props}
       >
         {children}
-      </div>
+      </section>
     </CarouselContext.Provider>
   )
 }
@@ -163,14 +161,12 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
 
   return (
     <div
-      aria-roledescription='slide'
       className={cn(
         'min-w-0 shrink-0 grow-0 basis-full',
         orientation === 'horizontal' ? 'pl-4' : 'pt-4',
         className
       )}
       data-slot='carousel-item'
-      role='group'
       {...props}
     />
   )
