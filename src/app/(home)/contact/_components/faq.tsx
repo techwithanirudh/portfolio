@@ -55,13 +55,14 @@ export const FAQ = () => (
 
     <SplitSectionContent>
       <Accordion
-        className='w-full divide-dashed divide-border'
+        className='w-full [&>[data-slot=accordion-item]:last-child]:border-b-0 [&>[data-slot=accordion-item]]:border-border [&>[data-slot=accordion-item]]:border-b [&>[data-slot=accordion-item]]:border-dashed'
         collapsible
         type='single'
       >
         {faq.map((item, index) => (
           <ViewAnimation
             blur={false}
+            className='border-border border-b border-dashed last:border-b-0'
             delay={0.05 * index}
             duration={0.25}
             initial={{ opacity: 0, translateY: -6 }}
@@ -69,10 +70,12 @@ export const FAQ = () => (
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <AccordionItem value={`index-${index}`}>
-              <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline aria-expanded:bg-card'>
+              <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline data-open:bg-card'>
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className='p-4'>{item.answer}</AccordionContent>
+              <AccordionContent className='!h-auto p-4'>
+                {item.answer}
+              </AccordionContent>
             </AccordionItem>
           </ViewAnimation>
         ))}
