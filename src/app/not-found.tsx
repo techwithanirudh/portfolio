@@ -24,7 +24,7 @@ export default function NotFound() {
             href='/'
           >
             Go Home
-            <Icons.arrowRight className='icon-arrow size-4' />
+            <Icons.arrowRight className='icon-arrow-button size-4' />
           </Link>
         </div>
       </div>

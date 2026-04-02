@@ -54,7 +54,7 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
               ))}
             </div>
             <Link
-              className='group/interactive mt-3 flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
+              className='group mt-3 flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
               href='/blog/tags'
             >
               {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}
@@ -109,7 +109,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
           whileInView={{ opacity: 1 }}
         >
           <Link
-            className='group/interactive flex items-center gap-2 px-4 py-2 text-muted-foreground text-sm transition-colors hover:bg-card/80 hover:text-foreground'
+            className='group flex items-center gap-2 px-4 py-2 text-muted-foreground text-sm transition-colors hover:bg-card/80 hover:text-foreground'
             href='/blog/tags'
           >
             {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}

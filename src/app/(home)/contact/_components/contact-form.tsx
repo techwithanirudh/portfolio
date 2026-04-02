@@ -125,7 +125,10 @@ const ContactFormInner = () => {
               data-icon='inline-end'
             />
           ) : (
-            <Icons.send className='icon-arrow size-4' data-icon='inline-end' />
+            <Icons.send
+              className='icon-arrow-button size-4'
+              data-icon='inline-end'
+            />
           )}
         </Button>
         {action.status === 'hasSucceeded' && (

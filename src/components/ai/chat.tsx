@@ -141,7 +141,7 @@ function Header() {
           }}
           type='button'
         >
-          <Icons.add className='icon-spin-90' />
+          <Icons.add className='icon-turn-button' />
         </button>
         <button
           aria-label='Close'
@@ -156,7 +156,7 @@ function Header() {
           tabIndex={-1}
           type='button'
         >
-          <Icons.close className='icon-spin-90' />
+          <Icons.close className='icon-turn-button' />
         </button>
       </div>
     </div>

@@ -128,7 +128,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
             <div className='flex items-center gap-2 font-medium text-sm'>
               <span>{parsed.os}</span>
               {isCurrent ? (
-                <Badge shape='square' variant='secondary'>
+                <Badge className='rounded-none' variant='secondary'>
                   This device
                 </Badge>
               ) : null}

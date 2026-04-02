@@ -133,9 +133,9 @@ function EditNameDialog({ name }: { name: string }) {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
+                      className='rounded-none'
                       maxLength={32}
                       placeholder='Your name'
-                      shape='square'
                       {...field}
                       disabled={form.formState.isSubmitting}
                     />

@@ -49,7 +49,7 @@ export default function About(): React.ReactElement {
               href='/about'
             >
               Learn More
-              <Icons.arrowRight className='icon-arrow size-4' />
+              <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>
           </div>
         </ViewAnimation>

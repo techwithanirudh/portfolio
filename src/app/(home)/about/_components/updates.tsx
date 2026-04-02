@@ -65,7 +65,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
               href='/blog'
             >
               View More
-              <Icons.arrowRight className='icon-arrow size-5' />
+              <Icons.arrowRight className='icon-arrow-button size-5' />
             </Link>
           </ViewAnimation>
         </div>

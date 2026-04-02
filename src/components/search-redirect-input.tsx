@@ -80,7 +80,7 @@ export function SearchRedirectInput({
           size='icon-sm'
           variant={'default'}
         >
-          <Icons.arrowRight className='icon-arrow size-3.5' />
+          <Icons.arrowRight className='icon-arrow-button size-3.5' />
         </InputGroupButton>
       </InputGroupAddon>
     </InputGroup>

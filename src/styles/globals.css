@@ -164,10 +164,14 @@
   }
 
   .icon-arrow {
-    @apply transition-transform group-hover/interactive:-rotate-45 group-hover/button:-rotate-45;
+    @apply transition-transform group-hover:-rotate-45;
   }
 
-  .icon-spin-90 {
+  .icon-arrow-button {
+    @apply transition-transform group-hover/button:-rotate-45;
+  }
+
+  .icon-turn-button {
     @apply transition-transform group-hover/button:rotate-90;
   }
 

@@ -91,7 +91,7 @@ export const GuestbookForm = () => {
           <Link href={getLoginUrl('/guestbook')}>
             <span>Sign in to post</span>
             <Icons.arrowRight
-              className='icon-arrow size-4'
+              className='icon-arrow-button size-4'
               data-icon='inline-end'
             />
           </Link>
@@ -143,7 +143,7 @@ export const GuestbookForm = () => {
             >
               <span>Next</span>
               <Icons.arrowRight
-                className='icon-arrow size-4'
+                className='icon-arrow-button size-4'
                 data-icon='inline-end'
               />
             </Button>

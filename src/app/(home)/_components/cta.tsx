@@ -41,7 +41,8 @@ export default function CTA(): React.ReactElement {
             >
               <Button asChild className='gap-4' size='lg'>
                 <Link href={'/contact'}>
-                  Contact Me <Icons.arrowRight className='icon-arrow size-4' />
+                  Contact Me{' '}
+                  <Icons.arrowRight className='icon-arrow-button size-4' />
                 </Link>
               </Button>
             </ViewAnimation>

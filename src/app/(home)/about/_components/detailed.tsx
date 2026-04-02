@@ -51,7 +51,7 @@ export default function Detailed(): React.ReactElement {
               href='/work'
             >
               View Work
-              <Icons.arrowRight className='icon-arrow size-4' />
+              <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>
           </div>
         </ViewAnimation>

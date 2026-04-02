@@ -65,7 +65,7 @@ export const NewsletterForm = () => {
             {action.status === 'executing' ? (
               <Icons.spinner className='size-4 animate-spin' />
             ) : (
-              <Icons.send className='icon-arrow size-4' />
+              <Icons.send className='icon-arrow-button size-4' />
             )}
           </Button>
         </div>
