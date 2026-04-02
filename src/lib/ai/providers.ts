@@ -11,7 +11,7 @@ const hackclub = createOpenRouter({
 
 const moderationModel = createRetryable({
   model: hackclub('google/gemini-3-flash-preview'),
-  retries: [hackclub('google/gemini-2.5-flash'), openai('gpt-5-mini')],
+  retries: [hackclub('google/gemini-2.5-flash'), openai('gpt-5.4-mini')],
   onError: (context) => {
     const { model } = context.current
     console.error(
@@ -22,7 +22,7 @@ const moderationModel = createRetryable({
 
 export const provider = customProvider({
   languageModels: {
-    'chat-model': openai('gpt-5-mini'),
+    'chat-model': openai('gpt-5.4-mini'),
     'moderation-model': moderationModel,
   },
 })
