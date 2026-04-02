@@ -12,7 +12,6 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { signIn } from '@/lib/auth-client'
-import { cn } from '@/lib/utils'
 
 const Cross = () => (
   <div className='relative h-6 w-6'>
@@ -54,7 +53,7 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
       <div className='absolute -top-3 -right-3 z-10 hidden h-6 -translate-x-px sm:block'>
         <Cross />
       </div>
-      <div className={cn('border-border border-x border-y border-dashed')}>
+      <div className='border-border border-x border-y border-dashed'>
         <Card className='rounded-none border-none'>
           <CardHeader>
             <CardTitle className='text-lg md:text-xl'>Sign In</CardTitle>
@@ -63,46 +62,39 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className='grid gap-4'>
-              <div
-                className={cn(
-                  'flex w-full items-center gap-2',
-                  'flex-col justify-between'
-                )}
+            <div className='flex w-full flex-col items-center justify-between gap-2'>
+              <Button
+                className='w-full gap-2'
+                disabled={isLoading}
+                onClick={() => {
+                  signInWithProvider('google')
+                }}
+                shape='square'
+                variant='dashed'
               >
-                <Button
-                  className='w-full gap-2'
-                  disabled={isLoading}
-                  onClick={() => {
-                    signInWithProvider('google')
-                  }}
-                  shape='square'
-                  variant='dashed'
-                >
-                  {isLoading ? (
-                    <Icons.spinner className='size-4 animate-spin' />
-                  ) : (
-                    <Icons.google />
-                  )}
-                  Sign in with Google
-                </Button>
-                <Button
-                  className='w-full gap-2'
-                  disabled={isLoading}
-                  onClick={() => {
-                    signInWithProvider('github')
-                  }}
-                  shape='square'
-                  variant='dashed'
-                >
-                  {isLoading ? (
-                    <Icons.spinner className='size-4 animate-spin' />
-                  ) : (
-                    <Icons.github />
-                  )}
-                  Sign in with GitHub
-                </Button>
-              </div>
+                {isLoading ? (
+                  <Icons.spinner className='size-4 animate-spin' />
+                ) : (
+                  <Icons.google />
+                )}
+                Sign in with Google
+              </Button>
+              <Button
+                className='w-full gap-2'
+                disabled={isLoading}
+                onClick={() => {
+                  signInWithProvider('github')
+                }}
+                shape='square'
+                variant='dashed'
+              >
+                {isLoading ? (
+                  <Icons.spinner className='size-4 animate-spin' />
+                ) : (
+                  <Icons.github />
+                )}
+                Sign in with GitHub
+              </Button>
             </div>
           </CardContent>
         </Card>

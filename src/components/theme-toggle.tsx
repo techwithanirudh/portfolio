@@ -2,7 +2,7 @@
 
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
-import { type ComponentProps, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 
@@ -29,8 +29,8 @@ type Theme = 'light' | 'dark' | 'system'
 export function ThemeToggle({
   className,
   mode = 'light-dark',
-  ...props
-}: ComponentProps<'div'> & {
+}: {
+  className?: string
   mode?: 'light-dark' | 'light-dark-system'
 }) {
   const { setTheme, theme, resolvedTheme } = useTheme()
@@ -77,7 +77,7 @@ export function ThemeToggle({
 
           return (
             <Icon
-              className={cn(itemVariants({ active: value === key }))}
+              className={itemVariants({ active: value === key })}
               fill='currentColor'
               key={key}
             />
@@ -90,11 +90,11 @@ export function ThemeToggle({
   const value = mounted ? theme : null
 
   return (
-    <div className={container} data-theme-toggle='' {...props}>
+    <div className={container} data-theme-toggle=''>
       {full.map(([key, Icon]) => (
         <button
           aria-label={key}
-          className={cn(itemVariants({ active: value === key }))}
+          className={itemVariants({ active: value === key })}
           key={key}
           onClick={() => handleChangeTheme(key)}
           type='button'

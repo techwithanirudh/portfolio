@@ -120,7 +120,7 @@ export function SearchClient() {
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
               <InputGroupInput
-                className={cn('text-sm')}
+                className='text-sm'
                 onChange={(event) => {
                   handleSearchChange(event.target.value)
                 }}

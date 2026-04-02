@@ -37,7 +37,7 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
         </div>
       )}
       <div className='min-w-0 flex-1'>
-        <p className={cn('font-medium text-foreground')}>{name}</p>
+        <p className='font-medium text-foreground'>{name}</p>
         {description && (
           <p className='text-muted-foreground text-sm'>{description}</p>
         )}

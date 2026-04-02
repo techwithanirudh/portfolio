@@ -29,7 +29,7 @@ export const PostCard: React.FC<PostCardProps> = ({
         <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
           {description}
         </p>
-        <div className='group mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
+        <div className='mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
           <span className='inline-flex items-center gap-1 capitalize'>
             <Icons.user className='icon-pop size-4' />
             {author}
