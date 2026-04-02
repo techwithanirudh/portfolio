@@ -55,7 +55,7 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
         <Cross />
       </div>
       <div className={cn('border-border border-x border-y border-dashed')}>
-        <Card className='rounded-none border-none'>
+        <Card className='rounded-none border-none shadow-none ring-0'>
           <CardHeader>
             <CardTitle className='text-lg md:text-xl'>Sign In</CardTitle>
             <CardDescription className='text-xs md:text-sm'>

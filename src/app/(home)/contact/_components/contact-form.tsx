@@ -114,14 +114,22 @@ const ContactFormInner = () => {
           )}
         />
         <Button
-          className='w-full'
+          className='group w-full'
           disabled={action.status === 'executing'}
           type='submit'
         >
+          <span>Send Message</span>
           {action.status === 'executing' ? (
-            <Icons.spinner className='size-4 animate-spin' />
-          ) : null}
-          Send Message
+            <Icons.spinner
+              className='size-4 animate-spin'
+              data-icon='inline-end'
+            />
+          ) : (
+            <Icons.send
+              className='size-4 transition-transform group-hover:-rotate-45'
+              data-icon='inline-end'
+            />
+          )}
         </Button>
         {action.status === 'hasSucceeded' && (
           <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
