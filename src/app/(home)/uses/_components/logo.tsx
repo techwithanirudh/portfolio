@@ -4,9 +4,9 @@ import type { Logo as LogoType } from '@/types'
 
 interface LogoProps {
   alt: string
+  className?: string
   logo?: LogoType
   size?: number
-  className?: string
 }
 
 export function Logo({ alt, logo, size = 44, className }: LogoProps) {

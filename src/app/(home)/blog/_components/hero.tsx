@@ -1,5 +1,5 @@
-import { Rss } from 'lucide-react'
 import Link from 'next/link'
+import { Icons } from '@/components/icons/icons'
 import { HeroSection } from '@/components/sections/hero'
 
 const CurrentPostsCount = ({
@@ -46,7 +46,7 @@ export const Hero = ({
           className='inline-flex items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground'
           href='/blog/rss.xml'
         >
-          <Rss className='size-5' />
+          <Icons.rss className='size-5' />
         </Link>
       </div>
     }

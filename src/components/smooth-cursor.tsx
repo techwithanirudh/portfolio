@@ -17,9 +17,9 @@ export interface SmoothCursorProps {
     cursorType: 'default' | 'text' | 'pointer'
     isOverPointer: boolean
   }) => JSX.Element
+  cursorType?: 'default' | 'text' | 'pointer'
   disableRotation?: boolean
   disableSmooth?: boolean
-  cursorType?: 'default' | 'text' | 'pointer'
 }
 
 export function SmoothCursor({

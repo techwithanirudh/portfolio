@@ -1,7 +1,7 @@
 'use client'
 
-import { User } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import { SectionHeader } from '@/components/sections/section-header'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -14,12 +14,12 @@ import {
 import { ViewAnimation } from '@/components/view-animation'
 
 interface Testimonial {
-  title: string
-  description: string
   author: {
     name: string
     image: string
   }
+  description: string
+  title: string
 }
 
 interface TestimonialsProps {
@@ -41,7 +41,7 @@ const TestimonialCard = ({
     whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
   >
     <div className='flex min-h-full flex-col justify-between gap-6 p-6 transition-all duration-300 hover:bg-card sm:p-8 lg:aspect-video'>
-      <User className='size-8 shrink-0 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
+      <Icons.user className='size-8 shrink-0 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>
           <h3 className='text-xl tracking-tight'>{testimonial.title}</h3>
@@ -51,7 +51,7 @@ const TestimonialCard = ({
         </div>
         <p className='flex flex-row items-center gap-2 text-sm'>
           <span className='text-muted-foreground'>By</span>
-          <Avatar className='h-6 w-6'>
+          <Avatar className='h-6 w-6 after:border-transparent dark:after:border-transparent'>
             <AvatarImage
               alt={testimonial.author.name}
               src={testimonial.author.image}
@@ -116,7 +116,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
               {testimonials.map((item, index) => (
                 <CarouselItem
                   className='pl-0 sm:basis-1/2'
-                  key={`${item.title}_${index}`}
+                  key={`${item.title}-${item.author.name}`}
                 >
                   <TestimonialCard index={index} testimonial={item} />
                 </CarouselItem>

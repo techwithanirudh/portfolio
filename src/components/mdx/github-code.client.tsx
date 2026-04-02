@@ -3,17 +3,17 @@
 import type { CodeBlockProps } from 'fumadocs-ui/components/codeblock'
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { Github } from 'lucide-react'
 import { useMemo } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 
 interface GitHubCodeBlockClientProps {
+  allowCopy?: CodeBlockProps['allowCopy']
   code: string
+  icon?: CodeBlockProps['icon']
+  keepBackground?: CodeBlockProps['keepBackground']
   lang: string
   sourceUrl: string
-  allowCopy?: CodeBlockProps['allowCopy']
-  keepBackground?: CodeBlockProps['keepBackground']
-  icon?: CodeBlockProps['icon']
   title?: string
 }
 
@@ -42,7 +42,7 @@ function GitHubCodeBlockActions({
         rel='noopener noreferrer'
         target='_blank'
       >
-        <Github />
+        <Icons.githubMark className='size-4' />
       </a>
     </div>
   )

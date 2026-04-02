@@ -25,13 +25,13 @@ const heroVariants = cva('flex flex-col', {
 })
 
 interface HeroProps {
-  image?: ReactNode
   caption?: string | ReactNode | null
-  title: string | ReactNode
-  description?: string | ReactNode | null
   children?: ReactNode
   className?: string
+  description?: string | ReactNode | null
+  image?: ReactNode
   sectionClassName?: string
+  title: string | ReactNode
 }
 
 export const HeroSection = ({

@@ -7,14 +7,14 @@ import { cn } from '@/lib/utils'
 
 export interface UserAvatarClassNames {
   base?: string
-  image?: string
   fallback?: string
   fallbackIcon?: string
+  image?: string
 }
 
 export interface UserAvatarProps {
-  user?: User | null
   classNames?: UserAvatarClassNames
+  user?: User | null
 }
 
 export function UserAvatar({
@@ -28,7 +28,11 @@ export function UserAvatar({
 
   return (
     <Avatar
-      className={cn('rounded-md', classNames?.base, className)}
+      className={cn(
+        'rounded-md after:rounded-md after:border-transparent dark:after:border-transparent',
+        classNames?.base,
+        className
+      )}
       key={src}
       {...props}
     >

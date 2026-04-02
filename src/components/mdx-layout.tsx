@@ -7,15 +7,15 @@ import { cn } from '@/lib/utils'
 
 interface MdxLayoutProps {
   children: ReactNode
-  title: string
-  toc?: ComponentProps<typeof InlineTOC>['items']
   comments?: boolean
   slug: string
+  title: string
+  toc?: ComponentProps<typeof InlineTOC>['items']
 }
 
 interface InlineTocBlockProps {
-  items?: ComponentProps<typeof InlineTOC>['items']
   className?: string
+  items?: ComponentProps<typeof InlineTOC>['items']
 }
 
 export const InlineTocBlock = ({ items, className }: InlineTocBlockProps) =>
@@ -33,12 +33,12 @@ export const InlineTocBlock = ({ items, className }: InlineTocBlockProps) =>
 
 interface MdxContentProps {
   children: ReactNode
-  toc?: ComponentProps<typeof InlineTOC>['items']
-  comments?: boolean
-  slug?: string
   className?: string
-  proseClassName?: string
+  comments?: boolean
   commentsClassName?: string
+  proseClassName?: string
+  slug?: string
+  toc?: ComponentProps<typeof InlineTOC>['items']
 }
 
 export const MdxContent = ({

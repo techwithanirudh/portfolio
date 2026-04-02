@@ -4,14 +4,14 @@ import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {
-  title: string | ReactNode
-  description?: string | ReactNode | null
+  align?: 'left' | 'center'
   children?: ReactNode
   className?: string
-  titleClassName?: string
+  description?: string | ReactNode | null
   descriptionClassName?: string
-  align?: 'left' | 'center'
   sticky?: boolean
+  title: string | ReactNode
+  titleClassName?: string
 }
 
 export const SectionHeader = ({

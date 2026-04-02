@@ -1,7 +1,7 @@
 interface UsePaginationProps {
   currentPage: number
-  totalPages: number
   paginationItemsToDisplay: number
+  totalPages: number
 }
 
 interface UsePaginationReturn {

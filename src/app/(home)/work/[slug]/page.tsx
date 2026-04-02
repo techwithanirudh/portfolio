@@ -37,7 +37,7 @@ function Header(props: { page: MDXPage }) {
     links.push({
       href: page.data.github,
       label: 'View Source',
-      icon: <Icons.gitHub className='size-4' />,
+      icon: <Icons.github className='size-4' />,
     })
   }
 

@@ -5,11 +5,11 @@ import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 
 interface WorkCardProps {
-  title: string
   description: string
   image?: string | null
-  url: string
   slugs: string[]
+  title: string
+  url: string
 }
 
 export const WorkCard = ({

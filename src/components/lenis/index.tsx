@@ -8,8 +8,8 @@ import { useRef } from 'react'
 import { useTempus } from 'tempus/react'
 
 interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
-  root: boolean
   options: LenisOptions
+  root: boolean
 }
 
 export function Lenis({ root, options }: LenisProps) {

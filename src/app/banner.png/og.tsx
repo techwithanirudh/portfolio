@@ -2,8 +2,8 @@ import type { ImageResponseOptions } from '@takumi-rs/image-response'
 import type { ReactElement } from 'react'
 
 interface GenerateProps {
-  title?: string
   subtitle?: string
+  title?: string
 }
 
 function CodeIcon({ ...props }): ReactElement {

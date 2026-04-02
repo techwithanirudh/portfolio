@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import { CheckCircle, Loader2, Send } from 'lucide-react'
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/ai/chat'
 import { Icons } from '@/components/icons/icons'
@@ -22,10 +21,10 @@ import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
 interface AIContactFormProps {
-  toolCallId: string
-  prefill?: Partial<Contact>
   isSubmitted: boolean
+  prefill?: Partial<Contact>
   submittedData?: Contact
+  toolCallId: string
 }
 
 export function AIContactForm({
@@ -74,7 +73,7 @@ export function AIContactForm({
     return (
       <div className='flex flex-col gap-2 rounded-md border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
         <div className='flex items-center gap-2'>
-          <CheckCircle className='size-4 shrink-0' />
+          <Icons.success className='size-4 shrink-0' />
           <p>message sent! anirudh will get back to you soon.</p>
         </div>
         <div className='mt-1 space-y-1 text-xs opacity-80'>
@@ -95,7 +94,7 @@ export function AIContactForm({
     return (
       <div className='flex flex-col gap-2 rounded-md border border-muted-foreground/30 border-dashed bg-muted/40 p-3 text-muted-foreground text-sm'>
         <div className='flex items-center gap-2'>
-          <CheckCircle className='size-4 shrink-0' />
+          <Icons.success className='size-4 shrink-0' />
           <p>message canceled. you can keep chatting.</p>
         </div>
       </div>
@@ -202,12 +201,12 @@ export function AIContactForm({
           >
             {isExecuting ? (
               <>
-                <Loader2 className='size-3.5 animate-spin' />
+                <Icons.spinner className='size-3.5 animate-spin' />
                 sending...
               </>
             ) : (
               <>
-                <Send className='size-3.5' />
+                <Icons.send className='size-3.5' />
                 send message
               </>
             )}

@@ -1,6 +1,6 @@
 export interface TechnologyItem {
-  name: string
   description: string
+  name: string
   url?: string
 }
 
@@ -10,6 +10,6 @@ export interface AttributionItem {
 }
 
 export interface TypographyItem {
-  label: string
   className: string
+  label: string
 }

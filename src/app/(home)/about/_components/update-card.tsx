@@ -1,18 +1,18 @@
-import { CalendarIcon, UserIcon } from 'lucide-react'
 import Link from 'next/link'
 import type React from 'react'
 import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
+import { Icons } from '@/components/icons/icons'
 
 interface UpdateCardProps {
-  title: string
+  author: string
+  date: string
   description: string
   image?: string | null
-  url: string
-  date: string
-  author: string
-  tags?: string[]
   slugs?: string[]
+  tags?: string[]
+  title: string
+  url: string
 }
 
 export const UpdateCard: React.FC<UpdateCardProps> = ({
@@ -52,12 +52,12 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
         <div className='flex flex-col justify-center gap-4'>
           <div className='group inline-flex items-center gap-2 text-muted-foreground text-sm'>
             <span className='inline-flex items-center gap-1 capitalize'>
-              <UserIcon className='size-4 transition-transform hover:scale-125' />
+              <Icons.user className='size-4 transition-transform hover:scale-125' />
               {author}
             </span>
             <span>•</span>
             <span className='inline-flex items-center gap-1'>
-              <CalendarIcon className='size-4 transition-transform hover:scale-125' />
+              <Icons.calendar className='size-4 transition-transform hover:scale-125' />
               {date}
             </span>
           </div>

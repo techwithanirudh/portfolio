@@ -14,15 +14,15 @@ const octokit = new Octokit({
 })
 
 export interface ParsedGitHubFileUrl {
-  owner: string
-  repo: string
-  ref: string
-  path: string
-  source: string
   lineRange: {
     startLine?: number
     endLine?: number
   }
+  owner: string
+  path: string
+  ref: string
+  repo: string
+  source: string
 }
 
 const parseLineRange = (

@@ -20,8 +20,8 @@ import {
   PopoverTrigger,
 } from 'fumadocs-ui/components/ui/popover'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
-import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { buttonVariants } from '@/components/ui/button'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
@@ -65,7 +65,7 @@ export default function CustomSearchDialog(props: SharedProps) {
               onClick={onClick}
             />
           )}
-          items={query.data !== 'empty' ? query.data : null}
+          items={query.data === 'empty' ? null : query.data}
         />
         <SearchDialogFooter className='flex flex-row flex-wrap items-center gap-2'>
           <Popover onOpenChange={setIsOpen} open={isOpen}>
@@ -80,7 +80,7 @@ export default function CustomSearchDialog(props: SharedProps) {
                 {filterLabel}
               </span>
               {activeTagLabel}
-              <ChevronDown className='size-3.5 text-fd-muted-foreground' />
+              <Icons.chevronDown className='size-3.5 text-fd-muted-foreground' />
             </PopoverTrigger>
             <PopoverContent
               align='start'

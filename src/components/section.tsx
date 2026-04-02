@@ -1,5 +1,5 @@
-import { PlusIcon } from 'lucide-react'
 import type { HTMLAttributes } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { ViewAnimation } from './view-animation'
 
@@ -17,7 +17,7 @@ const Cross = () => (
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
     >
-      <PlusIcon className='text-border/70 dark:text-border' size={20} />
+      <Icons.add className='size-5 text-border/70 dark:text-border' />
     </ViewAnimation>
   </div>
 )

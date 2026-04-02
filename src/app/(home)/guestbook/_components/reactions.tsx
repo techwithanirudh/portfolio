@@ -21,9 +21,9 @@ import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 
 interface GuestbookReactionsProps {
+  canReact: boolean
   entryId: number
   reactions: GuestbookReactionItem[]
-  canReact: boolean
 }
 
 interface OptimisticState {

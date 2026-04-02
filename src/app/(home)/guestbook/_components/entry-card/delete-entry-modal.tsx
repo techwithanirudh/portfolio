@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -53,7 +53,7 @@ export const DeleteEntryModal = ({
             type='button'
             variant='destructive'
           >
-            {isBusy ? <Loader2 className='size-4 animate-spin' /> : null}
+            {isBusy ? <Icons.spinner className='size-4 animate-spin' /> : null}
             {actionLabel}
           </Button>
         </DialogFooter>

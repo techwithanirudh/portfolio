@@ -9,14 +9,14 @@ import {
 } from '@/lib/github-code'
 
 interface GitHubCodeProps {
-  url: string
+  allowCopy?: CodeBlockProps['allowCopy']
+  endLine?: number
+  icon?: CodeBlockProps['icon']
+  keepBackground?: CodeBlockProps['keepBackground']
   language?: string
   startLine?: number
-  endLine?: number
   title?: string
-  allowCopy?: CodeBlockProps['allowCopy']
-  keepBackground?: CodeBlockProps['keepBackground']
-  icon?: CodeBlockProps['icon']
+  url: string
 }
 
 export async function GitHubCode({

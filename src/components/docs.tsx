@@ -8,9 +8,9 @@ import { Header } from './sections/header'
 type FumadocsLayoutProps = ComponentProps<typeof FumadocsDocsLayout>
 
 export interface DocsLayoutProps extends BaseLayoutProps {
-  tree: PageTree
-  sidebar?: FumadocsLayoutProps['sidebar']
   containerProps?: HTMLAttributes<HTMLDivElement>
+  sidebar?: FumadocsLayoutProps['sidebar']
+  tree: PageTree
 }
 
 export const DocsLayout = ({

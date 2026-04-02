@@ -8,9 +8,9 @@ import {
   SearchDialogListItem,
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
-import { Search } from 'lucide-react'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { Fragment, type ReactNode, useEffect } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import {
   InputGroup,
@@ -113,8 +113,8 @@ export function SearchClient() {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none'>
-              <InputGroupAddon className='border-0 text-muted-foreground'>
-                <Search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
+              <InputGroupAddon className='border-0 text-muted-foreground pl-3'>
+                <Icons.search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
               </InputGroupAddon>
               <InputGroupInput
                 className={cn('text-sm')}
@@ -125,7 +125,7 @@ export function SearchClient() {
                 value={search}
               />
               {search.length > 0 && (
-                <InputGroupAddon align='inline-end'>
+                <InputGroupAddon align='inline-end' className='pr-3'>
                   {resultCount} results
                 </InputGroupAddon>
               )}
@@ -191,7 +191,7 @@ export function SearchClient() {
               }
             />
           )}
-          items={query.data !== 'empty' ? query.data : null}
+          items={query.data === 'empty' ? null : query.data}
         />
       </Section>
     </SearchDialog>

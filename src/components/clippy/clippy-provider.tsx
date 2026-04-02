@@ -8,8 +8,8 @@ import AGENTS from './agents'
 import { ClippyContext, type ClippyContextValue } from './clippy-context'
 
 interface ClippyProviderProps {
-  children?: ReactNode
   agentName?: AgentType
+  children?: ReactNode
   draggable?: boolean
 }
 

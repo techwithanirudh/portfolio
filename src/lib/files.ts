@@ -1,6 +1,6 @@
 export interface Base64FileParts {
-  mediaType: string
   data: string
+  mediaType: string
 }
 
 export const parseB64File = (value: string): Base64FileParts | null => {

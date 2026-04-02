@@ -16,12 +16,17 @@ import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
 import {
   type LinkItemType,
   type NavOptions,
-  renderTitleNav,
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
-import { Menu, X } from 'lucide-react'
-import { type ComponentProps, Fragment, useMemo, useState } from 'react'
+import {
+  type ComponentProps,
+  Fragment,
+  type ReactNode,
+  useMemo,
+  useState,
+} from 'react'
+import { Icons } from '@/components/icons/icons'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
@@ -47,6 +52,28 @@ const navItemVariants = cva('[&_svg]:size-4', {
     variant: 'main',
   },
 })
+
+const renderNavTitle = (
+  nav: HomeLayoutProps['nav'],
+  props: ComponentProps<'a'>
+): ReactNode => {
+  const title = nav?.title
+  const href = nav?.url ?? '/'
+
+  if (!title) {
+    return null
+  }
+
+  if (typeof title === 'function') {
+    return title({ href, ...props }) as ReactNode
+  }
+
+  return (
+    <Link href={href} {...props}>
+      {title as ReactNode}
+    </Link>
+  )
+}
 
 export const Header = ({
   nav = {},
@@ -88,7 +115,7 @@ export const Header = ({
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            {renderTitleNav(nav, {
+            {renderNavTitle(nav, {
               className:
                 'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
             })}
@@ -185,8 +212,8 @@ export const Header = ({
                   : (event) => event.preventDefault()
               }
             >
-              <Menu className='transition-all duration-300 group-data-[state=open]:hidden' />
-              <X className='hidden transition-all duration-300 group-data-[state=open]:block' />
+              <Icons.menu className='transition-all duration-300 group-data-[state=open]:hidden' />
+              <Icons.close className='hidden transition-all duration-300 group-data-[state=open]:block' />
             </NavigationMenuTrigger>
           </ViewAnimation>
           <NavigationMenuContent className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end'>
@@ -294,7 +321,7 @@ const NavigationMenuLinkItem = ({
       } = child.menu ?? {}
 
       return (
-        <NavigationMenuLink asChild key={`${j}-${child.url}`}>
+        <NavigationMenuLink asChild key={child.url}>
           <Link
             external={child.external}
             href={child.url}

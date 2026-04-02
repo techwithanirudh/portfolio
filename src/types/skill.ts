@@ -1,11 +1,11 @@
-import type { LucideIcon } from 'lucide-react'
+import type { Icon } from '@/components/icons/icons'
 
 export type SkillSize = 'sm' | 'md' | 'lg'
 
 export interface Skill {
-  id: number
-  Icon: LucideIcon
-  title: string
   description: string
+  Icon: Icon
+  id: number
   size: SkillSize
+  title: string
 }
