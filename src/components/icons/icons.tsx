@@ -111,8 +111,8 @@ const getSvgSizeProps = ({
   size,
   width,
 }: Pick<IconProps, 'height' | 'size' | 'width'>) => ({
-  height: height ?? size ?? '1em',
-  width: width ?? size ?? '1em',
+  height: height ?? size ?? width ?? '1em',
+  width: width ?? size ?? height ?? '1em',
 })
 
 const themedIcon = (LightIcon: SvgIcon, DarkIcon: SvgIcon): SvgIcon => {
