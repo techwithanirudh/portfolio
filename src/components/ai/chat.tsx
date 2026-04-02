@@ -505,12 +505,12 @@ const Message = memo(function Message({
           </div>
         ) : null}
         <MessageMetadata inProgress={isInProgress} parts={parts} />
-        {parts.map((part) => {
+        {parts.map((part, index) => {
           if (part.type === 'text') {
             return (
               <div
                 className='prose text-sm'
-                key={`${message.id}-text-${part.text}`}
+                key={`${message.id}-text-${index}`}
               >
                 <Markdown text={part.text} />
               </div>
