@@ -2,10 +2,10 @@
 
 import { cn } from '@fumadocs/ui/cn'
 import { cva } from 'class-variance-authority'
-import { Airplay, Moon, Sun } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { type ComponentProps, useEffect, useState } from 'react'
 import { useWebHaptics } from 'web-haptics/react'
+import { Icons } from '@/components/icons/icons'
 
 const itemVariants = cva(
   'size-6.5 rounded-full p-1.5 text-fd-muted-foreground',
@@ -20,9 +20,9 @@ const itemVariants = cva(
 )
 
 const full = [
-  ['light', Sun] as const,
-  ['dark', Moon] as const,
-  ['system', Airplay] as const,
+  ['light', Icons.sun] as const,
+  ['dark', Icons.moon] as const,
+  ['system', Icons.laptop] as const,
 ]
 
 type Theme = 'light' | 'dark' | 'system'

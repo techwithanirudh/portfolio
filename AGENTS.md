@@ -53,6 +53,7 @@ Fight entropy. Leave the codebase better than you found it.
 ## UI & Styling
 - Tailwind CSS v4 with PostCSS; global tokens live in `src/styles/globals.css`.
 - Prefer `cn` from `src/lib/utils.ts` to merge class names.
+- App-level icons should be sourced via `src/components/icons/icons.tsx`; prefer Hugeicons there for generic UI/app icons and keep non-Hugeicons centralized when no good Hugeicons equivalent exists.
 - shadcn/ui components live in `src/components/ui`; extend them rather than copy/paste.
 - Radix UI primitives are used for accessible overlays, menus, and form controls.
 

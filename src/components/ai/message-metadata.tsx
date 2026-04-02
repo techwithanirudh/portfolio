@@ -1,13 +1,4 @@
 import { getStaticToolName, isStaticToolUIPart, isToolUIPart } from 'ai'
-import {
-  Brain,
-  ChevronDownIcon,
-  LinkIcon,
-  MailIcon,
-  PawPrint,
-  SearchIcon,
-  WrenchIcon,
-} from 'lucide-react'
 import type { ChatTools, MyUIMessage } from '@/app/api/chat/types'
 import { Shimmer } from '@/components/ai/shimmer'
 import {
@@ -16,6 +7,7 @@ import {
   SourcesContent,
   SourcesTrigger,
 } from '@/components/ai/sources'
+import { Icons } from '@/components/icons/icons'
 
 interface MessageMetadataProps {
   inProgress: boolean
@@ -37,11 +29,11 @@ export const MessageMetadata = ({
       <div className='flex items-center gap-2'>
         {reasoning ? (
           <>
-            <Brain className='size-4' />
+            <Icons.brain className='size-4' />
             <Shimmer>Sniffing around...</Shimmer>
           </>
         ) : (
-          <PawPrint className='size-4 animate-spin text-fd-primary' />
+          <Icons.pawPrint className='size-4 animate-spin text-fd-primary' />
         )}
       </div>
     )
@@ -62,8 +54,8 @@ export const MessageMetadata = ({
       <Sources className='group/source peer/source'>
         <SourcesTrigger count={sources.length}>
           <span className='relative size-4'>
-            <SearchIcon className='absolute inset-0 size-4 transition-opacity duration-200 group-hover/source:opacity-0' />
-            <ChevronDownIcon className='absolute inset-0 size-4 opacity-0 transition-all duration-200 group-hover/source:opacity-100 peer-data-[state=open]/source:rotate-180' />
+            <Icons.search className='absolute inset-0 size-4 transition-opacity duration-200 group-hover/source:opacity-0' />
+            <Icons.chevronDown className='absolute inset-0 size-4 opacity-0 transition-all duration-200 group-hover/source:opacity-100 peer-data-[state=open]/source:rotate-180' />
           </span>
           <p>Used {sources.length} sources</p>
         </SourcesTrigger>
@@ -83,22 +75,22 @@ export const MessageMetadata = ({
   }
 
   if (tool && inProgress && isStaticToolUIPart<ChatTools>(tool)) {
-    let Icon = WrenchIcon
+    let Icon = Icons.wrench
     let label = 'Working'
     const toolName = getStaticToolName(tool)
     const name = toolName.replace(/([A-Z])/g, ' $1').trim()
 
     switch (toolName) {
       case 'searchDocs':
-        Icon = SearchIcon
+        Icon = Icons.search
         label = 'Sniffing the pages'
         break
       case 'getPageContent':
-        Icon = LinkIcon
+        Icon = Icons.link
         label = 'Fetching a page'
         break
       case 'showContactForm':
-        Icon = MailIcon
+        Icon = Icons.mail
         label = 'Fetching contact form'
         break
       default:

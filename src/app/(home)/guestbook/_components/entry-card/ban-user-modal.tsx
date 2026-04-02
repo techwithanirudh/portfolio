@@ -1,4 +1,4 @@
-import { Loader2 } from 'lucide-react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -60,7 +60,7 @@ export const BanUserModal = ({
             type='button'
             variant={isBanned ? 'outline' : 'destructive'}
           >
-            {isBusy ? <Loader2 className='animate-spin' /> : null}
+            {isBusy ? <Icons.spinner className='animate-spin' /> : null}
             {actionLabel}
           </Button>
         </DialogFooter>

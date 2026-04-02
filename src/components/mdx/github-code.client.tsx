@@ -1,10 +1,10 @@
 'use client'
 
-import { MarkGithubIcon } from '@primer/octicons-react'
 import type { CodeBlockProps } from 'fumadocs-ui/components/codeblock'
 import { DynamicCodeBlock } from 'fumadocs-ui/components/dynamic-codeblock'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { useMemo } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 
 interface GitHubCodeBlockClientProps {
@@ -42,7 +42,7 @@ function GitHubCodeBlockActions({
         rel='noopener noreferrer'
         target='_blank'
       >
-        <MarkGithubIcon size={16} />
+        <Icons.githubMark className='size-4' />
       </a>
     </div>
   )

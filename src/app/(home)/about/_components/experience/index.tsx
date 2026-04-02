@@ -1,4 +1,4 @@
-import { DownloadIcon } from 'lucide-react'
+import { Icons } from '@/components/icons/icons'
 import {
   SplitSection,
   SplitSectionContent,
@@ -26,7 +26,7 @@ export default function Experience(): React.ReactElement {
             <Button asChild className='w-fit' size='sm' variant='default'>
               <a href='/resume.pdf' rel='noopener' target='_blank'>
                 Resume
-                <DownloadIcon className='inline-block' />
+                <Icons.download className='inline-block' />
               </a>
             </Button>
           </ViewAnimation>
@@ -38,7 +38,7 @@ export default function Experience(): React.ReactElement {
             <ViewAnimation
               delay={0.05 * index}
               initial={{ opacity: 0, translateY: -6 }}
-              key={`${experience.role}-${index}`}
+              key={`${experience.company}-${experience.role}-${experience.timeframe}`}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
               <div className='flex flex-col gap-3 p-6 sm:p-8'>

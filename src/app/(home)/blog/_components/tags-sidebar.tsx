@@ -34,7 +34,7 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
               Browse by Tag
             </span>
           </AccordionTrigger>
-          <AccordionContent className='pt-6'>
+          <AccordionContent className='!h-auto pt-6'>
             <div className='grid grid-cols-2 gap-px border border-border border-dashed bg-border'>
               {displayedTags.map((tag, index) => (
                 <ViewAnimation

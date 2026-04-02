@@ -1,6 +1,5 @@
 'use client'
 
-import { Eraser, Redo2, Undo2 } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import {
   type PointerEvent,
@@ -10,6 +9,7 @@ import {
   useRef,
 } from 'react'
 
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { useRefHistory } from '@/hooks/use-ref-history'
 import { cn } from '@/lib/utils'
@@ -333,7 +333,7 @@ export function SignaturePad({
           type='button'
           variant='ghost'
         >
-          <Undo2 className='size-4' />
+          <Icons.undo className='size-4' />
         </Button>
         <Button
           aria-label='Redo stroke'
@@ -343,7 +343,7 @@ export function SignaturePad({
           type='button'
           variant='ghost'
         >
-          <Redo2 className='size-4' />
+          <Icons.redo className='size-4' />
         </Button>
       </div>
       <Button
@@ -355,7 +355,7 @@ export function SignaturePad({
         type='button'
         variant='ghost'
       >
-        <Eraser className='size-4' />
+        <Icons.eraser className='size-4' />
       </Button>
     </div>
   )

@@ -1,8 +1,8 @@
 'use client'
 
-import { ArrowRight, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
+import { Icons } from '@/components/icons/icons'
 import {
   InputGroup,
   InputGroupAddon,
@@ -47,7 +47,7 @@ export function SearchRedirectInput({
       )}
     >
       <InputGroupAddon className='border-0 text-muted-foreground'>
-        <Search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
+        <Icons.search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
       </InputGroupAddon>
       <InputGroupInput
         className='text-sm'
@@ -77,7 +77,7 @@ export function SearchRedirectInput({
           size='icon-sm'
           variant={'default'}
         >
-          <ArrowRight className='size-3.5 transition-transform group-hover/button:-rotate-45' />
+          <Icons.arrowRight className='size-3.5 transition-transform group-hover/button:-rotate-45' />
         </InputGroupButton>
       </InputGroupAddon>
     </InputGroup>

@@ -1,4 +1,4 @@
-import { BadgeCheckIcon } from 'lucide-react'
+import { Icons } from '@/components/icons/icons'
 import type { SoftwareItem } from '@/types'
 import { Logo } from './logo'
 
@@ -21,7 +21,7 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
         </div>
         {featured && (
           <div className='absolute -top-1 -right-1 rounded-full bg-primary p-1'>
-            <BadgeCheckIcon className='size-3 text-primary-foreground' />
+            <Icons.verified className='size-3 text-primary-foreground' />
           </div>
         )}
       </div>

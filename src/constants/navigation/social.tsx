@@ -3,7 +3,7 @@ import type { Social } from '@/types'
 
 export const socials: Social[] = [
   {
-    icon: <Icons.gitHub />,
+    icon: <Icons.github />,
     name: 'GitHub',
     url: 'https://github.com/techwithanirudh',
     description: 'Check out my open source projects and contributions',

@@ -8,9 +8,9 @@ import {
   SearchDialogListItem,
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
-import { Search } from 'lucide-react'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { Fragment, type ReactNode, useEffect } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import {
   InputGroup,
@@ -114,7 +114,7 @@ export function SearchClient() {
           >
             <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none'>
               <InputGroupAddon className='border-0 text-muted-foreground'>
-                <Search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
+                <Icons.search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
               </InputGroupAddon>
               <InputGroupInput
                 className={cn('text-sm')}

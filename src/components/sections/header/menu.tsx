@@ -16,8 +16,8 @@ import {
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import type { LinkItemType } from 'fumadocs-ui/layouts/shared'
-import { Search } from 'lucide-react'
 import type { ComponentProps, ComponentPropsWithoutRef } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
@@ -189,7 +189,7 @@ export const SearchToggle = ({
       }}
       type='button'
     >
-      <Search />
+      <Icons.search />
     </button>
   )
 }
@@ -219,7 +219,7 @@ export const LargeSearchToggle = ({
         setOpenSearch(true)
       }}
     >
-      <Search className='size-4' />
+      <Icons.search className='size-4' />
       {text.search}
       <div className='ms-auto inline-flex gap-0.5'>
         {hotKey.map((key, i) => (

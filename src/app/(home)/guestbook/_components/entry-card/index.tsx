@@ -1,7 +1,6 @@
 'use client'
 
 import { formatDistanceToNow } from 'date-fns'
-import { BadgeCheck } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
@@ -138,7 +137,7 @@ export const GuestbookEntryCard = ({
           <h3 className='flex items-center gap-1.5 font-medium text-sm'>
             {entry.name}
             {entry.role === 'admin' ? (
-              <BadgeCheck
+              <Icons.verified
                 aria-label='Verified admin'
                 className='size-4 text-primary transition-transform hover:scale-125'
               />

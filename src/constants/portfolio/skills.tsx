@@ -1,11 +1,10 @@
-import { BrainCircuitIcon, Code2Icon, LayersIcon } from 'lucide-react'
 import { Icons } from '@/components/icons/icons'
 import type { Skill } from '@/types'
 
 export const skills: Skill[] = [
   {
     id: 1,
-    Icon: Code2Icon,
+    Icon: Icons.code,
     title: 'Web Development',
     description:
       'Building modern web apps with Next.js, React, TypeScript, and UI frameworks.',
@@ -13,14 +12,14 @@ export const skills: Skill[] = [
   },
   {
     id: 2,
-    Icon: BrainCircuitIcon,
+    Icon: Icons.brain,
     title: 'AI & Machine Learning',
     description: 'Exploring AI features with Python, OpenCV, and LLMs.',
     size: 'sm',
   },
   {
     id: 3,
-    Icon: LayersIcon,
+    Icon: Icons.layers,
     title: 'Full Stack Development',
     description:
       'Creating end-to-end solutions with Node.js, TypeScript, databases, and cloud technologies.',

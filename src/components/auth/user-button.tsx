@@ -81,10 +81,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
 
       <DropdownMenuContent
         align='start'
-        className={cn(
-          'w-fit min-w-56 max-w-64',
-          classNames?.content?.base
-        )}
+        className={cn('w-fit min-w-56 max-w-64', classNames?.content?.base)}
         onCloseAutoFocus={(e) => e.preventDefault()}
         side='top'
       >
