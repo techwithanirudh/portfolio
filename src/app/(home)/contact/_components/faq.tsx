@@ -65,11 +65,11 @@ export const FAQ = () => (
             delay={0.05 * index}
             duration={0.25}
             initial={{ opacity: 0, translateY: -6 }}
-            key={`${item.question}-${index}`}
+            key={item.question}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <AccordionItem value={`index-${index}`}>
-              <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline data-[state=open]:bg-card'>
+              <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline aria-expanded:bg-card'>
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className='p-4'>{item.answer}</AccordionContent>
