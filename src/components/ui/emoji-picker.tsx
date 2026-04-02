@@ -159,4 +159,4 @@ function EmojiPickerFooter({
   )
 }
 
-export { EmojiPicker, EmojiPickerSearch, EmojiPickerContent, EmojiPickerFooter }
+export { EmojiPicker, EmojiPickerContent, EmojiPickerFooter, EmojiPickerSearch }
