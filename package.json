@@ -10,7 +10,7 @@
     "postbuild": "next-sitemap --config next-sitemap.config.ts",
     "dev": "next dev",
     "start": "next start",
-    "check": "ultracite check .",
+    "check": "ultracite check",
     "check:unsafe": "ultracite fix --unsafe true .",
     "check:write": "ultracite fix .",
     "check:links": "bun run ./scripts/lint.ts",
@@ -102,7 +102,7 @@
     "zod": "4.3.6"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.10",
+    "@biomejs/biome": "2.4.9",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@commitlint/types": "^20.5.0",

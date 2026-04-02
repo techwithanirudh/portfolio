@@ -58,7 +58,9 @@
           "fix": "safe",
           "level": "info",
           "options": {
-            "functions": ["cn"]
+            "functions": [
+              "cn"
+            ]
           }
         },
         "noLeakedRender": "off"
