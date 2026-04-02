@@ -46,7 +46,7 @@ export function SearchRedirectInput({
         className
       )}
     >
-      <InputGroupAddon className='border-0 text-muted-foreground'>
+      <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
         <Icons.search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
       </InputGroupAddon>
       <InputGroupInput
