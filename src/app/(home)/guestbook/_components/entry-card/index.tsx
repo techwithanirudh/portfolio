@@ -139,7 +139,7 @@ export const GuestbookEntryCard = ({
             {entry.role === 'admin' ? (
               <Icons.verifiedAdmin
                 aria-label='Verified admin'
-                className='size-4 text-primary transition-transform hover:scale-125'
+                className='icon-pop size-4 text-primary'
               />
             ) : null}
           </h3>

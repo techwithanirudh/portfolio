@@ -28,7 +28,7 @@ export const Hero = () => (
             <TooltipTrigger asChild>
               <a
                 aria-label={social.name}
-                className='flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors transition-transform hover:scale-125 hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
+                className='[&_svg]:icon-pop flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
                 href={social.url}
                 key={social.name}
                 rel='noopener noreferrer'

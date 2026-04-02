@@ -31,12 +31,12 @@ export const PostCard: React.FC<PostCardProps> = ({
         </p>
         <div className='group mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
           <span className='inline-flex items-center gap-1 capitalize'>
-            <Icons.user className='size-4 transition-transform hover:scale-125' />
+            <Icons.user className='icon-pop size-4' />
             {author}
           </span>
           <span>•</span>
           <span className='inline-flex items-center gap-1'>
-            <Icons.calendar className='size-4 transition-transform hover:scale-125' />
+            <Icons.calendar className='icon-pop size-4' />
             {date}
           </span>
         </div>

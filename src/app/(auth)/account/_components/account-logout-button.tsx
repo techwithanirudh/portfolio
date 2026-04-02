@@ -10,19 +10,17 @@ export function AccountLogoutButton() {
 
   return (
     <Button
-      className='group self-start rounded-none'
+      className='self-start'
       onClick={async () => {
         await signOut()
         router.push('/')
         router.refresh()
       }}
+      shape='square'
       variant='destructive'
     >
       <span>Log Out</span>
-      <Icons.logOut
-        className='size-4 transition-transform group-hover:-rotate-45'
-        data-icon='inline-end'
-      />
+      <Icons.logOut className='icon-arrow size-4' data-icon='inline-end' />
     </Button>
   )
 }

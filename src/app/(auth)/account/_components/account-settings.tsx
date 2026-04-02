@@ -38,7 +38,7 @@ interface AccountSettingsProps {
 
 export function AccountSettings({ user }: AccountSettingsProps) {
   return (
-    <Card className='gap-0 divide-y divide-dashed rounded-none py-0'>
+    <Card className='dashed-stack' variant='flat'>
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Avatar</span>
@@ -108,11 +108,11 @@ function EditNameDialog({ name }: { name: string }) {
       open={open}
     >
       <AlertDialogTrigger asChild>
-        <Button className='rounded-none' size='sm' variant='secondary'>
+        <Button shape='square' size='sm' variant='secondary'>
           Edit
         </Button>
       </AlertDialogTrigger>
-      <AlertDialogContent className='rounded-none border border-border border-dashed shadow-none ring-0'>
+      <AlertDialogContent className='dashed-frame rounded-none shadow-none ring-0'>
         <AlertDialogHeader>
           <AlertDialogTitle>Edit Name</AlertDialogTitle>
           <AlertDialogDescription>
@@ -133,9 +133,9 @@ function EditNameDialog({ name }: { name: string }) {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      className='rounded-none'
                       maxLength={32}
                       placeholder='Your name'
+                      shape='square'
                       {...field}
                       disabled={form.formState.isSubmitting}
                     />
@@ -148,16 +148,16 @@ function EditNameDialog({ name }: { name: string }) {
         </Form>
         <AlertDialogFooter>
           <AlertDialogCancel
-            className='rounded-none'
             disabled={form.formState.isSubmitting}
+            shape='square'
             variant='secondary'
           >
             Cancel
           </AlertDialogCancel>
           <Button
-            className='rounded-none'
             disabled={form.formState.isSubmitting}
             form='edit-name-form'
+            shape='square'
             type='submit'
           >
             {form.formState.isSubmitting && (

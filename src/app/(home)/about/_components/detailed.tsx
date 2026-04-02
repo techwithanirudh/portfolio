@@ -46,12 +46,12 @@ export default function Detailed(): React.ReactElement {
             <Link
               className={cn(
                 buttonVariants({ variant: 'link', size: 'lg' }),
-                'group !p-0 h-fit'
+                '!p-0 h-fit'
               )}
               href='/work'
             >
               View Work
-              <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
+              <Icons.arrowRight className='icon-arrow size-4' />
             </Link>
           </div>
         </ViewAnimation>

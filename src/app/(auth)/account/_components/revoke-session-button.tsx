@@ -25,11 +25,11 @@ export function RevokeSessionButton(props: { token: string }) {
 
   return (
     <Button
-      className='rounded-none'
       disabled={status === 'executing'}
       onClick={() => {
         execute({ token })
       }}
+      shape='square'
       size='sm'
       variant='destructive'
     >

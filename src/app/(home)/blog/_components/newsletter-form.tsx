@@ -57,7 +57,7 @@ export const NewsletterForm = () => {
           </div>
 
           <Button
-            className='group size-auto w-15 rounded-md rounded-l-none px-3'
+            className='size-auto w-15 rounded-md rounded-l-none px-3'
             disabled={action.status === 'executing'}
             size='icon'
             type='submit'
@@ -65,7 +65,7 @@ export const NewsletterForm = () => {
             {action.status === 'executing' ? (
               <Icons.spinner className='size-4 animate-spin' />
             ) : (
-              <Icons.send className='size-4 transition-transform group-hover:-rotate-45' />
+              <Icons.send className='icon-arrow size-4' />
             )}
           </Button>
         </div>

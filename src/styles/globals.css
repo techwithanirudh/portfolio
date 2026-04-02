@@ -131,6 +131,46 @@
     @apply divide-border/70 dark:divide-border;
   }
 
+  .dashed-frame {
+    @apply border border-border border-dashed;
+  }
+
+  .dashed-stack {
+    @apply divide-y divide-dashed divide-border;
+  }
+
+  .divider-top-dashed {
+    @apply w-full border-border border-t border-dashed;
+  }
+
+  .divider-bottom-dashed {
+    @apply border-border border-b border-dashed;
+  }
+
+  .icon-pop {
+    @apply transition-transform hover:scale-125;
+  }
+
+  .icon-tilt {
+    @apply transition-transform hover:rotate-12 hover:scale-125;
+  }
+
+  .icon-tilt-reverse {
+    @apply transition-transform hover:-rotate-12 hover:scale-125;
+  }
+
+  .icon-turn {
+    @apply transition-transform hover:rotate-90 hover:scale-125;
+  }
+
+  .icon-arrow {
+    @apply transition-transform group-hover/interactive:-rotate-45 group-hover/button:-rotate-45;
+  }
+
+  .icon-spin-90 {
+    @apply transition-transform group-hover/button:rotate-90;
+  }
+
   .typography-hero {
     max-width: var(--typography-hero-width);
   }

@@ -17,7 +17,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           description='A snapshot of recent projects and collaborations.'
           title='Work'
         />
-        <div className='w-full border-border border-t border-dashed'>
+        <div className='divider-top-dashed'>
           <div className='grid grid-cols-1 divide-x divide-dashed divide-border text-left sm:grid-cols-2 [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
             {works.map((work, index) => (
               <ViewAnimation
@@ -47,13 +47,14 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           >
             <Link
               className={buttonVariants({
+                shape: 'square',
                 variant: 'default',
-                className: 'group w-full rounded-none py-4 sm:py-8',
+                className: 'w-full py-4 sm:py-8',
               })}
               href='/work'
             >
               View More
-              <Icons.arrowRight className='size-5 transition-transform group-hover:-rotate-45' />
+              <Icons.arrowRight className='icon-arrow size-5' />
             </Link>
           </ViewAnimation>
         </div>

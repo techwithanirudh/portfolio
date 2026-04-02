@@ -114,7 +114,7 @@ const ContactFormInner = () => {
           )}
         />
         <Button
-          className='group w-full'
+          className='w-full'
           disabled={action.status === 'executing'}
           type='submit'
         >
@@ -125,10 +125,7 @@ const ContactFormInner = () => {
               data-icon='inline-end'
             />
           ) : (
-            <Icons.send
-              className='size-4 transition-transform group-hover:-rotate-45'
-              data-icon='inline-end'
-            />
+            <Icons.send className='icon-arrow size-4' data-icon='inline-end' />
           )}
         </Button>
         {action.status === 'hasSucceeded' && (

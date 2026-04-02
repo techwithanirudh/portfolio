@@ -46,8 +46,11 @@ export function SearchRedirectInput({
         className
       )}
     >
-      <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
-        <Icons.search className='size-4 transition-transform hover:rotate-90 hover:scale-125' />
+      <InputGroupAddon
+        className='border-0 pl-3 text-muted-foreground'
+        focusInputOnClick
+      >
+        <Icons.search className='icon-turn size-4' />
       </InputGroupAddon>
       <InputGroupInput
         className='text-sm'
@@ -72,12 +75,12 @@ export function SearchRedirectInput({
       >
         <InputGroupButton
           aria-label='Submit search'
-          className='group/button rounded-none'
           onClick={() => handleSubmit(value)}
+          shape='square'
           size='icon-sm'
           variant={'default'}
         >
-          <Icons.arrowRight className='size-3.5 transition-transform group-hover/button:-rotate-45' />
+          <Icons.arrowRight className='icon-arrow size-3.5' />
         </InputGroupButton>
       </InputGroupAddon>
     </InputGroup>

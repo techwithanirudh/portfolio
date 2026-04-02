@@ -22,9 +22,10 @@ export const BanToggleActionButton = ({
       <TooltipTrigger asChild>
         <Button
           aria-label={isBanned ? 'Unban user' : 'Ban user'}
-          className='rounded-none text-destructive'
+          className='text-destructive'
           disabled={disabled}
           onClick={onClick}
+          shape='square'
           size='icon'
           variant='ghost'
         >

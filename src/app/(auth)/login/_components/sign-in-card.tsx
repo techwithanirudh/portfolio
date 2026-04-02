@@ -71,14 +71,13 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
                 )}
               >
                 <Button
-                  className={cn(
-                    'w-full gap-2 rounded-none border border-border border-dashed shadow-none'
-                  )}
+                  className='w-full gap-2'
                   disabled={isLoading}
                   onClick={() => {
                     signInWithProvider('google')
                   }}
-                  variant='outline'
+                  shape='square'
+                  variant='dashed'
                 >
                   {isLoading ? (
                     <Icons.spinner className='size-4 animate-spin' />
@@ -88,14 +87,13 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
                   Sign in with Google
                 </Button>
                 <Button
-                  className={cn(
-                    'w-full gap-2 rounded-none border border-border border-dashed shadow-none'
-                  )}
+                  className='w-full gap-2'
                   disabled={isLoading}
                   onClick={() => {
                     signInWithProvider('github')
                   }}
-                  variant='outline'
+                  shape='square'
+                  variant='dashed'
                 >
                   {isLoading ? (
                     <Icons.spinner className='size-4 animate-spin' />

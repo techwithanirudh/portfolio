@@ -28,12 +28,9 @@ export function UserAvatar({
 
   return (
     <Avatar
-      className={cn(
-        'rounded-md after:rounded-md after:border-transparent dark:after:border-transparent',
-        classNames?.base,
-        className
-      )}
+      className={cn('rounded-md after:rounded-md', classNames?.base, className)}
       key={src}
+      outlined={false}
       {...props}
     >
       <AvatarImage
