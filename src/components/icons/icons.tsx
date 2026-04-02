@@ -1,19 +1,50 @@
-import type { Icon as LucideIcon, LucideProps } from 'lucide-react'
+import {
+  CommentIcon,
+  FeedPublicIcon,
+  GitBranchIcon,
+  GitCommitIcon,
+  GitPullRequestIcon,
+  IssueClosedIcon,
+  IssueOpenedIcon,
+  IssueReopenedIcon,
+  IssueTrackedByIcon,
+  IssueTracksIcon,
+  MarkGithubIcon,
+  RepoForkedIcon,
+  RepoIcon,
+  StarIcon,
+  TagIcon,
+} from '@primer/octicons-react'
+import type { LucideIcon, LucideProps } from 'lucide-react'
 import {
   AlertTriangle,
+  ArrowDown,
+  ArrowDownLeft,
+  ArrowDownRight,
   ArrowLeft,
   ArrowRight,
+  ArrowUp,
+  ArrowUpLeft,
   ArrowUpRight,
   AtSign,
+  BadgeCheck,
+  Ban,
+  BotMessageSquare,
+  BrainCircuit,
+  Briefcase,
+  CalendarIcon,
   Check,
   CheckCircle,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   CircleDollarSign,
   ClipboardCheck,
   Code,
   CreditCard,
+  DownloadIcon,
+  Eraser,
   File,
   FileText,
   Globe,
@@ -22,31 +53,47 @@ import {
   Image,
   Info,
   Laptop,
+  Layers,
+  LinkIcon,
   Loader2,
   LogIn,
   LogOut,
   Mail,
   Menu,
   MessageSquare,
+  MonitorIcon,
   Moon,
   MoreVertical,
   Newspaper,
+  NotebookPen,
+  PawPrint,
   Pencil,
   PhoneCall,
   Pizza,
   Plus,
+  Quote,
+  Redo2,
+  RefreshCw,
   Rss,
-  SendHorizonal,
+  Search,
+  SendHorizontal,
   Settings,
   ShareIcon,
+  SmartphoneIcon,
+  SquareIcon,
+  Star,
   SunMedium,
+  TabletIcon,
   Tag,
   Tags,
   Trash,
+  TvIcon,
+  Undo2,
   User,
+  Wrench,
   X,
 } from 'lucide-react'
-import type { ComponentProps, JSX } from 'react'
+import type { JSX } from 'react'
 import { CssOld } from '@/components/icons/brands/css-old'
 import { DrizzleOrmDark } from '@/components/icons/brands/drizzle-orm-dark'
 import { DrizzleOrmLight } from '@/components/icons/brands/drizzle-orm-light'
@@ -67,16 +114,30 @@ import { Tailwindcss } from '@/components/icons/brands/tailwindcss'
 import { Typescript } from '@/components/icons/brands/typescript'
 import { cn } from '@/lib/utils'
 
-export type Icon = typeof LucideIcon
+type IconProps = LucideProps
+type SvgIcon = (props: IconProps) => JSX.Element
+export type Icon = LucideIcon | SvgIcon
 
-type SvgIcon = (props: ComponentProps<'svg'>) => JSX.Element
+const getSvgSizeProps = ({
+  height,
+  size,
+  width,
+}: Pick<IconProps, 'height' | 'size' | 'width'>) => ({
+  height: height ?? size ?? width ?? '1em',
+  width: width ?? size ?? height ?? '1em',
+})
 
 const themedIcon = (LightIcon: SvgIcon, DarkIcon: SvgIcon): SvgIcon => {
-  const Themed = ({ className, ...props }: ComponentProps<'svg'>) => (
+  const Themed = ({ className, height, size, width, ...props }: IconProps) => (
     <span className='inline-flex'>
-      <LightIcon {...props} className={cn('dark:hidden', className)} />
+      <LightIcon
+        {...props}
+        {...getSvgSizeProps({ height, size, width })}
+        className={cn('dark:hidden', className)}
+      />
       <DarkIcon
         {...props}
+        {...getSvgSizeProps({ height, size, width })}
         className={cn('hidden dark:inline-flex', className)}
       />
     </span>
@@ -90,10 +151,13 @@ export const Icons = {
   close: X,
   menu: Menu,
   code: Code,
+  work: Briefcase,
+  blog: NotebookPen,
   pencil: Pencil,
   copied: ClipboardCheck,
   success: CheckCircle,
   messageSquare: MessageSquare,
+  ai: BotMessageSquare,
   spinner: Loader2,
   atSign: AtSign,
   globe: Globe,
@@ -117,6 +181,9 @@ export const Icons = {
   user: User,
   arrowRight: ArrowRight,
   arrowLeft: ArrowLeft,
+  arrowUp: ArrowUp,
+  arrowDown: ArrowDown,
+  arrowUpLeft: ArrowUpLeft,
   help: HelpCircle,
   pizza: Pizza,
   sun: SunMedium,
@@ -125,12 +192,38 @@ export const Icons = {
   home: Home,
   info: Info,
   arrowUpRight: ArrowUpRight,
+  arrowDownLeft: ArrowDownLeft,
+  arrowDownRight: ArrowDownRight,
   chevronDown: ChevronDown,
+  chevronUp: ChevronUp,
   mail: Mail,
-  send: SendHorizonal,
+  send: SendHorizontal,
   pricing: CircleDollarSign,
   phone: PhoneCall,
-  gitHub: ({ ...props }: LucideProps) => (
+  calendar: CalendarIcon,
+  download: DownloadIcon,
+  search: Search,
+  layers: Layers,
+  desktop: MonitorIcon,
+  mobile: SmartphoneIcon,
+  tablet: TabletIcon,
+  tv: TvIcon,
+  link: LinkIcon,
+  brain: BrainCircuit,
+  wrench: Wrench,
+  quote: Quote,
+  refresh: RefreshCw,
+  square: SquareIcon,
+  undo: Undo2,
+  redo: Redo2,
+  eraser: Eraser,
+  verified: CheckCircle,
+  verifiedAdmin: BadgeCheck,
+  featured: Star,
+  ban: Ban,
+  userBlocked: Ban,
+  pawPrint: PawPrint,
+  github: ({ height, size, width, ...props }: IconProps) => (
     <svg
       aria-hidden='true'
       data-icon='github'
@@ -139,6 +232,7 @@ export const Icons = {
       role='img'
       viewBox='0 0 496 512'
       xmlns='http://www.w3.org/2000/svg'
+      {...getSvgSizeProps({ height, size, width })}
       {...props}
     >
       <path
@@ -147,15 +241,14 @@ export const Icons = {
       />
     </svg>
   ),
-  google: ({ ...props }: LucideProps) => (
+  google: ({ height, size, width, ...props }: IconProps) => (
     <svg
       aria-hidden='true'
       focusable='false'
-      height='1em'
       preserveAspectRatio='xMidYMid'
       viewBox='0 0 256 262'
-      width='1em'
       xmlns='http://www.w3.org/2000/svg'
+      {...getSvgSizeProps({ height, size, width })}
       {...props}
     >
       <path
@@ -178,37 +271,34 @@ export const Icons = {
   ),
   check: Check,
   rss: Rss,
-  twitter: ({ ...props }: LucideProps) => (
+  x: ({ height, size, width, ...props }: IconProps) => (
     <svg
       fill='currentColor'
-      height='1em'
       viewBox='0 0 24 24'
-      width='1em'
       xmlns='http://www.w3.org/2000/svg'
+      {...getSvgSizeProps({ height, size, width })}
       {...props}
     >
       <path d='M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z' />
     </svg>
   ),
-  linkedin: ({ ...props }: LucideProps) => (
+  linkedin: ({ height, size, width, ...props }: IconProps) => (
     <svg
       fill='currentColor'
-      height='1em'
       viewBox='0 0 24 24'
-      width='1em'
       xmlns='http://www.w3.org/2000/svg'
+      {...getSvgSizeProps({ height, size, width })}
       {...props}
     >
       <path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' />
     </svg>
   ),
-  youtube: ({ ...props }: LucideProps) => (
+  youtube: ({ height, size, width, ...props }: IconProps) => (
     <svg
       fill='currentColor'
-      height='1em'
       viewBox='0 0 24 24'
-      width='1em'
       xmlns='http://www.w3.org/2000/svg'
+      {...getSvgSizeProps({ height, size, width })}
       {...props}
     >
       <path d='M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z' />
@@ -227,4 +317,19 @@ export const Icons = {
   shadcn: themedIcon(ShadcnUi, ShadcnUiDark),
   hono: Hono,
   drizzleOrm: themedIcon(DrizzleOrmLight, DrizzleOrmDark),
+  githubMark: MarkGithubIcon,
+  gitCommit: GitCommitIcon,
+  gitPullRequest: GitPullRequestIcon,
+  issueClosed: IssueClosedIcon,
+  issueOpened: IssueOpenedIcon,
+  issueReopened: IssueReopenedIcon,
+  issueTrackedBy: IssueTrackedByIcon,
+  issueTracks: IssueTracksIcon,
+  comment: CommentIcon,
+  feedPublic: FeedPublicIcon,
+  gitBranch: GitBranchIcon,
+  repo: RepoIcon,
+  repoForked: RepoForkedIcon,
+  star: StarIcon,
+  gitTag: TagIcon,
 }

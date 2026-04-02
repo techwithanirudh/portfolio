@@ -3,13 +3,13 @@ import { Icons } from '@/components/icons/icons'
 
 export const linkItems: LinkItemType[] = [
   {
-    icon: <Icons.info />,
+    icon: <Icons.user />,
     text: 'About',
     url: '/about',
     active: 'url',
   },
   {
-    icon: <Icons.phone />,
+    icon: <Icons.mail />,
     text: 'Contact',
     url: '/contact',
     active: 'url',
@@ -21,14 +21,14 @@ export const linkItems: LinkItemType[] = [
     active: 'url',
   },
   {
-    icon: <Icons.code />,
+    icon: <Icons.work />,
     text: 'Work',
     url: '/work',
     active: 'nested-url',
   },
   {
     text: 'Blog',
-    icon: <Icons.posts />,
+    icon: <Icons.blog />,
     url: '/blog',
     active: 'nested-url',
   },

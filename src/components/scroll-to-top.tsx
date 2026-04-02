@@ -1,6 +1,5 @@
 'use client'
 
-import { ArrowUp } from 'lucide-react'
 import {
   AnimatePresence,
   motion,
@@ -8,6 +7,7 @@ import {
   useScroll,
 } from 'motion/react'
 import { useState } from 'react'
+import { Icons } from '@/components/icons/icons'
 
 export function ScrollToTop() {
   const [show, setShow] = useState(false)
@@ -37,7 +37,7 @@ export function ScrollToTop() {
             onClick={scrollToTop}
             type='button'
           >
-            <ArrowUp className='size-5' />
+            <Icons.arrowUp className='size-5' />
           </button>
         </motion.div>
       )}

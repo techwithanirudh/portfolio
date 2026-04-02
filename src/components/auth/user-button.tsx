@@ -21,17 +21,17 @@ import { UserAvatar } from './user-avatar'
 
 export interface UserButtonClassNames {
   base?: string
-  skeleton?: string
-  trigger?: {
-    base?: string
-    avatar?: UserAvatarClassNames
-    skeleton?: string
-  }
   content?: {
     base?: string
     avatar?: UserAvatarClassNames
     menuItem?: string
     separator?: string
+  }
+  skeleton?: string
+  trigger?: {
+    base?: string
+    avatar?: UserAvatarClassNames
+    skeleton?: string
   }
 }
 
@@ -52,7 +52,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         <Button
           aria-label={'User Menu'}
           className={cn(
-            'size-auto rounded-md border-none bg-transparent p-0 hover:bg-accent dark:hover:bg-accent',
+            'size-auto rounded-md border-none p-0',
             'bg-secondary hover:bg-secondary/80',
             classNames?.trigger?.base
           )}
@@ -81,7 +81,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
 
       <DropdownMenuContent
         align='start'
-        className={cn('max-w-64', classNames?.content?.base)}
+        className={cn('w-fit min-w-56 max-w-64', classNames?.content?.base)}
         onCloseAutoFocus={(e) => e.preventDefault()}
         side='top'
       >

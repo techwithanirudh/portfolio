@@ -9,8 +9,8 @@ import Balancer from 'react-wrap-balancer'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
-import { InlineTocBlock } from '@/components/mdx-layout'
 import { Mermaid } from '@/components/mdx/mermaid'
+import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
 import { Button } from '@/components/ui/button'
@@ -37,7 +37,7 @@ function Header(props: { page: MDXPage }) {
     links.push({
       href: page.data.github,
       label: 'View Source',
-      icon: <Icons.gitHub className='size-4' />,
+      icon: <Icons.github className='size-4' />,
     })
   }
 

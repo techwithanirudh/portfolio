@@ -1,6 +1,6 @@
 export interface Experience {
-  role: string
   company: string
-  timeframe: string
+  role: string
   summary: string
+  timeframe: string
 }

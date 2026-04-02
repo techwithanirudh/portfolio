@@ -15,7 +15,7 @@ export default function Contact(): React.ReactElement {
   return (
     <Wrapper>
       <SplitSection>
-        <SplitSectionSidebar>
+        <SplitSectionSidebar className='px-6 py-14'>
           <ViewAnimation
             blur={false}
             initial={{ opacity: 0, translateY: -6 }}
@@ -25,7 +25,7 @@ export default function Contact(): React.ReactElement {
           </ViewAnimation>
         </SplitSectionSidebar>
 
-        <SplitSectionContent className='flex w-full items-center px-6 py-8'>
+        <SplitSectionContent className='flex w-full items-center px-6 py-14'>
           <ViewAnimation
             blur={false}
             className='w-full'

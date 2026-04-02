@@ -1,0 +1,10 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "command": "bun check:write --skip=correctness/noUnusedImports",
+        "type": "command"
+      }
+    ]
+  }
+}

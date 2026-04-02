@@ -1,14 +1,14 @@
-import { CalendarIcon, UserIcon } from 'lucide-react'
 import Link from 'next/link'
 import type React from 'react'
+import { Icons } from '@/components/icons/icons'
 
 interface PostCardProps {
-  title: string
-  description: string
-  url: string
-  date: string
   author: string
+  date: string
+  description: string
   slugs: string[]
+  title: string
+  url: string
 }
 
 export const PostCard: React.FC<PostCardProps> = ({
@@ -29,14 +29,14 @@ export const PostCard: React.FC<PostCardProps> = ({
         <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
           {description}
         </p>
-        <div className='group mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
+        <div className='mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
           <span className='inline-flex items-center gap-1 capitalize'>
-            <UserIcon className='size-4 transition-transform hover:scale-125' />
+            <Icons.user className='icon-pop size-4' />
             {author}
           </span>
           <span>•</span>
           <span className='inline-flex items-center gap-1'>
-            <CalendarIcon className='size-4 transition-transform hover:scale-125' />
+            <Icons.calendar className='icon-pop size-4' />
             {date}
           </span>
         </div>

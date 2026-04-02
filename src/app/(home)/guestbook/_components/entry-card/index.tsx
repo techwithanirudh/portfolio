@@ -1,7 +1,6 @@
 'use client'
 
 import { formatDistanceToNow } from 'date-fns'
-import { BadgeCheck } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
@@ -27,8 +26,8 @@ import { BanUserModal } from './ban-user-modal'
 import { DeleteEntryModal } from './delete-entry-modal'
 
 interface GuestbookEntryCardProps {
-  entry: GuestbookEntryItem
   currentUserId: string | null
+  entry: GuestbookEntryItem
   isAdmin: boolean
   isSignedIn: boolean
 }
@@ -138,9 +137,9 @@ export const GuestbookEntryCard = ({
           <h3 className='flex items-center gap-1.5 font-medium text-sm'>
             {entry.name}
             {entry.role === 'admin' ? (
-              <BadgeCheck
+              <Icons.verifiedAdmin
                 aria-label='Verified admin'
-                className='size-4 text-primary transition-transform hover:scale-125'
+                className='icon-pop size-4 text-primary'
               />
             ) : null}
           </h3>

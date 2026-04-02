@@ -90,66 +90,79 @@ export const software: SoftwareItem[] = [
   {
     name: 'Alcove',
     description: 'Notch dock utility',
+    logo: '/images/uses/software/alcove.png',
     url: 'https://tryalcove.com',
   },
   {
     name: 'Amphetamine',
     description: 'Keeps Mac awake',
+    logo: '/images/uses/software/amphetamine.png',
     url: 'https://apps.apple.com/app/amphetamine/id937984704',
   },
   {
     name: 'Antinote',
     description: 'Quick notes',
+    logo: '/images/uses/software/antinote.png',
     url: 'https://antinote.io',
   },
   {
     name: 'Bartender',
     description: 'Menu bar organizer',
+    logo: '/images/uses/software/bartender.png',
     url: 'https://www.macbartender.com',
   },
   {
     name: 'Beeper',
     description: 'Unified messaging',
+    logo: '/images/uses/software/beeper.webp',
     url: 'https://www.beeper.com',
   },
   {
     name: 'BetterDisplay',
     description: 'Display management',
+    logo: '/images/uses/software/betterdisplay.png',
     url: 'https://betterdisplay.pro',
   },
   {
     name: 'CleanShot X',
     description: 'Screen capture and recording',
+    logo: '/images/uses/software/cleanshotx.png',
     url: 'https://cleanshot.com',
   },
   {
     name: 'Claude Code',
     description: 'AI coding assistant',
+    logo: '/images/uses/software/claude.svg',
     url: 'https://www.anthropic.com/claude-code',
   },
   {
     name: 'Conductor',
     description: 'Utility app',
+    logo: '/images/uses/software/conductor.png',
     url: 'https://conductor.build',
   },
   {
     name: 'Craft',
     description: 'Notes and documents',
+    logo: '/images/uses/software/craft.png',
     url: 'https://www.craft.do',
   },
   {
     name: 'Dia',
     description: 'Browser',
+    logo: '/images/uses/software/dia.png',
     url: 'https://diabrowser.com',
   },
   {
     name: 'Downie',
     description: 'Video downloader',
+    logo: '/images/uses/software/downie.png',
     url: 'https://software.charliemonroe.net/downie/',
   },
   {
     name: 'Dropover',
     description: 'Drag and drop shelf',
+    logo: '/images/uses/software/dropover.png',
     url: 'https://dropoverapp.com',
   },
   {
@@ -161,26 +174,31 @@ export const software: SoftwareItem[] = [
   {
     name: 'Goodnotes',
     description: 'Digital notebook',
+    logo: '/images/uses/software/goodnotes.png',
     url: 'https://www.goodnotes.com',
   },
   {
     name: 'IINA',
     description: 'Media player',
+    logo: '/images/uses/software/iina.png',
     url: 'https://iina.io',
   },
   {
     name: 'LookAway',
     description: 'Break reminders',
+    logo: '/images/uses/software/lookaway.png',
     url: 'https://lookaway.app',
   },
   {
     name: 'Loop',
     description: 'Window manager',
+    logo: '/images/uses/software/loop.png',
     url: 'https://github.com/MrKai77/Loop',
   },
   {
     name: 'Mole',
     description: 'Volume control per app',
+    logo: '/images/uses/software/mole.png',
     url: 'https://github.com/tw93/Mole',
   },
   {
@@ -193,31 +211,40 @@ export const software: SoftwareItem[] = [
   {
     name: 'Notion Calendar',
     description: 'Calendar client',
+    logo: '/images/uses/software/notion-calendar.webp',
     url: 'https://www.notion.com/product/calendar',
   },
   {
     name: 'OpenCode',
     description: 'Coding assistant',
+    logo: {
+      light: '/images/uses/software/opencode-light.svg',
+      dark: '/images/uses/software/opencode-dark.svg',
+    },
     url: 'https://opencode.ai',
   },
   {
     name: 'OrbStack',
     description: 'Containers and Linux VMs',
+    logo: '/images/uses/software/orbstack.png',
     url: 'https://orbstack.dev',
   },
   {
     name: 'Paste',
     description: 'Clipboard manager',
+    logo: '/images/uses/software/paste.png',
     url: 'https://pasteapp.io',
   },
   {
     name: 'Pictogram',
     description: 'Utility app',
+    logo: '/images/uses/software/pictogram.png',
     url: 'https://pictogramapp.com',
   },
   {
     name: 'PixelSnap',
     description: 'Screen measuring tool',
+    logo: '/images/uses/software/pixelsnap.png',
     url: 'https://pixelsnap.com',
   },
   {
@@ -236,6 +263,7 @@ export const software: SoftwareItem[] = [
   {
     name: 'Spark Mail',
     description: 'Email client',
+    logo: '/images/uses/software/spark-mail.png',
     url: 'https://sparkmailapp.com',
   },
   {
@@ -247,26 +275,31 @@ export const software: SoftwareItem[] = [
   {
     name: 'Supercharge',
     description: 'Mac productivity utilities',
+    logo: '/images/uses/software/supercharge.png',
     url: 'https://sindresorhus.com/supercharge',
   },
   {
     name: 'Termius',
     description: 'SSH client',
+    logo: '/images/uses/software/termius.webp',
     url: 'https://termius.com',
   },
   {
     name: 'Typefully',
     description: 'Writing and scheduling tool',
+    logo: '/images/uses/software/typefully.png',
     url: 'https://typefully.com',
   },
   {
     name: 'UTM',
     description: 'Virtual machines',
+    logo: '/images/uses/software/utm.png',
     url: 'https://mac.getutm.app',
   },
   {
     name: 'Vesktop',
     description: 'Discord client',
+    logo: '/images/uses/software/vesktop.svg',
     url: 'https://vesktop.dev',
   },
   {
@@ -279,17 +312,19 @@ export const software: SoftwareItem[] = [
   {
     name: 'Warp',
     description: 'Terminal',
-    logo: '/images/uses/software/warp.svg',
+    logo: '/images/uses/software/warp.png',
     url: 'https://warp.dev',
   },
   {
     name: 'Wispr Flow',
     description: 'Voice dictation',
+    logo: '/images/uses/software/wispr-flow.webp',
     url: 'https://wisprflow.ai',
   },
   {
     name: 'Yaak',
     description: 'API client',
+    logo: '/images/uses/software/yaak.png',
     url: 'https://yaak.app',
   },
 ]

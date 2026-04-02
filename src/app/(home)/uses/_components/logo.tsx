@@ -4,9 +4,9 @@ import type { Logo as LogoType } from '@/types'
 
 interface LogoProps {
   alt: string
+  className?: string
   logo?: LogoType
   size?: number
-  className?: string
 }
 
 export function Logo({ alt, logo, size = 44, className }: LogoProps) {
@@ -36,33 +36,39 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
 
   if (typeof logo === 'string') {
     return (
-      <div className={wrapper} style={{ height: size, width: size }}>
+      <div
+        className={cn(wrapper, 'relative overflow-hidden')}
+        style={{ height: size, width: size }}
+      >
         <Image
           alt={alt}
-          className='rounded'
-          height={size}
+          className='rounded-lg object-contain'
+          fill
+          sizes={`${size}px`}
           src={logo}
-          width={size}
         />
       </div>
     )
   }
 
   return (
-    <div className={wrapper} style={{ height: size, width: size }}>
+    <div
+      className={cn(wrapper, 'relative overflow-hidden')}
+      style={{ height: size, width: size }}
+    >
       <Image
         alt={alt}
-        className='rounded dark:hidden'
-        height={size}
+        className='rounded object-contain dark:hidden'
+        fill
+        sizes={`${size}px`}
         src={logo.light}
-        width={size}
       />
       <Image
         alt={alt}
-        className='hidden rounded dark:block'
-        height={size}
+        className='hidden rounded object-contain dark:block'
+        fill
+        sizes={`${size}px`}
         src={logo.dark}
-        width={size}
       />
     </div>
   )

@@ -3,13 +3,13 @@ import type { Social } from '@/types'
 
 export const socials: Social[] = [
   {
-    icon: <Icons.gitHub />,
+    icon: <Icons.github />,
     name: 'GitHub',
     url: 'https://github.com/techwithanirudh',
     description: 'Check out my open source projects and contributions',
   },
   {
-    icon: <Icons.twitter />,
+    icon: <Icons.x />,
     name: 'X (Twitter)',
     url: 'https://x.com/AnirudhWith',
     description: 'Follow me for tech updates and project announcements',

@@ -1,8 +1,8 @@
 'use client'
 
-import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import type { ComponentProps } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 
 type BackButtonProps = ComponentProps<typeof Button> & {
@@ -27,7 +27,7 @@ export function BackButton({
       variant='ghost'
       {...props}
     >
-      <ArrowLeft />
+      <Icons.arrowLeft />
       {!iconOnly && label}
     </Button>
   )

@@ -1,10 +1,10 @@
 export interface Author {
-  name: string
   image: string
+  name: string
 }
 
 export interface Testimonial {
-  title: string
-  description: string
   author: Author
+  description: string
+  title: string
 }

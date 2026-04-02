@@ -1,16 +1,16 @@
 export type Logo = string | { light: string; dark: string }
 
 export interface SoftwareItem {
-  name: string
   description: string
-  url: string
-  logo?: Logo
   featured?: boolean
+  logo?: Logo
+  name: string
+  url: string
 }
 
 export interface HardwareItem {
-  name: string
   description: string
-  url?: string
   image?: string
+  name: string
+  url?: string
 }

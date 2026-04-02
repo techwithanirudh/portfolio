@@ -17,8 +17,8 @@ const githubUrl = baseOptions.githubUrl ?? ''
 const githubUsername = githubUrl.split('/').filter(Boolean).at(-1)
 
 interface ContributionResponse {
-  total: Record<string, number>
   contributions: Activity[]
+  total: Record<string, number>
 }
 
 const getCachedContributions = unstable_cache(

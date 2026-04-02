@@ -5,11 +5,11 @@ import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 
 interface WorkCardProps {
-  title: string
   description: string
   image?: string | null
-  url: string
   slugs: string[]
+  title: string
+  url: string
 }
 
 export const WorkCard = ({
@@ -54,7 +54,7 @@ export const WorkCard = ({
         </div>
         <span className='inline-flex items-center gap-2 text-muted-foreground text-sm transition-colors group-hover:text-foreground'>
           View case study
-          <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
+          <Icons.arrowRight className='icon-arrow size-4' />
         </span>
       </div>
     </Link>

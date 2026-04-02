@@ -19,12 +19,12 @@ export default function NotFound() {
           </div>
           <Link
             className={buttonVariants({
-              className: 'group/button w-full',
+              className: 'w-full',
             })}
             href='/'
           >
             Go Home
-            <Icons.arrowRight className='size-4 transition-transform group-hover/button:-rotate-45' />
+            <Icons.arrowRight className='icon-arrow-button size-4' />
           </Link>
         </div>
       </div>

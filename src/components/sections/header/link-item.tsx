@@ -15,7 +15,6 @@ interface Filterable {
 }
 
 interface WithHref {
-  url: string
   /**
    * When the item is marked as active
    *
@@ -23,43 +22,42 @@ interface WithHref {
    */
   active?: 'url' | 'nested-url' | 'none'
   external?: boolean
+  url: string
 }
 
 export interface MainItemType extends WithHref, Filterable {
-  type?: 'main'
+  description?: ReactNode
   icon?: ReactNode
   text: ReactNode
-  description?: ReactNode
+  type?: 'main'
 }
 
 export interface IconItemType extends WithHref, Filterable {
-  type: 'icon'
+  icon: ReactNode
   /**
    * `aria-label` of icon button
    */
   label?: string
-  icon: ReactNode
-  text: ReactNode
   /**
    * @defaultValue true
    */
   secondary?: boolean
+  text: ReactNode
+  type: 'icon'
 }
 
 export interface ButtonItemType extends WithHref, Filterable {
-  type: 'button'
   icon?: ReactNode
-  text: ReactNode
   /**
    * @defaultValue false
    */
   secondary?: boolean
+  text: ReactNode
+  type: 'button'
 }
 
 export interface MenuItemType extends Partial<WithHref>, Filterable {
-  type: 'menu'
   icon?: ReactNode
-  text: ReactNode
 
   items: (
     | (MainItemType & {
@@ -77,15 +75,17 @@ export interface MenuItemType extends Partial<WithHref>, Filterable {
    * @defaultValue false
    */
   secondary?: boolean
+  text: ReactNode
+  type: 'menu'
 }
 
 export interface CustomItemType extends Filterable {
-  type: 'custom'
+  children: ReactNode
   /**
    * @defaultValue false
    */
   secondary?: boolean
-  children: ReactNode
+  type: 'custom'
 }
 
 export type LinkItemType =

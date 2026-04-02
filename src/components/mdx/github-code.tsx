@@ -8,15 +8,15 @@ import {
   sliceLines,
 } from '@/lib/github-code'
 
-type GitHubCodeProps = {
-  url: string
+interface GitHubCodeProps {
+  allowCopy?: CodeBlockProps['allowCopy']
+  endLine?: number
+  icon?: CodeBlockProps['icon']
+  keepBackground?: CodeBlockProps['keepBackground']
   language?: string
   startLine?: number
-  endLine?: number
   title?: string
-  allowCopy?: CodeBlockProps['allowCopy']
-  keepBackground?: CodeBlockProps['keepBackground']
-  icon?: CodeBlockProps['icon']
+  url: string
 }
 
 export async function GitHubCode({
@@ -55,8 +55,7 @@ export async function GitHubCode({
   } catch (error) {
     return (
       <p>
-        Unable to load source snippet from{' '}
-        <code>{url}</code>
+        Unable to load source snippet from <code>{url}</code>
         {process.env.NODE_ENV !== 'production' &&
           error instanceof Error &&
           ` (${error.message})`}

@@ -12,9 +12,9 @@ import { cn } from '@/lib/utils'
 
 interface NumberedPaginationProps {
   currentPage: number
-  totalPages: number
-  paginationItemsToDisplay?: number
   onPageChange: (page: number) => void
+  paginationItemsToDisplay?: number
+  totalPages: number
 }
 
 function NumberedPagination({

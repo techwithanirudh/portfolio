@@ -21,9 +21,9 @@ import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 
 interface GuestbookReactionsProps {
+  canReact: boolean
   entryId: number
   reactions: GuestbookReactionItem[]
-  canReact: boolean
 }
 
 interface OptimisticState {
@@ -103,15 +103,16 @@ export const GuestbookReactions = ({
         {optimisticReactions.map((reaction: GuestbookReactionItem) => (
           <Button
             className={cn(
-              'gap-2 rounded-none border border-border border-dashed bg-transparent px-3 text-xs',
+              'gap-2 px-3 text-xs',
               reaction.reacted && 'border-primary text-primary'
             )}
             disabled={!canReact || status === 'executing'}
             key={`${entryId}-${reaction.emoji}`}
             onClick={() => handleReaction(reaction.emoji)}
+            shape='square'
             size='sm'
             type='button'
-            variant='ghost'
+            variant='dashed'
           >
             <span>{reaction.emoji}</span>
             <span className='tabular-nums'>{reaction.count}</span>
@@ -120,11 +121,12 @@ export const GuestbookReactions = ({
         <Popover onOpenChange={setIsOpen} open={isOpen}>
           <PopoverTrigger asChild>
             <Button
-              className='gap-2 rounded-none border border-border border-dashed bg-transparent px-3 text-xs'
+              className='gap-2 px-3 text-xs'
               disabled={!canReact || status === 'executing'}
+              shape='square'
               size='sm'
               type='button'
-              variant='ghost'
+              variant='dashed'
             >
               <Icons.add className='size-3' />
               Add

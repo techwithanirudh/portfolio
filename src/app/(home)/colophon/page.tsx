@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { Fragment } from 'react'
 import { Section } from '@/components/section'
+import Separator from '@/components/separator'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
@@ -38,6 +39,7 @@ export default function ColophonPage() {
   return (
     <Wrapper>
       <Hero description={description} title={title} />
+      <Separator />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
         const headingDelay = section.title ? baseDelay : 0
@@ -46,13 +48,13 @@ export default function ColophonPage() {
         return (
           <Fragment key={section.title ?? `colophon-section-${index}`}>
             {section.title && (
-              <Section className='p-6'>
+              <Section className='px-6 py-8'>
                 <ViewAnimation
                   delay={headingDelay}
                   initial={{ opacity: 0, translateY: 6 }}
                   whileInView={{ opacity: 1, translateY: 0 }}
                 >
-                  <h2 className='font-medium text-xl'>{section.title}</h2>
+                  <h2 className='font-medium text-3xl'>{section.title}</h2>
                 </ViewAnimation>
               </Section>
             )}
@@ -65,6 +67,7 @@ export default function ColophonPage() {
                 {section.content}
               </ViewAnimation>
             </Section>
+            {index < sections.length - 1 && <Separator variant='transparent' />}
           </Fragment>
         )
       })}

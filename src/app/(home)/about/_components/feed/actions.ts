@@ -11,8 +11,8 @@ interface PushEventPayload {
 }
 
 export interface ActivityEventItem {
-  event: GitHubEvent
   commits?: PushCommit[]
+  event: GitHubEvent
 }
 
 const getFirstLine = (message: string) => {

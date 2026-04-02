@@ -5,8 +5,9 @@
 @import "@vidstack/react/player/styles/default/theme.css";
 @import "@vidstack/react/player/styles/default/layouts/video.css";
 @import "./fumacomment.css";
+@import "shadcn/tailwind.css";
 
-@plugin "tailwindcss-animate";
+@import "tw-animate-css";
 @plugin "tailwind-scrollbar";
 
 @custom-variant dark (&:is(.dark *));
@@ -52,30 +53,6 @@
   /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-
-  /* accordion */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-
-    to {
-      height: 0;
-    }
-  }
 }
 
 @layer base {
@@ -163,8 +140,8 @@
 }
 
 @utility container {
-  margin-inline: auto;
   padding-inline: 0rem;
+  margin-inline: auto;
 
   @apply 2xl:max-w-[1400px];
 }
@@ -190,6 +167,50 @@
 
   .divide-border {
     @apply divide-border/70 dark:divide-border;
+  }
+
+  .dashed-frame {
+    @apply border border-border border-dashed;
+  }
+
+  .dashed-stack {
+    @apply divide-y divide-dashed divide-border;
+  }
+
+  .divider-top-dashed {
+    @apply w-full border-border border-t border-dashed;
+  }
+
+  .divider-bottom-dashed {
+    @apply border-border border-b border-dashed;
+  }
+
+  .icon-pop {
+    @apply transition-transform hover:scale-125;
+  }
+
+  .icon-tilt {
+    @apply transition-transform hover:rotate-12 hover:scale-125;
+  }
+
+  .icon-tilt-reverse {
+    @apply transition-transform hover:-rotate-12 hover:scale-125;
+  }
+
+  .icon-turn {
+    @apply transition-transform hover:rotate-90 hover:scale-125;
+  }
+
+  .icon-arrow {
+    @apply transition-transform group-hover:-rotate-45;
+  }
+
+  .icon-arrow-button {
+    @apply transition-transform group-hover/button:-rotate-45;
+  }
+
+  .icon-turn-button {
+    @apply transition-transform group-hover/button:rotate-90;
   }
 
   .typography-hero {
@@ -248,40 +269,40 @@
 
   .footer {
     --footer-text-size: clamp(3rem, 14rem, 14vw);
+    position: relative;
 
     display: flex;
     justify-content: center;
-    color: var(--color-muted-foreground);
-    position: relative;
-    overflow: clip;
     min-height: var(--footer-text-size);
+    overflow: clip;
+    color: var(--color-muted-foreground);
   }
 
   .footer-text {
-    text-rendering: geometricPrecision;
-    font-weight: 900;
-    font-size: var(--footer-text-size);
-    letter-spacing: 0;
-    opacity: 0.3;
     position: absolute;
     bottom: calc(-1 * var(--footer-text-size) / 1.6);
+    font-size: var(--footer-text-size);
+    font-weight: 900;
+    letter-spacing: 0;
+    opacity: 0.3;
+    text-rendering: geometricPrecision;
   }
 
   .footer-grid {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    flex: none;
+    overflow: visible;
     background-color: transparent;
     background-image: radial-gradient(transparent 1px, rgb(255, 255, 255) 1px);
     background-size: 4px 4px;
+    opacity: 1;
     backdrop-filter: blur(3px);
     mask: linear-gradient(
       rgba(255, 255, 255, 0) 0%,
       rgb(255, 255, 255, 0.6) 100%
     );
-    opacity: 1;
-    position: absolute;
-    inset: 0;
-    overflow: visible;
-    z-index: 1;
-    flex: none;
   }
 
   .footer-gradient {
@@ -307,13 +328,13 @@
 }
 
 ::selection {
-  background-color: var(--color-accent);
   color: var(--color-foreground);
+  background-color: var(--color-accent);
 }
 
 .dark ::selection {
-  background-color: var(--color-accent);
   color: var(--color-foreground);
+  background-color: var(--color-accent);
 }
 
 .dark [data-hide-on-theme="dark"],
@@ -377,8 +398,8 @@
 
   ::view-transition-new(.via-blur) {
     animation-duration: 350ms;
-    animation-delay: 100ms;
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    animation-delay: 100ms;
   }
 
   ::view-transition-group(.via-blur) {
@@ -388,8 +409,8 @@
   /* Prevent background color flash during transition */
   ::view-transition-old(root),
   ::view-transition-new(root) {
-    animation: none;
     mix-blend-mode: normal;
+    animation: none;
   }
 }
 
@@ -435,7 +456,7 @@
   --checkbox-diameter: calc(var(--checkbox-height) - 4px);
 }
 
-:where(.vds-menu-item[aria-expanded='true']) {
+:where(.vds-menu-item[aria-expanded="true"]) {
   margin-bottom: 0 !important;
   background-color: var(--section-bg) !important;
 }
@@ -449,6 +470,6 @@
 }
 
 :where(.vds-menu-section-title) {
-  background-color: var(--section-bg) !important;
   padding: 6px !important;
+  background-color: var(--section-bg) !important;
 }

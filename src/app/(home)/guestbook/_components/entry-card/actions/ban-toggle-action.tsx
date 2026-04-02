@@ -1,4 +1,4 @@
-import { Check, CircleOff } from 'lucide-react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -22,16 +22,17 @@ export const BanToggleActionButton = ({
       <TooltipTrigger asChild>
         <Button
           aria-label={isBanned ? 'Unban user' : 'Ban user'}
-          className='rounded-none text-destructive'
+          className='text-destructive'
           disabled={disabled}
           onClick={onClick}
+          shape='square'
           size='icon'
           variant='ghost'
         >
           {isBanned ? (
-            <Check className='size-4' />
+            <Icons.check className='size-4' />
           ) : (
-            <CircleOff className='size-4' />
+            <Icons.ban className='size-4' />
           )}
         </Button>
       </TooltipTrigger>

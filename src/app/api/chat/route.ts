@@ -17,7 +17,7 @@ import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
 
-type PageContext = {
+interface PageContext {
   pathname?: string
 }
 
@@ -54,24 +54,27 @@ export async function POST(request: Request) {
     const stream = createUIMessageStream({
       originalMessages: messages,
       execute: async ({ writer }) => {
-        const modelMessages = await convertToModelMessages<MyUIMessage>(messages, {
-          convertDataPart: (part) => {
-            if (part.type !== 'data-context') {
-              return undefined
-            }
+        const modelMessages = await convertToModelMessages<MyUIMessage>(
+          messages,
+          {
+            convertDataPart: (part) => {
+              if (part.type !== 'data-context') {
+                return undefined
+              }
 
-            const context = contextDataSchema.safeParse(part.data).data?.text
-            if (!context) {
-              return undefined
-            }
+              const context = contextDataSchema.safeParse(part.data).data?.text
+              if (!context) {
+                return undefined
+              }
 
-            return {
-              type: 'text',
-              text: `\n\nSelected context (from page):\n"""\n${context}\n"""`,
-            }
-          },
-          ignoreIncompleteToolCalls: true,
-        })
+              return {
+                type: 'text',
+                text: `\n\nSelected context (from page):\n"""\n${context}\n"""`,
+              }
+            },
+            ignoreIncompleteToolCalls: true,
+          }
+        )
 
         const llms = await getLLMsTxt()
 

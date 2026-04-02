@@ -3,14 +3,14 @@ import { DeleteActionButton } from './delete-action'
 import { EditActionButton } from './edit-action'
 
 interface EntryCardActionsProps {
-  canEdit: boolean
   canBan: boolean
+  canEdit: boolean
   isBanned: boolean
   isBusy: boolean
   isEditing: boolean
-  onEdit: () => void
-  onDeleteModalOpen: () => void
   onBanModalOpen: () => void
+  onDeleteModalOpen: () => void
+  onEdit: () => void
 }
 
 export const EntryCardActions = ({

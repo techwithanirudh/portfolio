@@ -88,7 +88,13 @@ export const GuestbookForm = () => {
           Sign in to leave a guestbook message.
         </p>
         <Button asChild className='w-full'>
-          <Link href={getLoginUrl('/guestbook')}>Sign in to post</Link>
+          <Link href={getLoginUrl('/guestbook')}>
+            <span>Sign in to post</span>
+            <Icons.arrowRight
+              className='icon-arrow-button size-4'
+              data-icon='inline-end'
+            />
+          </Link>
         </Button>
       </div>
     )
@@ -135,8 +141,11 @@ export const GuestbookForm = () => {
               onClick={goToNextStep}
               type='button'
             >
-              Next{' '}
-              <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
+              <span>Next</span>
+              <Icons.arrowRight
+                className='icon-arrow-button size-4'
+                data-icon='inline-end'
+              />
             </Button>
           </div>
         </Activity>

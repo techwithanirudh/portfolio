@@ -126,12 +126,12 @@ const Hero = () => {
                 variant: 'default',
                 size: 'lg',
               }),
-              'group rounded-full bg-primary hover:bg-primary/90'
+              'rounded-full bg-primary hover:bg-primary/90'
             )}
             href='/work'
           >
             Browse Work
-            <Icons.arrowRight className='size-5 transition-transform group-hover:-rotate-45' />
+            <Icons.arrowRight className='icon-arrow-button size-5' />
           </Link>
         </ViewAnimation>
 

@@ -1,7 +1,6 @@
 'use client'
 
 import { ProgressProvider } from '@bprogress/next/app'
-import { TooltipProvider } from '@radix-ui/react-tooltip'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
@@ -12,6 +11,7 @@ import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { TooltipProvider } from '@/components/ui/tooltip'
 
 export function Provider({
   children,

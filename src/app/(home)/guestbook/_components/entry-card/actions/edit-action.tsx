@@ -20,9 +20,9 @@ export const EditActionButton = ({
       <TooltipTrigger asChild>
         <Button
           aria-label='Edit entry'
-          className='rounded-none'
           disabled={disabled}
           onClick={onClick}
+          shape='square'
           size='icon'
           variant='ghost'
         >
