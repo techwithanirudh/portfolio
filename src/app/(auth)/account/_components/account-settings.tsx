@@ -38,7 +38,7 @@ interface AccountSettingsProps {
 
 export function AccountSettings({ user }: AccountSettingsProps) {
   return (
-    <Card className='gap-0 divide-y divide-dashed rounded-none border border-border border-dashed py-0 shadow-none ring-0'>
+    <Card className='gap-0 divide-y divide-dashed rounded-none py-0'>
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Avatar</span>

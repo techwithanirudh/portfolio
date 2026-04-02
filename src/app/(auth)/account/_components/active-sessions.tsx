@@ -73,7 +73,7 @@ export async function ActiveSessions(props: { currentToken: string }) {
     sessions = await listSessions()
   } catch {
     return (
-      <Card className='gap-0 rounded-none border border-border border-dashed py-0 shadow-none ring-0'>
+      <Card className='gap-0 rounded-none py-0'>
         <div className='p-4 text-muted-foreground text-sm sm:p-6'>
           Could not load sessions.
         </div>
@@ -87,7 +87,7 @@ export async function ActiveSessions(props: { currentToken: string }) {
 
   if (sortedSessions.length === 0) {
     return (
-      <Card className='rounded-none border border-border border-dashed py-12 text-center text-muted-foreground text-sm shadow-none ring-0'>
+      <Card className='rounded-none py-12 text-center text-muted-foreground text-sm'>
         No active sessions found.
       </Card>
     )
@@ -115,7 +115,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
   const lastActive = format(new Date(session.updatedAt), 'MMM d, yyyy, h:mm a')
 
   return (
-    <Card className='gap-0 rounded-none border border-border border-dashed py-0 shadow-none ring-0'>
+    <Card className='gap-0 rounded-none py-0'>
       <div className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
         <div className='flex gap-4'>
           <div className='flex size-10 shrink-0 items-center justify-center rounded-md bg-secondary'>
