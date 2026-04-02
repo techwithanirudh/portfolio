@@ -15,6 +15,7 @@ import {
   StarIcon,
   TagIcon,
 } from '@primer/octicons-react'
+import type { LucideIcon, LucideProps } from 'lucide-react'
 import {
   AlertTriangle,
   ArrowDown,
@@ -80,7 +81,7 @@ import {
   Wrench,
   X,
 } from 'lucide-react'
-import type { ComponentProps, ComponentType, JSX } from 'react'
+import type { JSX } from 'react'
 import { CssOld } from '@/components/icons/brands/css-old'
 import { DrizzleOrmDark } from '@/components/icons/brands/drizzle-orm-dark'
 import { DrizzleOrmLight } from '@/components/icons/brands/drizzle-orm-light'
@@ -101,13 +102,9 @@ import { Tailwindcss } from '@/components/icons/brands/tailwindcss'
 import { Typescript } from '@/components/icons/brands/typescript'
 import { cn } from '@/lib/utils'
 
-type IconProps = ComponentProps<'svg'> & {
-  size?: number | string
-  strokeWidth?: number
-}
+type IconProps = LucideProps
 type SvgIcon = (props: IconProps) => JSX.Element
-type IconComponent = ComponentType<IconProps>
-export type Icon = IconComponent
+export type Icon = LucideIcon | SvgIcon
 
 const getSvgSizeProps = ({
   height,

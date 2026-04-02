@@ -1,7 +1,6 @@
 'use client'
 
-import { Cancel01Icon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
+import { XIcon } from 'lucide-react'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 import type * as React from 'react'
 import { Button } from '@/components/ui/button'
@@ -74,7 +73,7 @@ function DialogContent({
               size='icon-sm'
               variant='ghost'
             >
-              <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+              <XIcon />
               <span className='sr-only'>Close</span>
             </Button>
           </DialogPrimitive.Close>
@@ -127,7 +126,7 @@ function DialogTitle({
 }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
     <DialogPrimitive.Title
-      className={cn('font-heading font-medium leading-none', className)}
+      className={cn('font-medium leading-none', className)}
       data-slot='dialog-title'
       {...props}
     />
