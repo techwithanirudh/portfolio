@@ -65,7 +65,7 @@ const Skills = () => (
           <div className='flex flex-wrap gap-2'>
             {technologies.map(({ label, Icon }) => (
               <Badge
-                className='gap-2 rounded-md px-3 py-1 text-xs transition-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
+                className='h-auto gap-2 rounded-md px-3 py-1 text-xs transition-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
                 key={label}
                 variant='outline'
               >

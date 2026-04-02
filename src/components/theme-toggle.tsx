@@ -21,7 +21,7 @@ const itemVariants = cva(
 const full = [
   ['light', Icons.sun] as const,
   ['dark', Icons.moon] as const,
-  ['system', Icons.laptop] as const,
+  ['system', Icons.desktop] as const,
 ]
 
 type Theme = 'light' | 'dark' | 'system'
