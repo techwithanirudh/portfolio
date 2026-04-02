@@ -12,21 +12,12 @@ import {
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { usePathname } from 'next/navigation'
 import {
-  ArrowUpIcon,
-  Quote,
-  PawPrint,
-  PlusIcon,
-  RefreshCw,
-  SquareIcon,
-  X,
-} from 'lucide-react'
-import {
   type ComponentProps,
-  type Dispatch,
-  type SetStateAction,
   createContext,
+  type Dispatch,
   memo,
   type ReactNode,
+  type SetStateAction,
   type SyntheticEvent,
   use,
   useEffect,
@@ -52,11 +43,12 @@ import {
   ClippyProvider,
   useClippy,
 } from '@/components/clippy'
+import { Icons } from '@/components/icons/icons'
 import { useOiiaMode } from '@/components/oiia'
 import { cn } from '@/lib/utils'
-import { SelectionContextMenu } from './selection-context-menu'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
+import { SelectionContextMenu } from './selection-context-menu'
 
 const AISearchContext = createContext<{
   open: boolean
@@ -133,7 +125,7 @@ function Header() {
     <div className='sticky top-0 flex h-10 items-start'>
       <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
         <div className='flex items-center gap-2'>
-          <PawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
+          <Icons.pawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
           <p className='font-medium text-sm'>
             {mode === 'oiia' ? 'Ask OIIA' : 'Ask Simba'}
           </p>
@@ -156,7 +148,7 @@ function Header() {
           }}
           type='button'
         >
-          <PlusIcon className='transition-transform group-hover/button:rotate-90' />
+          <Icons.add className='icon-turn-button' />
         </button>
         <button
           aria-label='Close'
@@ -172,7 +164,7 @@ function Header() {
           tabIndex={-1}
           type='button'
         >
-          <X className='transition-transform group-hover/button:rotate-90' />
+          <Icons.close className='icon-turn-button' />
         </button>
       </div>
     </div>
@@ -202,7 +194,7 @@ function SearchAIActions() {
       tabIndex={canShow ? 0 : -1}
       type='button'
     >
-      <RefreshCw />
+      <Icons.refresh />
     </button>
   )
 }
@@ -289,6 +281,14 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     }
   }, [isLoading])
 
+  const placeholder = isLoading
+    ? mode === 'oiia'
+      ? 'Purring for answers...'
+      : 'Sniffing for answers...'
+    : mode === 'oiia'
+      ? 'Ask OIIA'
+      : 'Ask Simba'
+
   return (
     <form
       {...props}
@@ -296,10 +296,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       onSubmit={onStart}
     >
       <div className='flex flex-1 flex-col'>
-        <PromptContext
-          context={context}
-          onClear={() => setContext(null)}
-        />
+        <PromptContext context={context} onClear={() => setContext(null)} />
         <TextInput
           autoFocus
           className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
@@ -310,24 +307,15 @@ function SearchAIInput(props: ComponentProps<'form'>) {
               onStart(event)
             }
           }}
-          placeholder={
-            isLoading
-              ? mode === 'oiia'
-                ? 'Purring for answers...'
-                : 'Sniffing for answers...'
-              : mode === 'oiia'
-                ? 'Ask OIIA'
-                : 'Ask Simba'
-          }
+          placeholder={placeholder}
           value={input}
         />
       </div>
-      <div className={cn(
-        'h-full h-10 flex items-center justify-center pe-1.5',
-        {
+      <div
+        className={cn('flex h-10 h-full items-center justify-center pe-1.5', {
           'bg-fd-background': context,
-        },
-      )}>
+        })}
+      >
         {isLoading ? (
           <button
             className={cn(
@@ -341,7 +329,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
             onClick={stop}
             type='button'
           >
-            <SquareIcon className='fill-fd-foreground' />
+            <Icons.square className='fill-fd-foreground' />
           </button>
         ) : (
           <button
@@ -354,12 +342,11 @@ function SearchAIInput(props: ComponentProps<'form'>) {
               })
             )}
             disabled={
-              (input.trim().length === 0 && !context) ||
-              hasPendingToolInput
+              (input.trim().length === 0 && !context) || hasPendingToolInput
             }
             type='submit'
           >
-            <ArrowUpIcon />
+            <Icons.arrowUp />
           </button>
         )}
       </div>
@@ -379,8 +366,8 @@ function PromptContext({
   }
 
   return (
-    <div className='flex items-start gap-1.5 bg-fd-background px-2 py-1.5 text-xs h-10'>
-      <Quote className='mt-0.5 size-3 shrink-0 text-fd-muted-foreground' />
+    <div className='flex h-10 items-start gap-1.5 bg-fd-background px-2 py-1.5 text-xs'>
+      <Icons.quote className='mt-0.5 size-3 shrink-0 text-fd-muted-foreground' />
       <span className='line-clamp-2 flex-1 break-words'>
         {context.slice(0, MaxSourcePreviewChars)}
       </span>
@@ -390,7 +377,7 @@ function PromptContext({
         onClick={onClear}
         type='button'
       >
-        <X className='size-3.5' />
+        <Icons.close className='size-3.5' />
       </button>
     </div>
   )
@@ -475,7 +462,7 @@ function MessageList({
       <div className='flex flex-1 flex-col divide-y divide-dashed divide-border'>
         {messages.length === 0 ? (
           <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
-            <PawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />
+            <Icons.pawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />
             <p>
               {mode === 'oiia'
                 ? "heya! im oiia, anirudh's cat. i can answer questions about him, his work, or the site."
@@ -511,7 +498,7 @@ const Message = memo(function Message({
   const parts = (message.parts ?? []) as MyUIMessage['parts']
   const context = (() => {
     const contextPart = parts.find((part) => part.type === 'data-context')
-    if (!contextPart || !('data' in contextPart)) {
+    if (!(contextPart && 'data' in contextPart)) {
       return undefined
     }
     return contextDataSchema.safeParse(contextPart.data).data?.text
@@ -529,53 +516,61 @@ const Message = memo(function Message({
       </p>
       <div className='flex flex-col gap-2'>
         {message.role === 'user' && context ? (
-          <div className='not-prose rounded-md border border-dashed border-border bg-fd-muted/40 p-2 text-xs'>
-            <p className='mb-1 font-medium text-[11px] uppercase tracking-wide text-fd-muted-foreground'>
+          <div className='not-prose rounded-md border border-border border-dashed bg-fd-muted/40 p-2 text-xs'>
+            <p className='mb-1 font-medium text-[11px] text-fd-muted-foreground uppercase tracking-wide'>
               Context
             </p>
             <p className='line-clamp-3 break-words'>{context}</p>
           </div>
         ) : null}
         <MessageMetadata inProgress={isInProgress} parts={parts} />
-        {parts.map((part, idx) => {
-          if (part.type === 'text') {
-            return (
-              <div className='prose text-sm' key={`${message.id}-text-${idx}`}>
-                <Markdown text={part.text} />
-              </div>
-            )
-          }
-          if (part.type === 'tool-showContactForm') {
-            const isSubmitted = part.state === 'output-available'
-            const submittedData =
-              isSubmitted &&
+        {(() => {
+          let textPartOrdinal = 0
+
+          return parts.map((part) => {
+            if (part.type === 'text') {
+              const key = `${message.id}-text-${textPartOrdinal}`
+
+              textPartOrdinal += 1
+
+              return (
+                <div className='prose text-sm' key={key}>
+                  <Markdown text={part.text} />
+                </div>
+              )
+            }
+            if (part.type === 'tool-showContactForm') {
+              const isSubmitted = part.state === 'output-available'
+              const submittedData =
+                isSubmitted &&
                 part.output?.success &&
                 part.output.name &&
                 part.output.email &&
                 part.output.message
-                ? {
-                  name: part.output.name,
-                  email: part.output.email,
-                  message: part.output.message,
-                }
-                : undefined
+                  ? {
+                      name: part.output.name,
+                      email: part.output.email,
+                      message: part.output.message,
+                    }
+                  : undefined
 
-            if (!isSubmitted && part.state !== 'input-available') {
-              return <AIContactFormSkeleton key={part.toolCallId} />
+              if (!isSubmitted && part.state !== 'input-available') {
+                return <AIContactFormSkeleton key={part.toolCallId} />
+              }
+
+              return (
+                <AIContactForm
+                  isSubmitted={isSubmitted}
+                  key={part.toolCallId}
+                  prefill={part.input?.prefill ?? undefined}
+                  submittedData={submittedData}
+                  toolCallId={part.toolCallId}
+                />
+              )
             }
-
-            return (
-              <AIContactForm
-                isSubmitted={isSubmitted}
-                key={part.toolCallId}
-                prefill={part.input?.prefill ?? undefined}
-                submittedData={submittedData}
-                toolCallId={part.toolCallId}
-              />
-            )
-          }
-          return null
-        })}
+            return null
+          })
+        })()}
       </div>
     </div>
   )
