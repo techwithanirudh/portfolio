@@ -33,7 +33,7 @@ export const Hero = ({
   endIndex: number
 }) => (
   <HeroSection
-    align={'start'}
+    align='start'
     title={
       <div className='flex items-center justify-between gap-4'>
         <span className='flex items-center gap-2'>
@@ -50,6 +50,6 @@ export const Hero = ({
         </Link>
       </div>
     }
-    variant={'compact'}
+    variant='compact'
   />
 )

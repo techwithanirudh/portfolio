@@ -6,7 +6,6 @@ import { Wrapper } from '@/components/wrapper'
 import { title as homeTitle } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
 import { getTags } from '@/lib/source'
-import { cn } from '@/lib/utils'
 import { Hero } from './_components/hero'
 
 export default function Page() {
@@ -26,10 +25,8 @@ export default function Page() {
               whileInView={{ opacity: 1 }}
             >
               <TagCard
-                className={cn(
-                  'size-full items-center justify-start gap-2 rounded-none border-r bg-card/50 p-6 hover:bg-card/80'
-                )}
-                displayCount={true}
+                className='size-full items-center justify-start gap-2 rounded-none border-r bg-card/50 p-6 hover:bg-card/80'
+                displayCount
                 name={tag}
               />
             </ViewAnimation>

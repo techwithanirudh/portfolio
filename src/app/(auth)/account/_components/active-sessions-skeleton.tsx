@@ -7,7 +7,7 @@ export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
   return (
     <div className='space-y-4'>
       {items.map((item) => (
-        <Card className='gap-0 rounded-none py-0' key={item}>
+        <Card key={item} variant='flat'>
           <div className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
             <div className='flex gap-4'>
               <Skeleton className='size-10 shrink-0 rounded-md' />

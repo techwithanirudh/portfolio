@@ -18,7 +18,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
       <div className='flex flex-col gap-10'>
         <SectionHeader align='left' className='px-6' title='Blog' />
 
-        <div className='w-full border-border border-t border-dashed'>
+        <div className='divider-top-dashed'>
           <Carousel className='w-full'>
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {posts.map((post, index) => {
@@ -58,13 +58,14 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => {
           >
             <Link
               className={buttonVariants({
+                shape: 'square',
                 variant: 'default',
-                className: 'group w-full rounded-none py-4 sm:py-8',
+                className: 'w-full py-4 sm:py-8',
               })}
               href='/blog'
             >
               View More
-              <Icons.arrowRight className='size-5 transition-transform group-hover:-rotate-45' />
+              <Icons.arrowRight className='icon-arrow-button size-5' />
             </Link>
           </ViewAnimation>
         </div>

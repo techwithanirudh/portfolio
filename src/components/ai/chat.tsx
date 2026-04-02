@@ -132,8 +132,7 @@ function Header() {
             buttonVariants({
               color: 'secondary',
               size: 'icon-sm',
-              className:
-                'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
             })
           )}
           onClick={() => {
@@ -142,7 +141,7 @@ function Header() {
           }}
           type='button'
         >
-          <Icons.add className='transition-transform group-hover/button:rotate-90' />
+          <Icons.add className='icon-turn-button' />
         </button>
         <button
           aria-label='Close'
@@ -150,15 +149,14 @@ function Header() {
             buttonVariants({
               size: 'icon-sm',
               color: 'primary',
-              className:
-                'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
             })
           )}
           onClick={() => setOpen(false)}
           tabIndex={-1}
           type='button'
         >
-          <Icons.close className='transition-transform group-hover/button:rotate-90' />
+          <Icons.close className='icon-turn-button' />
         </button>
       </div>
     </div>
@@ -507,12 +505,12 @@ const Message = memo(function Message({
           </div>
         ) : null}
         <MessageMetadata inProgress={isInProgress} parts={parts} />
-        {parts.map((part) => {
+        {parts.map((part, index) => {
           if (part.type === 'text') {
             return (
               <div
                 className='prose text-sm'
-                key={`${message.id}-text-${part.text}`}
+                key={`${message.id}-text-${index}`}
               >
                 <Markdown text={part.text} />
               </div>

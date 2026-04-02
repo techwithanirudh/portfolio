@@ -52,7 +52,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         <Button
           aria-label={'User Menu'}
           className={cn(
-            'size-auto rounded-md border-none bg-transparent p-0 hover:bg-accent dark:hover:bg-accent',
+            'size-auto rounded-md border-none p-0',
             'bg-secondary hover:bg-secondary/80',
             classNames?.trigger?.base
           )}

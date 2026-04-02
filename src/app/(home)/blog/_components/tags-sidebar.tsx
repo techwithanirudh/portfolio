@@ -58,7 +58,7 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
               href='/blog/tags'
             >
               {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}
-              <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
+              <Icons.arrowRight className='icon-arrow size-4' />
             </Link>
           </AccordionContent>
         </AccordionItem>
@@ -75,7 +75,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
     <div className='sticky top-14 flex w-full flex-col divide-y divide-dashed divide-border self-start lg:min-h-[calc(100vh-22rem)]'>
       <ViewAnimation initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
         <div className='flex h-10 items-center gap-2 px-3'>
-          <Icons.tag className='size-4 text-muted-foreground transition-transform hover:scale-125' />
+          <Icons.tag className='icon-pop size-4 text-muted-foreground' />
           <span className='font-medium text-muted-foreground text-sm'>
             Tags
           </span>
@@ -113,7 +113,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
             href='/blog/tags'
           >
             {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}
-            <Icons.arrowRight className='size-4 transition-transform group-hover:-rotate-45' />
+            <Icons.arrowRight className='icon-arrow size-4' />
           </Link>
         </ViewAnimation>
       </div>

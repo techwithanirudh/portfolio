@@ -41,7 +41,7 @@ const TestimonialCard = ({
     whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
   >
     <div className='flex min-h-full flex-col justify-between gap-6 p-6 transition-all duration-300 hover:bg-card sm:p-8 lg:aspect-video'>
-      <Icons.user className='size-8 shrink-0 stroke-1 transition-transform hover:rotate-12 hover:scale-125' />
+      <Icons.user className='icon-tilt size-8 shrink-0 stroke-1' />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>
           <h3 className='text-xl tracking-tight'>{testimonial.title}</h3>
@@ -51,7 +51,7 @@ const TestimonialCard = ({
         </div>
         <p className='flex flex-row items-center gap-2 text-sm'>
           <span className='text-muted-foreground'>By</span>
-          <Avatar className='h-6 w-6 after:border-transparent dark:after:border-transparent'>
+          <Avatar className='h-6 w-6' outlined={false}>
             <AvatarImage
               alt={testimonial.author.name}
               src={testimonial.author.image}
@@ -108,10 +108,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
           initial={{ opacity: 0, translateY: 16 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <Carousel
-            className='w-full border-border border-t border-dashed'
-            setApi={setApi}
-          >
+          <Carousel className='divider-top-dashed' setApi={setApi}>
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {testimonials.map((item, index) => (
                 <CarouselItem

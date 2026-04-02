@@ -34,8 +34,6 @@ export const ActiveLink = ({
         className
       )}
       href={href}
-      rel={props.rel}
-      target={props.target}
       {...props}
     >
       {children}

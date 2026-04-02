@@ -57,7 +57,7 @@ export const NewsletterForm = () => {
           </div>
 
           <Button
-            className='group size-auto w-15 rounded-md rounded-l-none px-3'
+            className='size-auto w-15 rounded-md rounded-l-none px-3'
             disabled={action.status === 'executing'}
             size='icon'
             type='submit'
@@ -65,13 +65,13 @@ export const NewsletterForm = () => {
             {action.status === 'executing' ? (
               <Icons.spinner className='size-4 animate-spin' />
             ) : (
-              <Icons.send className='size-4 transition-transform group-hover:-rotate-45' />
+              <Icons.send className='icon-arrow-button size-4' />
             )}
           </Button>
         </div>
 
         {action.status === 'hasSucceeded' && (
-          <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+          <Alert className='border-emerald-500/15 bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.message ??
@@ -80,7 +80,7 @@ export const NewsletterForm = () => {
           </Alert>
         )}
         {action.result.serverError && (
-          <Alert className='border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+          <Alert className='border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.serverError}

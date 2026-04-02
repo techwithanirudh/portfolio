@@ -20,9 +20,10 @@ export const DeleteActionButton = ({
       <TooltipTrigger asChild>
         <Button
           aria-label='Delete entry'
-          className='rounded-none text-destructive'
+          className='text-destructive'
           disabled={disabled}
           onClick={onClick}
+          shape='square'
           size='icon'
           variant='ghost'
         >

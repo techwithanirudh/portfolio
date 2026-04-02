@@ -114,7 +114,7 @@ const ContactFormInner = () => {
           )}
         />
         <Button
-          className='group w-full'
+          className='w-full'
           disabled={action.status === 'executing'}
           type='submit'
         >
@@ -126,13 +126,13 @@ const ContactFormInner = () => {
             />
           ) : (
             <Icons.send
-              className='size-4 transition-transform group-hover:-rotate-45'
+              className='icon-arrow-button size-4'
               data-icon='inline-end'
             />
           )}
         </Button>
         {action.status === 'hasSucceeded' && (
-          <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+          <Alert className='border-emerald-500/15 bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.success && action.result.data?.message
@@ -142,7 +142,7 @@ const ContactFormInner = () => {
           </Alert>
         )}
         {action.result.serverError && (
-          <Alert className='border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+          <Alert className='border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
               {typeof action.result.serverError === 'string'

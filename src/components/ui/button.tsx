@@ -17,6 +17,8 @@ const buttonVariants = cva(
           'group relative isolate inline-flex items-center justify-center overflow-hidden bg-secondary text-left text-secondary-foreground font-medium transition duration-300 ease-[cubic-bezier(0.4,0.36,0,1)] shadow-xs shadow-[0_1px_theme(colors.white/0.07)_inset,0_1px_3px_theme(colors.gray.900/0.2)] ring-1 ring-secondary before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-gradient-to-b before:from-white/20 before:opacity-50 before:transition-opacity before:duration-300 before:ease-[cubic-bezier(0.4,0.36,0,1)] hover:before:opacity-100 after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:bg-gradient-to-b after:from-white/10 after:from-[46%] after:to-[54%] after:mix-blend-overlay aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
         ghost:
           'hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground dark:hover:bg-accent/50',
+        dashed:
+          'border border-border border-dashed bg-transparent text-foreground shadow-none hover:bg-accent/50 aria-expanded:bg-muted aria-expanded:text-foreground data-[disabled]:bg-transparent data-[disabled]:opacity-40',
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
         link: 'text-primary underline-offset-4 hover:underline',
@@ -34,10 +36,15 @@ const buttonVariants = cva(
           'size-8 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md',
         'icon-lg': 'size-10',
       },
+      shape: {
+        default: '',
+        square: 'rounded-none before:rounded-none after:rounded-none',
+      },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      shape: 'default',
     },
   }
 )
@@ -46,6 +53,7 @@ function Button({
   className,
   variant = 'default',
   size = 'default',
+  shape = 'default',
   asChild = false,
   ...props
 }: React.ComponentProps<'button'> &
@@ -56,7 +64,8 @@ function Button({
 
   return (
     <Comp
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, shape, className }))}
+      data-shape={shape}
       data-size={size}
       data-slot='button'
       data-variant={variant}

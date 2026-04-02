@@ -87,11 +87,11 @@ export const GuestbookForm = () => {
         <p className='text-muted-foreground text-sm'>
           Sign in to leave a guestbook message.
         </p>
-        <Button asChild className='group w-full'>
+        <Button asChild className='w-full'>
           <Link href={getLoginUrl('/guestbook')}>
             <span>Sign in to post</span>
             <Icons.arrowRight
-              className='size-4 transition-transform group-hover:-rotate-45'
+              className='icon-arrow-button size-4'
               data-icon='inline-end'
             />
           </Link>
@@ -136,14 +136,14 @@ export const GuestbookForm = () => {
               )}
             />
             <Button
-              className='group w-full'
+              className='w-full'
               disabled={isExecuting}
               onClick={goToNextStep}
               type='button'
             >
               <span>Next</span>
               <Icons.arrowRight
-                className='size-4 transition-transform group-hover:-rotate-45'
+                className='icon-arrow-button size-4'
                 data-icon='inline-end'
               />
             </Button>

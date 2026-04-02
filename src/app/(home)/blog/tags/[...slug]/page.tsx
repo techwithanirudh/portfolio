@@ -53,10 +53,7 @@ const Header = ({
     title={
       <div className='flex items-center justify-between gap-4'>
         <span className='flex items-center gap-2'>
-          <Icons.tag
-            className='text-muted-foreground transition-transform hover:rotate-12 hover:scale-125'
-            size={20}
-          />
+          <Icons.tag className='icon-tilt text-muted-foreground' size={20} />
           {tag} <span className='text-muted-foreground'>Posts</span>{' '}
           <CurrentPostsCount
             endIndex={endIndex}
