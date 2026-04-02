@@ -27,7 +27,11 @@ import {
   ArrowUpLeft,
   ArrowUpRight,
   AtSign,
+  BadgeCheck,
+  Ban,
+  BotMessageSquare,
   BrainCircuit,
+  Briefcase,
   CalendarIcon,
   Check,
   CheckCircle,
@@ -36,7 +40,6 @@ import {
   ChevronRight,
   ChevronUp,
   CircleDollarSign,
-  CircleOff,
   ClipboardCheck,
   Code,
   CreditCard,
@@ -62,6 +65,7 @@ import {
   Moon,
   MoreVertical,
   Newspaper,
+  NotebookPen,
   PawPrint,
   Pencil,
   PhoneCall,
@@ -77,6 +81,7 @@ import {
   ShareIcon,
   SmartphoneIcon,
   SquareIcon,
+  Star,
   SunMedium,
   TabletIcon,
   Tag,
@@ -146,10 +151,13 @@ export const Icons = {
   close: X,
   menu: Menu,
   code: Code,
+  work: Briefcase,
+  blog: NotebookPen,
   pencil: Pencil,
   copied: ClipboardCheck,
   success: CheckCircle,
   messageSquare: MessageSquare,
+  ai: BotMessageSquare,
   spinner: Loader2,
   atSign: AtSign,
   globe: Globe,
@@ -210,7 +218,10 @@ export const Icons = {
   redo: Redo2,
   eraser: Eraser,
   verified: CheckCircle,
-  userBlocked: CircleOff,
+  verifiedAdmin: BadgeCheck,
+  featured: Star,
+  ban: Ban,
+  userBlocked: Ban,
   pawPrint: PawPrint,
   github: ({ height, size, width, ...props }: IconProps) => (
     <svg
@@ -260,7 +271,7 @@ export const Icons = {
   ),
   check: Check,
   rss: Rss,
-  twitter: ({ height, size, width, ...props }: IconProps) => (
+  x: ({ height, size, width, ...props }: IconProps) => (
     <svg
       fill='currentColor'
       viewBox='0 0 24 24'

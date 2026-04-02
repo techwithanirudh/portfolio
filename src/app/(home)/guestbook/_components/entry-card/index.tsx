@@ -137,7 +137,7 @@ export const GuestbookEntryCard = ({
           <h3 className='flex items-center gap-1.5 font-medium text-sm'>
             {entry.name}
             {entry.role === 'admin' ? (
-              <Icons.verified
+              <Icons.verifiedAdmin
                 aria-label='Verified admin'
                 className='size-4 text-primary transition-transform hover:scale-125'
               />

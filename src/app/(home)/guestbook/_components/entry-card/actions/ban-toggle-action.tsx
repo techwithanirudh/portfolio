@@ -31,7 +31,7 @@ export const BanToggleActionButton = ({
           {isBanned ? (
             <Icons.check className='size-4' />
           ) : (
-            <Icons.userBlocked className='size-4' />
+            <Icons.ban className='size-4' />
           )}
         </Button>
       </TooltipTrigger>

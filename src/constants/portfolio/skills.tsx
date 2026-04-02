@@ -4,7 +4,7 @@ import type { Skill } from '@/types'
 export const skills: Skill[] = [
   {
     id: 1,
-    Icon: Icons.code,
+    Icon: Icons.globe,
     title: 'Web Development',
     description:
       'Building modern web apps with Next.js, React, TypeScript, and UI frameworks.',
@@ -12,7 +12,7 @@ export const skills: Skill[] = [
   },
   {
     id: 2,
-    Icon: Icons.brain,
+    Icon: Icons.ai,
     title: 'AI & Machine Learning',
     description: 'Exploring AI features with Python, OpenCV, and LLMs.',
     size: 'sm',
