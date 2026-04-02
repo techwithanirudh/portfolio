@@ -16,7 +16,7 @@ export function AccountLogoutButton() {
         router.push('/')
         router.refresh()
       }}
-      variant='secondary'
+      variant='destructive'
     >
       <span>Log Out</span>
       <Icons.logOut
