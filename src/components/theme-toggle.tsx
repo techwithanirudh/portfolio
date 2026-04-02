@@ -4,7 +4,6 @@ import { cn } from '@fumadocs/ui/cn'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { type ComponentProps, useEffect, useState } from 'react'
-import { useWebHaptics } from 'web-haptics/react'
 import { Icons } from '@/components/icons/icons'
 
 const itemVariants = cva(
@@ -35,7 +34,6 @@ export function ThemeToggle({
   mode?: 'light-dark' | 'light-dark-system'
 }) {
   const { setTheme, theme, resolvedTheme } = useTheme()
-  const { trigger } = useWebHaptics()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -49,7 +47,6 @@ export function ThemeToggle({
 
   const handleChangeTheme = async (theme: Theme) => {
     function update() {
-      trigger([{ duration: 30 }, { delay: 60, duration: 40, intensity: 1 }])
       setTheme(theme)
     }
 

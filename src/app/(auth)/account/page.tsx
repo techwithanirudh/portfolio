@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { Footer } from '@/components/sections/footer'
 import { createMetadata } from '@/lib/metadata'
 import { AccountLogoutButton } from './_components/account-logout-button'
 import { AccountSettingsSection } from './_components/account-settings-section'
@@ -22,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function AccountPage() {
   return (
-    <div className='flex min-h-full w-full flex-1 flex-col p-4 md:p-6'>
+    <div className='flex min-h-[calc(100dvh-4rem)] w-full flex-1 flex-col p-4 md:p-6'>
       <main className='flex flex-1 flex-col gap-8'>
         <header className='flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between'>
           <div className='space-y-2'>
@@ -45,6 +46,9 @@ export default function AccountPage() {
           </Suspense>
         </div>
       </main>
+      <div className='mt-8 border-border border-t border-dashed pt-0'>
+        <Footer />
+      </div>
     </div>
   )
 }
