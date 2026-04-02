@@ -17,7 +17,7 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
             boxShadow: '0px 2px 1.5px 0px rgba(165,174,184,0.32) inset',
           }}
         >
-          <Logo alt={name} className='bg-transparent' logo={logo} size={36} />
+          <Logo alt={name} className='bg-transparent' logo={logo} size={46} />
         </div>
         {featured && (
           <div className='absolute -top-1 -right-1 rounded-full bg-primary p-1'>
