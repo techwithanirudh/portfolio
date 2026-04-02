@@ -2,7 +2,7 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
-import { Presence } from '@radix-ui/react-presence'
+import { Presence } from 'radix-ui'
 import {
   DefaultChatTransport,
   getStaticToolName,

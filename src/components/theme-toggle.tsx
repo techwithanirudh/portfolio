@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@lib/cn'
+import { cn } from '@/lib/utils'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { type ComponentProps, useEffect, useState } from 'react'

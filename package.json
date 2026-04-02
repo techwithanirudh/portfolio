@@ -33,8 +33,6 @@
     "@fuma-comment/react": "^1.4.1",
     "@fuma-comment/server": "^1.4.1",
     "@hookform/resolvers": "^5.2.2",
-    "@hugeicons/core-free-icons": "^4.1.1",
-    "@hugeicons/react": "^1.1.6",
     "@neondatabase/serverless": "^1.0.2",
     "@next-safe-action/adapter-react-hook-form": "^2.0.5",
     "@octokit/rest": "^22.0.1",
