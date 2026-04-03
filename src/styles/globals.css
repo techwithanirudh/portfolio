@@ -227,46 +227,6 @@
 }
 
 @layer components {
-  .oiia-birth {
-    transform-origin: center;
-    animation: oiia-birth-pop 0.45s ease-out;
-  }
-
-  .oiia-burst {
-    transform-origin: center;
-    animation: oiia-burst-pop 0.6s ease-out;
-  }
-
-  @keyframes oiia-birth-pop {
-    0% {
-      transform: scale(0.6);
-      opacity: 0.7;
-    }
-    60% {
-      transform: scale(1.15);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-
-  @keyframes oiia-burst-pop {
-    0% {
-      transform: scale(0.4);
-      opacity: 0.9;
-    }
-    70% {
-      transform: scale(1.05);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(1.2);
-      opacity: 0;
-    }
-  }
-
   .footer {
     --footer-text-size: clamp(3rem, 14rem, 14vw);
     position: relative;
