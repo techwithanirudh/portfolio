@@ -1,6 +1,4 @@
 const GIF = 'https://media.tenor.com/8VuZc8I8f7EAAAAj/oiia-cat.gif'
-const MIN_RADIUS = 22
-const MAX_RADIUS = 48
 const INITIAL = 5
 const MAX = 60
 const COOLDOWN = 350
@@ -8,6 +6,7 @@ const SPEED_THRESHOLD = 1.2
 // biome-ignore lint/suspicious/noBitwiseOperators: Matter.js collision filter requires bitwise flags
 const CAT_MASK = 0x00_01 | 0x00_02
 const WALL_SIZE = 20_000
+const IMMUNITY_MS = 5000
 
 const BURST_COLORS = [
   '#ff6b6b',
@@ -17,6 +16,20 @@ const BURST_COLORS = [
   '#ff6bcb',
   '#ff9f43',
 ]
+
+function pickRadius(): number {
+  const t = Math.random()
+  if (t < 0.18) {
+    return 24 + Math.floor(Math.random() * 7) // small: 24–30
+  }
+  if (t < 0.72) {
+    return 30 + Math.floor(Math.random() * 9) // medium: 30–38
+  }
+  if (t < 0.92) {
+    return 42 + Math.floor(Math.random() * 12) // large: 42–53
+  }
+  return 56 + Math.floor(Math.random() * 16) // huge: 56–71
+}
 
 export interface OiiaEngine {
   clear: (onDone: () => void) => void
@@ -89,6 +102,9 @@ export function createOiiaEngine(
   const bodies = new Map<number, Matter.Body>()
   const els = new Map<number, HTMLDivElement>()
   const radii = new Map<number, number>()
+  const bodyToId = new Map<Matter.Body, number>()
+  const immuneUntil = new Map<number, number>()
+  const immunityTimeouts = new Map<number, number>()
   let nextId = 0,
     lastSpawn = 0,
     clearing = false
@@ -96,19 +112,17 @@ export function createOiiaEngine(
     drag: Matter.Constraint | null = null,
     dragId: number | null = null
 
-  function spawnCat(x?: number, y?: number) {
+  function spawnCat(x?: number, y?: number, halo?: string) {
     if (bodies.size >= MAX) {
       return
     }
     const id = nextId++
-    const r =
-      MIN_RADIUS + Math.floor(Math.random() * (MAX_RADIUS - MIN_RADIUS + 1))
+    const r = pickRadius()
     const cx = x ?? r + Math.random() * (window.innerWidth - r * 2)
     const cy = y ?? r + Math.random() * (window.innerHeight - r * 2)
 
     const body = M.Bodies.circle(cx, cy, r, {
       label: 'oiia',
-      // restitution: 1 — perfectly elastic cat-to-cat collisions so speed never decays
       restitution: 1,
       friction: 0,
       frictionAir: 0,
@@ -120,13 +134,16 @@ export function createOiiaEngine(
     M.World.add(engine.world, body)
 
     const el = document.createElement('div')
+    if (halo) {
+      el.style.filter = `drop-shadow(0 0 10px ${halo})`
+    }
     // Start translated offscreen so no flash at (0,0) before the RAF loop positions it
-    el.style.cssText = `position:absolute;width:${r * 2}px;height:${r * 2}px;top:0;left:0;pointer-events:auto;will-change:transform;cursor:grab;z-index:2;border-radius:50%;overflow:hidden;opacity:0;transition:opacity 0.2s ease-out;transform:translate3d(-9999px,-9999px,0);`
+    el.style.cssText = `${el.style.cssText}position:absolute;width:${r * 2}px;height:${r * 2}px;top:0;left:0;pointer-events:auto;will-change:transform;cursor:grab;z-index:2;opacity:0;transition:opacity 0.2s ease-out;transform:translate3d(-9999px,-9999px,0);`
     const img = document.createElement('img')
     img.src = GIF
     img.alt = 'OIIA cat'
     img.style.cssText =
-      'width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;-webkit-user-drag:none;'
+      'width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;'
     el.appendChild(img)
     container.appendChild(el)
     requestAnimationFrame(() => {
@@ -153,6 +170,20 @@ export function createOiiaEngine(
     bodies.set(id, body)
     els.set(id, el)
     radii.set(id, r)
+    bodyToId.set(body, id)
+    if (halo) {
+      immuneUntil.set(id, performance.now() + IMMUNITY_MS)
+      const timeoutId = window.setTimeout(() => {
+        immuneUntil.delete(id)
+        immunityTimeouts.delete(id)
+        const elRef = els.get(id)
+        if (elRef) {
+          elRef.style.transition = 'filter 0.8s ease-out'
+          elRef.style.filter = ''
+        }
+      }, IMMUNITY_MS)
+      immunityTimeouts.set(id, timeoutId)
+    }
     onCount(bodies.size)
   }
 
@@ -183,10 +214,21 @@ export function createOiiaEngine(
         if (now - lastSpawn < COOLDOWN || bodies.size >= MAX) {
           break
         }
+        const idA = bodyToId.get(bodyA)
+        const idB = bodyToId.get(bodyB)
+        if (
+          (idA !== undefined && (immuneUntil.get(idA) ?? 0) > now) ||
+          (idB !== undefined && (immuneUntil.get(idB) ?? 0) > now)
+        ) {
+          break
+        }
         lastSpawn = now
+        const halo =
+          BURST_COLORS[Math.floor(Math.random() * BURST_COLORS.length)]
         spawnCat(
           (bodyA.position.x + bodyB.position.x) / 2,
-          (bodyA.position.y + bodyB.position.y) / 2
+          (bodyA.position.y + bodyB.position.y) / 2,
+          halo
         )
         break
       }
@@ -196,7 +238,7 @@ export function createOiiaEngine(
   const tick = () => {
     for (const [id, body] of bodies) {
       const el = els.get(id)
-      const r = radii.get(id) ?? MIN_RADIUS
+      const r = radii.get(id) ?? 34
       if (el) {
         el.style.transform = `translate3d(${body.position.x - r}px,${body.position.y - r}px,0)`
       }
@@ -229,7 +271,7 @@ export function createOiiaEngine(
     M.Body.setPosition(wL, { x: -25, y: nh / 2 })
     M.Body.setPosition(wR, { x: nw + 25, y: nh / 2 })
     for (const [id, body] of bodies) {
-      const r = radii.get(id) ?? MIN_RADIUS
+      const r = radii.get(id) ?? 34
       M.Body.setPosition(body, {
         x: Math.max(r, Math.min(nw - r, body.position.x)),
         y: Math.max(r, Math.min(nh - r, body.position.y)),
@@ -247,6 +289,10 @@ export function createOiiaEngine(
     if (drag) {
       M.World.remove(engine.world, drag)
     }
+    for (const timeoutId of immunityTimeouts.values()) {
+      window.clearTimeout(timeoutId)
+    }
+    immunityTimeouts.clear()
     window.removeEventListener('pointermove', onMove)
     window.removeEventListener('pointerup', onUp)
     window.removeEventListener('pointercancel', onUp)

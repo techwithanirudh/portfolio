@@ -15,6 +15,21 @@ export function OiiaEngine() {
   }, [mode])
 
   useEffect(() => {
+    if (mode !== 'oiia') {
+      return
+    }
+
+    const { body } = document
+    const previousUserSelect = body.style.userSelect
+
+    body.style.userSelect = 'none'
+
+    return () => {
+      body.style.userSelect = previousUserSelect
+    }
+  }, [mode])
+
+  useEffect(() => {
     if (mode !== 'oiia' || !container.current) {
       return
     }
