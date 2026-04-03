@@ -17,8 +17,8 @@ export function OiiaWidget() {
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         >
           {/* Tip */}
-          <p className='select-none text-center text-[11px] text-white/40'>
-            make two collide to spawn a new oiia 🐱
+          <p className='flex select-none items-center gap-2 rounded-full border border-black/10 bg-white/75 p-1.5 text-xs text-black/70 backdrop-blur-xl dark:border-white/20 dark:bg-black/60 dark:text-white/70'>
+            make two collide to spawn a new oiia
           </p>
 
           {/* Controls pill */}

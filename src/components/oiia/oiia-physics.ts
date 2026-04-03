@@ -2,7 +2,10 @@ const GIF = 'https://media.tenor.com/8VuZc8I8f7EAAAAj/oiia-cat.gif'
 const INITIAL = 5
 const MAX = 60
 const COOLDOWN = 350
+const SOUND_COOLDOWN = 420
 const SPEED_THRESHOLD = 1.2
+const SOUND_SPEED_THRESHOLD = 3.2
+const HITBOX_SCALE = 0.68
 // biome-ignore lint/suspicious/noBitwiseOperators: Matter.js collision filter requires bitwise flags
 const CAT_MASK = 0x00_01 | 0x00_02
 const WALL_SIZE = 20_000
@@ -38,8 +41,14 @@ export interface OiiaEngine {
 
 // Reuse one AudioContext so each boing doesn't pay construction latency
 let sharedCtx: AudioContext | null = null
+let lastBoingAt = 0
 function boing() {
   try {
+    const now = performance.now()
+    if (now - lastBoingAt < SOUND_COOLDOWN) {
+      return
+    }
+    lastBoingAt = now
     const Ctx =
       window.AudioContext ||
       (window as Window & { webkitAudioContext?: typeof AudioContext })
@@ -117,11 +126,16 @@ export function createOiiaEngine(
       return
     }
     const id = nextId++
-    const r = pickRadius()
-    const cx = x ?? r + Math.random() * (window.innerWidth - r * 2)
-    const cy = y ?? r + Math.random() * (window.innerHeight - r * 2)
+    const visualRadius = pickRadius()
+    const collisionRadius = Math.max(12, Math.round(visualRadius * HITBOX_SCALE))
+    const cx =
+      x ??
+      visualRadius + Math.random() * (window.innerWidth - visualRadius * 2)
+    const cy =
+      y ??
+      visualRadius + Math.random() * (window.innerHeight - visualRadius * 2)
 
-    const body = M.Bodies.circle(cx, cy, r, {
+    const body = M.Bodies.circle(cx, cy, collisionRadius, {
       label: 'oiia',
       restitution: 1,
       friction: 0,
@@ -138,7 +152,7 @@ export function createOiiaEngine(
       el.style.filter = `drop-shadow(0 0 10px ${halo})`
     }
     // Start translated offscreen so no flash at (0,0) before the RAF loop positions it
-    el.style.cssText = `${el.style.cssText}position:absolute;width:${r * 2}px;height:${r * 2}px;top:0;left:0;pointer-events:auto;will-change:transform;cursor:grab;z-index:2;opacity:0;transition:opacity 0.2s ease-out;transform:translate3d(-9999px,-9999px,0);`
+    el.style.cssText = `${el.style.cssText}position:absolute;width:${visualRadius * 2}px;height:${visualRadius * 2}px;top:0;left:0;pointer-events:auto;will-change:transform;cursor:grab;z-index:2;opacity:0;transition:opacity 0.2s ease-out;transform:translate3d(-9999px,-9999px,0);`
     const img = document.createElement('img')
     img.src = GIF
     img.alt = 'OIIA cat'
@@ -169,7 +183,7 @@ export function createOiiaEngine(
 
     bodies.set(id, body)
     els.set(id, el)
-    radii.set(id, r)
+    radii.set(id, visualRadius)
     bodyToId.set(body, id)
     if (halo) {
       immuneUntil.set(id, performance.now() + IMMUNITY_MS)
@@ -209,8 +223,10 @@ export function createOiiaEngine(
         if (rel < SPEED_THRESHOLD) {
           continue
         }
-        boing()
         const now = performance.now()
+        if (rel >= SOUND_SPEED_THRESHOLD) {
+          boing()
+        }
         if (now - lastSpawn < COOLDOWN || bodies.size >= MAX) {
           break
         }

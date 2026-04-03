@@ -20,6 +20,7 @@ async function createNextConfig(): Promise<NextConfig> {
         fullUrl: true,
       },
     },
+    allowedDevOrigins: ['3000--main--portfolio--techwithanirudh.coder.techwithanirudh.com'],
     experimental: {
       viewTransition: true,
     },
