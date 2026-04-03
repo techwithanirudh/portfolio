@@ -3,6 +3,7 @@
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -13,81 +14,43 @@ import { baseTitle, oiiaTitle } from '@/constants/site'
 
 type OiiaMode = 'default' | 'oiia'
 
-type OiiaContextValue = {
-  mode: OiiaMode
+interface OiiaContextValue {
+  catCount: number
+  clearAllRequest: number
   clicksRemaining: number
-  playRequest: number
-  spawnRequest: number
-  registerOiiaClick: () => { remaining: number; mode: OiiaMode }
   disableOiia: () => void
+  mode: OiiaMode
+  registerOiiaClick: () => { remaining: number; mode: OiiaMode }
+  requestClearAll: () => void
+  setCatCount: (n: number) => void
 }
 
 const OiiaContext = createContext<OiiaContextValue | null>(null)
 
-const StorageKey = 'oiia-mode'
-const ClicksToEnable = 5
+const ClicksToEnable = 3
 
 export function OiiaProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<OiiaMode>('default')
   const [clicksRemaining, setClicksRemaining] = useState(ClicksToEnable)
-  const [playRequest, setPlayRequest] = useState(0)
-  const [spawnRequest, setSpawnRequest] = useState(0)
+  const [catCount, setCatCount] = useState(0)
+  const [clearAllRequest, setClearAllRequest] = useState(0)
   const clicksRemainingRef = useRef(ClicksToEnable)
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-    const stored = localStorage.getItem(StorageKey)
-    setMode(stored === 'oiia' ? 'oiia' : 'default')
-  }, [])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-    localStorage.setItem(StorageKey, mode)
     document.documentElement.classList.toggle('oiia', mode === 'oiia')
 
     const currentTitle = document.title
-    if (currentTitle.includes(baseTitle)) {
-      document.title = currentTitle.replace(
-        baseTitle,
-        mode === 'oiia' ? oiiaTitle : baseTitle
-      )
-      return
-    }
-    if (currentTitle.includes(oiiaTitle)) {
-      document.title = currentTitle.replace(
-        oiiaTitle,
-        mode === 'oiia' ? oiiaTitle : baseTitle
-      )
+    if (mode === 'oiia' && currentTitle.includes(baseTitle)) {
+      document.title = currentTitle.replace(baseTitle, oiiaTitle)
+    } else if (mode === 'default' && currentTitle.includes(oiiaTitle)) {
+      document.title = currentTitle.replace(oiiaTitle, baseTitle)
     }
   }, [mode])
 
-  useEffect(() => {
-    if (mode !== 'oiia') {
-      return
-    }
-
-    const handleClick = () => {
-      setPlayRequest((count) => count + 1)
-    }
-
-    window.addEventListener('pointerdown', handleClick)
-    return () => {
-      window.removeEventListener('pointerdown', handleClick)
-    }
-  }, [mode])
-
-  useEffect(() => {
-    if (mode !== 'oiia') {
-      return
-    }
-    setSpawnRequest((count) => count + 1)
-  }, [mode])
-
-  const registerOiiaClick = () => {
+  const registerOiiaClick = useCallback((): {
+    remaining: number
+    mode: OiiaMode
+  } => {
     const nextRemaining = Math.max(0, clicksRemainingRef.current - 1)
     clicksRemainingRef.current = nextRemaining
     setClicksRemaining(nextRemaining)
@@ -100,26 +63,44 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
     setMode(nextMode)
     clicksRemainingRef.current = ClicksToEnable
     setClicksRemaining(ClicksToEnable)
+    if (nextMode === 'default') {
+      setCatCount(0)
+    }
 
     return { remaining: 0, mode: nextMode }
-  }
+  }, [mode])
 
-  const disableOiia = () => {
+  const disableOiia = useCallback(() => {
     setMode('default')
     clicksRemainingRef.current = ClicksToEnable
     setClicksRemaining(ClicksToEnable)
-  }
+    setCatCount(0)
+  }, [])
+
+  const requestClearAll = useCallback(() => {
+    setClearAllRequest((n) => n + 1)
+  }, [])
 
   const value = useMemo(
     () => ({
       mode,
       clicksRemaining,
-      playRequest,
-      spawnRequest,
+      catCount,
+      clearAllRequest,
+      setCatCount,
+      requestClearAll,
       registerOiiaClick,
       disableOiia,
     }),
-    [clicksRemaining, mode, playRequest, spawnRequest]
+    [
+      mode,
+      clicksRemaining,
+      catCount,
+      clearAllRequest,
+      requestClearAll,
+      registerOiiaClick,
+      disableOiia,
+    ]
   )
 
   return <OiiaContext value={value}>{children}</OiiaContext>

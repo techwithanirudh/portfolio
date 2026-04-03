@@ -1,3 +1,4 @@
+export { OiiaAudio } from './oiia-audio'
+export { OiiaEngine } from './oiia-engine'
 export { OiiaProvider, useOiiaMode } from './oiia-provider'
-export { OiiaFloaters } from './oiia-floaters'
-export { OiiaAudioWidget } from './oiia-audio-widget'
+export { OiiaWidget } from './oiia-widget'

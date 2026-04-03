@@ -228,13 +228,13 @@
 
 @layer components {
   .oiia-birth {
-    animation: oiia-birth-pop 0.45s ease-out;
     transform-origin: center;
+    animation: oiia-birth-pop 0.45s ease-out;
   }
 
   .oiia-burst {
-    animation: oiia-burst-pop 0.6s ease-out;
     transform-origin: center;
+    animation: oiia-burst-pop 0.6s ease-out;
   }
 
   @keyframes oiia-birth-pop {
