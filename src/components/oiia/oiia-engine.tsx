@@ -5,12 +5,14 @@ import { useOiiaMode } from './oiia-provider'
 
 const GIF_URL = 'https://media.tenor.com/8VuZc8I8f7EAAAAj/oiia-cat.gif'
 const CAT_RADIUS = 34
-const INITIAL_CATS = 3
+const INITIAL_CATS = 5
 const MAX_CATS = 60
 const SPAWN_COOLDOWN_MS = 350
-const COLLISION_VELOCITY_THRESHOLD = 0.8
+const COLLISION_SPEED_THRESHOLD = 1.2
 // biome-ignore lint/suspicious/noBitwiseOperators: Matter.js collision filter requires bitwise flags
-const CAT_COLLISION_MASK = 0x00_01 | 0x00_02
+const CAT_MASK = 0x00_01 | 0x00_02
+// Oversized so they never need rescaling on resize — only position needs updating
+const WALL_EXTENT = 20_000
 
 const BURST_COLORS = [
   '#ff6b6b',
@@ -45,7 +47,7 @@ interface EngineState {
   runner: Matter.Runner
 }
 
-function playBoingSound() {
+function playBoing() {
   try {
     const Ctx =
       window.AudioContext ||
@@ -67,26 +69,27 @@ function playBoingSound() {
     osc.start(ctx.currentTime)
     osc.stop(ctx.currentTime + 0.28)
   } catch {
-    // AudioContext may be suspended before first user interaction
+    // AudioContext unavailable before first user gesture — ignore
   }
 }
 
-function spawnHoliParticles(container: HTMLDivElement, x: number, y: number) {
+function burstParticles(container: HTMLDivElement, x: number, y: number) {
   for (let i = 0; i < 10; i++) {
-    const angle = (i / 10) * Math.PI * 2 + Math.random() * 0.3
-    const distance = 60 + Math.random() * 80
-    const size = 8 + Math.random() * 10
+    const angle = (i / 10) * Math.PI * 2 + Math.random() * 0.4
+    const dist = 55 + Math.random() * 75
+    const size = 7 + Math.random() * 9
     const color =
       PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)] ??
       '#fff'
-    const particle = document.createElement('div')
-    particle.style.cssText = `position:fixed;left:${x - size / 2}px;top:${y - size / 2}px;width:${size}px;height:${size}px;border-radius:50%;background:${color};pointer-events:none;z-index:10001;transition:transform 0.55s cubic-bezier(0.22,1,0.36,1),opacity 0.5s ease-out;will-change:transform,opacity;`
-    container.appendChild(particle)
+    const p = document.createElement('div')
+    // z-index:100 — above cats (z-index:2) so particles are actually visible
+    p.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:${size}px;height:${size}px;margin-left:-${size / 2}px;margin-top:-${size / 2}px;border-radius:50%;background:${color};pointer-events:none;z-index:100;transition:transform 0.55s cubic-bezier(0.22,1,0.36,1),opacity 0.5s ease-out;will-change:transform,opacity;`
+    container.appendChild(p)
     requestAnimationFrame(() => {
-      particle.style.transform = `translate(${Math.cos(angle) * distance}px,${Math.sin(angle) * distance}px) scale(0)`
-      particle.style.opacity = '0'
+      p.style.transform = `translate(${Math.cos(angle) * dist}px,${Math.sin(angle) * dist}px) scale(0)`
+      p.style.opacity = '0'
     })
-    setTimeout(() => particle.remove(), 600)
+    setTimeout(() => p.remove(), 600)
   }
 }
 
@@ -103,22 +106,23 @@ function mountEngine(
   const w = window.innerWidth
   const h = window.innerHeight
 
+  // Walls are WALL_EXTENT wide/tall so resize only needs a position update, never a scale
   const makeWall = (x: number, y: number, width: number, height: number) =>
     M.Bodies.rectangle(x, y, width, height, {
       isStatic: true,
       label: 'wall',
-      restitution: 0.55,
-      friction: 0.05,
+      restitution: 1,
+      friction: 0,
       frictionStatic: 0,
     })
 
-  const [wallTop, wallBottom, wallLeft, wallRight] = [
-    makeWall(w / 2, -25, w + 200, 50),
-    makeWall(w / 2, h + 25, w + 200, 50),
-    makeWall(-25, h / 2, 50, h + 200),
-    makeWall(w + 25, h / 2, 50, h + 200),
+  const [wTop, wBottom, wLeft, wRight] = [
+    makeWall(w / 2, -25, WALL_EXTENT, 50),
+    makeWall(w / 2, h + 25, WALL_EXTENT, 50),
+    makeWall(-25, h / 2, 50, WALL_EXTENT),
+    makeWall(w + 25, h / 2, 50, WALL_EXTENT),
   ] as [Matter.Body, Matter.Body, Matter.Body, Matter.Body]
-  M.World.add(engine.world, [wallTop, wallBottom, wallLeft, wallRight])
+  M.World.add(engine.world, [wTop, wBottom, wLeft, wRight])
 
   const bodies = new Map<number, Matter.Body>()
   const elements = new Map<number, HTMLDivElement>()
@@ -137,34 +141,37 @@ function mountEngine(
     dragBodyId: null,
   }
 
-  const spawnCat = (x?: number, y?: number, vx = 0, vy = 0) => {
+  const spawnCat = (x?: number, y?: number, inheritVx = 0, inheritVy = 0) => {
     if (bodies.size >= MAX_CATS) {
       return
     }
     const id = state.nextId++
     const cx =
-      x ?? Math.random() * (window.innerWidth - CAT_RADIUS * 2) + CAT_RADIUS
+      x ?? CAT_RADIUS + Math.random() * (window.innerWidth - CAT_RADIUS * 2)
     const cy =
-      y ?? Math.random() * (window.innerHeight - CAT_RADIUS * 2) + CAT_RADIUS
+      y ?? CAT_RADIUS + Math.random() * (window.innerHeight - CAT_RADIUS * 2)
 
     const body = M.Bodies.circle(cx, cy, CAT_RADIUS, {
       label: 'oiia',
-      restitution: 0.75,
-      friction: 0.01,
-      frictionAir: 0.001,
+      restitution: 0.9,
+      friction: 0,
+      frictionAir: 0, // no damping — cats keep their speed indefinitely
       density: 0.002,
-      collisionFilter: { category: 0x00_01, mask: CAT_COLLISION_MASK },
+      collisionFilter: { category: 0x00_01, mask: CAT_MASK },
     })
-    const spawnAngle = Math.random() * Math.PI * 2
-    const spawnSpeed = 3 + Math.random() * 4
+
+    const angle = Math.random() * Math.PI * 2
+    const speed = 4 + Math.random() * 3
     M.Body.setVelocity(body, {
-      x: vx + Math.cos(spawnAngle) * spawnSpeed,
-      y: vy + Math.sin(spawnAngle) * spawnSpeed,
+      x: inheritVx * 0.4 + Math.cos(angle) * speed,
+      y: inheritVy * 0.4 + Math.sin(angle) * speed,
     })
     M.World.add(engine.world, body)
 
+    // position:absolute inside fixed inset-0 container == viewport coordinates,
+    // but avoids "fixed-inside-stacking-context" clipping that blocked free movement
     const el = document.createElement('div')
-    el.style.cssText = `position:fixed;width:${CAT_RADIUS * 2}px;height:${CAT_RADIUS * 2}px;top:0;left:0;pointer-events:auto;will-change:transform;cursor:grab;z-index:9999;border-radius:50%;overflow:hidden;animation:oiia-birth-pop 0.4s cubic-bezier(0.34,1.56,0.64,1);`
+    el.style.cssText = `position:absolute;width:${CAT_RADIUS * 2}px;height:${CAT_RADIUS * 2}px;top:0;left:0;pointer-events:auto;will-change:transform;cursor:grab;z-index:2;border-radius:50%;overflow:hidden;opacity:0;transition:opacity 0.25s ease-out;`
     const img = document.createElement('img')
     img.src = GIF_URL
     img.alt = 'OIIA cat'
@@ -172,6 +179,10 @@ function mountEngine(
       'width:100%;height:100%;object-fit:cover;pointer-events:none;user-select:none;-webkit-user-drag:none;'
     el.appendChild(img)
     container.appendChild(el)
+    // Fade in without touching transform — the RAF loop owns transform exclusively
+    requestAnimationFrame(() => {
+      el.style.opacity = '1'
+    })
 
     el.addEventListener('pointerdown', (e) => {
       e.stopPropagation()
@@ -183,7 +194,7 @@ function mountEngine(
       const constraint = M.Constraint.create({
         bodyA: body,
         pointB: { x: e.clientX, y: e.clientY },
-        stiffness: 0.07,
+        stiffness: 0.06,
         damping: 0.05,
         length: 0,
       })
@@ -207,37 +218,44 @@ function mountEngine(
       if (state.clearing || !isOiiaRef.current) {
         return
       }
-      const now = performance.now()
-      if (
-        now - state.lastSpawn < SPAWN_COOLDOWN_MS ||
-        bodies.size >= MAX_CATS
-      ) {
-        return
-      }
 
-      for (const pair of event.pairs) {
-        const { bodyA, bodyB } = pair
+      for (const { bodyA, bodyB } of event.pairs) {
         if (bodyA.label !== 'oiia' || bodyB.label !== 'oiia') {
           continue
         }
+
         const relSpeed = Math.hypot(
           bodyA.velocity.x - bodyB.velocity.x,
           bodyA.velocity.y - bodyB.velocity.y
         )
-        if (relSpeed < COLLISION_VELOCITY_THRESHOLD) {
+        if (relSpeed < COLLISION_SPEED_THRESHOLD) {
           continue
         }
+
+        // Always boing, even at max cap
+        playBoing()
+
+        const now = performance.now()
+        if (
+          now - state.lastSpawn < SPAWN_COOLDOWN_MS ||
+          bodies.size >= MAX_CATS
+        ) {
+          break
+        }
+
         state.lastSpawn = now
         spawnCat(
           (bodyA.position.x + bodyB.position.x) / 2,
-          (bodyA.position.y + bodyB.position.y) / 2
+          (bodyA.position.y + bodyB.position.y) / 2,
+          (bodyA.velocity.x + bodyB.velocity.x) / 2,
+          (bodyA.velocity.y + bodyB.velocity.y) / 2
         )
-        playBoingSound()
         break
       }
     }
   )
 
+  // RAF loop: physics positions → DOM transforms, bypassing React reconciliation
   const tick = () => {
     for (const [id, body] of bodies) {
       const el = elements.get(id)
@@ -261,24 +279,29 @@ function mountEngine(
     M.World.remove(engine.world, state.dragConstraint)
     state.dragConstraint = null
     if (state.dragBodyId !== null) {
-      elements
-        .get(state.dragBodyId)
-        ?.setAttribute(
-          'style',
-          elements
-            .get(state.dragBodyId)!
-            .style.cssText.replace('cursor:grabbing', 'cursor:grab')
-        )
+      elements.get(state.dragBodyId)?.style.setProperty('cursor', 'grab')
       state.dragBodyId = null
     }
   }
+
+  // On resize: only reposition walls (they're oversized, no scale needed).
+  // Also clamp any out-of-bounds cats so they don't get trapped outside the new walls.
   const onResize = () => {
     const nw = window.innerWidth
     const nh = window.innerHeight
-    M.Body.setPosition(wallTop, { x: nw / 2, y: -25 })
-    M.Body.setPosition(wallBottom, { x: nw / 2, y: nh + 25 })
-    M.Body.setPosition(wallLeft, { x: -25, y: nh / 2 })
-    M.Body.setPosition(wallRight, { x: nw + 25, y: nh / 2 })
+    M.Body.setPosition(wTop, { x: nw / 2, y: -25 })
+    M.Body.setPosition(wBottom, { x: nw / 2, y: nh + 25 })
+    M.Body.setPosition(wLeft, { x: -25, y: nh / 2 })
+    M.Body.setPosition(wRight, { x: nw + 25, y: nh / 2 })
+    for (const [, body] of bodies) {
+      const clamped = {
+        x: Math.max(CAT_RADIUS, Math.min(nw - CAT_RADIUS, body.position.x)),
+        y: Math.max(CAT_RADIUS, Math.min(nh - CAT_RADIUS, body.position.y)),
+      }
+      if (clamped.x !== body.position.x || clamped.y !== body.position.y) {
+        M.Body.setPosition(body, clamped)
+      }
+    }
   }
 
   window.addEventListener('pointermove', onPointerMove)
@@ -308,7 +331,7 @@ export function OiiaEngine() {
   const { mode, setCatCount, clearAllRequest } = useOiiaMode()
   const isOiia = mode === 'oiia'
   const containerRef = useRef<HTMLDivElement>(null)
-  const engineStateRef = useRef<EngineState | null>(null)
+  const stateRef = useRef<EngineState | null>(null)
   const cleanupRef = useRef<(() => void) | null>(null)
   const isOiiaRef = useRef(isOiia)
 
@@ -336,7 +359,7 @@ export function OiiaEngine() {
         isOiiaRef,
         setCatCount
       )
-      engineStateRef.current = state
+      stateRef.current = state
       cleanupRef.current = cleanup
     })
 
@@ -344,17 +367,17 @@ export function OiiaEngine() {
       cancelled = true
       cleanupRef.current?.()
       cleanupRef.current = null
-      engineStateRef.current = null
+      stateRef.current = null
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOiia, setCatCount])
 
-  // Holi-style clear animation
+  // Holi clear: burst every cat outward with particles, then respawn fresh
   useEffect(() => {
     if (clearAllRequest === 0) {
       return
     }
-    const state = engineStateRef.current
+    const state = stateRef.current
     const container = containerRef.current
     if (!(state && container)) {
       return
@@ -371,23 +394,22 @@ export function OiiaEngine() {
     for (const [, el] of state.elements) {
       const angle =
         (i / state.elements.size) * Math.PI * 2 + (Math.random() - 0.5) * 0.5
-      const d = 120 + Math.random() * 80
+      const d = 110 + Math.random() * 80
       const color = BURST_COLORS[i % BURST_COLORS.length] ?? '#fff'
       el.style.transition =
-        'transform 0.55s cubic-bezier(0.22,1,0.36,1),opacity 0.55s ease-out'
-      el.style.transform = `${el.style.transform} translate(${Math.cos(angle) * d}px,${Math.sin(angle) * d}px) scale(0.3)`
+        'transform 0.55s cubic-bezier(0.22,1,0.36,1),opacity 0.5s ease-out'
+      el.style.transform = `${el.style.transform} translate(${Math.cos(angle) * d}px,${Math.sin(angle) * d}px) scale(0.2)`
       el.style.opacity = '0'
-      el.style.filter = `drop-shadow(0 0 12px ${color})`
+      el.style.filter = `drop-shadow(0 0 10px ${color})`
       i++
     }
-
     for (const [, body] of state.bodies) {
-      spawnHoliParticles(container, body.position.x, body.position.y)
+      burstParticles(container, body.position.x, body.position.y)
     }
 
     cleanupRef.current?.()
     cleanupRef.current = null
-    engineStateRef.current = null
+    stateRef.current = null
 
     setTimeout(() => {
       if (!(isOiiaRef.current && containerRef.current)) {
@@ -397,13 +419,13 @@ export function OiiaEngine() {
         if (!(isOiiaRef.current && containerRef.current)) {
           return
         }
-        const { state: newState, cleanup } = mountEngine(
+        const { state: s, cleanup } = mountEngine(
           M,
           containerRef.current,
           isOiiaRef,
           setCatCount
         )
-        engineStateRef.current = newState
+        stateRef.current = s
         cleanupRef.current = cleanup
       })
     }, 650)
@@ -413,7 +435,7 @@ export function OiiaEngine() {
   return (
     <div
       aria-hidden='true'
-      className='pointer-events-none fixed inset-0 z-[9998] overflow-hidden'
+      className='pointer-events-none fixed inset-0 z-[9998]'
       ref={containerRef}
     />
   )

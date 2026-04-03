@@ -10,7 +10,6 @@ import {
   useRef,
   useState,
 } from 'react'
-import { baseTitle, oiiaTitle } from '@/constants/site'
 
 type OiiaMode = 'default' | 'oiia'
 
@@ -27,42 +26,35 @@ interface OiiaContextValue {
 
 const OiiaContext = createContext<OiiaContextValue | null>(null)
 
-const ClicksToEnable = 3
+const CLICKS_TO_ENABLE = 3
 
 export function OiiaProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<OiiaMode>('default')
-  const [clicksRemaining, setClicksRemaining] = useState(ClicksToEnable)
+  const [clicksRemaining, setClicksRemaining] = useState(CLICKS_TO_ENABLE)
   const [catCount, setCatCount] = useState(0)
   const [clearAllRequest, setClearAllRequest] = useState(0)
-  const clicksRemainingRef = useRef(ClicksToEnable)
+  const clicksRef = useRef(CLICKS_TO_ENABLE)
 
   useEffect(() => {
     document.documentElement.classList.toggle('oiia', mode === 'oiia')
-
-    const currentTitle = document.title
-    if (mode === 'oiia' && currentTitle.includes(baseTitle)) {
-      document.title = currentTitle.replace(baseTitle, oiiaTitle)
-    } else if (mode === 'default' && currentTitle.includes(oiiaTitle)) {
-      document.title = currentTitle.replace(oiiaTitle, baseTitle)
-    }
   }, [mode])
 
   const registerOiiaClick = useCallback((): {
     remaining: number
     mode: OiiaMode
   } => {
-    const nextRemaining = Math.max(0, clicksRemainingRef.current - 1)
-    clicksRemainingRef.current = nextRemaining
-    setClicksRemaining(nextRemaining)
+    const next = Math.max(0, clicksRef.current - 1)
+    clicksRef.current = next
+    setClicksRemaining(next)
 
-    if (nextRemaining !== 0) {
-      return { remaining: nextRemaining, mode }
+    if (next !== 0) {
+      return { remaining: next, mode }
     }
 
     const nextMode: OiiaMode = mode === 'oiia' ? 'default' : 'oiia'
     setMode(nextMode)
-    clicksRemainingRef.current = ClicksToEnable
-    setClicksRemaining(ClicksToEnable)
+    clicksRef.current = CLICKS_TO_ENABLE
+    setClicksRemaining(CLICKS_TO_ENABLE)
     if (nextMode === 'default') {
       setCatCount(0)
     }
@@ -72,14 +64,15 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
 
   const disableOiia = useCallback(() => {
     setMode('default')
-    clicksRemainingRef.current = ClicksToEnable
-    setClicksRemaining(ClicksToEnable)
+    clicksRef.current = CLICKS_TO_ENABLE
+    setClicksRemaining(CLICKS_TO_ENABLE)
     setCatCount(0)
   }, [])
 
-  const requestClearAll = useCallback(() => {
-    setClearAllRequest((n) => n + 1)
-  }, [])
+  const requestClearAll = useCallback(
+    () => setClearAllRequest((n) => n + 1),
+    []
+  )
 
   const value = useMemo(
     () => ({
