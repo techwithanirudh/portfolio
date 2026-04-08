@@ -50,6 +50,29 @@ const Hero = () => {
         />
       </motion.div>
       <ViewAnimation
+        delay={0.05}
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+      >
+        <div className='flex items-center gap-2 rounded-full border border-fd-border bg-fd-muted px-4 py-1.5 text-sm font-medium text-fd-muted-foreground'>
+          <span
+            aria-hidden
+            className='inline-block animate-bounce'
+            style={{ animationDuration: '1.2s' }}
+          >
+            🎉
+          </span>
+          <span>Happy Birthday, Babbar!</span>
+          <span
+            aria-hidden
+            className='inline-block animate-bounce'
+            style={{ animationDuration: '1.2s', animationDelay: '0.15s' }}
+          >
+            🎂
+          </span>
+        </div>
+      </ViewAnimation>
+      <ViewAnimation
         delay={0.1}
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
@@ -79,23 +102,32 @@ const Hero = () => {
           ) : (
             <>
               Hi! I'm{' '}
-              <button
-                aria-pressed={isOiia}
-                className='inline-flex items-baseline rounded-sm px-1 text-fd-primary transition-colors hover:bg-fd-muted hover:text-fd-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring'
-                onClick={() => {
-                  const result = registerOiiaClick()
-                  if (result.remaining > 0) {
-                    toast(`${result.remaining} clicks remaining`)
-                  } else if (result.mode === 'oiia') {
-                    toast('oiia mode enabled')
-                  } else {
-                    toast('oiia mode disabled')
-                  }
-                }}
-                type='button'
-              >
-                Anirudh
-              </button>
+              <span className='relative inline-flex items-baseline'>
+                <span
+                  aria-hidden
+                  className='absolute -top-8 left-1/2 -translate-x-1/2 -rotate-[20deg] animate-bounce text-3xl'
+                  style={{ animationDuration: '2s' }}
+                >
+                  🎩
+                </span>
+                <button
+                  aria-pressed={isOiia}
+                  className='inline-flex items-baseline rounded-sm px-1 text-fd-primary transition-colors hover:bg-fd-muted hover:text-fd-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring'
+                  onClick={() => {
+                    const result = registerOiiaClick()
+                    if (result.remaining > 0) {
+                      toast(`${result.remaining} clicks remaining`)
+                    } else if (result.mode === 'oiia') {
+                      toast('oiia mode enabled')
+                    } else {
+                      toast('oiia mode disabled')
+                    }
+                  }}
+                  type='button'
+                >
+                  Anirudh
+                </button>
+              </span>
               !
             </>
           )}
