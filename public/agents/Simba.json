@@ -1,0 +1,13 @@
+{
+  "frameWidth": 16,
+  "frameHeight": 16,
+  "cols": 6,
+  "scale": 5,
+  "animations": {
+    "Idle": { "row": 0, "frames": 6, "fps": 6,  "loop": true  },
+    "Walk": { "row": 1, "frames": 6, "fps": 8,  "loop": true  },
+    "Run":  { "row": 2, "frames": 6, "fps": 12, "loop": true  },
+    "Jump": { "row": 3, "frames": 6, "fps": 10, "loop": false },
+    "Fall": { "row": 4, "frames": 4, "fps": 8,  "loop": false }
+  }
+}

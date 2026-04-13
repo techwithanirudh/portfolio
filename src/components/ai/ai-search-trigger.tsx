@@ -30,14 +30,14 @@ function SimbaTriggerInner() {
       aria-label={open ? 'Close Simba' : 'Ask Simba'}
       aria-pressed={open}
       className={cn(
-        'fixed bottom-5 right-5 z-40 size-20 cursor-pointer bg-no-repeat transition-opacity duration-300',
+        'fixed bottom-5 right-5 z-40 cursor-pointer bg-no-repeat transition-opacity duration-300',
         isReady ? 'opacity-100' : 'opacity-0'
       )}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role='button'
       style={{
-        backgroundImage: 'url(/agents/Rover.png)',
+        backgroundImage: 'url(/agents/Simba.png)',
         backgroundPosition: '0 0',
         imageRendering: 'pixelated',
       }}

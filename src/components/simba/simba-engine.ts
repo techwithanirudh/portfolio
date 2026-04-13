@@ -1,32 +1,43 @@
-type Branch = { frameIndex: number; weight: number }
-
-export type AnimationFrame = {
-  duration: number
-  images: [[number, number], ...[number, number][]]
-  branching?: { branches: Branch[] }
+export type AnimationDef = {
+  row: number
+  frames: number
+  fps: number
+  loop: boolean
 }
 
-export type Animation = {
-  frames: AnimationFrame[]
+export type AgentConfig = {
+  frameWidth: number
+  frameHeight: number
+  cols: number
+  scale: number
+  animations: Record<string, AnimationDef>
 }
 
 /**
- * Drives a sprite-sheet animation by calling `onFrame(x, y)` once per frame.
- * Uses the same weighted-random branching logic as the original MS Agent format.
+ * Drives a row-based sprite-sheet animation at a fixed fps.
+ * Calls `onFrame(x, y)` with scaled background-position offsets each tick.
+ * Non-looping animations fire `onComplete` when the last frame finishes.
  */
 export class SimbaEngine {
   private timer: ReturnType<typeof setTimeout> | null = null
   private frameIndex = 0
-  private animation: Animation | null = null
+  private current: AnimationDef | null = null
+  private onComplete: (() => void) | undefined
+  private config: AgentConfig | null = null
   private readonly onFrame: (x: number, y: number) => void
 
   constructor(onFrame: (x: number, y: number) => void) {
     this.onFrame = onFrame
   }
 
-  play(animation: Animation): void {
+  setConfig(config: AgentConfig): void {
+    this.config = config
+  }
+
+  play(anim: AnimationDef, onComplete?: () => void): void {
     this.stop()
-    this.animation = animation
+    this.current = anim
+    this.onComplete = onComplete
     this.frameIndex = 0
     this.tick()
   }
@@ -36,49 +47,35 @@ export class SimbaEngine {
       clearTimeout(this.timer)
       this.timer = null
     }
-    this.animation = null
+    this.current = null
+    this.onComplete = undefined
   }
 
   private tick(): void {
-    const anim = this.animation
-    if (!anim) return
+    const anim = this.current
+    const config = this.config
+    if (!anim || !config) return
 
-    const frame = anim.frames[this.frameIndex]
-    if (!frame) {
-      this.animation = null
-      return
-    }
-
-    const [x, y] = frame.images[0]
+    const scale = config.scale
+    const x = this.frameIndex * config.frameWidth * scale
+    const y = anim.row * config.frameHeight * scale
     this.onFrame(x, y)
 
     this.timer = setTimeout(() => {
-      if (!this.animation) return
-      this.frameIndex = this.resolveNext(frame, this.frameIndex, anim.frames.length)
-      if (this.frameIndex >= anim.frames.length) {
-        this.animation = null
-        return
+      if (!this.current) return
+      this.frameIndex++
+
+      if (this.frameIndex >= anim.frames) {
+        if (anim.loop) {
+          this.frameIndex = 0
+        } else {
+          this.current = null
+          this.onComplete?.()
+          return
+        }
       }
+
       this.tick()
-    }, frame.duration)
-  }
-
-  /**
-   * Mirrors the original clippyts branching: subtract each branch weight from a
-   * 0-100 roll; first branch whose cumulative weight exceeds the roll wins.
-   * If no branch is taken, fall through to the next sequential frame.
-   */
-  private resolveNext(frame: AnimationFrame, current: number, total: number): number {
-    const branches = frame.branching?.branches
-    if (!branches || branches.length === 0) return current + 1
-
-    let rnd = Math.random() * 100
-    for (const branch of branches) {
-      if (rnd <= branch.weight) return branch.frameIndex
-      rnd -= branch.weight
-    }
-
-    const next = current + 1
-    return next < total ? next : total
+    }, 1000 / anim.fps)
   }
 }

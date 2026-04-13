@@ -8,19 +8,14 @@ import {
   useRef,
   useState,
 } from 'react'
-import type { Animation } from './simba-engine'
+import type { AgentConfig } from './simba-engine'
 import { SimbaEngine } from './simba-engine'
 import { SimbaContext, type SimbaContextValue } from './simba-context'
-
-type AgentData = {
-  framesize: [number, number]
-  animations: Record<string, Animation>
-}
 
 export function SimbaProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false)
   const spriteRef = useRef<HTMLDivElement | null>(null)
-  const animationsRef = useRef<AgentData['animations'] | null>(null)
+  const configRef = useRef<AgentConfig | null>(null)
   const engineRef = useRef<SimbaEngine | null>(null)
 
   useEffect(() => {
@@ -31,14 +26,31 @@ export function SimbaProvider({ children }: { children: ReactNode }) {
     })
     engineRef.current = engine
 
-    fetch('/agents/Rover.json')
-      .then((r) => r.json() as Promise<AgentData>)
-      .then((data) => {
-        animationsRef.current = data.animations
+    fetch('/agents/Simba.json')
+      .then((r) => r.json() as Promise<AgentConfig>)
+      .then((config) => {
+        configRef.current = config
+        engine.setConfig(config)
+
+        // Size the sprite element to one scaled frame
+        if (spriteRef.current) {
+          const w = config.frameWidth * config.scale
+          const h = config.frameHeight * config.scale
+          const bgW = config.cols * config.frameWidth * config.scale
+          const bgH = Object.keys(config.animations).length * config.frameHeight * config.scale
+          spriteRef.current.style.width = `${w}px`
+          spriteRef.current.style.height = `${h}px`
+          spriteRef.current.style.backgroundSize = `${bgW}px ${bgH}px`
+        }
+
+        // Start idle loop
+        const idle = config.animations['Idle']
+        if (idle) engine.play(idle)
+
         setIsReady(true)
       })
       .catch((err: unknown) => {
-        console.error('SimbaProvider: failed to load Rover.json', err)
+        console.error('SimbaProvider: failed to load Simba.json', err)
       })
 
     return () => {
@@ -51,10 +63,22 @@ export function SimbaProvider({ children }: { children: ReactNode }) {
     spriteRef.current = el
   }, [])
 
-  const play = useCallback((name: string) => {
-    const animation = animationsRef.current?.[name]
-    if (animation) engineRef.current?.play(animation)
+  const playIdle = useCallback(() => {
+    const config = configRef.current
+    const idle = config?.animations['Idle']
+    if (idle) engineRef.current?.play(idle)
   }, [])
+
+  const play = useCallback(
+    (name: string) => {
+      const config = configRef.current
+      const anim = config?.animations[name]
+      if (!anim) return
+      // Non-looping animations return to Idle when done
+      engineRef.current?.play(anim, anim.loop ? undefined : playIdle)
+    },
+    [playIdle]
+  )
 
   const stop = useCallback(() => {
     engineRef.current?.stop()
