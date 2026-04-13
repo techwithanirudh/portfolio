@@ -46,10 +46,6 @@ export function SimbaProvider({ children }: { children: ReactNode }) {
         // Size the sprite element if already mounted
         if (spriteRef.current) applyFrameStyles(spriteRef.current, config)
 
-        // Start idle loop
-        const idle = config.animations['Idle']
-        if (idle) engine.play(idle)
-
         setIsReady(true)
       })
       .catch((err: unknown) => {
@@ -68,18 +64,18 @@ export function SimbaProvider({ children }: { children: ReactNode }) {
     if (el && configRef.current) applyFrameStyles(el, configRef.current)
   }, [])
 
-  const playIdle = useCallback(() => {
-    const idle = configRef.current?.animations['Idle']
-    if (idle) engineRef.current?.play(idle)
+  // After any animation completes, hold the first frame of Idle as a static pose
+  const resetToStatic = useCallback(() => {
+    if (spriteRef.current) spriteRef.current.style.backgroundPosition = '0 0'
   }, [])
 
   const play = useCallback(
     (name: string) => {
       const anim = configRef.current?.animations[name]
       if (!anim) return
-      engineRef.current?.play(anim, anim.loop ? undefined : playIdle)
+      engineRef.current?.play(anim, anim.loop ? undefined : resetToStatic)
     },
-    [playIdle]
+    [resetToStatic]
   )
 
   const stop = useCallback(() => {
