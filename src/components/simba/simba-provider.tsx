@@ -12,6 +12,17 @@ import type { AgentConfig } from './simba-engine'
 import { SimbaEngine } from './simba-engine'
 import { SimbaContext, type SimbaContextValue } from './simba-context'
 
+function applyFrameStyles(el: HTMLDivElement, config: AgentConfig) {
+  const w = config.frameWidth * config.scale
+  const h = config.frameHeight * config.scale
+  const bgW = config.cols * config.frameWidth * config.scale
+  const bgH =
+    Object.keys(config.animations).length * config.frameHeight * config.scale
+  el.style.width = `${w}px`
+  el.style.height = `${h}px`
+  el.style.backgroundSize = `${bgW}px ${bgH}px`
+}
+
 export function SimbaProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false)
   const spriteRef = useRef<HTMLDivElement | null>(null)
@@ -32,16 +43,8 @@ export function SimbaProvider({ children }: { children: ReactNode }) {
         configRef.current = config
         engine.setConfig(config)
 
-        // Size the sprite element to one scaled frame
-        if (spriteRef.current) {
-          const w = config.frameWidth * config.scale
-          const h = config.frameHeight * config.scale
-          const bgW = config.cols * config.frameWidth * config.scale
-          const bgH = Object.keys(config.animations).length * config.frameHeight * config.scale
-          spriteRef.current.style.width = `${w}px`
-          spriteRef.current.style.height = `${h}px`
-          spriteRef.current.style.backgroundSize = `${bgW}px ${bgH}px`
-        }
+        // Size the sprite element if already mounted
+        if (spriteRef.current) applyFrameStyles(spriteRef.current, config)
 
         // Start idle loop
         const idle = config.animations['Idle']
@@ -61,20 +64,19 @@ export function SimbaProvider({ children }: { children: ReactNode }) {
 
   const attachSprite = useCallback((el: HTMLDivElement | null) => {
     spriteRef.current = el
+    // Config may already be loaded if dynamic import resolved after fetch
+    if (el && configRef.current) applyFrameStyles(el, configRef.current)
   }, [])
 
   const playIdle = useCallback(() => {
-    const config = configRef.current
-    const idle = config?.animations['Idle']
+    const idle = configRef.current?.animations['Idle']
     if (idle) engineRef.current?.play(idle)
   }, [])
 
   const play = useCallback(
     (name: string) => {
-      const config = configRef.current
-      const anim = config?.animations[name]
+      const anim = configRef.current?.animations[name]
       if (!anim) return
-      // Non-looping animations return to Idle when done
       engineRef.current?.play(anim, anim.loop ? undefined : playIdle)
     },
     [playIdle]
