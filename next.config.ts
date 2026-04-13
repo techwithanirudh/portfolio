@@ -20,6 +20,7 @@ async function createNextConfig(): Promise<NextConfig> {
         fullUrl: true,
       },
     },
+    allowedDevOrigins: ['3000--main--portfolio--techwithanirudh.coder.techwithanirudh.com'],
     experimental: {
       viewTransition: true,
     },
@@ -47,6 +48,31 @@ async function createNextConfig(): Promise<NextConfig> {
         {
           protocol: 'https',
           hostname: 'fumadocs.dev',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'tenor.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'clipart-library.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'media.tenor.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'media.giphy.com',
+          port: '',
+        },
+        {
+          protocol: 'https',
+          hostname: 'media4.giphy.com',
           port: '',
         },
       ],

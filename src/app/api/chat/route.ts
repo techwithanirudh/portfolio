@@ -26,9 +26,11 @@ export async function POST(request: Request) {
     const {
       messages,
       pageContext,
+      mode,
     }: {
       messages: MyUIMessage[]
       pageContext?: PageContext
+      mode?: 'default' | 'oiia'
     } = await request.json()
 
     const handleStreamError = (error: unknown) => {
@@ -81,10 +83,11 @@ export async function POST(request: Request) {
           system: systemPrompt({
             llms,
             pageContext,
+            mode,
           }),
           providerOptions: {
             openai: {
-              reasoningEffort: 'minimal',
+              reasoningEffort: 'low',
               reasoningSummary: 'auto',
               textVerbosity: 'medium',
               serviceTier: 'priority',

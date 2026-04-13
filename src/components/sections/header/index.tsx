@@ -19,6 +19,7 @@ import {
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
+import { Menu, X } from 'lucide-react'
 import {
   type ComponentProps,
   Fragment,
@@ -26,8 +27,9 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { Icons } from '@/components/icons/icons'
+import { useOiiaMode } from '@/components/oiia'
 import { ViewAnimation } from '@/components/view-animation'
+import { getSiteTitle } from '@/constants/site'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
@@ -70,7 +72,7 @@ const renderNavTitle = (
 
   return (
     <Link href={href} {...props}>
-      {title as ReactNode}
+      {title}
     </Link>
   )
 }
@@ -83,6 +85,7 @@ export const Header = ({
   searchToggle = {},
   className,
 }: HomeLayoutProps & { className?: string }) => {
+  const { mode } = useOiiaMode()
   const { navItems, menuItems } = useMemo(() => {
     const navItems: LinkItemType[] = []
     const menuItems: LinkItemType[] = []
@@ -115,10 +118,15 @@ export const Header = ({
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            {renderNavTitle(nav, {
-              className:
-                'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
-            })}
+            {renderNavTitle(
+              {
+                ...nav,
+                title: getSiteTitle(mode),
+              },
+              {
+                className: 'inline-flex items-center gap-2.5 font-semibold',
+              }
+            )}
           </ViewAnimation>
           {nav.children}
         </div>
@@ -212,8 +220,8 @@ export const Header = ({
                   : (event) => event.preventDefault()
               }
             >
-              <Icons.menu className='transition-all duration-300 group-data-[state=open]:hidden' />
-              <Icons.close className='hidden transition-all duration-300 group-data-[state=open]:block' />
+              <Menu className='transition-all duration-300 group-data-[state=open]:hidden' />
+              <X className='hidden transition-all duration-300 group-data-[state=open]:block' />
             </NavigationMenuTrigger>
           </ViewAnimation>
           <NavigationMenuContent className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end'>

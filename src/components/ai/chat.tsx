@@ -44,6 +44,7 @@ import {
   useClippy,
 } from '@/components/clippy'
 import { Icons } from '@/components/icons/icons'
+import { useOiiaMode } from '@/components/oiia'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -75,6 +76,7 @@ export function useChatContext() {
 
 export function AISearch({ children }: { children: ReactNode }) {
   const pathname = usePathname()
+  const { mode } = useOiiaMode()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
   const chat = useChat<MyUIMessage>({
@@ -88,6 +90,7 @@ export function AISearch({ children }: { children: ReactNode }) {
           pageContext: {
             pathname,
           },
+          mode,
         },
       }),
     }),
@@ -116,13 +119,16 @@ export function AISearch({ children }: { children: ReactNode }) {
 
 function Header() {
   const { setOpen, chat, setContext } = useAISearchContext()
+  const { mode } = useOiiaMode()
 
   return (
     <div className='sticky top-0 flex h-10 items-start'>
       <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
         <div className='flex items-center gap-2'>
           <Icons.pawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
-          <p className='font-medium text-sm'>Ask Simba</p>
+          <p className='font-medium text-sm'>
+            {mode === 'oiia' ? 'Ask OIIA' : 'Ask Simba'}
+          </p>
         </div>
       </div>
 
@@ -132,7 +138,8 @@ function Header() {
             buttonVariants({
               color: 'secondary',
               size: 'icon-sm',
-              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              className:
+                'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
             })
           )}
           onClick={() => {
@@ -149,7 +156,8 @@ function Header() {
             buttonVariants({
               size: 'icon-sm',
               color: 'primary',
-              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              className:
+                'group/button w-10 flex-1 rounded-none border-none [&_svg]:size-4',
             })
           )}
           onClick={() => setOpen(false)}
@@ -198,6 +206,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { setContext, context } = useAISearchContext()
   const { clippy } = useClippy()
+  const { mode } = useOiiaMode()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -272,6 +281,14 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     }
   }, [isLoading])
 
+  const placeholder = isLoading
+    ? mode === 'oiia'
+      ? 'Purring for answers...'
+      : 'Sniffing for answers...'
+    : mode === 'oiia'
+      ? 'Ask OIIA'
+      : 'Ask Simba'
+
   return (
     <form
       {...props}
@@ -290,12 +307,12 @@ function SearchAIInput(props: ComponentProps<'form'>) {
               onStart(event)
             }
           }}
-          placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
+          placeholder={placeholder}
           value={input}
         />
       </div>
       <div
-        className={cn('flex h-10 items-center justify-center pe-1.5', {
+        className={cn('flex h-10 h-full items-center justify-center pe-1.5', {
           'bg-fd-background': context,
         })}
       >
@@ -349,7 +366,7 @@ function PromptContext({
   }
 
   return (
-    <div className='flex h-10 items-start gap-1.5 bg-fd-background px-2 py-1 text-xs'>
+    <div className='flex h-10 items-start gap-1.5 bg-fd-background px-2 py-1.5 text-xs'>
       <Icons.quote className='mt-0.5 size-3 shrink-0 text-fd-muted-foreground' />
       <span className='line-clamp-2 flex-1 break-words'>
         {context.slice(0, MaxSourcePreviewChars)}
@@ -401,6 +418,7 @@ function MessageList({
   status: string
 } & ComponentProps<'div'>) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { mode } = useOiiaMode()
 
   useEffect(() => {
     const container = containerRef.current
@@ -446,8 +464,9 @@ function MessageList({
           <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
             <Icons.pawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />
             <p>
-              heya! im simba, anirudh's dog. i can answer questions about him,
-              his work, or the site.
+              {mode === 'oiia'
+                ? "heya! im oiia, anirudh's cat. i can answer questions about him, his work, or the site."
+                : "heya! im simba, anirudh's dog. i can answer questions about him, his work, or the site."}
             </p>
           </div>
         ) : (
@@ -505,48 +524,53 @@ const Message = memo(function Message({
           </div>
         ) : null}
         <MessageMetadata inProgress={isInProgress} parts={parts} />
-        {parts.map((part, index) => {
-          if (part.type === 'text') {
-            return (
-              <div
-                className='prose text-sm'
-                key={`${message.id}-text-${index}`}
-              >
-                <Markdown text={part.text} />
-              </div>
-            )
-          }
-          if (part.type === 'tool-showContactForm') {
-            const isSubmitted = part.state === 'output-available'
-            const submittedData =
-              isSubmitted &&
-              part.output?.success &&
-              part.output.name &&
-              part.output.email &&
-              part.output.message
-                ? {
-                    name: part.output.name,
-                    email: part.output.email,
-                    message: part.output.message,
-                  }
-                : undefined
+        {(() => {
+          let textPartOrdinal = 0
 
-            if (!isSubmitted && part.state !== 'input-available') {
-              return <AIContactFormSkeleton key={part.toolCallId} />
+          return parts.map((part) => {
+            if (part.type === 'text') {
+              const key = `${message.id}-text-${textPartOrdinal}`
+
+              textPartOrdinal += 1
+
+              return (
+                <div className='prose text-sm' key={key}>
+                  <Markdown text={part.text} />
+                </div>
+              )
             }
+            if (part.type === 'tool-showContactForm') {
+              const isSubmitted = part.state === 'output-available'
+              const submittedData =
+                isSubmitted &&
+                part.output?.success &&
+                part.output.name &&
+                part.output.email &&
+                part.output.message
+                  ? {
+                      name: part.output.name,
+                      email: part.output.email,
+                      message: part.output.message,
+                    }
+                  : undefined
 
-            return (
-              <AIContactForm
-                isSubmitted={isSubmitted}
-                key={part.toolCallId}
-                prefill={part.input?.prefill ?? undefined}
-                submittedData={submittedData}
-                toolCallId={part.toolCallId}
-              />
-            )
-          }
-          return null
-        })}
+              if (!isSubmitted && part.state !== 'input-available') {
+                return <AIContactFormSkeleton key={part.toolCallId} />
+              }
+
+              return (
+                <AIContactForm
+                  isSubmitted={isSubmitted}
+                  key={part.toolCallId}
+                  prefill={part.input?.prefill ?? undefined}
+                  submittedData={submittedData}
+                  toolCallId={part.toolCallId}
+                />
+              )
+            }
+            return null
+          })
+        })()}
       </div>
     </div>
   )
@@ -554,6 +578,7 @@ const Message = memo(function Message({
 
 function AISearchPanel() {
   const { setContext, open, setOpen } = useAISearchContext()
+  const { mode } = useOiiaMode()
   const chat = useChatContext()
   const { clippy } = useClippy()
   const lastTool = useRef<string | null>(null)
@@ -661,6 +686,7 @@ function AISearchPanel() {
         </div>
       </Presence>
       <SelectionContextMenu
+        label={mode === 'oiia' ? 'Ask OIIA' : 'Ask Simba'}
         onSelect={(text) => {
           const normalized = text.trim()
           if (!normalized) {

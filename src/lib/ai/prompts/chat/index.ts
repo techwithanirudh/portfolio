@@ -13,12 +13,14 @@ interface PageContext {
 export const systemPrompt = ({
   llms,
   pageContext,
+  mode,
 }: {
   llms: string
   pageContext?: PageContext
+  mode?: 'default' | 'oiia'
 }) =>
   [
-    corePrompt,
+    corePrompt(mode),
     personalityPrompt,
     directivesPrompt,
     toolsPrompt,
