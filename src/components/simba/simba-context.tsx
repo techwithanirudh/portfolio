@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react'
 
-export interface FloppyContextValue {
+export interface SimbaContextValue {
   /** Play a named animation (e.g. 'LookUp', 'Hide', 'Books', 'Searching'). */
   play: (name: string) => void
   /** Stop the current animation immediately. */
@@ -16,10 +16,10 @@ export interface FloppyContextValue {
   attachSprite: (el: HTMLDivElement | null) => void
 }
 
-export const FloppyContext = createContext<FloppyContextValue | undefined>(undefined)
+export const SimbaContext = createContext<SimbaContextValue | undefined>(undefined)
 
-export function useFloppyAgent(): FloppyContextValue {
-  const ctx = useContext(FloppyContext)
-  if (!ctx) throw new Error('useFloppyAgent must be used within FloppyProvider')
+export function useSimba(): SimbaContextValue {
+  const ctx = useContext(SimbaContext)
+  if (!ctx) throw new Error('useSimba must be used within SimbaProvider')
   return ctx
 }

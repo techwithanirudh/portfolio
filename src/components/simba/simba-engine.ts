@@ -14,7 +14,7 @@ export type Animation = {
  * Drives a sprite-sheet animation by calling `onFrame(x, y)` once per frame.
  * Uses the same weighted-random branching logic as the original MS Agent format.
  */
-export class FloppyEngine {
+export class SimbaEngine {
   private timer: ReturnType<typeof setTimeout> | null = null
   private frameIndex = 0
   private animation: Animation | null = null

@@ -38,10 +38,10 @@ import {
   AIContactFormSkeleton,
 } from '@/components/ai/tools/contact-form'
 import {
-  floppyAnimations,
-  FloppyProvider,
-  useFloppyAgent,
-} from '@/components/floppy'
+  simbaAnimations,
+  SimbaProvider,
+  useSimba,
+} from '@/components/simba'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
@@ -93,7 +93,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <FloppyProvider>
+    <SimbaProvider>
       <AISearchContext
         value={useMemo(
           () => ({
@@ -109,7 +109,7 @@ export function AISearch({ children }: { children: ReactNode }) {
         {children}
         <AISearchPanel />
       </AISearchContext>
-    </FloppyProvider>
+    </SimbaProvider>
   )
 }
 
@@ -196,7 +196,7 @@ const MaxSourcePreviewChars = 120
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { setContext, context } = useAISearchContext()
-  const { play, stop: stopAnimation } = useFloppyAgent()
+  const { play, stop: stopAnimation } = useSimba()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -232,7 +232,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
     stopAnimation()
-    play(floppyAnimations.submit)
+    play(simbaAnimations.submit)
 
     setInput('')
     setContext(null)
@@ -552,7 +552,7 @@ const Message = memo(function Message({
 function AISearchPanel() {
   const { setContext, open, setOpen } = useAISearchContext()
   const chat = useChatContext()
-  const { play, stop: stopAnimation } = useFloppyAgent()
+  const { play, stop: stopAnimation } = useSimba()
   const lastTool = useRef<string | null>(null)
   const lastOpen = useRef(open)
 
@@ -582,7 +582,7 @@ function AISearchPanel() {
     if (lastOpen.current === open) return
     lastOpen.current = open
     stopAnimation()
-    play(open ? floppyAnimations.open : floppyAnimations.bye)
+    play(open ? simbaAnimations.open : simbaAnimations.bye)
   }, [open, play, stopAnimation])
 
   useEffect(() => {
@@ -599,7 +599,7 @@ function AISearchPanel() {
 
     lastTool.current = toolPart.type
     stopAnimation()
-    play(floppyAnimations.tool)
+    play(simbaAnimations.tool)
   }, [chat.messages, chat.status, play, stopAnimation])
 
   const panelStyle = useMemo(

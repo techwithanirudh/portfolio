@@ -3,12 +3,12 @@
 import dynamic from 'next/dynamic'
 import { type KeyboardEvent, useCallback } from 'react'
 import { useAISearchContext } from '@/components/ai/chat'
-import { useFloppyAgent } from '@/components/floppy'
+import { useSimba } from '@/components/simba'
 import { cn } from '@/lib/utils'
 
-function FloppyTriggerInner() {
+function SimbaTriggerInner() {
   const { open, setOpen } = useAISearchContext()
-  const { attachSprite, isReady } = useFloppyAgent()
+  const { attachSprite, isReady } = useSimba()
 
   const handleClick = useCallback(() => {
     setOpen((prev) => !prev)
@@ -47,6 +47,6 @@ function FloppyTriggerInner() {
 }
 
 export const AISearchTrigger = dynamic(
-  () => Promise.resolve(FloppyTriggerInner),
+  () => Promise.resolve(SimbaTriggerInner),
   { ssr: false }
 )

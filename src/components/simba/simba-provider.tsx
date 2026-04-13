@@ -8,23 +8,23 @@ import {
   useRef,
   useState,
 } from 'react'
-import type { Animation } from './floppy-engine'
-import { FloppyEngine } from './floppy-engine'
-import { FloppyContext, type FloppyContextValue } from './floppy-context'
+import type { Animation } from './simba-engine'
+import { SimbaEngine } from './simba-engine'
+import { SimbaContext, type SimbaContextValue } from './simba-context'
 
 type AgentData = {
   framesize: [number, number]
   animations: Record<string, Animation>
 }
 
-export function FloppyProvider({ children }: { children: ReactNode }) {
+export function SimbaProvider({ children }: { children: ReactNode }) {
   const [isReady, setIsReady] = useState(false)
   const spriteRef = useRef<HTMLDivElement | null>(null)
   const animationsRef = useRef<AgentData['animations'] | null>(null)
-  const engineRef = useRef<FloppyEngine | null>(null)
+  const engineRef = useRef<SimbaEngine | null>(null)
 
   useEffect(() => {
-    const engine = new FloppyEngine((x, y) => {
+    const engine = new SimbaEngine((x, y) => {
       if (spriteRef.current) {
         spriteRef.current.style.backgroundPosition = `-${x}px -${y}px`
       }
@@ -38,7 +38,7 @@ export function FloppyProvider({ children }: { children: ReactNode }) {
         setIsReady(true)
       })
       .catch((err: unknown) => {
-        console.error('FloppyProvider: failed to load Rover.json', err)
+        console.error('SimbaProvider: failed to load Rover.json', err)
       })
 
     return () => {
@@ -60,12 +60,12 @@ export function FloppyProvider({ children }: { children: ReactNode }) {
     engineRef.current?.stop()
   }, [])
 
-  const value = useMemo<FloppyContextValue>(
+  const value = useMemo<SimbaContextValue>(
     () => ({ play, stop, isReady, attachSprite }),
     [play, stop, isReady, attachSprite]
   )
 
   return (
-    <FloppyContext.Provider value={value}>{children}</FloppyContext.Provider>
+    <SimbaContext.Provider value={value}>{children}</SimbaContext.Provider>
   )
 }
