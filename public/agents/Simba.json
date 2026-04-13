@@ -2,7 +2,7 @@
   "frameWidth": 64,
   "frameHeight": 64,
   "cols": 4,
-  "scale": 1,
+  "scale": 2,
   "animations": {
     "Idle":   { "row": 0, "frames": 4, "fps": 6,  "loop": true  },
     "Walk":   { "row": 1, "frames": 4, "fps": 8,  "loop": true  },
