@@ -8,7 +8,8 @@ export type AnimationDef = {
 export type AgentConfig = {
   frameWidth: number
   frameHeight: number
-  cols: number
+  sheetCols: number
+  sheetRows: number
   scale: number
   animations: Record<string, AnimationDef>
 }

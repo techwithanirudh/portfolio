@@ -15,9 +15,8 @@ import { SimbaContext, type SimbaContextValue } from './simba-context'
 function applyFrameStyles(el: HTMLDivElement, config: AgentConfig) {
   const w = config.frameWidth * config.scale
   const h = config.frameHeight * config.scale
-  const bgW = config.cols * config.frameWidth * config.scale
-  const bgH =
-    Object.keys(config.animations).length * config.frameHeight * config.scale
+  const bgW = config.sheetCols * config.frameWidth * config.scale
+  const bgH = config.sheetRows * config.frameHeight * config.scale
   el.style.width = `${w}px`
   el.style.height = `${h}px`
   el.style.backgroundSize = `${bgW}px ${bgH}px`

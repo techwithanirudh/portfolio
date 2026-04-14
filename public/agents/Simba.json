@@ -1,12 +1,14 @@
 {
-  "frameWidth": 64,
-  "frameHeight": 64,
-  "cols": 4,
-  "scale": 2,
+  "frameWidth": 48,
+  "frameHeight": 34,
+  "sheetCols": 10,
+  "sheetRows": 5,
+  "scale": 3,
   "animations": {
-    "Idle":   { "row": 0, "frames": 4, "fps": 6,  "loop": true  },
-    "Walk":   { "row": 1, "frames": 4, "fps": 8,  "loop": true  },
-    "Attack": { "row": 2, "frames": 4, "fps": 10, "loop": false },
-    "Death":  { "row": 3, "frames": 4, "fps": 8,  "loop": false }
+    "Idle":      { "row": 0, "frames": 10, "fps": 10, "loop": false },
+    "Walk":      { "row": 1, "frames": 8,  "fps": 8,  "loop": true  },
+    "Run":       { "row": 2, "frames": 8,  "fps": 12, "loop": true  },
+    "Bark":      { "row": 3, "frames": 3,  "fps": 8,  "loop": false },
+    "LyingDown": { "row": 4, "frames": 7,  "fps": 8,  "loop": false }
   }
 }
