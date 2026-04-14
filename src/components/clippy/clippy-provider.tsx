@@ -38,24 +38,8 @@ export function ClippyProvider({ children, character }: ClippyProviderProps) {
   useEffect(() => {
     let cancelled = false
 
-    character
-      .map()
-      .then(({ default: mapUrl }: { default: string }) => {
-        const image = new Image()
-        image.decoding = 'async'
-        image.src = mapUrl
-        if (image.complete) {
-          return
-        }
-        return new Promise<void>((resolve) => {
-          image.addEventListener('load', () => resolve(), { once: true })
-          image.addEventListener('error', () => resolve(), { once: true })
-        })
-      })
-      .then(async () => {
-        const { initAgent } = await import('clippyjs')
-        return initAgent(character)
-      })
+    import('clippyjs')
+      .then(({ initAgent }) => initAgent(character))
       .then((loaded: ClippyAgent) => {
         if (cancelled) {
           loaded.dispose()

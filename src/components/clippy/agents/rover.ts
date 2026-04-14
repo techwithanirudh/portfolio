@@ -1,8 +1,17 @@
 import RoverOriginal from 'clippyjs/agents/rover'
 
-const STATIC_ROVER_MAP_URL = '/assets/clippy/rover.png' as const
+const BASE = '/assets/clippy'
 
 export const Rover = {
   ...RoverOriginal,
-  map: () => Promise.resolve({ default: STATIC_ROVER_MAP_URL }),
+  map: () => Promise.resolve({ default: `${BASE}/rover.png` }),
+  sound: () =>
+    Promise.resolve({
+      default: Object.fromEntries(
+        Array.from({ length: 10 }, (_, i) => [
+          String(i + 1),
+          `${BASE}/sounds/rover-${i + 1}.mp3`,
+        ])
+      ),
+    }),
 }
