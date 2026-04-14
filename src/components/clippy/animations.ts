@@ -6,13 +6,14 @@ export const animations = {
 } as const
 
 export const idleExclude = new Set([
-  'Show', // entrance
-  'Hide', // exit
-  'HideQuick', // exit
-  'RestPose', // static hold
-  'Money', // 1-frame, freezes the loop
-  'Sports', // golf — too long / weird out of context
-  'Celebrity', // movie — same
+  'Books',
+  'Searching',
+  'Show',
+  'Hide',
+  'HideQuick',
+  'RestPose',
+  'Money',
+  'Sports',
+  'Celebrity',
 ])
-
 export const openAnimations = ['ClickedOn', 'Pleased'] as const
