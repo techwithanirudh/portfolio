@@ -1,1 +1,1 @@
-export { ClippyProvider, useClippy } from './clippy-provider'
+export { ClippyProvider, useClippy } from './provider'

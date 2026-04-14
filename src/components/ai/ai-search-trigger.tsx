@@ -3,12 +3,12 @@
 import dynamic from 'next/dynamic'
 import { useAISearchContext } from '@/components/ai/chat'
 import { useClippy } from '@/components/clippy'
-import { useClippyTriggerBehavior } from '@/components/clippy/use-clippy-behavior'
+import { useClippyTrigger } from '@/components/clippy/hooks'
 
 function ClippyTriggerInner() {
-  const { open, setOpen } = useAISearchContext()
+  const { setOpen } = useAISearchContext()
   const { agent } = useClippy()
-  useClippyTriggerBehavior({ agent, open, setOpen })
+  useClippyTrigger({ agent, setOpen })
 
   return null
 }

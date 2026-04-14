@@ -34,10 +34,7 @@ import {
 } from '@/components/ai/tools/contact-form'
 import { ClippyProvider, useClippy } from '@/components/clippy'
 import { Rover } from '@/components/clippy/agents/rover'
-import {
-  playSubmitAnimation,
-  useClippyPanelBehavior,
-} from '@/components/clippy/use-clippy-behavior'
+import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
@@ -566,7 +563,7 @@ function AISearchPanel() {
     return () => window.removeEventListener('keydown', onKeyPress)
   }, [])
 
-  useClippyPanelBehavior({
+  useClippyPanel({
     agent,
     messages: chat.messages,
     open,
