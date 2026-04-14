@@ -14,7 +14,7 @@ function getPosition() {
 
 function ClippyTriggerInner() {
   const { open, setOpen } = useAISearchContext()
-  const { clippy, element } = useClippy()
+  const { agent } = useClippy()
   const openRef = useRef(open)
 
   useEffect(() => {
@@ -22,24 +22,22 @@ function ClippyTriggerInner() {
   }, [open])
 
   useEffect(() => {
-    if (!clippy) {
+    if (!agent) {
       return
     }
 
     const reposition = () => {
       const { x, y } = getPosition()
-      clippy.moveTo(x, y, 0)
+      agent.moveTo(x, y, 0)
     }
 
-    clippy.show(true)
+    agent.show(true)
     reposition()
 
-    if (element) {
-      element.style.visibility = 'hidden'
-      requestAnimationFrame(() => {
-        element.style.visibility = 'visible'
-      })
-    }
+    agent._el.style.visibility = 'hidden'
+    requestAnimationFrame(() => {
+      agent._el.style.visibility = 'visible'
+    })
 
     const handleClick = (event: Event) => {
       event.preventDefault()
@@ -51,23 +49,23 @@ function ClippyTriggerInner() {
       window.requestAnimationFrame(() => reposition())
     }
 
-    element?.addEventListener('click', handleClick)
+    agent._el.addEventListener('click', handleClick)
     window.addEventListener('resize', handleResize)
 
     return () => {
-      element?.removeEventListener('click', handleClick)
+      agent._el.removeEventListener('click', handleClick)
       window.removeEventListener('resize', handleResize)
     }
-  }, [clippy, element, setOpen])
+  }, [agent, setOpen])
 
   useEffect(() => {
-    if (!(clippy && open)) {
+    if (!(agent && open)) {
       return
     }
 
     const { x, y } = getPosition()
-    clippy.moveTo(x, y, 0)
-  }, [clippy, open])
+    agent.moveTo(x, y, 0)
+  }, [agent, open])
 
   return null
 }

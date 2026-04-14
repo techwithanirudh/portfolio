@@ -1,13 +1,12 @@
 'use client'
 
-import type { Agent } from 'clippyts'
-import type { AgentType } from 'clippyts/dist/types'
+import type { initAgent } from 'clippyjs'
 import { createContext, useContext } from 'react'
 
+export type ClippyAgent = Awaited<ReturnType<typeof initAgent>>
+
 export interface ClippyContextValue {
-  agentName: AgentType
-  clippy: Agent | undefined
-  element: HTMLElement | null
+  agent: ClippyAgent | undefined
 }
 
 export const ClippyContext = createContext<ClippyContextValue | undefined>(

@@ -1,82 +1,88 @@
 'use client'
 
-import 'clippyts/src/clippy.css'
-import type { Agent } from 'clippyts'
-import type { AgentType } from 'clippyts/dist/types'
+import { initAgent } from 'clippyjs'
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
-import AGENTS from './agents'
-import { ClippyContext, type ClippyContextValue } from './clippy-context'
+import {
+  type ClippyAgent,
+  ClippyContext,
+  type ClippyContextValue,
+} from './clippy-context'
+
+type Agent = Parameters<typeof initAgent>[0]
 
 interface ClippyProviderProps {
-  agentName?: AgentType
+  agent: Agent
   children?: ReactNode
-  draggable?: boolean
 }
 
-export function ClippyProvider({
-  children,
-  agentName = AGENTS.CLIPPY,
-  draggable = false,
-}: ClippyProviderProps) {
-  const [clippy, setClippy] = useState<Agent | undefined>()
-  const [element, setElement] = useState<HTMLElement | null>(null)
-  const instance = useRef<Agent | null>(null)
+export function ClippyProvider({ children, agent }: ClippyProviderProps) {
+  const [currentAgent, setCurrentAgent] = useState<ClippyAgent | undefined>()
+  const instance = useRef<ClippyAgent | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
-    import('clippyts').then(({ default: clippyts }) => {
-      if (cancelled) {
-        return
-      }
+    agent
+      .map()
+      .then(({ default: mapUrl }) => {
+        const image = new Image()
+        image.decoding = 'async'
+        image.src = mapUrl
 
-      clippyts.load({
-        name: agentName,
-        successCb: (agent) => {
-          if (cancelled) {
-            return
-          }
-          instance.current = agent
-          setClippy(agent)
-        },
-        failCb: (error) => {
-          console.error('Failed to load Clippy:', error)
-        },
+        if (image.complete) {
+          return
+        }
+
+        return new Promise<void>((resolve) => {
+          image.addEventListener('load', () => resolve(), { once: true })
+          image.addEventListener('error', () => resolve(), { once: true })
+        })
       })
-    })
+      .then(() => initAgent(agent))
+      .then((loaded) => {
+        if (cancelled) {
+          loaded.dispose()
+          return
+        }
+        instance.current = loaded
+        setCurrentAgent(loaded)
+      })
+      .catch((error: unknown) => {
+        console.error('Failed to load Clippy:', error)
+      })
 
     return () => {
       cancelled = true
-      instance.current?.hide(false, () => {
-        instance.current = null
-      })
+      instance.current?.dispose()
+      instance.current = null
+      setCurrentAgent(undefined)
     }
-  }, [agentName])
+  }, [agent])
 
   useEffect(() => {
-    if (!clippy) {
-      setElement(null)
+    if (!currentAgent) {
       return
     }
 
-    const el = document.querySelector('.clippy') as HTMLElement | null
-    setElement(el)
-
-    if (!el || draggable) {
-      return
-    }
-
-    const blockDrag = (event: MouseEvent) => {
+    const blockDrag = (event: MouseEvent | TouchEvent) => {
       event.stopImmediatePropagation()
     }
 
-    el.addEventListener('mousedown', blockDrag, true)
-    return () => el.removeEventListener('mousedown', blockDrag, true)
-  }, [clippy, draggable])
+    currentAgent._el.addEventListener('mousedown', blockDrag, true)
+    currentAgent._el.addEventListener('touchstart', blockDrag, {
+      capture: true,
+      passive: false,
+    })
+
+    return () => {
+      currentAgent._el.removeEventListener('mousedown', blockDrag, true)
+      currentAgent._el.removeEventListener('touchstart', blockDrag, true)
+    }
+  }, [currentAgent])
 
   const value = useMemo<ClippyContextValue>(
-    () => ({ clippy, element, agentName }),
-    [clippy, element, agentName]
+    () => ({ agent: currentAgent }),
+    [currentAgent]
   )
 
   return (

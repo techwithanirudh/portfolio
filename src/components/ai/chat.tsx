@@ -37,12 +37,8 @@ import {
   AIContactForm,
   AIContactFormSkeleton,
 } from '@/components/ai/tools/contact-form'
-import {
-  AGENTS,
-  animations,
-  ClippyProvider,
-  useClippy,
-} from '@/components/clippy'
+import { animations, ClippyProvider, useClippy } from '@/components/clippy'
+import { Rover } from '@/components/clippy/agents/rover'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
@@ -94,7 +90,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider agentName={AGENTS.ROVER} draggable={false}>
+    <ClippyProvider agent={Rover}>
       <AISearchContext
         value={useMemo(
           () => ({
@@ -197,7 +193,7 @@ const MaxSourcePreviewChars = 120
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { setContext, context } = useAISearchContext()
-  const { clippy } = useClippy()
+  const { agent } = useClippy()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -232,9 +228,9 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     const messageText =
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
-    if (clippy) {
-      clippy.stopCurrent()
-      clippy.play(animations.submit)
+    if (agent) {
+      agent.stopCurrent()
+      agent.play(animations.submit)
     }
 
     setInput('')
@@ -510,6 +506,7 @@ const Message = memo(function Message({
             return (
               <div
                 className='prose text-sm'
+                // biome-ignore lint/suspicious/noArrayIndexKey: message parts are rendered in source order and don't expose a stable id
                 key={`${message.id}-text-${index}`}
               >
                 <Markdown text={part.text} />
@@ -555,7 +552,7 @@ const Message = memo(function Message({
 function AISearchPanel() {
   const { setContext, open, setOpen } = useAISearchContext()
   const chat = useChatContext()
-  const { clippy } = useClippy()
+  const { agent } = useClippy()
   const lastTool = useRef<string | null>(null)
   const lastOpen = useRef(open)
 
@@ -576,26 +573,26 @@ function AISearchPanel() {
   }, [])
 
   useEffect(() => {
-    if (chat.status !== 'ready' || !clippy) {
+    if (chat.status !== 'ready' || !agent) {
       return
     }
     const last = chat.messages.at(-1)
     if (last?.role === 'assistant') {
-      clippy.stopCurrent()
+      agent.stopCurrent()
     }
-  }, [chat.messages, chat.status, clippy])
+  }, [chat.messages, chat.status, agent])
 
   useEffect(() => {
-    if (lastOpen.current === open || !clippy) {
+    if (lastOpen.current === open || !agent) {
       return
     }
     lastOpen.current = open
-    clippy.stopCurrent()
-    clippy.play(open ? animations.open : animations.bye)
-  }, [open, clippy])
+    agent.stopCurrent()
+    agent.play(open ? animations.open : animations.bye)
+  }, [open, agent])
 
   useEffect(() => {
-    if (!clippy) {
+    if (!agent) {
       return
     }
 
@@ -613,9 +610,9 @@ function AISearchPanel() {
     }
 
     lastTool.current = toolPart.type
-    clippy.stopCurrent()
-    clippy.play(animations.tool)
-  }, [chat.messages, chat.status, clippy])
+    agent.stopCurrent()
+    agent.play(animations.tool)
+  }, [chat.messages, chat.status, agent])
 
   const panelStyle = useMemo(
     () => ({
