@@ -1,6 +1,6 @@
 'use client'
 
-import { initAgent } from 'clippyjs'
+import type { initAgent } from 'clippyjs'
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import {
   type ClippyAgent,
@@ -38,7 +38,10 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
           image.addEventListener('error', () => resolve(), { once: true })
         })
       })
-      .then(() => initAgent(agent))
+      .then(async () => {
+        const { initAgent } = await import('clippyjs')
+        return initAgent(agent)
+      })
       .then((loaded) => {
         if (cancelled) {
           loaded.dispose()
