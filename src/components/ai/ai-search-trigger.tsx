@@ -1,78 +1,52 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useRef } from 'react'
+import { type KeyboardEvent, useCallback } from 'react'
 import { useAISearchContext } from '@/components/ai/chat'
-import { useClippy } from '@/components/clippy'
+import { useSimba } from '@/components/simba'
+import { cn } from '@/lib/utils'
 
-function getPosition() {
-  return {
-    x: window.innerWidth - 90,
-    y: window.innerHeight - 100,
-  }
-}
-
-function ClippyTriggerInner() {
+function SimbaTriggerInner() {
   const { open, setOpen } = useAISearchContext()
-  const { clippy, element } = useClippy()
-  const openRef = useRef(open)
+  const { attachSprite, isReady } = useSimba()
 
-  useEffect(() => {
-    openRef.current = open
-  }, [open])
+  const handleClick = useCallback(() => {
+    setOpen((prev) => !prev)
+  }, [setOpen])
 
-  useEffect(() => {
-    if (!clippy) {
-      return
-    }
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        setOpen((prev) => !prev)
+      }
+    },
+    [setOpen]
+  )
 
-    const reposition = () => {
-      const { x, y } = getPosition()
-      clippy.moveTo(x, y, 0)
-    }
-
-    clippy.show(true)
-    reposition()
-
-    if (element) {
-      element.style.visibility = 'hidden'
-      requestAnimationFrame(() => {
-        element.style.visibility = 'visible'
-      })
-    }
-
-    const handleClick = (event: Event) => {
-      event.preventDefault()
-      event.stopPropagation()
-      setOpen(!openRef.current)
-    }
-
-    const handleResize = () => {
-      window.requestAnimationFrame(() => reposition())
-    }
-
-    element?.addEventListener('click', handleClick)
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      element?.removeEventListener('click', handleClick)
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [clippy, element, setOpen])
-
-  useEffect(() => {
-    if (!(clippy && open)) {
-      return
-    }
-
-    const { x, y } = getPosition()
-    clippy.moveTo(x, y, 0)
-  }, [clippy, open])
-
-  return null
+  return (
+    <div
+      ref={attachSprite}
+      aria-label={open ? 'Close Simba' : 'Ask Simba'}
+      aria-pressed={open}
+      className={cn(
+        'fixed bottom-5 right-5 z-40 cursor-pointer bg-no-repeat transition-opacity duration-300',
+        isReady ? 'opacity-100' : 'opacity-0'
+      )}
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role='button'
+      style={{
+        backgroundImage: 'url(/agents/Simba.png)',
+        backgroundPosition: '0 0',
+        imageRendering: 'pixelated',
+      }}
+      tabIndex={0}
+    />
+  )
 }
 
 export const AISearchTrigger = dynamic(
-  () => Promise.resolve(ClippyTriggerInner),
+  () => Promise.resolve(SimbaTriggerInner),
   { ssr: false }
 )

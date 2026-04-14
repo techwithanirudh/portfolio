@@ -50,7 +50,6 @@
     "botid": "^1.5.11",
     "bowser": "^2.14.1",
     "class-variance-authority": "^0.7.1",
-    "clippyts": "^1.0.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.45.2",

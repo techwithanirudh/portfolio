@@ -1,0 +1,14 @@
+{
+  "frameWidth": 34,
+  "frameHeight": 25,
+  "sheetCols": 10,
+  "sheetRows": 5,
+  "scale": 4,
+  "animations": {
+    "Idle":      { "row": 0, "frames": 10, "fps": 10, "loop": false },
+    "Walk":      { "row": 1, "frames": 8,  "fps": 8,  "loop": true  },
+    "Run":       { "row": 2, "frames": 8,  "fps": 12, "loop": true  },
+    "Bark":      { "row": 3, "frames": 3,  "fps": 8,  "loop": false },
+    "LyingDown": { "row": 4, "frames": 7,  "fps": 8,  "loop": false }
+  }
+}
