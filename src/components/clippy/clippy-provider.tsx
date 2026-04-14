@@ -1,38 +1,52 @@
 'use client'
 
 import type { initAgent } from 'clippyjs'
-import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import {
-  type ClippyAgent,
-  ClippyContext,
-  type ClippyContextValue,
-} from './clippy-context'
+  createContext,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 
-type Agent = Parameters<typeof initAgent>[0]
+type AgentLoaders = Parameters<typeof initAgent>[0]
+type ClippyAgent = Awaited<ReturnType<typeof initAgent>>
+
+const ClippyContext = createContext<
+  { agent: ClippyAgent | undefined } | undefined
+>(undefined)
+
+export function useClippy() {
+  const ctx = useContext(ClippyContext)
+  if (!ctx) {
+    throw new Error('useClippy must be used within ClippyProvider')
+  }
+  return ctx
+}
 
 interface ClippyProviderProps {
-  agent: Agent
+  character: AgentLoaders
   children?: ReactNode
 }
 
-export function ClippyProvider({ children, agent }: ClippyProviderProps) {
-  const [currentAgent, setCurrentAgent] = useState<ClippyAgent | undefined>()
+export function ClippyProvider({ children, character }: ClippyProviderProps) {
+  const [agent, setAgent] = useState<ClippyAgent | undefined>()
   const instance = useRef<ClippyAgent | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
-    agent
+    character
       .map()
-      .then(({ default: mapUrl }) => {
+      .then(({ default: mapUrl }: { default: string }) => {
         const image = new Image()
         image.decoding = 'async'
         image.src = mapUrl
-
         if (image.complete) {
           return
         }
-
         return new Promise<void>((resolve) => {
           image.addEventListener('load', () => resolve(), { once: true })
           image.addEventListener('error', () => resolve(), { once: true })
@@ -40,15 +54,15 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
       })
       .then(async () => {
         const { initAgent } = await import('clippyjs')
-        return initAgent(agent)
+        return initAgent(character)
       })
-      .then((loaded) => {
+      .then((loaded: ClippyAgent) => {
         if (cancelled) {
           loaded.dispose()
           return
         }
         instance.current = loaded
-        setCurrentAgent(loaded)
+        setAgent(loaded)
       })
       .catch((error: unknown) => {
         console.error('Failed to load Clippy:', error)
@@ -58,12 +72,12 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
       cancelled = true
       instance.current?.dispose()
       instance.current = null
-      setCurrentAgent(undefined)
+      setAgent(undefined)
     }
-  }, [agent])
+  }, [character])
 
   useEffect(() => {
-    if (!currentAgent) {
+    if (!agent) {
       return
     }
 
@@ -71,22 +85,19 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
       event.stopImmediatePropagation()
     }
 
-    currentAgent._el.addEventListener('mousedown', blockDrag, true)
-    currentAgent._el.addEventListener('touchstart', blockDrag, {
+    agent._el.addEventListener('mousedown', blockDrag, true)
+    agent._el.addEventListener('touchstart', blockDrag, {
       capture: true,
       passive: false,
     })
 
     return () => {
-      currentAgent._el.removeEventListener('mousedown', blockDrag, true)
-      currentAgent._el.removeEventListener('touchstart', blockDrag, true)
+      agent._el.removeEventListener('mousedown', blockDrag, true)
+      agent._el.removeEventListener('touchstart', blockDrag, true)
     }
-  }, [currentAgent])
+  }, [agent])
 
-  const value = useMemo<ClippyContextValue>(
-    () => ({ agent: currentAgent }),
-    [currentAgent]
-  )
+  const value = useMemo(() => ({ agent }), [agent])
 
   return (
     <ClippyContext.Provider value={value}>{children}</ClippyContext.Provider>

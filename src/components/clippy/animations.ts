@@ -3,4 +3,4 @@ export const animations = {
   bye: 'Hide',
   submit: 'Books',
   tool: 'Searching',
-} as const
+}

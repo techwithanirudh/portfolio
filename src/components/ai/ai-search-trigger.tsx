@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { useAISearchContext } from '@/components/ai/chat'
-import { useClippy } from '@/components/clippy'
+import { useClippy } from '@/components/clippy/clippy-provider'
 
 function getPosition() {
   return {

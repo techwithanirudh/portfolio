@@ -37,8 +37,9 @@ import {
   AIContactForm,
   AIContactFormSkeleton,
 } from '@/components/ai/tools/contact-form'
-import { animations, ClippyProvider, useClippy } from '@/components/clippy'
 import { Rover } from '@/components/clippy/agents/rover'
+import { animations } from '@/components/clippy/animations'
+import { ClippyProvider, useClippy } from '@/components/clippy/clippy-provider'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
@@ -90,7 +91,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider agent={Rover}>
+    <ClippyProvider character={Rover}>
       <AISearchContext
         value={useMemo(
           () => ({
