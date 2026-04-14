@@ -22,18 +22,16 @@ export const playSubmitAnimation = (agent: ClippyAgent | undefined) => {
 
 export function useClippyTrigger({
   agent,
-  open,
   setOpen,
 }: {
   agent: ClippyAgent | undefined
-  open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }) {
   useJitteredInterval(
     () => agent && playAnimation(agent, animations.idle),
     3000,
     4000,
-    !!agent && !open
+    !!agent
   )
 
   useEffect(() => {
