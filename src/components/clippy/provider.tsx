@@ -77,7 +77,9 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
 
     return () => {
       currentAgent._el.removeEventListener('mousedown', blockDrag, true)
-      currentAgent._el.removeEventListener('touchstart', blockDrag, true)
+      currentAgent._el.removeEventListener('touchstart', blockDrag, {
+        capture: true,
+      })
     }
   }, [currentAgent])
 

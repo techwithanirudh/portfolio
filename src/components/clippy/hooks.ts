@@ -22,16 +22,18 @@ export const playSubmitAnimation = (agent: ClippyAgent | undefined) => {
 
 export function useClippyTrigger({
   agent,
+  open,
   setOpen,
 }: {
   agent: ClippyAgent | undefined
+  open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
 }) {
   useJitteredInterval(
-    () => playAnimation(agent!, animations.idle),
+    () => agent && playAnimation(agent, animations.idle),
     3000,
     4000,
-    !!agent
+    !!agent && !open
   )
 
   useEffect(() => {
@@ -56,7 +58,8 @@ export function useClippyTrigger({
 
     const handleResize = () => {
       const { x, y } = getPosition()
-      agent.moveTo(x, y, 0)
+      agent._el.style.left = `${x}px`
+      agent._el.style.top = `${y}px`
     }
 
     agent._el.addEventListener('click', handleClick)

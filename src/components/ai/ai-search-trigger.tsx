@@ -6,9 +6,9 @@ import { useClippy } from '@/components/clippy'
 import { useClippyTrigger } from '@/components/clippy/hooks'
 
 function ClippyTriggerInner() {
-  const { setOpen } = useAISearchContext()
+  const { open, setOpen } = useAISearchContext()
   const { agent } = useClippy()
-  useClippyTrigger({ agent, setOpen })
+  useClippyTrigger({ agent, open, setOpen })
 
   return null
 }

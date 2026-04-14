@@ -9,7 +9,7 @@ function pickAnimation(animation: Animation): string {
   if (typeof animation === 'string') {
     return animation
   }
-  return animation[Math.floor(Math.random() * animation.length)] as string
+  return animation[Math.floor(Math.random() * animation.length)] ?? ''
 }
 
 export function playAnimation(
