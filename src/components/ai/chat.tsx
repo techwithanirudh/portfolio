@@ -3,12 +3,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
-import {
-  DefaultChatTransport,
-  getStaticToolName,
-  isStaticToolUIPart,
-  isToolUIPart,
-} from 'ai'
+import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { usePathname } from 'next/navigation'
 import {
@@ -37,9 +32,12 @@ import {
   AIContactForm,
   AIContactFormSkeleton,
 } from '@/components/ai/tools/contact-form'
+import { ClippyProvider, useClippy } from '@/components/clippy'
 import { Rover } from '@/components/clippy/agents/rover'
-import { animations } from '@/components/clippy/animations'
-import { ClippyProvider, useClippy } from '@/components/clippy/clippy-provider'
+import {
+  playSubmitAnimation,
+  useClippyPanelBehavior,
+} from '@/components/clippy/use-clippy-behavior'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
@@ -91,7 +89,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider character={Rover}>
+    <ClippyProvider agent={Rover}>
       <AISearchContext
         value={useMemo(
           () => ({
@@ -229,10 +227,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     const messageText =
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
-    if (agent) {
-      agent.stopCurrent()
-      agent.play(animations.submit)
-    }
+    playSubmitAnimation(agent)
 
     setInput('')
     setContext(null)
@@ -554,8 +549,6 @@ function AISearchPanel() {
   const { setContext, open, setOpen } = useAISearchContext()
   const chat = useChatContext()
   const { agent } = useClippy()
-  const lastTool = useRef<string | null>(null)
-  const lastOpen = useRef(open)
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === 'Escape' && open) {
@@ -573,47 +566,12 @@ function AISearchPanel() {
     return () => window.removeEventListener('keydown', onKeyPress)
   }, [])
 
-  useEffect(() => {
-    if (chat.status !== 'ready' || !agent) {
-      return
-    }
-    const last = chat.messages.at(-1)
-    if (last?.role === 'assistant') {
-      agent.stopCurrent()
-    }
-  }, [chat.messages, chat.status, agent])
-
-  useEffect(() => {
-    if (lastOpen.current === open || !agent) {
-      return
-    }
-    lastOpen.current = open
-    agent.stopCurrent()
-    agent.play(open ? animations.open : animations.bye)
-  }, [open, agent])
-
-  useEffect(() => {
-    if (!agent) {
-      return
-    }
-
-    const lastMessage = chat.messages.at(-1)
-    const parts = lastMessage?.parts ?? []
-    const toolPart = parts.find((part) => isToolUIPart(part))
-
-    if (!toolPart || chat.status === 'ready') {
-      lastTool.current = null
-      return
-    }
-
-    if (lastTool.current === toolPart.type) {
-      return
-    }
-
-    lastTool.current = toolPart.type
-    agent.stopCurrent()
-    agent.play(animations.tool)
-  }, [chat.messages, chat.status, agent])
+  useClippyPanelBehavior({
+    agent,
+    messages: chat.messages,
+    open,
+    status: chat.status,
+  })
 
   const panelStyle = useMemo(
     () => ({

@@ -12,7 +12,7 @@ import {
 } from 'react'
 
 type AgentLoaders = Parameters<typeof initAgent>[0]
-type ClippyAgent = Awaited<ReturnType<typeof initAgent>>
+export type ClippyAgent = Awaited<ReturnType<typeof initAgent>>
 
 const ClippyContext = createContext<
   { agent: ClippyAgent | undefined } | undefined
@@ -27,26 +27,26 @@ export function useClippy() {
 }
 
 interface ClippyProviderProps {
-  character: AgentLoaders
+  agent: AgentLoaders
   children?: ReactNode
 }
 
-export function ClippyProvider({ children, character }: ClippyProviderProps) {
-  const [agent, setAgent] = useState<ClippyAgent | undefined>()
+export function ClippyProvider({ children, agent }: ClippyProviderProps) {
+  const [currentAgent, setCurrentAgent] = useState<ClippyAgent | undefined>()
   const instance = useRef<ClippyAgent | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
     import('clippyjs')
-      .then(({ initAgent }) => initAgent(character))
+      .then(({ initAgent }) => initAgent(agent))
       .then((loaded: ClippyAgent) => {
         if (cancelled) {
           loaded.dispose()
           return
         }
         instance.current = loaded
-        setAgent(loaded)
+        setCurrentAgent(loaded)
       })
       .catch((error: unknown) => {
         console.error('Failed to load Clippy:', error)
@@ -56,12 +56,12 @@ export function ClippyProvider({ children, character }: ClippyProviderProps) {
       cancelled = true
       instance.current?.dispose()
       instance.current = null
-      setAgent(undefined)
+      setCurrentAgent(undefined)
     }
-  }, [character])
+  }, [agent])
 
   useEffect(() => {
-    if (!agent) {
+    if (!currentAgent) {
       return
     }
 
@@ -69,19 +69,19 @@ export function ClippyProvider({ children, character }: ClippyProviderProps) {
       event.stopImmediatePropagation()
     }
 
-    agent._el.addEventListener('mousedown', blockDrag, true)
-    agent._el.addEventListener('touchstart', blockDrag, {
+    currentAgent._el.addEventListener('mousedown', blockDrag, true)
+    currentAgent._el.addEventListener('touchstart', blockDrag, {
       capture: true,
       passive: false,
     })
 
     return () => {
-      agent._el.removeEventListener('mousedown', blockDrag, true)
-      agent._el.removeEventListener('touchstart', blockDrag, true)
+      currentAgent._el.removeEventListener('mousedown', blockDrag, true)
+      currentAgent._el.removeEventListener('touchstart', blockDrag, true)
     }
-  }, [agent])
+  }, [currentAgent])
 
-  const value = useMemo(() => ({ agent }), [agent])
+  const value = useMemo(() => ({ agent: currentAgent }), [currentAgent])
 
   return (
     <ClippyContext.Provider value={value}>{children}</ClippyContext.Provider>
