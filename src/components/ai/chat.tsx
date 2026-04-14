@@ -3,12 +3,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
-import {
-  DefaultChatTransport,
-  getStaticToolName,
-  isStaticToolUIPart,
-  isToolUIPart,
-} from 'ai'
+import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { usePathname } from 'next/navigation'
 import {
@@ -37,12 +32,9 @@ import {
   AIContactForm,
   AIContactFormSkeleton,
 } from '@/components/ai/tools/contact-form'
-import {
-  AGENTS,
-  animations,
-  ClippyProvider,
-  useClippy,
-} from '@/components/clippy'
+import { ClippyProvider, useClippy } from '@/components/clippy'
+import { Rover } from '@/components/clippy/agents/rover'
+import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
@@ -94,7 +86,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider agentName={AGENTS.ROVER} draggable={false}>
+    <ClippyProvider agent={Rover}>
       <AISearchContext
         value={useMemo(
           () => ({
@@ -197,7 +189,7 @@ const MaxSourcePreviewChars = 120
 function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { setContext, context } = useAISearchContext()
-  const { clippy } = useClippy()
+  const { agent } = useClippy()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -232,10 +224,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     const messageText =
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
-    if (clippy) {
-      clippy.stopCurrent()
-      clippy.play(animations.submit)
-    }
+    playSubmitAnimation(agent)
 
     setInput('')
     setContext(null)
@@ -510,6 +499,7 @@ const Message = memo(function Message({
             return (
               <div
                 className='prose text-sm'
+                // biome-ignore lint/suspicious/noArrayIndexKey: message parts are rendered in source order and don't expose a stable id
                 key={`${message.id}-text-${index}`}
               >
                 <Markdown text={part.text} />
@@ -555,9 +545,7 @@ const Message = memo(function Message({
 function AISearchPanel() {
   const { setContext, open, setOpen } = useAISearchContext()
   const chat = useChatContext()
-  const { clippy } = useClippy()
-  const lastTool = useRef<string | null>(null)
-  const lastOpen = useRef(open)
+  const { agent } = useClippy()
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === 'Escape' && open) {
@@ -575,47 +563,12 @@ function AISearchPanel() {
     return () => window.removeEventListener('keydown', onKeyPress)
   }, [])
 
-  useEffect(() => {
-    if (chat.status !== 'ready' || !clippy) {
-      return
-    }
-    const last = chat.messages.at(-1)
-    if (last?.role === 'assistant') {
-      clippy.stopCurrent()
-    }
-  }, [chat.messages, chat.status, clippy])
-
-  useEffect(() => {
-    if (lastOpen.current === open || !clippy) {
-      return
-    }
-    lastOpen.current = open
-    clippy.stopCurrent()
-    clippy.play(open ? animations.open : animations.bye)
-  }, [open, clippy])
-
-  useEffect(() => {
-    if (!clippy) {
-      return
-    }
-
-    const lastMessage = chat.messages.at(-1)
-    const parts = lastMessage?.parts ?? []
-    const toolPart = parts.find((part) => isToolUIPart(part))
-
-    if (!toolPart || chat.status === 'ready') {
-      lastTool.current = null
-      return
-    }
-
-    if (lastTool.current === toolPart.type) {
-      return
-    }
-
-    lastTool.current = toolPart.type
-    clippy.stopCurrent()
-    clippy.play(animations.tool)
-  }, [chat.messages, chat.status, clippy])
+  useClippyPanel({
+    agent,
+    messages: chat.messages,
+    open,
+    status: chat.status,
+  })
 
   const panelStyle = useMemo(
     () => ({
