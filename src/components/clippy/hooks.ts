@@ -2,72 +2,17 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { isToolUIPart } from 'ai'
-import { type Dispatch, type SetStateAction, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { animations } from './constants'
 import type { ClippyAgent } from './provider'
-import { playAnimation, useJitteredInterval } from './utils'
-
-const getPosition = () => ({
-  x: window.innerWidth - 90,
-  y: window.innerHeight - 100,
-})
+import { playAnimation } from './utils'
 
 export const playSubmitAnimation = (agent: ClippyAgent | undefined) => {
   if (!agent) {
     return
   }
   playAnimation(agent, animations.submit, { interrupt: true })
-}
-
-export function useClippyTrigger({
-  agent,
-  setOpen,
-}: {
-  agent: ClippyAgent | undefined
-  setOpen: Dispatch<SetStateAction<boolean>>
-}) {
-  useJitteredInterval(
-    () => agent && playAnimation(agent, animations.idle),
-    3000,
-    4000,
-    !!agent
-  )
-
-  useEffect(() => {
-    if (!agent) {
-      return
-    }
-
-    const { x, y } = getPosition()
-    agent.show(true)
-    agent.moveTo(x, y, 0)
-
-    agent._el.style.visibility = 'hidden'
-    requestAnimationFrame(() => {
-      agent._el.style.visibility = 'visible'
-    })
-
-    const handleClick = (event: Event) => {
-      event.preventDefault()
-      event.stopPropagation()
-      setOpen((prev) => !prev)
-    }
-
-    const handleResize = () => {
-      const { x, y } = getPosition()
-      agent._el.style.left = `${x}px`
-      agent._el.style.top = `${y}px`
-    }
-
-    agent._el.addEventListener('click', handleClick)
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      agent._el.removeEventListener('click', handleClick)
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [agent, setOpen])
 }
 
 export function useClippyPanel({
@@ -102,21 +47,17 @@ export function useClippyPanel({
   }, [agent, open])
 
   useEffect(() => {
-    if (!agent) {
+    if (agent && status === 'streaming') {
+      agent.stopCurrent()
+    }
+  }, [agent, status])
+
+  useEffect(() => {
+    if (!agent || status !== 'streaming') {
       return
     }
 
-    const lastMessage = messages.at(-1)
-
-    if (status === 'ready') {
-      if (lastMessage?.role === 'assistant') {
-        agent.stopCurrent()
-      }
-      lastTool.current = null
-      return
-    }
-
-    const toolPart = (lastMessage?.parts ?? []).find(isToolUIPart)
+    const toolPart = (messages.at(-1)?.parts ?? []).find(isToolUIPart)
     if (!toolPart || lastTool.current === toolPart.type) {
       return
     }
@@ -124,4 +65,11 @@ export function useClippyPanel({
     lastTool.current = toolPart.type
     playAnimation(agent, animations.tool, { interrupt: true })
   }, [agent, messages, status])
+
+  useEffect(() => {
+    if (!agent || status !== 'ready') {
+      return
+    }
+    lastTool.current = null
+  }, [agent, status])
 }
