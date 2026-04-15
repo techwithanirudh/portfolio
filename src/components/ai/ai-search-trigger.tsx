@@ -41,11 +41,7 @@ function ClippyTriggerInner() {
     const { x, y } = getPosition()
     agent._el.style.left = `${x}px`
     agent._el.style.top = `${y}px`
-    agent._el.style.visibility = 'hidden'
     agent.show(true)
-    requestAnimationFrame(() => {
-      agent._el.style.visibility = 'visible'
-    })
 
     const handleClick = (event: Event) => {
       event.preventDefault()
