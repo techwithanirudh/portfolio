@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useAISearchContext } from '@/components/ai/chat'
 import { useClippy } from '@/components/clippy'
 import { animations } from '@/components/clippy/constants'
@@ -15,19 +15,23 @@ const getPosition = () => ({
 function ClippyTriggerInner() {
   const { setOpen } = useAISearchContext()
   const { agent } = useClippy()
-  const restingRef = useRef(false)
 
   useEffect(() => {
     if (!agent) {
       return
     }
 
+    let idleCycles = 0
+    const cyclesUntilAction = () => 3 + Math.floor(Math.random() * 4)
+    let target = cyclesUntilAction()
+
     const onQueueEmpty = () => {
-      if (restingRef.current) {
-        restingRef.current = false
+      idleCycles++
+      if (idleCycles >= target) {
+        idleCycles = 0
+        target = cyclesUntilAction()
         playAnimation(agent, animations.idle)
       } else {
-        restingRef.current = true
         agent.play('Idle', 3000)
       }
     }
