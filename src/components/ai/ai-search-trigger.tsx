@@ -26,12 +26,12 @@ function ClippyTriggerInner() {
     let target = cyclesUntilAction()
 
     const onQueueEmpty = () => {
-      idleCycles++
       if (idleCycles >= target) {
         idleCycles = 0
         target = cyclesUntilAction()
         playAnimation(agent, animations.idle)
       } else {
+        idleCycles++
         agent.play('Idle', 3000)
       }
     }
