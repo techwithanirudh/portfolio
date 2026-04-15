@@ -5,7 +5,8 @@ import { useEffect } from 'react'
 import { useAISearchContext } from '@/components/ai/chat'
 import { useClippy } from '@/components/clippy'
 import { animations } from '@/components/clippy/constants'
-import { playAnimation, useJitteredInterval } from '@/components/clippy/utils'
+import { playAnimation } from '@/components/clippy/utils'
+import { useJitteredInterval } from '@/hooks/use-jittered-interval'
 
 const getPosition = () => ({
   x: window.innerWidth - 90,

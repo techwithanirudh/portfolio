@@ -1,6 +1,3 @@
-'use client'
-
-import { useEffect, useRef } from 'react'
 import type { ClippyAgent } from './provider'
 
 type Animation = string | readonly string[]
@@ -21,34 +18,4 @@ export function playAnimation(
     agent.stop()
   }
   agent.play(pickAnimation(animation))
-}
-
-export function useJitteredInterval(
-  fn: () => void,
-  minMs: number,
-  jitterMs: number,
-  enabled: boolean
-) {
-  const fnRef = useRef(fn)
-  fnRef.current = fn
-
-  useEffect(() => {
-    if (!enabled) {
-      return
-    }
-
-    let timer: number
-    const schedule = () => {
-      timer = window.setTimeout(
-        () => {
-          fnRef.current()
-          schedule()
-        },
-        minMs + Math.random() * jitterMs
-      )
-    }
-    schedule()
-
-    return () => window.clearTimeout(timer)
-  }, [enabled, minMs, jitterMs])
 }
