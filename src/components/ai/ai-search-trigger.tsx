@@ -1,12 +1,11 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useAISearchContext } from '@/components/ai/chat'
 import { useClippy } from '@/components/clippy'
 import { animations } from '@/components/clippy/constants'
 import { playAnimation } from '@/components/clippy/utils'
-import { useJitteredInterval } from '@/hooks/use-jittered-interval'
 
 const getPosition = () => ({
   x: window.innerWidth - 90,
@@ -16,24 +15,30 @@ const getPosition = () => ({
 function ClippyTriggerInner() {
   const { setOpen } = useAISearchContext()
   const { agent } = useClippy()
-
-  useJitteredInterval(
-    () => agent && playAnimation(agent, animations.idle),
-    3000,
-    4000,
-    !!agent
-  )
+  const restingRef = useRef(false)
 
   useEffect(() => {
     if (!agent) {
       return
     }
 
-    const { x, y } = getPosition()
-    agent.show(true)
-    agent.moveTo(x, y, 0)
+    const onQueueEmpty = () => {
+      if (restingRef.current) {
+        restingRef.current = false
+        playAnimation(agent, animations.idle)
+      } else {
+        restingRef.current = true
+        agent.play('Idle', 3000)
+      }
+    }
+    agent._onQueueEmpty = onQueueEmpty
+    agent._queue._onEmptyCallback = onQueueEmpty
 
+    const { x, y } = getPosition()
+    agent._el.style.left = `${x}px`
+    agent._el.style.top = `${y}px`
     agent._el.style.visibility = 'hidden'
+    agent.show(true)
     requestAnimationFrame(() => {
       agent._el.style.visibility = 'visible'
     })

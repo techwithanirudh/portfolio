@@ -12,6 +12,7 @@ export const animations: Animations = {
   idle: [
     'Acknowledge',
     'CharacterSucceeds',
+    'ClickedOn',
     'Congratulate',
     'Cooking',
     'Embarrassed',
@@ -22,7 +23,7 @@ export const animations: Animations = {
     'ImageSearching',
     'LookUp',
     'LookUpLeft',
-    'Shopping',
+    'Pleased',
     'Surprised',
     'Thinking',
     'Travel',
