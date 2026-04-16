@@ -1,14 +1,20 @@
 - Add AI Chat
-- Adding a new command palette (e.g: chanhdai, ingo, nelson)
-- Add keyboard shortcuts
+- Add `@toolwind/corner-shape`
+- Replace Fumadocs blog components with custom blog components
+- Add keyboard navigation across the site
+- Add a `Cmd+K` command palette 
+- Add JSON-LD structured data support across all pages for better SEO
+- Improve page metadata across the site and add support for custom per-page OG images like `chanhdai.com`
+- Use more animated icons across the site where they improve feedback and affordance
+- Improve mobile support with better small-screen layouts and touch optimization
+- Increase touch target sizes and touch radius on mobile, following the better interaction patterns
+- Add installable PWA support with polished `manifest`, icons, and install UX
+- Add a public bookmarks/recommendations page
+- Add scroll-fade effects for overflow areas like command menus, drawers, and long sidebars
+- Upgrade testimonials with richer presentation patterns like marquee/spotlight layouts
 - C15T Consent Manager
 - TOS and Privacy Policy
-- Populate App Images
 - Add Raycast and Browser Extension Sections
-- Guestbook Admin (Logo / Permissions to delete other things)
 - Lighthouse Scores / Perf is bad after clippy.js
 - Scroll to bottom is broken
 - When you open and close a contact form, the state isn't restored so it thinks you've not submitted yet
-- The restoration of the message is very broken from local storage, sometimes it's cleared sometimes it's not very buggy
-- Scroll to bottom is broken
-- ability to ask questions about blog post (current page), and on text select show a button to ask ai

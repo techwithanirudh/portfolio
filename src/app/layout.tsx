@@ -44,6 +44,7 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: dark)', color: '#0A0A0A' },
     { media: '(prefers-color-scheme: light)', color: '#fff' },
   ],
+  maximumScale: 1,
 }
 
 const baseUrlString = baseUrl.toString()
