@@ -43,7 +43,7 @@ export const SectionHeader = ({
           titleClassName
         )}
       >
-        <Balancer>{title}</Balancer>
+        {typeof title === 'string' ? <Balancer>{title}</Balancer> : title}
       </h2>
     </ViewAnimation>
     {description && (
@@ -58,7 +58,11 @@ export const SectionHeader = ({
             descriptionClassName
           )}
         >
-          <Balancer>{description}</Balancer>
+          {typeof description === 'string' ? (
+            <Balancer>{description}</Balancer>
+          ) : (
+            description
+          )}
         </p>
       </ViewAnimation>
     )}

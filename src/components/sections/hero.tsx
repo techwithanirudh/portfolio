@@ -65,7 +65,11 @@ export const HeroSection = ({
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <small className='block text-muted-foreground text-sm sm:text-base'>
-              <Balancer>{caption}</Balancer>
+              {typeof caption === 'string' ? (
+                <Balancer>{caption}</Balancer>
+              ) : (
+                caption
+              )}
             </small>
           </ViewAnimation>
         )}
@@ -82,7 +86,7 @@ export const HeroSection = ({
               variant === 'compact' && 'text-left sm:text-left'
             )}
           >
-            <Balancer>{title}</Balancer>
+            {typeof title === 'string' ? <Balancer>{title}</Balancer> : title}
           </h1>
         </ViewAnimation>
         {description && (
@@ -98,7 +102,11 @@ export const HeroSection = ({
                   'text-left text-lg leading-relaxed tracking-tight'
               )}
             >
-              <Balancer>{description}</Balancer>
+              {typeof description === 'string' ? (
+                <Balancer>{description}</Balancer>
+              ) : (
+                description
+              )}
             </p>
           </ViewAnimation>
         )}

@@ -9,6 +9,7 @@ export interface PageEntry {
   url: string
 }
 
+// biome-ignore lint: server action must be async
 export async function getPages(): Promise<PageEntry[]> {
   return [
     ...getPosts().map((page) => ({
