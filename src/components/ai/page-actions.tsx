@@ -1,5 +1,6 @@
 'use client'
 
+import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button'
 import {
   CheckIcon,
   ChevronDownIcon,
@@ -8,7 +9,6 @@ import {
 } from 'lucide-react'
 import type * as React from 'react'
 import { useMemo, useState } from 'react'
-import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button'
 
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -71,7 +71,11 @@ export function LLMCopyButton({
       type='button'
       variant='secondary'
     >
-      {checked ? <CheckIcon className='text-muted-foreground' /> : <CopyIcon className='text-muted-foreground' />}
+      {checked ? (
+        <CheckIcon className='text-muted-foreground' />
+      ) : (
+        <CopyIcon className='text-muted-foreground' />
+      )}
       <span>Copy Page</span>
     </Button>
   )
@@ -88,9 +92,9 @@ export function ViewOptions({
 }) {
   const items = useMemo(() => {
     const fullMarkdownUrl =
-      typeof window !== 'undefined'
-        ? new URL(markdownUrl, window.location.origin).toString()
-        : 'loading'
+      typeof window === 'undefined'
+        ? 'loading'
+        : new URL(markdownUrl, window.location.origin).toString()
 
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`
 
@@ -146,7 +150,7 @@ export function ViewOptions({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
-        className='max-w-full w-full'
+        className='w-full max-w-full'
         onCloseAutoFocus={(e) => e.preventDefault()}
       >
         {items.map(({ title, href, icon: Icon }) => (

@@ -9,7 +9,6 @@ import Analytics from '@/components/analytics'
 import { MobileNav } from '@/components/mobile-nav'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
-import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
@@ -19,35 +18,28 @@ export function Provider({
   children: ReactNode
 }): React.ReactElement {
   return (
-    <ThemeProvider
-      attribute='class'
-      defaultTheme='system'
-      disableTransitionOnChange
-      enableSystem
-    >
-      <NuqsAdapter>
-        <AISearch>
-          <ProgressProvider
-            color='var(--color-primary)'
-            delay={200}
-            height='2px'
-            options={{
-              showSpinner: false,
-            }}
-            shallowRouting
-            startOnLoad
-            stopDelay={200}
-          >
-            <TooltipProvider>{children}</TooltipProvider>
-          </ProgressProvider>
-          <AISearchTrigger />
-        </AISearch>
-        <Analytics />
-        <Toaster />
-        <TailwindIndicator />
-        <SmoothCursor />
-        <MobileNav />
-      </NuqsAdapter>
-    </ThemeProvider>
+    <NuqsAdapter>
+      <AISearch>
+        <ProgressProvider
+          color='var(--color-primary)'
+          delay={200}
+          height='2px'
+          options={{
+            showSpinner: false,
+          }}
+          shallowRouting
+          startOnLoad
+          stopDelay={200}
+        >
+          <TooltipProvider>{children}</TooltipProvider>
+        </ProgressProvider>
+        <AISearchTrigger />
+      </AISearch>
+      <Analytics />
+      <Toaster />
+      <TailwindIndicator />
+      <SmoothCursor />
+      <MobileNav />
+    </NuqsAdapter>
   )
 }

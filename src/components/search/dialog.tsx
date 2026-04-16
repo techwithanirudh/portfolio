@@ -1,6 +1,4 @@
 'use client'
-
-import { defaultFilter } from 'cmdk'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
@@ -10,7 +8,12 @@ import { Fragment, useEffect, useMemo, useState } from 'react'
 import { getPages, type PageEntry } from '@/app/actions/pages'
 import { Icons } from '@/components/icons/icons'
 import { CommandMenuFooter } from '@/components/search/footer'
-import { buildTagGroups, SearchResults } from '@/components/search/results'
+import { SearchResults as SearchResultsList } from '@/components/search/results'
+import {
+  buildCommandGroups,
+  buildPageEntryGroups,
+  buildSearchTagGroups,
+} from '@/components/search/utils/groups'
 import {
   Command,
   CommandEmpty,
@@ -27,8 +30,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { commands } from '@/constants/search'
-import type { CommandItem as CommandItemType } from '@/types/search'
 
 function usePages(enabled: boolean): PageEntry[] {
   const [pages, setPages] = useState<PageEntry[]>([])
@@ -44,63 +45,24 @@ function usePages(enabled: boolean): PageEntry[] {
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
   const router = useRouter()
-  const { setTheme } = useTheme()
+  const { setTheme, theme } = useTheme()
 
   const { search, setSearch, query } = useDocsSearch({ type: 'fetch', locale })
   const allPages = usePages(open ?? false)
 
   const isEmpty = !search.trim()
 
-  const groups = useMemo(() => {
-    if (isEmpty) {
-      const pages = [
-        {
-          group: 'Projects',
-          items: allPages
-            .filter((p) => p.tag === 'projects')
-            .map(
-              (p): CommandItemType => ({
-                kind: 'page',
-                title: p.title,
-                url: p.url,
-                icon: <Icons.work className='size-4' />,
-              })
-            ),
-        },
-        {
-          group: 'Blog',
-          items: allPages
-            .filter((p) => p.tag === 'blog')
-            .map(
-              (p): CommandItemType => ({
-                kind: 'page',
-                title: p.title,
-                url: p.url,
-                icon: <Icons.blog className='size-4' />,
-              })
-            ),
-        },
-      ].filter(({ items }) => items.length > 0)
-
-      return [...commands, ...pages]
-    }
-
-    return commands
-      .map(({ group, items }) => ({
-        group,
-        items: items.filter(
-          (item) => defaultFilter(item.title, search, item.keywords) > 0
-        ),
-      }))
-      .filter(({ items }) => items.length > 0)
-  }, [isEmpty, search, allPages])
+  const groups = useMemo(() => buildCommandGroups(search), [search])
 
   const tagGroups = useMemo(() => {
-    if (isEmpty || !query.data || query.data === 'empty') {
+    if (isEmpty) {
+      return buildPageEntryGroups(allPages)
+    }
+    if (!query.data || query.data === 'empty') {
       return []
     }
-    return buildTagGroups(query.data)
-  }, [isEmpty, query.data])
+    return buildSearchTagGroups(query.data)
+  }, [allPages, isEmpty, query.data])
 
   const hasNoResults =
     !(isEmpty || query.isLoading) &&
@@ -112,13 +74,26 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     setSearch('')
   }
 
-  const go = (url: string, external = false) => {
-    close()
-    if (external) {
-      window.open(url, '_blank', 'noopener,noreferrer')
-    } else {
-      router.push(url)
+  const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
+    if (item.kind === 'theme') {
+      setTheme(item.theme)
+      close()
+      return
     }
+
+    close()
+
+    if (item.kind === 'link') {
+      window.open(item.url, '_blank', 'noopener,noreferrer')
+      return
+    }
+
+    router.push(item.url)
+  }
+
+  const go = (url: string) => {
+    close()
+    router.push(url)
   }
 
   return (
@@ -139,7 +114,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           />
 
           <CommandList
-            className='max-h-[60dvh] supports-timeline-scroll:scroll-fade-effect-y sm:max-h-80'
+            className='supports-timeline-scroll:scroll-fade-effect-y max-h-[60dvh] sm:max-h-80'
             data-lenis-prevent
           >
             {groups.map(({ group, items }, i) => (
@@ -148,16 +123,14 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
                 <CommandGroup heading={group}>
                   {items.map((item) => (
                     <CommandItem
+                      data-checked={
+                        item.kind === 'theme' && theme === item.theme
+                          ? true
+                          : undefined
+                      }
                       key={item.title}
                       keywords={item.keywords}
-                      onSelect={() => {
-                        if (item.kind === 'theme') {
-                          close()
-                          setTheme(item.theme)
-                        } else {
-                          go(item.url, item.kind === 'link')
-                        }
-                      }}
+                      onSelect={() => handleSelect(item)}
                       value={item.title}
                     >
                       <span className='text-muted-foreground'>{item.icon}</span>
@@ -178,7 +151,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
             )}
 
-            {!isEmpty && <SearchResults groups={tagGroups} onSelect={go} />}
+            <SearchResultsList groups={tagGroups} onSelect={go} />
           </CommandList>
 
           <CommandMenuFooter />

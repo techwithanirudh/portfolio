@@ -10,6 +10,7 @@ import { description as homeDescription, owner, title } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
 import '@/styles/globals.css'
 import 'katex/dist/katex.css'
+import { ThemeProvider } from '@/components/theme-provider'
 import { Body } from './layout.client'
 import { Provider } from './provider'
 
@@ -103,16 +104,23 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
           }}
           type='application/ld+json'
         />
-        <RootProvider
-          search={{
-            SearchDialog: CustomSearchDialog,
-          }}
-          theme={{
-            enabled: false,
-          }}
+        <ThemeProvider
+          attribute='class'
+          defaultTheme='system'
+          disableTransitionOnChange
+          enableSystem
         >
-          <Provider>{children}</Provider>
-        </RootProvider>
+          <RootProvider
+            search={{
+              SearchDialog: CustomSearchDialog,
+            }}
+            theme={{
+              enabled: false,
+            }}
+          >
+            <Provider>{children}</Provider>
+          </RootProvider>
+        </ThemeProvider>
       </Body>
     </html>
   )
