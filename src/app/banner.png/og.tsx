@@ -68,10 +68,10 @@ export function generate({
               textWrap: 'pretty',
               overflow: 'hidden',
               maxWidth: '100%',
-              maxHeight: '180px',
+              maxHeight: '120px',
               textOverflow: 'ellipsis'
             }}
-            tw='mt-4 max-w-full text-[40px] leading-[1.5] text-stone-400'
+            tw='mt-4 max-w-full text-[38px] leading-[1.5] text-stone-400'
           >
             {subtitle}
           </div>

@@ -61,8 +61,13 @@ export function generate({
         <div
           style={{
             fontWeight: 500,
+            textWrap: 'pretty',
+            overflow: 'hidden',
+            maxWidth: '100%',
+            maxHeight: '120px',
+            textOverflow: 'ellipsis'
           }}
-          tw='text-[38px] leading-[1.5] text-white/70 h-[120px] overflow-hidden truncate'
+          tw='max-w-full text-[38px] leading-[1.5] text-white/70'
         >
           {description}
         </div>
