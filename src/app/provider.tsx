@@ -6,6 +6,7 @@ import type { ReactNode } from 'react'
 import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
 import { AISearch } from '@/components/ai/chat'
 import Analytics from '@/components/analytics'
+import { MobileNav } from '@/components/mobile-nav'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { ThemeProvider } from '@/components/theme-provider'
@@ -45,6 +46,7 @@ export function Provider({
         <Toaster />
         <TailwindIndicator />
         <SmoothCursor />
+        <MobileNav />
       </NuqsAdapter>
     </ThemeProvider>
   )

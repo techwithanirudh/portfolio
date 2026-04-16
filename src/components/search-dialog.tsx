@@ -200,7 +200,10 @@ export default function CustomSearchDialog({
             placeholder='Search or jump to...'
             value={search}
           />
-          <CommandList className='max-h-[60dvh] sm:max-h-72' data-lenis-prevent>
+          <CommandList
+            className='max-h-[60dvh] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] sm:max-h-72'
+            data-lenis-prevent
+          >
             {filteredNav.length > 0 && (
               <CommandGroup heading='Navigation'>
                 {filteredNav.map((item) => (

@@ -41,6 +41,7 @@ function ClippyTriggerInner() {
     const { x, y } = getPosition()
     agent._el.style.left = `${x}px`
     agent._el.style.top = `${y}px`
+    agent._el.style.zIndex = '45'
     agent.show(true)
 
     const handleClick = (event: Event) => {
