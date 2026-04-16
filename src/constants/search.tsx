@@ -1,110 +1,154 @@
+import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { socials } from '@/constants/navigation'
 
-export type CommandItemKind = 'command' | 'page' | 'link'
+// --------------------------------------------------------------------------
+// Item types
+// --------------------------------------------------------------------------
 
-export interface CommandLinkItem {
-  icon?: React.ReactNode
+interface BaseCommand {
+  group: string
+  icon?: ReactNode
+  id: string
   keywords?: string[]
-  kind?: CommandItemKind
-  openInNewTab?: boolean
   title: string
-  url: string
 }
 
-export const NAV_ITEMS: CommandLinkItem[] = [
-  { title: 'About', url: '/about', icon: <Icons.user className='size-4' /> },
+export type StaticCommand =
+  | (BaseCommand & { kind: 'page'; url: string })
+  | (BaseCommand & { kind: 'link'; url: string })
+  | (BaseCommand & { kind: 'theme'; theme: 'light' | 'dark' | 'system' })
+
+// --------------------------------------------------------------------------
+// Static command registry
+// --------------------------------------------------------------------------
+
+export const COMMANDS: StaticCommand[] = [
+  // Navigation
   {
+    kind: 'page',
+    id: 'nav-about',
+    title: 'About',
+    url: '/about',
+    group: 'Navigation',
+    icon: <Icons.user className='size-4' />,
+  },
+  {
+    kind: 'page',
+    id: 'nav-contact',
     title: 'Contact',
     url: '/contact',
+    group: 'Navigation',
     icon: <Icons.mail className='size-4' />,
   },
   {
+    kind: 'page',
+    id: 'nav-guestbook',
     title: 'Guestbook',
     url: '/guestbook',
+    group: 'Navigation',
     icon: <Icons.messageSquare className='size-4' />,
   },
-  { title: 'Work', url: '/work', icon: <Icons.work className='size-4' /> },
-  { title: 'Blog', url: '/blog', icon: <Icons.blog className='size-4' /> },
-]
-
-export const SOCIAL_ITEMS: CommandLinkItem[] = socials.map((s) => ({
-  title: s.name,
-  url: s.url,
-  icon: s.icon,
-  openInNewTab: true,
-  kind: 'link' as const,
-}))
-
-export const EXTRA_ITEMS: CommandLinkItem[] = [
   {
+    kind: 'page',
+    id: 'nav-work',
+    title: 'Work',
+    url: '/work',
+    group: 'Navigation',
+    icon: <Icons.work className='size-4' />,
+  },
+  {
+    kind: 'page',
+    id: 'nav-blog',
+    title: 'Blog',
+    url: '/blog',
+    group: 'Navigation',
+    icon: <Icons.blog className='size-4' />,
+  },
+
+  // Socials
+  ...socials.map((s) => ({
+    kind: 'link' as const,
+    id: `social-${s.name.toLowerCase()}`,
+    title: s.name,
+    url: s.url,
+    group: 'Socials',
+    icon: s.icon,
+  })),
+
+  // Links
+  {
+    kind: 'link',
+    id: 'link-rss',
     title: 'RSS Feed',
     url: '/rss.xml',
+    group: 'Links',
     icon: <Icons.rss className='size-4' />,
-    openInNewTab: true,
-    kind: 'link',
   },
   {
+    kind: 'link',
+    id: 'link-llms',
     title: 'LLMs.txt',
     url: '/llms.txt',
+    group: 'Links',
     icon: <Icons.post className='size-4' />,
-    openInNewTab: true,
-    kind: 'link',
   },
   {
+    kind: 'link',
+    id: 'link-sitemap',
     title: 'Sitemap',
     url: '/sitemap.xml',
+    group: 'Links',
     icon: <Icons.post className='size-4' />,
-    openInNewTab: true,
-    kind: 'link',
   },
   {
+    kind: 'page',
+    id: 'link-colophon',
     title: 'Colophon',
     url: '/colophon',
+    group: 'Links',
     icon: <Icons.post className='size-4' />,
   },
-]
 
-export const THEME_ITEMS = [
+  // Theme
   {
-    value: 'theme-light',
-    label: 'Light',
-    theme: 'light' as const,
+    kind: 'theme',
+    id: 'theme-light',
+    title: 'Light',
+    theme: 'light',
+    group: 'Theme',
     icon: <Icons.sun className='size-4' />,
-    keywords: ['theme', 'light', 'appearance'],
+    keywords: ['theme', 'appearance'],
   },
   {
-    value: 'theme-dark',
-    label: 'Dark',
-    theme: 'dark' as const,
+    kind: 'theme',
+    id: 'theme-dark',
+    title: 'Dark',
+    theme: 'dark',
+    group: 'Theme',
     icon: <Icons.moon className='size-4' />,
-    keywords: ['theme', 'dark', 'appearance'],
+    keywords: ['theme', 'appearance'],
   },
   {
-    value: 'theme-system',
-    label: 'System',
-    theme: 'system' as const,
+    kind: 'theme',
+    id: 'theme-system',
+    title: 'System',
+    theme: 'system',
+    group: 'Theme',
     icon: <Icons.desktop className='size-4' />,
-    keywords: ['theme', 'system', 'auto', 'appearance'],
+    keywords: ['theme', 'auto', 'appearance'],
   },
 ]
 
-function buildCommandMetaMap() {
-  const map = new Map<string, CommandItemKind>()
+// --------------------------------------------------------------------------
+// Meta map for footer hint (derived from COMMANDS)
+// --------------------------------------------------------------------------
 
-  for (const item of THEME_ITEMS) {
-    map.set(item.value, 'command')
-  }
+export type CommandKind = 'command' | 'page' | 'link'
 
-  for (const item of SOCIAL_ITEMS) {
-    map.set(item.title, 'link')
-  }
-
-  for (const item of EXTRA_ITEMS) {
-    map.set(item.title, item.kind ?? 'page')
-  }
-
-  return map
-}
-
-export const COMMAND_META_MAP = buildCommandMetaMap()
+export const COMMAND_META_MAP = new Map<string, CommandKind>(
+  COMMANDS.map((cmd) => [
+    cmd.id,
+    cmd.kind === 'theme' ? 'command' : cmd.kind === 'link' ? 'link' : 'page',
+  ])
+)

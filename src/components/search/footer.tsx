@@ -1,9 +1,9 @@
 'use client'
 
 import { useCommandState } from 'cmdk'
-import { COMMAND_META_MAP, type CommandItemKind } from '@/constants/search'
+import { COMMAND_META_MAP, type CommandKind } from '@/constants/search'
 
-const ENTER_LABELS: Record<CommandItemKind, string> = {
+const ENTER_LABELS: Record<CommandKind, string> = {
   command: 'Run Command',
   page: 'Go to Page',
   link: 'Open Link',
@@ -11,7 +11,7 @@ const ENTER_LABELS: Record<CommandItemKind, string> = {
 
 export function CommandMenuFooter() {
   const kind = useCommandState(
-    (state): CommandItemKind => COMMAND_META_MAP.get(state.value) ?? 'page'
+    (state): CommandKind => COMMAND_META_MAP.get(state.value) ?? 'page'
   )
 
   return (

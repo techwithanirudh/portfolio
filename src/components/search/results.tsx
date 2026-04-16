@@ -1,6 +1,7 @@
 'use client'
 
 import type { SortedResult } from 'fumadocs-core/search'
+import { Fragment } from 'react'
 import { Icons } from '@/components/icons/icons'
 import {
   CommandGroup,
@@ -95,8 +96,8 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
   return (
     <>
       {groups.map(({ tag, pages }) => (
-        <>
-          <CommandSeparator key={`sep-${tag}`} />
+        <Fragment key={tag}>
+          <CommandSeparator />
           <CommandGroup
             heading={
               <span className='flex items-center gap-1.5'>
@@ -108,7 +109,6 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
                 <span className='capitalize'>{tag}</span>
               </span>
             }
-            key={tag}
           >
             {pages.map((group) => (
               <div key={group.page.id}>
@@ -135,7 +135,7 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
               </div>
             ))}
           </CommandGroup>
-        </>
+        </Fragment>
       ))}
     </>
   )
