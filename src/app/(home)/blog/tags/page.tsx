@@ -50,7 +50,7 @@ export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
   const _params = await props.params
-  const description = `Explore all the tags on ${homeTitle}.`
+  const description = `Browse all blog tags on ${homeTitle} to explore posts by topic.`
 
   return createMetadata({
     title: 'Tags',

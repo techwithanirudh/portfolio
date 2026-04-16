@@ -113,10 +113,13 @@ export async function generateMetadata(
   const isFirstPage = pageIndex === 1 || !searchParams.page
   const pageTitle = isFirstPage ? 'Posts' : `Posts - Page ${pageIndex}`
   const canonicalUrl = isFirstPage ? '/blog' : `/blog?page=${pageIndex}`
+  const description = isFirstPage
+    ? 'Notes on design engineering, full-stack development, AI experiments, and the systems behind recent projects.'
+    : `Browse page ${pageIndex} of blog posts.`
 
   return createMetadata({
     title: pageTitle,
-    description: `Posts${isFirstPage ? '' : ` - Page ${pageIndex}`}`,
+    description,
     openGraph: {
       url: canonicalUrl,
     },

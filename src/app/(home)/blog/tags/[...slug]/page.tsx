@@ -178,12 +178,13 @@ export async function generateMetadata(
   const canonicalUrl = isFirstPage
     ? `/blog/tags/${tag}`
     : `/blog/tags/${tag}?page=${pageIndex}`
+  const description = isFirstPage
+    ? `Browse blog posts tagged with ${tag}.`
+    : `Browse page ${pageIndex} of blog posts tagged with ${tag}.`
 
   return createMetadata({
     title: pageTitle,
-    description: `Posts tagged with ${tag}${
-      isFirstPage ? '' : ` - Page ${pageIndex}`
-    }`,
+    description,
     openGraph: {
       url: canonicalUrl,
     },
