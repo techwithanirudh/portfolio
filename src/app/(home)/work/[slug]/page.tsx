@@ -9,6 +9,7 @@ import Balancer from 'react-wrap-balancer'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
+import { WorkJsonLd } from '@/components/json-ld'
 import { Mermaid } from '@/components/mdx/mermaid'
 import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
@@ -152,6 +153,7 @@ export default async function Page(props: {
           </ViewAnimation>
         </article>
       </SectionBody>
+      <WorkJsonLd page={page} />
     </>
   )
 }
@@ -174,8 +176,13 @@ export async function generateMetadata(props: {
     title,
     description,
     openGraph: {
+      type: 'article',
       url: `/work/${page.slugs.join('/')}`,
       images: image.url,
+      publishedTime: new Date(page.data.date).toISOString(),
+      modifiedTime: page.data.lastModified
+        ? new Date(page.data.lastModified).toISOString()
+        : new Date(page.data.date).toISOString(),
     },
     twitter: {
       images: image.url,

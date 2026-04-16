@@ -47,7 +47,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const _params = await props.params
   const description =
-    'Contact me for any inquiries, feedback. We are here to assist you.'
+    'Contact me for any inquiries, feedback.'
 
   return createMetadata({
     title: 'Contact',

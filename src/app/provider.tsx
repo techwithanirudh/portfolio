@@ -18,7 +18,7 @@ export function Provider({
   children: ReactNode
 }): React.ReactElement {
   return (
-    <NuqsAdapter>
+    <>
       <AISearch>
         <ProgressProvider
           color='var(--color-primary)'
@@ -31,7 +31,9 @@ export function Provider({
           startOnLoad
           stopDelay={200}
         >
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </TooltipProvider>
         </ProgressProvider>
         <AISearchTrigger />
       </AISearch>
@@ -40,6 +42,6 @@ export function Provider({
       <TailwindIndicator />
       <SmoothCursor />
       <MobileNav />
-    </NuqsAdapter>
+    </>
   )
 }

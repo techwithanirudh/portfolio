@@ -104,8 +104,14 @@ export async function generateMetadata(props: {
     title,
     description,
     openGraph: {
+      type: 'article',
       url: `/blog/${page.slugs.join('/')}`,
       images: image.url,
+      publishedTime: new Date(page.data.date).toISOString(),
+      modifiedTime: page.data.lastModified
+        ? new Date(page.data.lastModified).toISOString()
+        : new Date(page.data.date).toISOString(),
+      authors: [page.data.author ?? owner],
     },
     twitter: {
       images: image.url,

@@ -65,9 +65,13 @@ export function generate({
           <div
             style={{
               fontWeight: 500,
-              textWrap: 'balance',
+              textWrap: 'pretty',
+              overflow: 'hidden',
+              maxWidth: '100%',
+              maxHeight: '180px',
+              textOverflow: 'ellipsis'
             }}
-            tw='text-[40px] leading-[1.5] text-stone-400 truncate mt-4'
+            tw='mt-4 max-w-full text-[40px] leading-[1.5] text-stone-400'
           >
             {subtitle}
           </div>
