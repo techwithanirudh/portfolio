@@ -3,7 +3,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Share } from '@/app/(home)/blog/[slug]/page.client'
+import { CopyMarkdown, ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
 import { GitHubCode } from '@/components/mdx/github-code'
@@ -68,7 +68,10 @@ export default async function Page(props: {
                 <p className='font-medium'>{lastUpdate.toDateString()}</p>
               </div>
             )}
-            <Share url={page.url} />
+            <div className='flex items-center gap-2'>
+              <CopyMarkdown slug={params.slug} />
+              <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
+            </div>
           </div>
         </article>
       </SectionBody>
@@ -108,8 +111,8 @@ export async function generateMetadata(props: {
   })
 }
 
-export function generateStaticParams(): { slug: string | undefined }[] {
-  return getPosts().map((page) => ({
-    slug: page.slugs[0],
-  }))
+export function generateStaticParams(): { slug: string }[] {
+  return getPosts()
+    .map((page) => ({ slug: page.slugs[0] }))
+    .filter((p): p is { slug: string } => p.slug !== undefined)
 }

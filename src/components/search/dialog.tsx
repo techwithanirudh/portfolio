@@ -27,7 +27,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { COMMANDS, type StaticCommand } from '@/constants/search'
+import { commands } from '@/constants/search'
+import type { CommandItem as CommandItemType } from '@/types/search'
 
 function usePages(enabled: boolean): PageEntry[] {
   const [pages, setPages] = useState<PageEntry[]>([])
@@ -50,53 +51,48 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   const isEmpty = !search.trim()
 
-  const commandGroups = useMemo(() => {
-    const filtered = isEmpty
-      ? COMMANDS
-      : COMMANDS.filter(
-          (cmd) => defaultFilter(cmd.title, search, cmd.keywords) > 0
-        )
-
-    const map = new Map<string, StaticCommand[]>()
-    for (const cmd of filtered) {
-      if (!map.has(cmd.group)) {
-        map.set(cmd.group, [])
-      }
-      map.get(cmd.group)!.push(cmd)
-    }
-
+  const groups = useMemo(() => {
     if (isEmpty) {
-      for (const { tag, group, icon } of [
+      const pages = [
         {
-          tag: 'projects' as const,
           group: 'Projects',
-          icon: <Icons.work className='size-4' />,
+          items: allPages
+            .filter((p) => p.tag === 'projects')
+            .map(
+              (p): CommandItemType => ({
+                kind: 'page',
+                title: p.title,
+                url: p.url,
+                icon: <Icons.work className='size-4' />,
+              })
+            ),
         },
         {
-          tag: 'blog' as const,
           group: 'Blog',
-          icon: <Icons.blog className='size-4' />,
+          items: allPages
+            .filter((p) => p.tag === 'blog')
+            .map(
+              (p): CommandItemType => ({
+                kind: 'page',
+                title: p.title,
+                url: p.url,
+                icon: <Icons.blog className='size-4' />,
+              })
+            ),
         },
-      ]) {
-        const items = allPages
-          .filter((p) => p.tag === tag)
-          .map(
-            (p): StaticCommand => ({
-              kind: 'page',
-              id: p.url,
-              title: p.title,
-              url: p.url,
-              group,
-              icon,
-            })
-          )
-        if (items.length) {
-          map.set(group, items)
-        }
-      }
+      ].filter(({ items }) => items.length > 0)
+
+      return [...commands, ...pages]
     }
 
-    return map
+    return commands
+      .map(({ group, items }) => ({
+        group,
+        items: items.filter(
+          (item) => defaultFilter(item.title, search, item.keywords) > 0
+        ),
+      }))
+      .filter(({ items }) => items.length > 0)
   }, [isEmpty, search, allPages])
 
   const tagGroups = useMemo(() => {
@@ -109,7 +105,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const hasNoResults =
     !(isEmpty || query.isLoading) &&
     tagGroups.length === 0 &&
-    commandGroups.size === 0
+    groups.length === 0
 
   const close = () => {
     onOpenChange(false)
@@ -127,14 +123,14 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogHeader className='sr-only'>
-        <DialogTitle>Command Palette</DialogTitle>
-        <DialogDescription>Search or jump to a page</DialogDescription>
-      </DialogHeader>
       <DialogContent
         className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! p-0 sm:top-1/3 sm:max-w-lg sm:rounded-xl!'
         showCloseButton={false}
       >
+        <DialogHeader className='sr-only'>
+          <DialogTitle>Command Palette</DialogTitle>
+          <DialogDescription>Search or jump to a page</DialogDescription>
+        </DialogHeader>
         <Command shouldFilter={false}>
           <CommandInput
             onValueChange={setSearch}
@@ -146,26 +142,26 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             className='max-h-[60dvh] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] sm:max-h-80'
             data-lenis-prevent
           >
-            {Array.from(commandGroups.entries()).map(([group, cmds], i) => (
+            {groups.map(({ group, items }, i) => (
               <Fragment key={group}>
                 {i > 0 && <CommandSeparator />}
                 <CommandGroup heading={group}>
-                  {cmds.map((cmd) => (
+                  {items.map((item) => (
                     <CommandItem
-                      key={cmd.id}
-                      keywords={cmd.keywords}
+                      key={item.title}
+                      keywords={item.keywords}
                       onSelect={() => {
-                        if (cmd.kind === 'theme') {
+                        if (item.kind === 'theme') {
                           close()
-                          setTheme(cmd.theme)
+                          setTheme(item.theme)
                         } else {
-                          go(cmd.url, cmd.kind === 'link')
+                          go(item.url, item.kind === 'link')
                         }
                       }}
-                      value={cmd.id}
+                      value={item.title}
                     >
-                      <span className='text-muted-foreground'>{cmd.icon}</span>
-                      {cmd.title}
+                      <span className='text-muted-foreground'>{item.icon}</span>
+                      {item.title}
                     </CommandItem>
                   ))}
                 </CommandGroup>

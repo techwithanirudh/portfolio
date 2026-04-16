@@ -1,7 +1,9 @@
 'use client'
 
+import { createMarkdownRenderer } from 'fumadocs-core/content/md'
 import type { SortedResult } from 'fumadocs-core/search'
 import { Fragment } from 'react'
+import rehypeRaw from 'rehype-raw'
 import { Icons } from '@/components/icons/icons'
 import {
   CommandGroup,
@@ -9,35 +11,10 @@ import {
   CommandSeparator,
 } from '@/components/ui/command'
 
-const MARK_SPLIT = /(<mark>[^<]*<\/mark>)/g
-const MARK_MATCH = /^<mark>(.*)<\/mark>$/
-
-function Highlight({ content }: { content: string }) {
-  const parts = content.split(MARK_SPLIT)
-  if (parts.length === 1) {
-    return <span>{content}</span>
-  }
-
-  return (
-    <span>
-      {parts.map((part, i) => {
-        const match = part.match(MARK_MATCH)
-        return match ? (
-          <mark
-            className='rounded-sm bg-primary/20 px-0.5 text-primary not-italic'
-            // biome-ignore lint/suspicious/noArrayIndexKey: stable within a single render
-            key={i}
-          >
-            {match[1]}
-          </mark>
-        ) : (
-          // biome-ignore lint/suspicious/noArrayIndexKey: stable within a single render
-          <span key={i}>{part}</span>
-        )
-      })}
-    </span>
-  )
-}
+const md = createMarkdownRenderer({
+  remarkRehypeOptions: { allowDangerousHtml: true },
+  rehypePlugins: [rehypeRaw],
+})
 
 interface PageGroup {
   children: SortedResult[]
@@ -117,7 +94,18 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
                   onSelect={() => onSelect(group.page.url)}
                   value={group.page.id}
                 >
-                  <Highlight content={String(group.page.content)} />
+                  <md.Markdown
+                    components={{
+                      mark: ({ children }) => (
+                        <mark className='rounded-sm bg-primary/20 px-0.5 text-primary not-italic'>
+                          {children}
+                        </mark>
+                      ),
+                      p: ({ children }) => <span>{children}</span>,
+                    }}
+                  >
+                    {String(group.page.content)}
+                  </md.Markdown>
                 </CommandItem>
                 {group.children.map((child) => (
                   <CommandItem
@@ -128,7 +116,18 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
                   >
                     <Icons.arrowRight className='size-3 shrink-0' />
                     <span className='truncate'>
-                      <Highlight content={String(child.content)} />
+                      <md.Markdown
+                        components={{
+                          mark: ({ children }) => (
+                            <mark className='rounded-sm bg-primary/20 px-0.5 text-primary not-italic'>
+                              {children}
+                            </mark>
+                          ),
+                          p: ({ children }) => <span>{children}</span>,
+                        }}
+                      >
+                        {String(child.content)}
+                      </md.Markdown>
                     </span>
                   </CommandItem>
                 ))}

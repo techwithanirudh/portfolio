@@ -1,7 +1,8 @@
 'use client'
 
 import { useCommandState } from 'cmdk'
-import { COMMAND_META_MAP, type CommandKind } from '@/constants/search'
+import { COMMAND_META_MAP } from '@/constants/search'
+import type { CommandKind } from '@/types/search'
 
 const ENTER_LABELS: Record<CommandKind, string> = {
   command: 'Run Command',
