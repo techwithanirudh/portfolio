@@ -3,7 +3,8 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { CopyMarkdown, ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
+import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
+import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
 import { GitHubCode } from '@/components/mdx/github-code'
@@ -11,6 +12,7 @@ import { Mermaid } from '@/components/mdx/mermaid'
 import { MdxContent } from '@/components/mdx-layout'
 import { SectionBody } from '@/components/section-body'
 import { VideoPlayer } from '@/components/ui/video-player'
+import { owner, repo } from '@/constants/config/github'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
@@ -68,8 +70,11 @@ export default async function Page(props: {
                 <p className='font-medium'>{lastUpdate.toDateString()}</p>
               </div>
             )}
-            <div className='flex items-center gap-2'>
-              <CopyMarkdown slug={params.slug} />
+            <div className='flex flex-col gap-2'>
+              <LLMCopyButtonWithViewOptions
+                githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
+                markdownUrl={`/blog.mdx/${params.slug}`}
+              />
               <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
             </div>
           </div>

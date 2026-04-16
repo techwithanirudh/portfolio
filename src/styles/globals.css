@@ -5,12 +5,18 @@
 @import "@vidstack/react/player/styles/default/theme.css";
 @import "@vidstack/react/player/styles/default/layouts/video.css";
 @import "./fumacomment.css";
+@import "./scroll-fade-effect.css";
 @import "shadcn/tailwind.css";
 
 @import "tw-animate-css";
 @plugin "tailwind-scrollbar";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant supports-timeline-scroll {
+  @supports (animation-timeline: scroll()) {
+    @slot;
+  }
+}
 
 @source "../../node_modules/fumadocs-ui/dist/**/*.js";
 @source "../../node_modules/@fuma-comment/react/dist/**/*.js";

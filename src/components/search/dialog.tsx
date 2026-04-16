@@ -139,7 +139,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           />
 
           <CommandList
-            className='max-h-[60dvh] [mask-image:linear-gradient(to_bottom,black_85%,transparent_100%)] sm:max-h-80'
+            className='max-h-[60dvh] supports-timeline-scroll:scroll-fade-effect-y sm:max-h-80'
             data-lenis-prevent
           >
             {groups.map(({ group, items }, i) => (

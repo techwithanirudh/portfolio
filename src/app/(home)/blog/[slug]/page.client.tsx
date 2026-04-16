@@ -3,7 +3,6 @@
 import { Comments } from '@fuma-comment/react'
 import { EllipsisIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -16,63 +15,7 @@ import {
 import { getLoginUrl } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
-const cache = new Map<string, string>()
-
-export function CopyMarkdown({ slug }: { slug: string }) {
-  const [copied, setCopied] = useState(false)
-
-  const handleCopy = async () => {
-    if (copied) {
-      return
-    }
-    const url = `/blog.mdx/${slug}`
-    try {
-      const cached = cache.get(url)
-      if (cached) {
-        await navigator.clipboard.writeText(cached)
-      } else {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            'text/plain': fetch(url)
-              .then((r) => r.text())
-              .then((text) => {
-                cache.set(url, text)
-                return text
-              }),
-          }),
-        ])
-      }
-      setCopied(true)
-      toast.success('Markdown copied')
-      setTimeout(() => setCopied(false), 2000)
-    } catch {
-      toast.error('Failed to copy')
-    }
-  }
-
-  return (
-    <Button
-      className='h-7 gap-1.5'
-      onClick={handleCopy}
-      size='sm'
-      variant='secondary'
-    >
-      {copied ? (
-        <Icons.check className='size-3.5' />
-      ) : (
-        <Icons.post className='size-3.5' />
-      )}
-      Copy Page
-    </Button>
-  )
-}
-
 export function ShareMenu({ title, url }: { title: string; url: string }) {
-  const iconRef = useRef<{
-    startAnimation?: () => void
-    stopAnimation?: () => void
-  }>(null)
-
   const absoluteUrl =
     typeof window === 'undefined'
       ? url
@@ -90,16 +33,19 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
       <DropdownMenuTrigger asChild>
         <Button
           aria-label='Share'
-          className='size-7'
-          onMouseEnter={() => iconRef.current?.startAnimation?.()}
-          onMouseLeave={() => iconRef.current?.stopAnimation?.()}
-          size='icon'
+          className='w-full justify-start border-none shadow-none active:scale-none'
+          size='sm'
           variant='secondary'
         >
-          <Icons.share className='size-3.5' />
+          <Icons.share className='text-muted-foreground' />
+          Share
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-44'>
+      <DropdownMenuContent
+        align='start'
+        collisionPadding={8}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
         <DropdownMenuItem onClick={copyLink}>
           <Icons.link className='size-4' />
           Copy link
