@@ -14,23 +14,15 @@ import type { SearchTagGroup } from '@/types/search/results'
 
 function rehypeCustomElements() {
   return (tree: Parameters<typeof visit>[0]) => {
-    visit(
-      tree,
-      (node: {
-        type: string
-        tagName?: string
-        properties?: Record<string, unknown>
-      }) => {
-        if (
-          node.type === 'element' &&
-          node.tagName &&
-          document.createElement(node.tagName) instanceof HTMLUnknownElement
-        ) {
-          node.properties = { ...node.properties, _tagName: node.tagName }
-          node.tagName = 'span'
-        }
+    visit(tree, (node: { type: string; tagName?: string }) => {
+      if (
+        node.type === 'element' &&
+        node.tagName &&
+        document.createElement(node.tagName) instanceof HTMLUnknownElement
+      ) {
+        node.tagName = 'span'
       }
-    )
+    })
   }
 }
 

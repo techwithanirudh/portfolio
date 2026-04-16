@@ -1,5 +1,3 @@
-'use client'
-
 import { defaultFilter } from 'cmdk'
 import type { SortedResult } from 'fumadocs-core/search'
 import type { PageEntry } from '@/app/actions/pages'
@@ -18,7 +16,9 @@ function tagFromUrl(url: string): string {
 
 const TAG_ORDER = ['blog', 'projects']
 
-function orderTagGroups(tagMap: Map<string, SearchPageGroup[]>) {
+function orderTagGroups(
+  tagMap: Map<string, SearchPageGroup[]>
+): SearchTagGroup[] {
   return TAG_ORDER.filter((tag) => tagMap.has(tag))
     .map((tag) => ({ tag, pages: tagMap.get(tag)! }))
     .concat(
@@ -28,30 +28,12 @@ function orderTagGroups(tagMap: Map<string, SearchPageGroup[]>) {
     )
 }
 
-export function buildCommandGroups(search: string) {
-  const isEmpty = !search.trim()
-
-  return commands
-    .map(({ group, items }) => ({
-      group,
-      items: items.filter(
-        (item) => isEmpty || defaultFilter(item.title, search, item.keywords) > 0
-      ),
-    }))
-    .filter(({ items }) => items.length > 0)
-}
-
-export function buildSearchTagGroups(results: SortedResult[]): SearchTagGroup[] {
-  const tagMap = new Map<string, SearchPageGroup[]>()
+function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
+  const grouped: SearchPageGroup[] = []
   let current: SearchPageGroup | null = null
 
   for (const result of results) {
     if (result.type === 'page') {
-      const tag = tagFromUrl(result.url)
-      if (!tagMap.has(tag)) {
-        tagMap.set(tag, [])
-      }
-
       current = {
         page: {
           content: String(result.content),
@@ -60,31 +42,79 @@ export function buildSearchTagGroups(results: SortedResult[]): SearchTagGroup[] 
         },
         children: [],
       }
-      tagMap.get(tag)!.push(current)
-    } else if (current) {
-      current.children.push(result)
+      grouped.push(current)
+      continue
     }
+
+    current?.children.push(result)
+  }
+
+  return grouped
+}
+
+function bucketPageGroupsByTag(
+  pages: SearchPageGroup[],
+  getTag: (page: SearchPageGroup) => string
+): SearchTagGroup[] {
+  const tagMap = new Map<string, SearchPageGroup[]>()
+
+  for (const page of pages) {
+    const tag = getTag(page)
+    const existing = tagMap.get(tag)
+
+    if (existing) {
+      existing.push(page)
+      continue
+    }
+
+    tagMap.set(tag, [page])
   }
 
   return orderTagGroups(tagMap)
+}
+
+export function buildCommandGroups(search: string) {
+  const isEmpty = !search.trim()
+
+  return commands
+    .map(({ group, items }) => ({
+      group,
+      items: items.filter(
+        (item) =>
+          isEmpty || defaultFilter(item.title, search, item.keywords) > 0
+      ),
+    }))
+    .filter(({ items }) => items.length > 0)
+}
+
+export function buildSearchTagGroups(
+  results: SortedResult[]
+): SearchTagGroup[] {
+  return bucketPageGroupsByTag(groupSearchResultsByPage(results), (page) =>
+    tagFromUrl(page.page.url)
+  )
 }
 
 export function buildPageEntryGroups(entries: PageEntry[]): SearchTagGroup[] {
   const tagMap = new Map<string, SearchPageGroup[]>()
 
   for (const entry of entries) {
-    if (!tagMap.has(entry.tag)) {
-      tagMap.set(entry.tag, [])
-    }
-
-    tagMap.get(entry.tag)!.push({
+    const existing = tagMap.get(entry.tag)
+    const page: SearchPageGroup = {
       page: {
         content: entry.title,
         id: entry.url,
         url: entry.url,
       },
       children: [],
-    })
+    }
+
+    if (existing) {
+      existing.push(page)
+      continue
+    }
+
+    tagMap.set(entry.tag, [page])
   }
 
   return orderTagGroups(tagMap)
