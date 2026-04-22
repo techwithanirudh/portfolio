@@ -4,9 +4,9 @@ import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { Fragment, useEffect, useMemo, useState } from 'react'
-import { getPages, type PageEntry } from '@/app/actions/pages'
+import { Fragment, useMemo } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { usePages } from '@/contexts/pages'
 import { CommandMenuFooter } from '@/components/search/footer'
 import { SearchResults as SearchResultsList } from '@/components/search/results'
 import {
@@ -31,24 +31,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-function usePages(enabled: boolean): PageEntry[] {
-  const [pages, setPages] = useState<PageEntry[]>([])
-  useEffect(() => {
-    if (!enabled) {
-      return
-    }
-    getPages().then(setPages).catch(console.error)
-  }, [enabled])
-  return pages
-}
-
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
   const router = useRouter()
   const { setTheme, theme } = useTheme()
 
   const { search, setSearch, query } = useDocsSearch({ type: 'fetch', locale })
-  const allPages = usePages(open ?? false)
+  const allPages = usePages()
 
   const isEmpty = !search.trim()
 

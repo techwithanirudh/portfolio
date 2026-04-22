@@ -5,6 +5,7 @@ import { Section } from '@/components/section'
 import Separator from '@/components/separator'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
+import { AboutPageJsonLd } from '@/components/json-ld'
 import { createMetadata } from '@/lib/metadata'
 import { Attribution } from './_components/attribution'
 import { Design } from './_components/design'
@@ -71,6 +72,7 @@ export default function ColophonPage() {
           </Fragment>
         )
       })}
+      <AboutPageJsonLd description={description} path='/colophon' title={title} />
     </Wrapper>
   )
 }

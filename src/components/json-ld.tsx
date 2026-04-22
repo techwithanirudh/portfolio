@@ -1,7 +1,10 @@
 import type {
+  AboutPage,
   Article,
   BlogPosting,
   BreadcrumbList,
+  CollectionPage,
+  ContactPage,
   Graph,
   ProfilePage,
   WebPage,
@@ -120,74 +123,84 @@ export const WorkJsonLd = ({ page }: { page: WorkPage }) => {
   )
 }
 
-// --- Generic web page ---
+// --- Page helpers ---
 
-export const WebPageJsonLd = ({
-  title,
-  description,
-  path,
-}: {
-  title: string
+interface PageJsonLdProps {
+  breadcrumbs?: { name: string; url: string }[]
   description?: string
   path: string
-}) => {
-  const url = new URL(path, baseUrl.href).href
+  title: string
+}
 
-  const webPage: WebPage = {
-    '@type': 'WebPage',
+function makePageJsonLd<T extends WebPage>(
+  type: T['@type'],
+  { title, description, path, breadcrumbs: extraCrumbs }: PageJsonLdProps
+): { page: T; breadcrumbs: BreadcrumbList } {
+  const url = new URL(path, baseUrl.href).href
+  const page = {
+    '@type': type,
     name: title,
     description,
     url,
     isPartOf: { '@type': 'WebSite', '@id': `${baseUrl.href}#website` },
-  }
+  } as T
 
-  const breadcrumbs = makeBreadcrumbs([
+  const crumbs = extraCrumbs ?? [
     { name: homeTitle, url: baseUrl.href },
     { name: title, url },
-  ])
+  ]
 
+  return { page, breadcrumbs: makeBreadcrumbs(crumbs) }
+}
+
+// --- Generic web page (fallback) ---
+
+export const WebPageJsonLd = (props: PageJsonLdProps) => {
+  const { page, breadcrumbs } = makePageJsonLd<WebPage>('WebPage', props)
   return (
-    <JsonLd
-      graph={{
-        '@context': 'https://schema.org',
-        '@graph': [webPage, breadcrumbs],
-      }}
-    />
+    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+  )
+}
+
+// --- Collection page (listings: blog, work, tags) ---
+
+export const CollectionPageJsonLd = (props: PageJsonLdProps) => {
+  const { page, breadcrumbs } = makePageJsonLd<CollectionPage>('CollectionPage', props)
+  return (
+    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+  )
+}
+
+// --- Contact page ---
+
+export const ContactPageJsonLd = (props: PageJsonLdProps) => {
+  const { page, breadcrumbs } = makePageJsonLd<ContactPage>('ContactPage', props)
+  return (
+    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+  )
+}
+
+// --- About page (colophon, uses) ---
+
+export const AboutPageJsonLd = (props: PageJsonLdProps) => {
+  const { page, breadcrumbs } = makePageJsonLd<AboutPage>('AboutPage', props)
+  return (
+    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
   )
 }
 
 // --- Profile page ---
 
-export const ProfilePageJsonLd = ({
-  title,
-  description,
-  path,
-}: {
-  title: string
-  description?: string
-  path: string
-}) => {
-  const url = new URL(path, baseUrl.href).href
-
-  const profilePage: ProfilePage = {
-    '@type': 'ProfilePage',
-    name: title,
-    description,
-    url,
-    isPartOf: { '@type': 'WebSite', '@id': `${baseUrl.href}#website` },
-    mainEntity: { '@type': 'Person', '@id': `${baseUrl.href}#person` },
-  }
-
-  const breadcrumbs = makeBreadcrumbs([
-    { name: homeTitle, url: baseUrl.href },
-    { name: title, url },
-  ])
-
+export const ProfilePageJsonLd = (props: PageJsonLdProps) => {
+  const { page, breadcrumbs } = makePageJsonLd<ProfilePage>('ProfilePage', props)
   return (
     <JsonLd
       graph={{
         '@context': 'https://schema.org',
-        '@graph': [profilePage, breadcrumbs],
+        '@graph': [
+          { ...page, mainEntity: { '@type': 'Person', '@id': `${baseUrl.href}#person` } },
+          breadcrumbs,
+        ],
       }}
     />
   )
@@ -196,18 +209,23 @@ export const ProfilePageJsonLd = ({
 // --- Blog tag page ---
 
 export const TagJsonLd = ({ tag }: { tag: string }) => {
+  const tagUrl = new URL(`/blog/tags/${tag}`, baseUrl.href).href
+  const tagsUrl = new URL('/blog/tags', baseUrl.href).href
+
+  const page: CollectionPage = {
+    '@type': 'CollectionPage',
+    name: `Posts tagged "${tag}"`,
+    url: tagUrl,
+    isPartOf: { '@type': 'WebSite', '@id': `${baseUrl.href}#website` },
+  }
+
   const breadcrumbs = makeBreadcrumbs([
     { name: homeTitle, url: baseUrl.href },
-    { name: 'Tags', url: new URL('/blog/tags', baseUrl.href).href },
-    {
-      name: `Posts tagged "${tag}"`,
-      url: new URL(`/blog/tags/${tag}`, baseUrl.href).href,
-    },
+    { name: 'Tags', url: tagsUrl },
+    { name: `Posts tagged "${tag}"`, url: tagUrl },
   ])
 
   return (
-    <JsonLd
-      graph={{ '@context': 'https://schema.org', '@graph': [breadcrumbs] }}
-    />
+    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
   )
 }

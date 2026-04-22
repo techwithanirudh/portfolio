@@ -4,13 +4,15 @@ import type { Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 import CustomSearchDialog from '@/components/search'
+import { ThemeProvider } from '@/components/theme-provider'
 import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
 import { description as homeDescription, owner, title } from '@/constants/site'
+import { PagesProvider } from '@/contexts/pages'
 import { createMetadata } from '@/lib/metadata'
+import { getPosts, getWorkPages } from '@/lib/source'
 import '@/styles/globals.css'
 import 'katex/dist/katex.css'
-import { ThemeProvider } from '@/components/theme-provider'
 import { Body } from './layout.client'
 import { Provider } from './provider'
 
@@ -80,6 +82,21 @@ const jsonLd = {
 }
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
+  const pages = [
+    ...getPosts().map((page) => ({
+      title: page.data.title ?? 'Untitled',
+      url: page.url,
+      tag: 'blog' as const,
+      description: page.data.description,
+    })),
+    ...getWorkPages().map((page) => ({
+      title: page.data.title ?? 'Untitled',
+      url: page.url,
+      tag: 'projects' as const,
+      description: page.data.description,
+    })),
+  ]
+
   return (
     <html
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -104,23 +121,25 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
           }}
           type='application/ld+json'
         />
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          disableTransitionOnChange
-          enableSystem
-        >
-          <RootProvider
-            search={{
-              SearchDialog: CustomSearchDialog,
-            }}
-            theme={{
-              enabled: false,
-            }}
+        <PagesProvider pages={pages}>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            disableTransitionOnChange
+            enableSystem
           >
-            <Provider>{children}</Provider>
-          </RootProvider>
-        </ThemeProvider>
+            <RootProvider
+              search={{
+                SearchDialog: CustomSearchDialog,
+              }}
+              theme={{
+                enabled: false,
+              }}
+            >
+              <Provider>{children}</Provider>
+            </RootProvider>
+          </ThemeProvider>
+        </PagesProvider>
       </Body>
     </html>
   )

@@ -6,6 +6,11 @@
       "sourceType": "github",
       "computedHash": "27827bb6ca05cb6757953e507f46dc1c2bf44e48c1928eb3e49f2b675a168492"
     },
+    "make-interfaces-feel-better": {
+      "source": "jakubkrehel/make-interfaces-feel-better",
+      "sourceType": "github",
+      "computedHash": "54b6e221bbe4e2d1a8461c3f9ecabe69daf891f964e9ee5e699c323daa018f2e"
+    },
     "ultracite": {
       "source": "haydenbleasel/ultracite",
       "sourceType": "github",

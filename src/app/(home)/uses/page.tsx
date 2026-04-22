@@ -6,6 +6,7 @@ import Separator from '@/components/separator'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
 import { hardware, software } from '@/constants/portfolio/uses'
+import { AboutPageJsonLd } from '@/components/json-ld'
 import { createMetadata } from '@/lib/metadata'
 import { Coding } from './_components/coding'
 import { HardwareGrid } from './_components/hardware'
@@ -82,6 +83,7 @@ export default function UsesPage() {
           </Fragment>
         )
       })}
+      <AboutPageJsonLd description={description} path='/uses' title={title} />
     </Wrapper>
   )
 }

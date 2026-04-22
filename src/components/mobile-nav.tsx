@@ -70,12 +70,12 @@ export function MobileNav() {
         {menuOpen && (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
-            className='fixed inset-x-4 bottom-20 z-[49] rounded-2xl border bg-popover p-4 shadow-xl sm:hidden'
+            className='fixed inset-x-4 bottom-20 z-[49] rounded-2xl border bg-popover p-2 shadow-xl sm:hidden'
             exit={{ opacity: 0, y: 8 }}
             initial={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15 }}
           >
-            <div className='mb-3 flex items-center justify-between'>
+            <div className='my-2 px-3 flex items-center justify-between'>
               <span className='text-muted-foreground text-xs uppercase tracking-widest'>
                 Menu
               </span>
@@ -101,12 +101,12 @@ export function MobileNav() {
                   </Link>
                 ))}
             </nav>
-            <div className='mt-3 border-t pt-3'>
+            <div className='pt-2 border-t mt-3'>
               <div className='flex flex-wrap gap-2'>
                 {socials.map((s) => (
                   <a
                     aria-label={s.name}
-                    className='flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+                    className='flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-4'
                     href={s.url}
                     key={s.name}
                     rel='noopener noreferrer'
@@ -153,7 +153,7 @@ export function MobileNav() {
           <button
             aria-label='Toggle menu'
             className={cn(
-              'flex size-8 items-center justify-center rounded-full transition-colors',
+              'relative flex size-8 items-center justify-center rounded-full transition-colors',
               menuOpen
                 ? 'bg-primary/10 text-primary'
                 : 'text-muted-foreground hover:text-foreground'
@@ -161,11 +161,21 @@ export function MobileNav() {
             onClick={() => setMenuOpen((v) => !v)}
             type='button'
           >
-            {menuOpen ? (
-              <Icons.close className='size-4' />
-            ) : (
-              <Icons.menu className='size-4' />
-            )}
+            <AnimatePresence initial={false} mode='popLayout'>
+              <motion.span
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, scale: 0.25, filter: 'blur(4px)' }}
+                initial={{ opacity: 0, scale: 0.25, filter: 'blur(4px)' }}
+                key={menuOpen ? 'close' : 'menu'}
+                transition={{ type: 'spring', duration: 0.3, bounce: 0 }}
+              >
+                {menuOpen ? (
+                  <Icons.close className='size-4' />
+                ) : (
+                  <Icons.menu className='size-4' />
+                )}
+              </motion.span>
+            </AnimatePresence>
           </button>
         </div>
       </div>

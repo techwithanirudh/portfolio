@@ -8,6 +8,7 @@ import { Wrapper } from '@/components/wrapper'
 import { postsPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
 import { getPostsByTag, getSortedByDatePosts, getTags } from '@/lib/source'
+import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Hero } from './_components/hero'
 import { NewsletterSection } from './_components/newsletter-section'
 import { TagsAccordion, TagsSidebar } from './_components/tags-sidebar'
@@ -83,6 +84,7 @@ export default async function Page(props: {
       </SectionBody>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <NewsletterSection />
+      <CollectionPageJsonLd description='Notes on design engineering, full-stack development, AI experiments, and the systems behind recent projects.' path='/blog' title='Blog' />
     </Wrapper>
   )
 }

@@ -4,6 +4,7 @@ import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
 import { title as homeTitle } from '@/constants/site'
+import { CollectionPageJsonLd } from '@/components/json-ld'
 import { createMetadata } from '@/lib/metadata'
 import { getTags } from '@/lib/source'
 import { Hero } from './_components/hero'
@@ -42,6 +43,7 @@ export default function Page() {
           )}
         </div>
       </SectionBody>
+      <CollectionPageJsonLd description='Browse all blog tags to explore posts by topic.' path='/blog/tags' title='Tags' />
     </Wrapper>
   )
 }

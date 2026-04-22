@@ -423,7 +423,7 @@ function MessageList({
   return (
     <div
       className={cn(
-        'fd-scroll-container flex min-w-0 flex-col overflow-y-auto',
+        'fd-scroll-container flex min-w-0 flex-col overflow-y-auto supports-timeline-scroll:scroll-fade-effect-y',
         className
       )}
       data-lenis-prevent

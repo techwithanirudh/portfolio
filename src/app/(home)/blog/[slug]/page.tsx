@@ -53,7 +53,7 @@ export default async function Page(props: {
               }}
             />
           </MdxContent>
-          <div className='flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+          <div className='flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed lg:supports-timeline-scroll:scroll-fade-effect-y'>
             <div>
               <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
               <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
