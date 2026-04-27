@@ -18,7 +18,11 @@ export const GuestbookEntrySchema = z.object({
 
 export const GuestbookReactionSchema = z.object({
   entryId: z.number().int().positive(),
-  emoji: z.string().min(1).max(12),
+  emoji: z
+    .string()
+    .min(1)
+    .max(12)
+    .regex(/^\p{Emoji}/u, { message: 'Must be a valid emoji.' }),
 })
 
 export const GuestbookEntryIdSchema = z.object({
