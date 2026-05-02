@@ -16,4 +16,5 @@ export type CommandItem =
 export interface CommandGroup {
   group: string
   items: CommandItem[]
+  position?: 'before' | 'after'
 }

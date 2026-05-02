@@ -21,11 +21,7 @@ export function CommandMenuFooter() {
   return (
     <>
       <div className='flex h-10' />
-      <div className='absolute inset-x-0 bottom-0 flex h-10 items-center justify-between rounded-b-xl border-t px-4'>
-        <KbdGroup className='-ml-1'>
-          <Kbd>⌘</Kbd>
-          <Kbd>K</Kbd>
-        </KbdGroup>
+      <div className='absolute inset-x-0 bottom-0 flex h-10 items-center justify-end rounded-b-xl border-t px-4'>
         <div className='flex shrink-0 items-center gap-2 text-muted-foreground text-xs max-sm:hidden'>
           <span className='text-foreground'>{ENTER_LABELS[kind]}</span>
           <Kbd data-icon='inline-end'><CornerDownLeftIcon /></Kbd>

@@ -77,8 +77,9 @@ export function buildCommandGroups(search: string) {
   const isEmpty = !search.trim()
 
   return commands
-    .map(({ group, items }) => ({
+    .map(({ group, position, items }) => ({
       group,
+      position,
       items: items.filter(
         (item) =>
           isEmpty || defaultFilter(item.title, search, item.keywords) > 0

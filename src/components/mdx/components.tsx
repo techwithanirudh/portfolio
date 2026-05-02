@@ -31,6 +31,7 @@ export const mdxComponents: MDXComponents = {
   GitHubCode,
   IframeEmbed,
   ImageZoom,
+  img: FramedImage,
   Mermaid,
   Step,
   Steps,

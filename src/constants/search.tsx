@@ -4,7 +4,7 @@ import type { CommandGroup, CommandKind } from '@/types/search'
 
 export const commands: CommandGroup[] = [
   {
-    group: 'Navigation',
+    group: 'Portfolio',
     items: [
       {
         kind: 'page',
@@ -40,6 +40,7 @@ export const commands: CommandGroup[] = [
   },
   {
     group: 'Socials',
+    position: 'after',
     items: socials.map((s) => ({
       kind: 'link' as const,
       title: s.name,
@@ -48,7 +49,35 @@ export const commands: CommandGroup[] = [
     })),
   },
   {
-    group: 'Links',
+    group: 'Theme',
+    position: 'after',
+    items: [
+      {
+        kind: 'theme',
+        title: 'Light',
+        theme: 'light',
+        icon: <Icons.sun className='size-4' />,
+        keywords: ['theme', 'appearance'],
+      },
+      {
+        kind: 'theme',
+        title: 'Dark',
+        theme: 'dark',
+        icon: <Icons.moon className='size-4' />,
+        keywords: ['theme', 'appearance'],
+      },
+      {
+        kind: 'theme',
+        title: 'System',
+        theme: 'system',
+        icon: <Icons.desktop className='size-4' />,
+        keywords: ['theme', 'auto', 'appearance'],
+      },
+    ],
+  },
+  {
+    group: 'Others',
+    position: 'after',
     items: [
       {
         kind: 'link',
@@ -73,32 +102,6 @@ export const commands: CommandGroup[] = [
         title: 'Colophon',
         url: '/colophon',
         icon: <Icons.post className='size-4' />,
-      },
-    ],
-  },
-  {
-    group: 'Theme',
-    items: [
-      {
-        kind: 'theme',
-        title: 'Light',
-        theme: 'light',
-        icon: <Icons.sun className='size-4' />,
-        keywords: ['theme', 'appearance'],
-      },
-      {
-        kind: 'theme',
-        title: 'Dark',
-        theme: 'dark',
-        icon: <Icons.moon className='size-4' />,
-        keywords: ['theme', 'appearance'],
-      },
-      {
-        kind: 'theme',
-        title: 'System',
-        theme: 'system',
-        icon: <Icons.desktop className='size-4' />,
-        keywords: ['theme', 'auto', 'appearance'],
       },
     ],
   },
