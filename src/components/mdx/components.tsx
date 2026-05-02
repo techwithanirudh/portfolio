@@ -1,0 +1,40 @@
+import { Accordion, Accordions } from 'fumadocs-ui/components/accordion'
+import { File, Files, Folder } from 'fumadocs-ui/components/files'
+import { ImageZoom } from 'fumadocs-ui/components/image-zoom'
+import { Step, Steps } from 'fumadocs-ui/components/steps'
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
+import defaultMdxComponents from 'fumadocs-ui/mdx'
+import type { MDXComponents } from 'mdx/types'
+import { Callout } from 'fumadocs-ui/components/callout'
+import { Heading, InlineCode } from '@/components/prose'
+import { FramedImage, IframeEmbed } from './embed'
+import { GitHubCode } from './github-code'
+import { Mermaid } from './mermaid'
+import { VideoPlayer } from '../ui/video-player'
+
+export const mdxComponents: MDXComponents = {
+  ...defaultMdxComponents,
+  code: InlineCode,
+  h1: (props) => <Heading as='h1' {...props} />,
+  h2: (props) => <Heading as='h2' {...props} />,
+  h3: (props) => <Heading as='h3' {...props} />,
+  h4: (props) => <Heading as='h4' {...props} />,
+  h5: (props) => <Heading as='h5' {...props} />,
+  h6: (props) => <Heading as='h6' {...props} />,
+  Accordion,
+  Accordions,
+  Callout,
+  File,
+  Files,
+  Folder,
+  FramedImage,
+  GitHubCode,
+  IframeEmbed,
+  ImageZoom,
+  Mermaid,
+  Step,
+  Steps,
+  Tab,
+  Tabs,
+  VideoPlayer,
+}

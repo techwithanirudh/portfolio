@@ -1,6 +1,3 @@
-import { File, Files, Folder } from 'fumadocs-ui/components/files'
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
-import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -10,12 +7,11 @@ import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
-import { Mermaid } from '@/components/mdx/mermaid'
+import { mdxComponents } from '@/components/mdx/components'
 import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
 import { Button } from '@/components/ui/button'
-import { VideoPlayer } from '@/components/ui/video-player'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
@@ -135,19 +131,8 @@ export default async function Page(props: {
           >
             <div className='flex flex-1 flex-col gap-4'>
               <InlineTocBlock items={toc} />
-              <div className='prose min-w-0 flex-1 px-4 pb-4'>
-                <Mdx
-                  components={{
-                    ...defaultMdxComponents,
-                    File,
-                    Files,
-                    Folder,
-                    Tabs,
-                    Tab,
-                    Mermaid,
-                    VideoPlayer,
-                  }}
-                />
+              <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 pb-4'>
+                <Mdx components={mdxComponents} />
               </div>
             </div>
           </ViewAnimation>
