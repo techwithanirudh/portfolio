@@ -5,6 +5,7 @@ import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Separator } from '@/components/ui/separator'
 import { COMMAND_META_MAP } from '@/constants/search'
 import type { CommandKind } from '@/types/search'
+import { CornerDownLeftIcon } from 'lucide-react'
 
 const ENTER_LABELS: Record<CommandKind, string> = {
   command: 'Run Command',
@@ -27,10 +28,7 @@ export function CommandMenuFooter() {
         </KbdGroup>
         <div className='flex shrink-0 items-center gap-2 text-muted-foreground text-xs max-sm:hidden'>
           <span className='text-foreground'>{ENTER_LABELS[kind]}</span>
-          <Kbd data-icon='inline-end'>⏎</Kbd>
-          <Separator orientation='vertical' />
-          <span>Exit</span>
-          <Kbd>ESC</Kbd>
+          <Kbd data-icon='inline-end'><CornerDownLeftIcon /></Kbd>
         </div>
       </div>
     </>
