@@ -64,18 +64,16 @@ export const SplitSectionSidebar = ({
   background,
   inset,
   className,
-}: SplitSectionSidebarProps) => {
-  return (
-    <div
-      className={cn(
-        splitSectionSidebarVariants({ background, inset }),
-        className
-      )}
-    >
-      {children}
-    </div>
-  )
-}
+}: SplitSectionSidebarProps) => (
+  <div
+    className={cn(
+      splitSectionSidebarVariants({ background, inset }),
+      className
+    )}
+  >
+    {children}
+  </div>
+)
 
 type SplitSectionHeaderProps = Omit<SectionHeaderProps, 'align'> & {
   align?: SectionHeaderProps['align']

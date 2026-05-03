@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { WebPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
 import {
   SplitSection,
@@ -8,7 +9,6 @@ import {
 } from '@/components/sections/split-section'
 import { ViewAnimation } from '@/components/view-animation'
 import { Wrapper } from '@/components/wrapper'
-import { WebPageJsonLd } from '@/components/json-ld'
 import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'
@@ -68,7 +68,11 @@ export default async function GuestbookPage() {
           />
         </ViewAnimation>
       </Section>
-      <WebPageJsonLd description='Leave a note and react to messages from other visitors.' path='/guestbook' title='Guestbook' />
+      <WebPageJsonLd
+        description='Leave a note and react to messages from other visitors.'
+        path='/guestbook'
+        title='Guestbook'
+      />
     </Wrapper>
   )
 }

@@ -31,8 +31,7 @@ export const getTags = () => {
   return Array.from(tagSet).toSorted()
 }
 
-export const getPostsByTag = (tag: string) => {
-  return posts
+export const getPostsByTag = (tag: string) =>
+  posts
     .filter((post) => post.data.tags?.includes(tag))
     .toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime())
-}

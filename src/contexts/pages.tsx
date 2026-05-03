@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, use, type ReactNode } from 'react'
+import { createContext, type ReactNode, use } from 'react'
 import type { PageEntry } from '@/app/actions/pages'
 
 const PagesContext = createContext<PageEntry[]>([])

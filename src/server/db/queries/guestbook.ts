@@ -81,15 +81,14 @@ const fetchGuestbookEntries = async (
   }))
 }
 
-export const getGuestbookEntries = (currentUserId?: string | null) => {
-  return unstable_cache(
+export const getGuestbookEntries = (currentUserId?: string | null) =>
+  unstable_cache(
     () => fetchGuestbookEntries(currentUserId),
     ['guestbook', currentUserId ?? 'anonymous'],
     {
       tags: ['guestbook'],
     }
   )()
-}
 
 export const deleteGuestbookEntry = async (
   entryId: number,

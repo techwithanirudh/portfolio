@@ -21,22 +21,20 @@ export const VideoPlayer = ({
   poster,
   thumbnails,
   ...props
-}: VideoPlayerProps) => {
-  return (
-    <MediaPlayer
-      className={cn(
-        'w-full overflow-hidden rounded-lg border border-border bg-background',
-        className
-      )}
-      poster={poster}
-      {...props}
-    >
-      <MediaProvider />
-      <DefaultVideoLayout
-        colorScheme='default'
-        icons={defaultLayoutIcons}
-        thumbnails={thumbnails}
-      />
-    </MediaPlayer>
-  )
-}
+}: VideoPlayerProps) => (
+  <MediaPlayer
+    className={cn(
+      'w-full overflow-hidden rounded-lg border border-border bg-background',
+      className
+    )}
+    poster={poster}
+    {...props}
+  >
+    <MediaProvider />
+    <DefaultVideoLayout
+      colorScheme='default'
+      icons={defaultLayoutIcons}
+      thumbnails={thumbnails}
+    />
+  </MediaPlayer>
+)

@@ -423,7 +423,7 @@ function MessageList({
   return (
     <div
       className={cn(
-        'fd-scroll-container flex min-w-0 flex-col overflow-y-auto supports-timeline-scroll:scroll-fade-effect-y',
+        'fd-scroll-container supports-timeline-scroll:scroll-fade-effect-y flex min-w-0 flex-col overflow-y-auto',
         className
       )}
       data-lenis-prevent
@@ -469,7 +469,7 @@ const Message = memo(function Message({
   const context = (() => {
     const contextPart = parts.find((part) => part.type === 'data-context')
     if (!(contextPart && 'data' in contextPart)) {
-      return undefined
+      return
     }
     return contextDataSchema.safeParse(contextPart.data).data?.text
   })()

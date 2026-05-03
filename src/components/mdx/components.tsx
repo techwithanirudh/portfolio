@@ -1,16 +1,16 @@
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion'
+import { Callout } from 'fumadocs-ui/components/callout'
 import { File, Files, Folder } from 'fumadocs-ui/components/files'
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom'
 import { Step, Steps } from 'fumadocs-ui/components/steps'
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { MDXComponents } from 'mdx/types'
-import { Callout } from 'fumadocs-ui/components/callout'
 import { Heading, InlineCode } from '@/components/prose'
+import { VideoPlayer } from '../ui/video-player'
 import { FramedImage, IframeEmbed } from './embed'
 import { GitHubCode } from './github-code'
 import { Mermaid } from './mermaid'
-import { VideoPlayer } from '../ui/video-player'
 
 export const mdxComponents: MDXComponents = {
   ...defaultMdxComponents,

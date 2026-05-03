@@ -5,14 +5,13 @@ import { getPosts } from '@/lib/source'
 
 export const dynamic = 'force-static'
 
-const escapeForXML = (str: string) => {
-  return str
+const escapeForXML = (str: string) =>
+  str
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;')
-}
 
 export const GET = () => {
   const feed = createFeed()

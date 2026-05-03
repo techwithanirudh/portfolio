@@ -24,43 +24,41 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
   author,
   tags: _tags,
   slugs: _slugs,
-}) => {
-  return (
-    <Link
-      className='group flex min-h-full flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
-      href={url}
-    >
-      {image && (
-        <BlurImage
-          alt={title}
-          className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform group-hover:scale-102'
-          height={554}
-          src={image}
-          width={853}
-        />
-      )}
+}) => (
+  <Link
+    className='group flex min-h-full flex-col gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+    href={url}
+  >
+    {image && (
+      <BlurImage
+        alt={title}
+        className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform group-hover:scale-102'
+        height={554}
+        src={image}
+        width={853}
+      />
+    )}
 
-      <div className='flex h-full flex-col justify-between gap-4'>
-        <div className='flex-1 space-y-2'>
-          <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-            <Balancer>{title}</Balancer>
-          </h2>
-          <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
-            <Balancer>{description}</Balancer>
-          </p>
-        </div>
-        <div className='inline-flex items-center gap-2 text-muted-foreground text-sm'>
-          <span className='inline-flex items-center gap-1 capitalize'>
-            <Icons.user className='icon-pop size-4' />
-            {author}
-          </span>
-          <span>•</span>
-          <span className='inline-flex items-center gap-1'>
-            <Icons.calendar className='icon-pop size-4' />
-            {date}
-          </span>
-        </div>
+    <div className='flex h-full flex-col justify-between gap-4'>
+      <div className='flex-1 space-y-2'>
+        <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
+          <Balancer>{title}</Balancer>
+        </h2>
+        <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
+          <Balancer>{description}</Balancer>
+        </p>
       </div>
-    </Link>
-  )
-}
+      <div className='inline-flex items-center gap-2 text-muted-foreground text-sm'>
+        <span className='inline-flex items-center gap-1 capitalize'>
+          <Icons.user className='icon-pop size-4' />
+          {author}
+        </span>
+        <span>•</span>
+        <span className='inline-flex items-center gap-1'>
+          <Icons.calendar className='icon-pop size-4' />
+          {date}
+        </span>
+      </div>
+    </div>
+  </Link>
+)

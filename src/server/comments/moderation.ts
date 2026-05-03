@@ -53,9 +53,8 @@ const extractContent = (content: Content) => {
   }
 }
 
-export const extractCommentImages = (content: Content) => {
-  return extractContent(content).images
-}
+export const extractCommentImages = (content: Content) =>
+  extractContent(content).images
 
 export const moderateComment = async (content: Content) => {
   const { text, images } = extractContent(content)

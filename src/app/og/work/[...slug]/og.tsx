@@ -50,7 +50,7 @@ export function generate({
             overflow: 'hidden',
             maxWidth: '100%',
             maxHeight: '120px',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
           }}
           tw='max-w-full text-[38px] leading-[1.5] text-stone-400'
         >

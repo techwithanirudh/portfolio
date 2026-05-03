@@ -76,9 +76,9 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
+    @apply bg-background text-foreground antialiased;
   }
 
   html {
@@ -129,12 +129,12 @@
 }
 
 @utility step {
-  @apply max-md:pl-10;
   counter-increment: step;
+  @apply max-md:pl-10;
 
   &::before {
-    @apply absolute inline-flex size-6 items-center justify-center rounded-lg bg-muted text-center indent-0 text-[0.8125rem]/6 font-normal text-foreground max-md:left-0 md:-ml-10;
     content: counter(step);
+    @apply absolute inline-flex size-6 items-center justify-center rounded-lg bg-muted text-center indent-0 text-[0.8125rem]/6 font-normal text-foreground max-md:left-0 md:-ml-10;
   }
 }
 
@@ -144,7 +144,7 @@
   @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-1 prose-code:py-px prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
   @apply prose-strong:font-medium;
   @apply prose-hr:border-border;
-  @apply prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:border-border prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
+  @apply prose-blockquote:border-l prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:border-border prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
 }
 
 @utility prose-no-margin {

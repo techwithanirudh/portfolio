@@ -36,6 +36,18 @@ export const commands: CommandGroup[] = [
         url: '/blog',
         icon: <Icons.blog className='size-4' />,
       },
+      {
+        kind: 'page',
+        title: 'Uses',
+        url: '/uses',
+        icon: <Icons.wrench className='size-4' />,
+      },
+      {
+        kind: 'page',
+        title: 'Colophon',
+        url: '/colophon',
+        icon: <Icons.post className='size-4' />,
+      },
     ],
   },
   {
@@ -95,12 +107,6 @@ export const commands: CommandGroup[] = [
         kind: 'link',
         title: 'Sitemap',
         url: '/sitemap.xml',
-        icon: <Icons.post className='size-4' />,
-      },
-      {
-        kind: 'page',
-        title: 'Colophon',
-        url: '/colophon',
         icon: <Icons.post className='size-4' />,
       },
     ],

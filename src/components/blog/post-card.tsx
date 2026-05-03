@@ -18,29 +18,27 @@ export const PostCard: React.FC<PostCardProps> = ({
   date,
   author,
   slugs: _slugs,
-}) => {
-  return (
-    <Link
-      className='block bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
-      href={url}
-    >
-      <div className='flex flex-col gap-2'>
-        <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>{title}</h2>
-        <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
-          {description}
-        </p>
-        <div className='mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
-          <span className='inline-flex items-center gap-1 capitalize'>
-            <Icons.user className='icon-pop size-4' />
-            {author}
-          </span>
-          <span>•</span>
-          <span className='inline-flex items-center gap-1'>
-            <Icons.calendar className='icon-pop size-4' />
-            {date}
-          </span>
-        </div>
+}) => (
+  <Link
+    className='block bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
+    href={url}
+  >
+    <div className='flex flex-col gap-2'>
+      <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>{title}</h2>
+      <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
+        {description}
+      </p>
+      <div className='mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
+        <span className='inline-flex items-center gap-1 capitalize'>
+          <Icons.user className='icon-pop size-4' />
+          {author}
+        </span>
+        <span>•</span>
+        <span className='inline-flex items-center gap-1'>
+          <Icons.calendar className='icon-pop size-4' />
+          {date}
+        </span>
       </div>
-    </Link>
-  )
-}
+    </div>
+  </Link>
+)

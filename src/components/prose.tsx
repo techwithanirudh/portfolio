@@ -1,5 +1,5 @@
-import { LinkIcon } from 'lucide-react'
 import { Slot } from '@radix-ui/react-slot'
+import { LinkIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -12,23 +12,24 @@ export function Prose({
 
   return (
     <Comp
-      data-slot='prose'
       className={cn(
-        'prose max-w-none prose-zinc dark:prose-invert prose-content',
+        'prose prose-zinc dark:prose-invert prose-content max-w-none',
         className
       )}
+      data-slot='prose'
       {...props}
     />
   )
 }
 
 export function InlineCode({ className, ...props }: ComponentProps<'code'>) {
-  const isCodeBlock = 'data-language' in props || className?.includes('language-')
+  const isCodeBlock =
+    'data-language' in props || className?.includes('language-')
 
   return (
     <code
-      data-slot={isCodeBlock ? 'code-block' : 'code-inline'}
       className={cn(!isCodeBlock && 'not-prose code-inline', className)}
+      data-slot={isCodeBlock ? 'code-block' : 'code-inline'}
       {...props}
     />
   )
@@ -46,7 +47,9 @@ export function Heading<T extends HeadingTag = 'h1'>({
   const Comp = (as ?? 'h1') as HeadingTag
 
   if (!props.id) {
-    return <Comp className={className} {...(props as ComponentProps<typeof Comp>)} />
+    return (
+      <Comp className={className} {...(props as ComponentProps<typeof Comp>)} />
+    )
   }
 
   return (
@@ -54,7 +57,7 @@ export function Heading<T extends HeadingTag = 'h1'>({
       className={cn('flex flex-row items-center gap-2', className)}
       {...(props as ComponentProps<typeof Comp>)}
     >
-      <a href={`#${props.id}`} className='peer not-prose'>
+      <a className='peer not-prose' href={`#${props.id}`}>
         {props.children}
       </a>
       <LinkIcon

@@ -5,7 +5,10 @@ import { cn } from '@/lib/utils'
 export function IframeEmbed({ className, ...props }: ComponentProps<'iframe'>) {
   return (
     <div className='relative my-[1.25em]'>
-      <iframe className={cn('aspect-video w-full rounded-xl', className)} {...props} />
+      <iframe
+        className={cn('aspect-video w-full rounded-xl', className)}
+        {...props}
+      />
       <div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10' />
     </div>
   )

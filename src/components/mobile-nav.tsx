@@ -75,7 +75,7 @@ export function MobileNav() {
             initial={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15 }}
           >
-            <div className='my-2 px-3 flex items-center justify-between'>
+            <div className='my-2 flex items-center justify-between px-3'>
               <span className='text-muted-foreground text-xs uppercase tracking-widest'>
                 Menu
               </span>
@@ -101,7 +101,7 @@ export function MobileNav() {
                   </Link>
                 ))}
             </nav>
-            <div className='pt-2 border-t mt-3'>
+            <div className='mt-3 border-t pt-2'>
               <div className='flex flex-wrap gap-2'>
                 {socials.map((s) => (
                   <a

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useMemo } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { usePages } from '@/contexts/pages'
 import { CommandMenuFooter } from '@/components/search/footer'
 import { SearchResults as SearchResultsList } from '@/components/search/results'
 import {
@@ -30,6 +29,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
+import { usePages } from '@/contexts/pages'
 
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
@@ -97,7 +97,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <DialogTitle>Command Palette</DialogTitle>
           <DialogDescription>Search or jump to a page</DialogDescription>
         </DialogHeader>
-        <Command shouldFilter={false}>
+        <Command onKeyDown={(e) => e.stopPropagation()} shouldFilter={false}>
           <CommandInput
             onValueChange={setSearch}
             placeholder='Type a command or search...'
@@ -144,7 +144,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
             <SearchResultsList groups={tagGroups} onSelect={go} />
 
-            {afterGroups.map(({ group, items }, i) => (
+            {afterGroups.map(({ group, items }) => (
               <Fragment key={group}>
                 <CommandSeparator />
                 <CommandGroup heading={group}>

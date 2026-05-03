@@ -158,25 +158,46 @@ function makePageJsonLd<T extends WebPage>(
 export const WebPageJsonLd = (props: PageJsonLdProps) => {
   const { page, breadcrumbs } = makePageJsonLd<WebPage>('WebPage', props)
   return (
-    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+    <JsonLd
+      graph={{
+        '@context': 'https://schema.org',
+        '@graph': [page, breadcrumbs],
+      }}
+    />
   )
 }
 
 // --- Collection page (listings: blog, work, tags) ---
 
 export const CollectionPageJsonLd = (props: PageJsonLdProps) => {
-  const { page, breadcrumbs } = makePageJsonLd<CollectionPage>('CollectionPage', props)
+  const { page, breadcrumbs } = makePageJsonLd<CollectionPage>(
+    'CollectionPage',
+    props
+  )
   return (
-    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+    <JsonLd
+      graph={{
+        '@context': 'https://schema.org',
+        '@graph': [page, breadcrumbs],
+      }}
+    />
   )
 }
 
 // --- Contact page ---
 
 export const ContactPageJsonLd = (props: PageJsonLdProps) => {
-  const { page, breadcrumbs } = makePageJsonLd<ContactPage>('ContactPage', props)
+  const { page, breadcrumbs } = makePageJsonLd<ContactPage>(
+    'ContactPage',
+    props
+  )
   return (
-    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+    <JsonLd
+      graph={{
+        '@context': 'https://schema.org',
+        '@graph': [page, breadcrumbs],
+      }}
+    />
   )
 }
 
@@ -185,20 +206,31 @@ export const ContactPageJsonLd = (props: PageJsonLdProps) => {
 export const AboutPageJsonLd = (props: PageJsonLdProps) => {
   const { page, breadcrumbs } = makePageJsonLd<AboutPage>('AboutPage', props)
   return (
-    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+    <JsonLd
+      graph={{
+        '@context': 'https://schema.org',
+        '@graph': [page, breadcrumbs],
+      }}
+    />
   )
 }
 
 // --- Profile page ---
 
 export const ProfilePageJsonLd = (props: PageJsonLdProps) => {
-  const { page, breadcrumbs } = makePageJsonLd<ProfilePage>('ProfilePage', props)
+  const { page, breadcrumbs } = makePageJsonLd<ProfilePage>(
+    'ProfilePage',
+    props
+  )
   return (
     <JsonLd
       graph={{
         '@context': 'https://schema.org',
         '@graph': [
-          { ...page, mainEntity: { '@type': 'Person', '@id': `${baseUrl.href}#person` } },
+          {
+            ...page,
+            mainEntity: { '@type': 'Person', '@id': `${baseUrl.href}#person` },
+          },
           breadcrumbs,
         ],
       }}
@@ -226,6 +258,11 @@ export const TagJsonLd = ({ tag }: { tag: string }) => {
   ])
 
   return (
-    <JsonLd graph={{ '@context': 'https://schema.org', '@graph': [page, breadcrumbs] }} />
+    <JsonLd
+      graph={{
+        '@context': 'https://schema.org',
+        '@graph': [page, breadcrumbs],
+      }}
+    />
   )
 }

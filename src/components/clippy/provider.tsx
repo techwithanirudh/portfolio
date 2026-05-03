@@ -45,6 +45,7 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
           loaded.dispose()
           return
         }
+        loaded._animator._sounds = {}
         instance.current = loaded
         setCurrentAgent(loaded)
       })

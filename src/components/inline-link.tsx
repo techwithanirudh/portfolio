@@ -12,17 +12,15 @@ export const InlineLink = ({
   children: ReactNode
   blank?: boolean
   className?: string
-}) => {
-  return (
-    <Link
-      className={cn(
-        'text-fd-primary underline duration-300 hover:text-fd-primary/70',
-        className
-      )}
-      href={href}
-      target={blank ? '_blank' : undefined}
-    >
-      {children}
-    </Link>
-  )
-}
+}) => (
+  <Link
+    className={cn(
+      'text-fd-primary underline duration-300 hover:text-fd-primary/70',
+      className
+    )}
+    href={href}
+    target={blank ? '_blank' : undefined}
+  >
+    {children}
+  </Link>
+)

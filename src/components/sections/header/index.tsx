@@ -288,11 +288,8 @@ const HeaderNavigationMenu = ({
   )
 }
 
-const isSecondary = (item: LinkItemType): boolean => {
-  return (
-    ('secondary' in item && item.secondary === true) || item.type === 'icon'
-  )
-}
+const isSecondary = (item: LinkItemType): boolean =>
+  ('secondary' in item && item.secondary === true) || item.type === 'icon'
 
 const NavigationMenuLinkItem = ({
   item,
