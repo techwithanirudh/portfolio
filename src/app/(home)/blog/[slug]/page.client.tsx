@@ -3,7 +3,6 @@
 import { Comments } from '@fuma-comment/react'
 import { EllipsisIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { getLoginUrl } from '@/lib/auth-client'
+import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
 export function ShareMenu({ title, url }: { title: string; url: string }) {

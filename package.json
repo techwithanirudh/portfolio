@@ -44,6 +44,7 @@
     "@takumi-rs/image-response": "^1.1.2",
     "@vercel/blob": "^2.3.3",
     "@vidstack/react": "1.12.6",
+    "@web-kits/audio": "^0.1.0",
     "ai": "^6.0.174",
     "ai-retry": "^1.6.0",
     "better-auth": "^1.6.9",

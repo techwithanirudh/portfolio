@@ -1,5 +1,4 @@
 - [x] Add AI Chat
-- [ ] Add `@toolwind/corner-shape`
 - [ ] Replace Fumadocs blog components with custom blog components
 - [ ] Add keyboard navigation across the site
 - [x] Add a `Cmd+K` command palette
@@ -8,13 +7,14 @@
 - [ ] Use more animated icons across the site where they improve feedback and affordance
 - [x] Improve mobile support with better small-screen layouts and touch optimization
 - [ ] Increase touch target sizes and touch radius on mobile, following the better interaction patterns
-- [ ] Add installable PWA support with polished `manifest`, icons, and install UX
 - [ ] Add a public bookmarks/recommendations page
+- [ ] Add comment notifications for new replies, owner alerts, user preferences, and unsubscribe links
+- [ ] Add guestbook notifications for new entries, owner alerts, and moderation events
+- [ ] Add a Twemoji renderer for comments, guestbook entries, and MDX content
+- [ ] Switch app-level icons from Lucide to Heroicons where equivalent icons exist
+- [ ] Build a full role-gated admin UI for users, comments, guestbook entries, notifications, and site metrics
 - [x] Add scroll-fade effects for overflow areas like command menus, drawers, and long sidebars
-- [ ] Upgrade testimonials with richer presentation patterns like marquee/spotlight layouts
-- [ ] C15T Consent Manager
 - [ ] TOS and Privacy Policy
 - [ ] Add Raycast and Browser Extension Sections
 - [ ] Lighthouse Scores / Perf is bad after clippy.js
-- [ ] Scroll to bottom is broken
 - [ ] When you open and close a contact form, the state isn't restored so it thinks you've not submitted yet

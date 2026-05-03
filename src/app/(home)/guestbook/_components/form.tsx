@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/signature-pad'
 import { Textarea } from '@/components/ui/textarea'
 import { getLoginUrl, useSession } from '@/lib/auth-client'
+import { toast } from '@/lib/toast'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
@@ -40,6 +41,7 @@ export const GuestbookForm = () => {
     {
       actionProps: {
         onSuccess: () => {
+          toast.success('Guestbook entry posted.')
           form.reset({
             message: '',
             signature: undefined,
@@ -49,10 +51,15 @@ export const GuestbookForm = () => {
           setFormKey((current) => current + 1)
           router.refresh()
         },
-        onError: () => {
+        onError: ({ error }) => {
           if (form.formState.errors.message) {
             setStep(1)
           }
+          toast.error(
+            typeof error.serverError === 'string'
+              ? error.serverError
+              : 'Failed to post guestbook entry.'
+          )
         },
       },
       formProps: {

@@ -5,11 +5,10 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
-import { toast } from 'sonner'
-
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 import {
   type GuestbookEntryItem,
@@ -45,19 +44,42 @@ export const GuestbookEntryCard = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const editAction = useAction(editGuestbookEntry, {
+    onError: ({ error }) => {
+      toast.error(
+        typeof error.serverError === 'string'
+          ? error.serverError
+          : 'Failed to update message.'
+      )
+    },
     onSuccess: () => {
       setIsEditing(false)
       router.refresh()
+      toast.success('Guestbook entry updated.')
     },
   })
   const deleteAction = useAction(removeGuestbookEntry, {
+    onError: ({ error }) => {
+      toast.error(
+        typeof error.serverError === 'string'
+          ? error.serverError
+          : 'Failed to delete message.'
+      )
+    },
     onSuccess: () => {
       setIsEditing(false)
       setIsDeleteModalOpen(false)
       router.refresh()
+      toast.success('Guestbook entry deleted.')
     },
   })
   const banAction = useAction(banGuestbookUser, {
+    onError: ({ error }) => {
+      toast.error(
+        typeof error.serverError === 'string'
+          ? error.serverError
+          : 'Failed to update ban status.'
+      )
+    },
     onSuccess: () => {
       setIsEditing(false)
       setIsBanModalOpen(false)

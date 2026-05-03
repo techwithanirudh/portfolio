@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/lib/toast'
 import { ContactSchema } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
@@ -25,7 +26,22 @@ const ContactFormInner = () => {
     contact,
     zodResolver(ContactSchema),
     {
-      actionProps: {},
+      actionProps: {
+        onError: ({ error }) => {
+          toast.error(
+            typeof error.serverError === 'string'
+              ? error.serverError
+              : 'An error occurred while sending your message.'
+          )
+        },
+        onSuccess: ({ data }) => {
+          toast.success(
+            data?.success && data.message
+              ? data.message
+              : "Your message has been sent! We'll get back to you soon."
+          )
+        },
+      },
       formProps: {
         mode: 'onBlur',
         defaultValues: {

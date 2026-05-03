@@ -1,10 +1,11 @@
 'use client'
+import { useSound } from '@web-kits/audio/react'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { CommandMenuFooter } from '@/components/search/footer'
 import { SearchResults as SearchResultsList } from '@/components/search/results'
@@ -30,11 +31,33 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
+import {
+  click,
+  collapse,
+  hover,
+  keyPress,
+  notification,
+} from '@/lib/audio/minimal'
+
+const NAV_SOUND_THROTTLE_MS = 60
 
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
   const router = useRouter()
   const { setTheme, theme } = useTheme()
+  const playOpen = useSound(notification)
+  const playConfirm = useSound(click)
+  const playCollapse = useSound(collapse)
+  const playHover = useSound(hover)
+  const playNavigate = useSound(keyPress)
+  const activePointerItemRef = useRef<string | null>(null)
+  const lastNavSoundAtRef = useRef(0)
+
+  useEffect(() => {
+    if (open) {
+      playOpen()
+    }
+  }, [open, playOpen])
 
   const { search, setSearch, query } = useDocsSearch({ type: 'fetch', locale })
   const allPages = usePages()
@@ -44,6 +67,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const allGroups = useMemo(() => buildCommandGroups(search), [search])
   const groups = allGroups.filter((g) => g.position !== 'after')
   const afterGroups = allGroups.filter((g) => g.position === 'after')
+  type CommandItemData = (typeof groups)[number]['items'][number]
 
   const tagGroups = useMemo(() => {
     if (isEmpty) {
@@ -65,7 +89,42 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     setSearch('')
   }
 
+  const playNavigationSound = () => {
+    const now = performance.now()
+
+    if (now - lastNavSoundAtRef.current < NAV_SOUND_THROTTLE_MS) {
+      return
+    }
+
+    lastNavSoundAtRef.current = now
+    playNavigate()
+  }
+
+  const handlePointerActiveChange = (value: string) => {
+    if (activePointerItemRef.current === value) {
+      return
+    }
+
+    activePointerItemRef.current = value
+    playHover()
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    event.stopPropagation()
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      playNavigationSound()
+      return
+    }
+
+    if (event.key === 'Escape' && open) {
+      playCollapse()
+    }
+  }
+
   const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
+    playConfirm()
+
     if (item.kind === 'theme') {
       setTheme(item.theme)
       close()
@@ -83,9 +142,26 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   }
 
   const go = (url: string) => {
+    playConfirm()
     close()
     router.push(url)
   }
+
+  const renderCommandItem = (item: CommandItemData) => (
+    <CommandItem
+      data-checked={
+        item.kind === 'theme' && theme === item.theme ? true : undefined
+      }
+      key={item.title}
+      keywords={item.keywords}
+      onPointerEnter={() => handlePointerActiveChange(item.title)}
+      onSelect={() => handleSelect(item)}
+      value={item.title}
+    >
+      <span className='text-muted-foreground'>{item.icon}</span>
+      {item.title}
+    </CommandItem>
+  )
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -97,7 +173,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <DialogTitle>Command Palette</DialogTitle>
           <DialogDescription>Search or jump to a page</DialogDescription>
         </DialogHeader>
-        <Command onKeyDown={(e) => e.stopPropagation()} shouldFilter={false}>
+        <Command onKeyDown={handleKeyDown} shouldFilter={false}>
           <CommandInput
             onValueChange={setSearch}
             placeholder='Type a command or search...'
@@ -112,22 +188,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               <Fragment key={group}>
                 {i > 0 && <CommandSeparator />}
                 <CommandGroup heading={group}>
-                  {items.map((item) => (
-                    <CommandItem
-                      data-checked={
-                        item.kind === 'theme' && theme === item.theme
-                          ? true
-                          : undefined
-                      }
-                      key={item.title}
-                      keywords={item.keywords}
-                      onSelect={() => handleSelect(item)}
-                      value={item.title}
-                    >
-                      <span className='text-muted-foreground'>{item.icon}</span>
-                      {item.title}
-                    </CommandItem>
-                  ))}
+                  {items.map(renderCommandItem)}
                 </CommandGroup>
               </Fragment>
             ))}
@@ -142,28 +203,17 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
             )}
 
-            <SearchResultsList groups={tagGroups} onSelect={go} />
+            <SearchResultsList
+              groups={tagGroups}
+              onActiveChange={handlePointerActiveChange}
+              onSelect={go}
+            />
 
             {afterGroups.map(({ group, items }) => (
               <Fragment key={group}>
                 <CommandSeparator />
                 <CommandGroup heading={group}>
-                  {items.map((item) => (
-                    <CommandItem
-                      data-checked={
-                        item.kind === 'theme' && theme === item.theme
-                          ? true
-                          : undefined
-                      }
-                      key={item.title}
-                      keywords={item.keywords}
-                      onSelect={() => handleSelect(item)}
-                      value={item.title}
-                    >
-                      <span className='text-muted-foreground'>{item.icon}</span>
-                      {item.title}
-                    </CommandItem>
-                  ))}
+                  {items.map(renderCommandItem)}
                 </CommandGroup>
               </Fragment>
             ))}

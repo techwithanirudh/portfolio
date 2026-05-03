@@ -1,6 +1,7 @@
 'use client'
 
 import { ProgressProvider } from '@bprogress/next/app'
+import { SoundProvider } from '@web-kits/audio/react'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
@@ -18,7 +19,7 @@ export function Provider({
   children: ReactNode
 }): React.ReactElement {
   return (
-    <>
+    <SoundProvider>
       <AISearch>
         <ProgressProvider
           color='var(--color-primary)'
@@ -42,6 +43,6 @@ export function Provider({
       <TailwindIndicator />
       <SmoothCursor />
       <MobileNav />
-    </>
+    </SoundProvider>
   )
 }

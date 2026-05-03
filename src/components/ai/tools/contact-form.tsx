@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
+import { toast } from '@/lib/toast'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
@@ -40,7 +41,15 @@ export function AIContactForm({
     zodResolver(ContactSchema),
     {
       actionProps: {
+        onError: ({ error }) => {
+          toast.error(
+            typeof error.serverError === 'string'
+              ? error.serverError
+              : 'Failed to send message.'
+          )
+        },
         onSuccess: () => {
+          toast.success('Message sent.')
           const { name, email, message } = form.getValues()
           addToolOutput({
             tool: 'showContactForm',

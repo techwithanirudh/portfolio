@@ -1,5 +1,6 @@
 'use client'
 
+import { useSound } from '@web-kits/audio/react'
 import { cva } from 'class-variance-authority'
 import Link from 'fumadocs-core/link'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
@@ -28,6 +29,7 @@ import {
 } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { ViewAnimation } from '@/components/view-animation'
+import { tap } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
@@ -83,6 +85,8 @@ export const Header = ({
   searchToggle = {},
   className,
 }: HomeLayoutProps & { className?: string }) => {
+  const playTapLogo = useSound(tap)
+
   const { navItems, menuItems } = useMemo(() => {
     const navItems: LinkItemType[] = []
     const menuItems: LinkItemType[] = []
@@ -118,6 +122,7 @@ export const Header = ({
             {renderNavTitle(nav, {
               className:
                 'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
+              onClick: () => playTapLogo(),
             })}
           </ViewAnimation>
           {nav.children}
@@ -298,6 +303,8 @@ const NavigationMenuLinkItem = ({
   item: LinkItemType
   className?: string
 }) => {
+  const playTap = useSound(tap)
+
   if (item.type === 'custom') {
     return <div {...props}>{item.children}</div>
   }
@@ -327,6 +334,7 @@ const NavigationMenuLinkItem = ({
               'flex flex-col gap-2 rounded-lg border border-border bg-fd-card p-3 transition-colors hover:bg-fd-accent/80 hover:text-fd-accent-foreground',
               rest.className
             )}
+            onClick={() => playTap()}
           >
             {rest.children ?? (
               <>
@@ -367,6 +375,7 @@ const NavigationMenuLinkItem = ({
           aria-label={item.type === 'icon' ? item.label : undefined}
           className={cn(navItemVariants({ variant: item.type }))}
           item={item}
+          onClick={() => playTap()}
         >
           {item.type === 'icon' ? item.icon : item.text}
         </LinkItem>
@@ -382,6 +391,8 @@ const MobileNavigationMenuLinkItem = ({
   item: LinkItemType
   className?: string
 }) => {
+  const playTap = useSound(tap)
+
   if (item.type === 'custom') {
     return <div className={cn('grid', props.className)}>{item.children}</div>
   }
@@ -399,7 +410,11 @@ const MobileNavigationMenuLinkItem = ({
         <p className='mb-1 text-fd-muted-foreground text-sm'>
           {item.url ? (
             <NavigationMenuLink asChild>
-              <Link external={item.external} href={item.url}>
+              <Link
+                external={item.external}
+                href={item.url}
+                onClick={() => playTap()}
+              >
                 {header}
               </Link>
             </NavigationMenuLink>
@@ -433,6 +448,7 @@ const MobileNavigationMenuLinkItem = ({
           props.className
         )}
         item={item}
+        onClick={() => playTap()}
       >
         {item.icon}
         {item.type === 'icon' ? undefined : item.text}

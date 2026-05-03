@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,6 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { signIn } from '@/lib/auth-client'
+import { toast } from '@/lib/toast'
 
 const Cross = () => (
   <div className='relative h-6 w-6'>

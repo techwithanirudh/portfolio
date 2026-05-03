@@ -2,9 +2,9 @@
 
 import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
-import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
+import { toast } from '@/lib/toast'
 import { revokeSessionAction } from '../actions/revoke-session'
 
 export function RevokeSessionButton(props: { token: string }) {
@@ -13,6 +13,7 @@ export function RevokeSessionButton(props: { token: string }) {
   const { execute, status } = useAction(revokeSessionAction, {
     onSuccess: () => {
       router.refresh()
+      toast.success('Session revoked.')
     },
     onError: ({ error }) => {
       if (error.serverError) {

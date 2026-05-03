@@ -33,10 +33,15 @@ const md = createMarkdownRenderer({
 
 interface SearchResultsProps {
   groups: SearchTagGroup[]
+  onActiveChange?: (value: string) => void
   onSelect: (url: string) => void
 }
 
-export function SearchResults({ groups, onSelect }: SearchResultsProps) {
+export function SearchResults({
+  groups,
+  onActiveChange,
+  onSelect,
+}: SearchResultsProps) {
   return (
     <>
       {groups.map(({ tag, pages }) => (
@@ -47,6 +52,7 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
               <div key={group.page.id}>
                 <CommandItem
                   className='font-medium'
+                  onPointerEnter={() => onActiveChange?.(group.page.id)}
                   onSelect={() => onSelect(group.page.url)}
                   value={group.page.id}
                 >
@@ -72,6 +78,7 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
                   <CommandItem
                     className='pl-6 text-muted-foreground text-xs'
                     key={child.id}
+                    onPointerEnter={() => onActiveChange?.(child.id)}
                     onSelect={() => onSelect(child.url)}
                     value={child.id}
                   >

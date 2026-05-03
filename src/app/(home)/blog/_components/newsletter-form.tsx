@@ -14,6 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { toast } from '@/lib/toast'
 import { NewsletterSchema } from '@/lib/validators'
 
 export const NewsletterForm = () => {
@@ -21,7 +22,18 @@ export const NewsletterForm = () => {
     subscribe,
     zodResolver(NewsletterSchema),
     {
-      actionProps: {},
+      actionProps: {
+        onError: ({ error }) => {
+          toast.error(
+            typeof error.serverError === 'string'
+              ? error.serverError
+              : 'Failed to subscribe.'
+          )
+        },
+        onSuccess: ({ data }) => {
+          toast.success(data?.message ?? 'Subscribed successfully.')
+        },
+      },
       formProps: {
         defaultValues: {
           email: '',

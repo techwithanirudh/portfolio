@@ -5,7 +5,6 @@ import { format, formatDistanceToNow } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { UserAvatar } from '@/components/auth/user-avatar'
 import { Icons } from '@/components/icons/icons'
 import {
@@ -30,6 +29,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { authClient, type User } from '@/lib/auth-client'
+import { toast } from '@/lib/toast'
 import { type Account, AccountSchema } from '@/lib/validators/account'
 
 interface AccountSettingsProps {
