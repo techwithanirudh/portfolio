@@ -1,9 +1,7 @@
 import { ImageResponse } from '@takumi-rs/image-response'
 import { generate } from '@/app/banner.png/og'
 
-export const GET = async (
-  request: Request
-): Promise<ImageResponse | Response> => {
+export const GET = (request: Request): ImageResponse | Response => {
   const { searchParams } = new URL(request.url)
   const title = searchParams.get('title')
   const description = searchParams.get('description') ?? undefined

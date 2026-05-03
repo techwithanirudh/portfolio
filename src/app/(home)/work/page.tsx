@@ -50,6 +50,10 @@ export default async function Page(props: {
   const startIndex = pageIndex * worksPerPage
   const endIndex = startIndex + worksPerPage
   const work = getSortedByDateWork().slice(startIndex, endIndex)
+  const currentPage = pageIndex + 1
+  const isFirstPage = currentPage === 1
+  const canonicalUrl = isFirstPage ? '/work' : `/work?page=${currentPage}`
+  const jsonLdTitle = isFirstPage ? 'Work' : `Work - Page ${currentPage}`
 
   return (
     <Wrapper>
@@ -97,8 +101,8 @@ export default async function Page(props: {
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <CollectionPageJsonLd
         description='Selected work showcasing projects, collaborations, and outcomes.'
-        path='/work'
-        title='Work'
+        path={canonicalUrl}
+        title={jsonLdTitle}
       />
     </Wrapper>
   )

@@ -2,7 +2,7 @@
 
 import type { Variants } from 'motion/react'
 import { motion, useAnimation } from 'motion/react'
-import type { ButtonHTMLAttributes } from 'react'
+import type { ButtonHTMLAttributes, Ref } from 'react'
 import { useCallback, useImperativeHandle, useRef } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -13,6 +13,7 @@ export interface CheckIconHandle {
 }
 
 interface CheckIconProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  ref?: Ref<CheckIconHandle>
   size?: number
 }
 
@@ -46,7 +47,7 @@ const CheckIcon = ({
   size = 28,
   ref,
   ...props
-}: CheckIconProps & { ref?: RefObject<CheckIconHandle | null> }) => {
+}: CheckIconProps) => {
   const controls = useAnimation()
   const isControlledRef = useRef(false)
 

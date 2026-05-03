@@ -2,7 +2,7 @@
 
 import type { Variants } from 'motion/react'
 import { motion, useAnimation } from 'motion/react'
-import type { SVGProps } from 'react'
+import type { Ref, SVGProps } from 'react'
 import { useImperativeHandle } from 'react'
 
 import { cn } from '@/lib/utils'
@@ -12,7 +12,8 @@ export interface UploadIconHandle {
   stopAnimation: () => void
 }
 
-interface UploadIconProps extends SVGProps<SVGSVGElement> {
+interface UploadIconProps extends Omit<SVGProps<SVGSVGElement>, 'ref'> {
+  ref?: Ref<UploadIconHandle>
   size?: number
 }
 
@@ -34,7 +35,7 @@ const UploadIcon = ({
   size = 28,
   ref,
   ...props
-}: UploadIconProps & { ref?: RefObject<UploadIconHandle | null> }) => {
+}: UploadIconProps) => {
   const controls = useAnimation()
   useImperativeHandle(ref, () => ({
     startAnimation: () => controls.start('animate'),

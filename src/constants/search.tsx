@@ -115,13 +115,18 @@ export const commands: CommandGroup[] = [
 
 export const COMMAND_META_MAP = new Map<string, CommandKind>(
   commands.flatMap(({ items }) =>
-    items.map((item) => [
-      item.title,
-      item.kind === 'theme'
-        ? 'command'
-        : item.kind === 'link'
-          ? 'link'
-          : 'page',
-    ])
+    items.map((item) => {
+      let kind: CommandKind = 'page'
+
+      if (item.kind === 'theme') {
+        kind = 'command'
+      }
+
+      if (item.kind === 'link') {
+        kind = 'link'
+      }
+
+      return [item.title, kind]
+    })
   )
 )

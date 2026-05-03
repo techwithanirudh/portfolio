@@ -74,7 +74,11 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
           <DropdownMenuItem
             onClick={(e) => {
               e.preventDefault()
-              navigator.share({ title, url: absoluteUrl }).catch(() => {})
+              navigator.share({ title, url: absoluteUrl }).catch((error) => {
+                if (process.env.NODE_ENV !== 'production') {
+                  console.error(error)
+                }
+              })
             }}
           >
             <EllipsisIcon className='size-4' />
