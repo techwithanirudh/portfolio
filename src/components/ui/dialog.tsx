@@ -1,6 +1,7 @@
 'use client'
 
-import { XIcon } from 'lucide-react'
+import { Cancel01Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 import type * as React from 'react'
 import { Button } from '@/components/ui/button'
@@ -40,7 +41,6 @@ function DialogOverlay({
         'data-open:fade-in-0 data-closed:fade-out-0 fixed inset-0 isolate z-50 bg-black/10 duration-100 data-closed:animate-out data-open:animate-in supports-backdrop-filter:backdrop-blur-xs',
         className
       )}
-      data-lenis-prevent
       data-slot='dialog-overlay'
       {...props}
     />
@@ -74,7 +74,7 @@ function DialogContent({
               size='icon-sm'
               variant='ghost'
             >
-              <XIcon />
+              <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
               <span className='sr-only'>Close</span>
             </Button>
           </DialogPrimitive.Close>

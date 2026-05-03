@@ -44,7 +44,7 @@ const Skills = () => (
               key={feature.id}
               whileInView={{ opacity: 1 }}
             >
-              <feature.Icon className='icon-tilt h-8 w-8 stroke-1' />
+              <feature.Icon className='icon-tilt h-8 w-8' strokeWidth={1} />
               <div className='flex flex-col'>
                 <h3 className='text-xl tracking-tight transition-all'>
                   {feature.title}

@@ -142,7 +142,7 @@ const ContactFormInner = () => {
             />
           ) : (
             <Icons.send
-              className='icon-arrow-button size-4'
+              className='size-4 rotate-45 transition-transform group-hover/button:rotate-0'
               data-icon='inline-end'
             />
           )}

@@ -31,13 +31,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
-import {
-  click,
-  collapse,
-  hover,
-  keyPress,
-  notification,
-} from '@/lib/audio/minimal'
+import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 
 const NAV_SOUND_THROTTLE_MS = 60
 
@@ -48,9 +42,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const playOpen = useSound(notification)
   const playConfirm = useSound(click)
   const playCollapse = useSound(collapse)
-  const playHover = useSound(hover)
   const playNavigate = useSound(keyPress)
-  const activePointerItemRef = useRef<string | null>(null)
   const lastNavSoundAtRef = useRef(0)
 
   useEffect(() => {
@@ -100,15 +92,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     playNavigate()
   }
 
-  const handlePointerActiveChange = (value: string) => {
-    if (activePointerItemRef.current === value) {
-      return
-    }
-
-    activePointerItemRef.current = value
-    playHover()
-  }
-
   const handleKeyDown = (event: React.KeyboardEvent) => {
     event.stopPropagation()
 
@@ -154,7 +137,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       }
       key={item.title}
       keywords={item.keywords}
-      onPointerEnter={() => handlePointerActiveChange(item.title)}
       onSelect={() => handleSelect(item)}
       value={item.title}
     >
@@ -203,11 +185,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
             )}
 
-            <SearchResultsList
-              groups={tagGroups}
-              onActiveChange={handlePointerActiveChange}
-              onSelect={go}
-            />
+            <SearchResultsList groups={tagGroups} onSelect={go} />
 
             {afterGroups.map(({ group, items }) => (
               <Fragment key={group}>
