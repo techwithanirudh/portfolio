@@ -1,9 +1,8 @@
 'use client'
 
-import { ArrowDown01Icon, ArrowUp01Icon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 import { Accordion as AccordionPrimitive } from 'radix-ui'
 import type * as React from 'react'
+import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 
 function Accordion({
@@ -48,16 +47,14 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        <HugeiconsIcon
+        <Icons.chevronDown
           className='pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden'
           data-slot='accordion-trigger-icon'
-          icon={ArrowDown01Icon}
           strokeWidth={2}
         />
-        <HugeiconsIcon
+        <Icons.chevronUp
           className='pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline'
           data-slot='accordion-trigger-icon'
-          icon={ArrowUp01Icon}
           strokeWidth={2}
         />
       </AccordionPrimitive.Trigger>

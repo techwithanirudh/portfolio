@@ -22,7 +22,6 @@ export function Prose({
   )
 }
 
-
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 type HeadingProps<T extends HeadingTag> = ComponentProps<T> & { as?: T }

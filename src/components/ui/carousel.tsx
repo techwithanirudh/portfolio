@@ -1,11 +1,10 @@
 'use client'
 
-import { ArrowLeft01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react'
 import * as React from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -201,7 +200,7 @@ function CarouselPrevious({
       variant={variant}
       {...props}
     >
-      <HugeiconsIcon icon={ArrowLeft01Icon} strokeWidth={2} />
+      <Icons.arrowLeft strokeWidth={2} />
       <span className='sr-only'>Previous slide</span>
     </Button>
   )
@@ -231,7 +230,7 @@ function CarouselNext({
       variant={variant}
       {...props}
     >
-      <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
+      <Icons.arrowRight strokeWidth={2} />
       <span className='sr-only'>Next slide</span>
     </Button>
   )

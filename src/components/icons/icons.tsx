@@ -1,13 +1,5 @@
 import {
   Alert02Icon,
-  ArrowDown02Icon,
-  ArrowDownLeft02Icon,
-  ArrowDownRight02Icon,
-  ArrowLeft02Icon,
-  ArrowRight02Icon,
-  ArrowUp02Icon,
-  ArrowUpLeft02Icon,
-  ArrowUpRight02Icon,
   ArtificialIntelligence04Icon,
   AtIcon,
   BirdIcon,
@@ -18,10 +10,6 @@ import {
   Cancel01Icon,
   CheckmarkBadge02Icon,
   CheckmarkCircle01Icon,
-  ArrowDown01Icon as ChevronDownIcon,
-  ArrowLeft01Icon as ChevronLeftIcon,
-  ArrowRight01Icon as ChevronRightIcon,
-  ArrowUp01Icon as ChevronUpIcon,
   CodeIcon,
   CopyCheckIcon,
   CreditCardIcon,
@@ -47,7 +35,9 @@ import {
   Menu01Icon,
   Message01Icon,
   Moon02Icon,
+  MoreHorizontalCircle01Icon,
   MoreVerticalIcon,
+  MultiplicationSignCircleIcon,
   NewsIcon,
   Notebook01Icon,
   PencilEdit01Icon,
@@ -94,6 +84,21 @@ import {
   StarIcon,
   TagIcon,
 } from '@primer/octicons-react'
+import {
+  ArrowDown,
+  ArrowDownLeft,
+  ArrowDownRight,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowUpLeft,
+  ArrowUpRight,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  type LucideIcon,
+} from 'lucide-react'
 import type { ComponentProps, JSX } from 'react'
 import { CssOld } from '@/components/icons/brands/css-old'
 import { DrizzleOrmDark } from '@/components/icons/brands/drizzle-orm-dark'
@@ -156,6 +161,14 @@ const hugeIcon = (icon: HugeIconDefinition): SvgIcon => {
   return Icon
 }
 
+const lucideIcon = (Icon: LucideIcon): SvgIcon => {
+  const Lucide = ({ height, size, width, ...props }: IconProps) => (
+    <Icon {...getSvgSizeProps({ height, size, width })} {...props} />
+  )
+
+  return Lucide
+}
+
 const themedIcon = (LightIcon: SvgIcon, DarkIcon: SvgIcon): SvgIcon => {
   const Themed = ({ className, height, size, width, ...props }: IconProps) => (
     <span className='inline-flex'>
@@ -190,8 +203,8 @@ export const Icons = {
   spinner: hugeIcon(Loading03Icon),
   atSign: hugeIcon(AtIcon),
   globe: hugeIcon(Globe02Icon),
-  chevronLeft: hugeIcon(ChevronLeftIcon),
-  chevronRight: hugeIcon(ChevronRightIcon),
+  chevronLeft: lucideIcon(ChevronLeft),
+  chevronRight: lucideIcon(ChevronRight),
   trash: hugeIcon(Delete02Icon),
   tags: hugeIcon(TagsIcon),
   tag: hugeIcon(Tag01Icon),
@@ -208,11 +221,11 @@ export const Icons = {
   logOut: hugeIcon(Logout03Icon),
   warning: hugeIcon(Alert02Icon),
   user: hugeIcon(UserIcon),
-  arrowRight: hugeIcon(ArrowRight02Icon),
-  arrowLeft: hugeIcon(ArrowLeft02Icon),
-  arrowUp: hugeIcon(ArrowUp02Icon),
-  arrowDown: hugeIcon(ArrowDown02Icon),
-  arrowUpLeft: hugeIcon(ArrowUpLeft02Icon),
+  arrowRight: lucideIcon(ArrowRight),
+  arrowLeft: lucideIcon(ArrowLeft),
+  arrowUp: lucideIcon(ArrowUp),
+  arrowDown: lucideIcon(ArrowDown),
+  arrowUpLeft: lucideIcon(ArrowUpLeft),
   help: hugeIcon(HelpCircleIcon),
   pizza: hugeIcon(Pizza01Icon),
   sun: hugeIcon(Sun03Icon),
@@ -220,11 +233,11 @@ export const Icons = {
   laptop: hugeIcon(LaptopIcon),
   home: hugeIcon(Home01Icon),
   info: hugeIcon(InformationCircleIcon),
-  arrowUpRight: hugeIcon(ArrowUpRight02Icon),
-  arrowDownLeft: hugeIcon(ArrowDownLeft02Icon),
-  arrowDownRight: hugeIcon(ArrowDownRight02Icon),
-  chevronDown: hugeIcon(ChevronDownIcon),
-  chevronUp: hugeIcon(ChevronUpIcon),
+  arrowUpRight: lucideIcon(ArrowUpRight),
+  arrowDownLeft: lucideIcon(ArrowDownLeft),
+  arrowDownRight: lucideIcon(ArrowDownRight),
+  chevronDown: lucideIcon(ChevronDown),
+  chevronUp: lucideIcon(ChevronUp),
   mail: hugeIcon(Mail01Icon),
   send: hugeIcon(SentIcon),
   pricing: hugeIcon(DollarCircleIcon),
@@ -246,6 +259,8 @@ export const Icons = {
   undo: hugeIcon(Undo03Icon),
   redo: hugeIcon(Redo03Icon),
   eraser: hugeIcon(EraserIcon),
+  moreHorizontal: hugeIcon(MoreHorizontalCircle01Icon),
+  error: hugeIcon(MultiplicationSignCircleIcon),
   verified: hugeIcon(CheckmarkCircle01Icon),
   verifiedAdmin: hugeIcon(CheckmarkBadge02Icon),
   featured: hugeIcon(FeaturedIcon),

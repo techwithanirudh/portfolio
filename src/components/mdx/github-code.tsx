@@ -25,7 +25,7 @@ function GitHubSourceLink({ sourceUrl }: { sourceUrl: string }) {
     <div className='absolute top-[7px] right-9 z-10'>
       <a
         aria-label='View source on GitHub'
-        className='inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors duration-100 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring p-1 [&_svg]:size-4 hover:text-fd-accent-foreground data-checked:text-fd-accent-foreground text-fd-muted-foreground'
+        className='inline-flex items-center justify-center rounded-md p-1 font-medium text-fd-muted-foreground text-sm transition-colors duration-100 hover:text-fd-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring disabled:pointer-events-none disabled:opacity-50 data-checked:text-fd-accent-foreground [&_svg]:size-4'
         href={sourceUrl}
         rel='noopener noreferrer'
         target='_blank'

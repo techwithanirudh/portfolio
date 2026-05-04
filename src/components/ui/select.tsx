@@ -1,14 +1,8 @@
 'use client'
 
-import {
-  ArrowDown01Icon,
-  ArrowUp01Icon,
-  Tick02Icon,
-  UnfoldMoreIcon,
-} from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 import { Select as SelectPrimitive } from 'radix-ui'
 import type * as React from 'react'
+import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 
 function Select({
@@ -56,9 +50,8 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <HugeiconsIcon
+        <Icons.chevronDown
           className='pointer-events-none size-4 text-muted-foreground'
-          icon={UnfoldMoreIcon}
           strokeWidth={2}
         />
       </SelectPrimitive.Icon>
@@ -133,11 +126,7 @@ function SelectItem({
     >
       <span className='pointer-events-none absolute right-2 flex size-4 items-center justify-center'>
         <SelectPrimitive.ItemIndicator>
-          <HugeiconsIcon
-            className='pointer-events-none'
-            icon={Tick02Icon}
-            strokeWidth={2}
-          />
+          <Icons.check className='pointer-events-none' strokeWidth={2} />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
@@ -171,7 +160,7 @@ function SelectScrollUpButton({
       data-slot='select-scroll-up-button'
       {...props}
     >
-      <HugeiconsIcon icon={ArrowUp01Icon} strokeWidth={2} />
+      <Icons.chevronUp strokeWidth={2} />
     </SelectPrimitive.ScrollUpButton>
   )
 }
@@ -189,7 +178,7 @@ function SelectScrollDownButton({
       data-slot='select-scroll-down-button'
       {...props}
     >
-      <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2} />
+      <Icons.chevronDown strokeWidth={2} />
     </SelectPrimitive.ScrollDownButton>
   )
 }

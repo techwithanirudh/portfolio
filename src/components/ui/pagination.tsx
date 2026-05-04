@@ -1,10 +1,5 @@
-import {
-  ArrowLeft01Icon,
-  ArrowRight01Icon,
-  MoreHorizontalCircle01Icon,
-} from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 import type * as React from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -76,11 +71,7 @@ function PaginationPrevious({
       size='default'
       {...props}
     >
-      <HugeiconsIcon
-        data-icon='inline-start'
-        icon={ArrowLeft01Icon}
-        strokeWidth={2}
-      />
+      <Icons.arrowLeft data-icon='inline-start' strokeWidth={2} />
       <span className='hidden sm:block'>{text}</span>
     </PaginationLink>
   )
@@ -99,11 +90,7 @@ function PaginationNext({
       {...props}
     >
       <span className='hidden sm:block'>{text}</span>
-      <HugeiconsIcon
-        data-icon='inline-end'
-        icon={ArrowRight01Icon}
-        strokeWidth={2}
-      />
+      <Icons.arrowRight data-icon='inline-end' strokeWidth={2} />
     </PaginationLink>
   )
 }
@@ -122,7 +109,7 @@ function PaginationEllipsis({
       data-slot='pagination-ellipsis'
       {...props}
     >
-      <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
+      <Icons.moreHorizontal strokeWidth={2} />
       <span className='sr-only'>More pages</span>
     </span>
   )
