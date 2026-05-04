@@ -121,7 +121,7 @@
 }
 
 @utility link-underline {
-  @apply underline decoration-current/30 decoration-1 underline-offset-3 transition-colors hover:decoration-current;
+  @apply underline decoration-primary/60 decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
 @utility code-inline {
