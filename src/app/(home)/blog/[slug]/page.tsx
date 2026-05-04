@@ -5,6 +5,7 @@ import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
+import { GitHubCode } from '@/components/mdx/github-code'
 import { MdxContent } from '@/components/mdx-layout'
 import { SectionBody } from '@/components/section-body'
 import { owner, repo } from '@/constants/config/github'
@@ -34,7 +35,7 @@ export default async function Page(props: {
       <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
           <MdxContent comments slug={params.slug} toc={toc}>
-            <Mdx components={mdxComponents} />
+            <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </MdxContent>
           <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
             <div>

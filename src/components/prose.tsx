@@ -22,18 +22,6 @@ export function Prose({
   )
 }
 
-export function InlineCode({ className, ...props }: ComponentProps<'code'>) {
-  const isCodeBlock =
-    'data-language' in props || className?.includes('language-')
-
-  return (
-    <code
-      className={cn(!isCodeBlock && 'not-prose code-inline', className)}
-      data-slot={isCodeBlock ? 'code-block' : 'code-inline'}
-      {...props}
-    />
-  )
-}
 
 type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 

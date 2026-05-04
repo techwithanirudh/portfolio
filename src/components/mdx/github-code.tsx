@@ -1,5 +1,6 @@
+import { MarkGithubIcon } from '@primer/octicons-react'
 import type { CodeBlockProps } from 'fumadocs-ui/components/codeblock'
-import { GitHubCodeBlockClient } from '@/components/mdx/github-code.client'
+import { ServerCodeBlock } from 'fumadocs-ui/components/codeblock.rsc'
 import {
   getCodeTitle,
   getGitHubFileContent,
@@ -17,6 +18,22 @@ interface GitHubCodeProps {
   startLine?: number
   title?: string
   url: string
+}
+
+function GitHubSourceLink({ sourceUrl }: { sourceUrl: string }) {
+  return (
+    <div className='absolute top-[7px] right-9 z-10'>
+      <a
+        aria-label='View source on GitHub'
+        className='inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors duration-100 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring p-1 [&_svg]:size-4 hover:text-fd-accent-foreground data-checked:text-fd-accent-foreground text-fd-muted-foreground'
+        href={sourceUrl}
+        rel='noopener noreferrer'
+        target='_blank'
+      >
+        <MarkGithubIcon className='size-4' />
+      </a>
+    </div>
+  )
 }
 
 export async function GitHubCode({
@@ -40,15 +57,21 @@ export async function GitHubCode({
     const lang = language ?? resolveLanguage(resolved.path)
 
     return (
-      <div className='min-w-0'>
-        <GitHubCodeBlockClient
-          allowCopy={allowCopy}
+      <div className='relative min-w-0 [&_figcaption]:pr-8'>
+        <GitHubSourceLink sourceUrl={resolved.source} />
+        <ServerCodeBlock
           code={snippet}
-          icon={icon}
-          keepBackground={keepBackground}
+          codeblock={{
+            allowCopy,
+            icon,
+            keepBackground,
+            lang,
+            title: codeTitle,
+            viewportProps: {
+              className: 'max-w-full',
+            },
+          }}
           lang={lang}
-          sourceUrl={resolved.source}
-          title={codeTitle}
         />
       </div>
     )

@@ -6,15 +6,13 @@ import { Step, Steps } from 'fumadocs-ui/components/steps'
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { MDXComponents } from 'mdx/types'
-import { Heading, InlineCode } from '@/components/prose'
+import { Heading } from '@/components/prose'
 import { VideoPlayer } from '../ui/video-player'
 import { FramedImage, IframeEmbed } from './embed'
-import { GitHubCode } from './github-code'
 import { Mermaid } from './mermaid'
 
 export const mdxComponents: MDXComponents = {
   ...defaultMdxComponents,
-  code: InlineCode,
   h1: (props) => <Heading as='h1' {...props} />,
   h2: (props) => <Heading as='h2' {...props} />,
   h3: (props) => <Heading as='h3' {...props} />,
@@ -28,7 +26,6 @@ export const mdxComponents: MDXComponents = {
   Files,
   Folder,
   FramedImage,
-  GitHubCode,
   IframeEmbed,
   ImageZoom,
   img: FramedImage,
