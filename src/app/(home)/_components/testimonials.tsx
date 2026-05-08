@@ -40,7 +40,7 @@ const TestimonialCard = ({
     initial={{ opacity: 0, translateX: -12, scale: 0.98 }}
     whileInView={{ opacity: 1, translateX: 0, scale: 1 }}
   >
-    <div className='flex h-full min-h-84 flex-col justify-between gap-12 p-6 transition-all duration-300 hover:bg-card sm:min-h-96 sm:p-8 lg:min-h-104'>
+    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-all duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
       <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>

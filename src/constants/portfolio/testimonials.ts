@@ -4,7 +4,7 @@ export const testimonials: Testimonial[] = [
   {
     title: 'Exceptional 10x Developer',
     description:
-      "Some say 10x developers do not exist. I have met several, of which Anirudh. [...] Not only did Anirudh work really fast and well, he foresaw some technical limitations and implemented ingenious solutions. Most impressive to me was his ability to quickly master things he didn't know.",
+      "Some say 10x developers do not exist. I have met several, of which Anirudh. [...] Not only did he work really fast and well, he foresaw limitations and implemented ingenious solutions. Most impressive was his ability to quickly master things he didn't know.",
     author: {
       name: 'Lazare Rossilion',
       image: '/images/testimonials/1.jpg',
