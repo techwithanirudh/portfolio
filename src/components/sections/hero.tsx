@@ -1,6 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Children, type ReactNode } from 'react'
-import { Balancer } from 'react-wrap-balancer'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import { Section } from '../section'
@@ -64,12 +63,8 @@ export const HeroSection = ({
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <small className='block text-muted-foreground text-sm sm:text-base'>
-              {typeof caption === 'string' ? (
-                <Balancer>{caption}</Balancer>
-              ) : (
-                caption
-              )}
+            <small className='block text-balance text-muted-foreground text-sm sm:text-base'>
+              {caption}
             </small>
           </ViewAnimation>
         )}
@@ -80,13 +75,13 @@ export const HeroSection = ({
         >
           <h1
             className={cn(
-              'typography-hero font-normal text-3xl leading-tight tracking-tighter',
+              'typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter',
               'sm:text-center sm:text-4xl sm:leading-tight',
               'md:text-5xl md:leading-tight',
               variant === 'compact' && 'text-left sm:text-left'
             )}
           >
-            {typeof title === 'string' ? <Balancer>{title}</Balancer> : title}
+            {title}
           </h1>
         </ViewAnimation>
         {description && (
@@ -97,16 +92,12 @@ export const HeroSection = ({
           >
             <p
               className={cn(
-                'text-muted-foreground text-sm sm:text-base',
+                'text-pretty text-muted-foreground text-sm sm:text-base',
                 variant === 'compact' &&
                   'text-left text-lg leading-relaxed tracking-tight'
               )}
             >
-              {typeof description === 'string' ? (
-                <Balancer>{description}</Balancer>
-              ) : (
-                description
-              )}
+              {description}
             </p>
           </ViewAnimation>
         )}

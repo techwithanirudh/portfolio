@@ -61,7 +61,10 @@ const Contributions = ({ data }: ContributionsProps) => {
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className='font-semibold'>{activity.date}</p>
-                  <p>{activity.count} contributions</p>
+                  <p>
+                    <span className='tabular-nums'>{activity.count}</span>{' '}
+                    contributions
+                  </p>
                 </TooltipContent>
               </Tooltip>
             )}

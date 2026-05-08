@@ -2,7 +2,6 @@ import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
 import Link from 'next/link'
-import Balancer from 'react-wrap-balancer'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import { buttonVariants } from '@/components/ui/button'
@@ -50,7 +49,7 @@ const Hero = () => {
       >
         <h1
           className={cn(
-            'typography-hero text-center font-normal text-4xl leading-tight tracking-tighter',
+            'typography-hero text-balance text-center font-normal text-4xl leading-tight tracking-tighter',
             'md:text-5xl'
           )}
         >
@@ -62,11 +61,9 @@ const Hero = () => {
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
-        <p className='max-w-sm text-center text-base text-muted-foreground leading-relaxed tracking-tight sm:max-w-xl sm:text-lg md:text-xl'>
-          <Balancer>
-            I'm a design engineer and full-stack developer who blends design and
-            development to build beautiful, functional websites.
-          </Balancer>
+        <p className='max-w-sm text-pretty text-center text-base text-muted-foreground leading-relaxed tracking-tight sm:max-w-xl sm:text-lg md:text-xl'>
+          I'm a design engineer and full-stack developer who blends design and
+          development to build beautiful, functional websites.
         </p>
       </ViewAnimation>
 

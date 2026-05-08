@@ -46,10 +46,10 @@ const Skills = () => (
             >
               <feature.Icon className='icon-tilt h-8 w-8' strokeWidth={1} />
               <div className='flex flex-col'>
-                <h3 className='text-xl tracking-tight transition-all'>
+                <h3 className='text-balance text-xl tracking-tight'>
                   {feature.title}
                 </h3>
-                <p className='max-w-xs text-base text-muted-foreground transition-all'>
+                <p className='max-w-xs text-pretty text-base text-muted-foreground'>
                   {feature.description}
                 </p>
               </div>

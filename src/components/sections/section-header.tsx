@@ -1,5 +1,4 @@
 import { Children, isValidElement, type ReactNode } from 'react'
-import { Balancer } from 'react-wrap-balancer'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
@@ -38,12 +37,12 @@ export const SectionHeader = ({
     >
       <h2
         className={cn(
-          'typography-title font-regular text-3xl leading-tight tracking-tighter',
+          'typography-title text-balance font-regular text-3xl leading-tight tracking-tighter',
           'md:text-5xl',
           titleClassName
         )}
       >
-        {typeof title === 'string' ? <Balancer>{title}</Balancer> : title}
+        {title}
       </h2>
     </ViewAnimation>
     {description && (
@@ -54,15 +53,11 @@ export const SectionHeader = ({
       >
         <p
           className={cn(
-            'text-base text-muted-foreground',
+            'text-pretty text-base text-muted-foreground',
             descriptionClassName
           )}
         >
-          {typeof description === 'string' ? (
-            <Balancer>{description}</Balancer>
-          ) : (
-            description
-          )}
+          {description}
         </p>
       </ViewAnimation>
     )}

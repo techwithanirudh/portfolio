@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import type React from 'react'
-import Balancer from 'react-wrap-balancer'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import { Button } from '@/components/ui/button'
@@ -15,7 +14,7 @@ export default function CTA(): React.ReactElement {
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <h2 className='typography-title text-center font-regular text-3xl tracking-tighter sm:text-5xl'>
+          <h2 className='typography-title text-balance text-center font-regular text-3xl tracking-tighter sm:text-5xl'>
             Let's Collaborate
           </h2>
         </ViewAnimation>
@@ -26,11 +25,9 @@ export default function CTA(): React.ReactElement {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <p className='typography-body text-center text-muted-foreground sm:text-xl'>
-              <Balancer>
-                Have questions or want to connect? Reach out through the contact
-                form or find me on social platforms.
-              </Balancer>
+            <p className='typography-body text-pretty text-center text-muted-foreground sm:text-xl'>
+              Have questions or want to connect? Reach out through the contact
+              form or find me on social platforms.
             </p>
           </ViewAnimation>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center'>

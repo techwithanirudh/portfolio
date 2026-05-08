@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import type React from 'react'
-import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 
@@ -41,11 +40,11 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
 
     <div className='flex h-full flex-col justify-between gap-4'>
       <div className='flex-1 space-y-2'>
-        <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>
-          <Balancer>{title}</Balancer>
+        <h2 className='text-balance font-medium text-lg md:text-xl lg:text-2xl'>
+          {title}
         </h2>
-        <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
-          <Balancer>{description}</Balancer>
+        <p className='line-clamp-3 overflow-hidden text-ellipsis text-pretty text-medium text-muted-foreground'>
+          {description}
         </p>
       </div>
       <div className='inline-flex items-center gap-2 text-muted-foreground text-sm'>

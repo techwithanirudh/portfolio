@@ -85,7 +85,6 @@
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "react-hook-form": "^7.75.0",
-    "react-wrap-balancer": "^1.1.1",
     "rehype-katex": "7.0.1",
     "remark": "^15.0.1",
     "remark-math": "6.0.0",

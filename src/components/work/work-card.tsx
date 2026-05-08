@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { ViewTransition } from 'react'
-import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 
@@ -47,8 +46,8 @@ export const WorkCard = ({
             name={`${transitionName}-description`}
             share='via-blur'
           >
-            <p className='line-clamp-3 text-muted-foreground text-sm'>
-              <Balancer>{description}</Balancer>
+            <p className='line-clamp-3 text-pretty text-muted-foreground text-sm'>
+              {description}
             </p>
           </ViewTransition>
         </div>

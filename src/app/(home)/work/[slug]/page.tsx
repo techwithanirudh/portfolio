@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
-import Balancer from 'react-wrap-balancer'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
@@ -67,16 +66,16 @@ function Header(props: { page: MDXPage }) {
             name={`${page.slugs.join('/')}-title`}
             share='via-blur'
           >
-            <h1 className='typography-hero font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-              <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
+            <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
+              {page.data.title ?? 'Untitled'}
             </h1>
           </ViewTransition>
           <ViewTransition
             name={`${page.slugs.join('/')}-description`}
             share='via-blur'
           >
-            <p className='typography-body mx-auto'>
-              <Balancer>{page.data.description ?? ''}</Balancer>
+            <p className='typography-body mx-auto text-pretty'>
+              {page.data.description ?? ''}
             </p>
           </ViewTransition>
         </div>
