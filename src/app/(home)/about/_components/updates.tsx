@@ -59,7 +59,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => (
             className={buttonVariants({
               shape: 'square',
               variant: 'default',
-              className: 'w-full py-4 sm:py-8',
+              className: 'w-full py-8',
             })}
             href='/blog'
           >
