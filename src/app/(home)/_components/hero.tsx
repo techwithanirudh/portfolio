@@ -35,7 +35,7 @@ const Hero = () => {
       >
         <Image
           alt='Hero Background'
-          className='pointer-events-none absolute right-0 bottom-0 h-[500px] w-[560px] max-w-none translate-x-1/2 translate-y-1/2 select-none opacity-80 sm:h-[900px] sm:w-[1004px] sm:max-w-[1004px] dark:opacity-100'
+          className='pointer-events-none absolute right-0 bottom-0 h-[800px] w-[560px] max-w-none translate-x-1/2 translate-y-1/2 select-none opacity-80 sm:h-[860px] sm:w-[720px] sm:max-w-[720px] md:h-[920px] md:w-[900px] md:max-w-[900px] lg:h-[960px] lg:w-[1004px] lg:max-w-[1004px] dark:opacity-100'
           height={600}
           priority
           src={heroImage}

@@ -37,7 +37,7 @@ import { ThemeToggle } from './theme-toggle'
 const navItemVariants = cva('[&_svg]:size-4', {
   variants: {
     variant: {
-      main: 'inline-flex items-center gap-1 p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
+      main: 'inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
       button: buttonVariants({
         color: 'secondary',
         className: 'gap-1.5',
@@ -122,7 +122,7 @@ export const Header = ({
           </ViewAnimation>
           {nav.children}
         </div>
-        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-sm:hidden'>
+        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-md:hidden'>
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
