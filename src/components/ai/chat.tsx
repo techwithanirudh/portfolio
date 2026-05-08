@@ -38,7 +38,7 @@ import { Rover } from '@/components/clippy/agents/rover'
 import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { error as errorSound, send, success } from '@/lib/audio/minimal'
+import { error as errorSound, send, success, deleteSound, toggleOn, tap } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -75,12 +75,13 @@ export function AISearch({ children }: { children: ReactNode }) {
   const [context, setContext] = useState<string | null>(null)
   const playError = useSound(errorSound)
   const playSuccess = useSound(success)
+  const playDelete = useSound(deleteSound)
   const chat = useChat<MyUIMessage>({
     id: 'search',
     onError: () => playError(),
     onFinish: ({ isAbort, isDisconnect, isError }) => {
       if (isAbort) {
-        playError()
+        playDelete()
         return
       }
       if (!(isDisconnect || isError)) {
@@ -124,6 +125,7 @@ export function AISearch({ children }: { children: ReactNode }) {
 
 function Header() {
   const { setOpen, chat, setContext } = useAISearchContext()
+  const playNewChat = useSound(toggleOn)
 
   return (
     <div className='sticky top-0 flex h-10 items-start'>
@@ -144,6 +146,7 @@ function Header() {
             })
           )}
           onClick={() => {
+            playNewChat()
             chat.setMessages([])
             setContext(null)
           }}
@@ -176,6 +179,7 @@ function SearchAIActions() {
   const isLoading = status === 'streaming'
   const canShow =
     !isLoading && messages?.length > 0 && messages.at(-1)?.role === 'assistant'
+  const playRegenerate = useSound(tap)
 
   return (
     <button
@@ -190,7 +194,10 @@ function SearchAIActions() {
         canShow ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
       disabled={!canShow}
-      onClick={() => regenerate()}
+      onClick={() => {
+        playRegenerate()
+        regenerate()
+      }}
       tabIndex={canShow ? 0 : -1}
       type='button'
     >
