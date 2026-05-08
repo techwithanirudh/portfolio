@@ -1,5 +1,7 @@
 - [x] Add AI Chat
 - [ ] Replace Fumadocs blog components with custom blog components
+- [ ] Add custom blog MDX components for code blocks, callouts, steps, and tabs
+- [ ] Add custom blog code block features: title icons, copy/source actions, command variants, and long-code collapse
 - [ ] Add keyboard navigation across the site
 - [x] Add a `Cmd+K` command palette
 - [x] Add JSON-LD structured data support across all pages for better SEO
@@ -11,8 +13,13 @@
 - [ ] Add comment notifications for new replies, owner alerts, user preferences, and unsubscribe links
 - [ ] Add guestbook notifications for new entries, owner alerts, and moderation events
 - [ ] Add a Twemoji renderer for comments, guestbook entries, and MDX content
-- [ ] Switch app-level icons from Lucide to Heroicons where equivalent icons exist
+- [x] Use Lucide for directional icons and Hugeicons for app/content icons
 - [ ] Build a full role-gated admin UI for users, comments, guestbook entries, notifications, and site metrics
+- [ ] Add admin route protection with a server layout guard and server-side admin procedure/middleware
+- [ ] Add admin dashboard cards for users, comments, guestbook entries, views, likes, and notification events
+- [ ] Add admin tables for users, comments, guestbook entries, and notifications with pagination and search
+- [ ] Add admin moderation actions for deleting, hiding, pinning, and restoring comments/guestbook entries
+- [ ] Add admin recent activity and trend charts for comments, guestbook entries, and notifications
 - [x] Add scroll-fade effects for overflow areas like command menus, drawers, and long sidebars
 - [ ] TOS and Privacy Policy
 - [ ] Add Raycast and Browser Extension Sections

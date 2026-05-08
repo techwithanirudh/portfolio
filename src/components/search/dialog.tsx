@@ -46,10 +46,18 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const lastNavSoundAtRef = useRef(0)
 
   useEffect(() => {
-    if (open) {
-      playOpen()
+    if (!open) {
+      return
     }
-  }, [open, playOpen])
+
+    playOpen()
+    const { overflow } = document.body.style
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = overflow
+    }
+  }, [open])
 
   const { search, setSearch, query } = useDocsSearch({ type: 'fetch', locale })
   const allPages = usePages()
@@ -149,6 +157,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent
         className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! p-0 sm:top-1/3 sm:max-w-lg sm:rounded-xl!'
+        data-lenis-prevent
         showCloseButton={false}
       >
         <DialogHeader className='sr-only'>

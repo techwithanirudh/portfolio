@@ -8,11 +8,12 @@ import { useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/sections/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
+import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
 const PRIMARY_LINKS = [
   { href: '/', icon: <Icons.home className='size-4' />, label: 'Home' },
-  { href: '/blog', icon: <Icons.user className='size-4' />, label: 'About' },
+  { href: '/about', icon: <Icons.user className='size-4' />, label: 'About' },
   { href: '/work', icon: <Icons.work className='size-4' />, label: 'Work' },
 ]
 
@@ -28,14 +29,15 @@ function NavItem({
   nested?: boolean
 }) {
   const pathname = usePathname()
-  const isActive = nested ? pathname.startsWith(href) : pathname === href
+  const active = isActive(href, pathname, nested)
 
   return (
     <Link
+      aria-current={active ? 'page' : undefined}
       aria-label={label}
       className={cn(
         'flex size-8 items-center justify-center rounded-full transition-colors',
-        isActive
+        active
           ? 'bg-primary/10 text-primary'
           : 'text-muted-foreground hover:text-foreground'
       )}
@@ -49,6 +51,7 @@ function NavItem({
 export function MobileNav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { setOpenSearch } = useSearchContext()
+  const pathname = usePathname()
 
   return (
     <>
@@ -87,19 +90,36 @@ export function MobileNav() {
                   (item): item is typeof item & { url: string; text: string } =>
                     'url' in item && 'text' in item
                 )
-                .map((item) => (
-                  <Link
-                    className='flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted [&_svg]:size-3.5'
-                    href={item.url}
-                    key={item.url}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <span className='text-muted-foreground'>
-                      {'icon' in item ? item.icon : null}
-                    </span>
-                    {item.text}
-                  </Link>
-                ))}
+                .map((item) => {
+                  const activeType =
+                    'active' in item ? (item.active ?? 'url') : 'url'
+                  const active =
+                    activeType !== 'none' &&
+                    isActive(item.url, pathname, activeType === 'nested-url')
+
+                  return (
+                    <Link
+                      aria-current={active ? 'page' : undefined}
+                      className={cn(
+                        'flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted [&_svg]:size-3.5',
+                        active && 'bg-primary/10 font-medium text-primary'
+                      )}
+                      href={item.url}
+                      key={item.url}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span
+                        className={cn(
+                          'text-muted-foreground',
+                          active && 'text-primary'
+                        )}
+                      >
+                        {'icon' in item ? item.icon : null}
+                      </span>
+                      {item.text}
+                    </Link>
+                  )
+                })}
             </nav>
             <div className='mt-3 border-t pt-2'>
               <div className='flex flex-wrap gap-2'>

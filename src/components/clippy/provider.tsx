@@ -39,13 +39,14 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
     let cancelled = false
 
     import('clippyjs')
-      .then(({ initAgent }) => initAgent(agent))
+      .then(({ initAgent }) =>
+        initAgent({ ...agent, sound: () => Promise.resolve({ default: {} }) })
+      )
       .then((loaded: ClippyAgent) => {
         if (cancelled) {
           loaded.dispose()
           return
         }
-        loaded._animator._sounds = {}
         instance.current = loaded
         setCurrentAgent(loaded)
       })
