@@ -57,7 +57,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     return () => {
       document.body.style.overflow = overflow
     }
-  }, [open])
+  }, [open, playOpen])
 
   const { search, setSearch, query } = useDocsSearch({ type: 'fetch', locale })
   const allPages = usePages()

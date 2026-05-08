@@ -3,7 +3,6 @@ import {
   Alert02Icon,
   ArtificialIntelligence04Icon,
   AtIcon,
-  BirdIcon,
   Brain02Icon,
   Briefcase02Icon,
   BubbleChatIcon,

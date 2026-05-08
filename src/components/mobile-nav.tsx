@@ -96,10 +96,10 @@ export function MobileNav() {
           )}
         >
           <nav className='flex flex-col divide-y divide-dashed divide-border'>
-            {rows.map((row, rowIdx) => (
+            {rows.map((row) => (
               <div
                 className='grid grid-cols-2 divide-x divide-dashed divide-border'
-                key={rowIdx}
+                key={row.map((item) => item.url).join('-')}
               >
                 {row.map((item) => {
                   const activeType =
