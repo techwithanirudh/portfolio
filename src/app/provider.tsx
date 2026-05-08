@@ -37,12 +37,12 @@ export function Provider({
           </TooltipProvider>
         </ProgressProvider>
         <AISearchTrigger />
+        <MobileNav />
       </AISearch>
       <Analytics />
       <Toaster />
       <TailwindIndicator />
       <SmoothCursor />
-      <MobileNav />
     </SoundProvider>
   )
 }

@@ -1,4 +1,5 @@
 import {
+  AiChat02Icon,
   Alert02Icon,
   ArtificialIntelligence04Icon,
   AtIcon,
@@ -98,6 +99,7 @@ import {
   ChevronRight,
   ChevronUp,
   type LucideIcon,
+  PawPrintIcon,
 } from 'lucide-react'
 import type { ComponentProps, JSX } from 'react'
 import { CssOld } from '@/components/icons/brands/css-old'
@@ -200,6 +202,7 @@ export const Icons = {
   success: hugeIcon(CheckmarkCircle01Icon),
   messageSquare: hugeIcon(Message01Icon),
   ai: hugeIcon(ArtificialIntelligence04Icon),
+  aiChat: hugeIcon(AiChat02Icon),
   spinner: hugeIcon(Loading03Icon),
   atSign: hugeIcon(AtIcon),
   globe: hugeIcon(Globe02Icon),
@@ -266,7 +269,7 @@ export const Icons = {
   featured: hugeIcon(FeaturedIcon),
   ban: hugeIcon(UnavailableIcon),
   userBlocked: hugeIcon(UserBlock01Icon),
-  pawPrint: hugeIcon(BirdIcon),
+  pawPrint: lucideIcon(PawPrintIcon),
   github: ({ height, size, width, ...props }: IconProps) => (
     <svg
       aria-hidden='true'

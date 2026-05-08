@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { useAISearchContext } from '@/components/ai/chat'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/sections/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
@@ -51,6 +52,7 @@ function NavItem({
 export function MobileNav() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { setOpenSearch } = useSearchContext()
+  const { setOpen: setOpenAI } = useAISearchContext()
   const pathname = usePathname()
 
   return (
@@ -60,7 +62,7 @@ export function MobileNav() {
         {menuOpen && (
           <motion.div
             animate={{ opacity: 1 }}
-            className='fixed inset-0 z-[48] bg-background/60 backdrop-blur-sm sm:hidden'
+            className='fixed inset-0 z-20 bg-background/60 backdrop-blur-sm sm:hidden'
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             onClick={() => setMenuOpen(false)}
@@ -73,7 +75,7 @@ export function MobileNav() {
         {menuOpen && (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
-            className='fixed inset-x-4 bottom-20 z-[49] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden'
+            className='fixed inset-x-4 bottom-20 z-30 overflow-hidden rounded-xl border border-dashed bg-background sm:hidden'
             exit={{ opacity: 0, y: 8 }}
             initial={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15 }}
@@ -106,9 +108,11 @@ export function MobileNav() {
                     <Link
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:bg-muted [&_svg]:size-3.5',
-                        isLeftCol && 'border-r border-dashed',
-                        !isLastRow && 'border-b border-dashed',
+                        'flex items-center gap-2 px-4 py-3 text-sm transition-[background-color,color,opacity] hover:bg-muted [&_svg]:size-3.5',
+                        isLeftCol &&
+                          'border-r border-dashed [border-color:var(--color-border)]',
+                        !isLastRow &&
+                          'border-b border-dashed [border-color:var(--color-border)]',
                         active
                           ? 'font-medium text-primary'
                           : 'text-muted-foreground'
@@ -139,14 +143,27 @@ export function MobileNav() {
                   </a>
                 ))}
               </div>
-              <ThemeToggle />
+              <div className='flex items-center gap-1'>
+                <button
+                  aria-label='Ask AI'
+                  className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+                  onClick={() => {
+                    setMenuOpen(false)
+                    setOpenAI(true)
+                  }}
+                  type='button'
+                >
+                  <Icons.aiChat />
+                </button>
+                <ThemeToggle />
+              </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Floating pill */}
-      <div className='fixed inset-x-0 bottom-4 z-[49] flex justify-center sm:hidden'>
+      <div className='fixed inset-x-0 bottom-4 z-30 flex justify-center sm:hidden'>
         <div className='flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'>
           <button
             aria-label='Search'
