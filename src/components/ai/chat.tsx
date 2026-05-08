@@ -3,6 +3,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
+import { useSound } from '@web-kits/audio/react'
 import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { usePathname } from 'next/navigation'
@@ -37,6 +38,7 @@ import { Rover } from '@/components/clippy/agents/rover'
 import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { send, success } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -71,8 +73,14 @@ export function AISearch({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
+  const playSuccess = useSound(success)
   const chat = useChat<MyUIMessage>({
     id: 'search',
+    onFinish: ({ isAbort, isDisconnect, isError }) => {
+      if (!(isAbort || isDisconnect || isError)) {
+        playSuccess()
+      }
+    },
     transport: new DefaultChatTransport({
       api: '/api/chat',
       prepareSendMessagesRequest: ({ id, messages }) => ({
@@ -192,6 +200,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { setContext, context } = useAISearchContext()
   const { agent } = useClippy()
+  const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -227,6 +236,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
     playSubmitAnimation(agent)
+    playSend()
 
     setInput('')
     setContext(null)
