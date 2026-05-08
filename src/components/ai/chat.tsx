@@ -36,6 +36,7 @@ import { ClippyProvider, useClippy } from '@/components/clippy'
 import { Rover } from '@/components/clippy/agents/rover'
 import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -66,6 +67,7 @@ export function useChatContext() {
 }
 
 export function AISearch({ children }: { children: ReactNode }) {
+  const isMobile = useIsMobile()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
@@ -86,7 +88,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider agent={Rover}>
+    <ClippyProvider agent={isMobile ? undefined : Rover}>
       <AISearchContext
         value={useMemo(
           () => ({
