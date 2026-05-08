@@ -22,7 +22,7 @@ const Hero = () => {
   )
 
   return (
-    <Section className='relative flex flex-col items-center justify-center gap-4 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
+    <Section className='relative flex flex-col items-center justify-center gap-4 overflow-hidden px-4 py-24 sm:px-16 sm:py-32 md:py-40'>
       <motion.div
         animate={{ opacity: 1, translateY: 0 }}
         className='absolute inset-0 -z-10 h-full w-full'
@@ -50,9 +50,9 @@ const Hero = () => {
       >
         <h1
           className={cn(
-            'typography-hero font-normal text-3xl leading-tight tracking-tighter',
-            'sm:text-center sm:text-4xl sm:leading-tight',
-            'md:text-5xl md:leading-tight'
+            'typography-hero text-center font-normal text-4xl leading-tight tracking-tighter',
+            'sm:text-5xl',
+            'md:text-6xl'
           )}
         >
           Hi! I'm Anirudh!
@@ -63,7 +63,7 @@ const Hero = () => {
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
-        <p className='max-w-xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
+        <p className='max-w-sm text-center text-base text-muted-foreground leading-relaxed tracking-tight sm:max-w-xl sm:text-lg md:text-xl'>
           <Balancer>
             I'm a design engineer and full-stack developer who blends design and
             development to build beautiful, functional websites.

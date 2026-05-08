@@ -73,60 +73,63 @@ export function MobileNav() {
         {menuOpen && (
           <motion.div
             animate={{ opacity: 1, y: 0 }}
-            className='fixed inset-x-4 bottom-20 z-[49] rounded-2xl border bg-popover p-2 shadow-xl sm:hidden'
+            className='fixed inset-x-4 bottom-20 z-[49] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden'
             exit={{ opacity: 0, y: 8 }}
             initial={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15 }}
           >
-            <div className='my-2 flex items-center justify-between px-3'>
-              <span className='text-muted-foreground text-xs uppercase tracking-widest'>
-                Menu
-              </span>
-              <ThemeToggle />
-            </div>
-            <nav className='grid grid-cols-2 gap-1'>
-              {linkItems
-                .filter(
+            <nav className='grid grid-cols-2'>
+              {(() => {
+                const items = [
+                  {
+                    url: '/',
+                    text: 'Home',
+                    icon: <Icons.home />,
+                    active: 'url' as const,
+                  },
+                  ...linkItems,
+                ].filter(
                   (item): item is typeof item & { url: string; text: string } =>
                     'url' in item && 'text' in item
                 )
-                .map((item) => {
+
+                return items.map((item, index) => {
                   const activeType =
                     'active' in item ? (item.active ?? 'url') : 'url'
                   const active =
                     activeType !== 'none' &&
                     isActive(item.url, pathname, activeType === 'nested-url')
+                  const isLeftCol = index % 2 === 0
+                  const isLastRow = index >= items.length - 2
 
                   return (
                     <Link
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm transition-colors hover:bg-muted [&_svg]:size-3.5',
-                        active && 'bg-primary/10 font-medium text-primary'
+                        'flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:bg-muted [&_svg]:size-3.5',
+                        isLeftCol && 'border-r border-dashed',
+                        !isLastRow && 'border-b border-dashed',
+                        active
+                          ? 'font-medium text-primary'
+                          : 'text-muted-foreground'
                       )}
                       href={item.url}
                       key={item.url}
                       onClick={() => setMenuOpen(false)}
                     >
-                      <span
-                        className={cn(
-                          'text-muted-foreground',
-                          active && 'text-primary'
-                        )}
-                      >
-                        {'icon' in item ? item.icon : null}
-                      </span>
+                      {'icon' in item ? item.icon : null}
                       {item.text}
                     </Link>
                   )
-                })}
+                })
+              })()}
             </nav>
-            <div className='mt-3 border-t pt-2'>
-              <div className='flex flex-wrap gap-2'>
+            <div className='flex items-center justify-between border-t border-dashed px-3 py-2'>
+              <div className='flex items-center'>
                 {socials.map((s) => (
                   <a
                     aria-label={s.name}
-                    className='flex size-10 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-4'
+                    className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
                     href={s.url}
                     key={s.name}
                     rel='noopener noreferrer'
@@ -136,6 +139,7 @@ export function MobileNav() {
                   </a>
                 ))}
               </div>
+              <ThemeToggle />
             </div>
           </motion.div>
         )}
