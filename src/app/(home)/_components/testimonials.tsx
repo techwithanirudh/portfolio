@@ -112,7 +112,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {testimonials.map((item, index) => (
                 <CarouselItem
-                  className='pl-0 sm:basis-1/2'
+                  className='pl-0 md:basis-1/2 lg:basis-1/3'
                   key={`${item.title}-${item.author.name}`}
                 >
                   <TestimonialCard index={index} testimonial={item} />

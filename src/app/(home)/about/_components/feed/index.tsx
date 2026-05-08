@@ -28,10 +28,10 @@ export default async function Feed(): Promise<React.ReactElement | null> {
         </SplitSectionSidebar>
         <SplitSectionContent
           className={cn(
-            'sm:col-span-2',
+            'lg:col-span-2',
             'relative flex max-w-full flex-col gap-2 overflow-x-auto font-mono text-muted-foreground text-xs',
-            'sm:overflow-visible sm:text-sm',
-            'sm:px-8'
+            'lg:overflow-visible lg:text-sm',
+            'lg:px-8'
           )}
           inset
         >

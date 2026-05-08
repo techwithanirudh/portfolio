@@ -33,7 +33,7 @@ const Skills = () => (
       />
 
       <div className='divider-top-dashed'>
-        <div className='grid grid-cols-1 divide-x divide-dashed divide-border text-left sm:grid-cols-2 lg:grid-cols-3 [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 lg:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
+        <div className='grid grid-cols-1 divide-dashed divide-border text-left lg:grid-cols-3 lg:divide-x [&>*:last-child]:border-b-0 lg:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
           {skills.map((feature, index) => (
             <ViewAnimation
               className={featureItemVariants({

@@ -10,8 +10,8 @@ import { cn } from '@/lib/utils'
 const splitSectionVariants = cva('grid divide-y divide-dashed divide-border', {
   variants: {
     cols: {
-      two: 'sm:grid-cols-2 sm:divide-x sm:divide-y-0',
-      three: 'sm:grid-cols-3 sm:divide-x sm:divide-y-0',
+      two: 'lg:grid-cols-2 lg:divide-x lg:divide-y-0',
+      three: 'lg:grid-cols-3 lg:divide-x lg:divide-y-0',
     },
   },
   defaultVariants: {

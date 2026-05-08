@@ -32,7 +32,7 @@ export default function Experience(): React.ReactElement {
           </ViewAnimation>
         </SplitSectionHeader>
       </SplitSectionSidebar>
-      <SplitSectionContent className='px-0 py-0 sm:col-span-2'>
+      <SplitSectionContent className='px-0 py-0 lg:col-span-2'>
         <div className='divide-y divide-dashed divide-border'>
           {experiences.map((experience, index) => (
             <ViewAnimation
