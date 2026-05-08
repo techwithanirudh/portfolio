@@ -572,14 +572,6 @@ function AISearchPanel() {
     status: chat.status,
   })
 
-  const panelStyle = useMemo(
-    () => ({
-      maskImage:
-        'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent 100%)',
-    }),
-    []
-  )
-
   return (
     <>
       <Presence present={open}>
@@ -604,7 +596,6 @@ function AISearchPanel() {
               className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-3'
               messages={chat.messages}
               status={chat.status}
-              style={panelStyle}
             />
             <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
               <SearchAIInput />

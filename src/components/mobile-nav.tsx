@@ -80,7 +80,7 @@ export function MobileNav() {
       <Presence present={menuOpen}>
         <button
           aria-label='Close menu'
-          className='fixed inset-0 z-[29] bg-background/60 backdrop-blur-sm data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in sm:hidden'
+          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in sm:hidden'
           data-state={menuOpen ? 'open' : 'closed'}
           onClick={() => setMenuOpen(false)}
           type='button'
@@ -91,7 +91,7 @@ export function MobileNav() {
       <Presence present={menuOpen}>
         <div
           className={cn(
-            'fixed inset-x-4 bottom-20 z-30 overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
+            'fixed inset-x-4 bottom-20 z-[32] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
             menuOpen ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >
@@ -163,7 +163,7 @@ export function MobileNav() {
       </Presence>
 
       {/* Floating pill */}
-      <div className='fixed inset-x-0 bottom-4 z-30 flex justify-center sm:hidden'>
+      <div className='fixed inset-x-0 bottom-4 z-[32] flex justify-center sm:hidden'>
         <div className='flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'>
           <button
             aria-label='Search'
