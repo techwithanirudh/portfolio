@@ -51,8 +51,7 @@ const Hero = () => {
         <h1
           className={cn(
             'typography-hero text-center font-normal text-4xl leading-tight tracking-tighter',
-            'sm:text-5xl',
-            'md:text-6xl'
+            'md:text-5xl'
           )}
         >
           Hi! I'm Anirudh!
