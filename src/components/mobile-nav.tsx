@@ -1,7 +1,7 @@
 'use client'
 
+import { Presence } from '@radix-ui/react-presence'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
-import { AnimatePresence, motion } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
@@ -55,64 +55,64 @@ export function MobileNav() {
   const { setOpen: setOpenAI } = useAISearchContext()
   const pathname = usePathname()
 
+  const items = [
+    {
+      url: '/',
+      text: 'Home',
+      icon: <Icons.home />,
+      active: 'url' as const,
+    },
+    ...linkItems,
+  ].filter(
+    (item): item is typeof item & { url: string; text: string } =>
+      'url' in item && 'text' in item
+  )
+
+  // Chunk items into rows of 2 for divide-based borders
+  const rows: (typeof items)[] = []
+  for (let i = 0; i < items.length; i += 2) {
+    rows.push(items.slice(i, i + 2))
+  }
+
   return (
     <>
       {/* Backdrop */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            animate={{ opacity: 1 }}
-            className='fixed inset-0 z-20 bg-background/60 backdrop-blur-sm sm:hidden'
-            exit={{ opacity: 0 }}
-            initial={{ opacity: 0 }}
-            onClick={() => setMenuOpen(false)}
-          />
-        )}
-      </AnimatePresence>
+      <Presence present={menuOpen}>
+        <button
+          aria-label='Close menu'
+          className='fixed inset-0 z-[29] bg-background/60 backdrop-blur-sm data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in sm:hidden'
+          data-state={menuOpen ? 'open' : 'closed'}
+          onClick={() => setMenuOpen(false)}
+          type='button'
+        />
+      </Presence>
 
       {/* Menu panel */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            animate={{ opacity: 1, y: 0 }}
-            className='fixed inset-x-4 bottom-20 z-30 overflow-hidden rounded-xl border border-dashed bg-background sm:hidden'
-            exit={{ opacity: 0, y: 8 }}
-            initial={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.15 }}
-          >
-            <nav className='grid grid-cols-2'>
-              {(() => {
-                const items = [
-                  {
-                    url: '/',
-                    text: 'Home',
-                    icon: <Icons.home />,
-                    active: 'url' as const,
-                  },
-                  ...linkItems,
-                ].filter(
-                  (item): item is typeof item & { url: string; text: string } =>
-                    'url' in item && 'text' in item
-                )
-
-                return items.map((item, index) => {
+      <Presence present={menuOpen}>
+        <div
+          className={cn(
+            'fixed inset-x-4 bottom-20 z-30 overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
+            menuOpen ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
+          )}
+        >
+          <nav className='flex flex-col divide-y divide-dashed divide-border'>
+            {rows.map((row, rowIdx) => (
+              <div
+                className='grid grid-cols-2 divide-x divide-dashed divide-border'
+                key={rowIdx}
+              >
+                {row.map((item) => {
                   const activeType =
                     'active' in item ? (item.active ?? 'url') : 'url'
                   const active =
                     activeType !== 'none' &&
                     isActive(item.url, pathname, activeType === 'nested-url')
-                  const isLeftCol = index % 2 === 0
-                  const isLastRow = index >= items.length - 2
 
                   return (
                     <Link
                       aria-current={active ? 'page' : undefined}
                       className={cn(
-                        'flex items-center gap-2 px-4 py-3 text-sm transition-[background-color,color,opacity] hover:bg-muted [&_svg]:size-3.5',
-                        isLeftCol &&
-                          'border-r border-dashed [border-color:var(--color-border)]',
-                        !isLastRow &&
-                          'border-b border-dashed [border-color:var(--color-border)]',
+                        'flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:bg-muted [&_svg]:size-3.5',
                         active
                           ? 'font-medium text-primary'
                           : 'text-muted-foreground'
@@ -125,42 +125,42 @@ export function MobileNav() {
                       {item.text}
                     </Link>
                   )
-                })
-              })()}
-            </nav>
-            <div className='flex items-center justify-between border-t border-dashed px-3 py-2'>
-              <div className='flex items-center'>
-                {socials.map((s) => (
-                  <a
-                    aria-label={s.name}
-                    className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
-                    href={s.url}
-                    key={s.name}
-                    rel='noopener noreferrer'
-                    target='_blank'
-                  >
-                    {s.icon}
-                  </a>
-                ))}
+                })}
               </div>
-              <div className='flex items-center gap-1'>
-                <button
-                  aria-label='Ask AI'
+            ))}
+          </nav>
+          <div className='flex items-center justify-between border-t border-dashed px-3 py-2'>
+            <div className='flex items-center'>
+              {socials.map((s) => (
+                <a
+                  aria-label={s.name}
                   className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
-                  onClick={() => {
-                    setMenuOpen(false)
-                    setOpenAI(true)
-                  }}
-                  type='button'
+                  href={s.url}
+                  key={s.name}
+                  rel='noopener noreferrer'
+                  target='_blank'
                 >
-                  <Icons.aiChat />
-                </button>
-                <ThemeToggle />
-              </div>
+                  {s.icon}
+                </a>
+              ))}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <div className='flex items-center gap-1'>
+              <button
+                aria-label='Ask AI'
+                className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+                onClick={() => {
+                  setMenuOpen(false)
+                  setOpenAI(true)
+                }}
+                type='button'
+              >
+                <Icons.aiChat />
+              </button>
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      </Presence>
 
       {/* Floating pill */}
       <div className='fixed inset-x-0 bottom-4 z-30 flex justify-center sm:hidden'>
@@ -202,21 +202,11 @@ export function MobileNav() {
             onClick={() => setMenuOpen((v) => !v)}
             type='button'
           >
-            <AnimatePresence initial={false} mode='popLayout'>
-              <motion.span
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, scale: 0.25, filter: 'blur(4px)' }}
-                initial={{ opacity: 0, scale: 0.25, filter: 'blur(4px)' }}
-                key={menuOpen ? 'close' : 'menu'}
-                transition={{ type: 'spring', duration: 0.3, bounce: 0 }}
-              >
-                {menuOpen ? (
-                  <Icons.close className='size-4' />
-                ) : (
-                  <Icons.menu className='size-4' />
-                )}
-              </motion.span>
-            </AnimatePresence>
+            {menuOpen ? (
+              <Icons.close className='size-4' />
+            ) : (
+              <Icons.menu className='size-4' />
+            )}
           </button>
         </div>
       </div>

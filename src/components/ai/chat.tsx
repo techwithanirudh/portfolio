@@ -594,7 +594,7 @@ function AISearchPanel() {
       <Presence present={open}>
         <div
           className={cn(
-            'fixed inset-x-4 top-4 bottom-20 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:h-[500px] sm:w-[360px]',
+            'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:h-[500px] sm:w-[360px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >
