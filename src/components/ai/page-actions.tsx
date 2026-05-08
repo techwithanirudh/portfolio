@@ -1,12 +1,6 @@
 'use client'
 
 import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  CopyIcon,
-  MessageCircleIcon,
-} from 'lucide-react'
 import type * as React from 'react'
 import { useMemo, useState } from 'react'
 
@@ -72,9 +66,9 @@ export function LLMCopyButton({
       variant='secondary'
     >
       {checked ? (
-        <CheckIcon className='text-muted-foreground' />
+        <Icons.check className='text-muted-foreground' />
       ) : (
-        <CopyIcon className='text-muted-foreground' />
+        <Icons.copy className='text-muted-foreground' />
       )}
       <span>Copy Page</span>
     </Button>
@@ -130,7 +124,7 @@ export function ViewOptions({
       {
         title: 'Open in T3 Chat',
         href: `https://t3.chat/new?${new URLSearchParams({ q })}`,
-        icon: MessageCircleIcon,
+        icon: Icons.messageCircle,
       },
     ]
   }, [githubUrl, markdownUrl])
@@ -145,7 +139,7 @@ export function ViewOptions({
           size='icon-sm'
           variant='secondary'
         >
-          <ChevronDownIcon className='mt-0.5 size-4' />
+          <Icons.chevronDown className='mt-0.5 size-4' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

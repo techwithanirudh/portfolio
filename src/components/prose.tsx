@@ -1,6 +1,6 @@
 import { Slot } from '@radix-ui/react-slot'
-import { LinkIcon } from 'lucide-react'
 import type { ComponentProps } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 
 export function Prose({
@@ -47,7 +47,7 @@ export function Heading<T extends HeadingTag = 'h1'>({
       <a className='peer not-prose' href={`#${props.id}`}>
         {props.children}
       </a>
-      <LinkIcon
+      <Icons.link
         aria-hidden
         className='size-3.5 shrink-0 translate-y-px text-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100'
       />

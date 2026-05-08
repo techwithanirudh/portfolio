@@ -1,7 +1,7 @@
 'use client'
 
 import { useCommandState } from 'cmdk'
-import { CornerDownLeftIcon } from 'lucide-react'
+import { Icons } from '@/components/icons/icons'
 import { Kbd } from '@/components/ui/kbd'
 import { COMMAND_META_MAP } from '@/constants/search'
 import type { CommandKind } from '@/types/search'
@@ -24,7 +24,7 @@ export function CommandMenuFooter() {
         <div className='flex shrink-0 items-center gap-2 text-muted-foreground text-xs max-sm:hidden'>
           <span className='text-foreground'>{ENTER_LABELS[kind]}</span>
           <Kbd data-icon='inline-end'>
-            <CornerDownLeftIcon />
+            <Icons.cornerDownLeft />
           </Kbd>
         </div>
       </div>

@@ -1,7 +1,6 @@
 'use client'
 
 import { Comments } from '@fuma-comment/react'
-import { EllipsisIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -81,7 +80,7 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
               })
             }}
           >
-            <EllipsisIcon className='size-4' />
+            <Icons.moreHorizontal className='size-4' />
             More
           </DropdownMenuItem>
         )}
