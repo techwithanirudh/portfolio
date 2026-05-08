@@ -38,7 +38,7 @@ import { Rover } from '@/components/clippy/agents/rover'
 import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { send, success } from '@/lib/audio/minimal'
+import { error as errorSound, send, success } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -73,11 +73,17 @@ export function AISearch({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
+  const playError = useSound(errorSound)
   const playSuccess = useSound(success)
   const chat = useChat<MyUIMessage>({
     id: 'search',
+    onError: () => playError(),
     onFinish: ({ isAbort, isDisconnect, isError }) => {
-      if (!(isAbort || isDisconnect || isError)) {
+      if (isAbort) {
+        playError()
+        return
+      }
+      if (!(isDisconnect || isError)) {
         playSuccess()
       }
     },

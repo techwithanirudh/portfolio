@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
+import { useSound } from '@web-kits/audio/react'
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/ai/chat'
 import { Icons } from '@/components/icons/icons'
@@ -17,10 +18,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
+import { error, pop } from '@/lib/audio/minimal'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
-import { useSound } from '@web-kits/audio/react'
-import { error, success } from '@/lib/audio/minimal'
 
 interface AIContactFormProps {
   isSubmitted: boolean
@@ -36,19 +36,19 @@ export function AIContactForm({
   submittedData,
 }: AIContactFormProps) {
   const { addToolOutput, sendMessage } = useChatContext()
-  const playSuccess = useSound(success);
-  const playError = useSound(error);
+  const playPop = useSound(pop)
+  const playError = useSound(error)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
     zodResolver(ContactSchema),
     {
       actionProps: {
-        onError: ({ error }) => {
+        onError: () => {
           playError()
         },
         onSuccess: () => {
-          playSuccess()
+          playPop()
           const { name, email, message } = form.getValues()
           addToolOutput({
             tool: 'showContactForm',
