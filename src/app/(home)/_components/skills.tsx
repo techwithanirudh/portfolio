@@ -63,14 +63,17 @@ const Skills = () => (
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='flex flex-wrap gap-2'>
-            {technologies.map(({ label, Icon }) => (
+            {technologies.map(({ label, Icon, href }) => (
               <Badge
+                asChild
                 className='gap-2 rounded-md px-3 py-1 text-xs transition-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
                 key={label}
                 variant='outline'
               >
-                <Icon aria-hidden='true' className='size-4' />
-                {label}
+                <a href={href} rel='noopener noreferrer' target='_blank'>
+                  <Icon aria-hidden='true' className='size-4' />
+                  {label}
+                </a>
               </Badge>
             ))}
           </div>

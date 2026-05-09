@@ -28,16 +28,36 @@ export const skills: Skill[] = [
 ]
 
 export const technologies = [
-  { label: 'TypeScript', Icon: Icons.typescript },
-  { label: 'JavaScript', Icon: Icons.javascript },
-  { label: 'React', Icon: Icons.react },
-  { label: 'Next.js', Icon: Icons.nextjs },
-  { label: 'Tailwind CSS', Icon: Icons.tailwind },
-  { label: 'CSS3', Icon: Icons.css3 },
-  { label: 'Node.js', Icon: Icons.nodejs },
-  { label: 'Express', Icon: Icons.express },
-  { label: 'Git', Icon: Icons.git },
-  { label: 'shadcn/ui', Icon: Icons.shadcn },
-  { label: 'Hono', Icon: Icons.hono },
-  { label: 'Drizzle ORM', Icon: Icons.drizzleOrm },
+  {
+    label: 'TypeScript',
+    Icon: Icons.typescript,
+    href: 'https://www.typescriptlang.org',
+  },
+  {
+    label: 'JavaScript',
+    Icon: Icons.javascript,
+    href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+  },
+  { label: 'React', Icon: Icons.react, href: 'https://react.dev' },
+  { label: 'Next.js', Icon: Icons.nextjs, href: 'https://nextjs.org' },
+  {
+    label: 'Tailwind CSS',
+    Icon: Icons.tailwind,
+    href: 'https://tailwindcss.com',
+  },
+  {
+    label: 'CSS3',
+    Icon: Icons.css3,
+    href: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
+  },
+  { label: 'Node.js', Icon: Icons.nodejs, href: 'https://nodejs.org' },
+  { label: 'Express', Icon: Icons.express, href: 'https://expressjs.com' },
+  { label: 'Git', Icon: Icons.git, href: 'https://git-scm.com' },
+  { label: 'shadcn/ui', Icon: Icons.shadcn, href: 'https://ui.shadcn.com' },
+  { label: 'Hono', Icon: Icons.hono, href: 'https://hono.dev' },
+  {
+    label: 'Drizzle ORM',
+    Icon: Icons.drizzleOrm,
+    href: 'https://orm.drizzle.team',
+  },
 ] as const

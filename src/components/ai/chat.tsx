@@ -38,7 +38,14 @@ import { Rover } from '@/components/clippy/agents/rover'
 import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
 import { useIsMobile } from '@/hooks/use-mobile'
-import { error as errorSound, send, success, deleteSound, toggleOn, tap } from '@/lib/audio/minimal'
+import {
+  deleteSound,
+  error as errorSound,
+  send,
+  success,
+  tap,
+  toggleOn,
+} from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -609,7 +616,7 @@ function AISearchPanel() {
       <Presence present={open}>
         <div
           className={cn(
-            'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:h-[500px] sm:w-[360px]',
+            'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >

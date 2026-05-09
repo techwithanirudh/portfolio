@@ -1,6 +1,8 @@
 'use client'
 
+import { useSound } from '@web-kits/audio/react'
 import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button'
+import { AnimatePresence, motion } from 'motion/react'
 import type * as React from 'react'
 import { useMemo, useState } from 'react'
 
@@ -13,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { copy as copySound } from '@/lib/audio/minimal'
 
 const cache = new Map<string, string>()
 
@@ -46,6 +49,13 @@ function useMarkdownCopy(markdownUrl: string) {
   return { checked, isCopying, onClick }
 }
 
+const iconMotion = {
+  initial: { opacity: 0, scale: 0.8, filter: 'blur(2px)' },
+  animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+  exit: { opacity: 0, scale: 0.8 },
+  transition: { duration: 0.15, ease: 'easeOut' as const },
+}
+
 export function LLMCopyButton({
   checked,
   isCopying,
@@ -65,11 +75,17 @@ export function LLMCopyButton({
       type='button'
       variant='secondary'
     >
-      {checked ? (
-        <Icons.check className='text-muted-foreground' />
-      ) : (
-        <Icons.copy className='text-muted-foreground' />
-      )}
+      <AnimatePresence initial={false} mode='popLayout'>
+        {checked ? (
+          <motion.span key='check' {...iconMotion}>
+            <Icons.check className='text-muted-foreground' />
+          </motion.span>
+        ) : (
+          <motion.span key='copy' {...iconMotion}>
+            <Icons.copy className='text-muted-foreground' />
+          </motion.span>
+        )}
+      </AnimatePresence>
       <span>Copy Page</span>
     </Button>
   )
@@ -170,13 +186,19 @@ export function LLMCopyButtonWithViewOptions({
   githubUrl: string
 }) {
   const { checked, isCopying, onClick } = useMarkdownCopy(markdownUrl)
+  const playSound = useSound(copySound)
+
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    playSound()
+    onClick(e)
+  }
 
   return (
     <ButtonGroup className='w-full min-w-0'>
       <LLMCopyButton
         checked={checked}
         isCopying={isCopying}
-        onClick={onClick}
+        onClick={handleClick}
       />
       <ButtonGroupSeparator className='border-secondary border-y-4 data-vertical:my-0 dark:bg-white/20' />
       <ViewOptions
