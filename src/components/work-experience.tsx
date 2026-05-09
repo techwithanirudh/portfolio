@@ -3,6 +3,7 @@
 import { Briefcase01Icon, Infinity01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { differenceInMonths, parse } from 'date-fns'
+import Image from 'next/image'
 import { type ComponentProps, useCallback, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import type { ChevronsUpDownIconHandle } from '@/components/chevrons-up-down-icon'
@@ -55,11 +56,12 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
       <div className='not-prose flex items-center gap-3'>
         <div className='flex size-6 shrink-0 items-center justify-center'>
           {experience.companyLogo ? (
-            <img
+            <Image
               alt={experience.companyName}
-              aria-hidden
               className='size-6 rounded'
+              height={24}
               src={experience.companyLogo}
+              width={24}
             />
           ) : (
             <span className='flex size-3 border bg-muted' />
@@ -85,6 +87,7 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
           <span
             aria-label='Current Employer'
             className='relative flex items-center justify-center'
+            role='img'
           >
             <span className='absolute inline-flex size-3 animate-ping rounded-full bg-primary opacity-40' />
             <span className='relative inline-flex size-2 rounded-full bg-primary' />
@@ -219,8 +222,8 @@ export function ExperiencePositionItem({
 
         {Array.isArray(position.skills) && position.skills.length > 0 && (
           <ul className='not-prose flex flex-wrap gap-1.5 pt-3 pl-9'>
-            {position.skills.map((skill, index) => (
-              <li className='flex' key={index}>
+            {position.skills.map((skill) => (
+              <li className='flex' key={skill}>
                 <Skill>{skill}</Skill>
               </li>
             ))}

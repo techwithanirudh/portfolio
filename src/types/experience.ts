@@ -1,37 +1,37 @@
 import type React from 'react'
 
-export type ExperiencePositionItemType = {
-  id: string
-  title: string
+export interface ExperiencePositionItemType {
+  description?: string
   employmentPeriod: {
     start: string
     end?: string
   }
   employmentType?: string
-  description?: string
   icon?: React.ReactElement
-  skills?: string[]
-  isExpanded?: boolean
-}
-
-export type ExperienceItemType = {
   id: string
-  companyName: string
-  companyLogo?: string
-  companyWebsite?: string
-  positions: ExperiencePositionItemType[]
-  isCurrentEmployer?: boolean
+  isExpanded?: boolean
+  skills?: string[]
+  title: string
 }
 
-export type WorkExperienceProps = {
+export interface ExperienceItemType {
+  companyLogo?: string
+  companyName: string
+  companyWebsite?: string
+  id: string
+  isCurrentEmployer?: boolean
+  positions: ExperiencePositionItemType[]
+}
+
+export interface WorkExperienceProps {
   className?: string
   experiences: ExperienceItemType[]
 }
 
-export type ExperienceItemProps = {
+export interface ExperienceItemProps {
   experience: ExperienceItemType
 }
 
-export type ExperiencePositionItemProps = {
+export interface ExperiencePositionItemProps {
   position: ExperiencePositionItemType
 }

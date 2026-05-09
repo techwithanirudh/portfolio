@@ -27,14 +27,14 @@ export const motionIconProps: HTMLMotionProps<'span'> = {
   transition: { duration: 0.15, ease: 'easeOut' },
 }
 
-export type CopyStateIconProps = {
-  state: CopyState
-  /** Custom icon for idle state. */
-  idleIcon?: React.ReactNode
+export interface CopyStateIconProps {
   /** Custom icon for done state. */
   doneIcon?: React.ReactNode
   /** Custom icon for error state. */
   errorIcon?: React.ReactNode
+  /** Custom icon for idle state. */
+  idleIcon?: React.ReactNode
+  state: CopyState
 }
 
 export function CopyStateIcon({
@@ -43,39 +43,27 @@ export function CopyStateIcon({
   doneIcon,
   errorIcon,
 }: CopyStateIconProps) {
+  const iconByState = {
+    idle: idleIcon ?? (
+      <HugeiconsIcon data-slot='idle-icon' icon={Copy01Icon} strokeWidth={2} />
+    ),
+    done: doneIcon ?? (
+      <HugeiconsIcon data-slot='done-icon' icon={Tick02Icon} strokeWidth={2} />
+    ),
+    error: errorIcon ?? (
+      <HugeiconsIcon
+        data-slot='error-icon'
+        icon={CancelCircleIcon}
+        strokeWidth={2}
+      />
+    ),
+  }
+
   return (
     <AnimatePresence initial={false} mode='popLayout'>
-      {state === 'idle' ? (
-        <motion.span key='idle' {...motionIconProps}>
-          {idleIcon ?? (
-            <HugeiconsIcon
-              data-slot='idle-icon'
-              icon={Copy01Icon}
-              strokeWidth={2}
-            />
-          )}
-        </motion.span>
-      ) : state === 'done' ? (
-        <motion.span key='done' {...motionIconProps}>
-          {doneIcon ?? (
-            <HugeiconsIcon
-              data-slot='done-icon'
-              icon={Tick02Icon}
-              strokeWidth={2}
-            />
-          )}
-        </motion.span>
-      ) : state === 'error' ? (
-        <motion.span key='error' {...motionIconProps}>
-          {errorIcon ?? (
-            <HugeiconsIcon
-              data-slot='error-icon'
-              icon={CancelCircleIcon}
-              strokeWidth={2}
-            />
-          )}
-        </motion.span>
-      ) : null}
+      <motion.span key={state} {...motionIconProps}>
+        {iconByState[state]}
+      </motion.span>
     </AnimatePresence>
   )
 }
