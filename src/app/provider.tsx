@@ -40,7 +40,7 @@ export function Provider({
         <MobileNav />
       </AISearch>
       <Analytics />
-      <Toaster />
+      <Toaster position='top-center' />
       <TailwindIndicator />
       <SmoothCursor />
     </SoundProvider>
