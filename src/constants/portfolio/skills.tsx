@@ -3,10 +3,7 @@ import type { Skill } from '@/types'
 
 const base = '/images/tech-stack'
 const s = (file: string) => `${base}/${file}`
-const t = (light: string, dark: string) => ({
-  light: `${base}/light/${light}`,
-  dark: `${base}/dark/${dark}`,
-})
+const t = (light: string, dark: string) => ({ light: s(light), dark: s(dark) })
 
 export const skills: Skill[] = [
   {
