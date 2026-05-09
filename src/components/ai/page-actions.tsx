@@ -2,6 +2,7 @@
 
 import { useSound } from '@web-kits/audio/react'
 import { useMemo, useRef, useState } from 'react'
+import { useWebHaptics } from 'web-haptics/react'
 
 import { CopyStateIcon } from '@/components/copy-button'
 import { Icons } from '@/components/icons/icons'
@@ -23,6 +24,7 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
   const [isCopying, setIsCopying] = useState(false)
   const operationRef = useRef(false)
   const playSound = useSound(copySound)
+  const { trigger: haptic } = useWebHaptics()
 
   const handleCopy = async () => {
     if (operationRef.current) {
@@ -47,9 +49,11 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
           }),
         ])
       }
+      haptic('success')
       playSound()
       setState('done')
     } catch {
+      haptic('error')
       setState('error')
     } finally {
       clearTimeout(loadingTimer)

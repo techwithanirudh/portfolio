@@ -3,6 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
+import { useWebHaptics } from 'web-haptics/react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -79,6 +80,7 @@ export const GuestbookReactions = ({
   const [isOpen, setIsOpen] = useState(false)
   const playError = useSound(error)
   const playReaction = useSound(pop)
+  const { trigger: haptic } = useWebHaptics()
 
   const { execute, optimisticState, status } = useOptimisticAction(
     toggleGuestbookReaction,
@@ -86,6 +88,7 @@ export const GuestbookReactions = ({
       currentState: { reactions },
       updateFn: updateOptimisticReactions,
       onError: () => {
+        haptic('error')
         playError()
       },
     }
@@ -94,6 +97,7 @@ export const GuestbookReactions = ({
   const optimisticReactions = optimisticState.reactions
 
   const handleReaction = (emoji: string) => {
+    haptic('medium')
     playReaction()
     execute({ entryId, emoji })
     setIsOpen(false)

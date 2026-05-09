@@ -6,6 +6,7 @@ import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { useWebHaptics } from 'web-haptics/react'
 import { Icons } from '@/components/icons/icons'
 import { CommandMenuFooter } from '@/components/search/footer'
 import { SearchResults as SearchResultsList } from '@/components/search/results'
@@ -44,6 +45,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const playCollapse = useSound(collapse)
   const playNavigate = useSound(keyPress)
   const lastNavSoundAtRef = useRef(0)
+  const { trigger: haptic } = useWebHaptics()
 
   useEffect(() => {
     if (!open) {
@@ -97,6 +99,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     lastNavSoundAtRef.current = now
+    haptic('selection')
     playNavigate()
   }
 
@@ -109,11 +112,13 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (event.key === 'Escape' && open) {
+      haptic('light')
       playCollapse()
     }
   }
 
   const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
+    haptic('medium')
     playConfirm()
 
     if (item.kind === 'theme') {
@@ -133,6 +138,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   }
 
   const go = (url: string) => {
+    haptic('medium')
     playConfirm()
     close()
     router.push(url)

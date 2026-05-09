@@ -4,6 +4,7 @@ import { useSound } from '@web-kits/audio/react'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
+import { useWebHaptics } from 'web-haptics/react'
 import { Icons } from '@/components/icons/icons'
 import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
@@ -38,6 +39,7 @@ export function ThemeToggle({
   const { setTheme, theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const playToggle = useSound(toggleOn)
+  const { trigger: haptic } = useWebHaptics()
 
   useEffect(() => {
     setMounted(true)
@@ -49,6 +51,7 @@ export function ThemeToggle({
   )
 
   const handleChangeTheme = async (theme: Theme) => {
+    haptic('selection')
     playToggle()
 
     function update() {

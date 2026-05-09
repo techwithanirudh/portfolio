@@ -23,6 +23,7 @@ import {
   useState,
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
+import { useWebHaptics } from 'web-haptics/react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { contextDataSchema } from '@/app/api/chat/types'
 import {
@@ -83,15 +84,21 @@ export function AISearch({ children }: { children: ReactNode }) {
   const playError = useSound(errorSound)
   const playSuccess = useSound(success)
   const playDelete = useSound(deleteSound)
+  const { trigger: haptic } = useWebHaptics()
   const chat = useChat<MyUIMessage>({
     id: 'search',
-    onError: () => playError(),
+    onError: () => {
+      haptic('error')
+      playError()
+    },
     onFinish: ({ isAbort, isDisconnect, isError }) => {
       if (isAbort) {
+        haptic('medium')
         playDelete()
         return
       }
       if (!(isDisconnect || isError)) {
+        haptic('success')
         playSuccess()
       }
     },
@@ -133,6 +140,7 @@ export function AISearch({ children }: { children: ReactNode }) {
 function Header() {
   const { setOpen, chat, setContext } = useAISearchContext()
   const playNewChat = useSound(toggleOn)
+  const { trigger: haptic } = useWebHaptics()
 
   return (
     <div className='sticky top-0 flex h-10 items-start'>
@@ -153,6 +161,7 @@ function Header() {
             })
           )}
           onClick={() => {
+            haptic('selection')
             playNewChat()
             chat.setMessages([])
             setContext(null)
@@ -187,6 +196,7 @@ function SearchAIActions() {
   const canShow =
     !isLoading && messages?.length > 0 && messages.at(-1)?.role === 'assistant'
   const playRegenerate = useSound(tap)
+  const { trigger: haptic } = useWebHaptics()
 
   return (
     <button
@@ -202,6 +212,7 @@ function SearchAIActions() {
       )}
       disabled={!canShow}
       onClick={() => {
+        haptic('light')
         playRegenerate()
         regenerate()
       }}
@@ -221,6 +232,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   const { setContext, context } = useAISearchContext()
   const { agent } = useClippy()
   const playSend = useSound(send)
+  const { trigger: haptic } = useWebHaptics()
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -255,6 +267,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     const messageText =
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
+    haptic('medium')
     playSubmitAnimation(agent)
     playSend()
 

@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useSound } from '@web-kits/audio/react'
+import { useWebHaptics } from 'web-haptics/react'
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/ai/chat'
 import { Icons } from '@/components/icons/icons'
@@ -38,6 +39,7 @@ export function AIContactForm({
   const { addToolOutput, sendMessage } = useChatContext()
   const playPop = useSound(pop)
   const playError = useSound(error)
+  const { trigger: haptic } = useWebHaptics()
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
@@ -45,9 +47,11 @@ export function AIContactForm({
     {
       actionProps: {
         onError: () => {
+          haptic('error')
           playError()
         },
         onSuccess: () => {
+          haptic('success')
           playPop()
           const { name, email, message } = form.getValues()
           addToolOutput({
