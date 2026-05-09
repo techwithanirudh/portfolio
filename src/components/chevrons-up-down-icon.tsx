@@ -1,10 +1,9 @@
 'use client'
 
 import { motion, useAnimation } from 'motion/react'
-// biome-ignore lint/suspicious/noReactForwardRef: custom handle type requires forwardRef
 import { forwardRef, useImperativeHandle } from 'react'
 
-export type ChevronsUpDownIconHandle = {
+export interface ChevronsUpDownIconHandle {
   startAnimation: () => void
   stopAnimation: () => void
 }
@@ -13,6 +12,7 @@ export type ChevronsUpDownIconProps = React.ComponentProps<'svg'> & {
   duration?: number
 }
 
+// biome-ignore lint/suspicious/noReactForwardRef: custom handle type requires forwardRef
 const ChevronsUpDownIcon = forwardRef<
   ChevronsUpDownIconHandle,
   ChevronsUpDownIconProps
