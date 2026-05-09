@@ -49,7 +49,7 @@ export function Heading<T extends HeadingTag = 'h1'>({
       </a>
       <Icons.link
         aria-hidden
-        className='size-3.5 shrink-0 translate-y-px text-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100'
+        className='size-3.5 shrink-0 translate-y-px text-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100 peer-focus:opacity-100'
       />
     </Comp>
   )

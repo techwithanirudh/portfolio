@@ -123,6 +123,7 @@ function Carousel({
         canScrollNext,
       }}
     >
+      {/* biome-ignore lint/a11y/useSemanticElements: WAI-ARIA carousel pattern requires role=region on a div */}
       <div
         aria-roledescription='carousel'
         className={cn('relative', className)}
@@ -162,6 +163,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
   const { orientation } = useCarousel()
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: WAI-ARIA carousel slide pattern requires role=group
     <div
       aria-roledescription='slide'
       className={cn(

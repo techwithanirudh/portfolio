@@ -23,8 +23,12 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
   const encoded = encodeURIComponent(absoluteUrl)
 
   const copyLink = async () => {
-    await navigator.clipboard.writeText(absoluteUrl)
-    toast.success('Link copied')
+    try {
+      await navigator.clipboard.writeText(absoluteUrl)
+      toast.success('Link copied')
+    } catch {
+      toast.error('Unable to copy link')
+    }
   }
 
   return (

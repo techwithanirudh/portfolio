@@ -1,21 +1,23 @@
 'use client'
 
 import { motion, useAnimation } from 'motion/react'
-import { forwardRef, useImperativeHandle } from 'react'
+import { useImperativeHandle } from 'react'
 
-export type ChevronsUpDownIconHandle = {
+export interface ChevronsUpDownIconHandle {
   startAnimation: () => void
   stopAnimation: () => void
 }
 
-export type ChevronsUpDownIconProps = React.ComponentProps<'svg'> & {
+export interface ChevronsUpDownIconProps extends React.ComponentProps<'svg'> {
   duration?: number
+  ref?: React.Ref<ChevronsUpDownIconHandle>
 }
 
-const ChevronsUpDownIcon = forwardRef<
-  ChevronsUpDownIconHandle,
-  ChevronsUpDownIconProps
->(({ duration = 0.3, ...props }, ref) => {
+function ChevronsUpDownIcon({
+  duration = 0.3,
+  ref,
+  ...props
+}: ChevronsUpDownIconProps) {
   const controls = useAnimation()
 
   useImperativeHandle(ref, () => ({
@@ -41,37 +43,25 @@ const ChevronsUpDownIcon = forwardRef<
         animate={controls}
         d='M7 15L12 20L17 15'
         initial='normal'
-        transition={{
-          duration,
-        }}
+        transition={{ duration }}
         variants={{
-          normal: {
-            d: 'M7 15L12 20L17 15',
-          },
-          animate: {
-            d: 'M7 20L12 15L17 20',
-          },
+          normal: { d: 'M7 15L12 20L17 15' },
+          animate: { d: 'M7 20L12 15L17 20' },
         }}
       />
       <motion.path
         animate={controls}
         d='M7 9L12 4L17 9'
         initial='normal'
-        transition={{
-          duration,
-        }}
+        transition={{ duration }}
         variants={{
-          normal: {
-            d: 'M7 9L12 4L17 9',
-          },
-          animate: {
-            d: 'M7 4L12 9L17 4',
-          },
+          normal: { d: 'M7 9L12 4L17 9' },
+          animate: { d: 'M7 4L12 9L17 4' },
         }}
       />
     </svg>
   )
-})
+}
 
 ChevronsUpDownIcon.displayName = 'ChevronsUpDownIcon'
 

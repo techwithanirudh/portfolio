@@ -154,7 +154,15 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   )
 
   return (
-    <Dialog onOpenChange={onOpenChange} open={open}>
+    <Dialog
+      onOpenChange={(next) => {
+        if (!next) {
+          setSearch('')
+        }
+        onOpenChange(next)
+      }}
+      open={open}
+    >
       <DialogContent
         className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! p-0 sm:top-1/3 sm:max-w-lg sm:rounded-xl!'
         data-lenis-prevent

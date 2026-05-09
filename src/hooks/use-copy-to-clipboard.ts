@@ -1,7 +1,7 @@
 'use client'
 
 import { useSound } from '@web-kits/audio/react'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useWebHaptics } from 'web-haptics/react'
 import {
   error as errorSound,
@@ -10,9 +10,9 @@ import {
 
 export type CopyState = 'idle' | 'done' | 'error'
 
-export type UseCopyToClipboardOptions = {
-  onCopySuccess?: (text: string) => void
+export interface UseCopyToClipboardOptions {
   onCopyError?: (error: Error) => void
+  onCopySuccess?: (text: string) => void
   resetDelay?: number
 }
 
@@ -23,6 +23,15 @@ export function useCopyToClipboard({
 }: UseCopyToClipboardOptions = {}) {
   const [state, setState] = useState<CopyState>('idle')
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(
+    () => () => {
+      if (resetTimeoutRef.current) {
+        clearTimeout(resetTimeoutRef.current)
+      }
+    },
+    []
+  )
 
   const { trigger: haptic } = useWebHaptics()
   const playSuccess = useSound(successSound)

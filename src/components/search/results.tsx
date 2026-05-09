@@ -18,6 +18,7 @@ function rehypeCustomElements() {
       if (
         node.type === 'element' &&
         node.tagName &&
+        typeof document !== 'undefined' &&
         document.createElement(node.tagName) instanceof HTMLUnknownElement
       ) {
         node.tagName = 'span'

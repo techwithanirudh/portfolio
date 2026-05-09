@@ -474,7 +474,7 @@
 }
 
 @custom-variant retina {
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2x) {
+  @media (min-resolution: 2dppx) {
     @slot;
   }
 }

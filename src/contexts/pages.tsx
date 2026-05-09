@@ -3,7 +3,7 @@
 import { createContext, type ReactNode, use } from 'react'
 import type { PageEntry } from '@/app/actions/pages'
 
-const PagesContext = createContext<PageEntry[]>([])
+const PagesContext = createContext<PageEntry[] | null>(null)
 
 export function PagesProvider({
   pages,
@@ -16,5 +16,9 @@ export function PagesProvider({
 }
 
 export function usePages(): PageEntry[] {
-  return use(PagesContext)
+  const ctx = use(PagesContext)
+  if (ctx === null) {
+    throw new Error('usePages must be used within a PagesProvider')
+  }
+  return ctx
 }
