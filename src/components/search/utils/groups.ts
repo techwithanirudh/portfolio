@@ -5,10 +5,10 @@ import { commands } from '@/constants/search'
 import type { SearchPageGroup, SearchTagGroup } from '@/types/search/results'
 
 function tagFromUrl(url: string): string {
-  if (url.startsWith('/blog')) {
+  if (url === '/blog' || url.startsWith('/blog/')) {
     return 'blog'
   }
-  if (url.startsWith('/work')) {
+  if (url === '/work' || url.startsWith('/work/')) {
     return 'projects'
   }
   return 'other'
