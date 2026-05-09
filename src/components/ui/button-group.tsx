@@ -26,10 +26,9 @@ function ButtonGroup({
   ...props
 }: React.ComponentProps<'div'> & VariantProps<typeof buttonGroupVariants>) {
   return (
-    // biome-ignore lint/a11y/useSemanticElements: div[role=group] is the standard WAI-ARIA button group pattern
     <div
       className={cn(buttonGroupVariants({ orientation }), className)}
-      data-orientation={orientation ?? 'horizontal'}
+      data-orientation={orientation}
       data-slot='button-group'
       role='group'
       {...props}

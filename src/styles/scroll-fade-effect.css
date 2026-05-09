@@ -26,25 +26,25 @@
 
 @property --top-mask-height {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 0px;
 }
 
 @property --bottom-mask-height {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 64px;
 }
 
 @property --left-mask-width {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 0px;
 }
 
 @property --right-mask-width {
   syntax: "<length>";
-  inherits: false;
+  inherits: true;
   initial-value: 64px;
 }
 

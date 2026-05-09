@@ -18,7 +18,7 @@
       "!bun.lock",
       "!**/*.md",
       "!**/*.mdx",
-      "!components/ui",
+      "!src/components/ui",
       "!**/*.grit"
     ]
   },
