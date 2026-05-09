@@ -6,13 +6,14 @@ export function getExperienceText() {
 Route: ${url('/about')}
 
 ${experiences
-  .map(
-    (item) =>
-      `## ${item.role} | ${item.company}
-
-Duration: ${item.timeframe}
-
-${item.summary.trim()}`
+  .map((item) =>
+    item.positions
+      .map((position) => {
+        const skills = position.skills?.join(', ') ?? 'N/A'
+        const period = `${position.employmentPeriod.start} - ${position.employmentPeriod.end ?? 'Present'}`
+        return `## ${position.title} | ${item.companyName}\n\nDuration: ${period}\n\nSkills: ${skills}\n\n${position.description?.trim() ?? ''}`
+      })
+      .join('\n\n')
   )
   .join('\n\n')}
 `

@@ -1,6 +1,7 @@
 'use client'
 
 import { cva } from 'class-variance-authority'
+import Image from 'next/image'
 import { Section } from '@/components/section'
 import { SectionHeader } from '@/components/sections/section-header'
 import { Badge } from '@/components/ui/badge'
@@ -63,7 +64,7 @@ const Skills = () => (
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='flex flex-wrap gap-2'>
-            {technologies.map(({ label, Icon, href }) => (
+            {technologies.map(({ label, icon, href }) => (
               <Badge
                 asChild
                 className='gap-2 rounded-md px-3 py-1 text-xs transition-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
@@ -71,7 +72,38 @@ const Skills = () => (
                 variant='outline'
               >
                 <a href={href} rel='noopener noreferrer' target='_blank'>
-                  <Icon aria-hidden='true' className='size-4' />
+                  {typeof icon === 'string' ? (
+                    <Image
+                      alt=''
+                      aria-hidden
+                      className='size-4'
+                      height={16}
+                      src={icon}
+                      unoptimized
+                      width={16}
+                    />
+                  ) : (
+                    <>
+                      <Image
+                        alt=''
+                        aria-hidden
+                        className='size-4 dark:hidden'
+                        height={16}
+                        src={icon.light}
+                        unoptimized
+                        width={16}
+                      />
+                      <Image
+                        alt=''
+                        aria-hidden
+                        className='hidden size-4 dark:block'
+                        height={16}
+                        src={icon.dark}
+                        unoptimized
+                        width={16}
+                      />
+                    </>
+                  )}
                   {label}
                 </a>
               </Badge>

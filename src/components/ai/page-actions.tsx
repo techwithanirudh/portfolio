@@ -1,11 +1,9 @@
 'use client'
 
 import { useSound } from '@web-kits/audio/react'
-import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button'
-import { AnimatePresence, motion } from 'motion/react'
-import type * as React from 'react'
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
+import { CopyStateIcon } from '@/components/copy-button'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
@@ -15,77 +13,69 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import type { CopyState } from '@/hooks/use-copy-to-clipboard'
 import { copy as copySound } from '@/lib/audio/minimal'
 
 const cache = new Map<string, string>()
 
-function useMarkdownCopy(markdownUrl: string) {
+export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
+  const [state, setState] = useState<CopyState>('idle')
   const [isCopying, setIsCopying] = useState(false)
-  const [checked, onClick] = useCopyButton(async () => {
-    const cached = cache.get(markdownUrl)
-    if (cached) {
-      await navigator.clipboard.writeText(cached)
+  const operationRef = useRef(false)
+  const playSound = useSound(copySound)
+
+  const handleCopy = async () => {
+    if (operationRef.current) {
       return
     }
+    operationRef.current = true
 
-    setIsCopying(true)
+    const loadingTimer = setTimeout(() => setIsCopying(true), 150)
 
     try {
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          'text/plain': fetch(markdownUrl).then(async (res) => {
-            const content = await res.text()
-            cache.set(markdownUrl, content)
-
-            return content
+      const cached = cache.get(markdownUrl)
+      if (cached) {
+        await navigator.clipboard.writeText(cached)
+      } else {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/plain': fetch(markdownUrl).then(async (res) => {
+              const content = await res.text()
+              cache.set(markdownUrl, content)
+              return content
+            }),
           }),
-        }),
-      ])
+        ])
+      }
+      playSound()
+      setState('done')
+    } catch {
+      setState('error')
     } finally {
+      clearTimeout(loadingTimer)
       setIsCopying(false)
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      operationRef.current = false
+      setState('idle')
     }
-  })
+  }
 
-  return { checked, isCopying, onClick }
-}
-
-const iconMotion = {
-  initial: { opacity: 0, scale: 0.8, filter: 'blur(2px)' },
-  animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },
-  exit: { opacity: 0, scale: 0.8 },
-  transition: { duration: 0.15, ease: 'easeOut' as const },
-}
-
-export function LLMCopyButton({
-  checked,
-  isCopying,
-  onClick,
-}: {
-  checked: boolean
-  isCopying: boolean
-  onClick: React.MouseEventHandler<HTMLButtonElement>
-}) {
   return (
     <Button
       aria-busy={isCopying}
       className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
       disabled={isCopying}
-      onClick={onClick}
+      onClick={handleCopy}
       size='sm'
       type='button'
       variant='secondary'
     >
-      <AnimatePresence initial={false} mode='popLayout'>
-        {checked ? (
-          <motion.span key='check' {...iconMotion}>
-            <Icons.check className='text-muted-foreground' />
-          </motion.span>
-        ) : (
-          <motion.span key='copy' {...iconMotion}>
-            <Icons.copy className='text-muted-foreground' />
-          </motion.span>
-        )}
-      </AnimatePresence>
+      <CopyStateIcon
+        doneIcon={<Icons.check className='text-muted-foreground' />}
+        errorIcon={<Icons.x className='text-destructive' />}
+        idleIcon={<Icons.copy className='text-muted-foreground' />}
+        state={state}
+      />
       <span>Copy Page</span>
     </Button>
   )
@@ -94,11 +84,9 @@ export function LLMCopyButton({
 export function ViewOptions({
   markdownUrl,
   githubUrl,
-  disabled = false,
 }: {
   markdownUrl: string
   githubUrl: string
-  disabled?: boolean
 }) {
   const items = useMemo(() => {
     const fullMarkdownUrl =
@@ -126,10 +114,7 @@ export function ViewOptions({
       },
       {
         title: 'Open in ChatGPT',
-        href: `https://chatgpt.com/?${new URLSearchParams({
-          hints: 'search',
-          q,
-        })}`,
+        href: `https://chatgpt.com/?${new URLSearchParams({ hints: 'search', q })}`,
         icon: Icons.openai,
       },
       {
@@ -151,7 +136,6 @@ export function ViewOptions({
         <Button
           aria-label='View Options'
           className='size-8 border-none active:scale-none'
-          disabled={disabled}
           size='icon-sm'
           variant='secondary'
         >
@@ -176,8 +160,6 @@ export function ViewOptions({
   )
 }
 
-// --- LLMCopyButtonWithViewOptions ---
-
 export function LLMCopyButtonWithViewOptions({
   markdownUrl,
   githubUrl,
@@ -185,27 +167,11 @@ export function LLMCopyButtonWithViewOptions({
   markdownUrl: string
   githubUrl: string
 }) {
-  const { checked, isCopying, onClick } = useMarkdownCopy(markdownUrl)
-  const playSound = useSound(copySound)
-
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    playSound()
-    onClick(e)
-  }
-
   return (
     <ButtonGroup className='w-full min-w-0'>
-      <LLMCopyButton
-        checked={checked}
-        isCopying={isCopying}
-        onClick={handleClick}
-      />
+      <LLMCopyButton markdownUrl={markdownUrl} />
       <ButtonGroupSeparator className='border-secondary border-y-4 data-vertical:my-0 dark:bg-white/20' />
-      <ViewOptions
-        disabled={isCopying}
-        githubUrl={githubUrl}
-        markdownUrl={markdownUrl}
-      />
+      <ViewOptions githubUrl={githubUrl} markdownUrl={markdownUrl} />
     </ButtonGroup>
   )
 }

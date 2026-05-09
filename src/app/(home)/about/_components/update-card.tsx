@@ -38,7 +38,7 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
       />
     )}
 
-    <div className='flex h-full flex-col justify-between gap-4'>
+    <div className='flex flex-1 flex-col justify-between gap-4'>
       <div className='flex-1 space-y-2'>
         <h2 className='text-balance font-medium text-lg md:text-xl lg:text-2xl'>
           {title}

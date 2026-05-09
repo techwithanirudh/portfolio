@@ -1,6 +1,13 @@
 import { Icons } from '@/components/icons/icons'
 import type { Skill } from '@/types'
 
+const base = '/images/tech-stack'
+const s = (file: string) => `${base}/${file}`
+const t = (light: string, dark: string) => ({
+  light: `${base}/light/${light}`,
+  dark: `${base}/dark/${dark}`,
+})
+
 export const skills: Skill[] = [
   {
     id: 1,
@@ -30,34 +37,70 @@ export const skills: Skill[] = [
 export const technologies = [
   {
     label: 'TypeScript',
-    Icon: Icons.typescript,
+    icon: s('typescript.svg'),
     href: 'https://www.typescriptlang.org',
   },
   {
     label: 'JavaScript',
-    Icon: Icons.javascript,
+    icon: s('javascript.svg'),
     href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
   },
-  { label: 'React', Icon: Icons.react, href: 'https://react.dev' },
-  { label: 'Next.js', Icon: Icons.nextjs, href: 'https://nextjs.org' },
+  { label: 'Python', icon: s('python.svg'), href: 'https://www.python.org' },
+  {
+    label: 'React',
+    icon: t('react_light.svg', 'react_dark.svg'),
+    href: 'https://react.dev',
+  },
+  {
+    label: 'Next.js',
+    icon: s('nextjs_icon_dark.svg'),
+    href: 'https://nextjs.org',
+  },
   {
     label: 'Tailwind CSS',
-    Icon: Icons.tailwind,
+    icon: s('tailwindcss.svg'),
     href: 'https://tailwindcss.com',
   },
   {
-    label: 'CSS3',
-    Icon: Icons.css3,
-    href: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
+    label: 'shadcn/ui',
+    icon: t('shadcn-ui.svg', 'shadcn-ui_dark.svg'),
+    href: 'https://ui.shadcn.com',
   },
-  { label: 'Node.js', Icon: Icons.nodejs, href: 'https://nodejs.org' },
-  { label: 'Express', Icon: Icons.express, href: 'https://expressjs.com' },
-  { label: 'Git', Icon: Icons.git, href: 'https://git-scm.com' },
-  { label: 'shadcn/ui', Icon: Icons.shadcn, href: 'https://ui.shadcn.com' },
-  { label: 'Hono', Icon: Icons.hono, href: 'https://hono.dev' },
   {
-    label: 'Drizzle ORM',
-    Icon: Icons.drizzleOrm,
-    href: 'https://orm.drizzle.team',
+    label: 'Radix UI',
+    icon: t('radix-ui_light.svg', 'radix-ui_dark.svg'),
+    href: 'https://www.radix-ui.com',
   },
-] as const
+  {
+    label: 'Motion',
+    icon: t('motion.svg', 'motion_dark.svg'),
+    href: 'https://motion.dev',
+  },
+  {
+    label: 'TanStack',
+    icon: s('tanstack.svg'),
+    href: 'https://tanstack.com',
+  },
+  { label: 'Node.js', icon: s('nodejs.svg'), href: 'https://nodejs.org' },
+  { label: 'Bun', icon: s('bun.svg'), href: 'https://bun.sh' },
+  {
+    label: 'PostgreSQL',
+    icon: s('postgresql.svg'),
+    href: 'https://www.postgresql.org',
+  },
+  { label: 'Redis', icon: s('redis.svg'), href: 'https://redis.io' },
+  { label: 'Git', icon: s('git.svg'), href: 'https://git-scm.com' },
+  { label: 'Docker', icon: s('docker.svg'), href: 'https://www.docker.com' },
+  { label: 'Claude', icon: s('claude-ai-icon.svg'), href: 'https://claude.ai' },
+  {
+    label: 'Cursor',
+    icon: t('cursor_light.svg', 'cursor_dark.svg'),
+    href: 'https://cursor.com',
+  },
+  {
+    label: 'Codex',
+    icon: t('openai.svg', 'openai_dark.svg'),
+    href: 'https://chatgpt.com/codex',
+  },
+  { label: 'Figma', icon: s('figma.svg'), href: 'https://www.figma.com' },
+]
