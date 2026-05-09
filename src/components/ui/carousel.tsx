@@ -3,8 +3,8 @@
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from 'embla-carousel-react'
-import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 import * as React from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -49,7 +49,7 @@ function Carousel({
   className,
   children,
   ...props
-}: React.ComponentProps<'section'> & CarouselProps) {
+}: React.ComponentProps<'div'> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
     {
       ...opts,
@@ -123,14 +123,16 @@ function Carousel({
         canScrollNext,
       }}
     >
-      <section
+      <div
+        aria-roledescription='carousel'
         className={cn('relative', className)}
         data-slot='carousel'
         onKeyDownCapture={handleKeyDown}
+        role='region'
         {...props}
       >
         {children}
-      </section>
+      </div>
     </CarouselContext.Provider>
   )
 }
@@ -161,12 +163,14 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
 
   return (
     <div
+      aria-roledescription='slide'
       className={cn(
         'min-w-0 shrink-0 grow-0 basis-full',
         orientation === 'horizontal' ? 'pl-4' : 'pt-4',
         className
       )}
       data-slot='carousel-item'
+      role='group'
       {...props}
     />
   )
@@ -196,7 +200,7 @@ function CarouselPrevious({
       variant={variant}
       {...props}
     >
-      <ChevronLeftIcon />
+      <Icons.arrowLeft strokeWidth={2} />
       <span className='sr-only'>Previous slide</span>
     </Button>
   )
@@ -226,7 +230,7 @@ function CarouselNext({
       variant={variant}
       {...props}
     >
-      <ChevronRightIcon />
+      <Icons.arrowRight strokeWidth={2} />
       <span className='sr-only'>Next slide</span>
     </Button>
   )

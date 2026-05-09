@@ -1,3 +1,5 @@
+'use client'
+
 import { Icons } from '@/components/icons/icons'
 import {
   SplitSection,
@@ -7,6 +9,7 @@ import {
 } from '@/components/sections/split-section'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { WorkExperience } from '@/components/work-experience'
 import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
@@ -32,34 +35,14 @@ export default function Experience(): React.ReactElement {
           </ViewAnimation>
         </SplitSectionHeader>
       </SplitSectionSidebar>
-      <SplitSectionContent className='px-0 py-0 sm:col-span-2'>
-        <div className='divide-y divide-dashed divide-border'>
-          {experiences.map((experience, index) => (
-            <ViewAnimation
-              delay={0.05 * index}
-              initial={{ opacity: 0, translateY: -6 }}
-              key={`${experience.company}-${experience.role}-${experience.timeframe}`}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <div className='flex flex-col gap-3 p-6 sm:p-8'>
-                <div className='flex flex-wrap items-center justify-between gap-2'>
-                  <div>
-                    <h3 className='font-semibold text-lg'>{experience.role}</h3>
-                    <p className='text-muted-foreground text-sm'>
-                      {experience.company}
-                    </p>
-                  </div>
-                  <span className='text-muted-foreground text-sm'>
-                    {experience.timeframe}
-                  </span>
-                </div>
-                <p className='text-muted-foreground text-sm'>
-                  {experience.summary}
-                </p>
-              </div>
-            </ViewAnimation>
-          ))}
-        </div>
+
+      <SplitSectionContent className='px-0 py-0 lg:col-span-2'>
+        <ViewAnimation
+          initial={{ opacity: 0, translateY: -6 }}
+          whileInView={{ opacity: 1, translateY: 0 }}
+        >
+          <WorkExperience experiences={experiences} />
+        </ViewAnimation>
       </SplitSectionContent>
     </SplitSection>
   )

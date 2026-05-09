@@ -18,7 +18,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           title='Work'
         />
         <div className='divider-top-dashed'>
-          <div className='grid grid-cols-1 divide-x divide-dashed divide-border text-left sm:grid-cols-2 [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
+          <div className='grid grid-cols-1 divide-dashed divide-border text-left lg:grid-cols-2 lg:divide-x [&>*:last-child]:border-b-0 lg:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
             {works.map((work, index) => (
               <ViewAnimation
                 blur={false}
@@ -49,7 +49,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
               className={buttonVariants({
                 shape: 'square',
                 variant: 'default',
-                className: 'w-full py-4 sm:py-8',
+                className: 'w-full py-8',
               })}
               href='/work'
             >

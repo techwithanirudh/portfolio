@@ -57,12 +57,12 @@ export async function POST(request: Request) {
           {
             convertDataPart: (part) => {
               if (part.type !== 'data-context') {
-                return undefined
+                return
               }
 
               const context = contextDataSchema.safeParse(part.data).data?.text
               if (!context) {
-                return undefined
+                return
               }
 
               return {

@@ -1,47 +1,95 @@
 'use client'
+
 import { Comments } from '@fuma-comment/react'
 import { useRouter } from 'next/navigation'
-import { useRef } from 'react'
-import { toast } from 'sonner'
-import { useCopyToClipboard } from 'usehooks-ts'
-import {
-  UploadIcon as ShareIcon,
-  type UploadIconHandle as ShareIconHandle,
-} from '@/components/icons/animated/upload'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { getLoginUrl } from '@/lib/auth-client'
+import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
-export function Share({
-  url,
-  label = 'Share Post',
-}: {
-  url: string
-  label?: string
-}): React.ReactElement {
-  const iconRef = useRef<ShareIconHandle>(null)
-  const [_, copyToClipboard] = useCopyToClipboard()
+export function ShareMenu({ title, url }: { title: string; url: string }) {
+  const absoluteUrl =
+    typeof window === 'undefined'
+      ? url
+      : new URL(url, window.location.origin).toString()
 
-  const onClick = async (): Promise<void> => {
-    await copyToClipboard(`${window.location.origin}${url}`)
-    toast.success('Copied to clipboard!', {
-      icon: <Icons.copied className='size-4' />,
-      description: 'The post link has been copied to your clipboard.',
-    })
+  const encoded = encodeURIComponent(absoluteUrl)
+
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(absoluteUrl)
+      toast.success('Link copied')
+    } catch {
+      toast.error('Unable to copy link')
+    }
   }
 
   return (
-    <Button
-      className={cn('group gap-2')}
-      onClick={onClick}
-      onMouseEnter={() => iconRef.current?.startAnimation?.()}
-      onMouseLeave={() => iconRef.current?.stopAnimation?.()}
-      variant={'secondary'}
-    >
-      <ShareIcon className='size-4 hover:bg-transparent' ref={iconRef} />
-      {label}
-    </Button>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          aria-label='Share'
+          className='w-full justify-start border-none shadow-none active:scale-none'
+          size='sm'
+          variant='secondary'
+        >
+          <Icons.share className='text-muted-foreground' />
+          Share
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align='start'
+        collisionPadding={8}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
+        <DropdownMenuItem onClick={copyLink}>
+          <Icons.link className='size-4' />
+          Copy link
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <a
+            href={`https://x.com/intent/tweet?url=${encoded}&text=${encodeURIComponent(title)}`}
+            rel='noopener'
+            target='_blank'
+          >
+            <Icons.x className='size-4' />
+            Share on X
+          </a>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <a
+            href={`https://www.linkedin.com/sharing/share-offsite?url=${encoded}`}
+            rel='noopener'
+            target='_blank'
+          >
+            <Icons.linkedin className='size-4' />
+            Share on LinkedIn
+          </a>
+        </DropdownMenuItem>
+        {typeof navigator !== 'undefined' && 'share' in navigator && (
+          <DropdownMenuItem
+            onClick={(e) => {
+              e.preventDefault()
+              navigator.share({ title, url: absoluteUrl }).catch((error) => {
+                if (process.env.NODE_ENV !== 'production') {
+                  console.error(error)
+                }
+              })
+            }}
+          >
+            <Icons.moreHorizontal className='size-4' />
+            More
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 

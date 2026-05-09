@@ -4,7 +4,31 @@ import { env } from '@/env'
 import type { BlogPage } from './source/blog'
 import type { WorkPage } from './source/work'
 
+export const baseUrl =
+  env.NODE_ENV === 'development' || !env.NEXT_PUBLIC_BASE_URL
+    ? new URL('http://localhost:3000')
+    : new URL(env.NEXT_PUBLIC_BASE_URL)
+
+export function getSimpleOgImage(
+  ogTitle: string,
+  description?: string
+): string {
+  const params = new URLSearchParams({ title: ogTitle })
+  if (description) {
+    params.set('description', description)
+  }
+  return `/og?${params}`
+}
+
 export function createMetadata(override: Metadata): Metadata {
+  const ogTitle =
+    typeof override.title === 'string' ? override.title : undefined
+  const ogDesc =
+    typeof override.description === 'string' ? override.description : undefined
+  const defaultImage = ogTitle
+    ? getSimpleOgImage(ogTitle, ogDesc)
+    : '/banner.png'
+
   return {
     ...override,
     creator: owner,
@@ -21,7 +45,7 @@ export function createMetadata(override: Metadata): Metadata {
       title: override.title ?? undefined,
       description: override.description ?? undefined,
       url: baseUrl.href,
-      images: '/banner.png',
+      images: defaultImage,
       siteName: title,
       ...override.openGraph,
     },
@@ -30,7 +54,7 @@ export function createMetadata(override: Metadata): Metadata {
       creator: '@AnirudhWith',
       title: override.title ?? undefined,
       description: override.description ?? undefined,
-      images: '/banner.png',
+      images: defaultImage,
       ...override.twitter,
     },
     alternates: {
@@ -58,8 +82,3 @@ export function getWorkPageImage(page: WorkPage) {
     url: `/og/work/${segments.join('/')}`,
   }
 }
-
-export const baseUrl =
-  env.NODE_ENV === 'development' || !env.NEXT_PUBLIC_BASE_URL
-    ? new URL('http://localhost:3000')
-    : new URL(env.NEXT_PUBLIC_BASE_URL)

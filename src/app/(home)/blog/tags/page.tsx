@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { CollectionPageJsonLd } from '@/components/json-ld'
 import { SectionBody } from '@/components/section-body'
 import { TagCard } from '@/components/tags/tag-card'
 import { ViewAnimation } from '@/components/view-animation'
@@ -42,6 +43,11 @@ export default function Page() {
           )}
         </div>
       </SectionBody>
+      <CollectionPageJsonLd
+        description='Browse all blog tags to explore posts by topic.'
+        path='/blog/tags'
+        title='Tags'
+      />
     </Wrapper>
   )
 }
@@ -50,7 +56,7 @@ export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
   const _params = await props.params
-  const description = `Explore all the tags on ${homeTitle}.`
+  const description = `Browse all blog tags on ${homeTitle} to explore posts by topic.`
 
   return createMetadata({
     title: 'Tags',

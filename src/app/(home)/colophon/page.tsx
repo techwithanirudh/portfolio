@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import { Fragment } from 'react'
+import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
 import Separator from '@/components/separator'
 import { ViewAnimation } from '@/components/view-animation'
@@ -71,6 +72,11 @@ export default function ColophonPage() {
           </Fragment>
         )
       })}
+      <AboutPageJsonLd
+        description={description}
+        path='/colophon'
+        title={title}
+      />
     </Wrapper>
   )
 }

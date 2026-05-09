@@ -1,8 +1,8 @@
 'use client'
 
+import { useSound } from '@web-kits/audio/react'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
-import { toast } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { error, pop } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
@@ -76,16 +77,16 @@ export const GuestbookReactions = ({
   canReact,
 }: GuestbookReactionsProps) => {
   const [isOpen, setIsOpen] = useState(false)
+  const playError = useSound(error)
+  const playReaction = useSound(pop)
 
   const { execute, optimisticState, status } = useOptimisticAction(
     toggleGuestbookReaction,
     {
       currentState: { reactions },
       updateFn: updateOptimisticReactions,
-      onError: ({ error }) => {
-        if (error.serverError) {
-          toast.error(error.serverError)
-        }
+      onError: () => {
+        playError()
       },
     }
   )
@@ -93,6 +94,7 @@ export const GuestbookReactions = ({
   const optimisticReactions = optimisticState.reactions
 
   const handleReaction = (emoji: string) => {
+    playReaction()
     execute({ entryId, emoji })
     setIsOpen(false)
   }

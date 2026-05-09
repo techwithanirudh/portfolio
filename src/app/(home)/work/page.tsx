@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
+import { CollectionPageJsonLd } from '@/components/json-ld'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { Section } from '@/components/section'
@@ -49,6 +50,10 @@ export default async function Page(props: {
   const startIndex = pageIndex * worksPerPage
   const endIndex = startIndex + worksPerPage
   const work = getSortedByDateWork().slice(startIndex, endIndex)
+  const currentPage = pageIndex + 1
+  const isFirstPage = currentPage === 1
+  const canonicalUrl = isFirstPage ? '/work' : `/work?page=${currentPage}`
+  const jsonLdTitle = isFirstPage ? 'Work' : `Work - Page ${currentPage}`
 
   return (
     <Wrapper>
@@ -94,6 +99,11 @@ export default async function Page(props: {
         </div>
       </Section>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
+      <CollectionPageJsonLd
+        description='Selected work showcasing projects, collaborations, and outcomes.'
+        path={canonicalUrl}
+        title={jsonLdTitle}
+      />
     </Wrapper>
   )
 }

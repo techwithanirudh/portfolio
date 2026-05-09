@@ -45,22 +45,23 @@ the original extension in that thread was deprecated, but i kept the ideas i lik
 ## screenshot
 
 <div className='overflow-hidden'>
-  <img
-    alt='My VS Code setup'
-    className='h-full w-full dark:hidden rounded-lg'
-    height={720}
-    src='/images/uses/vscode-light.png'
-    width={1280}
-  />
-  <img
-    alt='My VS Code setup'
-    className='hidden h-full w-full dark:block rounded-lg'
-    height={720}
-    src='/images/uses/vscode-dark.png'
-    width={1280}
-  />
+  <div className='dark:hidden'>
+    <FramedImage
+      alt='My VS Code setup'
+      height={720}
+      src='/images/uses/vscode-light.png'
+      width={1280}
+    />
+  </div>
+  <div className='hidden dark:block'>
+    <FramedImage
+      alt='My VS Code setup'
+      height={720}
+      src='/images/uses/vscode-dark.png'
+      width={1280}
+    />
+  </div>
 </div>
-
 
 ## extensions
 

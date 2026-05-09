@@ -24,23 +24,20 @@ export const auth = betterAuth({
   },
 })
 
-export const getSession = async () => {
-  return await auth.api.getSession({
+export const getSession = async () =>
+  await auth.api.getSession({
     headers: await headers(),
   })
-}
 
-export const listSessions = async () => {
-  return await auth.api.listSessions({
+export const listSessions = async () =>
+  await auth.api.listSessions({
     headers: await headers(),
   })
-}
 
-export const revokeSession = async (token: string) => {
-  return await auth.api.revokeSession({
+export const revokeSession = async (token: string) =>
+  await auth.api.revokeSession({
     body: {
       token,
     },
     headers: await headers(),
   })
-}

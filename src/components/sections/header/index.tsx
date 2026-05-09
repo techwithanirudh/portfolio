@@ -37,7 +37,7 @@ import { ThemeToggle } from './theme-toggle'
 const navItemVariants = cva('[&_svg]:size-4', {
   variants: {
     variant: {
-      main: 'inline-flex items-center gap-1 p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
+      main: 'inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
       button: buttonVariants({
         color: 'secondary',
         className: 'gap-1.5',
@@ -122,7 +122,7 @@ export const Header = ({
           </ViewAnimation>
           {nav.children}
         </div>
-        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-sm:hidden'>
+        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-md:hidden'>
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
@@ -180,7 +180,7 @@ export const Header = ({
           </ViewAnimation>
         </div>
       </div>
-      <ul className='ms-auto -me-1.5 flex flex-row items-center lg:hidden'>
+      <ul className='ms-auto -me-1.5 hidden flex-row items-center sm:flex lg:hidden'>
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
             <ViewAnimation
@@ -263,7 +263,7 @@ const HeaderNavigationMenu = ({
         id='nd-nav'
         {...props}
         className={cn(
-          'sticky top-0 z-40 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors',
+          'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors',
           props.className
         )}
       >
@@ -288,11 +288,8 @@ const HeaderNavigationMenu = ({
   )
 }
 
-const isSecondary = (item: LinkItemType): boolean => {
-  return (
-    ('secondary' in item && item.secondary === true) || item.type === 'icon'
-  )
-}
+const isSecondary = (item: LinkItemType): boolean =>
+  ('secondary' in item && item.secondary === true) || item.type === 'icon'
 
 const NavigationMenuLinkItem = ({
   item,

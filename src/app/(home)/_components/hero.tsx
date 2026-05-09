@@ -2,7 +2,6 @@ import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import * as motion from 'motion/react-client'
 import Image from 'next/image'
 import Link from 'next/link'
-import Balancer from 'react-wrap-balancer'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import { buttonVariants } from '@/components/ui/button'
@@ -22,7 +21,7 @@ const Hero = () => {
   )
 
   return (
-    <Section className='relative flex flex-col items-center justify-center gap-4 overflow-hidden px-4 py-16 sm:px-16 sm:py-24 md:py-32'>
+    <Section className='relative flex flex-col items-center justify-center gap-4 overflow-hidden px-4 py-24 sm:px-16 sm:py-32 md:py-40'>
       <motion.div
         animate={{ opacity: 1, translateY: 0 }}
         className='absolute inset-0 -z-10 h-full w-full'
@@ -36,7 +35,7 @@ const Hero = () => {
       >
         <Image
           alt='Hero Background'
-          className='pointer-events-none absolute right-0 bottom-0 h-[900px] w-[1004px] max-w-[1004px] translate-x-1/2 translate-y-1/2 select-none opacity-80 dark:opacity-100'
+          className='pointer-events-none absolute right-0 bottom-0 h-[800px] w-[560px] max-w-none translate-x-1/2 translate-y-1/2 select-none opacity-80 sm:h-[860px] sm:w-[720px] sm:max-w-[720px] md:h-[920px] md:w-[900px] md:max-w-[900px] lg:h-[960px] lg:w-[1004px] lg:max-w-[1004px] dark:opacity-100'
           height={600}
           priority
           src={heroImage}
@@ -50,9 +49,8 @@ const Hero = () => {
       >
         <h1
           className={cn(
-            'typography-hero font-normal text-3xl leading-tight tracking-tighter',
-            'sm:text-center sm:text-4xl sm:leading-tight',
-            'md:text-5xl md:leading-tight'
+            'typography-hero text-balance text-center font-normal text-4xl leading-tight tracking-tighter',
+            'md:text-5xl'
           )}
         >
           Hi! I'm Anirudh!
@@ -63,11 +61,9 @@ const Hero = () => {
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
-        <p className='max-w-xl text-center text-lg text-muted-foreground leading-relaxed tracking-tight md:text-xl'>
-          <Balancer>
-            I'm a design engineer and full-stack developer who blends design and
-            development to build beautiful, functional websites.
-          </Balancer>
+        <p className='max-w-sm text-pretty text-center text-base text-muted-foreground leading-relaxed tracking-tight sm:max-w-xl sm:text-lg md:text-xl'>
+          I'm a design engineer and full-stack developer who blends design and
+          development to build beautiful, functional websites.
         </p>
       </ViewAnimation>
 

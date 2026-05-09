@@ -23,7 +23,7 @@ export function useRefHistory<T>(): UseRefHistoryReturn<T> {
 
   const undo = (): T | undefined => {
     if (index.current < 0) {
-      return undefined
+      return
     }
     index.current -= 1
     return entries.current[index.current]
@@ -31,7 +31,7 @@ export function useRefHistory<T>(): UseRefHistoryReturn<T> {
 
   const redo = (): T | undefined => {
     if (index.current >= entries.current.length - 1) {
-      return undefined
+      return
     }
     index.current += 1
     return entries.current[index.current]

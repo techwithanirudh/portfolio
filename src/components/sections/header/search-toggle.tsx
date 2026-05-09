@@ -23,6 +23,7 @@ export const SearchToggle = ({
   ...props
 }: SearchToggleProps) => {
   const { setOpenSearch, enabled } = useSearchContext()
+
   if (hideIfDisabled && !enabled) {
     return null
   }
@@ -38,9 +39,7 @@ export const SearchToggle = ({
         props.className
       )}
       data-search=''
-      onClick={() => {
-        setOpenSearch(true)
-      }}
+      onClick={() => setOpenSearch(true)}
       type='button'
     >
       <Icons.search />
@@ -56,6 +55,7 @@ export const LargeSearchToggle = ({
 }) => {
   const { enabled, hotKey, setOpenSearch } = useSearchContext()
   const { text } = useI18n()
+
   if (hideIfDisabled && !enabled) {
     return null
   }
@@ -69,9 +69,7 @@ export const LargeSearchToggle = ({
         'inline-flex items-center gap-2 rounded-lg border bg-fd-secondary/50 p-1.5 ps-2 text-fd-muted-foreground text-sm transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground',
         props.className
       )}
-      onClick={() => {
-        setOpenSearch(true)
-      }}
+      onClick={() => setOpenSearch(true)}
     >
       <Icons.search className='size-4' />
       {text.search}

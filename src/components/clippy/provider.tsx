@@ -27,7 +27,7 @@ export function useClippy() {
 }
 
 interface ClippyProviderProps {
-  agent: AgentLoaders
+  agent?: AgentLoaders
   children?: ReactNode
 }
 
@@ -36,10 +36,16 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
   const instance = useRef<ClippyAgent | null>(null)
 
   useEffect(() => {
+    if (!agent) {
+      return
+    }
+
     let cancelled = false
 
     import('clippyjs')
-      .then(({ initAgent }) => initAgent(agent))
+      .then(({ initAgent }) =>
+        initAgent({ ...agent, sound: () => Promise.resolve({ default: {} }) })
+      )
       .then((loaded: ClippyAgent) => {
         if (cancelled) {
           loaded.dispose()

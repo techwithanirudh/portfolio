@@ -54,7 +54,7 @@ export const MdxContent = ({
     <InlineTocBlock items={toc} />
     <div
       className={cn(
-        'prose min-w-0 flex-1 px-4 text-fd-foreground/90',
+        'prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 text-fd-foreground/90',
         proseClassName
       )}
     >

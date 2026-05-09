@@ -10,7 +10,7 @@ export const socials: Social[] = [
   },
   {
     icon: <Icons.x />,
-    name: 'X (Twitter)',
+    name: 'X',
     url: 'https://x.com/AnirudhWith',
     description: 'Follow me for tech updates and project announcements',
   },

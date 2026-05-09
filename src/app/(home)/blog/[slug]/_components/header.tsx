@@ -1,6 +1,5 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as motion from 'motion/react-client'
-import Balancer from 'react-wrap-balancer'
 import { BlurImage } from '@/components/blur-image'
 import { Section } from '@/components/section'
 import { TagCard } from '@/components/tags/tag-card'
@@ -66,11 +65,11 @@ export const Header = ({ page, tags }: HeaderProps) => {
               </div>
             ) : null}
             <div className='mb-4 space-y-4 text-balance'>
-              <h1 className='typography-hero max-w-2xl font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
-                <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
+              <h1 className='typography-hero max-w-2xl text-balance font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
+                {page.data.title ?? 'Untitled'}
               </h1>
-              <p className='typography-body hidden max-w-3xl text-slate-100 leading-8 md:block dark:text-foreground/85'>
-                <Balancer>{page.data.description ?? ''}</Balancer>
+              <p className='typography-body hidden max-w-3xl text-pretty text-slate-100 leading-8 md:block dark:text-foreground/85'>
+                {page.data.description ?? ''}
               </p>
             </div>
             <div className='flex items-center gap-6 text-slate-200 text-xs dark:text-foreground/45'>

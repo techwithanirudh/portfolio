@@ -1,6 +1,7 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import Posts from '@/app/(home)/_components/posts'
+import { CollectionPageJsonLd } from '@/components/json-ld'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
@@ -83,6 +84,11 @@ export default async function Page(props: {
       </SectionBody>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <NewsletterSection />
+      <CollectionPageJsonLd
+        description='Notes on design engineering, full-stack development, AI experiments, and the systems behind recent projects.'
+        path='/blog'
+        title='Blog'
+      />
     </Wrapper>
   )
 }
@@ -113,10 +119,13 @@ export async function generateMetadata(
   const isFirstPage = pageIndex === 1 || !searchParams.page
   const pageTitle = isFirstPage ? 'Posts' : `Posts - Page ${pageIndex}`
   const canonicalUrl = isFirstPage ? '/blog' : `/blog?page=${pageIndex}`
+  const description = isFirstPage
+    ? 'Notes on design engineering, full-stack development, AI experiments, and the systems behind recent projects.'
+    : `Browse page ${pageIndex} of blog posts.`
 
   return createMetadata({
     title: pageTitle,
-    description: `Posts${isFirstPage ? '' : ` - Page ${pageIndex}`}`,
+    description,
     openGraph: {
       url: canonicalUrl,
     },

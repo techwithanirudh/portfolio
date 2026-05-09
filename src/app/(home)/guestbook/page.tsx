@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { WebPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
 import {
   SplitSection,
@@ -67,6 +68,11 @@ export default async function GuestbookPage() {
           />
         </ViewAnimation>
       </Section>
+      <WebPageJsonLd
+        description='Leave a note and react to messages from other visitors.'
+        path='/guestbook'
+        title='Guestbook'
+      />
     </Wrapper>
   )
 }

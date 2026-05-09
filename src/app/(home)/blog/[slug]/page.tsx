@@ -1,16 +1,14 @@
-import { File, Files, Folder } from 'fumadocs-ui/components/files'
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
-import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Share } from '@/app/(home)/blog/[slug]/page.client'
+import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
+import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { PostJsonLd } from '@/components/json-ld'
+import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
-import { Mermaid } from '@/components/mdx/mermaid'
 import { MdxContent } from '@/components/mdx-layout'
 import { SectionBody } from '@/components/section-body'
-import { VideoPlayer } from '@/components/ui/video-player'
+import { owner, repo } from '@/constants/config/github'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
@@ -37,21 +35,9 @@ export default async function Page(props: {
       <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
           <MdxContent comments slug={params.slug} toc={toc}>
-            <Mdx
-              components={{
-                ...defaultMdxComponents,
-                File,
-                Files,
-                Folder,
-                Tabs,
-                Tab,
-                Mermaid,
-                VideoPlayer,
-                GitHubCode,
-              }}
-            />
+            <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </MdxContent>
-          <div className='flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
             <div>
               <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
               <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
@@ -68,7 +54,13 @@ export default async function Page(props: {
                 <p className='font-medium'>{lastUpdate.toDateString()}</p>
               </div>
             )}
-            <Share url={page.url} />
+            <div className='flex flex-col gap-2'>
+              <LLMCopyButtonWithViewOptions
+                githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
+                markdownUrl={`/blog.mdx/${params.slug}`}
+              />
+              <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
+            </div>
           </div>
         </article>
       </SectionBody>
@@ -96,8 +88,14 @@ export async function generateMetadata(props: {
     title,
     description,
     openGraph: {
+      type: 'article',
       url: `/blog/${page.slugs.join('/')}`,
       images: image.url,
+      publishedTime: new Date(page.data.date).toISOString(),
+      modifiedTime: page.data.lastModified
+        ? new Date(page.data.lastModified).toISOString()
+        : new Date(page.data.date).toISOString(),
+      authors: [page.data.author ?? owner],
     },
     twitter: {
       images: image.url,
@@ -108,8 +106,8 @@ export async function generateMetadata(props: {
   })
 }
 
-export function generateStaticParams(): { slug: string | undefined }[] {
-  return getPosts().map((page) => ({
-    slug: page.slugs[0],
-  }))
+export function generateStaticParams(): { slug: string }[] {
+  return getPosts()
+    .map((page) => ({ slug: page.slugs[0] }))
+    .filter((p): p is { slug: string } => p.slug !== undefined)
 }

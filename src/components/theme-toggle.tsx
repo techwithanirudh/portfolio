@@ -1,9 +1,11 @@
 'use client'
 
+import { useSound } from '@web-kits/audio/react'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 
 const itemVariants = cva(
@@ -35,6 +37,7 @@ export function ThemeToggle({
 }) {
   const { setTheme, theme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const playToggle = useSound(toggleOn)
 
   useEffect(() => {
     setMounted(true)
@@ -46,6 +49,8 @@ export function ThemeToggle({
   )
 
   const handleChangeTheme = async (theme: Theme) => {
+    playToggle()
+
     function update() {
       setTheme(theme)
     }

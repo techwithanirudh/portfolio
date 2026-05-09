@@ -3,6 +3,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
 import { Presence } from '@radix-ui/react-presence'
+import { useSound } from '@web-kits/audio/react'
 import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import { usePathname } from 'next/navigation'
@@ -36,6 +37,15 @@ import { ClippyProvider, useClippy } from '@/components/clippy'
 import { Rover } from '@/components/clippy/agents/rover'
 import { playSubmitAnimation, useClippyPanel } from '@/components/clippy/hooks'
 import { Icons } from '@/components/icons/icons'
+import { useIsMobile } from '@/hooks/use-mobile'
+import {
+  deleteSound,
+  error as errorSound,
+  send,
+  success,
+  tap,
+  toggleOn,
+} from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
@@ -66,11 +76,25 @@ export function useChatContext() {
 }
 
 export function AISearch({ children }: { children: ReactNode }) {
+  const isMobile = useIsMobile()
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
+  const playError = useSound(errorSound)
+  const playSuccess = useSound(success)
+  const playDelete = useSound(deleteSound)
   const chat = useChat<MyUIMessage>({
     id: 'search',
+    onError: () => playError(),
+    onFinish: ({ isAbort, isDisconnect, isError }) => {
+      if (isAbort) {
+        playDelete()
+        return
+      }
+      if (!(isDisconnect || isError)) {
+        playSuccess()
+      }
+    },
     transport: new DefaultChatTransport({
       api: '/api/chat',
       prepareSendMessagesRequest: ({ id, messages }) => ({
@@ -86,7 +110,7 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider agent={Rover}>
+    <ClippyProvider agent={isMobile ? undefined : Rover}>
       <AISearchContext
         value={useMemo(
           () => ({
@@ -108,6 +132,7 @@ export function AISearch({ children }: { children: ReactNode }) {
 
 function Header() {
   const { setOpen, chat, setContext } = useAISearchContext()
+  const playNewChat = useSound(toggleOn)
 
   return (
     <div className='sticky top-0 flex h-10 items-start'>
@@ -128,6 +153,7 @@ function Header() {
             })
           )}
           onClick={() => {
+            playNewChat()
             chat.setMessages([])
             setContext(null)
           }}
@@ -160,6 +186,7 @@ function SearchAIActions() {
   const isLoading = status === 'streaming'
   const canShow =
     !isLoading && messages?.length > 0 && messages.at(-1)?.role === 'assistant'
+  const playRegenerate = useSound(tap)
 
   return (
     <button
@@ -174,7 +201,10 @@ function SearchAIActions() {
         canShow ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
       disabled={!canShow}
-      onClick={() => regenerate()}
+      onClick={() => {
+        playRegenerate()
+        regenerate()
+      }}
       tabIndex={canShow ? 0 : -1}
       type='button'
     >
@@ -190,6 +220,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
   const { setContext, context } = useAISearchContext()
   const { agent } = useClippy()
+  const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
@@ -225,6 +256,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
     playSubmitAnimation(agent)
+    playSend()
 
     setInput('')
     setContext(null)
@@ -423,7 +455,7 @@ function MessageList({
   return (
     <div
       className={cn(
-        'fd-scroll-container flex min-w-0 flex-col overflow-y-auto',
+        'fd-scroll-container supports-timeline-scroll:scroll-fade-effect-y flex min-w-0 flex-col overflow-y-auto',
         className
       )}
       data-lenis-prevent
@@ -469,7 +501,7 @@ const Message = memo(function Message({
   const context = (() => {
     const contextPart = parts.find((part) => part.type === 'data-context')
     if (!(contextPart && 'data' in contextPart)) {
-      return undefined
+      return
     }
     return contextDataSchema.safeParse(contextPart.data).data?.text
   })()
@@ -570,14 +602,6 @@ function AISearchPanel() {
     status: chat.status,
   })
 
-  const panelStyle = useMemo(
-    () => ({
-      maskImage:
-        'linear-gradient(to bottom, transparent, white 1rem, white calc(100% - 1rem), transparent 100%)',
-    }),
-    []
-  )
-
   return (
     <>
       <Presence present={open}>
@@ -592,7 +616,7 @@ function AISearchPanel() {
       <Presence present={open}>
         <div
           className={cn(
-            'fixed inset-x-4 top-4 bottom-28 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:h-[500px] sm:w-[360px]',
+            'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
         >
@@ -602,7 +626,6 @@ function AISearchPanel() {
               className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-3'
               messages={chat.messages}
               status={chat.status}
-              style={panelStyle}
             />
             <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
               <SearchAIInput />

@@ -1,20 +1,17 @@
-import { File, Files, Folder } from 'fumadocs-ui/components/files'
-import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
-import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
-import Balancer from 'react-wrap-balancer'
 import BlogProgressBar from '@/components/blog/progress-bar'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
-import { Mermaid } from '@/components/mdx/mermaid'
+import { WorkJsonLd } from '@/components/json-ld'
+import { mdxComponents } from '@/components/mdx/components'
+import { GitHubCode } from '@/components/mdx/github-code'
 import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
 import { Button } from '@/components/ui/button'
-import { VideoPlayer } from '@/components/ui/video-player'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
@@ -69,16 +66,16 @@ function Header(props: { page: MDXPage }) {
             name={`${page.slugs.join('/')}-title`}
             share='via-blur'
           >
-            <h1 className='typography-hero font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-              <Balancer>{page.data.title ?? 'Untitled'}</Balancer>
+            <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
+              {page.data.title ?? 'Untitled'}
             </h1>
           </ViewTransition>
           <ViewTransition
             name={`${page.slugs.join('/')}-description`}
             share='via-blur'
           >
-            <p className='typography-body mx-auto'>
-              <Balancer>{page.data.description ?? ''}</Balancer>
+            <p className='typography-body mx-auto text-pretty'>
+              {page.data.description ?? ''}
             </p>
           </ViewTransition>
         </div>
@@ -134,24 +131,14 @@ export default async function Page(props: {
           >
             <div className='flex flex-1 flex-col gap-4'>
               <InlineTocBlock items={toc} />
-              <div className='prose min-w-0 flex-1 px-4 pb-4'>
-                <Mdx
-                  components={{
-                    ...defaultMdxComponents,
-                    File,
-                    Files,
-                    Folder,
-                    Tabs,
-                    Tab,
-                    Mermaid,
-                    VideoPlayer,
-                  }}
-                />
+              <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 pb-4'>
+                <Mdx components={{ ...mdxComponents, GitHubCode }} />
               </div>
             </div>
           </ViewAnimation>
         </article>
       </SectionBody>
+      <WorkJsonLd page={page} />
     </>
   )
 }
@@ -174,8 +161,13 @@ export async function generateMetadata(props: {
     title,
     description,
     openGraph: {
+      type: 'article',
       url: `/work/${page.slugs.join('/')}`,
       images: image.url,
+      publishedTime: new Date(page.data.date).toISOString(),
+      modifiedTime: page.data.lastModified
+        ? new Date(page.data.lastModified).toISOString()
+        : new Date(page.data.date).toISOString(),
     },
     twitter: {
       images: image.url,

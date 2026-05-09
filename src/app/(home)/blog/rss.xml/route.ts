@@ -5,14 +5,13 @@ import { getPosts } from '@/lib/source'
 
 export const dynamic = 'force-static'
 
-const escapeForXML = (str: string) => {
-  return str
+const escapeForXML = (str: string): string =>
+  str
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&apos;')
-}
 
 export const GET = () => {
   const feed = createFeed()
@@ -34,7 +33,7 @@ function createFeed(): Feed {
     image: new URL('/banner.png', baseUrl).href,
     favicon: new URL('/favicon.ico', baseUrl).href,
     link: baseUrl.href,
-    feed: new URL('/api/rss.xml', baseUrl).href,
+    feed: new URL('/blog/rss.xml', baseUrl).href,
     updated: new Date(),
   })
 

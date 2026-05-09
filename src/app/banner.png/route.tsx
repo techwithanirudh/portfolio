@@ -1,12 +1,11 @@
 import { ImageResponse } from '@takumi-rs/image-response'
 import { generate, getImageResponseOptions } from '@/app/banner.png/og'
 
-export const GET = async (): Promise<ImageResponse> => {
-  return new ImageResponse(
+export const GET = async (): Promise<ImageResponse> =>
+  new ImageResponse(
     generate({
       title: 'Anirudh',
       subtitle: 'Building web apps and AI experiments',
     }),
     await getImageResponseOptions()
   )
-}

@@ -1,8 +1,8 @@
 'use client'
 
-import { XIcon } from 'lucide-react'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 import type * as React from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
@@ -73,7 +73,7 @@ function DialogContent({
               size='icon-sm'
               variant='ghost'
             >
-              <XIcon />
+              <Icons.close strokeWidth={2} />
               <span className='sr-only'>Close</span>
             </Button>
           </DialogPrimitive.Close>

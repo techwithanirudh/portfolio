@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ContactPageJsonLd } from '@/components/json-ld'
 import {
   SplitSection,
   SplitSectionContent,
@@ -38,6 +39,11 @@ export default function Contact(): React.ReactElement {
         </SplitSectionContent>
       </SplitSection>
       <FAQ />
+      <ContactPageJsonLd
+        description='Contact me for any inquiries, feedback.'
+        path='/contact'
+        title='Contact'
+      />
     </Wrapper>
   )
 }
@@ -46,8 +52,7 @@ export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
   const _params = await props.params
-  const description =
-    'Contact me for any inquiries, feedback. We are here to assist you.'
+  const description = 'Contact me for any inquiries, feedback.'
 
   return createMetadata({
     title: 'Contact',
