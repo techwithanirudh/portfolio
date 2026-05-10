@@ -9,7 +9,7 @@ import {
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
-import { Fragment, type ReactNode, useEffect } from 'react'
+import { Fragment, type ReactNode, useRef } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/section'
 import {
@@ -28,15 +28,16 @@ const renderHighlights = (
   <span className='inline-flex w-full items-center justify-between'>
     <span>
       {highlights.map((node, index) => {
+        const key = `${String(node.content)}-${index}`
         if (node.styles?.highlight) {
           return (
-            <span className='text-primary underline' key={index.toString()}>
+            <span className='text-primary underline' key={key}>
               {node.content}
             </span>
           )
         }
 
-        return <Fragment key={index.toString()}>{node.content}</Fragment>
+        return <Fragment key={key}>{node.content}</Fragment>
       })}
     </span>
 
@@ -58,9 +59,9 @@ const getItemTag = (url: string) => {
   return 'page'
 }
 
-const tagValues = tags
-  .map((tag) => tag.value)
-  .filter((value): value is Exclude<typeof value, undefined> => Boolean(value))
+const tagValues = tags.flatMap((tag) =>
+  tag.value ? [tag.value] : []
+) as Exclude<(typeof tags)[number]['value'], undefined>[]
 
 const scopeParser = parseAsStringLiteral(['all', ...tagValues])
 
@@ -83,18 +84,21 @@ export function SearchClient() {
     locale,
   })
 
+  // Sync URL query param to search state once on mount so that direct links
+  // like /search?q=foo pre-populate the search input. Using a ref guard
+  // instead of useEffect avoids the effect-as-event-handler antipattern.
+  const initializedRef = useRef(false)
+  if (!initializedRef.current && queryParam) {
+    initializedRef.current = true
+    setSearch(queryParam)
+  }
+
   const resultCount =
     query.data !== 'empty' && query.data ? query.data.length : 0
   const handleSearchChange = (value: string) => {
     setSearch(value)
     setQueryParam(value.length > 0 ? value : null)
   }
-
-  useEffect(() => {
-    if (queryParam) {
-      setSearch(queryParam)
-    }
-  }, [queryParam, setSearch])
 
   const hasQuery = search.trim().length > 0
 
@@ -183,7 +187,7 @@ export function SearchClient() {
           data-lenis-prevent
           Item={({ item, onClick }) => (
             <SearchDialogListItem
-              className='rounded-none border-border border-b border-dashed px-3 py-3 last:border-b-0'
+              className='rounded-none border-border border-b border-dashed p-3 last:border-b-0'
               item={item}
               onClick={onClick}
               renderHighlights={(highlights) =>

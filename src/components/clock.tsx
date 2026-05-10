@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -44,14 +44,37 @@ const getParts = (date: Date) => {
   }
 }
 
+interface ClockReducerState {
+  mounted: boolean
+  time: Date
+}
+
+type ClockAction = { type: 'MOUNT' } | { type: 'TICK' }
+
+function clockReducer(
+  state: ClockReducerState,
+  action: ClockAction
+): ClockReducerState {
+  switch (action.type) {
+    case 'MOUNT':
+      return { mounted: true, time: new Date() }
+    case 'TICK':
+      return { ...state, time: new Date() }
+    default:
+      return state
+  }
+}
+
 export function Clock({ className }: ClockProps) {
-  const [mounted, setMounted] = useState(false)
-  const [time, setTime] = useState<Date>(new Date())
+  const [{ mounted, time }, dispatch] = useReducer(clockReducer, {
+    mounted: false,
+    time: new Date(),
+  })
 
   useEffect(() => {
-    setMounted(true)
+    dispatch({ type: 'MOUNT' })
     const interval = setInterval(() => {
-      setTime(new Date())
+      dispatch({ type: 'TICK' })
     }, 1000)
 
     return () => {

@@ -89,8 +89,10 @@ export default async function Page(props: {
   params: Promise<{ slug: string[] }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const params = await props.params
-  const searchParams = await props.searchParams
+  const [params, searchParams] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ])
 
   const tag = params.slug[0]
   if (!tag) {
@@ -163,8 +165,10 @@ export async function generateMetadata(
   props: Props,
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const params = await props.params
-  const searchParams = await props.searchParams
+  const [params, searchParams] = await Promise.all([
+    props.params,
+    props.searchParams,
+  ])
 
   const tag = params.slug[0]
   const pageIndex = searchParams.page

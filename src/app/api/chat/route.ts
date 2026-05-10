@@ -52,9 +52,8 @@ export async function POST(request: Request) {
     const stream = createUIMessageStream({
       originalMessages: messages,
       execute: async ({ writer }) => {
-        const modelMessages = await convertToModelMessages<MyUIMessage>(
-          messages,
-          {
+        const [modelMessages, llms] = await Promise.all([
+          convertToModelMessages<MyUIMessage>(messages, {
             convertDataPart: (part) => {
               if (part.type !== 'data-context') {
                 return
@@ -71,10 +70,9 @@ export async function POST(request: Request) {
               }
             },
             ignoreIncompleteToolCalls: true,
-          }
-        )
-
-        const llms = await getLLMsTxt()
+          }),
+          getLLMsTxt(),
+        ])
 
         const result = streamText({
           model: provider.languageModel('chat-model'),

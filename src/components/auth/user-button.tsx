@@ -41,7 +41,7 @@ export interface UserButtonProps {
 }
 
 export function UserButton({ className, classNames }: UserButtonProps) {
-  const router = useRouter()
+  const { refresh } = useRouter()
   const pathname = usePathname()
   const { data: sessionData, isPending } = useSession()
   const user = sessionData?.user ?? null
@@ -122,7 +122,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
               className={classNames?.content?.menuItem}
               onClick={async () => {
                 await signOut()
-                router.refresh()
+                refresh()
               }}
             >
               <Icons.logOut className='size-4' />

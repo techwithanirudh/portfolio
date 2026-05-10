@@ -1,9 +1,4 @@
-import {
-  type FileObject,
-  printErrors,
-  scanURLs,
-  validateFiles,
-} from 'next-validate-link'
+import { printErrors, scanURLs, validateFiles } from 'next-validate-link'
 import {
   type BlogPage,
   getPosts,
@@ -68,18 +63,15 @@ function getHeadings({ data }: BlogPage | WorkPage): string[] {
   return headings
 }
 
-async function getFiles(pages: BlogPage[] | WorkPage[]) {
-  const files: FileObject[] = []
-  for (const page of pages) {
-    files.push({
+function getFiles(pages: BlogPage[] | WorkPage[]) {
+  return Promise.all(
+    pages.map(async (page) => ({
       data: page.data,
       url: page.url,
       path: page.data.info.fullPath,
       content: await page.data.getText('raw'),
-    })
-  }
-
-  return files
+    }))
+  )
 }
 
 checkLinks().catch((error) => {

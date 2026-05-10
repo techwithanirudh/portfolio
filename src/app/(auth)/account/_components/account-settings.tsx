@@ -73,7 +73,7 @@ export function AccountSettings({ user }: AccountSettingsProps) {
 
 function EditNameDialog({ name }: { name: string }) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
+  const { refresh } = useRouter()
 
   const form = useForm<Account>({
     resolver: zodResolver(AccountSchema),
@@ -94,7 +94,7 @@ function EditNameDialog({ name }: { name: string }) {
 
     toast.success('Name updated successfully.')
     setOpen(false)
-    router.refresh()
+    refresh()
   }
 
   return (

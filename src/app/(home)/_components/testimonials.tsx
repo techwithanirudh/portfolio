@@ -51,7 +51,7 @@ const TestimonialCard = ({
         </div>
         <p className='flex flex-row items-center gap-2 text-sm'>
           <span className='text-muted-foreground'>By</span>
-          <Avatar className='h-6 w-6' outlined={false}>
+          <Avatar className='size-6' outlined={false}>
             <AvatarImage
               alt={testimonial.author.name}
               src={testimonial.author.image}
@@ -73,25 +73,22 @@ const TestimonialCard = ({
 
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
 
   useEffect(() => {
     if (!api) {
       return
     }
 
-    const timer = setTimeout(() => {
+    const timer = setInterval(() => {
       if (api.selectedScrollSnap() + 1 === api.scrollSnapList().length) {
-        setCurrent(0)
         api.scrollTo(0)
       } else {
         api.scrollNext()
-        setCurrent(current + 1)
       }
     }, 2500)
 
-    return () => clearTimeout(timer)
-  }, [api, current])
+    return () => clearInterval(timer)
+  }, [api])
 
   return (
     <Section className='relative w-full pt-10'>

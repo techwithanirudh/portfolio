@@ -11,8 +11,10 @@ import {
 const normalizeWhitespace = (value: string) =>
   value
     .split('\n')
-    .map((line) => line.replace(/[^\S\n]+/g, ' ').trim())
-    .filter(Boolean)
+    .flatMap((line) => {
+      const trimmed = line.replace(/[^\S\n]+/g, ' ').trim()
+      return trimmed ? [trimmed] : []
+    })
     .join('\n')
 
 const extractContent = (content: Content) => {

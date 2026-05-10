@@ -4,11 +4,16 @@ import Image from 'next/image'
 import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 
-export function IframeEmbed({ className, ...props }: ComponentProps<'iframe'>) {
+export function IframeEmbed({
+  className,
+  title = 'Embedded content',
+  ...props
+}: ComponentProps<'iframe'>) {
   return (
     <div className='relative my-[1.25em]'>
       <iframe
         className={cn('aspect-video w-full rounded-xl', className)}
+        title={title}
         {...props}
       />
       <div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10' />

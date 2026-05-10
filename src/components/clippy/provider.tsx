@@ -4,7 +4,7 @@ import type { initAgent } from 'clippyjs'
 import {
   createContext,
   type ReactNode,
-  useContext,
+  use,
   useEffect,
   useMemo,
   useRef,
@@ -19,7 +19,7 @@ const ClippyContext = createContext<
 >(undefined)
 
 export function useClippy() {
-  const ctx = useContext(ClippyContext)
+  const ctx = use(ClippyContext)
   if (!ctx) {
     throw new Error('useClippy must be used within ClippyProvider')
   }
@@ -78,7 +78,7 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
     currentAgent._el.addEventListener('mousedown', blockDrag, true)
     currentAgent._el.addEventListener('touchstart', blockDrag, {
       capture: true,
-      passive: false,
+      passive: true,
     })
 
     return () => {

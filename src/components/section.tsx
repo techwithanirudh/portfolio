@@ -8,7 +8,7 @@ type SectionProps = {
 } & HTMLAttributes<HTMLDivElement>
 
 const Cross = () => (
-  <div className='relative h-6 w-6'>
+  <div className='relative size-6'>
     <div className='absolute left-3 h-6 w-px bg-background' />
     <div className='absolute top-3 h-px w-6 bg-background' />
 

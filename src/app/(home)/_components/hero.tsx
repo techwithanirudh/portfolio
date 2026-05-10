@@ -88,16 +88,19 @@ const Hero = () => {
           </Link>
         </ViewAnimation>
 
-        <div className='flex items-center space-x-4'>
-          {navItems
-            .filter((item) => item.type === 'icon')
-            .map((item, i) => (
+        <div className='flex items-center gap-x-4'>
+          {navItems.reduce<React.ReactNode[]>((acc, item) => {
+            if (item.type !== 'icon') {
+              return acc
+            }
+            const i = acc.length
+            acc.push(
               <ViewAnimation
                 className='flex items-center'
                 delay={0.1 + i * 0.05}
                 duration={0.25}
                 initial={{ opacity: 0, translateY: -6, scale: 0.95 }}
-                key={i.toString()}
+                key={item.url}
                 whileInView={{ opacity: 1, translateY: 0, scale: 1 }}
               >
                 <Link
@@ -114,7 +117,9 @@ const Hero = () => {
                   <span className='sr-only'>{item.text}</span>
                 </Link>
               </ViewAnimation>
-            ))}
+            )
+            return acc
+          }, [])}
         </div>
       </div>
     </Section>

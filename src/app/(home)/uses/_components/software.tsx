@@ -35,7 +35,7 @@ interface SoftwareGridProps {
 }
 
 export function SoftwareGrid({ items }: SoftwareGridProps) {
-  const sortedItems = [...items].sort(
+  const sortedItems = items.toSorted(
     (a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
   )
 

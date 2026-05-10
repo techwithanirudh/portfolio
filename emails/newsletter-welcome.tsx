@@ -107,7 +107,7 @@ export default function NewsletterWelcomeEmail({
                 Thanks for subscribing to my newsletter! I&apos;m excited to
                 share my thoughts and ideas with you. You can expect an email
                 every few weeks, and I might occasionally share newsletter-only
-                content as well—so stay tuned!
+                content as well, so stay tuned!
               </Text>
               <Text className='text-lg leading-8'>
                 Here are a few popular posts from the past few months that you

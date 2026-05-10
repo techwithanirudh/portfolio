@@ -39,9 +39,8 @@ function ClippyTriggerInner() {
     agent._queue._onEmptyCallback = onQueueEmpty
 
     const { x, y } = getPosition()
-    agent._el.style.left = `${x}px`
-    agent._el.style.top = `${y}px`
-    agent._el.style.zIndex = '45'
+    // Batch all style mutations in one cssText assignment to avoid multiple reflows
+    agent._el.style.cssText += `left:${x}px;top:${y}px;z-index:45;`
     agent.show(true)
 
     const handleClick = (event: Event) => {
@@ -52,8 +51,8 @@ function ClippyTriggerInner() {
 
     const handleResize = () => {
       const { x, y } = getPosition()
-      agent._el.style.left = `${x}px`
-      agent._el.style.top = `${y}px`
+      // Batch both style mutations together
+      agent._el.style.cssText += `left:${x}px;top:${y}px;`
     }
 
     agent._el.addEventListener('click', handleClick)

@@ -6,15 +6,15 @@ import { Button } from '@/components/ui/button'
 import { signOut } from '@/lib/auth-client'
 
 export function AccountLogoutButton() {
-  const router = useRouter()
+  const { push, refresh } = useRouter()
 
   return (
     <Button
       className='self-start'
       onClick={async () => {
         await signOut()
-        router.push('/')
-        router.refresh()
+        push('/')
+        refresh()
       }}
       shape='square'
       variant='destructive'

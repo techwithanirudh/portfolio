@@ -21,7 +21,7 @@ export const GuestbookReactionSchema = z.object({
   emoji: z.string().min(1).max(12),
 })
 
-export const GuestbookEntryIdSchema = z.object({
+const GuestbookEntryIdSchema = z.object({
   entryId: z.number().int().positive(),
 })
 

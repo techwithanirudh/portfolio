@@ -10,6 +10,9 @@ export const retryWithBackoff = async <T>(
 ): Promise<T> => {
   let lastError: unknown
 
+  // Sequential await inside the loop is intentional: each retry must wait for
+  // the previous attempt to fail (and its back-off delay to elapse) before
+  // trying again. Parallelising with Promise.all would defeat the purpose.
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
       return await task()

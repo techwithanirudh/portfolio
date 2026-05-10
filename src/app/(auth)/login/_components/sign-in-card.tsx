@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useTransition } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,7 +14,7 @@ import { signIn } from '@/lib/auth-client'
 import { toast } from '@/lib/toast'
 
 const Cross = () => (
-  <div className='relative h-6 w-6'>
+  <div className='relative size-6'>
     <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
       <Icons.add className='size-5 text-border/70 dark:text-border' />
     </div>
@@ -26,23 +26,19 @@ export interface SignInCardProps {
 }
 
 export function SignInCard({ redirectTo }: SignInCardProps) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
 
-  const signInWithProvider = async (provider: 'google' | 'github') => {
-    if (isLoading) {
-      return
-    }
-
-    try {
-      setIsLoading(true)
-      await signIn.social({
-        provider,
-        callbackURL: redirectTo,
-      })
-    } catch {
-      toast.error('Sign in failed. Please try again.')
-      setIsLoading(false)
-    }
+  const signInWithProvider = (provider: 'google' | 'github') => {
+    startTransition(async () => {
+      try {
+        await signIn.social({
+          provider,
+          callbackURL: redirectTo,
+        })
+      } catch {
+        toast.error('Sign in failed. Please try again.')
+      }
+    })
   }
 
   return (
@@ -65,14 +61,14 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
             <div className='flex w-full flex-col items-center justify-between gap-2'>
               <Button
                 className='w-full gap-2'
-                disabled={isLoading}
+                disabled={isPending}
                 onClick={() => {
                   signInWithProvider('google')
                 }}
                 shape='square'
                 variant='dashed'
               >
-                {isLoading ? (
+                {isPending ? (
                   <Icons.spinner className='size-4 animate-spin' />
                 ) : (
                   <Icons.google />
@@ -81,14 +77,14 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
               </Button>
               <Button
                 className='w-full gap-2'
-                disabled={isLoading}
+                disabled={isPending}
                 onClick={() => {
                   signInWithProvider('github')
                 }}
                 shape='square'
                 variant='dashed'
               >
-                {isLoading ? (
+                {isPending ? (
                   <Icons.spinner className='size-4 animate-spin' />
                 ) : (
                   <Icons.github />

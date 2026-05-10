@@ -22,7 +22,7 @@ export function SearchRedirectInput({
   placeholder = 'Search...',
   className,
 }: SearchRedirectInputProps) {
-  const router = useRouter()
+  const { push } = useRouter()
   const [value, setValue] = useState('')
   const hasValue = value.trim().length > 0
 
@@ -34,9 +34,9 @@ export function SearchRedirectInput({
       }
 
       const params = new URLSearchParams({ tag, q: trimmedValue })
-      router.push(`/search?${params.toString()}`)
+      push(`/search?${params.toString()}`)
     },
-    [router, tag]
+    [push, tag]
   )
 
   return (

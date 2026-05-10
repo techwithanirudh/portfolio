@@ -210,7 +210,7 @@ export function AIContactForm({
             {isExecuting ? (
               <>
                 <Icons.spinner className='size-3.5 animate-spin' />
-                sending...
+                sending…
               </>
             ) : (
               <>

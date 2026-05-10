@@ -37,9 +37,9 @@ export const GuestbookEntryCard = ({
   isAdmin,
   isSignedIn,
 }: GuestbookEntryCardProps) => {
-  const router = useRouter()
+  const { refresh } = useRouter()
   const [isEditing, setIsEditing] = useState(false)
-  const [draftMessage, setDraftMessage] = useState(entry.message)
+  const [draftMessage, setDraftMessage] = useState('')
   const [isBanModalOpen, setIsBanModalOpen] = useState(false)
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
@@ -53,7 +53,7 @@ export const GuestbookEntryCard = ({
     },
     onSuccess: () => {
       setIsEditing(false)
-      router.refresh()
+      refresh()
       toast.success('Guestbook entry updated.')
     },
   })
@@ -68,7 +68,7 @@ export const GuestbookEntryCard = ({
     onSuccess: () => {
       setIsEditing(false)
       setIsDeleteModalOpen(false)
-      router.refresh()
+      refresh()
       toast.success('Guestbook entry deleted.')
     },
   })
@@ -83,7 +83,7 @@ export const GuestbookEntryCard = ({
     onSuccess: () => {
       setIsEditing(false)
       setIsBanModalOpen(false)
-      router.refresh()
+      refresh()
       toast.success(
         entry.banned ? `Unbanned ${entry.name}.` : `Banned ${entry.name}.`
       )
@@ -165,7 +165,7 @@ export const GuestbookEntryCard = ({
               />
             ) : null}
           </h3>
-          <p className='text-muted-foreground text-xs'>
+          <p className='text-muted-foreground text-xs' suppressHydrationWarning>
             {formatDistanceToNow(new Date(entry.createdAt), {
               addSuffix: true,
             })}

@@ -3,7 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { startTransition, useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
@@ -36,31 +36,37 @@ export function ThemeToggle({
   mode?: 'light-dark' | 'light-dark-system'
 }) {
   const { setTheme, theme, resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
   const playToggle = useSound(toggleOn)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const container = cn(
     'inline-flex items-center rounded-full border p-1',
     className
   )
 
-  const handleChangeTheme = async (theme: Theme) => {
+  const handleChangeTheme = (newTheme: Theme) => {
     playToggle()
 
-    function update() {
-      setTheme(theme)
-    }
+    const update = () => setTheme(newTheme)
 
-    if (document.startViewTransition && theme !== resolvedTheme) {
+    // document.startViewTransition is used here intentionally for the visual
+    // theme-switch animation. React's startTransition handles the state update
+    // inside so React stays in control of the theme change itself.
+    if (document.startViewTransition && newTheme !== resolvedTheme) {
       document.documentElement.style.viewTransitionName = 'theme-transition'
-      await document.startViewTransition(update).finished
-      document.documentElement.style.viewTransitionName = ''
+      document
+        .startViewTransition(() => {
+          startTransition(update)
+        })
+        .finished.then(() => {
+          document.documentElement.style.viewTransitionName = ''
+        })
     } else {
-      update()
+      startTransition(update)
     }
   }
 
@@ -73,6 +79,7 @@ export function ThemeToggle({
         className={container}
         data-theme-toggle=''
         onClick={() => handleChangeTheme(value === 'light' ? 'dark' : 'light')}
+        suppressHydrationWarning
         type='button'
       >
         {full.map(([key, Icon]) => {

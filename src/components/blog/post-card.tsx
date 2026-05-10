@@ -20,7 +20,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   slugs: _slugs,
 }) => (
   <Link
-    className='block bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
+    className='block bg-card/50 p-6 transition-colors hover:bg-card/80'
     href={url}
   >
     <div className='flex flex-col gap-2'>
@@ -34,7 +34,10 @@ export const PostCard: React.FC<PostCardProps> = ({
           {author}
         </span>
         <span>•</span>
-        <span className='inline-flex items-center gap-1'>
+        <span
+          className='inline-flex items-center gap-1'
+          suppressHydrationWarning
+        >
           <Icons.calendar className='icon-pop size-4' />
           {date}
         </span>

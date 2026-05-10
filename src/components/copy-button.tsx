@@ -7,7 +7,7 @@ import {
 } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import type { HTMLMotionProps, Variants } from 'motion/react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, m } from 'motion/react'
 import type { ComponentProps } from 'react'
 import { Button } from '@/components/ui/button'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
@@ -61,9 +61,9 @@ export function CopyStateIcon({
 
   return (
     <AnimatePresence initial={false} mode='popLayout'>
-      <motion.span key={state} {...motionIconProps}>
+      <m.span key={state} {...motionIconProps}>
         {iconByState[state]}
-      </motion.span>
+      </m.span>
     </AnimatePresence>
   )
 }

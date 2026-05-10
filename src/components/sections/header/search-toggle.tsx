@@ -77,7 +77,7 @@ export const LargeSearchToggle = ({
         {hotKey.map((k, i) => (
           <kbd
             className='rounded-md border bg-fd-background px-1.5'
-            key={i.toString()}
+            key={typeof k.key === 'string' ? k.key : i}
           >
             {k.display}
           </kbd>

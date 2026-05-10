@@ -56,17 +56,13 @@ const updateOptimisticReactions = (
     ? Math.max(existing.count - 1, 0)
     : existing.count + 1
 
-  const updated = state.reactions
-    .map((item) =>
+  const updated = state.reactions.flatMap((item) => {
+    const next =
       item.emoji === emoji
-        ? {
-            ...item,
-            count: nextCount,
-            reacted: nextReacted,
-          }
+        ? { ...item, count: nextCount, reacted: nextReacted }
         : item
-    )
-    .filter((item) => item.count > 0)
+    return next.count > 0 ? [next] : []
+  })
 
   return { reactions: updated }
 }

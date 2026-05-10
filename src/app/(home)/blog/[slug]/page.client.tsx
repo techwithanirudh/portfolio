@@ -100,14 +100,14 @@ export function PostComments({
   slug: string
   className?: string
 }) {
-  const router = useRouter()
+  const { push } = useRouter()
 
   return (
     <Comments
       auth={{
         type: 'api',
         signIn: () => {
-          router.push(getLoginUrl(`/blog/${slug}`))
+          push(getLoginUrl(`/blog/${slug}`))
         },
       }}
       className={cn('w-full', className)}

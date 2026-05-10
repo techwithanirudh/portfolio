@@ -30,7 +30,7 @@ export const MessageMetadata = ({
         {reasoning ? (
           <>
             <Icons.brain className='size-4' />
-            <Shimmer>Sniffing around...</Shimmer>
+            <Shimmer>Sniffing around…</Shimmer>
           </>
         ) : (
           <Icons.pawPrint className='size-4 animate-spin text-fd-primary' />
@@ -43,9 +43,9 @@ export const MessageMetadata = ({
 
   const sources = Array.from(
     new Map(
-      parts
-        .filter((part) => part.type === 'source-url')
-        .map((part) => [part.url, part])
+      parts.flatMap((part) =>
+        part.type === 'source-url' ? [[part.url, part] as const] : []
+      )
     ).values()
   )
 

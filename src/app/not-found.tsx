@@ -10,7 +10,7 @@ export default function NotFound() {
       <div className='container relative mx-auto flex min-h-full flex-1 items-center justify-center border-border border-x border-dashed'>
         <div className='flex w-fit flex-col items-center justify-center gap-4 px-4'>
           <div className='flex flex-col items-center text-center sm:flex-row'>
-            <h1 className='border-border font-extrabold text-2xl text-foreground tracking-tight sm:mr-6 sm:border-r sm:pr-6 sm:text-3xl'>
+            <h1 className='border-border font-semibold text-2xl text-foreground tracking-tight sm:mr-6 sm:border-r sm:pr-6 sm:text-3xl'>
               404
             </h1>
             <h2 className='mt-2 text-pretty text-muted-foreground sm:mt-0'>

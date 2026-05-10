@@ -222,6 +222,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
   const { agent } = useClippy()
   const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
+  const inputRef = useRef<HTMLTextAreaElement>(null)
   const [input, setInput] = useState(
     () => localStorage.getItem(StorageKeyInput) ?? ''
   )
@@ -262,6 +263,9 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     setContext(null)
     localStorage.removeItem(StorageKeyInput)
 
+    // Re-focus input after sending so the user can type the next message
+    inputRef.current?.focus()
+
     await sendMessage({
       parts: [
         {
@@ -287,12 +291,6 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     saveInput(value)
   }
 
-  useEffect(() => {
-    if (isLoading) {
-      document.getElementById('nd-ai-input')?.focus()
-    }
-  }, [isLoading])
-
   return (
     <form
       {...props}
@@ -302,7 +300,6 @@ function SearchAIInput(props: ComponentProps<'form'>) {
       <div className='flex flex-1 flex-col'>
         <PromptContext context={context} onClear={() => setContext(null)} />
         <TextInput
-          autoFocus
           className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
           disabled={isLoading}
           onChange={(event) => handleInputChange(event.target.value)}
@@ -312,6 +309,7 @@ function SearchAIInput(props: ComponentProps<'form'>) {
             }
           }}
           placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
+          ref={inputRef}
           value={input}
         />
       </div>
@@ -528,12 +526,11 @@ const Message = memo(function Message({
         <MessageMetadata inProgress={isInProgress} parts={parts} />
         {parts.map((part, index) => {
           if (part.type === 'text') {
+            // Text parts have no stable per-part ID; we combine message id,
+            // part type, and positional index as the most stable key available.
+            const textKey = `${message.id}-${part.type}-${index}`
             return (
-              <div
-                className='prose text-sm'
-                // biome-ignore lint/suspicious/noArrayIndexKey: message parts are rendered in source order and don't expose a stable id
-                key={`${message.id}-text-${index}`}
-              >
+              <div className='prose text-sm' key={textKey}>
                 <Markdown text={part.text} />
               </div>
             )

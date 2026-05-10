@@ -44,7 +44,7 @@ export default async function Page(props: {
             </div>
             <div>
               <p className='mb-1 text-muted-foreground text-sm'>Created At</p>
-              <p className='font-medium'>
+              <p className='font-medium' suppressHydrationWarning>
                 {new Date(page.data.date).toDateString()}
               </p>
             </div>
@@ -107,7 +107,7 @@ export async function generateMetadata(props: {
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return getPosts()
-    .map((page) => ({ slug: page.slugs[0] }))
-    .filter((p): p is { slug: string } => p.slug !== undefined)
+  return getPosts().flatMap((page) =>
+    page.slugs[0] === undefined ? [] : [{ slug: page.slugs[0] }]
+  )
 }

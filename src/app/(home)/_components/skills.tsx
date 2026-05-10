@@ -45,7 +45,7 @@ const Skills = () => (
               key={feature.id}
               whileInView={{ opacity: 1 }}
             >
-              <feature.Icon className='icon-tilt h-8 w-8' strokeWidth={1} />
+              <feature.Icon className='icon-tilt size-8' strokeWidth={1} />
               <div className='flex flex-col'>
                 <h3 className='text-balance text-xl tracking-tight'>
                   {feature.title}
@@ -59,7 +59,7 @@ const Skills = () => (
         </div>
 
         <ViewAnimation
-          className='divider-top-dashed px-6 py-6'
+          className='divider-top-dashed p-6'
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >

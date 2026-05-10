@@ -27,9 +27,9 @@ export const TagCard = ({
         size={18}
       />
       <span className='text-card-foreground'>{name}</span>
-      {displayCount && (
+      {displayCount ? (
         <span className='ml-auto text-muted-foreground'>({posts.length})</span>
-      )}
+      ) : null}
     </Link>
   )
 }

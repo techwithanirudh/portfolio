@@ -28,7 +28,7 @@ import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
 export const GuestbookForm = () => {
-  const router = useRouter()
+  const { refresh } = useRouter()
   const { data: session, isPending } = useSession()
   const user = session?.user
   const [step, setStep] = useState<1 | 2>(1)
@@ -49,7 +49,7 @@ export const GuestbookForm = () => {
           setStep(1)
           signaturePad.current?.clear()
           setFormKey((current) => current + 1)
-          router.refresh()
+          refresh()
         },
         onError: ({ error }) => {
           if (form.formState.errors.message) {

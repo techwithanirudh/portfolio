@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useReducedMotion } from 'motion/react'
+import { m, useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
 
 interface ViewAnimationProps {
@@ -38,7 +38,7 @@ export const ViewAnimation = ({
   const normalizedDelay = delay ? Math.min(delay, 0.2) : delay
 
   return (
-    <motion.div
+    <m.div
       animate={animate}
       className={className}
       initial={initialState}
@@ -47,6 +47,6 @@ export const ViewAnimation = ({
       whileInView={whileInViewState}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }

@@ -53,10 +53,10 @@ const navItemVariants = cva('[&_svg]:size-4', {
   },
 })
 
-const renderNavTitle = (
-  nav: HomeLayoutProps['nav'],
-  props: ComponentProps<'a'>
-): ReactNode => {
+const NavTitle = ({
+  nav,
+  ...props
+}: { nav: HomeLayoutProps['nav'] } & ComponentProps<'a'>): ReactNode => {
   const title = nav?.title
   const href = nav?.url ?? '/'
 
@@ -75,12 +75,27 @@ const renderNavTitle = (
   )
 }
 
+const DEFAULT_NAV: HomeLayoutProps['nav'] = {}
+const DEFAULT_THEME_SWITCH: HomeLayoutProps['themeSwitch'] = {}
+
+const getItemKey = (item: LinkItemType): string => {
+  if ('url' in item) {
+    return item.url ?? item.type ?? ''
+  }
+  if ('text' in item) {
+    return String(item.text)
+  }
+  return item.type
+}
+
+const DEFAULT_SEARCH_TOGGLE: HomeLayoutProps['searchToggle'] = {}
+
 export const Header = ({
-  nav = {},
+  nav = DEFAULT_NAV,
   links,
   githubUrl,
-  themeSwitch = {},
-  searchToggle = {},
+  themeSwitch = DEFAULT_THEME_SWITCH,
+  searchToggle = DEFAULT_SEARCH_TOGGLE,
   className,
 }: HomeLayoutProps & { className?: string }) => {
   const { navItems, menuItems } = useMemo(() => {
@@ -115,26 +130,28 @@ export const Header = ({
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            {renderNavTitle(nav, {
-              className:
-                'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
-            })}
+            <NavTitle
+              className='inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]'
+              nav={nav}
+            />
           </ViewAnimation>
           {nav.children}
         </div>
         <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-md:hidden'>
-          {navItems
-            .filter((item) => !isSecondary(item))
-            .map((item, i) => (
-              <ViewAnimation
-                delay={0.05 * i}
-                initial={{ opacity: 0, translateY: -6 }}
-                key={i.toString()}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
-                <NavigationMenuLinkItem className='text-sm' item={item} />
-              </ViewAnimation>
-            ))}
+          {navItems.flatMap((item, i) =>
+            isSecondary(item)
+              ? []
+              : [
+                  <ViewAnimation
+                    delay={0.05 * i}
+                    initial={{ opacity: 0, translateY: -6 }}
+                    key={`nav-primary-${item.type}-${getItemKey(item)}`}
+                    whileInView={{ opacity: 1, translateY: 0 }}
+                  >
+                    <NavigationMenuLinkItem className='text-sm' item={item} />
+                  </ViewAnimation>,
+                ]
+          )}
         </ul>
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
           <ViewAnimation
@@ -167,15 +184,19 @@ export const Header = ({
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <ul className='flex flex-row items-center gap-2 empty:hidden'>
-              {navItems.filter(isSecondary).map((item, i) => (
-                <NavigationMenuLinkItem
-                  className={cn(
-                    item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
-                  )}
-                  item={item}
-                  key={i.toString()}
-                />
-              ))}
+              {navItems.flatMap((item) =>
+                isSecondary(item)
+                  ? [
+                      <NavigationMenuLinkItem
+                        className={cn(
+                          item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
+                        )}
+                        item={item}
+                        key={`nav-secondary-${item.type}-${getItemKey(item)}`}
+                      />,
+                    ]
+                  : []
+              )}
             </ul>
           </ViewAnimation>
         </div>
@@ -217,23 +238,31 @@ export const Header = ({
             </NavigationMenuTrigger>
           </ViewAnimation>
           <NavigationMenuContent className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end'>
-            {menuItems
-              .filter((item) => !isSecondary(item))
-              .map((item, i) => (
-                <MobileNavigationMenuLinkItem
-                  className='sm:hidden'
-                  item={item}
-                  key={i.toString()}
-                />
-              ))}
+            {menuItems.flatMap((item) =>
+              isSecondary(item)
+                ? []
+                : [
+                    <MobileNavigationMenuLinkItem
+                      className='sm:hidden'
+                      item={item}
+                      key={`menu-primary-${item.type}-${getItemKey(item)}`}
+                    />,
+                  ]
+            )}
             <div className='-ms-1.5 flex flex-row items-center gap-2 max-sm:mt-2'>
-              {menuItems.filter(isSecondary).map((item, i) => (
-                <MobileNavigationMenuLinkItem
-                  className={cn(item.type === 'icon' && '-mx-1 first:ms-0')}
-                  item={item}
-                  key={i.toString()}
-                />
-              ))}
+              {menuItems.flatMap((item) =>
+                isSecondary(item)
+                  ? [
+                      <MobileNavigationMenuLinkItem
+                        className={cn(
+                          item.type === 'icon' && '-mx-1 first:ms-0'
+                        )}
+                        item={item}
+                        key={`menu-secondary-${item.type}-${getItemKey(item)}`}
+                      />,
+                    ]
+                  : []
+              )}
               {themeSwitch.enabled !== false &&
                 (themeSwitch.component ?? (
                   <ThemeToggle mode={themeSwitch?.mode} />
@@ -407,8 +436,11 @@ const MobileNavigationMenuLinkItem = ({
             header
           )}
         </p>
-        {item.items.map((child, i) => (
-          <MobileNavigationMenuLinkItem item={child} key={i.toString()} />
+        {item.items.map((child) => (
+          <MobileNavigationMenuLinkItem
+            item={child}
+            key={`menu-child-${child.type}-${getItemKey(child)}`}
+          />
         ))}
       </div>
     )

@@ -52,9 +52,9 @@ export const viewport: Viewport = {
 }
 
 const baseUrlString = baseUrl.toString()
-const socialUrls = socials
-  .map((social) => social.url)
-  .filter((url) => url.startsWith('http'))
+const socialUrls = socials.flatMap((social) =>
+  social.url.startsWith('http') ? [social.url] : []
+)
 
 const jsonLd = {
   '@context': 'https://schema.org',

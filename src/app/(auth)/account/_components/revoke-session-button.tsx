@@ -9,10 +9,10 @@ import { revokeSessionAction } from '../actions/revoke-session'
 
 export function RevokeSessionButton(props: { token: string }) {
   const { token } = props
-  const router = useRouter()
+  const { refresh } = useRouter()
   const { execute, status } = useAction(revokeSessionAction, {
     onSuccess: () => {
-      router.refresh()
+      refresh()
       toast.success('Session revoked.')
     },
     onError: ({ error }) => {

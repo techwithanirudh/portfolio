@@ -65,7 +65,7 @@ const EventDate = ({ date }: { date: string | null }) => {
   }
 
   return (
-    <div className='shrink-0 text-muted-foreground'>
+    <div className='shrink-0 text-muted-foreground' suppressHydrationWarning>
       {new Date(date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
@@ -74,6 +74,11 @@ const EventDate = ({ date }: { date: string | null }) => {
     </div>
   )
 }
+
+const commitListFormat = new Intl.ListFormat('en', {
+  style: 'long',
+  type: 'conjunction',
+})
 
 const getRepoName = (event: GitHubEvent) => event.repo?.name ?? 'a repository'
 
@@ -90,10 +95,7 @@ const PushEvent = ({
   let description = `Pushed commits to ${repoName}`
 
   if (commitCount > 0) {
-    const list = new Intl.ListFormat('en', {
-      style: 'long',
-      type: 'conjunction',
-    }).format(commitMessages)
+    const list = commitListFormat.format(commitMessages)
 
     const commitLabel = commitCount === 1 ? 'commit' : 'commits'
     description = `Pushed ${commitCount} ${commitLabel} to ${repoName}: ${list}`

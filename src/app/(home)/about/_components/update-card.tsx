@@ -53,7 +53,10 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
           {author}
         </span>
         <span>•</span>
-        <span className='inline-flex items-center gap-1'>
+        <span
+          className='inline-flex items-center gap-1'
+          suppressHydrationWarning
+        >
           <Icons.calendar className='icon-pop size-4' />
           {date}
         </span>

@@ -37,7 +37,7 @@ const NAV_SOUND_THROTTLE_MS = 60
 
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
-  const router = useRouter()
+  const { push } = useRouter()
   const { setTheme, theme } = useTheme()
   const playOpen = useSound(notification)
   const playConfirm = useSound(click)
@@ -129,13 +129,13 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       return
     }
 
-    router.push(item.url)
+    push(item.url)
   }
 
   const go = (url: string) => {
     playConfirm()
     close()
-    router.push(url)
+    push(url)
   }
 
   const renderCommandItem = (item: CommandItemData) => (

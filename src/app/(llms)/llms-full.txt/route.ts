@@ -20,31 +20,31 @@ async function getFullText() {
   const allPosts = getSortedByDatePosts()
   const allWork = getSortedByDateWork()
 
-  const workContent = await Promise.all(
-    allWork.map(async (item) => {
-      const page = workSource.getPage(item.slugs)
-      if (!page) {
-        return ''
-      }
+  const [workContent, blogContent, commitHistory] = await Promise.all([
+    Promise.all(
+      allWork.map(async (item) => {
+        const page = workSource.getPage(item.slugs)
+        if (!page) {
+          return ''
+        }
 
-      const content = await getWorkLLMText(page, { level: 'section' })
-      return content
-    })
-  )
+        const content = await getWorkLLMText(page, { level: 'section' })
+        return content
+      })
+    ),
+    Promise.all(
+      allPosts.map(async (item) => {
+        const page = post.getPage(item.slugs)
+        if (!page) {
+          return ''
+        }
 
-  const blogContent = await Promise.all(
-    allPosts.map(async (item) => {
-      const page = post.getPage(item.slugs)
-      if (!page) {
-        return ''
-      }
-
-      const content = await getBlogLLMText(page, { level: 'section' })
-      return content
-    })
-  )
-
-  const commitHistory = await getCommitHistoryText()
+        const content = await getBlogLLMText(page, { level: 'section' })
+        return content
+      })
+    ),
+    getCommitHistoryText(),
+  ])
 
   return `<SYSTEM>This document contains comprehensive information about ${owner}'s professional profile, portfolio, and blog content. It includes personal details, work experience, technical skills, projects, testimonials, and all published blog posts and work projects. This data is formatted for consumption by Large Language Models (LLMs) to provide accurate and up-to-date information about ${owner}'s background, skills, and expertise.</SYSTEM>
 

@@ -2,6 +2,7 @@
 
 import { ProgressProvider } from '@bprogress/next/app'
 import { SoundProvider } from '@web-kits/audio/react'
+import { domAnimation, LazyMotion } from 'motion/react'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
@@ -19,30 +20,32 @@ export function Provider({
   children: ReactNode
 }): React.ReactElement {
   return (
-    <SoundProvider>
-      <AISearch>
-        <ProgressProvider
-          color='var(--color-primary)'
-          delay={200}
-          height='2px'
-          options={{
-            showSpinner: false,
-          }}
-          shallowRouting
-          startOnLoad
-          stopDelay={200}
-        >
-          <TooltipProvider>
-            <NuqsAdapter>{children}</NuqsAdapter>
-          </TooltipProvider>
-        </ProgressProvider>
-        <AISearchTrigger />
-        <MobileNav />
-      </AISearch>
-      <Analytics />
-      <Toaster position='top-center' />
-      <TailwindIndicator />
-      <SmoothCursor />
-    </SoundProvider>
+    <LazyMotion features={domAnimation}>
+      <SoundProvider>
+        <AISearch>
+          <ProgressProvider
+            color='var(--color-primary)'
+            delay={200}
+            height='2px'
+            options={{
+              showSpinner: false,
+            }}
+            shallowRouting
+            startOnLoad
+            stopDelay={200}
+          >
+            <TooltipProvider>
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </TooltipProvider>
+          </ProgressProvider>
+          <AISearchTrigger />
+          <MobileNav />
+        </AISearch>
+        <Analytics />
+        <Toaster position='top-center' />
+        <TailwindIndicator />
+        <SmoothCursor />
+      </SoundProvider>
+    </LazyMotion>
   )
 }

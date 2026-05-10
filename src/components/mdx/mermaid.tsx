@@ -1,19 +1,26 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { use, useEffect, useId, useState } from 'react'
+import { use, useEffect, useId, useRef, useState } from 'react'
 
 export function Mermaid({ chart }: { chart: string }) {
-  const [mounted, setMounted] = useState(false)
+  const mountedRef = useRef(false)
+  const [, forceUpdate] = useState(0)
 
   useEffect(() => {
-    setMounted(true)
+    if (!mountedRef.current) {
+      mountedRef.current = true
+      forceUpdate((n) => n + 1)
+    }
   }, [])
 
-  if (!mounted) {
-    return
-  }
-  return <MermaidContent chart={chart} />
+  return (
+    // suppressHydrationWarning prevents the hydration mismatch flash
+    // caused by server rendering nothing and client rendering the chart
+    <div suppressHydrationWarning>
+      {mountedRef.current ? <MermaidContent chart={chart} /> : null}
+    </div>
+  )
 }
 
 const cache = new Map<string, Promise<unknown>>()

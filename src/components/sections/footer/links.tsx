@@ -34,17 +34,11 @@ export const Links = () => {
       title: 'Navigate',
       items: [
         { href: '/', children: 'Home' },
-        ...navItems
-          .filter(
-            (item) =>
-              item.type !== 'menu' &&
-              item.type !== 'custom' &&
-              item.type !== 'icon'
-          )
-          .map((item) => ({
-            href: item.url,
-            children: item.text,
-          })),
+        ...navItems.flatMap((item) =>
+          item.type !== 'menu' && item.type !== 'custom' && item.type !== 'icon'
+            ? [{ href: item.url, children: item.text }]
+            : []
+        ),
       ],
     },
     {

@@ -30,7 +30,10 @@ export const Footer = () => (
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <p className='whitespace-nowrap text-muted-foreground text-sm'>
+          <p
+            className='whitespace-nowrap text-muted-foreground text-sm'
+            suppressHydrationWarning
+          >
             &copy; {new Date().getFullYear()} {owner}. All rights reserved.
           </p>
         </ViewAnimation>

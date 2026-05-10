@@ -16,13 +16,13 @@ export function BackButton({
   size,
   ...props
 }: BackButtonProps) {
-  const router = useRouter()
+  const { back } = useRouter()
   const resolvedSize = iconOnly ? 'icon' : (size ?? 'sm')
 
   return (
     <Button
       aria-label={iconOnly ? label : undefined}
-      onClick={() => router.back()}
+      onClick={() => back()}
       size={resolvedSize}
       variant='ghost'
       {...props}

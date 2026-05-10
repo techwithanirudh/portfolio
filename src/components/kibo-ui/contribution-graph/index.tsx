@@ -18,7 +18,7 @@ import {
   Fragment,
   type HTMLAttributes,
   type ReactNode,
-  useContext,
+  use,
   useMemo,
 } from 'react'
 import { cn } from '@/lib/utils'
@@ -92,7 +92,7 @@ const ContributionGraphContext =
   createContext<ContributionGraphContextType | null>(null)
 
 const useContributionGraph = () => {
-  const context = useContext(ContributionGraphContext)
+  const context = use(ContributionGraphContext)
 
   if (!context) {
     throw new Error(
@@ -109,7 +109,7 @@ const fillHoles = (activities: Activity[]): Activity[] => {
   }
 
   // Sort activities by date to ensure correct date range
-  const sortedActivities = [...activities].sort((a, b) =>
+  const sortedActivities = activities.toSorted((a, b) =>
     a.date.localeCompare(b.date)
   )
 
@@ -235,6 +235,8 @@ export interface ContributionGraphProps extends HTMLAttributes<HTMLDivElement> {
   weekStart?: WeekDay
 }
 
+const EMPTY_STYLE: CSSProperties = {}
+
 export const ContributionGraph = ({
   data,
   blockMargin = 4,
@@ -243,7 +245,7 @@ export const ContributionGraph = ({
   fontSize = 14,
   labels: labelsProp = undefined,
   maxLevel: maxLevelProp = 4,
-  style = {},
+  style = EMPTY_STYLE,
   totalCount: totalCountProp = undefined,
   weekStart = 0,
   className,

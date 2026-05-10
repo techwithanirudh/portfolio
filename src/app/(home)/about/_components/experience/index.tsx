@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import {
   SplitSection,
@@ -27,16 +28,16 @@ export default function Experience(): React.ReactElement {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <Button asChild className='w-fit' size='sm' variant='default'>
-              <a href='/resume.pdf' rel='noopener' target='_blank'>
+              <Link href='/resume.pdf' rel='noopener' target='_blank'>
                 Resume
                 <Icons.download className='inline-block' />
-              </a>
+              </Link>
             </Button>
           </ViewAnimation>
         </SplitSectionHeader>
       </SplitSectionSidebar>
 
-      <SplitSectionContent className='px-0 py-0 lg:col-span-2'>
+      <SplitSectionContent className='p-0 lg:col-span-2'>
         <ViewAnimation
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}

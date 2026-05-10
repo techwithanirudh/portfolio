@@ -13,8 +13,10 @@ export interface DocsLayoutProps extends BaseLayoutProps {
   tree: PageTree
 }
 
+const DEFAULT_NAV: DocsLayoutProps['nav'] = {}
+
 export const DocsLayout = ({
-  nav = {},
+  nav = DEFAULT_NAV,
   ...props
 }: DocsLayoutProps): ReactNode => (
   <div className='[--fd-layout-width:1280px]'>

@@ -141,8 +141,8 @@ export function SignaturePad({
 
     canvas.width = w
     canvas.height = h
-    canvas.style.width = `${rect.width}px`
-    canvas.style.height = `${rect.height}px`
+    // Batch both dimension style mutations in one cssText assignment
+    canvas.style.cssText += `width:${rect.width}px;height:${rect.height}px;`
 
     const newCtx = canvas.getContext('2d')
     if (!newCtx) {

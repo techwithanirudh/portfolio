@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import type { ImageResponseOptions } from '@takumi-rs/image-response'
 import type { ReactElement } from 'react'
 

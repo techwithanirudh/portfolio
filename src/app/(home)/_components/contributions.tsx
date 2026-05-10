@@ -74,7 +74,7 @@ const Contributions = ({ data }: ContributionsProps) => {
             <ContributionGraphLegend>
               {({ level }) => (
                 <div
-                  className='group relative flex h-3 w-3 items-center justify-center'
+                  className='group relative flex size-3 items-center justify-center'
                   data-level={level}
                 >
                   <div

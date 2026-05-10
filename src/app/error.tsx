@@ -50,9 +50,8 @@ const ErrorPage = ({ error }: { error: Error }) => {
                 <span className='font-medium text-foreground'>
                   {error.name || 'Error'}: {error.message || 'Unknown error'}
                 </span>
-                {errorStack.map((line, index) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: stack order is stable
-                  <span className='pl-3' key={`${line}-${index}`}>
+                {errorStack.map((line) => (
+                  <span className='pl-3' key={line}>
                     {line}
                   </span>
                 ))}

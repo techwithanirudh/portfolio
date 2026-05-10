@@ -19,13 +19,13 @@ const TAG_ORDER = ['blog', 'projects']
 function orderTagGroups(
   tagMap: Map<string, SearchPageGroup[]>
 ): SearchTagGroup[] {
-  return TAG_ORDER.filter((tag) => tagMap.has(tag))
-    .map((tag) => ({ tag, pages: tagMap.get(tag)! }))
-    .concat(
-      Array.from(tagMap.entries())
-        .filter(([tag]) => !TAG_ORDER.includes(tag))
-        .map(([tag, pages]) => ({ tag, pages }))
+  return TAG_ORDER.flatMap((tag) =>
+    tagMap.has(tag) ? [{ tag, pages: tagMap.get(tag)! }] : []
+  ).concat(
+    Array.from(tagMap.entries()).flatMap(([tag, pages]) =>
+      TAG_ORDER.includes(tag) ? [] : [{ tag, pages }]
     )
+  )
 }
 
 function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
@@ -76,16 +76,12 @@ function bucketPageGroupsByTag(
 export function buildCommandGroups(search: string) {
   const isEmpty = !search.trim()
 
-  return commands
-    .map(({ group, position, items }) => ({
-      group,
-      position,
-      items: items.filter(
-        (item) =>
-          isEmpty || defaultFilter(item.title, search, item.keywords) > 0
-      ),
-    }))
-    .filter(({ items }) => items.length > 0)
+  return commands.flatMap(({ group, position, items }) => {
+    const filtered = items.filter(
+      (item) => isEmpty || defaultFilter(item.title, search, item.keywords) > 0
+    )
+    return filtered.length > 0 ? [{ group, position, items: filtered }] : []
+  })
 }
 
 export function buildSearchTagGroups(

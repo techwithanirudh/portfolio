@@ -41,7 +41,7 @@ const getCachedContributions = unstable_cache(
       `/v4/${githubUsername}?y=last`,
       'https://github-contributions-api.jogruber.de'
     )
-    const response = await fetch(url)
+    const response = await fetch(url, { next: { revalidate: 3600 } })
 
     if (!response.ok) {
       throw new Error('Failed to fetch GitHub contributions.')
