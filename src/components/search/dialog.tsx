@@ -164,7 +164,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       open={open}
     >
       <DialogContent
-        className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! border-none bg-popover bg-clip-padding p-2 pb-11 shadow-2xl ring-4 ring-neutral-200/80 sm:top-1/3 sm:max-w-lg sm:rounded-xl! dark:bg-neutral-900 dark:ring-neutral-800'
+        className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! border-none bg-popover bg-clip-padding p-2 shadow-2xl ring-4 ring-neutral-200/80 sm:top-1/3 sm:max-w-lg sm:rounded-xl! sm:pb-11 dark:bg-neutral-900 dark:ring-neutral-800'
         data-lenis-prevent
         showCloseButton={false}
       >
