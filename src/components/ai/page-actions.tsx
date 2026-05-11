@@ -18,7 +18,7 @@ import { copy as copySound } from '@/lib/audio/minimal'
 
 const cache = new Map<string, string>()
 
-export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
+function useMarkdownCopy(markdownUrl: string) {
   const [state, setState] = useState<CopyState>('idle')
   const [isCopying, setIsCopying] = useState(false)
   const operationRef = useRef(false)
@@ -60,12 +60,24 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
     }
   }
 
+  return { state, isCopying, handleCopy }
+}
+
+export function LLMCopyButton({
+  state,
+  isCopying,
+  onClick,
+}: {
+  state: CopyState
+  isCopying: boolean
+  onClick: () => void
+}) {
   return (
     <Button
       aria-busy={isCopying}
       className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
       disabled={isCopying}
-      onClick={handleCopy}
+      onClick={onClick}
       size='sm'
       type='button'
       variant='secondary'
@@ -84,9 +96,11 @@ export function LLMCopyButton({ markdownUrl }: { markdownUrl: string }) {
 export function ViewOptions({
   markdownUrl,
   githubUrl,
+  disabled = false,
 }: {
   markdownUrl: string
   githubUrl: string
+  disabled?: boolean
 }) {
   const items = useMemo(() => {
     const fullMarkdownUrl =
@@ -135,7 +149,8 @@ export function ViewOptions({
       <DropdownMenuTrigger asChild>
         <Button
           aria-label='View Options'
-          className='size-8 border-none active:scale-none'
+          className='size-8 border-none shadow-none active:scale-none'
+          disabled={disabled}
           size='icon-sm'
           variant='secondary'
         >
@@ -167,11 +182,17 @@ export function LLMCopyButtonWithViewOptions({
   markdownUrl: string
   githubUrl: string
 }) {
+  const { state, isCopying, handleCopy } = useMarkdownCopy(markdownUrl)
+
   return (
     <ButtonGroup className='w-full min-w-0'>
-      <LLMCopyButton markdownUrl={markdownUrl} />
+      <LLMCopyButton isCopying={isCopying} onClick={handleCopy} state={state} />
       <ButtonGroupSeparator className='border-secondary border-y-4 data-vertical:my-0 dark:bg-white/20' />
-      <ViewOptions githubUrl={githubUrl} markdownUrl={markdownUrl} />
+      <ViewOptions
+        disabled={isCopying}
+        githubUrl={githubUrl}
+        markdownUrl={markdownUrl}
+      />
     </ButtonGroup>
   )
 }
