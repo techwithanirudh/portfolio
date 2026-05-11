@@ -46,9 +46,9 @@ export const technology = [
     url: 'https://motion.dev',
   },
   {
-    name: 'Vercel',
-    description: 'Edge-ready hosting and automatic previews.',
-    url: 'https://vercel.com',
+    name: 'Bun',
+    description: 'Fast all-in-one runtime, bundler, and package manager.',
+    url: 'https://bun.sh',
   },
 ] satisfies TechnologyItem[]
 
