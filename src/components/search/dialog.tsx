@@ -164,7 +164,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       open={open}
     >
       <DialogContent
-        className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! p-0 sm:top-1/3 sm:max-w-lg sm:rounded-xl!'
+        className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! border-none bg-popover bg-clip-padding p-2 pb-11 shadow-2xl ring-4 ring-neutral-200/80 sm:top-1/3 sm:max-w-lg sm:rounded-xl! dark:bg-neutral-900 dark:ring-neutral-800'
         data-lenis-prevent
         showCloseButton={false}
       >
@@ -172,7 +172,11 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <DialogTitle>Command Palette</DialogTitle>
           <DialogDescription>Search or jump to a page</DialogDescription>
         </DialogHeader>
-        <Command onKeyDown={handleKeyDown} shouldFilter={false}>
+        <Command
+          className='rounded-none bg-transparent'
+          onKeyDown={handleKeyDown}
+          shouldFilter={false}
+        >
           <CommandInput
             onValueChange={setSearch}
             placeholder='Type a command or search...'
@@ -180,7 +184,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           />
 
           <CommandList
-            className='supports-timeline-scroll:scroll-fade-effect-y max-h-[60dvh] sm:max-h-80'
+            className='supports-timeline-scroll:scroll-fade-effect-y max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
             data-lenis-prevent
           >
             {groups.map(({ group, items }, i) => (

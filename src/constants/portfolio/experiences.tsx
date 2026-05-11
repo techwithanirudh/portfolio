@@ -1,11 +1,4 @@
-import {
-  BotIcon,
-  CodeXmlIcon,
-  CpuIcon,
-  FlaskConicalIcon,
-  GlobeIcon,
-} from 'lucide-react'
-
+import { Icons } from '@/components/icons/icons'
 import type { ExperienceItemType } from '@/types/experience'
 
 export const experiences: ExperienceItemType[] = [
@@ -19,7 +12,7 @@ export const experiences: ExperienceItemType[] = [
         title: 'Software Engineering Intern',
         employmentPeriod: { start: '09.2025', end: '12.2025' },
         employmentType: 'Internship',
-        icon: <CodeXmlIcon />,
+        icon: <Icons.codeXml />,
         description:
           "Worked on the frontend and microservices of Energent.ai's AI data analysis platform.",
         skills: ['TypeScript', 'React', 'Next.js', 'Node.js'],
@@ -37,7 +30,7 @@ export const experiences: ExperienceItemType[] = [
         title: 'Research Collaboration',
         employmentPeriod: { start: '04.2022', end: '05.2022' },
         employmentType: 'Contract',
-        icon: <FlaskConicalIcon />,
+        icon: <Icons.flask />,
         description:
           'Co-authored a research paper on privacy challenges for autonomous vehicles.',
         skills: ['Research', 'Autonomous Vehicles', 'Privacy Engineering'],
@@ -53,7 +46,7 @@ export const experiences: ExperienceItemType[] = [
         title: 'Full Stack Developer',
         employmentPeriod: { start: '2021' },
         employmentType: 'Part-time',
-        icon: <GlobeIcon />,
+        icon: <Icons.globe />,
         description:
           'Built Coolify Tweaks, Shadcn SaaS Landing, and various open-source projects.',
         skills: ['TypeScript', 'Next.js', 'React', 'Node.js', 'PostgreSQL'],
@@ -64,7 +57,7 @@ export const experiences: ExperienceItemType[] = [
         title: 'Web / PowerApps Developer',
         employmentPeriod: { start: '2020', end: '2021' },
         employmentType: 'Part-time',
-        icon: <CodeXmlIcon />,
+        icon: <Icons.codeXml />,
         description:
           'Shipped a Product Hunt launch, built PowerApps solutions, and published Maskio on GitHub Game Jam.',
         skills: ['PowerApps', 'JavaScript', 'React', 'SharePoint'],
@@ -74,7 +67,7 @@ export const experiences: ExperienceItemType[] = [
         title: 'Python & AI Developer',
         employmentPeriod: { start: '2019', end: '2020' },
         employmentType: 'Part-time',
-        icon: <BotIcon />,
+        icon: <Icons.bot />,
         description:
           'Built early AI experiments with Keras, OpenCV, and TensorFlow.',
         skills: ['Python', 'Keras', 'OpenCV', 'TensorFlow'],
@@ -84,7 +77,7 @@ export const experiences: ExperienceItemType[] = [
         title: 'Robotics Programmer',
         employmentPeriod: { start: '2018', end: '2019' },
         employmentType: 'Part-time',
-        icon: <CpuIcon />,
+        icon: <Icons.cpu />,
         description:
           'Created robotics experiments including Snake, Vernie, Humanoid Robot, and Gripper using Mindstorms / Lego Boost.',
         skills: ['Mindstorms', 'Lego Boost', 'Python'],
