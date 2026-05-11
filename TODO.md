@@ -25,3 +25,4 @@
 - [ ] Add Raycast and Browser Extension Sections
 - [ ] Lighthouse Scores / Perf is bad after clippy.js
 - [ ] When you open and close a contact form, the state isn't restored so it thinks you've not submitted yet
+- upgrade project images with shottr and paper

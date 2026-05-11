@@ -31,7 +31,7 @@ export const UpdateCard: React.FC<UpdateCardProps> = ({
     {image && (
       <BlurImage
         alt={title}
-        className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform group-hover:scale-102'
+        className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform will-change-transform group-hover:scale-102'
         height={554}
         src={image}
         width={853}

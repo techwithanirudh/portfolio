@@ -23,7 +23,7 @@ export const TagCard = ({
       href={`/blog/tags/${name}`}
     >
       <Icons.tag
-        className='my-auto text-muted-foreground transition-transform group-hover:rotate-12'
+        className='my-auto text-muted-foreground transition-transform will-change-transform group-hover:rotate-12'
         size={18}
       />
       <span className='text-card-foreground'>{name}</span>

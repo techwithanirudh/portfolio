@@ -67,7 +67,7 @@ const Skills = () => (
             {technologies.map(({ label, icon, href }) => (
               <Badge
                 asChild
-                className='gap-2 rounded-md px-3 py-1 text-xs transition-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
+                className='gap-2 rounded-md px-3 py-1 text-xs transition-transform will-change-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
                 key={label}
                 variant='outline'
               >
