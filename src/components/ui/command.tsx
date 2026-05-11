@@ -89,7 +89,7 @@ function CommandList({
   return (
     <CommandPrimitive.List
       className={cn(
-        'no-scrollbar max-h-80 scroll-pt-2 scroll-pb-1.5 overflow-y-auto overflow-x-hidden pb-2 outline-none',
+        'no-scrollbar max-h-80 scroll-pt-2 scroll-pb-1.5 overflow-y-auto overflow-x-hidden outline-none',
         className
       )}
       data-slot='command-list'
@@ -118,7 +118,7 @@ function CommandGroup({
   return (
     <CommandPrimitive.Group
       className={cn(
-        'overflow-hidden p-0 text-foreground **:[[cmdk-group-heading]]:scroll-mt-16 **:[[cmdk-group-heading]]:p-3 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
+        'overflow-hidden px-0 py-1 text-foreground **:[[cmdk-group-heading]]:scroll-mt-16 **:[[cmdk-group-heading]]:p-3 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
         className
       )}
       data-slot='command-group'
