@@ -173,7 +173,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <DialogDescription>Search or jump to a page</DialogDescription>
         </DialogHeader>
         <Command
-          className='rounded-none bg-transparent'
+          className='rounded-none bg-transparent **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input]:py-0'
           onKeyDown={handleKeyDown}
           shouldFilter={false}
         >
@@ -184,7 +184,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           />
 
           <CommandList
-            className='supports-timeline-scroll:scroll-fade-effect-y max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
+            className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 scroll-pt-2 scroll-pb-1.5 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
             data-lenis-prevent
           >
             {groups.map(({ group, items }, i) => (

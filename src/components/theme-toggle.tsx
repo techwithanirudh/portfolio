@@ -1,11 +1,10 @@
 'use client'
 
-import { useSound } from '@web-kits/audio/react'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { toggleOn } from '@/lib/audio/minimal'
+import { useThemeToggle } from '@/hooks/use-theme-toggle'
 import { cn } from '@/lib/utils'
 
 const itemVariants = cva(
@@ -26,8 +25,6 @@ const full = [
   ['system', Icons.desktop] as const,
 ]
 
-type Theme = 'light' | 'dark' | 'system'
-
 export function ThemeToggle({
   className,
   mode = 'light-dark',
@@ -35,9 +32,9 @@ export function ThemeToggle({
   className?: string
   mode?: 'light-dark' | 'light-dark-system'
 }) {
-  const { setTheme, theme, resolvedTheme } = useTheme()
+  const { theme, resolvedTheme } = useTheme()
+  const { changeTheme, toggleTheme } = useThemeToggle()
   const [mounted, setMounted] = useState(false)
-  const playToggle = useSound(toggleOn)
 
   useEffect(() => {
     setMounted(true)
@@ -48,22 +45,6 @@ export function ThemeToggle({
     className
   )
 
-  const handleChangeTheme = async (theme: Theme) => {
-    playToggle()
-
-    function update() {
-      setTheme(theme)
-    }
-
-    if (document.startViewTransition && theme !== resolvedTheme) {
-      document.documentElement.style.viewTransitionName = 'theme-transition'
-      await document.startViewTransition(update).finished
-      document.documentElement.style.viewTransitionName = ''
-    } else {
-      update()
-    }
-  }
-
   if (mode === 'light-dark') {
     const value = mounted ? resolvedTheme : null
 
@@ -72,7 +53,7 @@ export function ThemeToggle({
         aria-label={'Toggle Theme'}
         className={container}
         data-theme-toggle=''
-        onClick={() => handleChangeTheme(value === 'light' ? 'dark' : 'light')}
+        onClick={toggleTheme}
         type='button'
       >
         {full.map(([key, Icon]) => {
@@ -101,7 +82,7 @@ export function ThemeToggle({
           aria-label={key}
           className={itemVariants({ active: value === key })}
           key={key}
-          onClick={() => handleChangeTheme(key)}
+          onClick={() => changeTheme(key)}
           type='button'
         >
           <Icon className='size-full' fill='currentColor' />

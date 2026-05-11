@@ -66,13 +66,13 @@ function CommandInput({
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div
-      className='mb-0 flex h-9 items-center gap-2 rounded-md border border-input bg-input/50 px-2'
+      className='flex h-9 items-center gap-2 border-b px-3'
       data-slot='command-input-wrapper'
     >
       <Icons.search className='size-4 shrink-0 opacity-50' strokeWidth={2} />
       <CommandPrimitive.Input
         className={cn(
-          'h-9! min-w-0 flex-1 bg-transparent py-0 text-sm outline-hidden placeholder:text-muted-foreground/70 disabled:cursor-not-allowed disabled:opacity-50',
+          'flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
         data-slot='command-input'
@@ -89,7 +89,7 @@ function CommandList({
   return (
     <CommandPrimitive.List
       className={cn(
-        'no-scrollbar max-h-80 scroll-pt-2 scroll-pb-1.5 overflow-y-auto overflow-x-hidden outline-none',
+        'no-scrollbar max-h-80 scroll-pt-2 scroll-pb-1.5 py-1.5 overflow-y-auto overflow-x-hidden outline-none',
         className
       )}
       data-slot='command-list'
@@ -118,7 +118,7 @@ function CommandGroup({
   return (
     <CommandPrimitive.Group
       className={cn(
-        'overflow-hidden px-0 py-1 text-foreground **:[[cmdk-group-heading]]:scroll-mt-16 **:[[cmdk-group-heading]]:p-3 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
+        'overflow-hidden p-0 text-foreground **:[[cmdk-group-heading]]:scroll-mt-16 **:[[cmdk-group-heading]]:p-3 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
         className
       )}
       data-slot='command-group'
