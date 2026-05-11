@@ -1,14 +1,12 @@
 'use client'
 import { Icons } from '@/components/icons/icons'
-import { buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
-  PaginationLink,
 } from '@/components/ui/pagination'
 import { usePagination } from '@/hooks/use-pagination'
-import { cn } from '@/lib/utils'
 
 interface NumberedPaginationProps {
   currentPage: number
@@ -41,92 +39,78 @@ function NumberedPagination({
       <PaginationContent className='inline-flex w-full gap-0 -space-x-px rtl:space-x-reverse'>
         {currentPage > 1 && (
           <PaginationItem>
-            <PaginationLink
+            <Button
               aria-label='Go to previous page'
-              className={cn(
-                buttonVariants({
-                  variant: 'ghost',
-                }),
-                'rounded-none shadow-none focus-visible:z-10'
-              )}
-              href='#'
+              className='shadow-none hover:z-10 focus-visible:z-10'
               onClick={handlePageChange(currentPage - 1)}
+              shape='square'
+              size='icon'
+              variant='ghost'
             >
               <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
-            </PaginationLink>
+            </Button>
           </PaginationItem>
         )}
 
         <div className='inline-flex w-full justify-center'>
           {showLeftEllipsis && (
             <PaginationItem>
-              <PaginationLink
-                className={cn(
-                  buttonVariants({
-                    variant: 'ghost',
-                  }),
-                  'pointer-events-none rounded-none shadow-none'
-                )}
+              <Button
+                className='pointer-events-none shadow-none'
+                shape='square'
+                size='icon'
+                variant='ghost'
               >
                 ...
-              </PaginationLink>
+              </Button>
             </PaginationItem>
           )}
 
           {pages.map((page) => (
             <PaginationItem className='w-max' key={page}>
-              <PaginationLink
-                className={cn(
-                  buttonVariants({
-                    variant: page === currentPage ? 'default' : 'ghost',
-                  }),
-                  'rounded-none border-0 shadow-none focus-visible:z-10',
-                  page === currentPage &&
-                    'min-w-full dark:bg-primary dark:hover:bg-primary/90'
-                )}
-                href='#'
-                isActive={page === currentPage}
+              <Button
+                aria-current={page === currentPage ? 'page' : undefined}
+                className='shadow-none hover:z-10 focus-visible:z-10'
                 onClick={handlePageChange(page)}
+                shape='square'
+                size='icon'
+                variant={page === currentPage ? 'default' : 'ghost'}
               >
                 {page}
-              </PaginationLink>
+              </Button>
             </PaginationItem>
           ))}
 
           {showRightEllipsis && (
             <PaginationItem>
-              <PaginationLink
-                className={cn(
-                  buttonVariants({
-                    variant: 'ghost',
-                  }),
-                  'pointer-events-none rounded-none shadow-none'
-                )}
+              <Button
+                className='pointer-events-none shadow-none'
+                shape='square'
+                size='icon'
+                variant='ghost'
               >
                 ...
-              </PaginationLink>
+              </Button>
             </PaginationItem>
           )}
         </div>
+
         {currentPage < totalPages && (
           <PaginationItem>
-            <PaginationLink
+            <Button
               aria-label='Go to next page'
-              className={cn(
-                buttonVariants({
-                  variant: 'ghost',
-                }),
-                'rounded-none shadow-none focus-visible:z-10'
-              )}
-              href='#'
+              className='shadow-none hover:z-10 focus-visible:z-10'
               onClick={handlePageChange(currentPage + 1)}
+              shape='square'
+              size='icon'
+              variant='ghost'
             >
               <Icons.chevronRight
                 aria-hidden='true'
                 size={16}
                 strokeWidth={2}
               />
-            </PaginationLink>
+            </Button>
           </PaginationItem>
         )}
       </PaginationContent>
