@@ -225,31 +225,31 @@ html > body[data-scroll-locked] {
   }
 
   .icon-pop {
-    @apply transition-transform hover:scale-125;
+    @apply transition-transform hover:scale-125 will-change-transform;
   }
 
   .icon-tilt {
-    @apply transition-transform hover:rotate-12 hover:scale-125;
+    @apply transition-transform hover:rotate-12 hover:scale-125 will-change-transform;
   }
 
   .icon-tilt-reverse {
-    @apply transition-transform hover:-rotate-12 hover:scale-125;
+    @apply transition-transform hover:-rotate-12 hover:scale-125 will-change-transform;
   }
 
   .icon-turn {
-    @apply transition-transform hover:rotate-90 hover:scale-125;
+    @apply transition-transform hover:rotate-90 hover:scale-125 will-change-transform;
   }
 
   .icon-arrow {
-    @apply transition-transform group-hover:-rotate-45;
+    @apply transition-transform group-hover:-rotate-45 will-change-transform;
   }
 
   .icon-arrow-button {
-    @apply transition-transform group-hover/button:-rotate-45;
+    @apply transition-transform group-hover/button:-rotate-45 will-change-transform;
   }
 
   .icon-turn-button {
-    @apply transition-transform group-hover/button:rotate-90;
+    @apply transition-transform group-hover/button:rotate-90 will-change-transform;
   }
 
   .typography-hero {
