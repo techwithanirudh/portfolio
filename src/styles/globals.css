@@ -61,6 +61,15 @@
   --font-mono: var(--font-geist-mono);
 }
 
+html {
+  scrollbar-gutter: stable;
+}
+
+html > body[data-scroll-locked] {
+  --removed-body-scroll-bar-size: 0px !important;
+  margin-right: 0px !important;
+}
+
 @layer base {
   :root {
     --radius: 0.5rem;
@@ -477,10 +486,4 @@
   @media (min-resolution: 2dppx) {
     @slot;
   }
-}
-
-html body[data-scroll-locked] {
-  --removed-body-scroll-bar-size: 0 !important;
-  margin-right: 0 !important;
-  overflow-y: scroll !important;
 }
