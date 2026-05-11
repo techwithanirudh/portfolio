@@ -65,9 +65,13 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const isEmpty = !search.trim()
 
   const allGroups = useMemo(() => buildCommandGroups(search), [search])
-  const groups = allGroups.filter((g) => g.position !== 'after')
-  const afterGroups = allGroups.filter((g) => g.position === 'after')
-  type CommandItemData = (typeof groups)[number]['items'][number]
+  const groups = isEmpty
+    ? allGroups.filter((g) => g.position !== 'after')
+    : allGroups
+  const afterGroups = isEmpty
+    ? allGroups.filter((g) => g.position === 'after')
+    : []
+  type CommandItemData = (typeof allGroups)[number]['items'][number]
 
   const tagGroups = useMemo(() => {
     if (isEmpty) {
@@ -206,7 +210,9 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
             )}
 
-            <SearchResultsList groups={tagGroups} onSelect={go} />
+            {isEmpty ? (
+              <SearchResultsList groups={tagGroups} onSelect={go} />
+            ) : null}
 
             {afterGroups.map(({ group, items }) => (
               <Fragment key={group}>
@@ -216,6 +222,10 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
                 </CommandGroup>
               </Fragment>
             ))}
+
+            {isEmpty ? null : (
+              <SearchResultsList groups={tagGroups} onSelect={go} />
+            )}
           </CommandList>
 
           <CommandMenuFooter />
