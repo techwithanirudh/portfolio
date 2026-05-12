@@ -26,7 +26,7 @@ export default function Page() {
               whileInView={{ opacity: 1 }}
             >
               <TagCard
-                className='size-full items-center justify-start gap-2 rounded-none border-r bg-card/50 p-6 hover:bg-card/80'
+                className='size-full items-center justify-start gap-2 rounded-none border-r border-dashed bg-card/50 p-6 hover:bg-card/80'
                 displayCount
                 name={tag}
               />

@@ -1,56 +1,78 @@
 import { tool, type UIMessageStreamWriter } from 'ai'
-import { initAdvancedSearch } from 'fumadocs-core/search/server'
+import { Document } from 'flexsearch'
 import { z } from 'zod'
-import { getPosts, getWorkPages } from '@/lib/source'
+import type { CustomDocument } from '@/app/api/chat/types'
+import { post as blogSource, workSource } from '@/lib/source'
 
-const pagesByUrl = new Map<
-  string,
-  {
-    title?: string
-    description?: string
-  }
->()
+const searchServer = createSearchServer()
 
-const server = initAdvancedSearch({
-  language: 'english',
-  indexes: () => {
-    const blogPages = getPosts()
-    const workPages = getWorkPages()
+async function createSearchServer() {
+  const search = new Document<CustomDocument>({
+    document: {
+      id: 'url',
+      index: ['title', 'description', 'content'],
+      store: true,
+      tag: ['tag'],
+    },
+  })
 
-    for (const page of blogPages) {
-      pagesByUrl.set(page.url, {
-        title: page.data.title,
-        description: page.data.description,
-      })
-    }
+  const blog = await chunkedAll(
+    blogSource.getPages().map(async (page) => {
+      if (!('getText' in page.data)) {
+        return null
+      }
 
-    for (const page of workPages) {
-      pagesByUrl.set(page.url, {
-        title: page.data.title,
-        description: page.data.description,
-      })
-    }
-
-    return [
-      ...blogPages.map((page) => ({
-        id: page.url,
-        title: page.data.title ?? 'Untitled',
-        description: page.data.description,
-        structuredData: page.data.structuredData,
-        url: page.url,
+      return {
+        content: await page.data.getText('processed'),
+        description: page.data.description ?? '',
         tag: 'blog',
-      })),
-      ...workPages.map((page) => ({
-        id: page.url,
         title: page.data.title ?? 'Untitled',
-        description: page.data.description,
-        structuredData: page.data.structuredData,
         url: page.url,
+      } as CustomDocument
+    })
+  )
+
+  const work = await chunkedAll(
+    workSource.getPages().map(async (page) => {
+      if (!('getText' in page.data)) {
+        return null
+      }
+
+      return {
+        content: await page.data.getText('processed'),
+        description: page.data.description ?? '',
         tag: 'projects',
-      })),
-    ]
-  },
-})
+        title: page.data.title ?? 'Untitled',
+        url: page.url,
+      } as CustomDocument
+    })
+  )
+
+  for (const post of blog) {
+    if (post) {
+      search.add(post)
+    }
+  }
+
+  for (const page of work) {
+    if (page) {
+      search.add(page)
+    }
+  }
+
+  return search
+}
+
+async function chunkedAll<O>(promises: Promise<O>[]): Promise<O[]> {
+  const size = 50
+  const out: O[] = []
+
+  for (let i = 0; i < promises.length; i += size) {
+    out.push(...(await Promise.all(promises.slice(i, i + size))))
+  }
+
+  return out
+}
 
 const Tag = z.union([
   z.literal('all'),
@@ -73,62 +95,33 @@ export const createSearchDocsTool = (writer: UIMessageStreamWriter) =>
         .number()
         .int()
         .min(1)
-        .max(50)
+        .max(100)
         .default(10)
         .describe(
-          'Maximum number of results to return (default: 10, max: 50).'
+          'Maximum number of results to return (default: 10, max: 100).'
         ),
     }),
-    execute: async ({ query, tag: tagParam, locale, limit }) => {
+    execute: async ({ query, tag: tagParam, limit }) => {
       const tag = tagParam === 'all' ? undefined : tagParam
-      const results = await server.search(query, {
-        tag,
-        locale,
+      const search = await searchServer
+      const raw = await search.searchAsync({
+        query,
+        limit,
+        merge: true,
+        enrich: true,
+        tag: tag ? ({ tag } as Record<string, string>) : undefined,
       })
+      const results = raw as Array<{ doc: CustomDocument }>
 
-      const seen = new Set<string>()
-      const deduped = results.filter((result) => {
-        if (!result.url || seen.has(result.url)) {
-          return false
-        }
-        seen.add(result.url)
-        return true
-      })
-
-      const trimmed = deduped.slice(0, limit).map((doc) => {
-        const pageInfo = pagesByUrl.get(doc.url)
-
-        return {
-          ...doc,
-          pageTitle: pageInfo?.title,
-          pageDescription: pageInfo?.description,
-        }
-      })
-
-      trimmed.forEach((doc, index) => {
-        const title = doc.pageTitle ?? doc.url
+      for (const [index, result] of results.entries()) {
         writer.write({
           type: 'source-url',
-          sourceId: `search-doc-${index}-${doc.url}`,
-          url: doc.url,
-          title,
+          sourceId: `search-doc-${index}-${result.doc.url}`,
+          title: result.doc.title,
+          url: result.doc.url,
         })
-      })
-
-      if (trimmed.length === 0) {
-        return `No content found for query "${query}".`
       }
 
-      const summary = trimmed
-        .map((doc, index) => {
-          const title = doc.pageTitle ?? doc.url
-          const description = doc.pageDescription
-            ? ` — ${doc.pageDescription}`
-            : ''
-          return `${index + 1}. ${title} (${doc.url})${description}`
-        })
-        .join('\n')
-
-      return `Found ${trimmed.length} pages for "${query}":\n${summary}`
+      return results
     },
   })

@@ -2,27 +2,15 @@ import { corePrompt } from './core'
 import { directivesPrompt } from './directives'
 import { examplesPrompt } from './examples'
 import { llmsPrompt } from './llms'
-import { pageContextPrompt } from './page-context'
 import { personalityPrompt } from './personality'
 import { toolsPrompt } from './tools'
 
-interface PageContext {
-  pathname?: string
-}
-
-export const systemPrompt = ({
-  llms,
-  pageContext,
-}: {
-  llms: string
-  pageContext?: PageContext
-}) =>
+export const systemPrompt = ({ llms }: { llms: string }) =>
   [
     corePrompt,
     personalityPrompt,
     directivesPrompt,
     toolsPrompt,
-    pageContextPrompt(pageContext),
     llmsPrompt(llms),
     examplesPrompt,
   ]

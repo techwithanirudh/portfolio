@@ -6,7 +6,6 @@ import { Presence } from '@radix-ui/react-presence'
 import { useSound } from '@web-kits/audio/react'
 import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { usePathname } from 'next/navigation'
 import {
   type ComponentProps,
   createContext,
@@ -77,7 +76,6 @@ export function useChatContext() {
 
 export function AISearch({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile()
-  const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
   const playError = useSound(errorSound)
@@ -97,15 +95,6 @@ export function AISearch({ children }: { children: ReactNode }) {
     },
     transport: new DefaultChatTransport({
       api: '/api/chat',
-      prepareSendMessagesRequest: ({ id, messages }) => ({
-        body: {
-          id,
-          messages,
-          pageContext: {
-            pathname,
-          },
-        },
-      }),
     }),
   })
 
@@ -264,6 +253,12 @@ function SearchAIInput(props: ComponentProps<'form'>) {
 
     await sendMessage({
       parts: [
+        {
+          type: 'data-client',
+          data: {
+            location: window.location.href,
+          },
+        },
         {
           type: 'text',
           text: messageText,
