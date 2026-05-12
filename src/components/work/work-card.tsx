@@ -42,10 +42,7 @@ export const WorkCard = ({
       )}
       <div className='flex flex-1 flex-col gap-3'>
         <div className='flex flex-1 flex-col gap-2'>
-          <ViewTransition
-            name={`${transitionName}-title`}
-            share={transition}
-          >
+          <ViewTransition name={`${transitionName}-title`} share={transition}>
             <h2 className='font-medium text-lg md:text-xl'>{title}</h2>
           </ViewTransition>
           <ViewTransition
