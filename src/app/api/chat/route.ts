@@ -11,24 +11,18 @@ import {
 import { env } from '@/env'
 import { systemPrompt } from '@/lib/ai/prompts/chat'
 import { provider } from '@/lib/ai/providers'
-import { contextDataSchema, type MyUIMessage } from './types'
+import type { MyUIMessage } from './types'
 import { getLLMsTxt } from './utils/llms'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
 
-interface PageContext {
-  pathname?: string
-}
-
 export async function POST(request: Request) {
   try {
     const {
       messages,
-      pageContext,
     }: {
       messages: MyUIMessage[]
-      pageContext?: PageContext
     } = await request.json()
 
     const handleStreamError = (error: unknown) => {
@@ -55,19 +49,12 @@ export async function POST(request: Request) {
         const modelMessages = await convertToModelMessages<MyUIMessage>(
           messages,
           {
-            convertDataPart: (part) => {
-              if (part.type !== 'data-context') {
-                return
-              }
-
-              const context = contextDataSchema.safeParse(part.data).data?.text
-              if (!context) {
-                return
-              }
-
-              return {
-                type: 'text',
-                text: `\n\nSelected context (from page):\n"""\n${context}\n"""`,
+            convertDataPart(part) {
+              if (part.type === 'data-client') {
+                return {
+                  type: 'text',
+                  text: `[Client Context: ${JSON.stringify(part.data)}]`,
+                }
               }
             },
             ignoreIncompleteToolCalls: true,
@@ -80,7 +67,6 @@ export async function POST(request: Request) {
           model: provider.languageModel('chat-model'),
           system: systemPrompt({
             llms,
-            pageContext,
           }),
           providerOptions: {
             openai: {

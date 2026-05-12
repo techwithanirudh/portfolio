@@ -1,5 +1,7 @@
 import type { InferUITools, UIDataTypes, UIMessage } from 'ai'
+import type { DocumentData } from 'flexsearch'
 import { z } from 'zod'
+import type { PageEntry } from '@/app/actions/pages'
 import type { tools } from './utils/tools'
 
 export type ChatTools = InferUITools<typeof tools>
@@ -20,4 +22,12 @@ export type MyUIMessage = UIMessage<never, ChatDataTypes, ChatTools> & {
         title: string
       }
   >
+}
+
+export interface CustomDocument extends DocumentData {
+  content: string
+  description: string
+  tag: PageEntry['tag']
+  title: string
+  url: string
 }

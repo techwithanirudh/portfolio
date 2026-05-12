@@ -22,7 +22,7 @@ interface GitHubCodeProps {
 
 function GitHubSourceLink({ sourceUrl }: { sourceUrl: string }) {
   return (
-    <div className='absolute top-[7px] right-9 z-10'>
+    <div className='absolute top-[7px] right-9 z-10 bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)'>
       <a
         aria-label='View source on GitHub'
         className='inline-flex items-center justify-center rounded-md p-1 font-medium text-fd-muted-foreground text-sm transition-colors duration-100 hover:text-fd-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fd-ring disabled:pointer-events-none disabled:opacity-50 data-checked:text-fd-accent-foreground [&_svg]:size-4'
