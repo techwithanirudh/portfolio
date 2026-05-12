@@ -28,7 +28,7 @@ export const InlineTocBlock = ({ items, className }: InlineTocBlockProps) =>
       items={items}
     />
   ) : (
-    <div className='py-2' />
+    <div />
   )
 
 interface MdxContentProps {
