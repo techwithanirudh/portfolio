@@ -19,8 +19,9 @@ import WorkPreview from './_components/work'
 export const metadata: Metadata = createMetadata({
   title: 'Home',
   description: homeDescription,
-  openGraph: { url: '/' },
+  openGraph: { images: '/banner.png', url: '/' },
   alternates: { canonical: '/' },
+  twitter: { images: '/banner.png' },
 })
 
 const githubUrl = baseOptions.githubUrl ?? ''
