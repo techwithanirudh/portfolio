@@ -11,6 +11,8 @@ interface WorkCardProps {
   url: string
 }
 
+const transition = { default: 'none', 'work-card': 'via-blur' } as const
+
 export const WorkCard = ({
   title,
   description,
@@ -24,9 +26,10 @@ export const WorkCard = ({
     <Link
       className='group flex h-full flex-col gap-4 bg-card/60 p-6 transition-colors hover:bg-card'
       href={url}
+      transitionTypes={['work-card']}
     >
       {image && (
-        <ViewTransition name={`${transitionName}-image`} share='via-blur'>
+        <ViewTransition name={`${transitionName}-image`} share={transition}>
           <BlurImage
             alt={title}
             className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform will-change-transform group-hover:scale-102'
@@ -39,12 +42,15 @@ export const WorkCard = ({
       )}
       <div className='flex flex-1 flex-col gap-3'>
         <div className='flex flex-1 flex-col gap-2'>
-          <ViewTransition name={`${transitionName}-title`} share='via-blur'>
+          <ViewTransition
+            name={`${transitionName}-title`}
+            share={transition}
+          >
             <h2 className='font-medium text-lg md:text-xl'>{title}</h2>
           </ViewTransition>
           <ViewTransition
             name={`${transitionName}-description`}
-            share='via-blur'
+            share={transition}
           >
             <p className='line-clamp-3 text-pretty text-muted-foreground text-sm'>
               {description}

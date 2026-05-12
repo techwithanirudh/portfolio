@@ -17,6 +17,8 @@ import { createMetadata, getWorkPageImage } from '@/lib/metadata'
 import { getWork, getWorkPages, type WorkPage as MDXPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
 
+const transition = { default: 'none', 'work-card': 'via-blur' } as const
+
 function Header(props: { page: MDXPage }) {
   const { page } = props
   const links: { href: string; label: string; icon: ReactElement }[] = []
@@ -48,7 +50,7 @@ function Header(props: { page: MDXPage }) {
         {page.data.image && (
           <ViewTransition
             name={`${page.slugs.join('/')}-image`}
-            share='via-blur'
+            share={transition}
           >
             <BlurImage
               alt={page.data.title ?? 'Work cover image'}
@@ -63,7 +65,7 @@ function Header(props: { page: MDXPage }) {
         <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
           <ViewTransition
             name={`${page.slugs.join('/')}-title`}
-            share='via-blur'
+            share={transition}
           >
             <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
               {page.data.title ?? 'Untitled'}
@@ -71,7 +73,7 @@ function Header(props: { page: MDXPage }) {
           </ViewTransition>
           <ViewTransition
             name={`${page.slugs.join('/')}-description`}
-            share='via-blur'
+            share={transition}
           >
             <p className='typography-body mx-auto text-pretty'>
               {page.data.description ?? ''}
