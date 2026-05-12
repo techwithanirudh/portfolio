@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Label } from '@/components/ui/label'
 import {
   SignaturePad,
   type SignaturePadHandle,
@@ -83,23 +84,31 @@ export const GuestbookForm = () => {
 
   if (isPending) {
     return (
-      <div className='min-h-[17rem] w-full space-y-6'>
-        <div className='space-y-2'>
-          <Skeleton className='h-4 w-16' />
+      <div className='w-full space-y-6'>
+        <div className='grid gap-2'>
+          <Skeleton className='h-3.5 w-16' />
           <Skeleton className='h-40 w-full' />
-          <Skeleton className='h-4 w-36' />
+          <Skeleton className='h-5 w-36' />
         </div>
-        <Skeleton className='h-10 w-full' />
+        <Skeleton className='h-9 w-full' />
       </div>
     )
   }
 
   if (!(user || isPending)) {
     return (
-      <div className='flex min-h-[17rem] w-full flex-col justify-center gap-4 text-center'>
-        <p className='text-muted-foreground text-sm'>
-          Sign in to leave a guestbook message.
-        </p>
+      <div className='w-full space-y-6'>
+        <div className='grid gap-2'>
+          <Label>Message</Label>
+          <div className='flex h-40 items-center justify-center rounded-md border border-input bg-background px-4 text-center'>
+            <p className='text-muted-foreground text-sm'>
+              Sign in to leave a guestbook message.
+            </p>
+          </div>
+          <p className='text-muted-foreground text-sm'>
+            Posting requires auth.
+          </p>
+        </div>
         <Button asChild className='w-full'>
           <Link href={getLoginUrl('/guestbook')}>
             <span>Sign in to post</span>
@@ -116,10 +125,10 @@ export const GuestbookForm = () => {
   const isExecuting = action.status === 'executing'
 
   return (
-    <div className='min-h-[17rem] w-full'>
+    <div className='w-full'>
       <Form {...form}>
         <form
-          className='flex-1 space-y-6'
+          className='flex-1'
           key={formKey}
           onSubmit={handleSubmitWithAction}
         >
@@ -195,7 +204,7 @@ export const GuestbookForm = () => {
             </div>
           </Activity>
           {action.status === 'hasSucceeded' && (
-            <Alert className='border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+            <Alert className='mt-6 border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
               <Icons.success size={16} />
               <AlertTitle className='mb-0 leading-normal'>
                 Thanks for signing the guestbook!
@@ -203,7 +212,7 @@ export const GuestbookForm = () => {
             </Alert>
           )}
           {action.result.serverError && (
-            <Alert className='border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+            <Alert className='mt-6 border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
               <Icons.warning className='size-4' />
               <AlertTitle className='mb-0 leading-normal'>
                 {action.result.serverError}
