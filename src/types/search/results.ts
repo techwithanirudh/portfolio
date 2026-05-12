@@ -1,12 +1,8 @@
 import type { SortedResult } from 'fumadocs-core/search'
 
-export type SearchContentTag = 'blog' | 'projects'
-export type ResolvedSearchTag = SearchContentTag | 'other'
-
 export interface SearchPage {
   content: string
   id: string
-  tag: ResolvedSearchTag
   url: string
 }
 

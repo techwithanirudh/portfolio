@@ -5,7 +5,6 @@ import { Fragment } from 'react'
 import rehypeRaw from 'rehype-raw'
 import { visit } from 'unist-util-visit'
 import { Icons } from '@/components/icons/icons'
-import { getSearchTagLabel } from '@/components/search/utils/tags'
 import {
   CommandGroup,
   CommandItem,
@@ -41,10 +40,10 @@ interface SearchResultsProps {
 export function SearchResults({ groups, onSelect }: SearchResultsProps) {
   return (
     <>
-      {groups.map(({ tag, pages }, index) => (
+      {groups.map(({ tag, pages }) => (
         <Fragment key={tag}>
-          {index > 0 && <CommandSeparator />}
-          <CommandGroup heading={getSearchTagLabel(tag)}>
+          <CommandSeparator />
+          <CommandGroup heading={tag === 'blog' ? 'Blog' : 'Projects'}>
             {pages.map((group) => (
               <div key={group.page.id}>
                 <CommandItem

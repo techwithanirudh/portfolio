@@ -1,35 +1,34 @@
 import { defaultFilter } from 'cmdk'
 import type { SortedResult } from 'fumadocs-core/search'
 import type { PageEntry } from '@/app/actions/pages'
-import { searchTagOrder } from '@/components/search/utils/tags'
 import { commands } from '@/constants/search'
-import type {
-  ResolvedSearchTag,
-  SearchContentTag,
-  SearchPageGroup,
-  SearchTagGroup,
-} from '@/types/search/results'
+import type { SearchPageGroup, SearchTagGroup } from '@/types/search/results'
 
-function tagFromUrl(url: string): ResolvedSearchTag {
+function tagFromUrl(url: string): string {
   if (url === '/blog' || url.startsWith('/blog/')) {
     return 'blog'
   }
-
   if (url === '/work' || url.startsWith('/work/')) {
     return 'projects'
   }
-
   return 'other'
 }
 
-function getPageUrl(url: string) {
-  return url.split('#')[0] ?? url
+const TAG_ORDER = ['blog', 'projects']
+
+function orderTagGroups(
+  tagMap: Map<string, SearchPageGroup[]>
+): SearchTagGroup[] {
+  return TAG_ORDER.filter((tag) => tagMap.has(tag))
+    .map((tag) => ({ tag, pages: tagMap.get(tag)! }))
+    .concat(
+      Array.from(tagMap.entries())
+        .filter(([tag]) => !TAG_ORDER.includes(tag))
+        .map(([tag, pages]) => ({ tag, pages }))
+    )
 }
 
-function groupSearchResultsByPage(
-  results: SortedResult[],
-  tagMap: Map<string, SearchContentTag>
-): SearchPageGroup[] {
+function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
   const grouped: SearchPageGroup[] = []
   let current: SearchPageGroup | null = null
 
@@ -39,7 +38,6 @@ function groupSearchResultsByPage(
         page: {
           content: String(result.content),
           id: result.id,
-          tag: tagMap.get(getPageUrl(result.url)) ?? tagFromUrl(result.url),
           url: result.url,
         },
         children: [],
@@ -54,11 +52,14 @@ function groupSearchResultsByPage(
   return grouped
 }
 
-function bucketPageGroupsByTag(pages: SearchPageGroup[]): SearchTagGroup[] {
+function bucketPageGroupsByTag(
+  pages: SearchPageGroup[],
+  getTag: (page: SearchPageGroup) => string
+): SearchTagGroup[] {
   const tagMap = new Map<string, SearchPageGroup[]>()
 
   for (const page of pages) {
-    const tag = page.page.tag
+    const tag = getTag(page)
     const existing = tagMap.get(tag)
 
     if (existing) {
@@ -69,14 +70,7 @@ function bucketPageGroupsByTag(pages: SearchPageGroup[]): SearchTagGroup[] {
     tagMap.set(tag, [page])
   }
 
-  return [
-    ...searchTagOrder
-      .filter((tag) => tagMap.has(tag))
-      .map((tag) => ({ tag, pages: tagMap.get(tag)! })),
-    ...Array.from(tagMap.entries())
-      .filter(([tag]) => !searchTagOrder.includes(tag as ResolvedSearchTag))
-      .map(([tag, pages]) => ({ tag, pages })),
-  ]
+  return orderTagGroups(tagMap)
 }
 
 export function buildCommandGroups(search: string) {
@@ -95,26 +89,34 @@ export function buildCommandGroups(search: string) {
 }
 
 export function buildSearchTagGroups(
-  results: SortedResult[],
-  entries: PageEntry[]
+  results: SortedResult[]
 ): SearchTagGroup[] {
-  const tagMap = new Map(
-    entries.map((entry) => [entry.url, entry.tag] as const)
+  return bucketPageGroupsByTag(groupSearchResultsByPage(results), (page) =>
+    tagFromUrl(page.page.url)
   )
-
-  return bucketPageGroupsByTag(groupSearchResultsByPage(results, tagMap))
 }
 
 export function buildPageEntryGroups(entries: PageEntry[]): SearchTagGroup[] {
-  const pages = entries.map<SearchPageGroup>((entry) => ({
-    page: {
-      content: entry.title,
-      id: entry.url,
-      tag: entry.tag,
-      url: entry.url,
-    },
-    children: [],
-  }))
+  const tagMap = new Map<string, SearchPageGroup[]>()
 
-  return bucketPageGroupsByTag(pages)
+  for (const entry of entries) {
+    const existing = tagMap.get(entry.tag)
+    const page: SearchPageGroup = {
+      page: {
+        content: entry.title,
+        id: entry.url,
+        url: entry.url,
+      },
+      children: [],
+    }
+
+    if (existing) {
+      existing.push(page)
+      continue
+    }
+
+    tagMap.set(entry.tag, [page])
+  }
+
+  return orderTagGroups(tagMap)
 }
