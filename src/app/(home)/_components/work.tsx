@@ -49,7 +49,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
               className={buttonVariants({
                 shape: 'square',
                 variant: 'default',
-                className: 'w-full py-8',
+                className: 'w-full py-8 active:scale-none active:opacity-80',
               })}
               href='/work'
             >

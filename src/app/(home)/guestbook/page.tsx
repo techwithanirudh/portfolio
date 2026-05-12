@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { WebPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/section'
 import {
@@ -14,13 +15,31 @@ import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'
 import { GuestbookEntries } from './_components/entries'
 import { GuestbookForm } from './_components/form'
+import { GuestbookEntriesSkeleton } from './_components/skeleton'
 
-export default async function GuestbookPage() {
+async function GuestbookEntriesSection() {
   const session = await getSession()
-  const currentUserId = session?.user.id
+  const currentUserId = session?.user.id ?? null
   const isAdmin = session?.user.role === 'admin'
   const entries = await getGuestbookEntries(currentUserId)
 
+  return (
+    <ViewAnimation
+      delay={0.15}
+      initial={{ opacity: 0, translateY: 6 }}
+      whileInView={{ opacity: 1, translateY: 0 }}
+    >
+      <GuestbookEntries
+        currentUserId={currentUserId}
+        entries={entries}
+        isAdmin={isAdmin}
+        isSignedIn={Boolean(currentUserId)}
+      />
+    </ViewAnimation>
+  )
+}
+
+export default function GuestbookPage() {
   return (
     <Wrapper>
       <SplitSection>
@@ -55,18 +74,9 @@ export default async function GuestbookPage() {
         </ViewAnimation>
       </Section>
       <Section>
-        <ViewAnimation
-          delay={0.15}
-          initial={{ opacity: 0, translateY: 6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <GuestbookEntries
-            currentUserId={currentUserId ?? null}
-            entries={entries}
-            isAdmin={isAdmin ?? false}
-            isSignedIn={Boolean(currentUserId)}
-          />
-        </ViewAnimation>
+        <Suspense fallback={<GuestbookEntriesSkeleton />}>
+          <GuestbookEntriesSection />
+        </Suspense>
       </Section>
       <WebPageJsonLd
         description='Leave a note and react to messages from other visitors.'
