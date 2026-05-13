@@ -1,34 +1,24 @@
-import crypto from 'node:crypto'
+import { readFiles } from 'next-validate-link'
 import { chromium } from 'playwright'
 import { hashUrl, type LinkPreviewEntry } from '@/lib/link-preview'
 import {
-  captureScreenshot,
-  extractUrlsFromText,
-  getContentEntries,
-  getScreenshotFilename,
+  concurrency,
+  contentPatterns,
   linkPreviewConfig,
+  maxScreenshotAgeMs,
+} from './config'
+import {
+  captureScreenshot,
+  createPreviewEntry,
+  extractPreviewUrls,
+  generateContentHash,
   loadContentHash,
   loadManifest,
+  removeOrphanedScreenshots,
   saveContentHash,
+  scopePreviewsToUrls,
   writeManifest,
-} from './link-preview-utils'
-
-const maxScreenshotAgeMs = 6 * 30 * 24 * 60 * 60 * 1000
-const concurrency = 3
-const extractionVersion = 'bare-url-v1'
-
-function generateContentHash(entries: { content: string; path: string }[]) {
-  const hash = crypto.createHash('sha256')
-
-  hash.update(extractionVersion)
-
-  for (const entry of entries) {
-    hash.update(entry.path)
-    hash.update(entry.content)
-  }
-
-  return hash.digest('hex')
-}
+} from './utils'
 
 async function processUrls(
   urls: string[],
@@ -49,17 +39,8 @@ async function processUrls(
         batch.map(async (url) => {
           console.log(`  Capturing: ${url}`)
           const result = await captureScreenshot(browser, url)
-          const hash = hashUrl(url)
 
-          previews[hash] = {
-            errorMessage: result.error,
-            generatedAt: new Date().toISOString(),
-            height: linkPreviewConfig.screenshotHeight,
-            screenshotPath: `/previews/${getScreenshotFilename(url)}`,
-            status: result.success ? 'success' : 'failed',
-            url,
-            width: linkPreviewConfig.screenshotWidth,
-          }
+          previews[hashUrl(url)] = createPreviewEntry(url, result)
 
           console.log(
             result.success ? '    Success' : `    Failed: ${result.error}`
@@ -80,8 +61,8 @@ async function main() {
 
   const manifest = await loadManifest()
   const existingPreviews = manifest?.previews ?? {}
-  const entries = await getContentEntries()
-  const contentHash = generateContentHash(entries)
+  const files = await readFiles(contentPatterns)
+  const contentHash = generateContentHash(files)
 
   if ((await loadContentHash()) === contentHash && manifest) {
     console.log(
@@ -90,14 +71,15 @@ async function main() {
     return
   }
 
-  const urls = [
-    ...new Set(entries.flatMap((entry) => extractUrlsFromText(entry.content))),
-  ]
+  const urls = extractPreviewUrls(files)
 
+  console.log(`Read ${files.length} content files`)
   console.log(`Found ${urls.length} unique external URLs`)
 
+  const scopedPreviews = scopePreviewsToUrls(existingPreviews, urls)
+
   const urlsToProcess = urls.filter((url) => {
-    const existing = existingPreviews[hashUrl(url)]
+    const existing = scopedPreviews[hashUrl(url)]
 
     if (!existing) {
       return true
@@ -115,13 +97,15 @@ async function main() {
   console.log(`Processing ${urlsToProcess.length} new or stale URLs\n`)
 
   if (urlsToProcess.length === 0) {
-    await writeManifest(existingPreviews, manifest?.version)
+    await writeManifest(scopedPreviews, manifest?.version)
+    await removeOrphanedScreenshots(scopedPreviews)
     await saveContentHash(contentHash)
     return
   }
 
-  const previews = await processUrls(urlsToProcess, existingPreviews)
+  const previews = await processUrls(urlsToProcess, scopedPreviews)
   await writeManifest(previews, manifest?.version)
+  await removeOrphanedScreenshots(previews)
   await saveContentHash(contentHash)
 
   const successful = Object.values(previews).filter(

@@ -1,14 +1,16 @@
+import { readFiles } from 'next-validate-link'
 import { chromium } from 'playwright'
 import { hashUrl } from '@/lib/link-preview'
+import { contentPatterns } from './config'
 import {
   captureScreenshot,
-  extractUrlsFromText,
-  getContentEntries,
-  getScreenshotFilename,
-  linkPreviewConfig,
+  createPreviewEntry,
+  extractPreviewUrls,
   loadManifest,
+  removeOrphanedScreenshots,
+  scopePreviewsToUrls,
   writeManifest,
-} from './link-preview-utils'
+} from './utils'
 
 async function main() {
   const retryFailed = process.argv.includes('--all')
@@ -26,21 +28,22 @@ async function main() {
     return
   }
 
-  const entries = await getContentEntries()
-  const urls = [
-    ...new Set(entries.flatMap((entry) => extractUrlsFromText(entry.content))),
-  ]
-  const previews = { ...manifest.previews }
+  const files = await readFiles(contentPatterns)
+  const urls = extractPreviewUrls(files)
+  const previews = scopePreviewsToUrls(manifest.previews, urls)
   const urlsToProcess = urls.filter((url) => {
     const existing = previews[hashUrl(url)]
 
     return !existing || (retryFailed && existing.status === 'failed')
   })
 
+  console.log(`Read ${files.length} content files`)
   console.log(`Found ${urls.length} external URLs in content`)
   console.log(`Processing ${urlsToProcess.length} URLs\n`)
 
   if (urlsToProcess.length === 0) {
+    await writeManifest(previews, manifest.version)
+    await removeOrphanedScreenshots(previews)
     return
   }
 
@@ -51,15 +54,7 @@ async function main() {
       console.log(`[${index + 1}/${urlsToProcess.length}] ${url}`)
       const result = await captureScreenshot(browser, url, 45_000)
 
-      previews[hashUrl(url)] = {
-        errorMessage: result.error,
-        generatedAt: new Date().toISOString(),
-        height: linkPreviewConfig.screenshotHeight,
-        screenshotPath: `/previews/${getScreenshotFilename(url)}`,
-        status: result.success ? 'success' : 'failed',
-        url,
-        width: linkPreviewConfig.screenshotWidth,
-      }
+      previews[hashUrl(url)] = createPreviewEntry(url, result)
 
       console.log(
         result.success ? '  Success\n' : `  Failed: ${result.error}\n`
@@ -70,6 +65,7 @@ async function main() {
   }
 
   await writeManifest(previews, manifest.version)
+  await removeOrphanedScreenshots(previews)
 
   const successful = Object.values(previews).filter(
     (preview) => preview.status === 'success'
