@@ -4,11 +4,11 @@ export interface CaptureScreenshotResult {
 }
 
 export interface ScreenshotConfig {
-  timeout: number
-  waitAfterLoad: number
-  viewport: { height: number; width: number }
-  paths: { manifest: string; output: string }
   image: { format: 'jpeg' | 'png'; quality: number }
+  paths: { manifest: string; output: string }
+  timeout: number
+  viewport: { height: number; width: number }
+  waitAfterLoad: number
 }
 
 export interface ExclusionsConfig {

@@ -1,4 +1,8 @@
-import type { DetectionConfig, ScreenshotConfig } from './types'
+import type {
+  DetectionConfig,
+  ExclusionsConfig,
+  ScreenshotConfig,
+} from './types'
 
 export const content = [
   'content/blog/**/*.{md,mdx}',
@@ -23,7 +27,7 @@ export const screenshot: ScreenshotConfig = {
   },
 }
 
-export const exclusions = {
+export const exclusions: ExclusionsConfig = {
   domains: [
     'twitter.com',
     'x.com',
