@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import type { ComponentProps } from 'react'
 import { BlurImage } from '@/components/blur-image'
@@ -9,6 +10,7 @@ import {
 } from '@/components/ui/hover-card'
 import {
   getDisplayUrl,
+  getFaviconUrl,
   getLinkPreview,
   isExternalHttpUrl,
 } from '@/lib/link-preview'
@@ -55,6 +57,7 @@ export function LinkPreview({
   }
 
   const displayUrl = getDisplayUrl(href)
+  const faviconUrl = getFaviconUrl(href)
 
   return (
     <HoverCard closeDelay={120} openDelay={180}>
@@ -85,9 +88,16 @@ export function LinkPreview({
             width={preview.width}
           />
           <div className='flex items-center gap-2 border-border border-t border-dashed px-3 py-2.5 text-muted-foreground text-xs'>
-            <span className='flex size-5 shrink-0 items-center justify-center rounded-sm bg-muted text-muted-foreground'>
-              <Icons.globe className='size-3.5' />
-            </span>
+            {faviconUrl && (
+              <Image
+                alt=''
+                className='size-4 shrink-0 rounded-sm object-contain'
+                height={16}
+                src={faviconUrl}
+                unoptimized
+                width={16}
+              />
+            )}
             <span className='min-w-0 flex-1 truncate'>{displayUrl}</span>
             <Icons.arrowUpRight className='size-3.5 shrink-0 transition-transform will-change-transform group-hover:scale-125' />
           </div>

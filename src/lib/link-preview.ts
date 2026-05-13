@@ -69,3 +69,12 @@ export function getDisplayUrl(url: string): string {
 export function isExternalHttpUrl(url: string): boolean {
   return url.startsWith('http://') || url.startsWith('https://')
 }
+
+export function getFaviconUrl(url: string): string {
+  try {
+    const { hostname } = new URL(url)
+    return `https://www.google.com/s2/favicons?domain=${hostname}&sz=32`
+  } catch {
+    return ''
+  }
+}
