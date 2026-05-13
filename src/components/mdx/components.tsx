@@ -10,6 +10,7 @@ import { Heading } from '@/components/prose'
 import { VideoPlayer } from '../ui/video-player'
 import { FramedImage, IframeEmbed } from './embed'
 import { GitHubRepo, GithubRepo } from './github-repo'
+import { LinkPreviewAnchor } from './link-preview'
 import { Mermaid } from './mermaid'
 
 export const mdxComponents: MDXComponents = {
@@ -22,6 +23,7 @@ export const mdxComponents: MDXComponents = {
   h6: (props) => <Heading as='h6' {...props} />,
   Accordion,
   Accordions,
+  a: LinkPreviewAnchor,
   Callout,
   File,
   Files,

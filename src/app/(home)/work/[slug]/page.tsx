@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
@@ -7,10 +6,10 @@ import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
+import { PreviewButton } from '@/components/mdx/preview-button'
 import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
-import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
@@ -88,16 +87,12 @@ function Header(props: { page: MDXPage }) {
           >
             <div className='flex flex-wrap gap-3'>
               {links.map((link) => (
-                <Button asChild key={link.href} size='sm' variant='secondary'>
-                  <Link
-                    href={link.href}
-                    rel='noopener noreferrer'
-                    target='_blank'
-                  >
-                    {link.icon}
-                    {link.label}
-                  </Link>
-                </Button>
+                <PreviewButton
+                  href={link.href}
+                  icon={link.icon}
+                  key={link.href}
+                  label={link.label}
+                />
               ))}
             </div>
           </ViewAnimation>

@@ -54,3 +54,6 @@ next-env.d.ts
 
 # cspell
 .cspellcache
+
+# local link preview optimization
+public/previews/.content-hash
