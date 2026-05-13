@@ -14,8 +14,8 @@ export const concurrency = 3
 export const maxScreenshotAgeMs = 6 * 30 * 24 * 60 * 60 * 1000
 
 export const screenshot: ScreenshotConfig = {
-  timeout: 45_000,
-  waitAfterLoad: 5000,
+  timeout: 60_000,
+  waitAfterLoad: 10_000,
   viewport: { height: 630, width: 1200 },
   paths: {
     manifest: 'public/previews/manifest.json',
