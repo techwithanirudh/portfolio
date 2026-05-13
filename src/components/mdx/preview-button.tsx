@@ -37,7 +37,7 @@ export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
         </Button>
       </HoverCardTrigger>
       {preview && (
-        <HoverCardContent className='not-prose w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden border-dashed bg-card p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
+        <HoverCardContent className='not-prose w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden border-dashed bg-card p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
           <a
             className='group block'
             href={href}
