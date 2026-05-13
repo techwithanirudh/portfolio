@@ -1,3 +1,5 @@
+import 'server-only'
+
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
@@ -18,14 +20,21 @@ export interface LinkPreviewManifest {
   previews: Record<string, LinkPreviewEntry>
 }
 
-const manifestPath = path.join(process.cwd(), 'public', 'previews', 'manifest.json')
+const manifestPath = path.join(
+  process.cwd(),
+  'public',
+  'previews',
+  'manifest.json'
+)
 
 export function hashUrl(url: string): string {
   return crypto.createHash('sha256').update(url).digest('hex').slice(0, 12)
 }
 
 export const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
-  if (!fs.existsSync(manifestPath)) return null
+  if (!fs.existsSync(manifestPath)) {
+    return null
+  }
 
   try {
     return JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
@@ -38,7 +47,9 @@ export function getLinkPreview(url: string): LinkPreviewEntry | null {
   const manifest = getLinkPreviewManifest()
   const preview = manifest?.previews[hashUrl(url)]
 
-  if (!preview || preview.status !== 'success') return null
+  if (!preview || preview.status !== 'success') {
+    return null
+  }
 
   return preview
 }
