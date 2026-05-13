@@ -4,10 +4,10 @@ import { hashUrl } from '@/lib/link-preview'
 import { contentPatterns } from './config'
 import {
   captureScreenshot,
-  createPreviewEntry,
-  extractPreviewUrls,
+  createEntry,
+  extractUrls,
   loadManifest,
-  removeOrphanedScreenshots,
+  removeOrphans,
   scopePreviewsToUrls,
   writeManifest,
 } from './utils'
@@ -18,9 +18,7 @@ async function main() {
 
   console.log('Fix Failed Link Previews\n')
   console.log(
-    retryFailed
-      ? 'Mode: retry failed and missing screenshots'
-      : 'Mode: generate missing screenshots only'
+    retryFailed ? 'Mode: retry failed and missing' : 'Mode: missing only'
   )
 
   if (!manifest) {
@@ -29,54 +27,41 @@ async function main() {
   }
 
   const files = await readFiles(contentPatterns)
-  const urls = extractPreviewUrls(files)
+  const urls = [...new Set(files.flatMap((f) => extractUrls(f)))]
   const previews = scopePreviewsToUrls(manifest.previews, urls)
   const urlsToProcess = urls.filter((url) => {
     const existing = previews[hashUrl(url)]
-
     return !existing || (retryFailed && existing.status === 'failed')
   })
 
-  console.log(`Read ${files.length} content files`)
-  console.log(`Found ${urls.length} external URLs in content`)
-  console.log(`Processing ${urlsToProcess.length} URLs\n`)
+  console.log(
+    `Read ${files.length} files, ${urls.length} URLs, processing ${urlsToProcess.length}`
+  )
 
-  if (urlsToProcess.length === 0) {
-    await writeManifest(previews, manifest.version)
-    await removeOrphanedScreenshots(previews)
-    return
-  }
+  if (urlsToProcess.length > 0) {
+    const browser = await chromium.launch({ headless: true })
 
-  const browser = await chromium.launch({ headless: true })
-
-  try {
-    for (const [index, url] of urlsToProcess.entries()) {
-      console.log(`[${index + 1}/${urlsToProcess.length}] ${url}`)
-      const result = await captureScreenshot(browser, url, 45_000)
-
-      previews[hashUrl(url)] = createPreviewEntry(url, result)
-
-      console.log(
-        result.success ? '  Success\n' : `  Failed: ${result.error}\n`
-      )
+    try {
+      for (const [i, url] of urlsToProcess.entries()) {
+        console.log(`[${i + 1}/${urlsToProcess.length}] ${url}`)
+        const result = await captureScreenshot(browser, url, 45_000)
+        previews[hashUrl(url)] = createEntry(url, result)
+        console.log(
+          result.success ? '  Success\n' : `  Failed: ${result.error}\n`
+        )
+      }
+    } finally {
+      await browser.close()
     }
-  } finally {
-    await browser.close()
   }
 
-  await writeManifest(previews, manifest.version)
-  await removeOrphanedScreenshots(previews)
+  await writeManifest(previews)
+  await removeOrphans(previews)
 
-  const successful = Object.values(previews).filter(
-    (preview) => preview.status === 'success'
-  ).length
-  const failed = Object.values(previews).filter(
-    (preview) => preview.status === 'failed'
-  ).length
-
-  console.log('Results:')
-  console.log(`  Successful: ${successful}`)
-  console.log(`  Failed: ${failed}`)
+  const all = Object.values(previews)
+  console.log(
+    `Results: ${all.filter((p) => p.status === 'success').length} success, ${all.filter((p) => p.status === 'failed').length} failed`
+  )
 }
 
 main().catch((error) => {

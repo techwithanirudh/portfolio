@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-13T05:36:59.190Z",
+  "generated": "2026-05-13T05:52:24.319Z",
   "previews": {
     "cb9875639394": {
       "generatedAt": "2026-05-13T04:28:14.145Z",
@@ -313,6 +313,5 @@
       "url": "https://notes.techwithanirudh.com/",
       "width": 1200
     }
-  },
-  "version": "1.0"
+  }
 }
