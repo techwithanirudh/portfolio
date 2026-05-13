@@ -21,16 +21,6 @@ export interface LinkPreviewManifest {
   version: string
 }
 
-export interface LinkPreviewConfig {
-  imageFormat: 'jpeg' | 'png'
-  imageQuality: number
-  manifestPath: string
-  outputDir: string
-  screenshotHeight: number
-  screenshotWidth: number
-  timeout: number
-}
-
 const manifestPath = path.join(
   process.cwd(),
   'public',

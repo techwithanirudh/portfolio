@@ -1,3 +1,5 @@
+import type { DetectionConfig, ScreenshotConfig } from './types'
+
 export const content = [
   'content/blog/**/*.{md,mdx}',
   'content/work/**/*.{md,mdx}',
@@ -7,14 +9,18 @@ export const concurrency = 3
 
 export const maxScreenshotAgeMs = 6 * 30 * 24 * 60 * 60 * 1000
 
-export const linkPreviewConfig = {
-  imageFormat: 'jpeg' as const,
-  imageQuality: 92,
-  manifestPath: 'public/previews/manifest.json',
-  outputDir: 'public/previews',
-  screenshotHeight: 630,
-  screenshotWidth: 1200,
-  timeout: 30_000,
+export const screenshot: ScreenshotConfig = {
+  timeout: 45_000,
+  waitAfterLoad: 5000,
+  viewport: { height: 630, width: 1200 },
+  paths: {
+    manifest: 'public/previews/manifest.json',
+    output: 'public/previews',
+  },
+  image: {
+    format: 'jpeg',
+    quality: 92,
+  },
 }
 
 export const exclusions = {
@@ -43,22 +49,12 @@ export const exclusions = {
     '.exe',
     '.pkg',
   ],
-}
-
-export const internalHostnames = new Set([
-  'techwithanirudh.com',
-  'www.techwithanirudh.com',
-  'localhost',
-])
-
-export interface DetectionConfig {
-  components: Record<string, string[]>
-  frontmatter: string[]
+  hostnames: ['localhost'],
 }
 
 export const detection: DetectionConfig = {
   components: {
     // Card: ['href'],
   },
-  frontmatter: ['website'],
+  frontmatter: ['website', 'github'],
 }

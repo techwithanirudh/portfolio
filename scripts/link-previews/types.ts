@@ -1,24 +1,23 @@
-import type { LinkPreviewConfig } from '@/lib/link-preview'
-
-export interface LinkPreviewScriptConfig extends LinkPreviewConfig {
-  contentHashPath: string
-}
-
 export interface CaptureScreenshotResult {
   error?: string
   success: boolean
 }
 
-export interface MarkdownNode {
-  attributes?: MdxJsxAttribute[]
-  children?: MarkdownNode[]
-  name?: unknown
-  type: string
-  url?: unknown
+export interface ScreenshotConfig {
+  timeout: number
+  waitAfterLoad: number
+  viewport: { height: number; width: number }
+  paths: { manifest: string; output: string }
+  image: { format: 'jpeg' | 'png'; quality: number }
 }
 
-export interface MdxJsxAttribute {
-  name?: unknown
-  type: string
-  value?: unknown
+export interface ExclusionsConfig {
+  domains: string[]
+  extensions: string[]
+  hostnames: string[]
+}
+
+export interface DetectionConfig {
+  components: Record<string, string[]>
+  frontmatter: string[]
 }

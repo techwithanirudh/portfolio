@@ -11,12 +11,7 @@ import {
   type LinkPreviewEntry,
   type LinkPreviewManifest,
 } from '@/lib/link-preview'
-import {
-  detection,
-  exclusions,
-  internalHostnames,
-  linkPreviewConfig,
-} from './config'
+import { detection, exclusions, screenshot } from './config'
 import type { CaptureScreenshotResult } from './types'
 
 const mdProcessor = remark().use(remarkGfm)
@@ -30,7 +25,7 @@ export function shouldGeneratePreview(url: string): boolean {
 
   try {
     const parsed = new URL(url)
-    if (internalHostnames.has(parsed.hostname)) {
+    if (exclusions.hostnames.includes(parsed.hostname)) {
       return false
     }
     if (
@@ -124,7 +119,7 @@ export function previewsForUrls(
 /** Load the existing preview manifest, or null if none exists */
 export async function loadManifest(): Promise<LinkPreviewManifest | null> {
   try {
-    return JSON.parse(await fs.readFile(linkPreviewConfig.manifestPath, 'utf8'))
+    return JSON.parse(await fs.readFile(screenshot.paths.manifest, 'utf8'))
   } catch {
     return null
   }
@@ -134,9 +129,9 @@ export async function loadManifest(): Promise<LinkPreviewManifest | null> {
 export async function writeManifest(
   previews: Record<string, LinkPreviewEntry>
 ) {
-  await fs.mkdir(linkPreviewConfig.outputDir, { recursive: true })
+  await fs.mkdir(screenshot.paths.output, { recursive: true })
   await fs.writeFile(
-    linkPreviewConfig.manifestPath,
+    screenshot.paths.manifest,
     `${JSON.stringify({ generated: new Date().toISOString(), previews }, null, 2)}\n`
   )
 }
@@ -145,14 +140,14 @@ export async function writeManifest(
 export async function captureScreenshot(
   browser: Browser,
   url: string,
-  timeout = linkPreviewConfig.timeout
+  timeout = screenshot.timeout
 ) {
   const context = await browser.newContext({
     userAgent:
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     viewport: {
-      height: linkPreviewConfig.screenshotHeight,
-      width: linkPreviewConfig.screenshotWidth,
+      height: screenshot.viewport.height,
+      width: screenshot.viewport.width,
     },
   })
   const page = await context.newPage()
@@ -167,7 +162,7 @@ export async function captureScreenshot(
     })
 
     let response = await page
-      .goto(url, { timeout: 20_000, waitUntil: 'networkidle' })
+      .goto(url, { timeout, waitUntil: 'networkidle' })
       .catch(() => null)
     if (!response) {
       response = await page.goto(url, {
@@ -181,23 +176,19 @@ export async function captureScreenshot(
       return { error: `HTTP ${response.status()}`, success: false }
     }
 
-    await page.waitForTimeout(1000)
-    await page
-      .evaluate(() => document.fonts.ready)
-      .catch(() => {
-        /* Font Loading API may be polyfilled */
-      })
+    await page.waitForTimeout(screenshot.waitAfterLoad)
+    await page.evaluate(() => document.fonts.ready).catch(() => null)
 
     await page.screenshot({
       path: path.join(
-        linkPreviewConfig.outputDir,
-        `${hashUrl(url)}.${linkPreviewConfig.imageFormat}`
+        screenshot.paths.output,
+        `${hashUrl(url)}.${screenshot.image.format}`
       ),
       quality:
-        linkPreviewConfig.imageFormat === 'jpeg'
-          ? linkPreviewConfig.imageQuality
+        screenshot.image.format === 'jpeg'
+          ? screenshot.image.quality
           : undefined,
-      type: linkPreviewConfig.imageFormat,
+      type: screenshot.image.format,
     })
 
     return { success: true }
@@ -220,7 +211,7 @@ export async function removeOrphans(
   )
   let files: string[]
   try {
-    files = await fs.readdir(linkPreviewConfig.outputDir)
+    files = await fs.readdir(screenshot.paths.output)
   } catch {
     return
   }
@@ -229,7 +220,7 @@ export async function removeOrphans(
       (file.endsWith('.jpeg') || file.endsWith('.png')) &&
       !expectedFiles.has(file)
     ) {
-      await fs.unlink(path.join(linkPreviewConfig.outputDir, file))
+      await fs.unlink(path.join(screenshot.paths.output, file))
     }
   }
 }
@@ -242,10 +233,10 @@ export function createEntry(
   return {
     errorMessage: result.error,
     generatedAt: new Date().toISOString(),
-    height: linkPreviewConfig.screenshotHeight,
-    screenshotPath: `/previews/${hashUrl(url)}.${linkPreviewConfig.imageFormat}`,
+    height: screenshot.viewport.height,
+    screenshotPath: `/previews/${hashUrl(url)}.${screenshot.image.format}`,
     status: result.success ? 'success' : 'failed',
     url,
-    width: linkPreviewConfig.screenshotWidth,
+    width: screenshot.viewport.width,
   }
 }
