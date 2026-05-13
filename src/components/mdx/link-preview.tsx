@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import type { ComponentProps } from 'react'
+import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import {
   HoverCard,
@@ -76,11 +76,11 @@ export function LinkPreview({
           rel='noopener noreferrer'
           target='_blank'
         >
-          <Image
+          <BlurImage
             alt={`Preview of ${displayUrl}`}
-            className='aspect-[1200/630] w-full bg-muted object-cover'
+            className='aspect-[1200/630] w-full bg-muted'
             height={preview.height}
-            loading='lazy'
+            imageClassName='object-cover'
             src={preview.screenshotPath}
             width={preview.width}
           />
