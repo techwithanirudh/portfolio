@@ -9,11 +9,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import {
-  getDisplayUrl,
-  getFaviconUrl,
-  getLinkPreview,
-} from '@/lib/link-preview'
+import { getLinkPreview } from '@/lib/link-preview'
 
 interface PreviewButtonProps {
   href: string
@@ -23,8 +19,8 @@ interface PreviewButtonProps {
 
 export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
   const preview = getLinkPreview(href)
-  const displayUrl = getDisplayUrl(href)
-  const faviconUrl = getFaviconUrl(href)
+  const { hostname: displayUrl } = new URL(href)
+  const faviconUrl = `https://www.google.com/s2/favicons?domain=${displayUrl}&sz=32`
 
   return (
     <HoverCard closeDelay={120} openDelay={180}>

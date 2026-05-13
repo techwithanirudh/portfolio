@@ -8,12 +8,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import {
-  getDisplayUrl,
-  getFaviconUrl,
-  getLinkPreview,
-  isExternalHttpUrl,
-} from '@/lib/link-preview'
+import { getLinkPreview } from '@/lib/link-preview'
 import { cn } from '@/lib/utils'
 
 type LinkPreviewProps = ComponentProps<'a'>
@@ -32,7 +27,7 @@ export function LinkPreview({
     )
   }
 
-  if (!(href && isExternalHttpUrl(href))) {
+  if (!(href && (href.startsWith('http://') || href.startsWith('https://')))) {
     return (
       <a className={className} href={href} {...props}>
         {children}
@@ -56,8 +51,8 @@ export function LinkPreview({
     )
   }
 
-  const displayUrl = getDisplayUrl(href)
-  const faviconUrl = getFaviconUrl(href)
+  const { hostname: displayUrl } = new URL(href)
+  const faviconUrl = `https://www.google.com/s2/favicons?domain=${displayUrl}&sz=32`
 
   return (
     <HoverCard closeDelay={120} openDelay={180}>
