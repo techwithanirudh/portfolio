@@ -9,6 +9,7 @@ import type { MDXComponents } from 'mdx/types'
 import { Heading } from '@/components/prose'
 import { VideoPlayer } from '../ui/video-player'
 import { FramedImage, IframeEmbed } from './embed'
+import { GitHubRepo, GithubRepo } from './github-repo'
 import { Mermaid } from './mermaid'
 
 export const mdxComponents: MDXComponents = {
@@ -26,6 +27,8 @@ export const mdxComponents: MDXComponents = {
   Files,
   Folder,
   FramedImage,
+  GitHubRepo,
+  GithubRepo,
   IframeEmbed,
   ImageZoom,
   img: FramedImage,

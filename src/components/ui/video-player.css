@@ -1,5 +1,5 @@
 [data-media-player] {
-  --video-border: var(--border);
+  --video-border: none;
   --video-border-radius: var(--radius-xl);
 }
 
