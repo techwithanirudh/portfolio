@@ -10,6 +10,7 @@ import {
 } from '@vidstack/react/player/layouts/default'
 import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
+import './video-player.css';
 
 export interface VideoPlayerProps extends ComponentProps<typeof MediaPlayer> {
   poster?: string
@@ -24,7 +25,7 @@ export const VideoPlayer = ({
 }: VideoPlayerProps) => (
   <MediaPlayer
     className={cn(
-      'w-full overflow-hidden rounded-lg border border-border bg-background',
+      'w-full overflow-hidden !rounded-xl relative !border-none',
       className
     )}
     poster={poster}
@@ -36,5 +37,6 @@ export const VideoPlayer = ({
       icons={defaultLayoutIcons}
       thumbnails={thumbnails}
     />
+    <div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10' />
   </MediaPlayer>
 )

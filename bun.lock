@@ -24,7 +24,7 @@
         "@t3-oss/env-nextjs": "^0.13.11",
         "@takumi-rs/image-response": "^1.1.2",
         "@vercel/blob": "^2.3.3",
-        "@vidstack/react": "1.12.6",
+        "@vidstack/react": "^1.12.13",
         "@web-kits/audio": "^0.1.0",
         "ai": "^6.0.174",
         "ai-retry": "^1.6.0",
@@ -1159,7 +1159,7 @@
 
     "@vercel/oidc": ["@vercel/oidc@3.2.0", "", {}, "sha512-UycprH3T6n3jH0k44NHMa7pnFHGu/N05MjojYr+Mc6I7obkoLIJujSWwin1pCvdy/eOxrI/l3uDLQsmcrOb4ug=="],
 
-    "@vidstack/react": ["@vidstack/react@1.12.6", "", { "dependencies": { "@floating-ui/dom": "^1.6.10", "media-captions": "^1.0.4" }, "peerDependencies": { "@types/react": "^18.0.0", "react": "^18.0.0" } }, "sha512-HaQPctvJ29FTSRHWNkWlpC8QgmxX3Jmak2/IgjO85PihUzzbH7ztv7HfJ6x38bBZB+9lqU/h23i1YzMm6rfXkw=="],
+    "@vidstack/react": ["@vidstack/react@1.12.13", "", { "dependencies": { "@floating-ui/dom": "^1.6.10", "media-captions": "^1.0.4" }, "peerDependencies": { "@types/react": "^18.0.0 || ^19.0.0", "react": "^18.0.0 || ^19.0.0" } }, "sha512-zyNydy1+HtoK6cJ8EmqFNkPPGHIFMrr2KH+ef3654EqXx4IcJ8A5LCNMXBuALQE8IMxtk040JMoR9OKyeXjBOQ=="],
 
     "@web-kits/audio": ["@web-kits/audio@0.1.0", "", { "dependencies": { "@clack/prompts": "^0.9.1", "picocolors": "^1.1.1" }, "peerDependencies": { "react": ">=18" }, "optionalPeers": ["react"], "bin": { "audio": "dist/bin.js" } }, "sha512-jaS9Z6MSilo4SN9dUpztvqZhRkJWd8ABcB38Vdqpsh5UbKxYUBC9qq0a/YUC+RPzG8Iy5/wpycIV4d18ewX0rg=="],
 
