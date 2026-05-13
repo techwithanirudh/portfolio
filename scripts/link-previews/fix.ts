@@ -1,16 +1,39 @@
 import { readFiles } from 'next-validate-link'
 import { chromium } from 'playwright'
-import { hashUrl } from '@/lib/link-preview'
-import { contentPatterns } from './config'
+import { hashUrl, type LinkPreviewEntry } from '@/lib/link-preview'
+import { content } from './config'
 import {
   captureScreenshot,
   createEntry,
   extractUrls,
   loadManifest,
+  previewsForUrls,
   removeOrphans,
-  scopePreviewsToUrls,
   writeManifest,
 } from './utils'
+
+async function captureMissing(
+  urls: string[],
+  existing: Record<string, LinkPreviewEntry>
+) {
+  const previews = { ...existing }
+  const browser = await chromium.launch({ headless: true })
+
+  try {
+    for (const [i, url] of urls.entries()) {
+      console.log(`[${i + 1}/${urls.length}] ${url}`)
+      const result = await captureScreenshot(browser, url, 45_000)
+      previews[hashUrl(url)] = createEntry(url, result)
+      console.log(
+        result.success ? '  Success\n' : `  Failed: ${result.error}\n`
+      )
+    }
+  } finally {
+    await browser.close()
+  }
+
+  return previews
+}
 
 async function main() {
   const retryFailed = process.argv.includes('--all')
@@ -26,34 +49,22 @@ async function main() {
     return
   }
 
-  const files = await readFiles(contentPatterns)
+  const files = await readFiles(content)
   const urls = [...new Set(files.flatMap((f) => extractUrls(f)))]
-  const previews = scopePreviewsToUrls(manifest.previews, urls)
-  const urlsToProcess = urls.filter((url) => {
-    const existing = previews[hashUrl(url)]
+  const currentPreviews = previewsForUrls(manifest.previews, urls)
+  const pending = urls.filter((url) => {
+    const existing = currentPreviews[hashUrl(url)]
     return !existing || (retryFailed && existing.status === 'failed')
   })
 
   console.log(
-    `Read ${files.length} files, ${urls.length} URLs, processing ${urlsToProcess.length}`
+    `Read ${files.length} files, ${urls.length} URLs, processing ${pending.length}`
   )
 
-  if (urlsToProcess.length > 0) {
-    const browser = await chromium.launch({ headless: true })
-
-    try {
-      for (const [i, url] of urlsToProcess.entries()) {
-        console.log(`[${i + 1}/${urlsToProcess.length}] ${url}`)
-        const result = await captureScreenshot(browser, url, 45_000)
-        previews[hashUrl(url)] = createEntry(url, result)
-        console.log(
-          result.success ? '  Success\n' : `  Failed: ${result.error}\n`
-        )
-      }
-    } finally {
-      await browser.close()
-    }
-  }
+  const previews =
+    pending.length === 0
+      ? currentPreviews
+      : await captureMissing(pending, currentPreviews)
 
   await writeManifest(previews)
   await removeOrphans(previews)

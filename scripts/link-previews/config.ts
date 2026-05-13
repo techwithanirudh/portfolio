@@ -1,4 +1,4 @@
-export const contentPatterns = [
+export const content = [
   'content/blog/**/*.{md,mdx}',
   'content/work/**/*.{md,mdx}',
 ]
@@ -17,32 +17,33 @@ export const linkPreviewConfig = {
   timeout: 30_000,
 }
 
-export const excludedDomains = [
-  'twitter.com',
-  'x.com',
-  'facebook.com',
-  'instagram.com',
-  'linkedin.com',
-  'youtube.com',
-  'youtu.be',
-  'tiktok.com',
-  'reddit.com',
-  'discord.com',
-  'slack.com',
-]
-
-export const excludedPathExtensions = [
-  '.zip',
-  '.tar',
-  '.gz',
-  '.tgz',
-  '.rar',
-  '.7z',
-  '.pdf',
-  '.dmg',
-  '.exe',
-  '.pkg',
-]
+export const exclusions = {
+  domains: [
+    'twitter.com',
+    'x.com',
+    'facebook.com',
+    'instagram.com',
+    'linkedin.com',
+    'youtube.com',
+    'youtu.be',
+    'tiktok.com',
+    'reddit.com',
+    'discord.com',
+    'slack.com',
+  ],
+  extensions: [
+    '.zip',
+    '.tar',
+    '.gz',
+    '.tgz',
+    '.rar',
+    '.7z',
+    '.pdf',
+    '.dmg',
+    '.exe',
+    '.pkg',
+  ],
+}
 
 export const internalHostnames = new Set([
   'techwithanirudh.com',
@@ -50,8 +51,14 @@ export const internalHostnames = new Set([
   'localhost',
 ])
 
-export const mdxComponentAttributes: Record<string, string[]> = {
-  Card: ['href'],
+export interface DetectionConfig {
+  components: Record<string, string[]>
+  frontmatter: string[]
 }
 
-export const frontmatterUrlFields = ['website']
+export const detection: DetectionConfig = {
+  components: {
+    // Card: ['href'],
+  },
+  frontmatter: ['website'],
+}

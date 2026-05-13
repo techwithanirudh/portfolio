@@ -1,14 +1,14 @@
 import { readFiles } from 'next-validate-link'
 import { chromium } from 'playwright'
 import { hashUrl, type LinkPreviewEntry } from '@/lib/link-preview'
-import { concurrency, contentPatterns, maxScreenshotAgeMs } from './config'
+import { concurrency, content, maxScreenshotAgeMs } from './config'
 import {
   captureScreenshot,
   createEntry,
   extractUrls,
   loadManifest,
+  previewsForUrls,
   removeOrphans,
-  scopePreviewsToUrls,
   writeManifest,
 } from './utils'
 
@@ -49,14 +49,14 @@ async function main() {
 
   const manifest = await loadManifest()
   const existingPreviews = manifest?.previews ?? {}
-  const files = await readFiles(contentPatterns)
+  const files = await readFiles(content)
   const urls = [...new Set(files.flatMap((f) => extractUrls(f)))]
 
   console.log(`Read ${files.length} content files, ${urls.length} URLs`)
 
-  const scopedPreviews = scopePreviewsToUrls(existingPreviews, urls)
-  const process = urls.filter((url) => {
-    const existing = scopedPreviews[hashUrl(url)]
+  const currentPreviews = previewsForUrls(existingPreviews, urls)
+  const pending = urls.filter((url) => {
+    const existing = currentPreviews[hashUrl(url)]
     return (
       !existing ||
       (existing.status !== 'failed' &&
@@ -66,9 +66,9 @@ async function main() {
   })
 
   const previews =
-    process.length === 0
-      ? scopedPreviews
-      : await processUrls(process, scopedPreviews)
+    pending.length === 0
+      ? currentPreviews
+      : await processUrls(pending, currentPreviews)
 
   await writeManifest(previews)
   await removeOrphans(previews)

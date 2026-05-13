@@ -69,7 +69,7 @@ export function LinkPreview({
           {children}
         </a>
       </HoverCardTrigger>
-      <HoverCardContent className='not-prose w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden border-dashed bg-card/95 p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
+      <HoverCardContent className='not-prose w-[22rem] max-w-[calc(100vw-2rem)] overflow-hidden border-dashed bg-card p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
         <a
           className='group block'
           href={href}

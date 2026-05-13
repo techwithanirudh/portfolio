@@ -12,18 +12,17 @@ import {
   type LinkPreviewManifest,
 } from '@/lib/link-preview'
 import {
-  excludedDomains,
-  excludedPathExtensions,
-  frontmatterUrlFields,
+  detection,
+  exclusions,
   internalHostnames,
   linkPreviewConfig,
-  mdxComponentAttributes,
 } from './config'
 import type { CaptureScreenshotResult } from './types'
 
 const mdProcessor = remark().use(remarkGfm)
 const mdxProcessor = remark().use(remarkMdx).use(remarkGfm)
 
+/** Whether a URL should have a screenshot captured (filters internal, excluded domains, etc.) */
 export function shouldGeneratePreview(url: string): boolean {
   if (!(url.startsWith('http://') || url.startsWith('https://'))) {
     return false
@@ -35,18 +34,19 @@ export function shouldGeneratePreview(url: string): boolean {
       return false
     }
     if (
-      excludedPathExtensions.some((e) =>
+      exclusions.extensions.some((e) =>
         parsed.pathname.toLowerCase().endsWith(e)
       )
     ) {
       return false
     }
-    return !excludedDomains.some((d) => parsed.hostname.includes(d))
+    return !exclusions.domains.some((d) => parsed.hostname.includes(d))
   } catch {
     return false
   }
 }
 
+/** Extract external URLs from an MDX/MD file's markdown links and frontmatter */
 export function extractUrls(file: FileObject): string[] {
   const urls = new Set<string>()
   const processor = file.path.endsWith('.mdx') ? mdxProcessor : mdProcessor
@@ -54,7 +54,7 @@ export function extractUrls(file: FileObject): string[] {
 
   if (file.data) {
     const fm = file.data as Record<string, unknown>
-    for (const field of frontmatterUrlFields) {
+    for (const field of detection.frontmatter) {
       const v = fm[field]
       if (typeof v === 'string' && shouldGeneratePreview(v)) {
         urls.add(v)
@@ -88,7 +88,7 @@ export function extractUrls(file: FileObject): string[] {
         return
       }
 
-      const attrs = mdxComponentAttributes[node.name]
+      const attrs = detection.components[node.name]
       if (!attrs) {
         return
       }
@@ -110,7 +110,8 @@ export function extractUrls(file: FileObject): string[] {
   return [...urls]
 }
 
-export function scopePreviewsToUrls(
+/** Keep only preview entries whose URL hashes are present in the given URL list */
+export function previewsForUrls(
   previews: Record<string, LinkPreviewEntry>,
   urls: string[]
 ): Record<string, LinkPreviewEntry> {
@@ -120,6 +121,7 @@ export function scopePreviewsToUrls(
   )
 }
 
+/** Load the existing preview manifest, or null if none exists */
 export async function loadManifest(): Promise<LinkPreviewManifest | null> {
   try {
     return JSON.parse(await fs.readFile(linkPreviewConfig.manifestPath, 'utf8'))
@@ -128,6 +130,7 @@ export async function loadManifest(): Promise<LinkPreviewManifest | null> {
   }
 }
 
+/** Write the preview manifest to disk, creating the output directory if needed */
 export async function writeManifest(
   previews: Record<string, LinkPreviewEntry>
 ) {
@@ -138,6 +141,7 @@ export async function writeManifest(
   )
 }
 
+/** Capture a full-page screenshot of a URL, returning success or an error message */
 export async function captureScreenshot(
   browser: Browser,
   url: string,
@@ -207,6 +211,7 @@ export async function captureScreenshot(
   }
 }
 
+/** Delete screenshot files not referenced by any preview entry */
 export async function removeOrphans(
   previews: Record<string, LinkPreviewEntry>
 ) {
@@ -229,6 +234,7 @@ export async function removeOrphans(
   }
 }
 
+/** Create a new manifest entry for a screenshot result */
 export function createEntry(
   url: string,
   result: CaptureScreenshotResult
