@@ -18,7 +18,6 @@ export interface LinkPreviewEntry {
 export interface LinkPreviewManifest {
   generated: string
   previews: Record<string, LinkPreviewEntry>
-  version: string
 }
 
 const manifestPath = path.join(
