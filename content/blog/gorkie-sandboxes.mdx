@@ -76,8 +76,7 @@ the flow looked like this:
 
 in code, this looked like get-or-create with snapshot restore plus redis TTLs for thread persistence:
 
-```ts
-// source: https://github.com/imdevarsh/gorkie-slack/blob/feat/sandbox/server/lib/ai/tools/execute-code/sandbox.ts
+```ts title="lib/ai/tools/execute-code/sandbox.ts"
 const live = await reconnect(ctxId);
 if (live) {
   return live;
@@ -99,8 +98,7 @@ this made per-thread persistence possible before we had a full DB session model.
 
 on shutdown, we also snapshot and save the snapshot id with a TTL:
 
-```ts
-// https://github.com/imdevarsh/gorkie-slack/blob/feat/sandbox/server/lib/ai/tools/execute-code/sandbox.ts
+```ts title="lib/ai/tools/execute-code/sandbox.ts"
 const snap = await instance.snapshot().catch((error: unknown) => {
   logger.warn({ sandboxId, error, ctxId }, 'Snapshot failed');
   return null;
@@ -134,8 +132,7 @@ we kept the same architecture (tool loop agent), only swapping the sandbox layer
 
 at the data layer, we made thread ownership explicit with a thread-to-sandbox session table:
 
-```ts
-// source: https://github.com/imdevarsh/gorkie-slack/blob/main/server/db/schema.ts
+```ts title="db/schema.ts"
 export const sandboxSessions = pgTable('sandbox_sessions', {
   threadId: text('thread_id').primaryKey(),
   sandboxId: text('sandbox_id').notNull(),
@@ -201,8 +198,7 @@ no custom janitor needed.
 
 with daytona, lifecycle and session mapping became much simpler in code:
 
-```ts
-// source: https://github.com/imdevarsh/gorkie-slack/blob/feat/daytona-pi/server/lib/sandbox/session.ts
+```ts title="lib/sandbox/session.ts"
 const sandbox = await daytona.create({
   autoStopInterval: config.timeouts.stopMinutes,
   autoArchiveInterval: config.timeouts.archiveMinutes,
@@ -317,8 +313,7 @@ we built a small rpc client inspired by pi's own client.
 
 the rpc boot path was just PTY startup, `stty -echo`, and optional session resume:
 
-```ts
-// source: https://github.com/imdevarsh/gorkie-slack/blob/feat/refactor-pi/server/lib/sandbox/rpc.ts
+```ts title="lib/sandbox/rpc.ts"
 const piCmd = sessionId
   ? `pi --mode rpc --session ${sessionId}`
   : 'pi --mode rpc';
@@ -353,8 +348,7 @@ with pi, we can:
 
 for tools, we registered handlers directly (for example `showFile` for Slack uploads) with validation built in:
 
-```ts
-// source: https://github.com/imdevarsh/gorkie-slack/blob/feat/refactor-pi/server/lib/sandbox/config/extensions/tools.ts
+```ts title="lib/sandbox/config/extensions/tools.ts"
 pi.registerTool({
   name: 'showFile',
   label: 'showFile',
