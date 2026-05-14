@@ -1,5 +1,6 @@
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion'
 import { Callout } from 'fumadocs-ui/components/callout'
+import { Card, Cards } from 'fumadocs-ui/components/card'
 import { File, Files, Folder } from 'fumadocs-ui/components/files'
 import { ImageZoom } from 'fumadocs-ui/components/image-zoom'
 import { Step, Steps } from 'fumadocs-ui/components/steps'
@@ -21,10 +22,12 @@ export const mdxComponents: MDXComponents = {
   h4: (props) => <Heading as='h4' {...props} />,
   h5: (props) => <Heading as='h5' {...props} />,
   h6: (props) => <Heading as='h6' {...props} />,
+  a: LinkPreviewAnchor,
   Accordion,
   Accordions,
-  a: LinkPreviewAnchor,
   Callout,
+  Card,
+  Cards,
   File,
   Files,
   Folder,
