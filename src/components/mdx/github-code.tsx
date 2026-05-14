@@ -43,7 +43,7 @@ export async function GitHubCode({
   endLine,
   title,
   allowCopy = true,
-  keepBackground = true,
+  keepBackground = false,
   icon,
 }: GitHubCodeProps) {
   try {
