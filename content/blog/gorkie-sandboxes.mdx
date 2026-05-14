@@ -7,7 +7,7 @@ image: /images/blog/first-post.png
 author: Anirudh & Devarsh
 ---
 
-This blog post was a collaboration between two people. Gorkie itself was built by [Devarsh](http://github.com/imdevarsh), and I led the sandbox and runtime work, with Devarsh helping throughout with testing, and ideas.
+Gorkie was built by [Devarsh](http://github.com/imdevarsh). I led the sandbox and runtime work; Devarsh helped throughout with testing and feedback.
 
 ## Intro
 
@@ -31,9 +31,9 @@ Through every iteration, three things stayed constant:
 
 We also use **Slack's AI implementation** for the chat surface and interaction model, which lets us render interactive UI directly via [Block Kit](https://docs.slack.dev/reference/block-kit/blocks/plan-block/).
 
-## The Provider Era
+## Vercel, Then E2B
 
-We started with [Vercel Sandboxes](https://vercel.com/docs/vercel-sandbox/). An obvious choice since we were already on the [AI SDK](https://ai-sdk.dev/). We gave Gorkie a sandbox tool that spawned a **ToolLoopAgent** to work inside the sandbox.
+We started with [Vercel Sandboxes](https://vercel.com/docs/vercel-sandbox/). We were already on [AI SDK](https://ai-sdk.dev/), so it was the obvious first choice. We gave Gorkie a sandbox tool that spawned a **ToolLoopAgent** to work inside it.
 
 ```ts title="lib/ai/tools/execute-code/sandbox.ts"
 const live = await reconnect(ctxId);
@@ -89,14 +89,9 @@ But as usage grew, we realized **the provider was not the real problem**. The re
 
 We were slowly building our own runtime by accident. E2B itself had friction too; persistence was beta and buggy, and the model was closer to "create and kill" than true persistence. We wanted persistence-first from day one.
 
-## Finding the Right Sandbox
+## Daytona
 
-We switched to **[Daytona](https://www.daytona.io/)**. It fit because:
-- Persistence-first design
-- Cleaner lifecycle controls
-- A natural mapping to "this thread owns a runtime"
-
-Daytona's lifecycle settings made cleanup trivial:
+We switched to **[Daytona](https://www.daytona.io/)**. The model fit what we were building: each Slack thread owns a runtime, and that runtime persists across messages. Daytona's lifecycle settings made cleanup something the platform handled rather than us:
 - Auto-stop after **5 minutes** of inactivity
 - Auto-archive **2 hours** after stop
 - Auto-delete after **2 days**
@@ -130,7 +125,7 @@ No custom janitor needed. Cleanup shifted from our cron logic to platform lifecy
 
 With the sandbox sorted, the next question was: what coding agent should run inside it?
 
-## The Orchestration Trap
+## The Orchestration
 
 We tried [Sandbox Agent](https://sandboxagent.dev/) by [Rivet](https://rivet.dev) with **[OpenCode](https://opencode.ai/)** behind it. Sandbox Agent runs inside the sandbox, exposes an HTTP interface, and communicates over [ACP](https://zed.dev/acp). We had to boot, health-check, and restart it when needed.
 
@@ -153,7 +148,7 @@ We tried [Sandbox Agent](https://sandboxagent.dev/) by [Rivet](https://rivet.dev
 
 It offloaded orchestration, but added too many failure points: an HTTP server inside the sandbox, more moving parts. OpenCode was also over-engineered for our use case and used more tokens than we wanted.
 
-We next tried **[Pi](https://pi.dev/)** with Sandbox Agent. Pi gave us skills, MCPs, and easy extensibility, but the core shape was still an HTTP server inside the sandbox. Crashes still happened. We wanted boring infrastructure.
+We next tried **[Pi](https://pi.dev/)** with Sandbox Agent. Pi gave us skills, MCPs, and easy extensibility, but the core shape was still an HTTP server inside the sandbox. Crashes still happened. We wanted simple/boring infrastructure.
 
 ## The Simple Path
 
@@ -167,8 +162,6 @@ The flow:
 5. Pi runs commands and edits
 6. RPC returns structured output
 7. Stream progress back to Slack
-
-The boot path was just PTY startup, `stty -echo`, and optional session resume:
 
 ```ts title="lib/sandbox/rpc.ts"
 const piCmd = sessionId
@@ -203,8 +196,6 @@ pi.registerTool({
 });
 ```
 
-Tools became first-class instead of being pushed through an MCP proxy.
-
 ## Current Architecture
 
 <Mermaid
@@ -229,17 +220,6 @@ Tools became first-class instead of being pushed through an MCP proxy.
   src="https://vimeo.com/1168112844"
 />
 
-## Lessons
-
-* "Just build it" becomes "we accidentally built a runtime" very quickly
-* Persistence-first is a different world from spin-up and spin-down
-* Fewer moving parts wins almost every time
-* Running an HTTP server inside your sandbox sounds cool until it is not
-
 ## Code
 
 <GithubRepo repo={{ owner: 'imdevarsh', repo: 'gorkie-slack', branch: 'feat/refactor-pi' }} />
-
-## Credits
-
-This blog post's style is inspired by [xyzeva](https://kibty.town/).
