@@ -31,9 +31,32 @@ Through every iteration, three things stayed constant:
 
 We also use **Slack's AI implementation** for the chat surface and interaction model, which lets us render interactive UI directly via [Block Kit](https://docs.slack.dev/reference/block-kit/blocks/plan-block/).
 
-## Vercel, Then E2B
+## Sandbox Providers
 
-We started with [Vercel Sandboxes](https://vercel.com/docs/vercel-sandbox/). We were already on [AI SDK](https://ai-sdk.dev/), so it was the obvious first choice. We gave Gorkie a sandbox tool that spawned a **ToolLoopAgent** to work inside it.
+<Steps>
+<Step>
+
+### Vercel Sandboxes
+
+We were already on the [AI SDK](https://ai-sdk.dev/), so [Vercel Sandboxes](https://vercel.com/docs/vercel-sandbox/) were the obvious first step. We gave Gorkie a sandbox tool that spawned a **ToolLoopAgent** to work inside it.
+
+<Mermaid
+  chart="sequenceDiagram
+  participant G as Gorkie
+  participant A as Subagent
+  participant SB as Sandbox
+  participant S as Slack
+  G->>A: build task + context
+  A->>SB: create/attach sandbox
+  A->>SB: sync attachments
+  A->>SB: run commands
+  A-->>SB: write outputs
+  A->>S: upload files (showFile)
+  A-->>G: summary
+  G-->>G: final summary"
+/>
+
+Per-thread persistence was get-or-create with snapshot restore and Redis TTLs, a workaround that held things together before we had a proper DB model. On shutdown we'd snapshot and save the ID with its own TTL:
 
 ```ts title="lib/ai/tools/execute-code/sandbox.ts"
 const live = await reconnect(ctxId);
@@ -53,8 +76,6 @@ await redis.set(redisKeys.sandbox(ctxId), instance.sandboxId);
 await redis.expire(redisKeys.sandbox(ctxId), config.sandboxTtlSeconds);
 ```
 
-Per-thread persistence was get-or-create with snapshot restore and Redis TTLs, a workaround that held things together before we had a proper DB model. On shutdown we'd snapshot and save the ID with its own TTL:
-
 ```ts title="lib/ai/tools/execute-code/sandbox.ts"
 const snap = await instance.snapshot().catch((error: unknown) => {
   logger.warn({ sandboxId, error, ctxId }, 'Snapshot failed');
@@ -67,9 +88,14 @@ if (snap) {
 }
 ```
 
-It worked, but it was janky. Limited lifecycle controls, unreliable snapshots, random bugs, easy-to-hit limits. We needed something more serious.
+It worked for short runs, but the cracks showed quickly: limited lifecycle controls, unreliable snapshots, easy-to-hit limits. Not the foundation we wanted.
 
-Next we moved to **[E2B](https://e2b.dev/)**. Built for AI agent execution, it felt like the right step. Same architecture, just swapped the sandbox layer. We also made thread ownership explicit with a proper session table:
+</Step>
+<Step>
+
+### E2B
+
+We moved to **[E2B](https://e2b.dev/)**, built for AI agent execution, which felt like the right step up. Same architecture, just a better sandbox layer. We also made thread ownership explicit with a proper session table:
 
 ```ts title="db/schema.ts"
 export const sandboxSessions = pgTable('sandbox_sessions', {
@@ -82,16 +108,18 @@ export const sandboxSessions = pgTable('sandbox_sessions', {
 });
 ```
 
-But as usage grew, we realized **the provider was not the real problem**. The real problem was our tool loop architecture. It handled short tasks but struggled with:
-- Skills and MCP plumbing
-- Coordination and orchestration
-- Stateful session handling and retries
+As usage grew, we realized the provider wasn't the issue, our tool loop architecture was. It handled short tasks but fell apart under skills, MCP plumbing, orchestration, and stateful session handling. We were slowly building our own runtime by accident.
 
-We were slowly building our own runtime by accident. E2B itself had friction too; persistence was beta and buggy, and the model was closer to "create and kill" than true persistence. We wanted persistence-first from day one.
+E2B had its own friction too: persistence was beta and buggy, and the model leaned more toward "create and kill" than true long-lived sessions. We wanted persistence-first from the start.
 
-## Daytona
+</Step>
+<Step>
 
-We switched to **[Daytona](https://www.daytona.io/)**. The model fit what we were building: each Slack thread owns a runtime, and that runtime persists across messages. Daytona's lifecycle settings made cleanup something the platform handled rather than us:
+### Daytona
+
+We switched to **[Daytona](https://www.daytona.io/)**. Each Slack thread owns a runtime, and that runtime persists across messages. The state model is straightforward: `threadId → sandboxId + sessionId`, with status transitions (`active`, `paused`, `resuming`, `destroyed`) and automatic reattach on the next message in the thread.
+
+Daytona's lifecycle settings handled cleanup without us touching it:
 - Auto-stop after **5 minutes** of inactivity
 - Auto-archive **2 hours** after stop
 - Auto-delete after **2 days**
@@ -112,7 +140,7 @@ await upsert({
 });
 ```
 
-No custom janitor needed. Cleanup shifted from our cron logic to platform lifecycle settings.
+No custom janitor jobs. Cleanup moved from our cron logic into platform config.
 
 <Mermaid
   chart="flowchart LR
@@ -122,6 +150,9 @@ No custom janitor needed. Cleanup shifted from our cron logic to platform lifecy
   S -->|auto-archive 2 hours| A[Object Storage]
   A -->|auto-delete 2 days| X[Deleted]"
 />
+
+</Step>
+</Steps>
 
 With the sandbox stable, the next question was what should run inside it.
 
@@ -148,7 +179,7 @@ We tried [Sandbox Agent](https://sandboxagent.dev/) by [Rivet](https://rivet.dev
 
 It offloaded orchestration, but added too many failure points: an HTTP server inside the sandbox, more moving parts. OpenCode was also over-engineered for our use case and used more tokens than we wanted.
 
-We next tried **[Pi](https://pi.dev/)** with Sandbox Agent. Pi gave us skills, MCPs, and easy extensibility, but the core shape was still an HTTP server inside the sandbox. Crashes still happened. We wanted simple/boring infrastructure.
+We next tried **[Pi](https://pi.dev/)** with Sandbox Agent. Pi gave us skills, MCPs, and easy extensibility, but the core shape was still an HTTP server inside the sandbox. Crashes still happened. We wanted boring infrastructure.
 
 ## Pi over RPC
 
@@ -211,7 +242,7 @@ pi.registerTool({
   src="https://vimeo.com/1168112844"
 />
 
-Vercel recently launched a [Chat SDK](https://chat-sdk.dev/) that supports multiple runtimes. We're looking at whether a future version of Gorkie makes sense on top of it.
+Vercel recently launched a [Chat SDK](https://sdk.vercel.ai/docs/ai-sdk-ui/overview) that supports multiple runtimes. We might rewrite Gorkie on top of it.
 
 ## Code
 
