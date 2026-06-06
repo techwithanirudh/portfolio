@@ -48,7 +48,6 @@ import {
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
-import { SelectionContextMenu } from './selection-context-menu'
 
 const AISearchContext = createContext<{
   open: boolean
@@ -631,16 +630,6 @@ function AISearchPanel() {
           </div>
         </div>
       </Presence>
-      <SelectionContextMenu
-        onSelect={(text) => {
-          const normalized = text.trim()
-          if (!normalized) {
-            return
-          }
-          setContext(normalized)
-          setOpen(true)
-        }}
-      />
     </>
   )
 }
