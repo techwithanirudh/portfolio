@@ -42,8 +42,9 @@ export const experiences: ExperienceItemType[] = [
   },
   {
     id: 'bosch',
+    companyLogo: '/images/companies/bosch.png',
     companyName: 'Bosch',
-    companyWebsite: 'https://www.bosch.com',
+    companyWebsite: 'https://www.bosch-softwaretechnologies.com/en/',
     positions: [
       {
         id: '1',
