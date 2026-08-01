@@ -17,11 +17,11 @@ import { cn } from '@/lib/utils'
 
 /**
  * Two treatments for the blog's table of contents, split by breakpoint. Both
- * read from a single `TOCProvider` (`BlogTocProvider`), so there is one shared
+ * read from a single `TOCProvider` (`BlogTOCProvider`), so there is one shared
  * scroll-spy for the page rather than one per breakpoint.
  */
 
-export const BlogTocProvider = TOCProvider
+export const BlogTOCProvider = TOCProvider
 
 // This `DocsLayout` renders no sidebar, nav, or header, and its container is
 // forced to `display: contents`, so it takes up no space and paints nothing.
@@ -50,7 +50,7 @@ const emptyTree: PageTreeRoot = { children: [], name: '' }
  * is shown up to `2xl` the height collapses to zero above 1280px and the bar
  * paints on top of the first paragraph. 40px is the value fumadocs uses.
  */
-export function BlogTocPopover({ className }: { className?: string }) {
+export function BlogTOCPopover({ className }: { className?: string }) {
   return (
     <DocsLayout
       containerProps={{ style: { display: 'contents' } }}
@@ -84,7 +84,7 @@ export function BlogTocPopover({ className }: { className?: string }) {
  * above the article: embedded video players ship z-indexes in the millions
  * and do not create a stacking context of their own.
  */
-export function BlogTocMinimap({ className }: { className?: string }) {
+export function BlogTOCMinimap({ className }: { className?: string }) {
   const items = useTOCItems()
   const activeAnchor = useActiveAnchor()
 
@@ -100,10 +100,10 @@ export function BlogTocMinimap({ className }: { className?: string }) {
       )}
       data-blog-toc-minimap=''
     >
-      <div className='sticky top-14 pt-8'>
+      <div className='sticky top-14'>
         <HoverCard closeDelay={100} openDelay={100}>
           <HoverCardTrigger asChild>
-            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden py-3 pl-6'>
+            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-4 pb-3 pl-6'>
               {items.map((item) => (
                 <div
                   aria-hidden
