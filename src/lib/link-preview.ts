@@ -47,7 +47,7 @@ export function getLinkPreview(url: string): LinkPreviewEntry | null {
   const manifest = getLinkPreviewManifest()
   const preview = manifest?.previews[hashUrl(url)]
 
-  if (!preview || preview.status !== 'success') {
+  if (preview?.status !== 'success') {
     return null
   }
 
