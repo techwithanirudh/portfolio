@@ -48,7 +48,7 @@ export const createGuestbookEntry = protectedGuestbookAction
       if (parsedInput.signature) {
         parsedSignature = parseB64File(parsedInput.signature)
 
-        if (!parsedSignature || parsedSignature.mediaType !== 'image/png') {
+        if (parsedSignature?.mediaType !== 'image/png') {
           throw new ActionError('Signature must be a PNG data URL.')
         }
       }

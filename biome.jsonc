@@ -46,16 +46,29 @@
       "correctness": {
         "useUniqueElementIds": "off"
       },
+      // The rules marked "new in 2.5" below arrived with the Biome 2.5 /
+      // ultracite 7.9 preset and flag ~150 existing call sites. They are
+      // parked here so the upgrade stays reviewable; adopting any of them is
+      // its own change, not a dependency bump.
       "performance": {
+        "noAwaitInLoops": "off", // new in 2.5
         "noBarrelFile": "off",
+        "noJsxPropsBind": "off", // new in 2.5, 66 inline JSX handlers
         "noNamespaceImport": "off"
       },
       "style": {
-        "noNonNullAssertion": "off"
+        "noIncrementDecrement": "off", // new in 2.5
+        "noNonNullAssertion": "off",
+        "useDestructuring": "off", // new in 2.5
+        "useErrorCause": "off" // new in 2.5
       },
       "suspicious": {
         // Graduated out of nursery in Biome 2.5.
-        "noLeakedRender": "off"
+        "noLeakedRender": "off",
+        "noShadow": "off", // new in 2.5
+        "noUnnecessaryConditions": "off", // new in 2.5
+        // Flags `tw`, which Satori/takumi use to style OG images.
+        "noUnknownAttribute": "off"
       },
       "nursery": {
         "useSortedClasses": {
