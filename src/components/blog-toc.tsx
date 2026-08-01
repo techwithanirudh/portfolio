@@ -59,6 +59,7 @@ export function BlogTocMinimap({ className }: { className?: string }) {
 
           <HoverCardContent
             align='start'
+            alignOffset={16}
             className='w-56 overflow-hidden p-0'
             side='left'
             sideOffset={-60}
