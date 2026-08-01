@@ -3,6 +3,7 @@ import { useSound } from '@web-kits/audio/react'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
+import { useLenis } from 'lenis/react'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -44,7 +45,8 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const playCollapse = useSound(collapse)
   const playNavigate = useSound(keyPress)
   const lastNavSoundAtRef = useRef(0)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const commandInput = useRef<HTMLInputElement>(null)
+  const lenis = useLenis()
 
   useEffect(() => {
     if (!open) {
@@ -55,15 +57,26 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   }, [open, playOpen])
 
   useEffect(() => {
+    if (!lenis) {
+      return
+    }
+
+    if (open) {
+      lenis.stop()
+    } else {
+      lenis.start()
+    }
+
+    return () => {
+      lenis.start()
+    }
+  }, [open, lenis])
+
+  useEffect(() => {
     if (!open) {
       return
     }
 
-    // Radix's own scroll lock sets overflow:hidden on <body> while a dialog
-    // is open. On iOS Safari, a fixed-position descendant of an ancestor
-    // with non-visible overflow doesn't stay pinned to the viewport - it
-    // scrolls with the page. Locking body with position:fixed sidesteps
-    // that regardless of which overflow rule triggers it.
     const scrollY = window.scrollY
     const { body } = document
     const previousPosition = body.style.position
@@ -195,7 +208,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
         data-lenis-prevent
         onOpenAutoFocus={(event) => {
           event.preventDefault()
-          inputRef.current?.focus({ preventScroll: true })
+          commandInput.current?.focus({ preventScroll: true })
         }}
         showCloseButton={false}
       >
@@ -211,7 +224,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <CommandInput
             onValueChange={setSearch}
             placeholder='Type a command or search...'
-            ref={inputRef}
+            ref={commandInput}
             value={search}
           />
 
