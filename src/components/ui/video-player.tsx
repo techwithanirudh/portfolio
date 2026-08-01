@@ -25,9 +25,6 @@ export const VideoPlayer = ({
 }: VideoPlayerProps) => (
   <MediaPlayer
     className={cn(
-      // `isolate` opens a stacking context: vidstack's chrome ships
-      // z-indexes up to 9999999 and would otherwise paint over the rest of
-      // the page (the TOC minimap included).
       'relative isolate w-full overflow-hidden !rounded-xl !border-none',
       className
     )}

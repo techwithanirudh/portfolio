@@ -11,20 +11,8 @@ import {
 } from '@/components/ui/hover-card'
 import { cn } from '@/lib/utils'
 
-// Renders no sidebar/nav/header and takes no space, but is required:
-// `TOCPopover` calls `useDocsLayout()` (throws without it), and fumadocs'
-// `layout:` variants key off the `#nd-docs-layout` id this container carries.
 const emptyTree: PageTreeRoot = { children: [], name: '' }
 
-/**
- * Below `2xl`: fumadocs' own `TOCPopover`, unmodified except for the
- * container class. `top-14` sits it under this site's header, and
- * `xl:block 2xl:hidden` hands over to the minimap at `2xl` instead of
- * fumadocs' own `xl:hidden` (tailwind-merge won't override a class with one
- * from a different variant, so `2xl:hidden` alone can't displace it).
- * `h-10` replaces fumadocs' `h-(--fd-toc-popover-height)`, which is only set
- * below `xl` and would otherwise collapse to zero once shown up to `2xl`.
- */
 export function TOCPopover({ className }: { className?: string }) {
   return (
     <DocsLayout
@@ -42,17 +30,6 @@ export function TOCPopover({ className }: { className?: string }) {
   )
 }
 
-/**
- * `2xl`+: a minimap in the margin beside the article (one tick per heading,
- * active section filled in). Gated at `2xl` since that's the first
- * breakpoint where the site container stops being full-bleed, so the first
- * point with any margin to sit in.
- *
- * `right-full` resolves against `Section`'s `.container.relative`, putting
- * the rail outside the border rather than in the article's padding. `z-20`
- * keeps it above embedded video players, which ship z-indexes in the
- * millions without creating their own stacking context.
- */
 export function TOCMinimap({ className }: { className?: string }) {
   const items = useTOCItems()
   const activeAnchor = useActiveAnchor()
