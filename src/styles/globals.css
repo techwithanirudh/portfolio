@@ -72,6 +72,7 @@ html > body[data-scroll-locked] {
 
 @layer base {
   :root {
+    --color-fd-background: #ffffff;
     --fade-bottom-height: --spacing(24);
     --radius: 0.5rem;
     --typography-hero-width: 56rem;
@@ -92,7 +93,7 @@ html > body[data-scroll-locked] {
   }
 
   html {
-    @apply scroll-smooth accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-track-transparent;
+    @apply bg-background scroll-smooth accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-track-transparent;
   }
 
   [id] {
@@ -107,6 +108,7 @@ html > body[data-scroll-locked] {
 }
 
 .dark {
+  --color-fd-background: #09090b;
   --color-fd-ring: hsl(234, 100%, 83%);
   --color-fd-primary: hsl(234, 100%, 83%);
   --color-fd-primary-foreground: hsl(240, 7%, 11%);

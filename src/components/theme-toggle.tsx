@@ -5,6 +5,8 @@ import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { META_THEME_COLORS } from '@/constants/site'
+import { useMetaColor } from '@/hooks/use-meta-color'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
@@ -36,18 +38,36 @@ export function ThemeToggle({
   className?: string
   mode?: 'light-dark' | 'light-dark-system'
 }) {
-  const { resolvedTheme, setTheme, theme } = useTheme()
+  const { resolvedTheme, setTheme, systemTheme, theme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const playToggle = useSound(toggleOn)
+  const { setMetaColor } = useMetaColor()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  useEffect(() => {
+    setMetaColor(
+      resolvedTheme === 'dark'
+        ? META_THEME_COLORS.dark
+        : META_THEME_COLORS.light
+    )
+  }, [resolvedTheme, setMetaColor])
+
   useThemeShortcut()
 
   const handleChangeTheme = async (next: Theme) => {
     playToggle()
+
+    const nextResolvedTheme =
+      next === 'system' ? (systemTheme ?? resolvedTheme) : next
+
+    setMetaColor(
+      nextResolvedTheme === 'dark'
+        ? META_THEME_COLORS.dark
+        : META_THEME_COLORS.light
+    )
 
     function update() {
       setTheme(next)
@@ -70,7 +90,7 @@ export function ThemeToggle({
   }
 
   const container = cn(
-    'inline-flex items-center rounded-full border p-1',
+    'inline-flex touch-manipulation items-center rounded-full border p-1',
     className
   )
 
@@ -79,12 +99,13 @@ export function ThemeToggle({
 
     return (
       <button
-        aria-label={'Toggle Theme'}
+        aria-label='Toggle theme'
         className={container}
         data-theme-toggle=''
-        onClick={() =>
-          handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-        }
+        onClick={() => {
+          const next = resolvedTheme === 'dark' ? 'light' : 'dark'
+          handleChangeTheme(next === systemTheme ? 'system' : next)
+        }}
         type='button'
       >
         {full.map(([key, Icon]) => {
