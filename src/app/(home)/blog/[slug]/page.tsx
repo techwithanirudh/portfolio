@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
+import { BlogToc } from '@/components/blog-toc'
 import { PostJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
@@ -32,6 +33,7 @@ export default async function Page(props: {
 
       <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
+          <BlogToc toc={toc} />
           <MdxContent comments slug={params.slug} toc={toc}>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </MdxContent>
