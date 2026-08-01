@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react'
+import { InlineTOC } from 'fumadocs-ui/components/inline-toc'
+import type { ComponentProps, ReactNode } from 'react'
 import { PostComments } from '@/app/(home)/blog/[slug]/page.client'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
@@ -10,6 +11,24 @@ interface MdxLayoutProps {
   slug: string
   title: string
 }
+
+interface InlineTocBlockProps {
+  className?: string
+  items?: ComponentProps<typeof InlineTOC>['items']
+}
+
+export const InlineTocBlock = ({ items, className }: InlineTocBlockProps) =>
+  items?.length ? (
+    <InlineTOC
+      className={cn(
+        'rounded-none border-0 border-border border-b border-dashed',
+        className
+      )}
+      items={items}
+    />
+  ) : (
+    <div />
+  )
 
 interface MdxContentProps {
   beforeComments?: ReactNode

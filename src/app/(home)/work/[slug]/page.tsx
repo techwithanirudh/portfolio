@@ -7,9 +7,9 @@ import { WorkJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
 import { PreviewButton } from '@/components/mdx/preview-button'
+import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
-import { TocInline } from '@/components/toc-inline'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
@@ -125,7 +125,7 @@ export default async function Page(props: {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='flex flex-1 flex-col gap-4'>
-              <TocInline items={toc} />
+              <InlineTocBlock items={toc} />
               <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 pb-4'>
                 <Mdx components={{ ...mdxComponents, GitHubCode }} />
               </div>

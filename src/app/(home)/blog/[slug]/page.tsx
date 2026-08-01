@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
 import {
-  BlogTocInline,
   BlogTocMinimap,
+  BlogTocPopover,
   BlogTocProvider,
 } from '@/components/blog-toc'
 import { PostJsonLd } from '@/components/json-ld'
@@ -64,7 +64,7 @@ export default async function Page(props: {
         <BlogTocMinimap />
         <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
           <div className='flex min-w-0 flex-1 flex-col'>
-            <BlogTocInline className='mx-4 mt-4' />
+            <BlogTocPopover />
             <MdxContent
               beforeComments={
                 <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
