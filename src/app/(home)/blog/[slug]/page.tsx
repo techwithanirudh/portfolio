@@ -3,8 +3,8 @@ import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
 import {
-  BlogTocDesktop,
-  BlogTocMobile,
+  BlogTocInline,
+  BlogTocMinimap,
   BlogTocProvider,
 } from '@/components/blog-toc'
 import { PostJsonLd } from '@/components/json-ld'
@@ -35,20 +35,20 @@ export default async function Page(props: {
     <BlogTocProvider toc={toc}>
       <Header page={page} tags={tags} />
 
-      <BlogTocDesktop />
-      <BlogTocMobile />
-
       <SectionBody>
-        <article className='flex min-h-full flex-col lg:flex-row'>
-          <MdxContent
-            comments
-            hideInlineToc
-            proseClassName='pt-4'
-            slug={params.slug}
-            toc={toc}
-          >
-            <Mdx components={{ ...mdxComponents, GitHubCode }} />
-          </MdxContent>
+        <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
+          <div className='flex min-w-0 flex-1 flex-col'>
+            <BlogTocInline className='mx-4 mt-4' />
+            <MdxContent
+              comments
+              hideInlineToc
+              proseClassName='pt-4'
+              slug={params.slug}
+              toc={toc}
+            >
+              <Mdx components={{ ...mdxComponents, GitHubCode }} />
+            </MdxContent>
+          </div>
           <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
             <div>
               <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
@@ -74,6 +74,7 @@ export default async function Page(props: {
               <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
             </div>
           </div>
+          <BlogTocMinimap />
         </article>
       </SectionBody>
       <PostJsonLd page={page} />

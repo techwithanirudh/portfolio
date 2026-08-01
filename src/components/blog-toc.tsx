@@ -1,71 +1,112 @@
 'use client'
 
-import type { Root as PageTreeRoot } from 'fumadocs-core/page-tree'
-import { DocsLayout } from 'fumadocs-ui/layouts/docs'
-import { TOCPopover } from 'fumadocs-ui/layouts/docs/page/slots/toc'
+import { TOCProvider, useItems, useTOCItems } from 'fumadocs-ui/components/toc'
+import { ChevronDown, Text } from 'lucide-react'
 import {
-  TOC as GlassTOC,
-  TOCProvider,
-} from 'fumadocs-ui/layouts/glass/page/slots/toc'
-import { useEffect, useState } from 'react'
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card'
 import { cn } from '@/lib/utils'
 
 export const BlogTocProvider = TOCProvider
 
-export function BlogTocDesktop({ className }: { className?: string }) {
-  const [top, setTop] = useState(140)
+export function BlogTocInline({ className }: { className?: string }) {
+  const items = useTOCItems()
 
-  useEffect(() => {
-    const updateTop = () => {
-      const article = document.querySelector('article')
-
-      if (article) {
-        setTop(Math.max(140, article.getBoundingClientRect().top + 64))
-      }
-    }
-
-    updateTop()
-    window.addEventListener('scroll', updateTop, { passive: true })
-    window.addEventListener('resize', updateTop)
-
-    return () => {
-      window.removeEventListener('scroll', updateTop)
-      window.removeEventListener('resize', updateTop)
-    }
-  }, [])
+  if (items.length === 0) {
+    return null
+  }
 
   return (
-    <GlassTOC
-      container={{
-        className: cn(
-          'blog-glass-toc md:!grid md:!fixed md:!z-40 min-[1800px]:!right-auto min-[1800px]:!h-[calc(100vh-12rem)] min-[1800px]:!w-[176px] min-[1800px]:!items-start min-[1800px]:!p-0 min-[1800px]:!translate-y-0 min-[1800px]:![grid-area:auto] hidden',
-          className
-        ),
-        style: {
-          left: 'max(1rem, calc((100vw - 1400px) / 2 - 200px))',
-          top,
-        },
-        tabIndex: 0,
-      }}
-    />
+    <Collapsible
+      className={cn(
+        'group rounded-xl bg-card font-sans ring-1 ring-border/60 lg:hidden',
+        className
+      )}
+      data-blog-toc-inline=''
+    >
+      <CollapsibleTrigger className='flex w-full items-center gap-2 rounded-xl py-2.5 pr-2 pl-4 font-medium text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50 [&_svg]:size-4'>
+        <Text className='-translate-x-0.5' />
+        On this page
+        <ChevronDown className='ml-auto shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180' />
+      </CollapsibleTrigger>
+
+      <CollapsibleContent>
+        <ul className='flex flex-col px-4 pb-2'>
+          {items.map((item) => (
+            <li className='flex py-1' key={item.url}>
+              <a
+                className='text-muted-foreground text-sm transition-colors hover:text-accent-foreground data-[depth=3]:pl-4 data-[depth=4]:pl-8'
+                data-depth={item.depth}
+                href={item.url}
+              >
+                {item.title}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </CollapsibleContent>
+    </Collapsible>
   )
 }
 
-const emptyTree: PageTreeRoot = { children: [], name: '' }
+export function BlogTocMinimap({ className }: { className?: string }) {
+  const items = useItems()
 
-export function BlogTocMobile({ className }: { className?: string }) {
+  if (items.length === 0) {
+    return null
+  }
+
   return (
-    <DocsLayout
-      containerProps={{ style: { display: 'contents' } }}
-      nav={{ enabled: false }}
-      sidebar={{ enabled: false }}
-      tree={emptyTree}
+    <aside
+      className={cn('ml-auto hidden w-[72px] shrink-0 lg:block', className)}
+      data-blog-toc-minimap=''
     >
-      <TOCPopover
-        container={{
-          className: cn('z-[60] md:hidden', className),
-        }}
-      />
-    </DocsLayout>
+      <div className='sticky top-16'>
+        <HoverCard closeDelay={100} openDelay={100}>
+          <HoverCardTrigger asChild>
+            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden py-3 pl-6'>
+              {items.map((item) => (
+                <div
+                  aria-hidden
+                  className='pointer-events-none h-0.5 w-6 shrink-0 rounded-xs bg-muted-foreground/50 transition-colors data-[depth=3]:ml-2 data-[depth=4]:ml-4 data-[depth=3]:w-4 data-[depth=4]:w-2 data-[active=true]:bg-foreground'
+                  data-active={item.active}
+                  data-depth={item.original.depth}
+                  key={item.id}
+                />
+              ))}
+            </div>
+          </HoverCardTrigger>
+
+          <HoverCardContent
+            align='start'
+            className='w-56 overflow-hidden p-0'
+            side='left'
+            sideOffset={-60}
+          >
+            <ul className='flex max-h-[calc(100dvh-6rem)] w-full flex-col overflow-y-auto px-6 py-4 text-sm'>
+              {items.map((item) => (
+                <li className='flex py-1' key={item.id}>
+                  <a
+                    className='line-clamp-2 w-full text-muted-foreground transition-colors hover:text-foreground data-[depth=3]:pl-4 data-[depth=4]:pl-8 data-[active=true]:text-foreground'
+                    data-active={item.active}
+                    data-depth={item.original.depth}
+                    href={item.original.url}
+                  >
+                    {item.original.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </HoverCardContent>
+        </HoverCard>
+      </div>
+    </aside>
   )
 }
