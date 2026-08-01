@@ -45,6 +45,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const playCollapse = useSound(collapse)
   const playNavigate = useSound(keyPress)
   const lastNavSoundAtRef = useRef(0)
+  const inputRef = useRef<HTMLInputElement>(null)
   const lenis = useLenis()
 
   useEffect(() => {
@@ -182,6 +183,10 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       <DialogContent
         className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! border-none bg-popover bg-clip-padding p-2 shadow-2xl sm:top-1/3 sm:max-w-lg sm:rounded-xl! sm:pb-11 sm:ring-4 sm:ring-neutral-200/80 dark:bg-neutral-900 dark:sm:ring-neutral-800'
         data-lenis-prevent
+        onOpenAutoFocus={(event) => {
+          event.preventDefault()
+          inputRef.current?.focus({ preventScroll: true })
+        }}
         showCloseButton={false}
       >
         <DialogHeader className='sr-only'>
@@ -196,6 +201,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <CommandInput
             onValueChange={setSearch}
             placeholder='Type a command or search...'
+            ref={inputRef}
             value={search}
           />
 
