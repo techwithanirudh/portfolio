@@ -1,23 +1,15 @@
 'use client'
 
 import type { Root as PageTreeRoot } from 'fumadocs-core/page-tree'
-import {
-  TOCProvider,
-  useActiveAnchor,
-  useTOCItems,
-} from 'fumadocs-ui/components/toc'
+import { useActiveAnchor, useTOCItems } from 'fumadocs-ui/components/toc'
 import { DocsLayout } from 'fumadocs-ui/layouts/docs'
-import { TOCPopover } from 'fumadocs-ui/layouts/docs/page/slots/toc'
+import { TOCPopover as FumaTOCPopover } from 'fumadocs-ui/layouts/docs/page/slots/toc'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
 import { cn } from '@/lib/utils'
-
-// Both treatments below read from a single `TOCProvider` so there's one
-// shared scroll-spy for the page rather than one per breakpoint.
-export const BlogTOCProvider = TOCProvider
 
 // Renders no sidebar/nav/header and takes no space, but is required:
 // `TOCPopover` calls `useDocsLayout()` (throws without it), and fumadocs'
@@ -33,7 +25,7 @@ const emptyTree: PageTreeRoot = { children: [], name: '' }
  * `h-10` replaces fumadocs' `h-(--fd-toc-popover-height)`, which is only set
  * below `xl` and would otherwise collapse to zero once shown up to `2xl`.
  */
-export function BlogTOCPopover({ className }: { className?: string }) {
+export function TOCPopover({ className }: { className?: string }) {
   return (
     <DocsLayout
       containerProps={{ style: { display: 'contents' } }}
@@ -41,7 +33,7 @@ export function BlogTOCPopover({ className }: { className?: string }) {
       sidebar={{ enabled: false }}
       tree={emptyTree}
     >
-      <TOCPopover
+      <FumaTOCPopover
         container={{
           className: cn('top-14 h-10 xl:block 2xl:hidden', className),
         }}
@@ -52,17 +44,16 @@ export function BlogTOCPopover({ className }: { className?: string }) {
 
 /**
  * `2xl`+: a minimap in the margin beside the article (one tick per heading,
- * active section filled in), after
- * https://github.com/braydoncoyer/braydoncoyer.dev. Gated at `2xl` since
- * that's the first breakpoint where the site container stops being
- * full-bleed, so the first point with any margin to sit in.
+ * active section filled in). Gated at `2xl` since that's the first
+ * breakpoint where the site container stops being full-bleed, so the first
+ * point with any margin to sit in.
  *
  * `right-full` resolves against `Section`'s `.container.relative`, putting
  * the rail outside the border rather than in the article's padding. `z-20`
  * keeps it above embedded video players, which ship z-indexes in the
  * millions without creating their own stacking context.
  */
-export function BlogTOCMinimap({ className }: { className?: string }) {
+export function TOCMinimap({ className }: { className?: string }) {
   const items = useTOCItems()
   const activeAnchor = useActiveAnchor()
 
@@ -76,7 +67,7 @@ export function BlogTOCMinimap({ className }: { className?: string }) {
         'hidden w-[72px] shrink-0 2xl:absolute 2xl:inset-y-0 2xl:right-full 2xl:z-20 2xl:block',
         className
       )}
-      data-blog-toc-minimap=''
+      data-toc-minimap=''
     >
       <div className='sticky top-14'>
         <HoverCard closeDelay={100} openDelay={100}>

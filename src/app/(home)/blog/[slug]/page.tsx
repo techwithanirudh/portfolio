@@ -1,13 +1,9 @@
+import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
-import {
-  BlogTOCMinimap,
-  BlogTOCPopover,
-  BlogTOCProvider,
-} from '@/components/blog-toc'
-
+import { TOCMinimap, TOCPopover } from '@/components/blog-toc'
 import { PostJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
@@ -58,14 +54,14 @@ export default async function Page(props: {
   )
 
   return (
-    <BlogTOCProvider toc={toc}>
+    <TOCProvider toc={toc}>
       <Header page={page} tags={tags} />
 
       <SectionBody className='flex'>
-        <BlogTOCMinimap />
+        <TOCMinimap />
         <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
           <div className='flex min-w-0 flex-1 flex-col'>
-            <BlogTOCPopover />
+            <TOCPopover />
             <MdxContent
               beforeComments={
                 <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
@@ -85,7 +81,7 @@ export default async function Page(props: {
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
-    </BlogTOCProvider>
+    </TOCProvider>
   )
 }
 
