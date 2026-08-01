@@ -5,7 +5,7 @@ import { ActiveLink } from '@/components/active-link'
 import { ViewAnimation } from '@/components/view-animation'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
-import { getSortedByDateWork } from '@/lib/source'
+import { getSortedWork } from '@/lib/source'
 
 interface ListItem {
   external?: boolean
@@ -27,7 +27,7 @@ export const Links = () => {
     ['nav', 'all'].includes(item.on ?? 'all')
   )
 
-  const works = getSortedByDateWork()
+  const works = getSortedWork()
 
   const lists: ListItem[] = [
     {

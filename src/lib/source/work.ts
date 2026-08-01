@@ -16,5 +16,23 @@ export type WorkPage = ReturnType<typeof getWorkPages>[number]
 
 const workPages = getWorkPages()
 
-export const getSortedByDateWork = () =>
-  workPages.toSorted((a, b) => b.data.date.getTime() - a.data.date.getTime())
+/**
+ * Pinned projects lead, in `order`; everything else follows, newest first.
+ */
+export const getSortedWork = () =>
+  workPages.toSorted((a, b) => {
+    const aOrder = a.data.order
+    const bOrder = b.data.order
+
+    if (aOrder !== undefined && bOrder !== undefined) {
+      return aOrder - bOrder
+    }
+    if (aOrder !== undefined) {
+      return -1
+    }
+    if (bOrder !== undefined) {
+      return 1
+    }
+
+    return b.data.date.getTime() - a.data.date.getTime()
+  })

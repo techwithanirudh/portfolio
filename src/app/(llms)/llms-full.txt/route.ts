@@ -2,7 +2,7 @@ import { owner, title } from '@/constants/site'
 import { getBlogLLMText, getWorkLLMText } from '@/lib/get-llm-text'
 import {
   getSortedByDatePosts,
-  getSortedByDateWork,
+  getSortedWork,
   post,
   workSource,
 } from '@/lib/source'
@@ -18,7 +18,7 @@ import { getCommitHistoryText } from '../utils/github-commits'
 
 async function getFullText() {
   const allPosts = getSortedByDatePosts()
-  const allWork = getSortedByDateWork()
+  const allWork = getSortedWork()
 
   const workContent = await Promise.all(
     allWork.map(async (item) => {

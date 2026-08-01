@@ -7,7 +7,7 @@ import { Wrapper } from '@/components/wrapper'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { baseOptions, description as homeDescription } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
-import { getSortedByDateWork } from '@/lib/source'
+import { getSortedWork } from '@/lib/source'
 import About from './_components/about'
 import Contributions from './_components/contributions'
 import CTA from './_components/cta'
@@ -57,7 +57,7 @@ const getCachedContributions = unstable_cache(
 )
 
 export default async function Home() {
-  const works = getSortedByDateWork().slice(0, 4)
+  const works = getSortedWork().slice(0, 4)
   const contributions = await getCachedContributions()
 
   return (
