@@ -482,7 +482,7 @@ html > body[data-scroll-locked] {
   }
 }
 
-@media (min-width: 1024px) and (max-width: 1799px) {
+@media (min-width: 768px) and (max-width: 1799px) {
   .blog-glass-toc {
     top: 50% !important;
     right: 1rem !important;

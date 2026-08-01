@@ -38,7 +38,7 @@ export function BlogTocDesktop({ className }: { className?: string }) {
     <GlassTOC
       container={{
         className: cn(
-          'blog-glass-toc lg:!grid lg:!fixed lg:!z-40 min-[1800px]:!right-auto min-[1800px]:!h-[calc(100vh-12rem)] min-[1800px]:!w-[176px] min-[1800px]:!items-start min-[1800px]:!p-0 min-[1800px]:!translate-y-0 min-[1800px]:![grid-area:auto] hidden',
+          'blog-glass-toc md:!grid md:!fixed md:!z-40 min-[1800px]:!right-auto min-[1800px]:!h-[calc(100vh-12rem)] min-[1800px]:!w-[176px] min-[1800px]:!items-start min-[1800px]:!p-0 min-[1800px]:!translate-y-0 min-[1800px]:![grid-area:auto] hidden',
           className
         ),
         style: {
@@ -63,7 +63,7 @@ export function BlogTocMobile({ className }: { className?: string }) {
     >
       <TOCPopover
         container={{
-          className: cn('z-[60] lg:hidden', className),
+          className: cn('z-[60] md:hidden', className),
         }}
       />
     </DocsLayout>
