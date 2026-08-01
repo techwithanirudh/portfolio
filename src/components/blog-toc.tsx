@@ -132,7 +132,9 @@ export function BlogToc({ toc, container }: BlogTocProps) {
         <div
           aria-hidden='true'
           className={cn(
-            'fixed inset-0 z-10 backdrop-blur-sm transition-opacity duration-300',
+            // Only below lg: on a wide screen the rail opens into the margin,
+            // so blurring the whole page would be heavy-handed.
+            'fixed inset-0 z-10 backdrop-blur-sm transition-opacity duration-300 lg:hidden',
             '[mask-image:radial-gradient(circle_at_center_left,white,white_200px,transparent_500px)]',
             !open && 'pointer-events-none opacity-0'
           )}
