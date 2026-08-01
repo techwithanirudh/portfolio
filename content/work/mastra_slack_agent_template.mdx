@@ -1,0 +1,45 @@
+---
+title: Mastra Slack Agent Template
+description: Customizable Slack agent built on Mastra, Bun, and TypeScript, with an isolated E2B sandbox per thread.
+date: 2026-07-15
+github: https://github.com/techwithanirudh/mastra-slack-agent-template
+image: https://raw.githubusercontent.com/techwithanirudh/gorkie/main/.github/banner.png
+tags: ['TypeScript', 'Mastra', 'Bun', 'Slack', 'E2B', 'PostgreSQL']
+---
+
+This is the template extracted from Gorkie, the Slack assistant, so the same setup can be handed to anyone who wants their own. It runs as a long-lived Bun process and handles mentions, DMs, threads, files, and workspace search, streaming responses back into Slack with live tool-activity widgets rather than a single blob of text at the end.
+
+The part that makes it useful is execution. Each thread gets its own isolated E2B sandbox with persistent files, shell access, and a browser, so the agent can run commands and inspect files without ever touching the host. Around that sit web research through Exa, image generation, subagents, and scheduled tasks, with optional GitHub and AgentMail accounts. New capabilities go in as skills or MCP servers rather than as forks of the runtime.
+
+Models are routed through OpenRouter, memory and state live in PostgreSQL, and observability runs locally. The [configuration guide](https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md) walks through creating each service, since the template is only useful once the Slack app and credentials exist.
+
+<Files>
+  <Folder name="src" defaultOpen>
+    <Folder name="mastra" defaultOpen>
+      <File name="agents" />
+      <File name="chat" />
+      <File name="tools" />
+      <File name="workspace" />
+      <File name="mcp" />
+    </Folder>
+  </Folder>
+  <Folder name="docs">
+    <File name="configuration.md" />
+  </Folder>
+  <File name="slack-manifest.json" />
+</Files>
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - Slack mentions, DMs, threads, files, and workspace search.
+    - An isolated E2B sandbox per thread, with persistent files and a shell.
+    - Streaming replies with live tool-activity widgets.
+    - Extensible through skills and MCP servers instead of forks.
+  </Tab>
+  <Tab value="Stack">
+    - Mastra runtime on Bun, TypeScript, and the AI SDK.
+    - Slack via the Chat SDK adapter in Socket Mode.
+    - OpenRouter models, Exa search, E2B sandboxes.
+    - PostgreSQL memory and state, with local observability.
+  </Tab>
+</Tabs>

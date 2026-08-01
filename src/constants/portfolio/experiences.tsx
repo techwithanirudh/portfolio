@@ -21,6 +21,24 @@ export const experiences: ExperienceItemType[] = [
     ],
   },
   {
+    id: 'meetingbaas',
+    companyName: 'MeetingBaaS',
+    companyWebsite: 'https://www.meetingbaas.com/en',
+    positions: [
+      {
+        id: '1',
+        title: 'Full Stack Developer',
+        employmentPeriod: { start: '10.2024', end: '05.2025' },
+        employmentType: 'Freelance',
+        icon: <Icons.codeXml />,
+        description:
+          'Built Transcript Seeker and Speaking Meeting Bot, plus the AI chat and MCP tooling around the MeetingBaaS meeting APIs.',
+        skills: ['TypeScript', 'React', 'Next.js', 'Python', 'Drizzle', 'MCP'],
+        isExpanded: true,
+      },
+    ],
+  },
+  {
     id: 'bosch',
     companyName: 'Bosch',
     companyWebsite: 'https://www.bosch.com',

@@ -209,6 +209,9 @@
     "Ebene",
     "miterlimit",
     "shottr",
-    "flexsearch"
+    "flexsearch",
+    "rebindable",
+    "corercd",
+    "meetingbaas"
   ]
 }

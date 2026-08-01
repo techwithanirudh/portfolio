@@ -1,0 +1,48 @@
+---
+title: Remotely
+description: macOS menu bar app that turns a display's HDMI-CEC remote into a mouse, with rebindable gestures.
+date: 2026-07-30
+github: https://github.com/techwithanirudh/remotely
+image: https://raw.githubusercontent.com/techwithanirudh/remotely/main/.github/cover.png
+tags: ['Swift', 'SwiftUI', 'macOS', 'HDMI-CEC', 'Accessibility']
+---
+
+Remotely is a macOS app that lets the remote already sitting next to a TV drive the pointer. macOS keeps the CEC bus locked inside the `corercd` daemon and refuses bus enumeration to third-party clients, so no HID events ever reach the process. What the daemon does do is log every frame, so Remotely streams its log output, parses the frames itself, and turns them into pointer input through `CGEvent`.
+
+The gesture layer sits between those two ends. A tap nudges the pointer a few pixels, a held D-pad glides along an accelerating curve, and a double press on Back flips the arrows between moving and scrolling, with a chip beside the pointer showing the current mode. Twenty actions are rebindable, including recorded keyboard shortcuts. Nothing leaves the Mac: no account, no network calls, no analytics.
+
+The split between the two targets is what makes the rules testable. `RemotelyKit` holds the entire behavior and imports no UI framework, so the CEC parsing, gesture timing, and glide curve can be driven from tests without a screen, a remote, or a TV.
+
+<Files>
+  <Folder name="Sources" defaultOpen>
+    <Folder name="RemotelyKit" defaultOpen>
+      <File name="CEC" />
+      <File name="Input" />
+      <File name="Model" />
+    </Folder>
+    <Folder name="Remotely">
+      <File name="App" />
+      <File name="Settings" />
+      <File name="Onboarding" />
+    </Folder>
+  </Folder>
+  <Folder name="Tests">
+    <File name="RemotelyKitTests" />
+  </Folder>
+  <File name="Package.swift" />
+</Files>
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - CEC frames parsed from the `corercd` log stream, since the bus is closed.
+    - Tap-to-nudge and hold-to-glide pointer control with a scroll mode.
+    - Twenty rebindable actions, including recorded keyboard shortcuts.
+    - Fully offline: no account, no network, no analytics.
+  </Tab>
+  <Tab value="Stack">
+    - Swift and SwiftUI, targeting macOS 15+.
+    - `RemotelyKit` core with no UI dependency, plus a menu bar app target.
+    - `CGEvent` input synthesis and Accessibility permissions.
+    - Swift Package Manager, with tests as a plain executable target.
+  </Tab>
+</Tabs>
