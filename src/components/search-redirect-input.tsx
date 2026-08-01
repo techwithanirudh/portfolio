@@ -33,7 +33,7 @@ export function SearchRedirectInput({
         return
       }
 
-      const params = new URLSearchParams({ tag, q: trimmedValue })
+      const params = new URLSearchParams({ q: trimmedValue, tag })
       router.push(`/search?${params.toString()}`)
     },
     [router, tag]

@@ -20,10 +20,10 @@ const description =
 
 export function generateMetadata(): Metadata {
   return createMetadata({
-    title,
+    alternates: { canonical: '/uses' },
     description,
     openGraph: { url: '/uses' },
-    alternates: { canonical: '/uses' },
+    title,
   })
 }
 
@@ -33,16 +33,16 @@ export default function UsesPage() {
       content: <Setup />,
     },
     {
-      title: 'Hardware',
       content: <HardwareGrid items={hardware} />,
+      title: 'Hardware',
     },
     {
-      title: 'Software',
       content: <SoftwareGrid items={software} />,
+      title: 'Software',
     },
     {
-      title: 'Coding',
       content: <Coding />,
+      title: 'Coding',
     },
   ]
 

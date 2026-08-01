@@ -16,8 +16,8 @@ export async function updateContact({
   audienceId: string
 } & Omit<UpdateContactOptions, 'email' | 'audienceId' | 'id'>) {
   const { data, error } = await resend.contacts.update({
-    email,
     audienceId,
+    email,
     ...props,
   })
 
@@ -76,9 +76,9 @@ export async function sendWelcomeEmail({
       async () => {
         const { error } = await resend.emails.send({
           from: EMAIL_FROM,
-          to,
-          subject: 'Welcome to my newsletter!',
           react: NewsletterWelcomeEmail({ firstName, posts: formattedPosts }),
+          subject: 'Welcome to my newsletter!',
+          to,
         })
 
         if (error) {
@@ -93,7 +93,7 @@ export async function sendWelcomeEmail({
     )
   } catch (error) {
     if (isRateLimitError(error)) {
-      return { sent: false, reason: 'rate_limit_exceeded' as const }
+      return { reason: 'rate_limit_exceeded' as const, sent: false }
     }
 
     throw new Error(`Failed to send welcome email: ${JSON.stringify(error)}`)

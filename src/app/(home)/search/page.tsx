@@ -34,13 +34,13 @@ export default function Page() {
 
 export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
-    title: 'Search',
+    alternates: {
+      canonical: '/search',
+    },
     description: `Search posts and projects on ${homeTitle}.`,
     openGraph: {
       url: '/search',
     },
-    alternates: {
-      canonical: '/search',
-    },
+    title: 'Search',
   })
 }

@@ -53,6 +53,10 @@
       "style": {
         "noNonNullAssertion": "off"
       },
+      "suspicious": {
+        // Graduated out of nursery in Biome 2.5.
+        "noLeakedRender": "off"
+      },
       "nursery": {
         "useSortedClasses": {
           "fix": "safe",
@@ -60,8 +64,7 @@
           "options": {
             "functions": ["cn"]
           }
-        },
-        "noLeakedRender": "off"
+        }
       }
     }
   },

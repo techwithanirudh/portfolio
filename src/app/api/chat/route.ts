@@ -28,8 +28,8 @@ export async function POST(request: Request) {
     const handleStreamError = (error: unknown) => {
       if (env.NODE_ENV !== 'production') {
         console.error('An error occurred:', {
-          name: (error as Error).name,
           message: (error as Error).message,
+          name: (error as Error).name,
         })
       }
 
@@ -44,7 +44,6 @@ export async function POST(request: Request) {
     }
 
     const stream = createUIMessageStream({
-      originalMessages: messages,
       execute: async ({ writer }) => {
         const modelMessages = await convertToModelMessages<MyUIMessage>(
           messages,
@@ -52,8 +51,8 @@ export async function POST(request: Request) {
             convertDataPart(part) {
               if (part.type === 'data-client') {
                 return {
-                  type: 'text',
                   text: `[Client Context: ${JSON.stringify(part.data)}]`,
+                  type: 'text',
                 }
               }
             },
@@ -64,30 +63,30 @@ export async function POST(request: Request) {
         const llms = await getLLMsTxt()
 
         const result = streamText({
-          model: provider.languageModel('chat-model'),
-          system: systemPrompt({
-            llms,
+          experimental_transform: smoothStream({
+            chunking: 'line',
+            delayInMs: 20,
           }),
+          messages: modelMessages,
+          model: provider.languageModel('chat-model'),
           providerOptions: {
             openai: {
               reasoningEffort: 'low',
               reasoningSummary: 'auto',
-              textVerbosity: 'medium',
               serviceTier: 'priority',
+              textVerbosity: 'medium',
             },
           },
+          stopWhen: stepCountIs(10),
+          system: systemPrompt({
+            llms,
+          }),
+          toolChoice: 'auto',
           tools: {
-            searchDocs: createSearchDocsTool(writer),
             getPageContent,
+            searchDocs: createSearchDocsTool(writer),
             showContactForm: showContactFormTool,
           },
-          messages: modelMessages,
-          toolChoice: 'auto',
-          experimental_transform: smoothStream({
-            delayInMs: 20,
-            chunking: 'line',
-          }),
-          stopWhen: stepCountIs(10),
         })
 
         writer.merge(
@@ -96,14 +95,15 @@ export async function POST(request: Request) {
           })
         )
       },
+      originalMessages: messages,
     })
 
     return createUIMessageStreamResponse({ stream })
   } catch (error) {
     if (env.NODE_ENV !== 'production') {
       console.error('Failed to process chat request:', {
-        name: (error as Error).name,
         message: (error as Error).message,
+        name: (error as Error).name,
       })
     }
 

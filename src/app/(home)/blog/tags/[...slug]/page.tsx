@@ -183,13 +183,13 @@ export async function generateMetadata(
     : `Browse page ${pageIndex} of blog posts tagged with ${tag}.`
 
   return createMetadata({
-    title: pageTitle,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     description,
     openGraph: {
       url: canonicalUrl,
     },
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    title: pageTitle,
   })
 }

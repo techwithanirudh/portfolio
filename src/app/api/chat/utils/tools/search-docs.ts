@@ -84,13 +84,30 @@ export const createSearchDocsTool = (writer: UIMessageStreamWriter) =>
   tool({
     description:
       'Search the portfolio content using the internal search server.',
+    execute: async ({ query, tag: tagParam, limit }) => {
+      const tag = tagParam === 'all' ? undefined : tagParam
+      const search = await searchServer
+      const raw = await search.searchAsync({
+        enrich: true,
+        limit,
+        merge: true,
+        query,
+        tag: tag ? ({ tag } as Record<string, string>) : undefined,
+      })
+      const results = raw as Array<{ doc: CustomDocument }>
+
+      for (const [index, result] of results.entries()) {
+        writer.write({
+          sourceId: `search-doc-${index}-${result.doc.url}`,
+          title: result.doc.title,
+          type: 'source-url',
+          url: result.doc.url,
+        })
+      }
+
+      return results
+    },
     inputSchema: z.object({
-      query: z.string().describe('The query to search for.'),
-      tag: Tag.default('all').describe('Optional tag filter.'),
-      locale: z
-        .string()
-        .optional()
-        .describe('Optional locale for i18n setups.'),
       limit: z
         .number()
         .int()
@@ -100,28 +117,11 @@ export const createSearchDocsTool = (writer: UIMessageStreamWriter) =>
         .describe(
           'Maximum number of results to return (default: 10, max: 100).'
         ),
+      locale: z
+        .string()
+        .optional()
+        .describe('Optional locale for i18n setups.'),
+      query: z.string().describe('The query to search for.'),
+      tag: Tag.default('all').describe('Optional tag filter.'),
     }),
-    execute: async ({ query, tag: tagParam, limit }) => {
-      const tag = tagParam === 'all' ? undefined : tagParam
-      const search = await searchServer
-      const raw = await search.searchAsync({
-        query,
-        limit,
-        merge: true,
-        enrich: true,
-        tag: tag ? ({ tag } as Record<string, string>) : undefined,
-      })
-      const results = raw as Array<{ doc: CustomDocument }>
-
-      for (const [index, result] of results.entries()) {
-        writer.write({
-          type: 'source-url',
-          sourceId: `search-doc-${index}-${result.doc.url}`,
-          title: result.doc.title,
-          url: result.doc.url,
-        })
-      }
-
-      return results
-    },
   })

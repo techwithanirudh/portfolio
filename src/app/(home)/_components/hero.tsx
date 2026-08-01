@@ -13,8 +13,8 @@ import heroImage from '../../../../public/images/gradient-noise-purple-azure-lig
 
 const Hero = () => {
   const links = resolveLinkItems({
-    links: linkItems,
     githubUrl: baseOptions.githubUrl,
+    links: linkItems,
   }) as LinkItemType[]
   const navItems = links.filter((item) =>
     ['nav', 'all'].includes(item.on ?? 'all')
@@ -28,7 +28,7 @@ const Hero = () => {
         initial={{ opacity: 0, translateY: -6 }}
         transition={{
           duration: 0.4,
-          scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
+          scale: { bounce: 0.5, type: 'spring', visualDuration: 0.4 },
         }}
         viewport={{ once: true }}
         whileInView={{ opacity: 1 }}
@@ -76,8 +76,8 @@ const Hero = () => {
           <Link
             className={cn(
               buttonVariants({
-                variant: 'default',
                 size: 'lg',
+                variant: 'default',
               }),
               'rounded-full bg-primary hover:bg-primary/90'
             )}
@@ -96,15 +96,15 @@ const Hero = () => {
                 className='flex items-center'
                 delay={0.1 + i * 0.05}
                 duration={0.25}
-                initial={{ opacity: 0, translateY: -6, scale: 0.95 }}
+                initial={{ opacity: 0, scale: 0.95, translateY: -6 }}
                 key={i.toString()}
-                whileInView={{ opacity: 1, translateY: 0, scale: 1 }}
+                whileInView={{ opacity: 1, scale: 1, translateY: 0 }}
               >
                 <Link
                   className={cn(
                     buttonVariants({
-                      variant: 'ghost',
                       size: 'icon',
+                      variant: 'ghost',
                     }),
                     'rounded-full'
                   )}

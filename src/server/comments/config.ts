@@ -11,6 +11,7 @@ import { comments, rates, roles, users } from '@/server/db/schema'
 export const auth: AuthAdapter<CustomRequest> =
   createBetterAuthAdapter(betterAuth)
 const baseStorage = createDrizzleAdapter({
+  auth: 'better-auth',
   db,
   schemas: {
     comments,
@@ -18,7 +19,6 @@ const baseStorage = createDrizzleAdapter({
     roles,
     user: users,
   },
-  auth: 'better-auth',
 })
 
 type PostCommentArgs = Parameters<typeof baseStorage.postComment>[0]

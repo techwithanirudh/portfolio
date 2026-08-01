@@ -10,14 +10,14 @@ import { ActiveSessionsSkeleton } from './_components/active-sessions-skeleton'
 
 export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
-    title: 'Account Settings',
+    alternates: {
+      canonical: '/account',
+    },
     description: 'Manage your account information and active sessions.',
     openGraph: {
       url: '/account',
     },
-    alternates: {
-      canonical: '/account',
-    },
+    title: 'Account Settings',
   })
 }
 

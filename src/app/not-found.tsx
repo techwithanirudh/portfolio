@@ -39,7 +39,7 @@ export async function generateMetadata(props: {
   const description = 'The page you are looking for could not be found.'
 
   return createMetadata({
-    title: 'Not Found',
     description,
+    title: 'Not Found',
   })
 }

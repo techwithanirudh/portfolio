@@ -1,16 +1,16 @@
 import { cn } from '@/lib/utils'
 
 const palette = [
-  { label: 'Background', className: 'bg-background' },
-  { label: 'Card', className: 'bg-card' },
-  { label: 'Muted', className: 'bg-muted' },
-  { label: 'Muted F.G', className: 'bg-muted-foreground' },
-  { label: 'Border', className: 'bg-border' },
-  { label: 'Foreground', className: 'bg-foreground' },
-  { label: 'Primary', className: 'bg-primary' },
-  { label: 'Primary Soft', className: 'bg-primary/30' },
-  { label: 'Accent', className: 'bg-accent' },
-  { label: 'Accent F.G', className: 'bg-accent-foreground' },
+  { className: 'bg-background', label: 'Background' },
+  { className: 'bg-card', label: 'Card' },
+  { className: 'bg-muted', label: 'Muted' },
+  { className: 'bg-muted-foreground', label: 'Muted F.G' },
+  { className: 'bg-border', label: 'Border' },
+  { className: 'bg-foreground', label: 'Foreground' },
+  { className: 'bg-primary', label: 'Primary' },
+  { className: 'bg-primary/30', label: 'Primary Soft' },
+  { className: 'bg-accent', label: 'Accent' },
+  { className: 'bg-accent-foreground', label: 'Accent F.G' },
 ]
 
 export const Design = () => (

@@ -31,26 +31,26 @@ export const subscribe = actionClient
       : { firstName: '', lastName: '' }
 
     try {
-      const contact = await getContact({ email, audienceId })
+      const contact = await getContact({ audienceId, email })
 
       if (contact) {
         await updateContact({
+          audienceId,
           email,
           firstName,
           lastName,
-          audienceId,
           unsubscribed: false,
         })
 
         return {
-          success: true,
           message: 'You are already subscribed to our newsletter!',
+          success: true,
         }
       }
 
       const { data, error } = await resend.contacts.create({
-        email,
         audienceId,
+        email,
         firstName,
         lastName,
         unsubscribed: false,
@@ -64,14 +64,14 @@ export const subscribe = actionClient
 
       const posts = getSortedByDatePosts()
       await sendWelcomeEmail({
+        firstName: firstName || 'there',
         posts,
         to: email,
-        firstName: firstName || 'there',
       })
 
       return {
-        success: true,
         message: 'You are now subscribed to our newsletter!',
+        success: true,
       }
     } catch (error) {
       console.error('Failed to subscribe:', error)

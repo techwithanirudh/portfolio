@@ -70,18 +70,18 @@ export const getGitHubRepoDetails = unstable_cache(
     })
 
     return {
-      owner: parsed.owner,
-      repo: parsed.repo,
+      branch: parsed.branch,
       defaultBranch: response.data.default_branch,
       description: response.data.description,
-      branch: parsed.branch,
       forks: response.data.forks_count,
       homepage: response.data.homepage || null,
       language: response.data.language,
       license: response.data.license?.spdx_id ?? null,
       name: response.data.full_name,
       openIssues: response.data.open_issues_count,
+      owner: parsed.owner,
       pushedAt: response.data.pushed_at ?? null,
+      repo: parsed.repo,
       stars: response.data.stargazers_count,
       topics: response.data.topics ?? [],
       url: parsed.branch

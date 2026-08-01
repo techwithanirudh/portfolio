@@ -18,20 +18,16 @@ import { Body } from './layout.client'
 import { Provider } from './provider'
 
 const geistSans = Geist({
-  variable: '--font-geist-sans',
   subsets: ['latin'],
+  variable: '--font-geist-sans',
 })
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
   subsets: ['latin'],
+  variable: '--font-geist-mono',
 })
 
 export const metadata = createMetadata({
-  title: {
-    template: `%s | ${title}`,
-    default: title,
-  },
   applicationName: title,
   authors: [
     {
@@ -41,14 +37,18 @@ export const metadata = createMetadata({
   ],
   description: homeDescription,
   metadataBase: baseUrl,
+  title: {
+    default: title,
+    template: `%s | ${title}`,
+  },
 })
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#0A0A0A' },
-    { media: '(prefers-color-scheme: light)', color: '#fff' },
-  ],
   maximumScale: 1,
+  themeColor: [
+    { color: '#0A0A0A', media: '(prefers-color-scheme: dark)' },
+    { color: '#fff', media: '(prefers-color-scheme: light)' },
+  ],
 }
 
 const baseUrlString = baseUrl.toString()
@@ -60,24 +60,24 @@ const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': 'Person',
       '@id': `${baseUrlString}#person`,
-      name: owner,
-      url: baseUrlString,
+      '@type': 'Person',
       description: homeDescription,
       jobTitle: 'Full-stack Developer',
       knowsAbout: ['Next.js', 'React', 'TypeScript', 'Web Development', 'AI'],
+      name: owner,
       sameAs: socialUrls,
+      url: baseUrlString,
     },
     {
-      '@type': 'WebSite',
       '@id': `${baseUrlString}#website`,
-      name: title,
-      url: baseUrlString,
+      '@type': 'WebSite',
       description: homeDescription,
+      name: title,
       publisher: {
         '@id': `${baseUrlString}#person`,
       },
+      url: baseUrlString,
     },
   ],
 }
@@ -85,16 +85,16 @@ const jsonLd = {
 const RootLayout = ({ children }: { children: ReactNode }) => {
   const pages = [
     ...getPosts().map((page) => ({
+      description: page.data.description,
+      tag: 'blog' as const,
       title: page.data.title ?? 'Untitled',
       url: page.url,
-      tag: 'blog' as const,
-      description: page.data.description,
     })),
     ...getWorkPages().map((page) => ({
+      description: page.data.description,
+      tag: 'projects' as const,
       title: page.data.title ?? 'Untitled',
       url: page.url,
-      tag: 'projects' as const,
-      description: page.data.description,
     })),
   ]
 
@@ -108,8 +108,8 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         <BotIdClient
           protect={[
             {
-              path: '/*',
               method: 'POST',
+              path: '/*',
             },
           ]}
         />

@@ -71,18 +71,18 @@ export const createGuestbookEntry = protectedGuestbookAction
           buffer,
           {
             access: 'public',
-            contentType: 'image/png',
             cacheControlMaxAge: 31_536_000,
+            contentType: 'image/png',
           }
         )
         signatureUrl = blob.url
       }
 
       await db.insert(guestbookEntries).values({
-        userId: user.id,
-        name,
         message: parsedInput.message,
+        name,
         signature: signatureUrl,
+        userId: user.id,
       })
 
       revalidatePath('/guestbook')
@@ -120,9 +120,9 @@ export const toggleGuestbookReaction = protectedGuestbookAction
         await db
           .insert(guestbookReactions)
           .values({
+            emoji,
             entryId,
             userId: user.id,
-            emoji,
           })
           .onConflictDoNothing()
       }
@@ -159,8 +159,8 @@ export const editGuestbookEntry = protectedGuestbookAction
       const updated = await db
         .update(guestbookEntries)
         .set({
-          message: parsedInput.message,
           editedAt: new Date(),
+          message: parsedInput.message,
         })
         .where(
           isAdmin
@@ -211,11 +211,11 @@ export const removeGuestbookEntry = protectedGuestbookAction
         } catch (error) {
           console.error('Failed to delete guestbook signature blob:', {
             entryId: parsedInput.entryId,
-            signature: removed.signature,
             error:
               error instanceof Error
-                ? { name: error.name, message: error.message }
+                ? { message: error.message, name: error.name }
                 : String(error),
+            signature: removed.signature,
           })
         }
       }
@@ -250,8 +250,8 @@ export const banGuestbookUser = protectedGuestbookAction
 
       const [targetUser] = await db
         .select({
-          role: users.role,
           banned: users.banned,
+          role: users.role,
         })
         .from(users)
         .where(eq(users.id, parsedInput.userId))
@@ -272,8 +272,8 @@ export const banGuestbookUser = protectedGuestbookAction
 
         await auth.api.banUser({
           body: {
-            userId: parsedInput.userId,
             banReason: 'Banned by an admin from the guestbook.',
+            userId: parsedInput.userId,
           },
           headers: await headers(),
         })

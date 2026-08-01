@@ -14,17 +14,17 @@ import type { CopyState } from '@/hooks/use-copy-to-clipboard'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 
 export const motionIconVariants: Variants = {
-  initial: { opacity: 0, scale: 0.8, filter: 'blur(2px)' },
-  animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+  animate: { filter: 'blur(0px)', opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.8 },
+  initial: { filter: 'blur(2px)', opacity: 0, scale: 0.8 },
 }
 
 export const motionIconProps: HTMLMotionProps<'span'> = {
-  variants: motionIconVariants,
-  initial: 'initial',
   animate: 'animate',
   exit: 'exit',
+  initial: 'initial',
   transition: { duration: 0.15, ease: 'easeOut' },
+  variants: motionIconVariants,
 }
 
 export interface CopyStateIconProps {
@@ -44,9 +44,6 @@ export function CopyStateIcon({
   errorIcon,
 }: CopyStateIconProps) {
   const iconByState = {
-    idle: idleIcon ?? (
-      <HugeiconsIcon data-slot='idle-icon' icon={Copy01Icon} strokeWidth={2} />
-    ),
     done: doneIcon ?? (
       <HugeiconsIcon data-slot='done-icon' icon={Tick02Icon} strokeWidth={2} />
     ),
@@ -56,6 +53,9 @@ export function CopyStateIcon({
         icon={CancelCircleIcon}
         strokeWidth={2}
       />
+    ),
+    idle: idleIcon ?? (
+      <HugeiconsIcon data-slot='idle-icon' icon={Copy01Icon} strokeWidth={2} />
     ),
   }
 
@@ -90,8 +90,8 @@ export function CopyButton({
   ...props
 }: CopyButtonProps) {
   const { state, copy } = useCopyToClipboard({
-    onCopySuccess,
     onCopyError,
+    onCopySuccess,
   })
 
   return (

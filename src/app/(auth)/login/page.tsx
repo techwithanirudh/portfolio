@@ -4,14 +4,14 @@ import { SignInCard } from './_components/sign-in-card'
 
 export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
-    title: 'Sign In',
+    alternates: {
+      canonical: '/login',
+    },
     description: 'Sign in to manage your account and sessions.',
     openGraph: {
       url: '/login',
     },
-    alternates: {
-      canonical: '/login',
-    },
+    title: 'Sign In',
   })
 }
 

@@ -10,10 +10,10 @@ export const GET = (request: Request): ImageResponse | Response => {
     return new Response('Missing title', { status: 400 })
   }
 
-  const image = new ImageResponse(generate({ title, subtitle: description }), {
+  const image = new ImageResponse(generate({ subtitle: description, title }), {
     format: 'webp',
-    width: 1200,
     height: 630,
+    width: 1200,
   })
 
   return image

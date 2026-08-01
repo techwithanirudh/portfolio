@@ -17,10 +17,10 @@ import Testimonials from './_components/testimonials'
 import WorkPreview from './_components/work'
 
 export const metadata: Metadata = createMetadata({
-  title: 'Home',
+  alternates: { canonical: '/' },
   description: homeDescription,
   openGraph: { images: '/banner.png', url: '/' },
-  alternates: { canonical: '/' },
+  title: 'Home',
   twitter: { images: '/banner.png' },
 })
 

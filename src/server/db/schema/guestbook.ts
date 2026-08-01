@@ -13,32 +13,32 @@ import { users } from './auth'
 const createTable = pgTableCreator((name) => `portfolio_${name}`)
 
 export const guestbookEntries = createTable('guestbook_entries', {
-  id: serial('id').primaryKey().notNull(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  name: text('name').notNull(),
-  message: text('message').notNull(),
-  signature: text('signature'),
-  editedAt: timestamp('edited_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()
     .notNull(),
+  editedAt: timestamp('edited_at', { withTimezone: true }),
+  id: serial('id').primaryKey().notNull(),
+  message: text('message').notNull(),
+  name: text('name').notNull(),
+  signature: text('signature'),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
 })
 
 export const guestbookReactions = createTable(
   'guestbook_reactions',
   {
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    emoji: text('emoji').notNull(),
     entryId: integer('entry_id')
       .notNull()
       .references(() => guestbookEntries.id, { onDelete: 'cascade' }),
     userId: text('user_id')
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    emoji: text('emoji').notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true })
-      .defaultNow()
-      .notNull(),
   },
   (table) => [
     primaryKey({ columns: [table.entryId, table.userId, table.emoji] }),

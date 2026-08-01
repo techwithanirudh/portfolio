@@ -43,7 +43,7 @@ export const ViewAnimation = ({
       className={className}
       initial={initialState}
       transition={{ delay: normalizedDelay, duration: duration ?? 0.3 }}
-      viewport={{ once: true, amount: 0.1 }}
+      viewport={{ amount: 0.1, once: true }}
       whileInView={whileInViewState}
     >
       {children}

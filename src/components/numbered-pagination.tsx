@@ -23,8 +23,8 @@ function NumberedPagination({
 }: NumberedPaginationProps) {
   const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
     currentPage,
-    totalPages,
     paginationItemsToDisplay,
+    totalPages,
   })
 
   const handlePageChange = (page: number) => (e: React.MouseEvent) => {

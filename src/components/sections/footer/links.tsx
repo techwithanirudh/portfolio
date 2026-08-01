@@ -20,8 +20,8 @@ interface ListItem {
 
 export const Links = () => {
   const links = resolveLinkItems({
-    links: linkItems,
     githubUrl: baseOptions.githubUrl,
+    links: linkItems,
   })
   const navItems = links.filter((item) =>
     ['nav', 'all'].includes(item.on ?? 'all')
@@ -31,9 +31,8 @@ export const Links = () => {
 
   const lists: ListItem[] = [
     {
-      title: 'Navigate',
       items: [
-        { href: '/', children: 'Home' },
+        { children: 'Home', href: '/' },
         ...navItems
           .filter(
             (item) =>
@@ -42,44 +41,45 @@ export const Links = () => {
               item.type !== 'icon'
           )
           .map((item) => ({
-            href: item.url,
             children: item.text,
+            href: item.url,
           })),
       ],
+      title: 'Navigate',
     },
     {
-      title: 'More',
       items: [
-        { href: '/uses', children: 'Uses' },
-        { href: '/colophon', children: 'Colophon' },
+        { children: 'Uses', href: '/uses' },
+        { children: 'Colophon', href: '/colophon' },
         {
-          href: 'https://v1.techwithanirudh.com/',
           children: 'V1 Portfolio',
           external: true,
+          href: 'https://v1.techwithanirudh.com/',
         },
-        { href: '/rss.xml', children: 'RSS Feed' },
-        { href: '/sitemap.xml', children: 'Sitemap' },
+        { children: 'RSS Feed', href: '/rss.xml' },
+        { children: 'Sitemap', href: '/sitemap.xml' },
       ],
+      title: 'More',
     },
     {
-      title: 'Work',
       items: works.slice(0, 5).map((work) => ({
-        href: work.url,
         children: work.data.title,
+        href: work.url,
       })),
+      title: 'Work',
     },
     {
-      title: 'Socials',
       items: socials.map((social) => ({
-        href: social.url,
-        external: true,
         children: (
           <span className='inline-flex items-center gap-1.5 [&_svg]:size-4'>
             {social.icon}
             {social.name}
           </span>
         ),
+        external: true,
+        href: social.url,
       })),
+      title: 'Socials',
     },
   ]
 

@@ -19,18 +19,18 @@ async function checkLinks() {
     populate: {
       '(home)/(blog)/blog/[slug]': await Promise.all(
         posts.map((page) => ({
+          hashes: getHeadings(page),
           value: {
             slug: page.slugs[0] ?? '',
           },
-          hashes: getHeadings(page),
         }))
       ),
       '(home)/work/[slug]': await Promise.all(
         workPages.map((page) => ({
+          hashes: getHeadings(page),
           value: {
             slug: page.slugs[0] ?? '',
           },
-          hashes: getHeadings(page),
         }))
       ),
     },
@@ -44,13 +44,13 @@ async function checkLinks() {
     await validateFiles(
       [...(await getFiles(workPages)), ...(await getFiles(posts))],
       {
-        scanned,
+        checkRelativePaths: 'as-url',
         markdown: {
           components: {
             Card: { attributes: ['href'] },
           },
         },
-        checkRelativePaths: 'as-url',
+        scanned,
       }
     ),
     true
@@ -72,10 +72,10 @@ async function getFiles(pages: BlogPage[] | WorkPage[]) {
   const files: FileObject[] = []
   for (const page of pages) {
     files.push({
-      data: page.data,
-      url: page.url,
-      path: page.data.info.fullPath,
       content: await page.data.getText('raw'),
+      data: page.data,
+      path: page.data.info.fullPath,
+      url: page.url,
     })
   }
 

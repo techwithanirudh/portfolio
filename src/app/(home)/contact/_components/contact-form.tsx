@@ -42,15 +42,15 @@ const ContactFormInner = () => {
           )
         },
       },
+      errorMapProps: {},
       formProps: {
-        mode: 'onBlur',
         defaultValues: {
-          name: '',
           email: '',
           message: '',
+          name: '',
         },
+        mode: 'onBlur',
       },
-      errorMapProps: {},
     }
   )
 
