@@ -10,13 +10,13 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
-interface TocInlineProps {
+interface TOCInlineProps {
   children?: ReactNode
   className?: string
   items: TOCItemType[]
 }
 
-export function TocInline({ children, className, items }: TocInlineProps) {
+export function TOCInline({ children, className, items }: TOCInlineProps) {
   if (items.length === 0) {
     return null
   }

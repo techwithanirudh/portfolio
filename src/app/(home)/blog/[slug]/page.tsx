@@ -3,9 +3,9 @@ import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
 import {
-  BlogTocInline,
-  BlogTocMinimap,
-  BlogTocProvider,
+  BlogTOCInline,
+  BlogTOCMinimap,
+  BlogTOCProvider,
 } from '@/components/blog-toc'
 import { PostJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
@@ -57,14 +57,14 @@ export default async function Page(props: {
   )
 
   return (
-    <BlogTocProvider toc={toc}>
+    <BlogTOCProvider toc={toc}>
       <Header page={page} tags={tags} />
 
       <SectionBody className='flex'>
-        <BlogTocMinimap />
+        <BlogTOCMinimap />
         <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
           <div className='flex min-w-0 flex-1 flex-col'>
-            <BlogTocInline />
+            <BlogTOCInline />
             <MdxContent
               beforeComments={
                 <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
@@ -84,7 +84,7 @@ export default async function Page(props: {
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
-    </BlogTocProvider>
+    </BlogTOCProvider>
   )
 }
 

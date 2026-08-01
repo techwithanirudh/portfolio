@@ -5,7 +5,7 @@ import {
   useActiveAnchor,
   useTOCItems,
 } from 'fumadocs-ui/components/toc'
-import { TocInline } from '@/components/toc-inline'
+import { TOCInline } from '@/components/toc-inline'
 import {
   HoverCard,
   HoverCardContent,
@@ -13,19 +13,19 @@ import {
 } from '@/components/ui/hover-card'
 import { cn } from '@/lib/utils'
 
-export const BlogTocProvider = TOCProvider
+export const BlogTOCProvider = TOCProvider
 
-export function BlogTocInline({ className }: { className?: string }) {
+export function BlogTOCInline({ className }: { className?: string }) {
   const items = useTOCItems()
 
   if (items.length === 0) {
     return null
   }
 
-  return <TocInline className={cn('2xl:hidden', className)} items={items} />
+  return <TOCInline className={cn('2xl:hidden', className)} items={items} />
 }
 
-export function BlogTocMinimap({ className }: { className?: string }) {
+export function BlogTOCMinimap({ className }: { className?: string }) {
   const items = useTOCItems()
   const activeAnchor = useActiveAnchor()
 
