@@ -7,9 +7,9 @@ image: /images/projects/anikode/cover.png
 tags: ['Next.js', 'GrapesJS', 'Drizzle ORM', 'NextAuth', 'TailwindCSS']
 ---
 
-AniKode is a Next.js 14 website builder centered on a GrapesJS editor and a dashboard-style workflow. It combines a drag-and-drop canvas with a plugin-driven block system, then persists projects through Drizzle so users can reopen and iterate on their layouts.
+Building a website usually means picking between a drag-and-drop builder that's too simple and a framework that's too much work. AniKode sits in between: a GrapesJS canvas for dragging blocks around, wrapped in a dashboard that saves every project through Drizzle so you can close the tab and pick it back up later.
 
-Auth flows are handled through NextAuth and the UI is composed with Radix and Tailwind, which keeps the editor chrome consistent across dialogs, menus, and configuration panels. The system leans on JSON serialization for project state, so exports and previews stay close to the editor source of truth.
+Sign-in runs through NextAuth, and the editor itself, dialogs, menus, and configuration panels included, is built with Radix and Tailwind so it looks and behaves the same throughout. Project state is stored as plain JSON, which keeps exports and previews matching exactly what's in the editor.
 
 <Tabs items={['Highlights', 'Stack']}>
   <Tab value="Highlights">

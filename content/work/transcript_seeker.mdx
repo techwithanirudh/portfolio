@@ -7,9 +7,9 @@ image: /images/projects/transcript_seeker/cover.png
 tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
 ---
 
-Transcript Seeker is a Turborepo app for uploading recordings, transcribing them, and exploring the results inside a React + Vite interface. The UI is built around synced playback and transcripts, with a Nitro proxy and Drizzle models behind the scenes to keep data flows structured.
+Scrubbing through a meeting recording to find the one thing someone said is tedious. Transcript Seeker fixes that by syncing playback with the transcript: click a line, jump to that moment in the audio. Uploading, transcribing, and browsing all happen in a React and Vite interface, backed by a Nitro proxy and Drizzle models.
 
-The product leans on local-first storage with PGLite in the browser and optional Turso/SQLite for persistent calendar data. MeetingBaaS APIs integrate meeting bots, while AI chat and summarization tools make transcripts interactive.
+Storage is local-first, using PGLite right in the browser, with Turso or SQLite available for calendar data that needs to stick around. MeetingBaaS APIs bring meeting bots into the mix, and built-in AI chat and summarization tools let you ask questions about a transcript instead of just reading through it.
 
 <Files>
   <Folder name="apps" defaultOpen>

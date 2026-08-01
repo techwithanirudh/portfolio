@@ -7,9 +7,9 @@ image: /images/projects/anirudh_gpt/cover.jpg
 tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 ---
 
-AnirudhGPT is a compact Next.js chat UI that wires Firebase on the client and admin sides. The app mixes App Router and legacy pages, which keeps the UI modern while preserving a straightforward routing structure for chat views and assets.
+A ChatGPT-style interface built to stay small and easy to change. AnirudhGPT wires Firebase into a Next.js app that mixes the newer App Router with older-style pages, so the chat views can look modern while the rest keeps a plain, familiar routing structure.
 
-Firebase handles the data layer, with Firestore as the primary store and admin access configured for server-side operations. The UI is intentionally lightweight, using Tailwind for layout and a small component set so the chat flow stays fast to iterate.
+Firebase does the heavy lifting: Firestore stores the data, and admin access is set up for anything that needs to run server-side. The UI stays small on purpose, just Tailwind for layout and a handful of components, so changes to the chat flow are quick to make.
 
 <Tabs items={['Highlights', 'Stack']}>
   <Tab value="Highlights">

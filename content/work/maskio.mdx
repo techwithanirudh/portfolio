@@ -8,9 +8,9 @@ image: /images/projects/maskio/cover.jpg
 tags: ['KaboomJS', 'Game Development', 'Node.js']
 ---
 
-Maskio is a KaboomJS browser game that keeps the runtime lean while still shipping a complete gameplay loop. The project uses esbuild to bundle assets quickly and a small Express server to serve the build during development and production.
+A browser game doesn't need a heavy toolchain to feel complete. Maskio proves that with KaboomJS: sprites, scenes, and collisions handle the gameplay, while esbuild bundles everything fast and a small Express server serves it in both development and production.
 
-Gameplay logic stays inside Kaboom's scene system, while the Node scripts handle build, dev, and static serving. This keeps the pipeline simple: iterate in dev with nodemon, generate a bundle with `build.js`, and serve the output with a minimal Express server.
+Gameplay logic lives entirely inside Kaboom's scene system, so the Node side stays focused on building and serving. Run `nodemon` in dev, bundle with `build.js`, and serve the output through that same lightweight Express server: no extra pipeline needed.
 
 <Tabs items={['Highlights', 'Stack']}>
   <Tab value="Highlights">

@@ -7,9 +7,9 @@ image: /images/projects/classnotes_buddy/cover.png
 tags: ['Turborepo', 'Supabase', 'Next.js', 'Expo', 'Drizzle']
 ---
 
-Classnotes Buddy is a Turborepo refactor that ships a web app and an Expo mobile client from the same workspace. The project extends the create-t3-turbo stack with Supabase Auth, Drizzle-managed schemas, and shared tooling so both apps can use a consistent notes workflow.
+Taking notes on your laptop and then needing them on your phone shouldn't mean building two separate apps. Classnotes Buddy solves that by keeping a Next.js web app and an Expo mobile app in one Turborepo workspace, built on top of the create-t3-turbo stack, so both share the same Supabase-backed notes workflow.
 
-The repo documents the Supabase setup in detail, including auth redirect rules, SQL triggers to sync user profiles, and environment templates for local and preview deployments. Turbo pipelines handle dev/build/lint/typecheck so the monorepo stays fast even with multiple apps.
+The Supabase setup is documented in detail: auth redirect rules, SQL triggers that keep user profiles in sync, and environment templates for local and preview deployments. Turbo runs dev, build, lint, and typecheck across both apps, so the monorepo stays fast even as it grows.
 
 <Tabs items={['Highlights', 'Stack']}>
   <Tab value="Highlights">
