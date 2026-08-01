@@ -6,6 +6,7 @@ export const experiences: ExperienceItemType[] = [
     id: 'energent',
     companyName: 'Energent.ai',
     companyWebsite: 'https://energent.ai',
+    companyLogo: '/images/companies/energent.png',
     positions: [
       {
         id: '1',
@@ -24,6 +25,7 @@ export const experiences: ExperienceItemType[] = [
     id: 'meetingbaas',
     companyName: 'MeetingBaaS',
     companyWebsite: 'https://www.meetingbaas.com/en',
+    companyLogo: '/images/companies/meetingbaas.png',
     positions: [
       {
         id: '1',
@@ -32,7 +34,7 @@ export const experiences: ExperienceItemType[] = [
         employmentType: 'Freelance',
         icon: <Icons.codeXml />,
         description:
-          'Built Transcript Seeker and Speaking Meeting Bot, plus the AI chat and MCP tooling around the MeetingBaaS meeting APIs.',
+          'Built [Transcript Seeker](/work/transcript_seeker) and [Speaking Meeting Bot](/work/speaking_meeting_bot), plus the AI chat and MCP tooling around the MeetingBaaS meeting APIs.',
         skills: ['TypeScript', 'React', 'Next.js', 'Python', 'Drizzle', 'MCP'],
         isExpanded: true,
       },

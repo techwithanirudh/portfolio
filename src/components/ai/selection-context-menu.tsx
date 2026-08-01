@@ -119,7 +119,17 @@ export function SelectionContent({ children }: { children: ReactNode }) {
 
   return (
     <>
-      <div className='contents' ref={containerRef}>
+      {/*
+        `contents` keeps this wrapper out of the layout, but it is still a DOM
+        child, so the parent's `divide-y` sees one child and draws nothing --
+        and a `contents` box cannot paint a border anyway. Dividing here puts
+        the separators back on the sections themselves. `divide-y` skips the
+        last child, so the rule above the footer is restored explicitly.
+      */}
+      <div
+        className='contents divide-y divide-dashed divide-border [&>:last-child]:border-border [&>:last-child]:border-b [&>:last-child]:border-dashed'
+        ref={containerRef}
+      >
         {children}
       </div>
       {popup &&
