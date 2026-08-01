@@ -78,7 +78,7 @@ export default async function Page(props: {
               <Mdx components={{ ...mdxComponents, GitHubCode }} />
             </MdxContent>
           </div>
-          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed lg:before:absolute lg:before:top-0 lg:before:-left-px lg:before:h-4 lg:before:w-px lg:before:bg-border'>
             {pageActions}
           </div>
         </article>
