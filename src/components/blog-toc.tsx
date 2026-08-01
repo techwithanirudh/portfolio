@@ -86,7 +86,7 @@ export function BlogTocMobile({ className }: { className?: string }) {
       tree={emptyTree}
     >
       <TOCPopover
-        container={{ className: cn('top-14 lg:hidden', className) }}
+        container={{ className: cn('top-14 z-[60] lg:hidden', className) }}
       />
     </DocsLayout>
   )
