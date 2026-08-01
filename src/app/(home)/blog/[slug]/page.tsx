@@ -2,7 +2,11 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
-import { BlogToc } from '@/components/blog-toc'
+import {
+  BlogTocDesktop,
+  BlogTocMobile,
+  BlogTocProvider,
+} from '@/components/blog-toc'
 import { PostJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
@@ -28,15 +32,17 @@ export default async function Page(props: {
   const lastUpdate = lastModified ? new Date(lastModified) : undefined
 
   return (
-    <>
+    <BlogTocProvider toc={toc}>
       <Header page={page} tags={tags} />
 
-      {/* Outside SectionBody: the rail is anchored to the viewport, not the article. */}
-      <BlogToc toc={toc} />
+      {/* Below `lg` only: a sticky bar above the article. */}
+      <BlogTocMobile />
 
       <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
-          <MdxContent comments slug={params.slug} toc={toc}>
+          {/* `lg` and up only: an always-expanded left column. */}
+          <BlogTocDesktop />
+          <MdxContent comments hideInlineToc slug={params.slug} toc={toc}>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </MdxContent>
           <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
@@ -67,7 +73,7 @@ export default async function Page(props: {
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
-    </>
+    </BlogTocProvider>
   )
 }
 
