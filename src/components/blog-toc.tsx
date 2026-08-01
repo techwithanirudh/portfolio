@@ -79,7 +79,7 @@ export function BlogTocMinimap({ className }: { className?: string }) {
       <div className='sticky top-16'>
         <HoverCard closeDelay={100} openDelay={100}>
           <HoverCardTrigger asChild>
-            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden py-3 pl-6'>
+            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-4 pb-3 pl-6'>
               {items.map((item) => (
                 <div
                   aria-hidden
@@ -95,7 +95,7 @@ export function BlogTocMinimap({ className }: { className?: string }) {
           <HoverCardContent
             align='start'
             className='w-56 overflow-hidden p-0'
-            side='right'
+            side='left'
             sideOffset={-60}
           >
             <ul className='flex max-h-[calc(100dvh-6rem)] w-full flex-col overflow-y-auto px-6 py-4 text-sm'>
