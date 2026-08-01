@@ -167,6 +167,7 @@
     "youtu",
     "KHTML",
     "networkidle",
-    "domcontentloaded"
+    "domcontentloaded",
+    "trackpad"
   ]
 }

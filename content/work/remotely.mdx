@@ -1,6 +1,6 @@
 ---
 title: Remotely
-description: macOS menu bar app that turns a display's HDMI-CEC remote into a mouse, with rebindable gestures.
+description: Drive your Mac's pointer with the TV remote already sitting on the couch. No dongle, no account, nothing leaves the machine.
 date: 2026-07-30
 order: 5
 github: https://github.com/techwithanirudh/remotely
@@ -8,11 +8,11 @@ image: /images/projects/remotely/cover.png
 tags: ['Swift', 'SwiftUI', 'macOS', 'HDMI-CEC', 'Accessibility']
 ---
 
-Remotely is a macOS app that lets the remote already sitting next to a TV drive the pointer. macOS keeps the CEC bus locked inside the `corercd` daemon and refuses bus enumeration to third-party clients, so no HID events ever reach the process. What the daemon does do is log every frame, so Remotely streams its log output, parses the frames itself, and turns them into pointer input through `CGEvent`.
+A Mac plugged into a TV is a great setup right up to the moment you need the pointer, and the trackpad is across the room. Remotely fixes that with the remote already in your hand: the arrows move the cursor, the centre button clicks, and nothing else has to be bought or paired.
 
-The gesture layer sits between those two ends. A tap nudges the pointer a few pixels, a held D-pad glides along an accelerating curve, and a double press on Back flips the arrows between moving and scrolling, with a chip beside the pointer showing the current mode. Twenty actions are rebindable, including recorded keyboard shortcuts. Nothing leaves the Mac: no account, no network calls, no analytics.
+Getting there took a detour. Macs can hear TV remotes over the HDMI cable, but macOS keeps that channel to itself and hands nothing to third-party apps — the usual door is locked and stays locked. It does, however, narrate every button press into the system log. So Remotely reads the log, works out which button was pressed, and moves the pointer accordingly. A side door, but a reliable one.
 
-The split between the two targets is what makes the rules testable. `RemotelyKit` holds the entire behavior and imports no UI framework, so the CEC parsing, gesture timing, and glide curve can be driven from tests without a screen, a remote, or a TV.
+The rest is making it feel like a mouse rather than a D-pad. Tapping an arrow nudges a few pixels for small targets; holding one glides, picking up speed the longer you hold. Press Back twice and the arrows scroll instead of move, with a chip by the cursor showing which mode you're in. Twenty actions can be rebound, keyboard shortcuts included. It all runs on the Mac — no account, no network, no analytics.
 
 <Files>
   <Folder name="Sources" defaultOpen>

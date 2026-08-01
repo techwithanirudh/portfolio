@@ -7,7 +7,6 @@ export const GitHubIcon = ({ height, size, width, ...props }: IconProps) => (
     data-icon='github'
     data-prefix='fab'
     focusable='false'
-    role='img'
     viewBox='0 0 496 512'
     xmlns='http://www.w3.org/2000/svg'
     {...getSvgSizeProps({ height, size, width })}

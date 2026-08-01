@@ -3,7 +3,9 @@ import { getSvgSizeProps } from '../utils'
 
 export const YouTubeIcon = ({ height, size, width, ...props }: IconProps) => (
   <svg
+    aria-hidden='true'
     fill='currentColor'
+    focusable='false'
     viewBox='0 0 24 24'
     xmlns='http://www.w3.org/2000/svg'
     {...getSvgSizeProps({ height, size, width })}
