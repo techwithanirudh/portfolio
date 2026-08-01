@@ -45,7 +45,7 @@ export default function Detailed(): React.ReactElement {
             </p>
             <Link
               className={cn(
-                buttonVariants({ variant: 'link', size: 'lg' }),
+                buttonVariants({ size: 'lg', variant: 'link' }),
                 '!p-0 h-fit'
               )}
               href='/work'

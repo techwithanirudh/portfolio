@@ -6,8 +6,8 @@ export const getCommitHistoryText = async () => {
     const commitItems = items
       .filter((item) => (item.commits?.length ?? 0) > 0)
       .map((item) => ({
-        repoName: item.event.repo?.name ?? 'unknown',
         commits: item.commits ?? [],
+        repoName: item.event.repo?.name ?? 'unknown',
       }))
 
     if (commitItems.length === 0) {

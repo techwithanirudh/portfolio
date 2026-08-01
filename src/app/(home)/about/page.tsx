@@ -13,10 +13,10 @@ import Hero from './_components/hero'
 import Updates from './_components/updates'
 
 export const metadata: Metadata = createMetadata({
-  title: 'About',
+  alternates: { canonical: '/about' },
   description: homeDescription,
   openGraph: { url: '/about' },
-  alternates: { canonical: '/about' },
+  title: 'About',
 })
 
 export default function AboutPage() {

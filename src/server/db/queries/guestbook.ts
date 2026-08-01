@@ -10,22 +10,22 @@ const fetchGuestbookEntries = async (
 ): Promise<GuestbookEntryItem[]> => {
   const rows = await db
     .select({
-      // Entry info
-      id: guestbookEntries.id,
-      name: guestbookEntries.name,
-      message: guestbookEntries.message,
-      signature: guestbookEntries.signature,
-      userId: guestbookEntries.userId,
-      role: users.role,
       banned: users.banned,
+      count: sql<number>`count(${guestbookReactions.emoji})`.mapWith(Number),
       createdAt: guestbookEntries.createdAt,
       editedAt: guestbookEntries.editedAt,
       // Reactions
       emoji: guestbookReactions.emoji,
-      count: sql<number>`count(${guestbookReactions.emoji})`.mapWith(Number),
+      // Entry info
+      id: guestbookEntries.id,
+      message: guestbookEntries.message,
+      name: guestbookEntries.name,
       reacted: currentUserId
         ? sql<boolean>`coalesce(bool_or(${guestbookReactions.userId} = ${currentUserId}), false)`
         : sql<boolean>`false`,
+      role: users.role,
+      signature: guestbookEntries.signature,
+      userId: guestbookEntries.userId,
     })
     .from(guestbookEntries)
     .innerJoin(users, eq(users.id, guestbookEntries.userId))
@@ -52,23 +52,23 @@ const fetchGuestbookEntries = async (
   for (const row of rows) {
     if (!entriesMap.has(row.id)) {
       entriesMap.set(row.id, {
-        id: row.id,
-        name: row.name,
-        message: row.message,
-        signature: row.signature ?? null,
-        userId: row.userId,
-        role: row.role,
         banned: row.banned ?? false,
         createdAt: row.createdAt,
         editedAt: row.editedAt,
+        id: row.id,
+        message: row.message,
+        name: row.name,
         reactions: [],
+        role: row.role,
+        signature: row.signature ?? null,
+        userId: row.userId,
       })
     }
 
     if (row.emoji) {
       entriesMap.get(row.id)!.reactions.push({
-        emoji: row.emoji,
         count: row.count,
+        emoji: row.emoji,
         reacted: row.reacted,
       })
     }

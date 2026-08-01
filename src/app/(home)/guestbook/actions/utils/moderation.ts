@@ -14,32 +14,32 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
 
   const userContent: UserContent = [
     {
-      type: 'text',
       text: `Moderate this guestbook entry:\n\nMessage:\n${message}. If a signature image is included, also moderate the content of the signature.`,
+      type: 'text',
     },
   ]
 
   if (signature) {
     userContent.push({
-      type: 'image',
       image: signature.data,
       mediaType: signature.mediaType,
+      type: 'image',
     })
   }
 
   try {
     const { output } = await generateText({
+      messages: [
+        {
+          content: userContent,
+          role: 'user',
+        },
+      ],
       model: provider.languageModel('moderation-model'),
-      system: moderationPrompt,
       output: Output.object({
         schema: ModerationResultSchema,
       }),
-      messages: [
-        {
-          role: 'user',
-          content: userContent,
-        },
-      ],
+      system: moderationPrompt,
     })
 
     return output
@@ -47,7 +47,7 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
     console.error('Guestbook moderation failed:', {
       error:
         error instanceof Error
-          ? { name: error.name, message: error.message }
+          ? { message: error.message, name: error.name }
           : String(error),
     })
 

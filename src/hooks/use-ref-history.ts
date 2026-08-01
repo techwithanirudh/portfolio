@@ -45,5 +45,5 @@ export function useRefHistory<T>(): UseRefHistoryReturn<T> {
   const canUndo = () => index.current >= 0
   const canRedo = () => index.current < entries.current.length - 1
 
-  return { push, undo, redo, clear, canUndo, canRedo }
+  return { canRedo, canUndo, clear, push, redo, undo }
 }

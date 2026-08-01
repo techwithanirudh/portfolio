@@ -36,8 +36,8 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
     try {
       setIsLoading(true)
       await signIn.social({
-        provider,
         callbackURL: redirectTo,
+        provider,
       })
     } catch {
       toast.error('Sign in failed. Please try again.')

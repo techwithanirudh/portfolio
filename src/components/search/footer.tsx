@@ -8,8 +8,8 @@ import type { CommandKind } from '@/types/search'
 
 const ENTER_LABELS: Record<CommandKind, string> = {
   command: 'Run Command',
-  page: 'Go to Page',
   link: 'Open Link',
+  page: 'Go to Page',
 }
 
 export function CommandMenuFooter() {

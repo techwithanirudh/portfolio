@@ -48,8 +48,8 @@ const extractContent = (content: Content) => {
   visit(content)
 
   return {
-    text: normalizeWhitespace(textParts.join('')),
     images,
+    text: normalizeWhitespace(textParts.join('')),
   }
 }
 
@@ -61,42 +61,42 @@ export const moderateComment = async (content: Content) => {
 
   if (images.length > 0) {
     throw new RouteError({
-      statusCode: 400,
       message: 'Images are not allowed in comments.',
+      statusCode: 400,
     })
   }
 
   const userContent: UserContent = [
     {
-      type: 'text',
       text: `Moderate this comment:\n\n${text || '[no text content]'}`,
+      type: 'text',
     },
   ]
 
   try {
     const { output } = await generateText({
+      messages: [
+        {
+          content: userContent,
+          role: 'user',
+        },
+      ],
       model: provider.languageModel('moderation-model'),
-      system: moderationPrompt,
       output: Output.object({
         schema: ModerationResultSchema,
       }),
-      messages: [
-        {
-          role: 'user',
-          content: userContent,
-        },
-      ],
+      system: moderationPrompt,
     })
 
     if (!output) {
       throw new RouteError({
-        statusCode: 500,
         message: 'Could not verify content safety. Please try again.',
+        statusCode: 500,
       })
     }
 
     if (!output.allowed) {
-      throw new RouteError({ statusCode: 400, message: output.reason })
+      throw new RouteError({ message: output.reason, statusCode: 400 })
     }
 
     return output
@@ -108,13 +108,13 @@ export const moderateComment = async (content: Content) => {
     console.error('Comment moderation failed:', {
       error:
         error instanceof Error
-          ? { name: error.name, message: error.message }
+          ? { message: error.message, name: error.name }
           : String(error),
     })
 
     throw new RouteError({
-      statusCode: 500,
       message: 'Could not verify content safety. Please try again.',
+      statusCode: 500,
     })
   }
 }

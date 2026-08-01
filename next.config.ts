@@ -14,16 +14,11 @@ async function createNextConfig(): Promise<NextConfig> {
     allowedDevOrigins: [
       '3000--main--portfolio--techwithanirudh.coder.techwithanirudh.com',
     ],
-    reactStrictMode: true,
-    poweredByHeader: false,
-    productionBrowserSourceMaps: process.env.SOURCE_MAPS === 'true',
     devIndicators: false,
-    logging: {
-      fetches: {
-        fullUrl: true,
-      },
-    },
     experimental: {
+      // TypeScript 7 dropped the compiler API Next.js reaches for directly, so
+      // it has to shell out to tsc instead.
+      useTypeScriptCli: true,
       viewTransition: true,
     },
     images: {
@@ -31,31 +26,52 @@ async function createNextConfig(): Promise<NextConfig> {
       qualities: [100, 75, 85, 95],
       remotePatterns: [
         {
-          protocol: 'https',
           hostname: 'avatars.githubusercontent.com',
           port: '',
+          protocol: 'https',
         },
         {
-          protocol: 'https',
           hostname: 'raw.githubusercontent.com',
-          port: '',
           pathname: '/techwithanirudh/**',
-        },
-        {
-          protocol: 'https',
-          hostname: 'raw.githubusercontent.com',
           port: '',
-          pathname: '/Meeting-BaaS/**',
+          protocol: 'https',
         },
         {
+          hostname: 'raw.githubusercontent.com',
+          pathname: '/Meeting-BaaS/**',
+          port: '',
           protocol: 'https',
+        },
+        {
           hostname: 'fumadocs.dev',
           port: '',
+          protocol: 'https',
         },
       ],
     },
-    typescript: {
-      ignoreBuildErrors: true,
+    logging: {
+      fetches: {
+        fullUrl: true,
+      },
+    },
+    poweredByHeader: false,
+    productionBrowserSourceMaps: process.env.SOURCE_MAPS === 'true',
+    reactStrictMode: true,
+    async rewrites() {
+      return [
+        {
+          destination: '/blog.mdx/:path*',
+          source: '/blog/:path*.mdx',
+        },
+        {
+          destination: '/work.mdx/:path*',
+          source: '/work/:path*.mdx',
+        },
+        {
+          destination: '/blog/rss.xml',
+          source: '/rss.xml',
+        },
+      ]
     },
     serverExternalPackages: [
       'ts-morph',
@@ -66,21 +82,8 @@ async function createNextConfig(): Promise<NextConfig> {
       'shiki',
       '@takumi-rs/image-response',
     ],
-    async rewrites() {
-      return [
-        {
-          source: '/blog/:path*.mdx',
-          destination: '/blog.mdx/:path*',
-        },
-        {
-          source: '/work/:path*.mdx',
-          destination: '/work.mdx/:path*',
-        },
-        {
-          source: '/rss.xml',
-          destination: '/blog/rss.xml',
-        },
-      ]
+    typescript: {
+      ignoreBuildErrors: true,
     },
   }
 

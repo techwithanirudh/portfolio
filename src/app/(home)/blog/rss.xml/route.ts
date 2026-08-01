@@ -25,24 +25,29 @@ export const GET = () => {
 
 function createFeed(): Feed {
   const feed = new Feed({
-    title,
-    description,
-    id: baseUrl.href,
-    language: 'en',
     copyright: `All rights reserved ${new Date().getFullYear()}, ${owner}`,
-    image: new URL('/banner.png', baseUrl).href,
+    description,
     favicon: new URL('/favicon.ico', baseUrl).href,
-    link: baseUrl.href,
     feed: new URL('/blog/rss.xml', baseUrl).href,
+    id: baseUrl.href,
+    image: new URL('/banner.png', baseUrl).href,
+    language: 'en',
+    link: baseUrl.href,
+    title,
     updated: new Date(),
   })
 
   const posts = getPosts()
   for (const post of posts) {
     feed.addItem({
-      title: post.data.title,
+      author: [
+        {
+          name: post.data.author,
+          // link: new URL('/about', baseUrl).href,
+        },
+      ],
+      date: post.data.date,
       description: post.data.description,
-      link: new URL(post.url, baseUrl).href,
       image: {
         title: post.data.title,
         type: 'image/webp',
@@ -50,13 +55,8 @@ function createFeed(): Feed {
           new URL(`/og/${post.slugs.join('/')}/image.webp`, baseUrl.href).href
         ),
       },
-      date: post.data.date,
-      author: [
-        {
-          name: post.data.author,
-          // link: new URL('/about', baseUrl).href,
-        },
-      ],
+      link: new URL(post.url, baseUrl).href,
+      title: post.data.title,
     })
   }
 

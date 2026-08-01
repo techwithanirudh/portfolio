@@ -1,6 +1,6 @@
 export const toolConfirmationMap = {
-  searchDocs: false,
   getPageContent: false,
+  searchDocs: false,
   showContactForm: true,
 } as const
 

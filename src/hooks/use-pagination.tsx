@@ -29,13 +29,13 @@ export function usePagination({
 
     const halfDisplay = Math.floor(paginationItemsToDisplay / 2)
     const initialRange = {
-      start: currentPage - halfDisplay,
       end: currentPage + halfDisplay,
+      start: currentPage - halfDisplay,
     }
 
     const adjustedRange = {
-      start: Math.max(1, initialRange.start),
       end: Math.min(totalPages, initialRange.end),
+      start: Math.max(1, initialRange.start),
     }
 
     if (adjustedRange.start === 1) {

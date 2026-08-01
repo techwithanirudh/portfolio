@@ -29,9 +29,9 @@ export function SelectionContent({ children }: { children: ReactNode }) {
   const [popup, setPopup] = useState<PopupState | null>(null)
 
   const { refs, floatingStyles } = useFloating({
+    middleware: [offset(8), flip(), shift({ padding: 8 })],
     open: popup !== null,
     placement: 'top',
-    middleware: [offset(8), flip(), shift({ padding: 8 })],
     whileElementsMounted: autoUpdate,
   })
 
@@ -61,10 +61,10 @@ export function SelectionContent({ children }: { children: ReactNode }) {
     }
 
     refs.setReference({
+      contextElement: container,
       getBoundingClientRect() {
         return range.getBoundingClientRect()
       },
-      contextElement: container,
     })
 
     setPopup({ text: text.slice(0, 1200) })
@@ -142,9 +142,9 @@ export function SelectionContent({ children }: { children: ReactNode }) {
             <button
               className={cn(
                 buttonVariants({
+                  className: 'shadow-lg',
                   color: 'primary',
                   size: 'sm',
-                  className: 'shadow-lg',
                 })
               )}
               onClick={() => {

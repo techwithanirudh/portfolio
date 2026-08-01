@@ -8,8 +8,8 @@ import type { BlogPage as MDXPage } from '@/lib/source'
 
 const formatPostDate = (date: Date) =>
   date.toLocaleDateString('en-US', {
-    month: 'long',
     day: 'numeric',
+    month: 'long',
     year: 'numeric',
   })
 

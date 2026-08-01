@@ -31,38 +31,38 @@ export function createMetadata(override: Metadata): Metadata {
 
   return {
     ...override,
-    creator: owner,
-    publisher: owner,
-    formatDetection: {
-      telephone: false,
-      ...override.formatDetection,
-    },
-    appleWebApp: {
-      capable: true,
-      statusBarStyle: 'default',
-    },
-    openGraph: {
-      title: override.title ?? undefined,
-      description: override.description ?? undefined,
-      url: baseUrl.href,
-      images: defaultImage,
-      siteName: title,
-      ...override.openGraph,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      creator: '@AnirudhWith',
-      title: override.title ?? undefined,
-      description: override.description ?? undefined,
-      images: defaultImage,
-      ...override.twitter,
-    },
     alternates: {
       canonical: '/',
       types: {
         'application/rss+xml': '/api/rss.xml',
       },
       ...override.alternates,
+    },
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+    },
+    creator: owner,
+    formatDetection: {
+      telephone: false,
+      ...override.formatDetection,
+    },
+    openGraph: {
+      description: override.description ?? undefined,
+      images: defaultImage,
+      siteName: title,
+      title: override.title ?? undefined,
+      url: baseUrl.href,
+      ...override.openGraph,
+    },
+    publisher: owner,
+    twitter: {
+      card: 'summary_large_image',
+      creator: '@AnirudhWith',
+      description: override.description ?? undefined,
+      images: defaultImage,
+      title: override.title ?? undefined,
+      ...override.twitter,
     },
   }
 }

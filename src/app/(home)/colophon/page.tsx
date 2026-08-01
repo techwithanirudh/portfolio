@@ -20,20 +20,20 @@ const description =
 export default function ColophonPage() {
   const sections: Array<{ title?: string | null; content: ReactNode }> = [
     {
-      title: 'Technology',
       content: <Technology />,
+      title: 'Technology',
     },
     {
-      title: 'Typography',
       content: <Typography />,
+      title: 'Typography',
     },
     {
-      title: 'Design & Colors',
       content: <Design />,
+      title: 'Design & Colors',
     },
     {
-      title: 'Attribution',
       content: <Attribution />,
+      title: 'Attribution',
     },
   ]
 
@@ -83,9 +83,9 @@ export default function ColophonPage() {
 
 export function generateMetadata(): Metadata {
   return createMetadata({
-    title,
+    alternates: { canonical: '/colophon' },
     description,
     openGraph: { url: '/colophon' },
-    alternates: { canonical: '/colophon' },
+    title,
   })
 }
