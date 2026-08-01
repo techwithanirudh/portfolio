@@ -24,11 +24,11 @@ export function TocInline({ children, className, items }: TocInlineProps) {
   return (
     <Collapsible
       className={cn(
-        'not-prose group/inline-toc rounded-xl border border-border bg-card p-0 font-sans',
+        'not-prose group/inline-toc rounded-none border-0 border-border border-b border-dashed bg-transparent p-0 font-sans',
         className
       )}
     >
-      <CollapsibleTrigger className='inline-flex w-full items-center gap-2 rounded-xl py-2.5 pr-2 pl-4 font-medium text-sm outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring/50 group-data-[state=open]/inline-toc:rounded-b-none [&_svg]:size-4'>
+      <CollapsibleTrigger className='inline-flex w-full items-center gap-2 rounded-none py-2.5 pr-2 pl-4 font-medium text-sm outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring/50 [&_svg]:size-4'>
         <Text className='-translate-x-0.5' />
         {children ?? 'On this page'}
         <ChevronDown className='ml-auto shrink-0 text-muted-foreground transition-transform duration-150 group-data-[state=open]/inline-toc:rotate-180' />
