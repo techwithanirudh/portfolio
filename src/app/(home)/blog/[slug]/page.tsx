@@ -35,8 +35,8 @@ export default async function Page(props: {
     <BlogTocProvider toc={toc}>
       <Header page={page} tags={tags} />
 
-      <BlogTocMobile />
       <BlogTocDesktop />
+      <BlogTocMobile />
 
       <SectionBody>
         <article className='flex min-h-full flex-col pt-16 lg:flex-row'>
@@ -50,34 +50,29 @@ export default async function Page(props: {
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </MdxContent>
           <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+            <div>
+              <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
+              <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
+            </div>
+            <div>
+              <p className='mb-1 text-muted-foreground text-sm'>Created At</p>
+              <p className='font-medium'>
+                {new Date(page.data.date).toDateString()}
+              </p>
+            </div>
+            {lastUpdate && (
               <div>
-                <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
-                <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
+                <p className='mb-1 text-muted-foreground text-sm'>Updated At</p>
+                <p className='font-medium'>{lastUpdate.toDateString()}</p>
               </div>
-              <div>
-                <p className='mb-1 text-muted-foreground text-sm'>Created At</p>
-                <p className='font-medium'>
-                  {new Date(page.data.date).toDateString()}
-                </p>
-              </div>
-              {lastUpdate && (
-                <div>
-                  <p className='mb-1 text-muted-foreground text-sm'>
-                    Updated At
-                  </p>
-                  <p className='font-medium'>{lastUpdate.toDateString()}</p>
-                </div>
-              )}
-              <div className='flex flex-col gap-2'>
-                <LLMCopyButtonWithViewOptions
-                  githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
-                  markdownUrl={`/blog.mdx/${params.slug}`}
-                />
-                <ShareMenu
-                  title={page.data.title ?? 'Untitled'}
-                  url={page.url}
-                />
-              </div>
+            )}
+            <div className='flex flex-col gap-2'>
+              <LLMCopyButtonWithViewOptions
+                githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
+                markdownUrl={`/blog.mdx/${params.slug}`}
+              />
+              <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
+            </div>
           </div>
         </article>
       </SectionBody>
