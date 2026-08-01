@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/hover-card'
 import type { LinkPreviewEntry } from '@/lib/link-preview'
 
-type Props = {
+interface Props {
   children: ReactNode
   className?: string
   href: string
