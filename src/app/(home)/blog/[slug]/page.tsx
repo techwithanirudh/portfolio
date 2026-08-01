@@ -35,24 +35,21 @@ export default async function Page(props: {
     <BlogTocProvider toc={toc}>
       <Header page={page} tags={tags} />
 
-      {/* Below `lg` only: a sticky bar above the article. */}
       <BlogTocMobile />
+      <BlogTocDesktop />
 
-      <SectionBody className='lg:border-0'>
-        <div className='flex min-h-full flex-col lg:flex-row'>
-          {/* `lg` and up only: an always-expanded left column. */}
-          <BlogTocDesktop />
-          <div className='flex min-w-0 flex-1 flex-col border-border border-dashed lg:flex-row lg:border-x'>
-            <MdxContent
-              comments
-              hideInlineToc
-              proseClassName='pt-4 lg:pt-0'
-              slug={params.slug}
-              toc={toc}
-            >
-              <Mdx components={{ ...mdxComponents, GitHubCode }} />
-            </MdxContent>
-            <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+      <SectionBody>
+        <article className='flex min-h-full flex-col lg:flex-row'>
+          <MdxContent
+            comments
+            hideInlineToc
+            proseClassName='pt-4 lg:pt-0'
+            slug={params.slug}
+            toc={toc}
+          >
+            <Mdx components={{ ...mdxComponents, GitHubCode }} />
+          </MdxContent>
+          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
               <div>
                 <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
                 <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
@@ -81,9 +78,8 @@ export default async function Page(props: {
                   url={page.url}
                 />
               </div>
-            </div>
           </div>
-        </div>
+        </article>
       </SectionBody>
       <PostJsonLd page={page} />
     </BlogTocProvider>
