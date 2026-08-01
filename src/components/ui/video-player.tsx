@@ -25,11 +25,9 @@ export const VideoPlayer = ({
 }: VideoPlayerProps) => (
   <MediaPlayer
     className={cn(
-      // `isolate` matters: vidstack's own chrome carries z-indexes up to
-      // 9999999, and `[data-media-player]` is only `position: relative` with
-      // `contain: style`, which is not enough to open a stacking context. Left
-      // alone, those layers escape into the root context and paint over
-      // anything else on the page, the table of contents included.
+      // `isolate` opens a stacking context: vidstack's chrome ships
+      // z-indexes up to 9999999 and would otherwise paint over the rest of
+      // the page (the TOC minimap included).
       'relative isolate w-full overflow-hidden !rounded-xl !border-none',
       className
     )}
