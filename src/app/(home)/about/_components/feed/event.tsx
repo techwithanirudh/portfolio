@@ -67,8 +67,8 @@ const EventDate = ({ date }: { date: string | null }) => {
   return (
     <div className='shrink-0 text-muted-foreground'>
       {new Date(date).toLocaleDateString('en-US', {
-        month: 'short',
         day: 'numeric',
+        month: 'short',
         year: 'numeric',
       })}
     </div>

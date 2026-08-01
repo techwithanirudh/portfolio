@@ -11,8 +11,8 @@ import type { BlogPage } from '@/lib/source'
 import type { WorkPage } from '@/lib/source/work'
 
 const personRef = {
-  '@type': 'Person',
   '@id': `${baseUrl.href}#person`,
+  '@type': 'Person',
 } as const
 
 function JsonLd({ graph }: { graph: object }) {
@@ -34,9 +34,9 @@ function makeBreadcrumbs(
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, i) => ({
       '@type': 'ListItem',
-      position: i + 1,
-      name: item.name,
       item: item.url,
+      name: item.name,
+      position: i + 1,
     })),
   }
 }
@@ -52,22 +52,22 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => {
   const image = new URL(getBlogPageImage(page).url, baseUrl.href).href
 
   const post: BlogPosting = {
-    '@type': 'BlogPosting',
     '@id': `${url}#article`,
-    headline: page.data.title,
-    description: page.data.description,
-    image,
-    url,
-    datePublished: new Date(page.data.date).toISOString(),
-    dateModified: page.data.lastModified
-      ? new Date(page.data.lastModified).toISOString()
-      : new Date(page.data.date).toISOString(),
-    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    '@type': 'BlogPosting',
     author: page.data.author
       ? { '@type': 'Person', name: page.data.author }
       : personRef,
+    dateModified: page.data.lastModified
+      ? new Date(page.data.lastModified).toISOString()
+      : new Date(page.data.date).toISOString(),
+    datePublished: new Date(page.data.date).toISOString(),
+    description: page.data.description,
+    headline: page.data.title,
+    image,
+    isPartOf: { '@id': `${baseUrl.href}#website`, '@type': 'WebSite' },
+    mainEntityOfPage: { '@id': url, '@type': 'WebPage' },
     publisher: personRef,
-    isPartOf: { '@type': 'WebSite', '@id': `${baseUrl.href}#website` },
+    url,
   }
 
   const breadcrumbs = makeBreadcrumbs([
@@ -86,20 +86,20 @@ export const WorkJsonLd = ({ page }: { page: WorkPage }) => {
   const image = new URL(getWorkPageImage(page).url, baseUrl.href).href
 
   const article: Article = {
-    '@type': 'Article',
     '@id': `${url}#article`,
-    headline: page.data.title,
-    description: page.data.description,
-    image,
-    url,
-    datePublished: new Date(page.data.date).toISOString(),
+    '@type': 'Article',
+    author: personRef,
     dateModified: page.data.lastModified
       ? new Date(page.data.lastModified).toISOString()
       : new Date(page.data.date).toISOString(),
-    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-    author: personRef,
+    datePublished: new Date(page.data.date).toISOString(),
+    description: page.data.description,
+    headline: page.data.title,
+    image,
+    isPartOf: { '@id': `${baseUrl.href}#website`, '@type': 'WebSite' },
+    mainEntityOfPage: { '@id': url, '@type': 'WebPage' },
     publisher: personRef,
-    isPartOf: { '@type': 'WebSite', '@id': `${baseUrl.href}#website` },
+    url,
   }
 
   const breadcrumbs = makeBreadcrumbs([
@@ -140,12 +140,12 @@ function PageJsonLdBase({
   const url = new URL(path, baseUrl.href).href
 
   const page = {
-    '@type': type,
     '@id': `${url}#webpage`,
+    '@type': type,
     name: title,
     ...(description && { description }),
+    isPartOf: { '@id': `${baseUrl.href}#website`, '@type': 'WebSite' },
     url,
-    isPartOf: { '@type': 'WebSite', '@id': `${baseUrl.href}#website` },
     ...extra,
   }
 
@@ -186,7 +186,7 @@ export const AboutPageJsonLd = (props: PageJsonLdProps) => (
 export const ProfilePageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase
     extra={{
-      mainEntity: { '@type': 'Person', '@id': `${baseUrl.href}#person` },
+      mainEntity: { '@id': `${baseUrl.href}#person`, '@type': 'Person' },
     }}
     props={props}
     type='ProfilePage'
@@ -200,11 +200,11 @@ export const TagJsonLd = ({ tag }: { tag: string }) => {
   const tagsUrl = new URL('/blog/tags', baseUrl.href).href
 
   const page: CollectionPage = {
-    '@type': 'CollectionPage',
     '@id': `${tagUrl}#webpage`,
+    '@type': 'CollectionPage',
+    isPartOf: { '@id': `${baseUrl.href}#website`, '@type': 'WebSite' },
     name: `Posts tagged "${tag}"`,
     url: tagUrl,
-    isPartOf: { '@type': 'WebSite', '@id': `${baseUrl.href}#website` },
   }
 
   const breadcrumbs = makeBreadcrumbs([

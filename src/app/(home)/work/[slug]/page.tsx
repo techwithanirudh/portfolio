@@ -25,16 +25,16 @@ function Header(props: { page: MDXPage }) {
   if (page.data.website) {
     links.push({
       href: page.data.website,
-      label: 'Visit Website',
       icon: <Icons.globe className='size-4' />,
+      label: 'Visit Website',
     })
   }
 
   if (page.data.github) {
     links.push({
       href: page.data.github,
-      label: 'View Source',
       icon: <Icons.github className='size-4' />,
+      label: 'View Source',
     })
   }
 
@@ -153,22 +153,22 @@ export async function generateMetadata(props: {
   const image = getWorkPageImage(page)
 
   return createMetadata({
-    title,
+    alternates: {
+      canonical: page.url,
+    },
     description,
     openGraph: {
-      type: 'article',
-      url: `/work/${page.slugs.join('/')}`,
       images: image.url,
-      publishedTime: new Date(page.data.date).toISOString(),
       modifiedTime: page.data.lastModified
         ? new Date(page.data.lastModified).toISOString()
         : new Date(page.data.date).toISOString(),
+      publishedTime: new Date(page.data.date).toISOString(),
+      type: 'article',
+      url: `/work/${page.slugs.join('/')}`,
     },
+    title,
     twitter: {
       images: image.url,
-    },
-    alternates: {
-      canonical: page.url,
     },
   })
 }

@@ -136,14 +136,14 @@ export async function generateMetadata(
   const canonicalUrl = isFirstPage ? '/work' : `/work?page=${pageIndex}`
 
   return createMetadata({
-    title: pageTitle,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     description:
       'Selected work showcasing projects, collaborations, and outcomes.',
     openGraph: {
       url: canonicalUrl,
     },
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    title: pageTitle,
   })
 }

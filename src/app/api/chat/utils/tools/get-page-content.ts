@@ -22,22 +22,22 @@ const resolvePage = (path: string) => {
 
 export const getPageContent = tool({
   description: 'Get the content of a specific internal page.',
-  inputSchema: z.object({
-    path: z.string().describe('The path of the page to get the content of.'),
-  }),
   execute: async ({ path }) => {
     const page = resolvePage(path)
 
     if (!page) {
       return {
-        success: false,
         data: 'Page not found',
+        success: false,
       }
     }
 
     return {
-      success: true,
       data: await page.data.getText('processed'),
+      success: true,
     }
   },
+  inputSchema: z.object({
+    path: z.string().describe('The path of the page to get the content of.'),
+  }),
 })

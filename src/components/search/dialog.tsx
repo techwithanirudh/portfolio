@@ -53,7 +53,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     playOpen()
   }, [open, playOpen])
 
-  const { search, setSearch, query } = useDocsSearch({ type: 'fetch', locale })
+  const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
 
   const isEmpty = !search.trim()

@@ -105,10 +105,10 @@ export function PostComments({
   return (
     <Comments
       auth={{
-        type: 'api',
         signIn: () => {
           router.push(getLoginUrl(`/blog/${slug}`))
         },
+        type: 'api',
       }}
       className={cn('w-full', className)}
       page={slug}

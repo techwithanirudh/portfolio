@@ -67,5 +67,5 @@ export function useCopyToClipboard({
     [onCopySuccess, onCopyError, haptic, playSuccess, playError, resetDelay]
   )
 
-  return { state, copy } as const
+  return { copy, state } as const
 }

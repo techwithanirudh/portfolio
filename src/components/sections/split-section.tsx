@@ -8,31 +8,31 @@ import {
 import { cn } from '@/lib/utils'
 
 const splitSectionVariants = cva('grid divide-y divide-dashed divide-border', {
-  variants: {
-    cols: {
-      two: 'lg:grid-cols-2 lg:divide-x lg:divide-y-0',
-      three: 'lg:grid-cols-3 lg:divide-x lg:divide-y-0',
-    },
-  },
   defaultVariants: {
     cols: 'two',
+  },
+  variants: {
+    cols: {
+      three: 'lg:grid-cols-3 lg:divide-x lg:divide-y-0',
+      two: 'lg:grid-cols-2 lg:divide-x lg:divide-y-0',
+    },
   },
 })
 
 const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
-  variants: {
-    background: {
-      default: '',
-      dashed: 'bg-dashed',
-    },
-    inset: {
-      true: 'px-6 py-8',
-      false: '',
-    },
-  },
   defaultVariants: {
     background: 'default',
     inset: true,
+  },
+  variants: {
+    background: {
+      dashed: 'bg-dashed',
+      default: '',
+    },
+    inset: {
+      false: '',
+      true: 'px-6 py-8',
+    },
   },
 })
 
@@ -85,14 +85,14 @@ export const SplitSectionHeader = ({
 }: SplitSectionHeaderProps) => <SectionHeader align={align} {...props} />
 
 const splitSectionContentVariants = cva('', {
-  variants: {
-    inset: {
-      true: 'px-6 py-8',
-      false: '',
-    },
-  },
   defaultVariants: {
     inset: false,
+  },
+  variants: {
+    inset: {
+      false: '',
+      true: 'px-6 py-8',
+    },
   },
 })
 

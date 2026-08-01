@@ -20,8 +20,8 @@ export const Technology = () => {
         const linkProps = hasLink
           ? {
               href: item.url,
-              target: '_blank',
               rel: 'noopener noreferrer',
+              target: '_blank',
             }
           : {}
 

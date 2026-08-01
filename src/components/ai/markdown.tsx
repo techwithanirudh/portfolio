@@ -41,20 +41,20 @@ export function rehypeWrapWords() {
         }
 
         return {
-          type: 'element',
-          tagName: 'span',
+          children: [{ type: 'text', value: word }],
           properties: {
             class: 'animate-fd-fade-in',
           },
-          children: [{ type: 'text', value: word }],
+          tagName: 'span',
+          type: 'element',
         }
       })
 
       Object.assign(node, {
-        type: 'element',
-        tagName: 'span',
-        properties: {},
         children: newNodes,
+        properties: {},
+        tagName: 'span',
+        type: 'element',
       } satisfies RootContent)
       return 'skip'
     })
@@ -73,15 +73,15 @@ function createProcessor(): Processor {
       const hast = await processor.run(nodes)
 
       return toJsxRuntime(hast, {
-        development: false,
-        jsx,
-        jsxs,
-        Fragment,
         components: {
           ...defaultMdxComponents,
-          pre: Pre,
           img: undefined,
+          pre: Pre,
         },
+        development: false,
+        Fragment,
+        jsx,
+        jsxs,
       })
     },
   }

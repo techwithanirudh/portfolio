@@ -5,7 +5,7 @@ import type { HardwareItem } from '@/types'
 function HardwareCard({ name, description, url, image }: HardwareItem) {
   const Wrapper = url ? 'a' : 'div'
   const linkProps = url
-    ? { href: url, target: '_blank', rel: 'noopener noreferrer' }
+    ? { href: url, rel: 'noopener noreferrer', target: '_blank' }
     : {}
 
   return (

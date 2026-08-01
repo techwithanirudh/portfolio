@@ -59,13 +59,13 @@ export async function generateMetadata(props: {
   const description = `Browse all blog tags on ${homeTitle} to explore posts by topic.`
 
   return createMetadata({
-    title: 'Tags',
+    alternates: {
+      canonical: '/blog/tags',
+    },
     description,
     openGraph: {
       url: '/blog/tags',
     },
-    alternates: {
-      canonical: '/blog/tags',
-    },
+    title: 'Tags',
   })
 }

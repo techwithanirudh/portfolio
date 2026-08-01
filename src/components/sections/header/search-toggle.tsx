@@ -4,7 +4,6 @@ import {
   type ButtonProps,
   buttonVariants,
 } from 'fumadocs-ui/components/ui/button'
-import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import type { ComponentProps } from 'react'
 import { Icons } from '@/components/icons/icons'
@@ -33,8 +32,8 @@ export const SearchToggle = ({
       aria-label='Open Search'
       className={cn(
         buttonVariants({
-          size,
           color,
+          size,
         }),
         props.className
       )}
@@ -54,7 +53,6 @@ export const LargeSearchToggle = ({
   hideIfDisabled?: boolean
 }) => {
   const { enabled, hotKey, setOpenSearch } = useSearchContext()
-  const { text } = useI18n()
 
   if (hideIfDisabled && !enabled) {
     return null
@@ -72,7 +70,7 @@ export const LargeSearchToggle = ({
       onClick={() => setOpenSearch(true)}
     >
       <Icons.search className='size-4' />
-      {text.search}
+      Search
       <div className='ms-auto inline-flex gap-0.5'>
         {hotKey.map((k, i) => (
           <kbd

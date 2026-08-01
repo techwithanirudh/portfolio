@@ -27,9 +27,9 @@ function parseUserAgent(ua?: string | null): {
 } {
   if (!ua) {
     return {
-      os: 'Unknown',
       browser: 'Unknown',
       browserVersion: '',
+      os: 'Unknown',
       platform: 'unknown',
     }
   }
@@ -46,9 +46,9 @@ function parseUserAgent(ua?: string | null): {
       : 'unknown'
 
   return {
-    os: parsed.os.name ?? 'Unknown',
     browser: parsed.browser.name ?? 'Unknown',
     browserVersion: parsed.browser.version ?? '',
+    os: parsed.os.name ?? 'Unknown',
     platform,
   }
 }

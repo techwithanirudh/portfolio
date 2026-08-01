@@ -3,101 +3,101 @@ import type { Skill } from '@/types'
 
 const base = '/images/tech-stack'
 const s = (file: string) => `${base}/${file}`
-const t = (light: string, dark: string) => ({ light: s(light), dark: s(dark) })
+const t = (light: string, dark: string) => ({ dark: s(dark), light: s(light) })
 
 export const skills: Skill[] = [
   {
-    id: 1,
-    Icon: Icons.globe,
-    title: 'Web Development',
     description:
       'Building modern web apps with Next.js, React, TypeScript, and UI frameworks.',
+    Icon: Icons.globe,
+    id: 1,
     size: 'sm',
+    title: 'Web Development',
   },
   {
-    id: 2,
-    Icon: Icons.ai,
-    title: 'AI & Machine Learning',
     description: 'Exploring AI features with Python, OpenCV, and LLMs.',
+    Icon: Icons.ai,
+    id: 2,
     size: 'sm',
+    title: 'AI & Machine Learning',
   },
   {
-    id: 3,
-    Icon: Icons.layers,
-    title: 'Full Stack Development',
     description:
       'Creating end-to-end solutions with Node.js, TypeScript, databases, and cloud technologies.',
+    Icon: Icons.layers,
+    id: 3,
     size: 'sm',
+    title: 'Full Stack Development',
   },
 ]
 
 export const technologies = [
   {
-    label: 'TypeScript',
-    icon: s('typescript.svg'),
     href: 'https://www.typescriptlang.org',
+    icon: s('typescript.svg'),
+    label: 'TypeScript',
   },
   {
-    label: 'JavaScript',
-    icon: s('javascript.svg'),
     href: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+    icon: s('javascript.svg'),
+    label: 'JavaScript',
   },
-  { label: 'Python', icon: s('python.svg'), href: 'https://www.python.org' },
+  { href: 'https://www.python.org', icon: s('python.svg'), label: 'Python' },
   {
-    label: 'React',
-    icon: t('react_light.svg', 'react_dark.svg'),
     href: 'https://react.dev',
+    icon: t('react_light.svg', 'react_dark.svg'),
+    label: 'React',
   },
   {
-    label: 'Next.js',
-    icon: s('nextjs_icon_dark.svg'),
     href: 'https://nextjs.org',
+    icon: s('nextjs_icon_dark.svg'),
+    label: 'Next.js',
   },
   {
-    label: 'Tailwind CSS',
-    icon: s('tailwindcss.svg'),
     href: 'https://tailwindcss.com',
+    icon: s('tailwindcss.svg'),
+    label: 'Tailwind CSS',
   },
   {
-    label: 'shadcn/ui',
-    icon: t('shadcn-ui.svg', 'shadcn-ui_dark.svg'),
     href: 'https://ui.shadcn.com',
+    icon: t('shadcn-ui.svg', 'shadcn-ui_dark.svg'),
+    label: 'shadcn/ui',
   },
   {
-    label: 'Radix UI',
-    icon: t('radix-ui_light.svg', 'radix-ui_dark.svg'),
     href: 'https://www.radix-ui.com',
+    icon: t('radix-ui_light.svg', 'radix-ui_dark.svg'),
+    label: 'Radix UI',
   },
   {
-    label: 'Motion',
-    icon: t('motion.svg', 'motion_dark.svg'),
     href: 'https://motion.dev',
+    icon: t('motion.svg', 'motion_dark.svg'),
+    label: 'Motion',
   },
   {
-    label: 'TanStack',
-    icon: s('tanstack.svg'),
     href: 'https://tanstack.com',
+    icon: s('tanstack.svg'),
+    label: 'TanStack',
   },
-  { label: 'Node.js', icon: s('nodejs.svg'), href: 'https://nodejs.org' },
-  { label: 'Bun', icon: s('bun.svg'), href: 'https://bun.sh' },
+  { href: 'https://nodejs.org', icon: s('nodejs.svg'), label: 'Node.js' },
+  { href: 'https://bun.sh', icon: s('bun.svg'), label: 'Bun' },
   {
-    label: 'PostgreSQL',
-    icon: s('postgresql.svg'),
     href: 'https://www.postgresql.org',
+    icon: s('postgresql.svg'),
+    label: 'PostgreSQL',
   },
-  { label: 'Redis', icon: s('redis.svg'), href: 'https://redis.io' },
-  { label: 'Git', icon: s('git.svg'), href: 'https://git-scm.com' },
-  { label: 'Docker', icon: s('docker.svg'), href: 'https://www.docker.com' },
-  { label: 'Claude', icon: s('claude-ai-icon.svg'), href: 'https://claude.ai' },
+  { href: 'https://redis.io', icon: s('redis.svg'), label: 'Redis' },
+  { href: 'https://git-scm.com', icon: s('git.svg'), label: 'Git' },
+  { href: 'https://www.docker.com', icon: s('docker.svg'), label: 'Docker' },
+  { href: 'https://claude.ai', icon: s('claude-ai-icon.svg'), label: 'Claude' },
   {
-    label: 'Cursor',
-    icon: t('cursor_light.svg', 'cursor_dark.svg'),
     href: 'https://cursor.com',
+    icon: t('cursor_light.svg', 'cursor_dark.svg'),
+    label: 'Cursor',
   },
   {
-    label: 'Codex',
-    icon: t('openai.svg', 'openai_dark.svg'),
     href: 'https://chatgpt.com/codex',
+    icon: t('openai.svg', 'openai_dark.svg'),
+    label: 'Codex',
   },
-  { label: 'Figma', icon: s('figma.svg'), href: 'https://www.figma.com' },
+  { href: 'https://www.figma.com', icon: s('figma.svg'), label: 'Figma' },
 ]

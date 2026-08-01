@@ -41,14 +41,14 @@ export function Coding() {
           >
             JetBrains Mono
           </a>{' '}
-          font with ligatures enabled. If you want the config, it lives{' '}
+          font with ligatures enabled. If you want the config, it lives in{' '}
           <a
             className='font-medium text-primary hover:underline'
             href='https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json'
             rel='noopener noreferrer'
             target='_blank'
           >
-            here
+            my dotfiles
           </a>
           .
         </p>

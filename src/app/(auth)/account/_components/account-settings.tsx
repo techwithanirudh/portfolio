@@ -76,10 +76,10 @@ function EditNameDialog({ name }: { name: string }) {
   const router = useRouter()
 
   const form = useForm<Account>({
-    resolver: zodResolver(AccountSchema),
     defaultValues: {
       name,
     },
+    resolver: zodResolver(AccountSchema),
   })
 
   const onSubmit = async (values: Account) => {

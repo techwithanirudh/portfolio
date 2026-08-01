@@ -83,23 +83,23 @@ export async function generateMetadata(props: {
   const image = getBlogPageImage(page)
 
   return createMetadata({
-    title,
+    alternates: {
+      canonical: page.url,
+    },
     description,
     openGraph: {
-      type: 'article',
-      url: `/blog/${page.slugs.join('/')}`,
+      authors: [page.data.author ?? owner],
       images: image.url,
-      publishedTime: new Date(page.data.date).toISOString(),
       modifiedTime: page.data.lastModified
         ? new Date(page.data.lastModified).toISOString()
         : new Date(page.data.date).toISOString(),
-      authors: [page.data.author ?? owner],
+      publishedTime: new Date(page.data.date).toISOString(),
+      type: 'article',
+      url: `/blog/${page.slugs.join('/')}`,
     },
+    title,
     twitter: {
       images: image.url,
-    },
-    alternates: {
-      canonical: page.url,
     },
   })
 }

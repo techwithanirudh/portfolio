@@ -20,10 +20,10 @@ export function MenuPanel({
   const pathname = usePathname()
   const menuItems = [
     {
-      url: '/',
-      text: 'Home',
-      icon: <Icons.home />,
       active: 'url' as const,
+      icon: <Icons.home />,
+      text: 'Home',
+      url: '/',
     },
     ...linkItems,
   ].filter(

@@ -23,7 +23,7 @@ export const parseB64File = (value: string): Base64FileParts | null => {
   }
 
   return {
-    mediaType,
     data,
+    mediaType,
   }
 }

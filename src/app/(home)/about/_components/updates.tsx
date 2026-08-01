@@ -57,9 +57,9 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => (
         >
           <Link
             className={buttonVariants({
+              className: 'w-full py-8 active:scale-none active:opacity-80',
               shape: 'square',
               variant: 'default',
-              className: 'w-full py-8 active:scale-none active:opacity-80',
             })}
             href='/blog'
           >

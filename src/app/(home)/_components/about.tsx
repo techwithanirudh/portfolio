@@ -41,8 +41,8 @@ export default function About(): React.ReactElement {
             <Link
               className={cn(
                 buttonVariants({
-                  variant: 'link',
                   size: 'lg',
+                  variant: 'link',
                 }),
                 '!p-0 h-fit'
               )}

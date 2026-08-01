@@ -12,9 +12,13 @@ import type { ShikiTransformer } from 'shiki'
 import { z } from 'zod'
 
 export const blog = defineCollections({
-  type: 'doc',
   dir: 'content/blog',
+  postprocess: {
+    extractLinkReferences: true,
+    includeProcessedMarkdown: true,
+  },
   schema: frontmatterSchema.extend({
+    author: z.string(),
     date: z
       .string()
       .or(z.date())
@@ -24,25 +28,24 @@ export const blog = defineCollections({
         } catch {
           context.issues.push({
             code: 'custom',
-            message: 'The value could not be transformed to Date type.',
             input: value,
+            message: 'The value could not be transformed to Date type.',
           })
           return z.NEVER
         }
       }),
-    author: z.string(),
-    tags: z.array(z.string()).optional(),
     image: z.string().optional(),
+    tags: z.array(z.string()).optional(),
   }),
-  postprocess: {
-    includeProcessedMarkdown: true,
-    extractLinkReferences: true,
-  },
+  type: 'doc',
 })
 
 export const work = defineCollections({
-  type: 'doc',
   dir: 'content/work',
+  postprocess: {
+    extractLinkReferences: true,
+    includeProcessedMarkdown: true,
+  },
   schema: frontmatterSchema.extend({
     date: z
       .string()
@@ -53,13 +56,12 @@ export const work = defineCollections({
         } catch {
           context.issues.push({
             code: 'custom',
-            message: 'The value could not be transformed to Date type.',
             input: value,
+            message: 'The value could not be transformed to Date type.',
           })
           return z.NEVER
         }
       }),
-    website: z.string().optional(),
     github: z.string().optional(),
     image: z.string().optional(),
     /**
@@ -67,16 +69,13 @@ export const work = defineCollections({
      * without it falls in behind, newest first.
      */
     order: z.number().optional(),
+    website: z.string().optional(),
   }),
-  postprocess: {
-    includeProcessedMarkdown: true,
-    extractLinkReferences: true,
-  },
+  type: 'doc',
 })
 
 function transformerEscape(): ShikiTransformer {
   return {
-    name: '@shikijs/transformers:remove-notation-escape',
     code(hast) {
       function replace(node: ElementContent) {
         if (node.type === 'text') {
@@ -91,16 +90,11 @@ function transformerEscape(): ShikiTransformer {
       replace(hast)
       return hast
     },
+    name: '@shikijs/transformers:remove-notation-escape',
   }
 }
 
 export default defineConfig({
-  plugins: [
-    jsonSchema({
-      insert: true,
-    }),
-    lastModified(),
-  ],
   mdxOptions: async () => {
     const { rehypeCodeDefaultOptions } = await import(
       'fumadocs-core/mdx-plugins/rehype-code'
@@ -116,8 +110,8 @@ export default defineConfig({
       rehypeCodeOptions: {
         inline: 'tailing-curly-colon',
         themes: {
-          light: 'catppuccin-latte',
           dark: 'catppuccin-mocha',
+          light: 'catppuccin-latte',
         },
         transformers: [
           ...(rehypeCodeDefaultOptions.transformers ?? []),
@@ -127,6 +121,7 @@ export default defineConfig({
           transformerEscape(),
         ],
       },
+      rehypePlugins: (v) => [rehypeKatex, ...v],
       remarkCodeTabOptions: {
         parseMdx: true,
       },
@@ -136,7 +131,12 @@ export default defineConfig({
         },
       },
       remarkPlugins: [remarkSteps, remarkMath, remarkAutoTypeTable],
-      rehypePlugins: (v) => [rehypeKatex, ...v],
     }
   },
+  plugins: [
+    jsonSchema({
+      insert: true,
+    }),
+    lastModified(),
+  ],
 })

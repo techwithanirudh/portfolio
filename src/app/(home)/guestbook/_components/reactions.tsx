@@ -43,8 +43,8 @@ const updateOptimisticReactions = (
       reactions: [
         ...state.reactions,
         {
-          emoji,
           count: 1,
+          emoji,
           reacted: true,
         },
       ],
@@ -84,10 +84,10 @@ export const GuestbookReactions = ({
     toggleGuestbookReaction,
     {
       currentState: { reactions },
-      updateFn: updateOptimisticReactions,
       onError: () => {
         playError()
       },
+      updateFn: updateOptimisticReactions,
     }
   )
 
@@ -95,7 +95,7 @@ export const GuestbookReactions = ({
 
   const handleReaction = (emoji: string) => {
     playReaction()
-    execute({ entryId, emoji })
+    execute({ emoji, entryId })
     setIsOpen(false)
   }
 

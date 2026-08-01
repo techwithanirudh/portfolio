@@ -135,9 +135,9 @@ function Header() {
         <button
           className={cn(
             buttonVariants({
+              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
               color: 'secondary',
               size: 'icon-sm',
-              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
             })
           )}
           onClick={() => {
@@ -153,9 +153,9 @@ function Header() {
           aria-label='Close'
           className={cn(
             buttonVariants({
-              size: 'icon-sm',
-              color: 'primary',
               className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              color: 'primary',
+              size: 'icon-sm',
             })
           )}
           onClick={() => setOpen(false)}
@@ -181,10 +181,10 @@ function SearchAIActions() {
       aria-hidden={!canShow}
       className={cn(
         buttonVariants({
-          color: 'secondary',
-          size: 'icon-sm',
           className:
             'gap-1.5 rounded-none border border-dashed transition-opacity duration-200 [&_svg]:size-4',
+          color: 'secondary',
+          size: 'icon-sm',
         }),
         canShow ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
@@ -253,22 +253,22 @@ function SearchAIInput(props: ComponentProps<'form'>) {
     await sendMessage({
       parts: [
         {
-          type: 'data-client',
           data: {
             location: window.location.href,
           },
+          type: 'data-client',
         },
         {
-          type: 'text',
           text: messageText,
+          type: 'text',
         },
         ...(contextValue
           ? [
               {
-                type: 'data-context' as const,
                 data: {
                   text: contextValue,
                 },
+                type: 'data-context' as const,
               },
             ]
           : []),
@@ -318,10 +318,10 @@ function SearchAIInput(props: ComponentProps<'form'>) {
           <button
             className={cn(
               buttonVariants({
-                color: 'secondary',
-                size: 'icon-sm',
                 className:
                   'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
+                color: 'secondary',
+                size: 'icon-sm',
               })
             )}
             onClick={stop}
@@ -333,10 +333,10 @@ function SearchAIInput(props: ComponentProps<'form'>) {
           <button
             className={cn(
               buttonVariants({
-                color: 'primary',
-                size: 'icon-sm',
                 className:
                   'rounded-none border border-dashed transition-all [&_svg]:size-4',
+                color: 'primary',
+                size: 'icon-sm',
               })
             )}
             disabled={
@@ -402,8 +402,8 @@ function TextInput(props: ComponentProps<'textarea'>) {
 }
 
 const roleName: Record<string, string> = {
-  user: 'you',
   assistant: 'assistant',
+  user: 'you',
 }
 
 function MessageList({
@@ -431,7 +431,7 @@ function MessageList({
         container.scrollHeight - container.scrollTop - container.clientHeight <
         100
       if (isNearBottom) {
-        container.scrollTo({ top: container.scrollHeight, behavior: 'instant' })
+        container.scrollTo({ behavior: 'instant', top: container.scrollHeight })
       }
     }
 
@@ -541,9 +541,9 @@ const Message = memo(function Message({
               part.output.email &&
               part.output.message
                 ? {
-                    name: part.output.name,
                     email: part.output.email,
                     message: part.output.message,
+                    name: part.output.name,
                   }
                 : undefined
 

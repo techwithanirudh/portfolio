@@ -15,7 +15,7 @@ interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
 export function Lenis({ root, options }: LenisProps) {
   const lenisRef = useRef<LenisRef>(null)
 
-  useTempus((time: number) => {
+  useTempus(({ time }) => {
     if (lenisRef.current?.lenis) {
       lenisRef.current.lenis.raf(time)
     }
@@ -25,9 +25,9 @@ export function Lenis({ root, options }: LenisProps) {
     <ReactLenis
       options={{
         ...options,
-        lerp: options?.lerp ?? 0.18,
-        autoRaf: false,
         anchors: true,
+        autoRaf: false,
+        lerp: options?.lerp ?? 0.18,
         prevent: (node: Element | null) =>
           node?.nodeName === 'VERCEL-LIVE-FEEDBACK' ||
           node?.id === 'theatrejs-studio-root' ||

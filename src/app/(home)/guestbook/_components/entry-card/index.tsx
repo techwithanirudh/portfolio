@@ -143,8 +143,8 @@ export const GuestbookEntryCard = ({
   const banUser = () => {
     setIsEditing(false)
     banAction.execute({
-      userId: entry.userId,
       action: entry.banned ? 'unban' : 'ban',
+      userId: entry.userId,
     })
   }
 

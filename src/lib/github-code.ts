@@ -41,8 +41,8 @@ const parseLineRange = (
   const end = match[2] ? Number(match[2]) : undefined
 
   return {
-    startLine: Number.isNaN(start) ? undefined : start,
     endLine: end !== undefined && !Number.isNaN(end) ? end : undefined,
+    startLine: Number.isNaN(start) ? undefined : start,
   }
 }
 
@@ -64,12 +64,12 @@ export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
     }
 
     return {
-      owner,
-      repo,
-      ref,
-      path,
-      source: parsed.toString(),
       lineRange,
+      owner,
+      path,
+      ref,
+      repo,
+      source: parsed.toString(),
     }
   }
 
@@ -84,12 +84,12 @@ export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
     }
 
     return {
-      owner,
-      repo,
-      ref,
-      path,
-      source: `https://github.com/${owner}/${repo}/blob/${ref}/${path}`,
       lineRange,
+      owner,
+      path,
+      ref,
+      repo,
+      source: `https://github.com/${owner}/${repo}/blob/${ref}/${path}`,
     }
   }
 
@@ -104,9 +104,9 @@ export const getGitHubFileContent = unstable_cache(
   ): Promise<string> => {
     const response = await octokit.repos.getContent({
       owner: parsed.owner,
-      repo: parsed.repo,
-      ref: parsed.ref,
       path: parsed.path,
+      ref: parsed.ref,
+      repo: parsed.repo,
     })
 
     if (Array.isArray(response.data)) {

@@ -17,8 +17,8 @@ export const GuestbookEntrySchema = z.object({
 })
 
 export const GuestbookReactionSchema = z.object({
-  entryId: z.number().int().positive(),
   emoji: z.string().min(1).max(12),
+  entryId: z.number().int().positive(),
 })
 
 export const GuestbookEntryIdSchema = z.object({
@@ -31,8 +31,8 @@ export const GuestbookEditSchema = GuestbookEntrySchema.merge(
 
 export const GuestbookDeleteSchema = GuestbookEntryIdSchema
 export const GuestbookBanUserSchema = z.object({
-  userId: z.string().min(1),
   action: z.enum(['ban', 'unban']),
+  userId: z.string().min(1),
 })
 
 export const GuestbookModerationInputSchema = GuestbookEntrySchema.pick({
@@ -47,22 +47,22 @@ export const ModerationResultSchema = z.object({
 
 // Output schemas
 export const GuestbookReactionItemSchema = z.object({
-  emoji: z.string(),
   count: z.number(),
+  emoji: z.string(),
   reacted: z.boolean(),
 })
 
 export const GuestbookEntryItemSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  message: z.string(),
-  signature: z.string().nullable(),
-  userId: z.string(),
-  role: z.string(),
   banned: z.boolean(),
   createdAt: z.string(),
   editedAt: z.string().nullable(),
+  id: z.number(),
+  message: z.string(),
+  name: z.string(),
   reactions: z.array(GuestbookReactionItemSchema),
+  role: z.string(),
+  signature: z.string().nullable(),
+  userId: z.string(),
 })
 
 // Inferred types

@@ -34,12 +34,12 @@ export const NewsletterForm = () => {
           toast.success(data?.message ?? 'Subscribed successfully.')
         },
       },
+      errorMapProps: {},
       formProps: {
         defaultValues: {
           email: '',
         },
       },
-      errorMapProps: {},
     }
   )
 
