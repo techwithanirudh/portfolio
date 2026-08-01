@@ -132,7 +132,7 @@ export function BlogToc({ toc, container }: BlogTocProps) {
         <div
           aria-hidden='true'
           className={cn(
-            'fixed inset-0 z-10 backdrop-blur-sm transition-opacity duration-300 lg:hidden',
+            'fixed inset-0 z-10 backdrop-blur-sm transition-opacity duration-300',
             '[mask-image:radial-gradient(circle_at_center_left,white,white_200px,transparent_500px)]',
             !open && 'pointer-events-none opacity-0'
           )}
@@ -141,14 +141,13 @@ export function BlogToc({ toc, container }: BlogTocProps) {
         <TOCScrollArea
           {...container}
           className={cn(
-            'z-10 grid transition-[width,padding] duration-300',
-            'lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:items-center lg:self-start lg:ps-4',
-            'max-lg:fixed max-lg:start-1 max-lg:top-1/2 max-lg:max-h-[calc(100dvh-8rem)] max-lg:-translate-y-1/2',
-            'max-lg:grid-cols-[calc(240px-1.5rem)] max-lg:rounded-xl max-lg:border max-lg:bg-popover max-lg:text-popover-foreground max-lg:shadow-md',
+            // Anchored to the viewport rather than the article, so it never
+            // depends on the content container's positioning or overflow.
+            'fixed start-1 top-1/2 z-20 grid max-h-[calc(100dvh-8rem)] -translate-y-1/2',
+            'grid-cols-[calc(240px-1.5rem)] transition-[width,padding] duration-300',
+            'rounded-xl border bg-popover text-popover-foreground shadow-md',
             inAnimation && 'overflow-y-hidden',
-            open
-              ? 'w-[240px] max-lg:p-3'
-              : 'max-lg:w-6 max-lg:overflow-clip lg:w-10',
+            open ? 'w-[240px] p-3' : 'w-6 overflow-clip',
             container?.className
           )}
           onPointerDown={(e) => {

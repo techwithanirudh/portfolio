@@ -31,9 +31,11 @@ export default async function Page(props: {
     <>
       <Header page={page} tags={tags} />
 
+      {/* Outside SectionBody: the rail is anchored to the viewport, not the article. */}
+      <BlogToc toc={toc} />
+
       <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
-          <BlogToc toc={toc} />
           <MdxContent comments slug={params.slug} toc={toc}>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </MdxContent>
