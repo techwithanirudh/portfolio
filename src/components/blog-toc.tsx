@@ -52,7 +52,8 @@ export function BlogTOCPopover({ className }: { className?: string }) {
 
 /**
  * `2xl`+: a minimap in the margin beside the article (one tick per heading,
- * active section filled in), after braydoncoyer.dev. Gated at `2xl` since
+ * active section filled in), after
+ * https://github.com/braydoncoyer/braydoncoyer.dev. Gated at `2xl` since
  * that's the first breakpoint where the site container stops being
  * full-bleed, so the first point with any margin to sit in.
  *
