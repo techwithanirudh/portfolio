@@ -2,6 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
+import {
+  BlogTOCMinimap,
+  BlogTOCPopover,
+  BlogTOCProvider,
+} from '@/components/blog-toc'
+
 import { PostJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
@@ -52,30 +58,34 @@ export default async function Page(props: {
   )
 
   return (
-    <>
+    <BlogTOCProvider toc={toc}>
       <Header page={page} tags={tags} />
 
-      <SectionBody>
-        <article className='flex min-h-full flex-col lg:flex-row'>
-          <MdxContent
-            beforeComments={
-              <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
-                {pageActions}
-              </aside>
-            }
-            comments
-            slug={params.slug}
-            toc={toc}
-          >
-            <Mdx components={{ ...mdxComponents, GitHubCode }} />
-          </MdxContent>
-          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+      <SectionBody className='flex'>
+        <BlogTOCMinimap />
+        <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
+          <div className='flex min-w-0 flex-1 flex-col'>
+            <BlogTOCPopover />
+            <MdxContent
+              beforeComments={
+                <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
+                  {pageActions}
+                </aside>
+              }
+              comments
+              proseClassName='pt-4'
+              slug={params.slug}
+            >
+              <Mdx components={{ ...mdxComponents, GitHubCode }} />
+            </MdxContent>
+          </div>
+          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-14 lg:h-[calc(100vh-3.5rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
             {pageActions}
           </div>
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
-    </>
+    </BlogTOCProvider>
   )
 }
 

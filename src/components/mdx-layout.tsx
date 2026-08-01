@@ -10,7 +10,6 @@ interface MdxLayoutProps {
   comments?: boolean
   slug: string
   title: string
-  toc?: ComponentProps<typeof InlineTOC>['items']
 }
 
 interface InlineTocBlockProps {
@@ -39,13 +38,11 @@ interface MdxContentProps {
   commentsClassName?: string
   proseClassName?: string
   slug?: string
-  toc?: ComponentProps<typeof InlineTOC>['items']
 }
 
 export const MdxContent = ({
   children,
   beforeComments,
-  toc,
   comments,
   slug,
   className,
@@ -53,7 +50,6 @@ export const MdxContent = ({
   commentsClassName,
 }: MdxContentProps) => (
   <div className={cn('flex min-w-0 flex-1 flex-col gap-4', className)}>
-    <InlineTocBlock items={toc} />
     <div
       className={cn(
         'prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 text-fd-foreground/90',
@@ -80,7 +76,6 @@ export const MdxContent = ({
 export default function MdxLayout({
   children,
   title,
-  toc,
   comments,
   slug,
 }: MdxLayoutProps): ReactNode {
@@ -94,7 +89,7 @@ export default function MdxLayout({
 
       <SectionBody>
         <article className='flex min-h-full flex-col lg:flex-row'>
-          <MdxContent comments={comments} slug={slug} toc={toc}>
+          <MdxContent comments={comments} slug={slug}>
             {children}
           </MdxContent>
         </article>
