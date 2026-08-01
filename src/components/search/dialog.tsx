@@ -3,6 +3,7 @@ import { useSound } from '@web-kits/audio/react'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
+import { useLenis } from 'lenis/react'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -44,6 +45,8 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const playCollapse = useSound(collapse)
   const playNavigate = useSound(keyPress)
   const lastNavSoundAtRef = useRef(0)
+  const commandInput = useRef<HTMLInputElement>(null)
+  const lenis = useLenis()
 
   useEffect(() => {
     if (!open) {
@@ -52,6 +55,45 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
     playOpen()
   }, [open, playOpen])
+
+  useEffect(() => {
+    if (!lenis) {
+      return
+    }
+
+    if (open) {
+      lenis.stop()
+    } else {
+      lenis.start()
+    }
+
+    return () => {
+      lenis.start()
+    }
+  }, [open, lenis])
+
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    const scrollY = window.scrollY
+    const { body } = document
+    const previousPosition = body.style.position
+    const previousTop = body.style.top
+    const previousWidth = body.style.width
+
+    body.style.position = 'fixed'
+    body.style.top = `-${scrollY}px`
+    body.style.width = '100%'
+
+    return () => {
+      body.style.position = previousPosition
+      body.style.top = previousTop
+      body.style.width = previousWidth
+      window.scrollTo(0, scrollY)
+    }
+  }, [open])
 
   const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
@@ -164,6 +206,10 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       <DialogContent
         className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! border-none bg-popover bg-clip-padding p-2 shadow-2xl sm:top-1/3 sm:max-w-lg sm:rounded-xl! sm:pb-11 sm:ring-4 sm:ring-neutral-200/80 dark:bg-neutral-900 dark:sm:ring-neutral-800'
         data-lenis-prevent
+        onOpenAutoFocus={(event) => {
+          event.preventDefault()
+          commandInput.current?.focus({ preventScroll: true })
+        }}
         showCloseButton={false}
       >
         <DialogHeader className='sr-only'>
@@ -178,6 +224,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <CommandInput
             onValueChange={setSearch}
             placeholder='Type a command or search...'
+            ref={commandInput}
             value={search}
           />
 
