@@ -1,6 +1,10 @@
 'use client'
 
-import { TOCProvider, useItems, useTOCItems } from 'fumadocs-ui/components/toc'
+import {
+  TOCProvider,
+  useActiveAnchor,
+  useTOCItems,
+} from 'fumadocs-ui/components/toc'
 import { ChevronDown, Text } from 'lucide-react'
 import {
   Collapsible,
@@ -57,7 +61,8 @@ export function BlogTocInline({ className }: { className?: string }) {
 }
 
 export function BlogTocMinimap({ className }: { className?: string }) {
-  const items = useItems()
+  const items = useTOCItems()
+  const activeAnchor = useActiveAnchor()
 
   if (items.length === 0) {
     return null
@@ -65,7 +70,7 @@ export function BlogTocMinimap({ className }: { className?: string }) {
 
   return (
     <aside
-      className={cn('ml-auto hidden w-[72px] shrink-0 lg:block', className)}
+      className={cn('hidden w-[72px] shrink-0 lg:block', className)}
       data-blog-toc-minimap=''
     >
       <div className='sticky top-16'>
@@ -76,9 +81,9 @@ export function BlogTocMinimap({ className }: { className?: string }) {
                 <div
                   aria-hidden
                   className='pointer-events-none h-0.5 w-6 shrink-0 rounded-xs bg-muted-foreground/50 transition-colors data-[depth=3]:ml-2 data-[depth=4]:ml-4 data-[depth=3]:w-4 data-[depth=4]:w-2 data-[active=true]:bg-foreground'
-                  data-active={item.active}
-                  data-depth={item.original.depth}
-                  key={item.id}
+                  data-active={item.url === `#${activeAnchor}`}
+                  data-depth={item.depth}
+                  key={item.url}
                 />
               ))}
             </div>
@@ -87,19 +92,19 @@ export function BlogTocMinimap({ className }: { className?: string }) {
           <HoverCardContent
             align='start'
             className='w-56 overflow-hidden p-0'
-            side='left'
+            side='right'
             sideOffset={-60}
           >
             <ul className='flex max-h-[calc(100dvh-6rem)] w-full flex-col overflow-y-auto px-6 py-4 text-sm'>
               {items.map((item) => (
-                <li className='flex py-1' key={item.id}>
+                <li className='flex py-1' key={item.url}>
                   <a
                     className='line-clamp-2 w-full text-muted-foreground transition-colors hover:text-foreground data-[depth=3]:pl-4 data-[depth=4]:pl-8 data-[active=true]:text-foreground'
-                    data-active={item.active}
-                    data-depth={item.original.depth}
-                    href={item.original.url}
+                    data-active={item.url === `#${activeAnchor}`}
+                    data-depth={item.depth}
+                    href={item.url}
                   >
-                    {item.original.title}
+                    {item.title}
                   </a>
                 </li>
               ))}

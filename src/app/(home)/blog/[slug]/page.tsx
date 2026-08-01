@@ -35,7 +35,8 @@ export default async function Page(props: {
     <BlogTocProvider toc={toc}>
       <Header page={page} tags={tags} />
 
-      <SectionBody>
+      <SectionBody className='flex'>
+        <BlogTocMinimap />
         <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
           <div className='flex min-w-0 flex-1 flex-col'>
             <BlogTocInline className='mx-4 mt-4' />
@@ -74,7 +75,6 @@ export default async function Page(props: {
               <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
             </div>
           </div>
-          <BlogTocMinimap />
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
