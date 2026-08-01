@@ -50,7 +50,6 @@ export const experiences: ExperienceItemType[] = [
         description:
           'Co-authored a research paper on privacy challenges for autonomous vehicles.',
         employmentPeriod: { end: '05.2022', start: '04.2022' },
-        employmentType: 'Contract',
         icon: <Icons.flask />,
         id: '1',
         skills: ['Research', 'Autonomous Vehicles', 'Privacy Engineering'],
