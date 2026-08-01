@@ -24,22 +24,24 @@ export function TOCInline({ children, className, items }: TOCInlineProps) {
   return (
     <Collapsible
       className={cn(
-        'not-prose group/inline-toc rounded-none border-0 border-border border-b border-dashed bg-transparent p-0 font-sans',
+        'not-prose rounded-none border-0 border-border border-b border-dashed bg-fd-card text-fd-card-foreground',
         className
       )}
     >
-      <CollapsibleTrigger className='inline-flex w-full items-center gap-2 rounded-none py-2.5 pr-2 pl-4 font-medium text-sm outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring/50 [&_svg]:size-4'>
-        <Text className='-translate-x-0.5' />
-        {children ?? 'On this page'}
-        <ChevronDown className='ml-auto shrink-0 text-muted-foreground transition-transform duration-150 group-data-[state=open]/inline-toc:rotate-180' />
+      <CollapsibleTrigger className='group inline-flex w-full items-center justify-between px-4 py-2.5 font-medium outline-none focus-visible:inset-ring-2 focus-visible:inset-ring-ring/50'>
+        <span className='flex items-center gap-2'>
+          <Text className='size-4' />
+          {children ?? 'On this page'}
+        </span>
+        <ChevronDown className='size-4 transition-transform duration-200 group-data-[state=open]:rotate-180' />
       </CollapsibleTrigger>
 
-      <CollapsibleContent>
-        <ul className='flex flex-col px-4 pb-2'>
+      <CollapsibleContent className='overflow-hidden data-[state=closed]:animate-fd-collapsible-up data-[state=open]:animate-fd-collapsible-down'>
+        <ul className='flex flex-col p-4 pt-0 text-fd-muted-foreground text-sm'>
           {items.map((item) => (
-            <li className='flex py-1' key={item.url}>
+            <li className='flex' key={item.url}>
               <a
-                className='text-muted-foreground text-sm transition-colors hover:text-accent-foreground data-[depth=3]:pl-4 data-[depth=4]:pl-8'
+                className='w-full border-s py-1.5 hover:text-fd-accent-foreground data-[depth=2]:ps-3 data-[depth=3]:ps-6 data-[depth=4]:ps-9'
                 data-depth={item.depth}
                 href={item.url}
               >
