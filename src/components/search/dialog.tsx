@@ -72,6 +72,34 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
   }, [open, lenis])
 
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    // Radix's own scroll lock sets overflow:hidden on <body> while a dialog
+    // is open. On iOS Safari, a fixed-position descendant of an ancestor
+    // with non-visible overflow doesn't stay pinned to the viewport - it
+    // scrolls with the page. Locking body with position:fixed sidesteps
+    // that regardless of which overflow rule triggers it.
+    const scrollY = window.scrollY
+    const { body } = document
+    const previousPosition = body.style.position
+    const previousTop = body.style.top
+    const previousWidth = body.style.width
+
+    body.style.position = 'fixed'
+    body.style.top = `-${scrollY}px`
+    body.style.width = '100%'
+
+    return () => {
+      body.style.position = previousPosition
+      body.style.top = previousTop
+      body.style.width = previousWidth
+      window.scrollTo(0, scrollY)
+    }
+  }, [open])
+
   const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
 
