@@ -3,6 +3,7 @@ import { useSound } from '@web-kits/audio/react'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
+import { useLenis } from 'lenis/react'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -44,6 +45,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const playCollapse = useSound(collapse)
   const playNavigate = useSound(keyPress)
   const lastNavSoundAtRef = useRef(0)
+  const lenis = useLenis()
 
   useEffect(() => {
     if (!open) {
@@ -52,6 +54,22 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
     playOpen()
   }, [open, playOpen])
+
+  useEffect(() => {
+    if (!lenis) {
+      return
+    }
+
+    if (open) {
+      lenis.stop()
+    } else {
+      lenis.start()
+    }
+
+    return () => {
+      lenis.start()
+    }
+  }, [open, lenis])
 
   const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
