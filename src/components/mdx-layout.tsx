@@ -37,12 +37,6 @@ interface MdxContentProps {
   className?: string
   comments?: boolean
   commentsClassName?: string
-  /**
-   * Hide the inline table of contents block. Pages that render their own
-   * table of contents (e.g. the blog, via `BlogTocDesktop`/`BlogTocMobile`)
-   * should set this so the inline block doesn't duplicate it.
-   */
-  hideInlineToc?: boolean
   proseClassName?: string
   slug?: string
   toc?: ComponentProps<typeof InlineTOC>['items']
@@ -57,10 +51,9 @@ export const MdxContent = ({
   className,
   proseClassName,
   commentsClassName,
-  hideInlineToc,
 }: MdxContentProps) => (
   <div className={cn('flex min-w-0 flex-1 flex-col gap-4', className)}>
-    {hideInlineToc ? null : <InlineTocBlock items={toc} />}
+    <InlineTocBlock items={toc} />
     <div
       className={cn(
         'prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 text-fd-foreground/90',

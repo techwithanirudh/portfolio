@@ -72,10 +72,8 @@ export default async function Page(props: {
                 </aside>
               }
               comments
-              hideInlineToc
               proseClassName='pt-4'
               slug={params.slug}
-              toc={toc}
             >
               <Mdx components={{ ...mdxComponents, GitHubCode }} />
             </MdxContent>
