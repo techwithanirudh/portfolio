@@ -27,7 +27,7 @@ export function BlogTocDesktop({ className }: { className?: string }) {
       const article = document.querySelector('article')
 
       if (article) {
-        setTop(Math.max(140, article.getBoundingClientRect().top))
+        setTop(Math.max(140, article.getBoundingClientRect().top + 32))
       }
     }
 

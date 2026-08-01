@@ -39,7 +39,7 @@ export default async function Page(props: {
       <BlogTocDesktop />
 
       <SectionBody>
-        <article className='flex min-h-full flex-col lg:flex-row'>
+        <article className='flex min-h-full flex-col pt-8 lg:flex-row'>
           <MdxContent
             comments
             hideInlineToc
