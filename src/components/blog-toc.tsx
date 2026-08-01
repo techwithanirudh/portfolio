@@ -41,12 +41,12 @@ export function TOCMinimap({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        'hidden w-[72px] shrink-0 2xl:absolute 2xl:inset-y-0 2xl:right-full 2xl:z-20 2xl:block',
+        'hidden w-[72px] shrink-0 2xl:absolute 2xl:inset-y-0 2xl:right-full 2xl:block',
         className
       )}
       data-toc-minimap=''
     >
-      <div className='sticky top-14'>
+      <div className='sticky top-16'>
         <HoverCard closeDelay={100} openDelay={100}>
           <HoverCardTrigger asChild>
             <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-4 pb-3 pl-6'>
@@ -64,12 +64,12 @@ export function TOCMinimap({ className }: { className?: string }) {
 
           <HoverCardContent
             align='start'
-            alignOffset={-8}
+            alignOffset={16}
             className='w-56 overflow-hidden p-0'
-            side='right'
-            sideOffset={8}
+            side='left'
+            sideOffset={-60}
           >
-            <ul className='flex max-h-[calc(100dvh-8rem)] w-full flex-col overflow-y-auto px-4 py-3 text-sm'>
+            <ul className='flex max-h-[calc(100dvh-6rem)] w-full flex-col overflow-y-auto px-6 py-4 text-sm'>
               {items.map((item) => (
                 <li className='flex py-1' key={item.url}>
                   <a
