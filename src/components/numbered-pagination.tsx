@@ -36,23 +36,29 @@ function NumberedPagination({
 
   return (
     <Pagination>
-      <PaginationContent className='inline-flex w-full gap-0 -space-x-px rtl:space-x-reverse'>
-        {currentPage > 1 && (
-          <PaginationItem>
-            <Button
-              aria-label='Go to previous page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage - 1)}
-              shape='square'
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
-            </Button>
-          </PaginationItem>
-        )}
+      <PaginationContent className='grid w-full grid-cols-[1fr_auto_1fr] items-center gap-0 -space-x-px rtl:space-x-reverse'>
+        <div className='flex'>
+          {currentPage > 1 && (
+            <PaginationItem>
+              <Button
+                aria-label='Go to previous page'
+                className='shadow-none hover:z-10 focus-visible:z-10'
+                onClick={handlePageChange(currentPage - 1)}
+                shape='square'
+                size='icon'
+                variant='ghost'
+              >
+                <Icons.chevronLeft
+                  aria-hidden='true'
+                  size={16}
+                  strokeWidth={2}
+                />
+              </Button>
+            </PaginationItem>
+          )}
+        </div>
 
-        <div className='inline-flex w-full justify-center'>
+        <div className='inline-flex justify-self-center'>
           {showLeftEllipsis && (
             <PaginationItem>
               <Button
@@ -95,24 +101,26 @@ function NumberedPagination({
           )}
         </div>
 
-        {currentPage < totalPages && (
-          <PaginationItem>
-            <Button
-              aria-label='Go to next page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage + 1)}
-              shape='square'
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.chevronRight
-                aria-hidden='true'
-                size={16}
-                strokeWidth={2}
-              />
-            </Button>
-          </PaginationItem>
-        )}
+        <div className='flex justify-end'>
+          {currentPage < totalPages && (
+            <PaginationItem>
+              <Button
+                aria-label='Go to next page'
+                className='shadow-none hover:z-10 focus-visible:z-10'
+                onClick={handlePageChange(currentPage + 1)}
+                shape='square'
+                size='icon'
+                variant='ghost'
+              >
+                <Icons.chevronRight
+                  aria-hidden='true'
+                  size={16}
+                  strokeWidth={2}
+                />
+              </Button>
+            </PaginationItem>
+          )}
+        </div>
       </PaginationContent>
     </Pagination>
   )
