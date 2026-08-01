@@ -11,14 +11,14 @@ import { skills, technologies } from '@/constants/portfolio/skills'
 const featureItemVariants = cva(
   'flex flex-col justify-between gap-28 p-6 hover:bg-card/80 sm:gap-34 md:gap-40 lg:gap-46',
   {
-    variants: {
-      size: {
-        sm: '',
-        lg: 'lg:col-span-2',
-      },
-    },
     defaultVariants: {
       size: 'sm',
+    },
+    variants: {
+      size: {
+        lg: 'lg:col-span-2',
+        sm: '',
+      },
     },
   }
 )

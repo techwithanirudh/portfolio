@@ -35,21 +35,21 @@ import { LargeSearchToggle, SearchToggle } from './search-toggle'
 import { ThemeToggle } from './theme-toggle'
 
 const navItemVariants = cva('[&_svg]:size-4', {
+  defaultVariants: {
+    variant: 'main',
+  },
   variants: {
     variant: {
-      main: 'inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
       button: buttonVariants({
-        color: 'secondary',
         className: 'gap-1.5',
+        color: 'secondary',
       }),
       icon: buttonVariants({
         color: 'ghost',
         size: 'icon',
       }),
+      main: 'inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
     },
-  },
-  defaultVariants: {
-    variant: 'main',
   },
 })
 
@@ -87,7 +87,7 @@ export const Header = ({
     const navItems: LinkItemType[] = []
     const menuItems: LinkItemType[] = []
 
-    for (const item of resolveLinkItems({ links, githubUrl })) {
+    for (const item of resolveLinkItems({ githubUrl, links })) {
       switch (item.on ?? 'all') {
         case 'menu':
           menuItems.push(item)
@@ -101,7 +101,7 @@ export const Header = ({
       }
     }
 
-    return { navItems, menuItems }
+    return { menuItems, navItems }
   }, [links, githubUrl])
 
   return (
@@ -201,9 +201,9 @@ export const Header = ({
               aria-label='Toggle Menu'
               className={cn(
                 buttonVariants({
-                  size: 'icon',
-                  color: 'ghost',
                   className: 'group [&_svg]:size-5.5',
+                  color: 'ghost',
+                  size: 'icon',
                 })
               )}
               onPointerMove={
@@ -420,15 +420,15 @@ const MobileNavigationMenuLinkItem = ({
         aria-label={item.type === 'icon' ? item.label : undefined}
         className={cn(
           {
-            main: 'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-fd-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-fd-primary [&_svg]:size-4',
-            icon: buttonVariants({
-              size: 'icon',
-              color: 'ghost',
-            }),
             button: buttonVariants({
-              color: 'secondary',
               className: 'gap-1.5 [&_svg]:size-4',
+              color: 'secondary',
             }),
+            icon: buttonVariants({
+              color: 'ghost',
+              size: 'icon',
+            }),
+            main: 'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-fd-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-fd-primary [&_svg]:size-4',
           }[item.type ?? 'main'],
           props.className
         )}

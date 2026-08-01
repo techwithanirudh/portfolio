@@ -60,7 +60,7 @@ function useMarkdownCopy(markdownUrl: string) {
     }
   }
 
-  return { state, isCopying, handleCopy }
+  return { handleCopy, isCopying, state }
 }
 
 export function LLMCopyButton({
@@ -112,34 +112,34 @@ export function ViewOptions({
 
     return [
       {
-        title: 'View as Markdown',
         href: fullMarkdownUrl,
         icon: Icons.markdown,
+        title: 'View as Markdown',
       },
       {
-        title: 'Open in GitHub',
         href: githubUrl,
         icon: Icons.github,
+        title: 'Open in GitHub',
       },
       {
-        title: 'Open in Scira AI',
         href: `https://scira.ai/?${new URLSearchParams({ q })}`,
         icon: Icons.scira,
+        title: 'Open in Scira AI',
       },
       {
-        title: 'Open in ChatGPT',
         href: `https://chatgpt.com/?${new URLSearchParams({ hints: 'search', q })}`,
         icon: Icons.openai,
+        title: 'Open in ChatGPT',
       },
       {
-        title: 'Open in Claude',
         href: `https://claude.ai/new?${new URLSearchParams({ q })}`,
         icon: Icons.claude,
+        title: 'Open in Claude',
       },
       {
-        title: 'Open in T3 Chat',
         href: `https://t3.chat/new?${new URLSearchParams({ q })}`,
         icon: Icons.messageCircle,
+        title: 'Open in T3 Chat',
       },
     ]
   }, [githubUrl, markdownUrl])

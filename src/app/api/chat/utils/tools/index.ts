@@ -5,17 +5,17 @@ import { showContactFormTool } from './show-contact-form'
 
 const searchDocsToolType = tool({
   description: 'Search the portfolio content',
+  execute: async () => 'Search results',
   inputSchema: z.object({
+    limit: z.number().optional(),
+    locale: z.string().optional(),
     query: z.string(),
     tag: z.union([z.literal('all'), z.literal('blog'), z.literal('projects')]),
-    locale: z.string().optional(),
-    limit: z.number().optional(),
   }),
-  execute: async () => 'Search results',
 })
 
 export const tools = {
   getPageContent,
-  showContactForm: showContactFormTool,
   searchDocs: searchDocsToolType,
+  showContactForm: showContactFormTool,
 } satisfies ToolSet

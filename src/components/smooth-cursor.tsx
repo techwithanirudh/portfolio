@@ -43,24 +43,24 @@ export function SmoothCursor({
 
   // Much more responsive cursor tracking - minimal lag
   const cursorX = useSpring(0, {
-    stiffness: disableSmooth ? 10_000 : 1200,
     damping: disableSmooth ? 100 : 80,
     mass: disableSmooth ? 0.1 : 0.3,
+    stiffness: disableSmooth ? 10_000 : 1200,
   })
   const cursorY = useSpring(0, {
-    stiffness: disableSmooth ? 10_000 : 1200,
     damping: disableSmooth ? 100 : 80,
     mass: disableSmooth ? 0.1 : 0.3,
+    stiffness: disableSmooth ? 10_000 : 1200,
   })
   const rotation = useSpring(-45, {
-    stiffness: 800,
     damping: 60,
     mass: 0.4,
+    stiffness: 800,
   })
   const scale = useSpring(1, {
-    stiffness: 1000,
     damping: 70,
     mass: 0.3,
+    stiffness: 1000,
   })
 
   useEffect(() => {
@@ -186,10 +186,10 @@ export function SmoothCursor({
     <motion.div
       className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${isMoving || cursorType === 'pointer' || isOverPointer ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
       style={{
+        backfaceVisibility: 'hidden',
         left: cursorX,
         top: cursorY,
         transform: 'translateZ(0)',
-        backfaceVisibility: 'hidden',
         willChange: 'transform',
       }}
     >

@@ -51,27 +51,27 @@ export function AIContactForm({
           playPop()
           const { name, email, message } = form.getValues()
           addToolOutput({
-            tool: 'showContactForm',
-            toolCallId,
             output: {
-              success: true,
-              name,
               email,
               message,
+              name,
+              success: true,
             },
+            tool: 'showContactForm',
+            toolCallId,
           })
           sendMessage()
         },
       },
+      errorMapProps: {},
       formProps: {
-        mode: 'onBlur',
         defaultValues: {
-          name: prefill?.name ?? '',
           email: prefill?.email ?? '',
           message: prefill?.message ?? '',
+          name: prefill?.name ?? '',
         },
+        mode: 'onBlur',
       },
-      errorMapProps: {},
     }
   )
 
@@ -111,12 +111,12 @@ export function AIContactForm({
 
   const handleCancel = () => {
     addToolOutput({
+      output: {
+        reason: 'user canceled the form',
+        success: false,
+      },
       tool: 'showContactForm',
       toolCallId,
-      output: {
-        success: false,
-        reason: 'user canceled the form',
-      },
     })
     sendMessage()
   }

@@ -89,13 +89,13 @@ export default function GuestbookPage() {
 
 export async function generateMetadata(): Promise<Metadata> {
   return createMetadata({
-    title: 'Guestbook',
+    alternates: {
+      canonical: '/guestbook',
+    },
     description: 'Leave a note and react to messages from other visitors.',
     openGraph: {
       url: '/guestbook',
     },
-    alternates: {
-      canonical: '/guestbook',
-    },
+    title: 'Guestbook',
   })
 }

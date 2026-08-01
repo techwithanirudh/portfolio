@@ -20,11 +20,11 @@ function orderTagGroups(
   tagMap: Map<string, SearchPageGroup[]>
 ): SearchTagGroup[] {
   return TAG_ORDER.filter((tag) => tagMap.has(tag))
-    .map((tag) => ({ tag, pages: tagMap.get(tag)! }))
+    .map((tag) => ({ pages: tagMap.get(tag)!, tag }))
     .concat(
       Array.from(tagMap.entries())
         .filter(([tag]) => !TAG_ORDER.includes(tag))
-        .map(([tag, pages]) => ({ tag, pages }))
+        .map(([tag, pages]) => ({ pages, tag }))
     )
 }
 
@@ -35,12 +35,12 @@ function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
   for (const result of results) {
     if (result.type === 'page') {
       current = {
+        children: [],
         page: {
           content: String(result.content),
           id: result.id,
           url: result.url,
         },
-        children: [],
       }
       grouped.push(current)
       continue
@@ -79,11 +79,11 @@ export function buildCommandGroups(search: string) {
   return commands
     .map(({ group, position, items }) => ({
       group,
-      position,
       items: items.filter(
         (item) =>
           isEmpty || defaultFilter(item.title, search, item.keywords) > 0
       ),
+      position,
     }))
     .filter(({ items }) => items.length > 0)
 }
@@ -102,12 +102,12 @@ export function buildPageEntryGroups(entries: PageEntry[]): SearchTagGroup[] {
   for (const entry of entries) {
     const existing = tagMap.get(entry.tag)
     const page: SearchPageGroup = {
+      children: [],
       page: {
         content: entry.title,
         id: entry.url,
         url: entry.url,
       },
-      children: [],
     }
 
     if (existing) {

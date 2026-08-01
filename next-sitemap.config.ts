@@ -7,8 +7,8 @@ const siteUrl =
     : 'http://localhost:3000')
 
 const config: IConfig = {
-  siteUrl,
   generateRobotsTxt: true,
+  siteUrl,
 }
 
 export default config

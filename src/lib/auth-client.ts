@@ -11,11 +11,6 @@ import type { auth } from '@/server/auth'
 // @see https://github.com/better-auth/better-auth/issues/1391
 export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
   {
-    plugins: [
-      adminClient(),
-      inferAdditionalFields<typeof auth>(),
-      multiSessionClient(),
-    ],
     fetchOptions: {
       onError(e) {
         if (e.error.status === 429) {
@@ -23,6 +18,11 @@ export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
         }
       },
     },
+    plugins: [
+      adminClient(),
+      inferAdditionalFields<typeof auth>(),
+      multiSessionClient(),
+    ],
   }
 )
 

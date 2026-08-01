@@ -15,10 +15,10 @@ export const contact = actionClient
     try {
       const { error } = await resend.emails.send({
         from: env.EMAIL_FROM,
-        to: env.EMAIL_TO,
+        replyTo: email,
         subject: `New contact form submission from ${name}`,
         text: message,
-        replyTo: email,
+        to: env.EMAIL_TO,
       })
 
       if (error) {
@@ -27,8 +27,8 @@ export const contact = actionClient
       }
 
       return {
-        success: true,
         message: "Your message has been sent! We'll get back to you soon.",
+        success: true,
       }
     } catch (error) {
       console.error('Contact form error:', error)

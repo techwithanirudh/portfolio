@@ -42,6 +42,16 @@ export const GuestbookForm = () => {
     zodResolver(GuestbookEntrySchema),
     {
       actionProps: {
+        onError: ({ error }) => {
+          if (form.formState.errors.message) {
+            setStep(1)
+          }
+          toast.error(
+            typeof error.serverError === 'string'
+              ? error.serverError
+              : 'Failed to post guestbook entry.'
+          )
+        },
         onSuccess: () => {
           toast.success('Guestbook entry posted.')
           form.reset({
@@ -53,25 +63,15 @@ export const GuestbookForm = () => {
           setFormKey((current) => current + 1)
           router.refresh()
         },
-        onError: ({ error }) => {
-          if (form.formState.errors.message) {
-            setStep(1)
-          }
-          toast.error(
-            typeof error.serverError === 'string'
-              ? error.serverError
-              : 'Failed to post guestbook entry.'
-          )
-        },
       },
+      errorMapProps: {},
       formProps: {
-        mode: 'onBlur',
         defaultValues: {
           message: '',
           signature: undefined,
         },
+        mode: 'onBlur',
       },
-      errorMapProps: {},
     }
   )
 

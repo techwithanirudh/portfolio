@@ -28,8 +28,8 @@ function rehypeCustomElements() {
 }
 
 const md = createMarkdownRenderer({
-  remarkRehypeOptions: { allowDangerousHtml: true },
   rehypePlugins: [rehypeRaw, rehypeCustomElements],
+  remarkRehypeOptions: { allowDangerousHtml: true },
 })
 
 interface SearchResultsProps {

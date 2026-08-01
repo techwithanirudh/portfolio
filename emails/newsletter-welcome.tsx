@@ -74,8 +74,8 @@ export default function NewsletterWelcomeEmail({
           fontStyle='normal'
           fontWeight={400}
           webFont={{
-            url: 'https://fonts.gstatic.com/s/alexbrush/v22/SZc83FzrJKuqFbwMKk6EhUXz7RlNiCY.woff2',
             format: 'woff2',
+            url: 'https://fonts.gstatic.com/s/alexbrush/v22/SZc83FzrJKuqFbwMKk6EhUXz7RlNiCY.woff2',
           }}
         />
         <Font
@@ -84,8 +84,8 @@ export default function NewsletterWelcomeEmail({
           fontStyle='normal'
           fontWeight={400}
           webFont={{
-            url: 'https://fonts.gstatic.com/s/bricolagegrotesque/v8/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGIInHWVyNJ.woff2',
             format: 'woff2',
+            url: 'https://fonts.gstatic.com/s/bricolagegrotesque/v8/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGIInHWVyNJ.woff2',
           }}
         />
       </Head>
@@ -152,33 +152,33 @@ NewsletterWelcomeEmail.PreviewProps = {
   firstName: 'Jane',
   posts: [
     {
-      title: 'Next.js Pages',
+      author: 'You',
+      date: new Date('2025-03-21'),
       description:
         'Dive into the details of Next.js Pages with examples, dynamic routing, pre-rendering strategies like Static Generation and SSR, and pro tips for building fast, SEO-friendly web apps. Packed with insights and tricks from my latest project!',
-      date: new Date('2025-03-21'),
-      tags: ['Next.js', 'Pages', 'Routing'],
       image: `${baseUrl}/images/blog/pages.png`,
-      author: 'You',
+      tags: ['Next.js', 'Pages', 'Routing'],
+      title: 'Next.js Pages',
       url: `${baseUrl}/posts/pages`,
     },
     {
-      title: 'Markdown Examples',
+      author: 'You',
+      date: new Date('2025-03-22'),
       description:
         'Learn to use Markdown for clean, structured formatting in blogs, docs, and notes. Explore examples, pro tips, and practical use cases to level up your writing and make your content easier to read, share, and maintain across platforms.',
-      date: new Date('2025-03-22'),
-      tags: ['Markdown', 'Docs', 'Writing'],
       image: `${baseUrl}/images/blog/markdown-examples.png`,
-      author: 'You',
+      tags: ['Markdown', 'Docs', 'Writing'],
+      title: 'Markdown Examples',
       url: `${baseUrl}/posts/markdown-examples`,
     },
     {
-      title: 'Using MDX',
+      author: 'You',
+      date: new Date('2025-03-23'),
       description:
         'Learn MDX in Next.js to mix Markdown with React. This guide shows setup with @next/mdx, usage tips, and examples to embed JSX in posts—ideal for blogs, docs, and interactive tutorials.',
-      date: new Date('2025-03-23'),
-      tags: ['MDX', 'Next.js', 'React'],
       image: `${baseUrl}/images/blog/using-mdx.png`,
-      author: 'You',
+      tags: ['MDX', 'Next.js', 'React'],
+      title: 'Using MDX',
       url: `${baseUrl}/posts/using-mdx`,
     },
   ],

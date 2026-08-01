@@ -78,9 +78,9 @@ export function SearchClient() {
   const tag = scopeParam === 'all' ? undefined : scopeParam
 
   const { search, setSearch, query } = useDocsSearch({
-    type: 'fetch',
-    tag,
     locale,
+    tag,
+    type: 'fetch',
   })
 
   const resultCount =

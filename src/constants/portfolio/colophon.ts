@@ -6,48 +6,48 @@ import type {
 
 export const technology = [
   {
-    name: 'Next.js',
     description: 'App Router foundation with server components and streaming.',
+    name: 'Next.js',
     url: 'https://nextjs.org',
   },
   {
-    name: 'TypeScript',
     description: 'Strict typing for safer, more readable UI code.',
+    name: 'TypeScript',
     url: 'https://www.typescriptlang.org',
   },
   {
-    name: 'Tailwind CSS',
     description: 'Utility-first styling with custom design tokens.',
+    name: 'Tailwind CSS',
     url: 'https://tailwindcss.com',
   },
   {
-    name: 'Fumadocs',
     description: 'Typed MDX content with a docs-friendly layout engine.',
+    name: 'Fumadocs',
     url: 'https://fumadocs.dev',
   },
   {
-    name: 'Radix UI + shadcn/ui',
     description: 'Accessible primitives and customized UI building blocks.',
+    name: 'Radix UI + shadcn/ui',
     url: 'https://ui.shadcn.com',
   },
   {
-    name: 'PostgreSQL',
     description: 'Reliable relational database for data persistence.',
+    name: 'PostgreSQL',
     url: 'https://www.postgresql.org',
   },
   {
-    name: 'Drizzle ORM',
     description: 'Type-safe queries and schema management.',
+    name: 'Drizzle ORM',
     url: 'https://orm.drizzle.team',
   },
   {
-    name: 'Motion',
     description: 'Subtle reveals and transitions for a calmer rhythm.',
+    name: 'Motion',
     url: 'https://motion.dev',
   },
   {
-    name: 'Bun',
     description: 'Fast all-in-one runtime, bundler, and package manager.',
+    name: 'Bun',
     url: 'https://bun.sh',
   },
 ] satisfies TechnologyItem[]
@@ -77,10 +77,10 @@ export const attributions = [
 ] satisfies AttributionItem[]
 
 export const typography = [
-  { label: 'Geist Regular', className: 'font-normal' },
-  { label: 'Geist Medium', className: 'font-medium' },
-  { label: 'Geist Semibold', className: 'font-semibold' },
-  { label: 'Geist Bold', className: 'font-bold' },
-  { label: 'Geist Mono', className: 'font-mono' },
-  { label: 'Geist Mono Italic', className: 'font-mono italic' },
+  { className: 'font-normal', label: 'Geist Regular' },
+  { className: 'font-medium', label: 'Geist Medium' },
+  { className: 'font-semibold', label: 'Geist Semibold' },
+  { className: 'font-bold', label: 'Geist Bold' },
+  { className: 'font-mono', label: 'Geist Mono' },
+  { className: 'font-mono italic', label: 'Geist Mono Italic' },
 ] satisfies TypographyItem[]

@@ -21,8 +21,8 @@ interface GithubRepoProps {
 }
 
 const compactNumber = new Intl.NumberFormat('en', {
-  notation: 'compact',
   maximumFractionDigits: 1,
+  notation: 'compact',
 })
 
 const formatNumber = (value: number): string => compactNumber.format(value)

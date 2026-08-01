@@ -5,21 +5,21 @@ import { cn } from '@/lib/utils'
 import { Section } from '../section'
 
 const heroVariants = cva('flex flex-col', {
+  defaultVariants: {
+    align: 'center',
+    variant: 'default',
+  },
   variants: {
-    variant: {
-      default:
-        'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
-      compact: 'gap-4 py-6 lg:py-12 lg:px-2',
-    },
     align: {
       center: 'items-start justify-center sm:items-center',
-      start: 'items-start justify-center sm:items-start',
       end: 'items-start justify-center sm:items-end',
+      start: 'items-start justify-center sm:items-start',
     },
-  },
-  defaultVariants: {
-    variant: 'default',
-    align: 'center',
+    variant: {
+      compact: 'gap-4 py-6 lg:py-12 lg:px-2',
+      default:
+        'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
+    },
   },
 })
 
@@ -48,7 +48,7 @@ export const HeroSection = ({
     asChild?: boolean
   }) => (
   <Section className={cn('px-6 sm:p-4', sectionClassName)}>
-    <div className={cn(heroVariants({ variant, align, className }))}>
+    <div className={cn(heroVariants({ align, className, variant }))}>
       {image && (
         <ViewAnimation
           initial={{ opacity: 0, translateY: -6 }}

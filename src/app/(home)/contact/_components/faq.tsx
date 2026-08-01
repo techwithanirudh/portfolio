@@ -15,24 +15,24 @@ import { ViewAnimation } from '@/components/view-animation'
 
 const faq = [
   {
-    question: 'What technologies do you specialize in?',
     answer:
       'I focus on full-stack web development with Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.',
+    question: 'What technologies do you specialize in?',
   },
   {
-    question: 'What are you focusing on right now?',
     answer:
       "I'm focused on shipping personal products, polishing this portfolio, and learning more about scalable web app architecture.",
+    question: 'What are you focusing on right now?',
   },
   {
-    question: 'How can I get in touch with you?',
     answer:
       'The best way to reach me is through the contact form on this website or via email at hello@techwithanirudh.com. You can also connect with me on GitHub or LinkedIn.',
+    question: 'How can I get in touch with you?',
   },
   {
-    question: "What's your development approach?",
     answer:
       "I try to keep things simple, readable, and easy to maintain. I focus on user experience, write clear code, and document what matters. I'm always learning and like shipping small improvements often.",
+    question: "What's your development approach?",
   },
 ]
 

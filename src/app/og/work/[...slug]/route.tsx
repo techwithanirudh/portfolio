@@ -20,9 +20,9 @@ export const GET = async (
 
   return new ImageResponse(
     generate({
-      title: page.data.title ?? 'Untitled',
-      description: page.data.description ?? '',
       backgroundImage,
+      description: page.data.description ?? '',
+      title: page.data.title ?? 'Untitled',
     }),
     await getImageResponseOptions()
   )

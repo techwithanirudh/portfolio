@@ -37,15 +37,15 @@ const getPushEventCommits = async (
 
   try {
     const comparison = await octokit.rest.repos.compareCommits({
-      owner: repoOwner,
-      repo,
       base: payload.before,
       head: payload.head,
+      owner: repoOwner,
+      repo,
     })
 
     return comparison.data.commits.slice(0, 3).map((commit) => ({
-      sha: commit.sha,
       message: getFirstLine(commit.commit.message),
+      sha: commit.sha,
     }))
   } catch {
     return []
@@ -55,18 +55,18 @@ const getPushEventCommits = async (
 const getCachedActivityItems = unstable_cache(
   async (): Promise<ActivityEventItem[]> => {
     const activity = await octokit.rest.activity.listPublicEventsForUser({
-      username: owner,
       per_page: limit,
+      username: owner,
     })
 
     const events = activity.data.slice(0, limit)
     const items = await Promise.all(
       events.map(async (event) => ({
-        event,
         commits:
           event.type === 'PushEvent'
             ? await getPushEventCommits(event)
             : undefined,
+        event,
       }))
     )
 

@@ -16,8 +16,8 @@ const itemVariants = cva(
   {
     variants: {
       active: {
-        true: 'bg-fd-accent text-fd-accent-foreground',
         false: 'text-fd-muted-foreground',
+        true: 'bg-fd-accent text-fd-accent-foreground',
       },
     },
   }

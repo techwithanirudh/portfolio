@@ -3,21 +3,21 @@ import { z } from 'zod'
 
 const prefillSchema = z
   .object({
-    name: z.string().optional().describe("User's name if mentioned"),
     email: z.string().optional().describe("User's email if mentioned"),
     message: z
       .string()
       .optional()
       .describe('Suggested message based on conversation context'),
+    name: z.string().optional().describe("User's name if mentioned"),
   })
   .optional()
 
 export const contactFormOutputSchema = z.object({
-  success: z.boolean(),
-  reason: z.string().optional(),
-  name: z.string().optional(),
   email: z.string().optional(),
   message: z.string().optional(),
+  name: z.string().optional(),
+  reason: z.string().optional(),
+  success: z.boolean(),
 })
 
 export type ContactFormOutput = z.infer<typeof contactFormOutputSchema>

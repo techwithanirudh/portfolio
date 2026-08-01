@@ -1,21 +1,21 @@
 import { z } from 'zod'
 
 export const CommentImageContentSchema = z.object({
-  type: z.literal('image'),
   attrs: z.object({
+    alt: z.string().optional(),
+    height: z.number(),
     src: z.string().startsWith('http'),
     width: z.number(),
-    height: z.number(),
-    alt: z.string().optional(),
   }),
+  type: z.literal('image'),
 })
 
 export const CommentMentionContentSchema = z.object({
-  type: z.literal('mention'),
   attrs: z.object({
     id: z.string(),
     label: z.string().optional(),
   }),
+  type: z.literal('mention'),
 })
 
 export type CommentImageContent = z.infer<typeof CommentImageContentSchema>

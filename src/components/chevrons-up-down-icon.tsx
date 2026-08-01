@@ -44,8 +44,8 @@ const ChevronsUpDownIcon = forwardRef<
         initial='normal'
         transition={{ duration }}
         variants={{
-          normal: { d: 'M7 15L12 20L17 15' },
           animate: { d: 'M7 20L12 15L17 20' },
+          normal: { d: 'M7 15L12 20L17 15' },
         }}
       />
       <motion.path
@@ -54,8 +54,8 @@ const ChevronsUpDownIcon = forwardRef<
         initial='normal'
         transition={{ duration }}
         variants={{
-          normal: { d: 'M7 9L12 4L17 9' },
           animate: { d: 'M7 4L12 9L17 4' },
+          normal: { d: 'M7 9L12 4L17 9' },
         }}
       />
     </svg>

@@ -55,13 +55,13 @@ export async function generateMetadata(props: {
   const description = 'Contact me for any inquiries, feedback.'
 
   return createMetadata({
-    title: 'Contact',
+    alternates: {
+      canonical: '/contact',
+    },
     description,
     openGraph: {
       url: '/contact',
     },
-    alternates: {
-      canonical: '/contact',
-    },
+    title: 'Contact',
   })
 }

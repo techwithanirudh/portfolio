@@ -10,8 +10,8 @@ interface GenerateProps {
 export function getImageResponseOptions(): ImageResponseOptions {
   return {
     format: 'webp',
-    width: 1200,
     height: 630,
+    width: 1200,
   }
 }
 
@@ -34,10 +34,10 @@ export function generate({
         </span>
         <div
           style={{
-            textWrap: 'balance',
-            fontWeight: 600,
             fontSize: title && title.length > 20 ? 64 : 80,
+            fontWeight: 600,
             letterSpacing: '-0.04em',
+            textWrap: 'balance',
           }}
           tw='tracking-tight flex flex-col justify-center leading-[1.1]'
         >
@@ -46,11 +46,11 @@ export function generate({
         <div
           style={{
             fontWeight: 500,
-            textWrap: 'pretty',
-            overflow: 'hidden',
-            maxWidth: '100%',
             maxHeight: '120px',
+            maxWidth: '100%',
+            overflow: 'hidden',
             textOverflow: 'ellipsis',
+            textWrap: 'pretty',
           }}
           tw='max-w-full text-[38px] leading-[1.5] text-stone-400'
         >

@@ -2,6 +2,12 @@ import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { LLMCopyButtonWithViewOptions } from '@/components/ai/page-actions'
+import {
+  BlogTOCMinimap,
+  BlogTOCPopover,
+  BlogTOCProvider,
+} from '@/components/blog-toc'
+
 import { PostJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
@@ -25,45 +31,61 @@ export default async function Page(props: {
   const { body: Mdx, toc, tags, lastModified } = page.data
 
   const lastUpdate = lastModified ? new Date(lastModified) : undefined
+  const pageActions = (
+    <>
+      <div>
+        <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
+        <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
+      </div>
+      <div>
+        <p className='mb-1 text-muted-foreground text-sm'>Created At</p>
+        <p className='font-medium'>{new Date(page.data.date).toDateString()}</p>
+      </div>
+      {lastUpdate && (
+        <div>
+          <p className='mb-1 text-muted-foreground text-sm'>Updated At</p>
+          <p className='font-medium'>{lastUpdate.toDateString()}</p>
+        </div>
+      )}
+      <div className='flex flex-col gap-2'>
+        <LLMCopyButtonWithViewOptions
+          githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
+          markdownUrl={`/blog.mdx/${params.slug}`}
+        />
+        <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
+      </div>
+    </>
+  )
 
   return (
-    <>
+    <BlogTOCProvider toc={toc}>
       <Header page={page} tags={tags} />
 
-      <SectionBody>
-        <article className='flex min-h-full flex-col lg:flex-row'>
-          <MdxContent comments slug={params.slug} toc={toc}>
-            <Mdx components={{ ...mdxComponents, GitHubCode }} />
-          </MdxContent>
-          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-[4rem] lg:h-[calc(100vh-4rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
-            <div>
-              <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
-              <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
-            </div>
-            <div>
-              <p className='mb-1 text-muted-foreground text-sm'>Created At</p>
-              <p className='font-medium'>
-                {new Date(page.data.date).toDateString()}
-              </p>
-            </div>
-            {lastUpdate && (
-              <div>
-                <p className='mb-1 text-muted-foreground text-sm'>Updated At</p>
-                <p className='font-medium'>{lastUpdate.toDateString()}</p>
-              </div>
-            )}
-            <div className='flex flex-col gap-2'>
-              <LLMCopyButtonWithViewOptions
-                githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
-                markdownUrl={`/blog.mdx/${params.slug}`}
-              />
-              <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
-            </div>
+      <SectionBody className='flex'>
+        <BlogTOCMinimap />
+        <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
+          <div className='flex min-w-0 flex-1 flex-col'>
+            <BlogTOCPopover />
+            <MdxContent
+              beforeComments={
+                <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
+                  {pageActions}
+                </aside>
+              }
+              comments
+              proseClassName='pt-4'
+              slug={params.slug}
+            >
+              <Mdx components={{ ...mdxComponents, GitHubCode }} />
+            </MdxContent>
+          </div>
+          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y flex flex-col gap-4 p-4 text-sm lg:sticky lg:top-14 lg:h-[calc(100vh-3.5rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+            {pageActions}
           </div>
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
-    </>
+    </BlogTOCProvider>
   )
 }
 
@@ -83,23 +105,23 @@ export async function generateMetadata(props: {
   const image = getBlogPageImage(page)
 
   return createMetadata({
-    title,
+    alternates: {
+      canonical: page.url,
+    },
     description,
     openGraph: {
-      type: 'article',
-      url: `/blog/${page.slugs.join('/')}`,
+      authors: [page.data.author ?? owner],
       images: image.url,
-      publishedTime: new Date(page.data.date).toISOString(),
       modifiedTime: page.data.lastModified
         ? new Date(page.data.lastModified).toISOString()
         : new Date(page.data.date).toISOString(),
-      authors: [page.data.author ?? owner],
+      publishedTime: new Date(page.data.date).toISOString(),
+      type: 'article',
+      url: `/blog/${page.slugs.join('/')}`,
     },
+    title,
     twitter: {
       images: image.url,
-    },
-    alternates: {
-      canonical: page.url,
     },
   })
 }

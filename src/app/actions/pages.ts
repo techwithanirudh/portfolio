@@ -13,16 +13,16 @@ export interface PageEntry {
 export async function getPages(): Promise<PageEntry[]> {
   return [
     ...getPosts().map((page) => ({
+      description: page.data.description,
+      tag: 'blog' as const,
       title: page.data.title ?? 'Untitled',
       url: page.url,
-      tag: 'blog' as const,
-      description: page.data.description,
     })),
     ...getWorkPages().map((page) => ({
+      description: page.data.description,
+      tag: 'projects' as const,
       title: page.data.title ?? 'Untitled',
       url: page.url,
-      tag: 'projects' as const,
-      description: page.data.description,
     })),
   ]
 }

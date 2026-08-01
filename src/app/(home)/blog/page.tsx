@@ -21,8 +21,8 @@ const pageCount = Math.ceil(totalPosts / postsPerPage)
 const getTagsWithCount = () => {
   const tagNames = getTags()
   return tagNames.map((name) => ({
-    name,
     count: getPostsByTag(name).length,
+    name,
   }))
 }
 
@@ -124,13 +124,13 @@ export async function generateMetadata(
     : `Browse page ${pageIndex} of blog posts.`
 
   return createMetadata({
-    title: pageTitle,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     description,
     openGraph: {
       url: canonicalUrl,
     },
-    alternates: {
-      canonical: canonicalUrl,
-    },
+    title: pageTitle,
   })
 }
