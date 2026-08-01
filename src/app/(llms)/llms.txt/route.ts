@@ -1,9 +1,9 @@
 import { description, title } from '@/constants/site'
-import { getSortedByDatePosts, getSortedByDateWork } from '@/lib/source'
+import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
 import { url } from '@/lib/url'
 
 const allPosts = getSortedByDatePosts()
-const allWork = getSortedByDateWork()
+const allWork = getSortedWork()
 
 const content = `# ${title}
 > ${description}

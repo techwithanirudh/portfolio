@@ -3,6 +3,7 @@ import { getSvgSizeProps } from '../utils'
 
 export const GoogleIcon = ({ height, size, width, ...props }: IconProps) => (
   <svg
+    aria-hidden='true'
     focusable='false'
     preserveAspectRatio='xMidYMid'
     viewBox='0 0 256 262'

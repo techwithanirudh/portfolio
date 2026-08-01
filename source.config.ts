@@ -62,6 +62,11 @@ export const work = defineCollections({
     website: z.string().optional(),
     github: z.string().optional(),
     image: z.string().optional(),
+    /**
+     * Pins a project to the front of the work list, lowest first. Anything
+     * without it falls in behind, newest first.
+     */
+    order: z.number().optional(),
   }),
   postprocess: {
     includeProcessedMarkdown: true,

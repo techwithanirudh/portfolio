@@ -1,0 +1,49 @@
+---
+title: Remotely
+description: Drive your Mac's pointer with the TV remote already sitting on the couch. No dongle, no account, nothing leaves the machine.
+date: 2026-07-30
+order: 5
+github: https://github.com/techwithanirudh/remotely
+image: /images/projects/remotely/cover.png
+tags: ['Swift', 'SwiftUI', 'macOS', 'HDMI-CEC', 'Accessibility']
+---
+
+A Mac plugged into a TV is a great setup right up to the moment you need the pointer, and the trackpad is across the room. Remotely fixes that with the remote already in your hand: the arrows move the cursor, the centre button clicks, and nothing else has to be bought or paired.
+
+Getting there took a detour. Macs can hear TV remotes over the HDMI cable, but macOS keeps that channel to itself and hands nothing to third-party apps — the usual door is locked and stays locked. It does, however, narrate every button press into the system log. So Remotely reads the log, works out which button was pressed, and moves the pointer accordingly. A side door, but a reliable one.
+
+The rest is making it feel like a mouse rather than a D-pad. Tapping an arrow nudges a few pixels for small targets; holding one glides, picking up speed the longer you hold. Press Back twice and the arrows scroll instead of move, with a chip by the cursor showing which mode you're in. Twenty actions can be rebound, keyboard shortcuts included. It all runs on the Mac — no account, no network, no analytics.
+
+<Files>
+  <Folder name="Sources" defaultOpen>
+    <Folder name="RemotelyKit" defaultOpen>
+      <File name="CEC" />
+      <File name="Input" />
+      <File name="Model" />
+    </Folder>
+    <Folder name="Remotely">
+      <File name="App" />
+      <File name="Settings" />
+      <File name="Onboarding" />
+    </Folder>
+  </Folder>
+  <Folder name="Tests">
+    <File name="RemotelyKitTests" />
+  </Folder>
+  <File name="Package.swift" />
+</Files>
+
+<Tabs items={['Highlights', 'Stack']}>
+  <Tab value="Highlights">
+    - CEC frames parsed from the `corercd` log stream, since the bus is closed.
+    - Tap-to-nudge and hold-to-glide pointer control with a scroll mode.
+    - Twenty rebindable actions, including recorded keyboard shortcuts.
+    - Fully offline: no account, no network, no analytics.
+  </Tab>
+  <Tab value="Stack">
+    - Swift and SwiftUI, targeting macOS 15+.
+    - `RemotelyKit` core with no UI dependency, plus a menu bar app target.
+    - `CGEvent` input synthesis and Accessibility permissions.
+    - Swift Package Manager, with tests as a plain executable target.
+  </Tab>
+</Tabs>

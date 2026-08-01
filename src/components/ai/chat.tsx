@@ -569,7 +569,7 @@ const Message = memo(function Message({
 })
 
 function AISearchPanel() {
-  const { setContext, open, setOpen } = useAISearchContext()
+  const { open, setOpen } = useAISearchContext()
   const chat = useChatContext()
   const { agent } = useClippy()
 

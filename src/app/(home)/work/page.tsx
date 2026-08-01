@@ -9,12 +9,12 @@ import { WorkCard } from '@/components/work/work-card'
 import { Wrapper } from '@/components/wrapper'
 import { worksPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
-import { getSortedByDateWork } from '@/lib/source'
+import { getSortedWork } from '@/lib/source'
 import { Hero } from './_components/hero'
 
 export const dynamicParams = false
 
-const totalWorks = getSortedByDateWork().length
+const totalWorks = getSortedWork().length
 const pageCount = Math.ceil(totalWorks / worksPerPage)
 
 const Pagination = ({ pageIndex }: { pageIndex: number }) => {
@@ -49,7 +49,7 @@ export default async function Page(props: {
 
   const startIndex = pageIndex * worksPerPage
   const endIndex = startIndex + worksPerPage
-  const work = getSortedByDateWork().slice(startIndex, endIndex)
+  const work = getSortedWork().slice(startIndex, endIndex)
   const currentPage = pageIndex + 1
   const isFirstPage = currentPage === 1
   const canonicalUrl = isFirstPage ? '/work' : `/work?page=${currentPage}`
