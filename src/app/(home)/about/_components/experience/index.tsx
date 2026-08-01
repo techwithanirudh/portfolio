@@ -14,7 +14,7 @@ import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
-    <SplitSection cols='three'>
+    <SplitSection cols='three' id='experience'>
       <SplitSectionSidebar background='dashed'>
         <SplitSectionHeader
           description='A quick timeline of the roles shaping my work.'

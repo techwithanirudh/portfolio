@@ -9,3 +9,10 @@ export interface Skill {
   size: SkillSize
   title: string
 }
+
+export interface TechStackItem {
+  categories: string[]
+  href: string
+  icon: string | { dark: string; light: string }
+  label: string
+}
