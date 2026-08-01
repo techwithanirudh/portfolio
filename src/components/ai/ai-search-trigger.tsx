@@ -1,8 +1,7 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
-import { useAISearchContext } from '@/components/ai/chat'
+import { useAISearchContext } from '@/components/ai/chat-context'
 import { useClippy } from '@/components/clippy'
 import { animations } from '@/components/clippy/constants'
 import { playAnimation } from '@/components/clippy/utils'
@@ -12,7 +11,7 @@ const getPosition = () => ({
   y: window.innerHeight - 100,
 })
 
-function ClippyTriggerInner() {
+export function AISearchTrigger() {
   const { setOpen } = useAISearchContext()
   const { agent } = useClippy()
 
@@ -67,8 +66,3 @@ function ClippyTriggerInner() {
 
   return null
 }
-
-export const AISearchTrigger = dynamic(
-  () => Promise.resolve(ClippyTriggerInner),
-  { ssr: false }
-)
