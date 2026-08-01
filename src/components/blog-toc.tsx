@@ -30,7 +30,7 @@ export function BlogTocInline({ className }: { className?: string }) {
   return (
     <Collapsible
       className={cn(
-        'group rounded-xl bg-card font-sans ring-1 ring-border/60 lg:hidden',
+        'group rounded-xl bg-card font-sans ring-1 ring-border/60 2xl:hidden',
         className
       )}
       data-blog-toc-inline=''
@@ -70,7 +70,10 @@ export function BlogTocMinimap({ className }: { className?: string }) {
 
   return (
     <aside
-      className={cn('hidden w-[72px] shrink-0 lg:block', className)}
+      className={cn(
+        'hidden w-[72px] shrink-0 2xl:absolute 2xl:inset-y-0 2xl:right-full 2xl:block',
+        className
+      )}
       data-blog-toc-minimap=''
     >
       <div className='sticky top-16'>
