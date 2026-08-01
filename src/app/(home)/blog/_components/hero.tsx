@@ -38,7 +38,11 @@ export const Hero = ({
       <div className='flex items-center justify-between gap-4'>
         <span className='flex items-center gap-2'>
           All {totalPosts} Posts{' '}
-          <CurrentPostsCount endIndex={endIndex} startIndex={startIndex} />
+          <CurrentPostsCount
+            endIndex={endIndex}
+            startIndex={startIndex}
+            totalPosts={totalPosts}
+          />
         </span>
 
         <Link

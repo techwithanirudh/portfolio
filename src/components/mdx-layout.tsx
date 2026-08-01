@@ -32,6 +32,7 @@ export const InlineTocBlock = ({ items, className }: InlineTocBlockProps) =>
   )
 
 interface MdxContentProps {
+  beforeComments?: ReactNode
   children: ReactNode
   className?: string
   comments?: boolean
@@ -49,6 +50,7 @@ interface MdxContentProps {
 
 export const MdxContent = ({
   children,
+  beforeComments,
   toc,
   comments,
   slug,
@@ -67,6 +69,7 @@ export const MdxContent = ({
     >
       {children}
     </div>
+    {beforeComments}
     {comments && slug ? (
       <PostComments
         className={cn(
