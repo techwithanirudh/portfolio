@@ -24,7 +24,7 @@ export function TocInline({ children, className, items }: TocInlineProps) {
   return (
     <Collapsible
       className={cn(
-        'not-prose group/inline-toc inset-ring-1 inset-ring-border/60 rounded-xl bg-card font-sans',
+        'not-prose group/inline-toc rounded-xl border border-border bg-card p-0 font-sans',
         className
       )}
     >
