@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
-import { ThemeToggle } from '@/components/sections/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
@@ -38,7 +37,7 @@ export function MenuPanel({
   return (
     <div
       className={cn(
-        'fixed inset-x-4 bottom-20 z-[32] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
+        'fixed inset-x-4 bottom-16 z-[22] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
         menuOpen ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
       )}
     >
@@ -100,7 +99,6 @@ export function MenuPanel({
           >
             <Icons.aiChat />
           </button>
-          <ThemeToggle />
         </div>
       </div>
     </div>

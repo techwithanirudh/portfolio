@@ -24,7 +24,7 @@ export function NavItem({
       aria-current={active ? 'page' : undefined}
       aria-label={label}
       className={cn(
-        'flex size-8 items-center justify-center rounded-full transition-colors',
+        'flex size-8 touch-manipulation items-center justify-center rounded-full transition-colors',
         active
           ? 'bg-primary/10 text-primary'
           : 'text-muted-foreground hover:text-foreground'
