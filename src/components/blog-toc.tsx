@@ -5,12 +5,7 @@ import {
   useActiveAnchor,
   useTOCItems,
 } from 'fumadocs-ui/components/toc'
-import { ChevronDown, Text } from 'lucide-react'
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/components/ui/collapsible'
+import { TocInline } from '@/components/toc-inline'
 import {
   HoverCard,
   HoverCardContent,
@@ -27,37 +22,7 @@ export function BlogTocInline({ className }: { className?: string }) {
     return null
   }
 
-  return (
-    <Collapsible
-      className={cn(
-        'group rounded-xl bg-card font-sans ring-1 ring-border/60 2xl:hidden',
-        className
-      )}
-      data-blog-toc-inline=''
-    >
-      <CollapsibleTrigger className='flex w-full items-center gap-2 rounded-xl py-2.5 pr-2 pl-4 font-medium text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50 [&_svg]:size-4'>
-        <Text className='-translate-x-0.5' />
-        On this page
-        <ChevronDown className='ml-auto shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180' />
-      </CollapsibleTrigger>
-
-      <CollapsibleContent>
-        <ul className='flex flex-col px-4 pb-2'>
-          {items.map((item) => (
-            <li className='flex py-1' key={item.url}>
-              <a
-                className='text-muted-foreground text-sm transition-colors hover:text-accent-foreground data-[depth=3]:pl-4 data-[depth=4]:pl-8'
-                data-depth={item.depth}
-                href={item.url}
-              >
-                {item.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </CollapsibleContent>
-    </Collapsible>
-  )
+  return <TocInline className={cn('2xl:hidden', className)} items={items} />
 }
 
 export function BlogTocMinimap({ className }: { className?: string }) {
