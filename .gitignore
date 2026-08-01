@@ -57,3 +57,6 @@ next-env.d.ts
 
 # local link preview optimization
 public/previews/.content-hash
+
+# scratch checkouts made by agents working in an isolated worktree
+.claude/worktrees/
