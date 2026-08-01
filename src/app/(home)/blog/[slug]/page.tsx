@@ -39,11 +39,11 @@ export default async function Page(props: {
       <BlogTocMobile />
 
       <SectionBody>
-        <article className='flex min-h-full flex-col pt-16 lg:flex-row'>
+        <article className='flex min-h-full flex-col lg:flex-row'>
           <MdxContent
             comments
             hideInlineToc
-            proseClassName='pt-4 lg:pt-0'
+            proseClassName='pt-4'
             slug={params.slug}
             toc={toc}
           >

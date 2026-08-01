@@ -38,13 +38,14 @@ export function BlogTocDesktop({ className }: { className?: string }) {
     <GlassTOC
       container={{
         className: cn(
-          'lg:!grid lg:!fixed lg:!z-40 lg:max-[1799px]:!top-1/2 lg:max-[1799px]:!right-4 lg:max-[1799px]:!left-auto lg:max-[1799px]:!w-6 lg:max-[1799px]:!overflow-clip lg:max-[1799px]:!-translate-y-1/2 lg:max-[1799px]:hover:!w-[240px] lg:max-[1799px]:hover:!p-3 min-[1800px]:!right-auto min-[1800px]:!h-[calc(100vh-12rem)] min-[1800px]:!w-[180px] min-[1800px]:!items-start min-[1800px]:!p-0 min-[1800px]:!translate-y-0 min-[1800px]:![grid-area:auto] hidden',
+          'blog-glass-toc lg:!grid lg:!fixed lg:!z-40 min-[1800px]:!right-auto min-[1800px]:!h-[calc(100vh-12rem)] min-[1800px]:!w-[176px] min-[1800px]:!items-start min-[1800px]:!p-0 min-[1800px]:!translate-y-0 min-[1800px]:![grid-area:auto] hidden',
           className
         ),
         style: {
           left: 'max(1rem, calc((100vw - 1400px) / 2 - 200px))',
           top,
         },
+        tabIndex: 0,
       }}
     />
   )
@@ -62,7 +63,7 @@ export function BlogTocMobile({ className }: { className?: string }) {
     >
       <TOCPopover
         container={{
-          className: cn('top-14 z-[60] mt-16 lg:hidden', className),
+          className: cn('z-[60] lg:hidden', className),
         }}
       />
     </DocsLayout>

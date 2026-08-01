@@ -482,6 +482,46 @@ html > body[data-scroll-locked] {
   }
 }
 
+@media (min-width: 1024px) and (max-width: 1799px) {
+  .blog-glass-toc {
+    top: 50% !important;
+    right: 1rem !important;
+    left: auto !important;
+    grid-template-columns: calc(240px - 1.5rem) !important;
+    align-items: initial !important;
+    width: 1.5rem !important;
+    height: auto !important;
+    max-height: calc(100dvh - 8rem) !important;
+    padding: 0.75rem 0 0.75rem 0.625rem !important;
+    overflow: clip !important;
+    transform: translateY(-50%) !important;
+  }
+
+  .blog-glass-toc:hover,
+  .blog-glass-toc:focus-within {
+    width: 240px !important;
+    padding: 0.75rem !important;
+  }
+
+  .blog-glass-toc > div {
+    align-items: flex-start !important;
+    text-align: start !important;
+  }
+
+  .blog-glass-toc a {
+    flex-direction: row !important;
+  }
+
+  .blog-glass-toc:not(:hover):not(:focus-within) #nd-toc-title {
+    height: 0 !important;
+    opacity: 0 !important;
+  }
+
+  .blog-glass-toc:not(:hover):not(:focus-within) span {
+    opacity: 0 !important;
+  }
+}
+
 @custom-variant retina {
   @media (min-resolution: 2dppx) {
     @slot;
