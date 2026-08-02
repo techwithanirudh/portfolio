@@ -22,26 +22,6 @@ Around that core sit web research through Exa, image generation, and scheduled t
 
 Models are routed through OpenRouter, memory and state live in PostgreSQL, and observability runs locally. The [configuration guide](https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md) walks through setting up each service, since the template only comes alive once the Slack app and credentials exist.
 
-## Code
-
-Here's how it's organized:
-
-<Files>
-  <Folder name="src" defaultOpen>
-    <Folder name="mastra" defaultOpen>
-      <File name="agents" />
-      <File name="chat" />
-      <File name="tools" />
-      <File name="workspace" />
-      <File name="mcp" />
-    </Folder>
-  </Folder>
-  <Folder name="docs">
-    <File name="configuration.md" />
-  </Folder>
-  <File name="slack-manifest.json" />
-</Files>
-
 ## Stack
 
 - Mastra runtime on Bun, TypeScript, and the AI SDK.
