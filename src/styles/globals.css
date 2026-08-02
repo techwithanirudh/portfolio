@@ -72,7 +72,6 @@ html > body[data-scroll-locked] {
 
 @layer base {
   :root {
-    --color-fd-background: #ffffff;
     --radius: 0.5rem;
     --typography-hero-width: 56rem;
     --typography-title-width: 40rem;
@@ -107,7 +106,6 @@ html > body[data-scroll-locked] {
 }
 
 .dark {
-  --color-fd-background: #09090b;
   --color-fd-ring: hsl(234, 100%, 83%);
   --color-fd-primary: hsl(234, 100%, 83%);
   --color-fd-primary-foreground: hsl(240, 7%, 11%);
