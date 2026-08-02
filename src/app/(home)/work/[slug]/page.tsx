@@ -1,13 +1,14 @@
+import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
+import { TOCMinimap, TOCPopover } from '@/components/blog-toc'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
 import { mdxComponents } from '@/components/mdx/components'
 import { GitHubCode } from '@/components/mdx/github-code'
 import { PreviewButton } from '@/components/mdx/preview-button'
-import { InlineTocBlock } from '@/components/mdx-layout'
 import { Section } from '@/components/section'
 import { SectionBody } from '@/components/section-body'
 import { ViewAnimation } from '@/components/view-animation'
@@ -114,27 +115,26 @@ export default async function Page(props: {
   const { body: Mdx, toc } = page.data
 
   return (
-    <>
+    <TOCProvider toc={toc}>
       <Header page={page} />
 
-      <SectionBody>
-        <article className='flex min-h-full flex-col'>
+      <SectionBody className='flex'>
+        <TOCMinimap />
+        <article className='flex min-h-full min-w-0 flex-1 flex-col'>
+          <TOCPopover />
           <ViewAnimation
             delay={0.1}
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <div className='flex flex-1 flex-col gap-4'>
-              <InlineTocBlock items={toc} />
-              <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 pb-4'>
-                <Mdx components={{ ...mdxComponents, GitHubCode }} />
-              </div>
+            <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 pb-4'>
+              <Mdx components={{ ...mdxComponents, GitHubCode }} />
             </div>
           </ViewAnimation>
         </article>
       </SectionBody>
       <WorkJsonLd page={page} />
-    </>
+    </TOCProvider>
   )
 }
 
