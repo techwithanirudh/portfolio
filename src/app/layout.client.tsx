@@ -12,7 +12,7 @@ export function Body({
 
   return (
     <body className={mode}>
-      <div className='relative flex min-h-svh flex-col overflow-x-hidden'>
+      <div className='relative flex min-h-svh flex-col overflow-x-clip'>
         {children}
       </div>
     </body>
