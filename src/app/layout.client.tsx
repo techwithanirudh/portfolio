@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation'
 import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 export function Body({
   children,
@@ -11,10 +12,10 @@ export function Body({
   const mode = useMode()
 
   return (
-    <body className={mode}>
-      <div className='relative flex min-h-svh flex-col overflow-x-clip'>
-        {children}
-      </div>
+    <body
+      className={cn(mode, 'relative flex min-h-svh flex-col overflow-x-hidden')}
+    >
+      {children}
     </body>
   )
 }

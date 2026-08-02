@@ -36,9 +36,9 @@ function NumberedPagination({
 
   return (
     <Pagination>
-      <PaginationContent className='inline-flex w-full gap-0 -space-x-px rtl:space-x-reverse'>
-        {currentPage > 1 && (
-          <PaginationItem>
+      <PaginationContent className='grid w-full grid-cols-[1fr_auto_1fr] items-center gap-0'>
+        <PaginationItem className='flex'>
+          {currentPage > 1 && (
             <Button
               aria-label='Go to previous page'
               className='shadow-none hover:z-10 focus-visible:z-10'
@@ -49,54 +49,56 @@ function NumberedPagination({
             >
               <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
             </Button>
-          </PaginationItem>
-        )}
-
-        <div className='inline-flex w-full justify-center'>
-          {showLeftEllipsis && (
-            <PaginationItem>
-              <Button
-                className='pointer-events-none shadow-none'
-                shape='square'
-                size='icon'
-                variant='ghost'
-              >
-                ...
-              </Button>
-            </PaginationItem>
           )}
+        </PaginationItem>
 
-          {pages.map((page) => (
-            <PaginationItem className='w-max' key={page}>
-              <Button
-                aria-current={page === currentPage ? 'page' : undefined}
-                className='shadow-none hover:z-10 focus-visible:z-10'
-                onClick={handlePageChange(page)}
-                shape='square'
-                size='icon'
-                variant={page === currentPage ? 'default' : 'ghost'}
-              >
-                {page}
-              </Button>
-            </PaginationItem>
-          ))}
+        <PaginationItem className='justify-self-center'>
+          <ul className='inline-flex items-center gap-1 -space-x-px rtl:space-x-reverse'>
+            {showLeftEllipsis && (
+              <PaginationItem>
+                <Button
+                  className='pointer-events-none shadow-none'
+                  shape='square'
+                  size='icon'
+                  variant='ghost'
+                >
+                  ...
+                </Button>
+              </PaginationItem>
+            )}
 
-          {showRightEllipsis && (
-            <PaginationItem>
-              <Button
-                className='pointer-events-none shadow-none'
-                shape='square'
-                size='icon'
-                variant='ghost'
-              >
-                ...
-              </Button>
-            </PaginationItem>
-          )}
-        </div>
+            {pages.map((page) => (
+              <PaginationItem className='w-max' key={page}>
+                <Button
+                  aria-current={page === currentPage ? 'page' : undefined}
+                  className='shadow-none hover:z-10 focus-visible:z-10'
+                  onClick={handlePageChange(page)}
+                  shape='square'
+                  size='icon'
+                  variant={page === currentPage ? 'default' : 'ghost'}
+                >
+                  {page}
+                </Button>
+              </PaginationItem>
+            ))}
 
-        {currentPage < totalPages && (
-          <PaginationItem>
+            {showRightEllipsis && (
+              <PaginationItem>
+                <Button
+                  className='pointer-events-none shadow-none'
+                  shape='square'
+                  size='icon'
+                  variant='ghost'
+                >
+                  ...
+                </Button>
+              </PaginationItem>
+            )}
+          </ul>
+        </PaginationItem>
+
+        <PaginationItem className='flex justify-end'>
+          {currentPage < totalPages && (
             <Button
               aria-label='Go to next page'
               className='shadow-none hover:z-10 focus-visible:z-10'
@@ -111,8 +113,8 @@ function NumberedPagination({
                 strokeWidth={2}
               />
             </Button>
-          </PaginationItem>
-        )}
+          )}
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
   )
