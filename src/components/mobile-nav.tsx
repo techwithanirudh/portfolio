@@ -16,10 +16,18 @@ export function MobileNav() {
 
   return (
     <>
+      <div
+        aria-hidden
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-20 sm:hidden'
+      >
+        <div className='h-16 bg-gradient-to-t from-background to-transparent' />
+        <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
+      </div>
+
       <Presence present={menuOpen}>
         <button
           aria-label='Close menu'
-          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in sm:hidden'
+          className='fixed inset-0 z-[21] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in sm:hidden'
           data-state={menuOpen ? 'open' : 'closed'}
           onClick={closeMenu}
           type='button'
