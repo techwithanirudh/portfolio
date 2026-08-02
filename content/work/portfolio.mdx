@@ -11,7 +11,15 @@ tags: ['Next.js', 'Fumadocs', 'Drizzle', 'MDX', 'TypeScript']
 
 This is the site you're looking at right now. It's a Next.js app that reads its content straight from Markdown files, blog posts and project write-ups alike, with search built on top so both are easy to find.
 
-It also handles the boring-but-useful parts: preview images for social shares, an RSS feed for the blog, and a contact form (plus comments and a newsletter signup) backed by Drizzle and Better Auth.
+## Why it exists
+
+A portfolio is only as good as how easy it is to keep updated. Writing a new post or project should mean adding a Markdown file, not touching a database or a CMS dashboard, so content stays as easy to edit as the rest of the codebase.
+
+## How it works
+
+Fumadocs turns the `content/` folder into typed collections with search indexing built in. On top of that sit the boring-but-useful parts: preview images generated automatically for social shares, an RSS feed for the blog, and a contact form (plus comments and a newsletter signup) backed by Drizzle and Better Auth.
+
+## Code
 
 <Files>
   <Folder name="content" defaultOpen>
@@ -38,15 +46,8 @@ It also handles the boring-but-useful parts: preview images for social shares, a
   </Folder>
 </Files>
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Fumadocs MDX collections for work and blog content.
-    - OG images, RSS feed, and search indexing baked in.
-    - Contact/newsletter workflows with server actions.
-  </Tab>
-  <Tab value="Stack">
-    - Next.js, TypeScript, Tailwind, Radix UI.
-    - Fumadocs MDX + Shiki, Zod validators.
-    - Drizzle ORM, Better Auth, React Email + Resend.
-  </Tab>
-</Tabs>
+## Stack
+
+- Next.js, TypeScript, Tailwind, Radix UI.
+- Fumadocs MDX + Shiki, Zod validators.
+- Drizzle ORM, Better Auth, React Email + Resend.

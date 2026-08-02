@@ -9,17 +9,18 @@ tags: ['Next.js', 'GrapesJS', 'Drizzle ORM', 'NextAuth', 'TailwindCSS']
 
 AniKode lets you build a website by dragging elements onto a canvas instead of writing code. Add pages, place blocks, and edit content directly, with changes showing up live as you work.
 
-Projects save automatically, so you can close the tab and pick a layout back up later. Accounts and sign-in are handled through NextAuth, and the editor itself is built with Next.js, Radix, and Tailwind.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - GrapesJS editor with export, form, and custom-code plugins.
-    - JSON-based project persistence and live preview workflow.
-    - Dashboard UX with editor panels for pages, assets, and settings.
-  </Tab>
-  <Tab value="Stack">
-    - Next.js 14, Tailwind CSS, Radix UI, Framer Motion.
-    - Drizzle ORM + Postgres adapters, NextAuth sessions.
-    - React Hook Form + Zod, React Email + Resend.
-  </Tab>
-</Tabs>
+Most website builders either lock you into rigid templates or expect you to know how to code. AniKode aims for the middle ground: a real drag-and-drop canvas with export and custom-code plugins for when you need more control, without needing a dashboard full of settings just to change some text.
+
+## How it works
+
+Pages, blocks, and assets are all managed from a dashboard-style editor, with a live preview that updates as you edit. Projects are saved as you go and stored as plain JSON, so what you see in the editor is exactly what gets exported.
+
+Accounts and sign-in are handled through NextAuth, and the editor itself is built with Next.js, Radix, and Tailwind.
+
+## Stack
+
+- Next.js 14, Tailwind CSS, Radix UI, Framer Motion.
+- Drizzle ORM + Postgres adapters, NextAuth sessions.
+- React Hook Form + Zod, React Email + Resend.

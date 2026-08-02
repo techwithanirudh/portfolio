@@ -22,6 +22,10 @@ Around that core sit web research through Exa, image generation, and scheduled t
 
 Models are routed through OpenRouter, memory and state live in PostgreSQL, and observability runs locally. The [configuration guide](https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md) walks through setting up each service, since the template only comes alive once the Slack app and credentials exist.
 
+## Code
+
+Here's how it's organized:
+
 <Files>
   <Folder name="src" defaultOpen>
     <Folder name="mastra" defaultOpen>
@@ -38,17 +42,9 @@ Models are routed through OpenRouter, memory and state live in PostgreSQL, and o
   <File name="slack-manifest.json" />
 </Files>
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Slack mentions, DMs, threads, files, and workspace search.
-    - An isolated E2B sandbox per thread, with persistent files and a shell.
-    - Streaming replies with live tool-activity widgets.
-    - Extensible through skills and MCP servers instead of forks.
-  </Tab>
-  <Tab value="Stack">
-    - Mastra runtime on Bun, TypeScript, and the AI SDK.
-    - Slack via the Chat SDK adapter in Socket Mode.
-    - OpenRouter models, Exa search, E2B sandboxes.
-    - PostgreSQL memory and state, with local observability.
-  </Tab>
-</Tabs>
+## Stack
+
+- Mastra runtime on Bun, TypeScript, and the AI SDK.
+- Slack via the Chat SDK adapter in Socket Mode.
+- OpenRouter models, Exa search, E2B sandboxes.
+- PostgreSQL memory and state, with local observability.

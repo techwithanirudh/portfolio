@@ -7,19 +7,18 @@ image: /images/projects/classnotes_buddy/cover.png
 tags: ['Turborepo', 'Supabase', 'Next.js', 'Drizzle']
 ---
 
-Classnotes Buddy lets you upload class notes and share them with a link, with everything synced instantly across your devices. It's built on a Turborepo workspace extending the create-t3-turbo stack, with Supabase handling auth and Drizzle managing the database schema. Mobile support (via Expo) is in progress.
+Classnotes Buddy lets you upload class notes and share them with a link, with everything synced instantly across your devices.
 
-Turbo pipelines handle dev/build/lint/typecheck so the monorepo stays fast as more apps get added to the workspace.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Instant upload and cross-device sync for notes.
-    - Supabase auth with email/OAuth flows and profile triggers.
-    - Drizzle migrations and schema tooling for Postgres.
-  </Tab>
-  <Tab value="Stack">
-    - Turborepo, pnpm workspaces, TypeScript.
-    - Supabase Auth + Postgres, Drizzle ORM.
-    - Next.js web client, with an Expo mobile app in progress.
-  </Tab>
-</Tabs>
+Sharing class notes usually means a group chat full of photos of a whiteboard, or a folder link nobody can find later. This gives notes a proper home: upload once, get a link, and it's synced everywhere you open it.
+
+## How it works
+
+Uploads sync instantly across devices, with Supabase handling auth (email and OAuth) and profile syncing behind the scenes, and Drizzle managing the Postgres schema. It's built on a Turborepo workspace extending the create-t3-turbo stack, with a Next.js web client today and an Expo mobile app in progress.
+
+## Stack
+
+- Turborepo, pnpm workspaces, TypeScript.
+- Supabase Auth + Postgres, Drizzle ORM.
+- Next.js web client, with an Expo mobile app in progress.

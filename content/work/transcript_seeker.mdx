@@ -1,15 +1,23 @@
 ---
 title: Transcript Seeker
-description: Turborepo app with React/Vite frontend, Nitro proxy, Drizzle ORM, and MeetingBaaS integrations.
+description: Upload or join meetings, transcribe them, and chat with your recordings.
 date: 2025-05-02
 github: https://github.com/Meeting-BaaS/transcript-seeker
 image: /images/projects/transcript_seeker/cover.png
 tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
 ---
 
-Transcript Seeker is a Turborepo app for uploading recordings, transcribing them, and exploring the results inside a React + Vite interface. The UI is built around synced playback and transcripts, with a Nitro proxy and Drizzle models behind the scenes to keep data flows structured.
+Transcript Seeker connects to Zoom, Google Meet, and other platforms through the MeetingBaaS API, or you can just upload your own audio or video files.
 
-The product leans on local-first storage with PGLite in the browser and optional Turso/SQLite for persistent calendar data. MeetingBaaS APIs integrate meeting bots, while AI chat and summarization tools make transcripts interactive.
+## Why it exists
+
+Meeting recordings are easy to make and hard to actually use afterward. This gives them a proper interface: synced playback and transcript, search, and an AI you can ask about what was said, instead of scrubbing through a video hoping to find the right moment.
+
+## How it works
+
+The interface syncs playback with the transcript, so clicking any word jumps you to that moment in the recording. MeetingBaaS bots handle joining and recording meetings automatically, while AI chat and summarization tools let you search or explore a transcript conversationally. It's local-first, using PGLite in the browser with optional Turso/SQLite for persistent calendar data, all within a Turborepo workspace with a Nitro proxy and Drizzle ORM behind the scenes.
+
+## Code
 
 <Files>
   <Folder name="apps" defaultOpen>
@@ -26,15 +34,8 @@ The product leans on local-first storage with PGLite in the browser and optional
   <File name="turbo.json" />
 </Files>
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Upload, transcribe, and seek through recordings.
-    - Local-first storage with optional calendar sync.
-    - MeetingBaaS bot integration plus AI chat.
-  </Tab>
-  <Tab value="Stack">
-    - React + Vite, Tailwind, Radix UI.
-    - Nitro proxy, Drizzle ORM, PGLite/Turso.
-    - Turborepo + pnpm workspace tooling.
-  </Tab>
-</Tabs>
+## Stack
+
+- React + Vite, Tailwind, Radix UI.
+- Nitro proxy, Drizzle ORM, PGLite/Turso.
+- Turborepo + pnpm workspace tooling.

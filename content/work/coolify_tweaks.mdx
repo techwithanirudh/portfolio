@@ -9,19 +9,18 @@ image: https://raw.githubusercontent.com/techwithanirudh/coolify-tweaks/dev/apps
 tags: ['Coolify', 'Userstyle', 'Stylus', 'Nitro', 'TurboRepo']
 ---
 
-Coolify Tweaks is a userstyle that cleans up the Coolify self-hosting dashboard: better spacing, typography, and layout throughout. Install it via the Stylus browser extension or userstyles.world, or inject it directly if you're proxying Coolify through something like Traefik.
+Coolify Tweaks is a userstyle that cleans up the Coolify self-hosting dashboard: better spacing, typography, and layout throughout.
 
-Docs walk through each install method with screenshots so you can see exactly what changes before you apply them.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Stylus bundle with theme-aware overrides and layout fixes.
-    - Nitro API serving dynamic CSS builds.
-    - Docs site with install guides, screenshots, and changelog.
-  </Tab>
-  <Tab value="Stack">
-    - TurboRepo, TypeScript, Changesets.
-    - Stylus userstyles + Nitro API.
-    - Docs app with Tailwind UI utilities.
-  </Tab>
-</Tabs>
+Coolify's dashboard is functional but rough around the edges. Rather than fork it, this ships as a userstyle: opinionated overrides you can apply on top of any Coolify instance, without maintaining a custom build.
+
+## How it works
+
+The style package handles spacing, typography, and layout consistency across the dashboard, with theme-aware overrides so it holds up in both light and dark mode. A Nitro API serves the CSS dynamically, and a docs site walks through install: via the Stylus browser extension, userstyles.world, or direct proxy injection if you're already routing Coolify through something like Traefik. Screenshots in the docs show exactly what changes before you apply anything.
+
+## Stack
+
+- TurboRepo, TypeScript, Changesets.
+- Stylus userstyles + Nitro API.
+- Docs app with Tailwind UI utilities.

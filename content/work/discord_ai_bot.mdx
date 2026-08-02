@@ -7,19 +7,18 @@ image: /images/projects/discord_ai_bot/cover.png
 tags: ['Discord', 'AI', 'Bun', 'TypeScript']
 ---
 
-Discord AI Bot answers questions in text channels and can join voice channels to listen and talk back. It comes with web search and memory built in, and new commands can be added without touching the core bot.
+Discord AI Bot answers questions in text channels and can join voice channels to listen and talk back.
 
-It's built with Bun and the Vercel AI SDK, so it isn't locked to one AI provider, and Upstash Redis handles rate-limiting so it holds up under heavy use.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Slash command framework with modular handlers.
-    - Multi-provider AI routing via the Vercel AI SDK.
-    - Voice pipeline with STT/TTS integrations.
-  </Tab>
-  <Tab value="Stack">
-    - Bun, TypeScript, discord.js.
-    - OpenAI/Anthropic/OpenRouter/Google providers.
-    - Upstash Redis, Pino, ESLint/Prettier.
-  </Tab>
-</Tabs>
+Most Discord AI bots are locked to one provider and stop at text. This one is built to swap AI providers freely and treat voice as a first-class input, not an afterthought, while staying easy to extend with new commands.
+
+## How it works
+
+A slash-command framework handles text, backed by the Vercel AI SDK so it can route between OpenAI, Anthropic, OpenRouter, or Google without touching the rest of the bot. Voice channels are handled through a speech-to-text/text-to-speech pipeline, and it comes with web search and memory built in. Upstash Redis handles rate-limiting so it holds up under heavy use.
+
+## Stack
+
+- Bun, TypeScript, discord.js.
+- OpenAI/Anthropic/OpenRouter/Google providers.
+- Upstash Redis, Pino, ESLint/Prettier.

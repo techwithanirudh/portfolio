@@ -9,17 +9,16 @@ tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 
 AnirudhGPT is a small chat app built on top of OpenAI, with sign-in and chat history handled through Firebase. Conversations are saved as you go, so you can close the app and pick up where you left off.
 
-It's an early project, built as a compact Next.js UI rather than a polished product, with Tailwind for styling.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Chat-first UI with reusable message components.
-    - Firebase client + admin setup for Firestore access.
-    - Simple routing split between `app` and `pages`.
-  </Tab>
-  <Tab value="Stack">
-    - Next.js, TypeScript, Tailwind, PostCSS.
-    - Firebase SDKs + Firestore.
-    - Minimal build scripts and config surface.
-  </Tab>
-</Tabs>
+This was one of my earlier projects, built when hosted ChatGPT clones were still novel and I wanted to understand what it actually took to wire a chat UI up to an LLM and keep history around per user, rather than treating it as a black box.
+
+## How it works
+
+The UI is chat-first, built from a small set of reusable message components. Firebase handles both sides: a client SDK for the app itself, and an admin setup for server-side operations, with Firestore as the store behind conversation history. Routing is split between the Next.js `app` and `pages` directories, a byproduct of it being built early and never fully migrated.
+
+## Stack
+
+- Next.js, TypeScript, Tailwind, PostCSS.
+- Firebase SDKs + Firestore.
+- Minimal build scripts and config surface.
