@@ -20,7 +20,7 @@ export function MobileNav() {
         aria-hidden
         className='pointer-events-none fixed inset-x-0 bottom-0 z-20 sm:hidden'
       >
-        <div className='mask-linear-[to_top,var(--background)_25%,transparent] h-(--fade-bottom-height) bg-linear-to-b from-transparent to-background backdrop-blur-[1px]' />
+        <div className='h-16 bg-gradient-to-t from-background to-transparent' />
         <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
       </div>
 

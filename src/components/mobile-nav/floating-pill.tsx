@@ -25,7 +25,7 @@ export function FloatingPill({
 
   return (
     <div className='fixed inset-x-0 bottom-[calc(--spacing(2)+env(safe-area-inset-bottom,0))] z-[22] flex justify-center sm:hidden'>
-      <div className='flex items-center gap-0.5 rounded-xl bg-popover py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 dark:ring-foreground/20'>
+      <div className='flex items-center gap-0.5 rounded-xl bg-popover/80 py-1 pr-1 pl-2.5 shadow-[0_4px_6px_rgba(0,0,0,0.04)] ring ring-border/40 backdrop-blur-xl dark:shadow-[0_0_0_1px_rgba(255,255,255,0.1)] dark:ring-foreground/20'>
         <button
           aria-label='Search'
           className='flex size-8 touch-manipulation items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground'

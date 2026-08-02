@@ -73,7 +73,6 @@ html > body[data-scroll-locked] {
 @layer base {
   :root {
     --color-fd-background: #ffffff;
-    --fade-bottom-height: --spacing(24);
     --radius: 0.5rem;
     --typography-hero-width: 56rem;
     --typography-title-width: 40rem;
