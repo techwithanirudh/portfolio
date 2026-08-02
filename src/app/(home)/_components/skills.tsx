@@ -76,74 +76,73 @@ const Skills = () => (
           {Object.entries(groupByCategory(technologies)).map(
             ([category, items], index) => (
               <ViewAnimation
+                className='divider-bottom-dashed grid items-center gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'
                 delay={0.05 * index}
                 initial={{ opacity: 0, translateY: -6 }}
                 key={category}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >
-                <div className='divider-bottom-dashed grid items-center gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'>
-                  <div className='px-6 text-muted-foreground text-sm sm:pr-0'>
-                    <span
-                      aria-hidden
-                      className='mr-1.5 select-none font-mono text-muted-foreground/50'
-                    >
-                      {(index + 1).toString().padStart(2, '0')}
-                    </span>
-                    {category}
-                  </div>
+                <div className='px-6 text-muted-foreground text-sm sm:pr-0'>
+                  <span
+                    aria-hidden
+                    className='mr-1.5 select-none font-mono text-muted-foreground/50'
+                  >
+                    {(index + 1).toString().padStart(2, '0')}
+                  </span>
+                  {category}
+                </div>
 
-                  <ul className='flex flex-wrap gap-1.5 px-6 sm:pl-0'>
-                    {items.map(({ label, icon, href }) => (
-                      <li className='flex' key={label}>
-                        <Badge
-                          asChild
-                          className='gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs transition-transform will-change-transform hover:-rotate-4 hover:scale-105'
-                          variant='outline'
+                <ul className='flex flex-wrap gap-1.5 px-6 sm:pl-0'>
+                  {items.map(({ label, icon, href }) => (
+                    <li className='flex' key={label}>
+                      <Badge
+                        asChild
+                        className='gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs transition-transform will-change-transform hover:-rotate-4 hover:scale-105'
+                        variant='outline'
+                      >
+                        <a
+                          href={href}
+                          rel='noopener noreferrer'
+                          target='_blank'
                         >
-                          <a
-                            href={href}
-                            rel='noopener noreferrer'
-                            target='_blank'
-                          >
-                            {typeof icon === 'string' ? (
+                          {typeof icon === 'string' ? (
+                            <Image
+                              alt=''
+                              aria-hidden
+                              className='size-3.5'
+                              height={14}
+                              src={icon}
+                              unoptimized
+                              width={14}
+                            />
+                          ) : (
+                            <>
                               <Image
                                 alt=''
                                 aria-hidden
-                                className='size-3.5'
+                                className='size-3.5 dark:hidden'
                                 height={14}
-                                src={icon}
+                                src={icon.light}
                                 unoptimized
                                 width={14}
                               />
-                            ) : (
-                              <>
-                                <Image
-                                  alt=''
-                                  aria-hidden
-                                  className='size-3.5 dark:hidden'
-                                  height={14}
-                                  src={icon.light}
-                                  unoptimized
-                                  width={14}
-                                />
-                                <Image
-                                  alt=''
-                                  aria-hidden
-                                  className='hidden size-3.5 dark:block'
-                                  height={14}
-                                  src={icon.dark}
-                                  unoptimized
-                                  width={14}
-                                />
-                              </>
-                            )}
-                            {label}
-                          </a>
-                        </Badge>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                              <Image
+                                alt=''
+                                aria-hidden
+                                className='hidden size-3.5 dark:block'
+                                height={14}
+                                src={icon.dark}
+                                unoptimized
+                                width={14}
+                              />
+                            </>
+                          )}
+                          {label}
+                        </a>
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
               </ViewAnimation>
             )
           )}
