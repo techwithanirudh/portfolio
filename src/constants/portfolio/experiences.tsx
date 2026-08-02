@@ -48,10 +48,11 @@ export const experiences: ExperienceItemType[] = [
     positions: [
       {
         description:
-          'Co-authored a research paper on privacy challenges for autonomous vehicles.',
+          'Co-authored a research paper on [privacy challenges for autonomous vehicles](https://osf.io/preprints/osf/mtfpy_v1).',
         employmentPeriod: { end: '05.2022', start: '04.2022' },
         icon: <Icons.flask />,
         id: '1',
+        isExpanded: true,
         skills: ['Research', 'Autonomous Vehicles', 'Privacy Engineering'],
         title: 'Research Collaboration',
       },

@@ -1,6 +1,6 @@
 ---
 title: Maskio
-description: KaboomJS arcade game bundled with esbuild and served from a small Node/Express runtime.
+description: A retro platformer where you jump levels, dodge hazards, and collect coins.
 date: 2021-08-10
 website: https://maskio.techwithanirudh.com/
 github: https://github.com/techwithanirudh/Maskio
@@ -8,19 +8,18 @@ image: /images/projects/maskio/cover.jpg
 tags: ['KaboomJS', 'Game Development', 'Node.js']
 ---
 
-Maskio is a KaboomJS browser game that keeps the runtime lean while still shipping a complete gameplay loop. The project uses esbuild to bundle assets quickly and a small Express server to serve the build during development and production.
+Maskio is a pixel-art platformer: jump across platforms, dodge spiky hazards, and collect coins across multiple worlds.
 
-Gameplay logic stays inside Kaboom's scene system, while the Node scripts handle build, dev, and static serving. This keeps the pipeline simple: iterate in dev with nodemon, generate a bundle with `build.js`, and serve the output with a minimal Express server.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - KaboomJS scenes, sprites, and collision handling.
-    - esbuild bundle pipeline for fast builds.
-    - Express server for local runtime and static delivery.
-  </Tab>
-  <Tab value="Stack">
-    - KaboomJS, Node.js, Express.
-    - esbuild, nodemon.
-    - Lightweight scripts for build and serve.
-  </Tab>
-</Tabs>
+This was a project to learn KaboomJS by building something with an actual gameplay loop, rather than a single tech demo, complete with scenes, sprites, and collision handling.
+
+## How it works
+
+Levels are built from KaboomJS scenes with sprite-based collision detection for platforms, hazards, and coins. It works with keyboard controls on desktop and touch controls on mobile. esbuild bundles everything quickly, and a small Express server serves the build in both development and production.
+
+## Stack
+
+- KaboomJS, Node.js, Express.
+- esbuild, nodemon.
+- Lightweight scripts for build and serve.

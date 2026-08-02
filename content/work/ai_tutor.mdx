@@ -1,51 +1,26 @@
 ---
 title: AI Tutor
-description: Next.js 16 AI learning workspace with chat, quizzes, flashcards, and voice sessions.
+description: AI-powered learning app with chat, quizzes, flashcards, and voice study sessions.
 date: 2023-11-20
 website: https://tutor.techwithanirudh.com
 image: /images/projects/ai_tutor/cover.png
 tags: ['Next.js', 'AI', 'Drizzle', 'NextAuth', 'LiveKit']
 ---
 
-AI Tutor is a Next.js 16 learning workspace that turns chat into a guided study loop. The UI blends chat, document editing, quizzes, and flashcards, while the AI layer is routed through a shared prompt registry that chooses between OpenAI, Anthropic, and Google models.
+AI Tutor is a learning app that turns studying into a chat. Ask it a question and it can walk you through the answer, quiz you on it, or turn it into flashcards, so the same material gets reinforced a few different ways instead of being read once and forgotten.
 
-The app separates auth and chat flows, persists history through Drizzle on Neon, and runs NextAuth with Google/Resend/Keycloak providers. Voice sessions run on LiveKit with transcript syncing and noise filtering, so the same study flow works in text or audio mode.
+## Why it exists
 
-<Files>
-  <Folder name="src" defaultOpen>
-    <Folder name="app">
-      <Folder name="(chat)">
-        <Folder name="api">
-          <Folder name="quiz">
-            <File name="route.ts" />
-          </Folder>
-        </Folder>
-      </Folder>
-    </Folder>
-    <Folder name="server">
-      <Folder name="db">
-        <File name="schema.ts" />
-        <File name="queries.ts" />
-      </Folder>
-    </Folder>
-    <Folder name="lib">
-      <Folder name="ai">
-        <File name="prompts.ts" />
-        <File name="models.ts" />
-      </Folder>
-    </Folder>
-  </Folder>
-</Files>
+Most study tools make you pick one format upfront: flashcards, or quizzes, or notes. But the way you want to review a topic changes depending on how well you already know it. This ties chat, documents, quizzes, and flashcards together so you can move between them without starting over.
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Chat workspace that generates documents, quizzes, and flashcards.
-    - Versioned document tools with suggestions and diff helpers.
-    - LiveKit voice rooms with transcript-aware UI.
-  </Tab>
-  <Tab value="Stack">
-    - Next.js 16 App Router, Tailwind, Radix UI.
-    - Drizzle ORM + Neon, NextAuth, React Email.
-    - AI SDK providers with typed model registry.
-  </Tab>
-</Tabs>
+## How it works
+
+A chat workspace sits at the center, with versioned documents you can edit and get suggestions on. From any topic you can generate a quiz or a set of flashcards without leaving the conversation. Voice sessions let you go through a study session out loud instead of typing, with a transcript-aware UI keeping track of where you are.
+
+Sign-in is handled through NextAuth, history is saved so you can pick a topic back up later, and the underlying AI can switch between a few different model providers.
+
+## Stack
+
+- Next.js 16 App Router, Tailwind, Radix UI.
+- Drizzle ORM + Neon, NextAuth, React Email.
+- AI SDK providers with a typed model registry.
