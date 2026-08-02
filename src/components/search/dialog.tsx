@@ -137,36 +137,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
     if (sameRouteTarget) {
       scrollToHashTarget(sameRouteTarget, prefersReducedMotion)
-      return
     }
-
-    // Next.js scrolls to the hash once the new route mounts, but content
-    // that renders in afterwards (Mermaid diagrams, images) can still
-    // shift the page and leave the target in the wrong spot. Keep
-    // re-correcting while the page settles, unless the user scrolls.
-    let stopped = false
-    const stop = () => {
-      if (stopped) {
-        return
-      }
-      stopped = true
-      observer.disconnect()
-      window.removeEventListener('wheel', stop)
-      window.removeEventListener('touchmove', stop)
-      clearTimeout(timeoutId)
-    }
-
-    // Uses native scrollIntoView here, not scrollToHashTarget/lenis: this
-    // page's Lenis instance is about to unmount as part of the route
-    // change, so the `lenis` reference above goes stale mid-navigation.
-    const observer = new MutationObserver(() => {
-      const target = document.querySelector(hash)
-      target?.scrollIntoView({ behavior: 'auto', block: 'start' })
-    })
-    observer.observe(document.body, { childList: true, subtree: true })
-    window.addEventListener('wheel', stop, { once: true, passive: true })
-    window.addEventListener('touchmove', stop, { once: true, passive: true })
-    const timeoutId = setTimeout(stop, 3000)
   }
 
   const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
