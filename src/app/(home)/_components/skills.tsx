@@ -76,7 +76,7 @@ const Skills = () => (
           {Object.entries(groupByCategory(technologies)).map(
             ([category, items], index) => (
               <ViewAnimation
-                className='divider-bottom-dashed grid gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'
+                className='divider-bottom-dashed grid items-center gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'
                 delay={0.05 * index}
                 initial={{ opacity: 0, translateY: -6 }}
                 key={category}
