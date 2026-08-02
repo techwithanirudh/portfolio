@@ -101,6 +101,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html
       className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      data-scroll-behavior='smooth'
       lang='en'
       suppressHydrationWarning
     >
