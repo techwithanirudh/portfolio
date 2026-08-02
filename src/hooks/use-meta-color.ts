@@ -16,9 +16,16 @@ export function useMetaColor() {
   )
 
   const setMetaColor = useCallback((color: string) => {
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', color)
+    const meta = document.querySelector('meta[name="theme-color"]')
+    meta?.setAttribute('content', color)
+
+    // Safari doesn't reliably resample theme-color from a bare attribute
+    // mutation -- it tends to only repaint the chrome on the next "real"
+    // reflow (scroll, visibility change, animation). Forcing a synchronous
+    // layout read here nudges it to pick up the change immediately instead
+    // of waiting for an unrelated repaint elsewhere on the page.
+    // biome-ignore lint/complexity/noVoid: intentional layout read to force a reflow
+    void document.body.offsetHeight
   }, [])
 
   return { metaColor, setMetaColor }
