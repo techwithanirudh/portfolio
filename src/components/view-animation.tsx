@@ -36,8 +36,8 @@ export const ViewAnimation = ({
     <motion.div
       animate={animate}
       className={cn(
-        'motion-reduce:transform-none! motion-reduce:opacity-100! motion-reduce:[filter:none]!',
-        className
+        className,
+        'motion-reduce:transform-none! motion-reduce:opacity-100! motion-reduce:[filter:none]!'
       )}
       initial={initialState}
       transition={{ delay: normalizedDelay, duration: duration ?? 0.3 }}

@@ -121,10 +121,18 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     router.push(url)
 
     if (sameRouteTarget) {
+      const prefersReducedMotion = window.matchMedia(
+        '(prefers-reduced-motion: reduce)'
+      ).matches
+
       if (lenis) {
-        lenis.scrollTo(sameRouteTarget as HTMLElement)
+        lenis.scrollTo(sameRouteTarget as HTMLElement, {
+          immediate: prefersReducedMotion,
+        })
       } else {
-        sameRouteTarget.scrollIntoView({ behavior: 'smooth' })
+        sameRouteTarget.scrollIntoView({
+          behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        })
       }
     }
   }
