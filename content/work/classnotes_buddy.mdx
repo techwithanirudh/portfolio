@@ -1,25 +1,25 @@
 ---
 title: Classnotes Buddy
-description: Turborepo T3 stack with Supabase auth and shared web + mobile notes workflows.
+description: A web app for uploading and sharing class notes, free to use.
 date: 2023-01-18
 website: https://notes.techwithanirudh.com/
 image: /images/projects/classnotes_buddy/cover.png
-tags: ['Turborepo', 'Supabase', 'Next.js', 'Expo', 'Drizzle']
+tags: ['Turborepo', 'Supabase', 'Next.js', 'Drizzle']
 ---
 
-Classnotes Buddy is a Turborepo refactor that ships a web app and an Expo mobile client from the same workspace. The project extends the create-t3-turbo stack with Supabase Auth, Drizzle-managed schemas, and shared tooling so both apps can use a consistent notes workflow.
+Classnotes Buddy lets you upload class notes and share them with a link, with everything synced instantly across your devices. It's built on a Turborepo workspace extending the create-t3-turbo stack, with Supabase handling auth and Drizzle managing the database schema. Mobile support (via Expo) is in progress.
 
-The repo documents the Supabase setup in detail, including auth redirect rules, SQL triggers to sync user profiles, and environment templates for local and preview deployments. Turbo pipelines handle dev/build/lint/typecheck so the monorepo stays fast even with multiple apps.
+Turbo pipelines handle dev/build/lint/typecheck so the monorepo stays fast as more apps get added to the workspace.
 
 <Tabs items={['Highlights', 'Stack']}>
   <Tab value="Highlights">
-    - Web + mobile apps in one workspace (`apps/nextjs` and `apps/expo`).
+    - Instant upload and cross-device sync for notes.
     - Supabase auth with email/OAuth flows and profile triggers.
     - Drizzle migrations and schema tooling for Postgres.
   </Tab>
   <Tab value="Stack">
     - Turborepo, pnpm workspaces, TypeScript.
     - Supabase Auth + Postgres, Drizzle ORM.
-    - Expo mobile app + Next.js web client.
+    - Next.js web client, with an Expo mobile app in progress.
   </Tab>
 </Tabs>

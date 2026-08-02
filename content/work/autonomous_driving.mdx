@@ -1,6 +1,6 @@
 ---
 title: Solving Autonomous Driving Privacy Challenges using AI
-description: Python OpenCV + MediaPipe prototype exploring face-mesh triangulation for privacy in AV datasets.
+description: A face-swapping prototype for protecting privacy in autonomous-driving datasets.
 date: 2022-04-15
 website: https://osf.io/mtfpy/
 github: https://github.com/techwithanirudh/AutonomousDrivingPaperCode/
@@ -8,9 +8,9 @@ image: /images/projects/autonomous_driving/cover.png
 tags: ['Research', 'AI', 'Autonomous Driving', 'Privacy']
 ---
 
-This research prototype explores privacy-preserving preprocessing for autonomous driving datasets. It uses OpenCV and MediaPipe Face Mesh to triangulate faces, then warps triangle regions to reduce raw facial fidelity while keeping geometry consistent for downstream modeling.
+Self-driving cars record a lot of video, and that video usually has bystanders' faces in it. This research prototype swaps those faces out for a different one, so the footage can still be used to train driving models without keeping anyone's real identity in the data.
 
-The pipeline downloads a base face, extracts landmarks, applies the triangulation topology, and uses affine transforms to blend a new face region. Live webcam capture makes it easier to test the mesh transformation in real time and validate how much identity signal is removed.
+It works by mapping facial landmarks with MediaPipe, then warping a replacement face onto the same geometry with OpenCV, so the pose and expression still line up naturally. It also supports live webcam input, which made it easier to test the face swap in real time while building it.
 
 <Tabs items={['Highlights', 'Stack']}>
   <Tab value="Highlights">
