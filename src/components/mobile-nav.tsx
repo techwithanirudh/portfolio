@@ -3,7 +3,7 @@
 import { Presence } from '@radix-ui/react-presence'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { useState } from 'react'
-import { useAISearchContext } from '@/components/ai/chat'
+import { useAISearchContext } from '@/components/ai/chat-context'
 import { FloatingPill } from '@/components/mobile-nav/floating-pill'
 import { MenuPanel } from '@/components/mobile-nav/menu-panel'
 

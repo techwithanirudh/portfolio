@@ -9,15 +9,11 @@ import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
   type ComponentProps,
   createContext,
-  type Dispatch,
   memo,
-  type ReactNode,
-  type SetStateAction,
   type SyntheticEvent,
   use,
   useEffect,
   useEffectEvent,
-  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -28,6 +24,8 @@ import {
   getToolsRequiringConfirmation,
   type ToolName,
 } from '@/app/api/chat/utils/tools/confirmation'
+import { AISearchTrigger } from '@/components/ai/ai-search-trigger'
+import { useAISearchContext } from '@/components/ai/chat-context'
 import {
   AIContactForm,
   AIContactFormSkeleton,
@@ -49,34 +47,18 @@ import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
 
-const AISearchContext = createContext<{
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  chat: UseChatHelpers<MyUIMessage>
-  context: string | null
-  setContext: Dispatch<SetStateAction<string | null>>
-} | null>(null)
+const ChatContext = createContext<UseChatHelpers<MyUIMessage> | null>(null)
 
-export function useAISearchContext() {
-  const ctx = use(AISearchContext)
+export function useChatContext() {
+  const ctx = use(ChatContext)
   if (!ctx) {
-    throw new Error('useAISearchContext must be used within AISearch')
+    throw new Error('useChatContext must be used within AISearchHeavy')
   }
   return ctx
 }
 
-export function useChatContext() {
-  const ctx = use(AISearchContext)
-  if (!ctx) {
-    throw new Error('useChatContext must be used within AISearch')
-  }
-  return ctx.chat
-}
-
-export function AISearch({ children }: { children: ReactNode }) {
+export function AISearchHeavy() {
   const isMobile = useIsMobile()
-  const [open, setOpen] = useState(false)
-  const [context, setContext] = useState<string | null>(null)
   const playError = useSound(errorSound)
   const playSuccess = useSound(success)
   const playDelete = useSound(deleteSound)
@@ -99,27 +81,17 @@ export function AISearch({ children }: { children: ReactNode }) {
 
   return (
     <ClippyProvider agent={isMobile ? undefined : Rover}>
-      <AISearchContext
-        value={useMemo(
-          () => ({
-            chat,
-            context,
-            open,
-            setContext,
-            setOpen,
-          }),
-          [chat, context, open]
-        )}
-      >
-        {children}
+      <ChatContext value={chat}>
+        <AISearchTrigger />
         <AISearchPanel />
-      </AISearchContext>
+      </ChatContext>
     </ClippyProvider>
   )
 }
 
 function Header() {
-  const { setOpen, chat, setContext } = useAISearchContext()
+  const { setOpen, setContext } = useAISearchContext()
+  const chat = useChatContext()
   const playNewChat = useSound(toggleOn)
 
   return (
