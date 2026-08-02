@@ -91,7 +91,7 @@ html > body[data-scroll-locked] {
   }
 
   html {
-    @apply bg-background scroll-smooth accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-track-transparent;
+    @apply scroll-smooth accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-track-transparent;
   }
 
   [id] {
