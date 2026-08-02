@@ -3,6 +3,7 @@ import { useSound } from '@web-kits/audio/react'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
+import { useLenis } from 'lenis/react'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
@@ -38,6 +39,7 @@ const NAV_SOUND_THROTTLE_MS = 60
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
   const router = useRouter()
+  const lenis = useLenis()
   const { setTheme, theme } = useTheme()
   const playOpen = useSound(notification)
   const playConfirm = useSound(click)
@@ -111,6 +113,33 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
   }
 
+  const scrollToHashTarget = (target: Element, immediate: boolean) => {
+    if (lenis) {
+      lenis.scrollTo(target as HTMLElement, { immediate })
+    } else {
+      target.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth' })
+    }
+  }
+
+  const navigateToUrl = (url: string) => {
+    const hashIndex = url.indexOf('#')
+    const hash = hashIndex === -1 ? null : url.slice(hashIndex)
+    const sameRouteTarget = hash ? document.querySelector(hash) : null
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches
+
+    router.push(url)
+
+    if (!hash) {
+      return
+    }
+
+    if (sameRouteTarget) {
+      scrollToHashTarget(sameRouteTarget, prefersReducedMotion)
+    }
+  }
+
   const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
     playConfirm()
 
@@ -127,13 +156,13 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       return
     }
 
-    router.push(item.url)
+    navigateToUrl(item.url)
   }
 
   const go = (url: string) => {
     playConfirm()
     close()
-    router.push(url)
+    navigateToUrl(url)
   }
 
   const renderCommandItem = (item: CommandItemData) => (

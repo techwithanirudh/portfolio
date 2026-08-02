@@ -39,14 +39,16 @@ const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
 interface SplitSectionProps extends VariantProps<typeof splitSectionVariants> {
   children: ReactNode
   className?: string
+  id?: string
 }
 
 export const SplitSection = ({
   children,
   cols,
   className,
+  id,
 }: SplitSectionProps) => (
-  <Section>
+  <Section id={id}>
     <div className={cn(splitSectionVariants({ cols }), className)}>
       {children}
     </div>

@@ -7,6 +7,20 @@ import { SectionHeader } from '@/components/sections/section-header'
 import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
 import { skills, technologies } from '@/constants/portfolio/skills'
+import type { TechStackItem } from '@/types'
+
+const groupByCategory = (items: TechStackItem[]) => {
+  const grouped: Record<string, TechStackItem[]> = {}
+
+  for (const item of items) {
+    for (const category of item.categories) {
+      grouped[category] ??= []
+      grouped[category].push(item)
+    }
+  }
+
+  return grouped
+}
 
 const featureItemVariants = cva(
   'flex flex-col justify-between gap-28 p-6 hover:bg-card/80 sm:gap-34 md:gap-40 lg:gap-46',
@@ -24,7 +38,7 @@ const featureItemVariants = cva(
 )
 
 const Skills = () => (
-  <Section className='relative w-full pt-10'>
+  <Section className='relative w-full pt-10' id='stack'>
     <div className='flex flex-col gap-10'>
       <SectionHeader
         align='left'
@@ -58,58 +72,81 @@ const Skills = () => (
           ))}
         </div>
 
-        <ViewAnimation
-          className='divider-top-dashed px-6 py-6'
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <div className='flex flex-wrap gap-2'>
-            {technologies.map(({ label, icon, href }) => (
-              <Badge
-                asChild
-                className='gap-2 rounded-md px-3 py-1 text-xs transition-transform will-change-transform hover:-rotate-4 hover:scale-105 sm:text-sm'
-                key={label}
-                variant='outline'
+        <div className='divider-top-dashed'>
+          {Object.entries(groupByCategory(technologies)).map(
+            ([category, items], index) => (
+              <ViewAnimation
+                className='divider-bottom-dashed grid items-center gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'
+                delay={0.05 * index}
+                initial={{ opacity: 0, translateY: -6 }}
+                key={category}
+                whileInView={{ opacity: 1, translateY: 0 }}
               >
-                <a href={href} rel='noopener noreferrer' target='_blank'>
-                  {typeof icon === 'string' ? (
-                    <Image
-                      alt=''
-                      aria-hidden
-                      className='size-4'
-                      height={16}
-                      src={icon}
-                      unoptimized
-                      width={16}
-                    />
-                  ) : (
-                    <>
-                      <Image
-                        alt=''
-                        aria-hidden
-                        className='size-4 dark:hidden'
-                        height={16}
-                        src={icon.light}
-                        unoptimized
-                        width={16}
-                      />
-                      <Image
-                        alt=''
-                        aria-hidden
-                        className='hidden size-4 dark:block'
-                        height={16}
-                        src={icon.dark}
-                        unoptimized
-                        width={16}
-                      />
-                    </>
-                  )}
-                  {label}
-                </a>
-              </Badge>
-            ))}
-          </div>
-        </ViewAnimation>
+                <div className='px-6 text-muted-foreground text-sm sm:pr-0'>
+                  <span
+                    aria-hidden
+                    className='mr-1.5 select-none font-mono text-muted-foreground/50'
+                  >
+                    {(index + 1).toString().padStart(2, '0')}
+                  </span>
+                  {category}
+                </div>
+
+                <ul className='flex flex-wrap gap-1.5 px-6 sm:pl-0'>
+                  {items.map(({ label, icon, href }) => (
+                    <li className='flex' key={label}>
+                      <Badge
+                        asChild
+                        className='gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs transition-transform will-change-transform hover:-rotate-4 hover:scale-105'
+                        variant='outline'
+                      >
+                        <a
+                          href={href}
+                          rel='noopener noreferrer'
+                          target='_blank'
+                        >
+                          {typeof icon === 'string' ? (
+                            <Image
+                              alt=''
+                              aria-hidden
+                              className='size-3.5'
+                              height={14}
+                              src={icon}
+                              unoptimized
+                              width={14}
+                            />
+                          ) : (
+                            <>
+                              <Image
+                                alt=''
+                                aria-hidden
+                                className='size-3.5 dark:hidden'
+                                height={14}
+                                src={icon.light}
+                                unoptimized
+                                width={14}
+                              />
+                              <Image
+                                alt=''
+                                aria-hidden
+                                className='hidden size-3.5 dark:block'
+                                height={14}
+                                src={icon.dark}
+                                unoptimized
+                                width={14}
+                              />
+                            </>
+                          )}
+                          {label}
+                        </a>
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              </ViewAnimation>
+            )
+          )}
+        </div>
       </div>
     </div>
   </Section>

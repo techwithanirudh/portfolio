@@ -13,6 +13,12 @@ export const commands: CommandGroup[] = [
         url: '/about',
       },
       {
+        icon: <Icons.experience className='size-4' />,
+        kind: 'page',
+        title: 'Experience',
+        url: '/about#experience',
+      },
+      {
         icon: <Icons.mail className='size-4' />,
         kind: 'page',
         title: 'Contact',

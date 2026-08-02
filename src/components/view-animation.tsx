@@ -1,7 +1,8 @@
 'use client'
 
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import type { ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
 interface ViewAnimationProps {
   animate?: Record<string, string | number>
@@ -25,12 +26,6 @@ export const ViewAnimation = ({
   className,
   children,
 }: ViewAnimationProps) => {
-  const shouldReduceMotion = useReducedMotion()
-
-  if (shouldReduceMotion) {
-    return children
-  }
-
   const initialState = blur ? { filter: 'blur(4px)', ...initial } : initial
   const whileInViewState = blur
     ? { filter: 'blur(0px)', ...whileInView }
@@ -40,7 +35,10 @@ export const ViewAnimation = ({
   return (
     <motion.div
       animate={animate}
-      className={className}
+      className={cn(
+        className,
+        'motion-reduce:transform-none! motion-reduce:opacity-100! motion-reduce:[filter:none]!'
+      )}
       initial={initialState}
       transition={{ delay: normalizedDelay, duration: duration ?? 0.3 }}
       viewport={{ amount: 0.1, once: true }}
