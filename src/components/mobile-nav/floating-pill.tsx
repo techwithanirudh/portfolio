@@ -24,11 +24,11 @@ export function FloatingPill({
   ]
 
   return (
-    <div className='fixed inset-x-0 bottom-4 z-[32] flex justify-center sm:hidden'>
-      <div className='flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'>
+    <div className='fixed inset-x-0 bottom-[calc(--spacing(2)+env(safe-area-inset-bottom,0))] z-[22] flex justify-center sm:hidden'>
+      <div className='flex items-center gap-0.5 rounded-xl bg-popover py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 dark:ring-foreground/20'>
         <button
           aria-label='Search'
-          className='flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground'
+          className='flex size-8 touch-manipulation items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground'
           onClick={onSearchOpen}
           type='button'
         >
@@ -52,7 +52,7 @@ export function FloatingPill({
         <button
           aria-label='Toggle menu'
           className={cn(
-            'relative flex size-8 items-center justify-center rounded-full transition-colors',
+            'relative flex size-8 touch-manipulation items-center justify-center rounded-full transition-colors',
             menuOpen
               ? 'bg-primary/10 text-primary'
               : 'text-muted-foreground hover:text-foreground'

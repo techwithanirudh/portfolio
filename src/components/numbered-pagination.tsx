@@ -36,9 +36,9 @@ function NumberedPagination({
 
   return (
     <Pagination>
-      <PaginationContent className='inline-flex w-full gap-0 -space-x-px rtl:space-x-reverse'>
+      <PaginationContent className='relative flex w-full justify-center gap-0 -space-x-px rtl:space-x-reverse'>
         {currentPage > 1 && (
-          <PaginationItem>
+          <PaginationItem className='absolute left-0'>
             <Button
               aria-label='Go to previous page'
               className='shadow-none hover:z-10 focus-visible:z-10'
@@ -96,7 +96,7 @@ function NumberedPagination({
         </div>
 
         {currentPage < totalPages && (
-          <PaginationItem>
+          <PaginationItem className='absolute right-0'>
             <Button
               aria-label='Go to next page'
               className='shadow-none hover:z-10 focus-visible:z-10'

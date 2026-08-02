@@ -5,6 +5,8 @@ import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { META_THEME_COLORS } from '@/constants/site'
+import { useMetaColor } from '@/hooks/use-meta-color'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
@@ -36,18 +38,41 @@ export function ThemeToggle({
   className?: string
   mode?: 'light-dark' | 'light-dark-system'
 }) {
-  const { resolvedTheme, setTheme, theme } = useTheme()
+  const { resolvedTheme, setTheme, systemTheme, theme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const playToggle = useSound(toggleOn)
+  const { setMetaColor } = useMetaColor()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
+  useEffect(() => {
+    setMetaColor(
+      resolvedTheme === 'dark'
+        ? META_THEME_COLORS.dark
+        : META_THEME_COLORS.light
+    )
+  }, [resolvedTheme, setMetaColor])
+
   useThemeShortcut()
 
   const handleChangeTheme = async (next: Theme) => {
     playToggle()
+
+    let nextResolvedTheme = next
+    if (next === 'system') {
+      nextResolvedTheme = window.matchMedia('(prefers-color-scheme: dark)')
+        .matches
+        ? 'dark'
+        : 'light'
+    }
+
+    setMetaColor(
+      nextResolvedTheme === 'dark'
+        ? META_THEME_COLORS.dark
+        : META_THEME_COLORS.light
+    )
 
     function update() {
       setTheme(next)
@@ -75,31 +100,29 @@ export function ThemeToggle({
   )
 
   if (mode === 'light-dark') {
-    const value = mounted ? resolvedTheme : null
-
     return (
       <button
-        aria-label={'Toggle Theme'}
-        className={container}
+        aria-label='Toggle theme'
+        className={cn(
+          'relative flex size-8 touch-manipulation items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground',
+          className
+        )}
         data-theme-toggle=''
-        onClick={() =>
-          handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-        }
+        onClick={() => {
+          const next = resolvedTheme === 'dark' ? 'light' : 'dark'
+          handleChangeTheme(next === systemTheme ? 'system' : next)
+        }}
         type='button'
       >
-        {full.map(([key, Icon]) => {
-          if (key === 'system') {
-            return null
-          }
-
-          return (
-            <Icon
-              className={itemVariants({ active: value === key })}
-              fill='currentColor'
-              key={key}
-            />
-          )
-        })}
+        <span aria-hidden className='absolute pointer-fine:hidden size-12' />
+        <Icons.moon
+          aria-hidden
+          className={cn('hidden size-4 dark:block', !mounted && 'invisible')}
+        />
+        <Icons.sun
+          aria-hidden
+          className={cn('size-4 dark:hidden', !mounted && 'invisible')}
+        />
       </button>
     )
   }
