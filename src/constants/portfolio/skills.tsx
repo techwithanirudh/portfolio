@@ -5,6 +5,11 @@ const base = '/images/tech-stack'
 const s = (file: string) => `${base}/${file}`
 const t = (light: string, dark: string) => ({ dark: s(dark), light: s(light) })
 
+// Icons pulled live from svgl.app / simpleicons.org instead of vendoring local copies.
+const svgl = (file: string) => `https://svgl.app/library/${file}`
+const simpleIcon = (slug: string, color: string) =>
+  `https://cdn.simpleicons.org/${slug}/${color}`
+
 export const skills: Skill[] = [
   {
     description:
@@ -130,6 +135,12 @@ export const technologies: TechStackItem[] = [
   },
   {
     categories: ['Workflow & AI'],
+    href: 'https://vercel.com',
+    icon: { dark: svgl('vercel_dark.svg'), light: svgl('vercel.svg') },
+    label: 'Vercel',
+  },
+  {
+    categories: ['Workflow & AI'],
     href: 'https://claude.ai',
     icon: s('claude-ai-icon.svg'),
     label: 'Claude',
@@ -147,9 +158,30 @@ export const technologies: TechStackItem[] = [
     label: 'Codex',
   },
   {
+    categories: ['Analytics'],
+    href: 'https://posthog.com',
+    icon: svgl('posthog.svg'),
+    label: 'PostHog',
+  },
+  {
+    categories: ['Analytics'],
+    href: 'https://umami.is',
+    icon: {
+      dark: simpleIcon('umami', 'ffffff'),
+      light: simpleIcon('umami', '000000'),
+    },
+    label: 'Umami',
+  },
+  {
     categories: ['Design'],
     href: 'https://www.figma.com',
     icon: s('figma.svg'),
     label: 'Figma',
+  },
+  {
+    categories: ['Design'],
+    href: 'https://paper.design',
+    icon: svgl('paper.svg'),
+    label: 'Paper',
   },
 ]
