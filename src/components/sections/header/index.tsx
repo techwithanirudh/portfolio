@@ -179,9 +179,6 @@ export const Header = ({
             </ul>
           </ViewAnimation>
         </div>
-        <div className='ml-auto sm:hidden'>
-          <ThemeToggle />
-        </div>
       </div>
       <ul className='ms-auto -me-1.5 hidden flex-row items-center sm:flex lg:hidden'>
         {searchToggle.enabled !== false &&
