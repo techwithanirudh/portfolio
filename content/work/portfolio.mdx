@@ -1,6 +1,6 @@
 ---
 title: Portfolio
-description: Next.js portfolio powered by Fumadocs MDX content, typed metadata, and a lightweight contact pipeline.
+description: My personal site, with a blog, project showcase, guestbook, and an AI chat that knows the site.
 date: 2026-01-12
 order: 2
 website: https://www.techwithanirudh.com
@@ -9,44 +9,18 @@ image: /images/projects/portfolio/cover.png
 tags: ['Next.js', 'Fumadocs', 'Drizzle', 'MDX', 'TypeScript']
 ---
 
-Portfolio is a Next.js App Router site that treats MDX as the primary content source for work and blog entries. The project leans on Fumadocs for collections, search indexing, and schema validation, then layers in OG image generation, RSS feeds, and structured metadata to make the content shareable.
+This is my personal site: where I write, show what I've built, and let people leave a note in the guestbook. You're looking at it right now.
 
-The UI stack uses Tailwind and Radix patterns for cards, dialogs, and layout sections, while Drizzle and Better Auth provide the scaffolding for comments and newsletter flows. Everything is split into focused modules so content, metadata, and UI can evolve independently.
+## Why it exists
 
-<Files>
-  <Folder name="content" defaultOpen>
-    <Folder name="work">
-      <File name="portfolio.mdx" />
-    </Folder>
-    <Folder name="blog">
-      <File name="*.mdx" />
-    </Folder>
-  </Folder>
-  <Folder name="src" defaultOpen>
-    <Folder name="lib">
-      <Folder name="source">
-        <File name="work.ts" />
-        <File name="blog.ts" />
-      </Folder>
-      <File name="metadata.ts" />
-    </Folder>
-    <Folder name="app">
-      <Folder name="api">
-        <File name="search/route.ts" />
-      </Folder>
-    </Folder>
-  </Folder>
-</Files>
+Most personal sites are a static resume that goes stale after a month. I wanted mine to actually be worth coming back to: a blog I'd keep writing in because publishing is just adding a Markdown file, a guestbook so visitors leave something behind instead of just reading and leaving, and enough small extras (an AI chat that can answer questions about my work, a uses page, a colophon) that it feels like a real place rather than a template with my name swapped in.
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Fumadocs MDX collections for work and blog content.
-    - OG images, RSS feed, and search indexing baked in.
-    - Contact/newsletter workflows with server actions.
-  </Tab>
-  <Tab value="Stack">
-    - Next.js, TypeScript, Tailwind, Radix UI.
-    - Fumadocs MDX + Shiki, Zod validators.
-    - Drizzle ORM, Better Auth, React Email + Resend.
-  </Tab>
-</Tabs>
+## How it works
+
+Blog posts and project write-ups both live as Markdown, turned into typed, searchable collections by Fumadocs. The guestbook and comments run through Drizzle and Better Auth, so visitors can sign in and leave a message or reply to a post. There's an AI chat that's aware of the site's own content, so you can ask it about a project instead of digging through pages yourself. Around that sit the smaller things: OG images generated automatically for social shares, an RSS feed for the blog, and a contact form backed by React Email and Resend.
+
+## Stack
+
+- Next.js, TypeScript, Tailwind, Radix UI.
+- Fumadocs MDX + Shiki, Zod validators.
+- Drizzle ORM, Better Auth, React Email + Resend.

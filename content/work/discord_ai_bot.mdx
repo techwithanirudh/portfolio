@@ -1,25 +1,24 @@
 ---
 title: Discord AI Bot
-description: Bun-powered Discord bot with Vercel AI SDK integrations, voice support, and modular tooling.
+description: A Discord bot with AI chat, voice support, and web search.
 date: 2025-10-21
 github: https://github.com/techwithanirudh/discord-ai-bot
 image: /images/projects/discord_ai_bot/cover.png
 tags: ['Discord', 'AI', 'Bun', 'TypeScript']
 ---
 
-Discord AI Bot is a Bun-based TypeScript runtime that pairs discord.js with the Vercel AI SDK. The bot is designed to swap AI providers easily and supports both text and voice flows, with optional speech tooling layered into the same command pipeline.
+Discord AI Bot answers questions in text channels and can join voice channels to listen and talk back.
 
-The runtime keeps command registration, event handling, and AI tool execution modular so new skills can be added without touching the core. Voice features rely on Discord's voice stack plus Deepgram and ElevenLabs, while Upstash Redis is used to rate-limit and protect long-running requests.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Slash command framework with modular handlers.
-    - Multi-provider AI routing via the Vercel AI SDK.
-    - Voice pipeline with STT/TTS integrations.
-  </Tab>
-  <Tab value="Stack">
-    - Bun, TypeScript, discord.js.
-    - OpenAI/Anthropic/OpenRouter/Google providers.
-    - Upstash Redis, Pino, ESLint/Prettier.
-  </Tab>
-</Tabs>
+Most Discord AI bots are locked to one provider and stop at text. This one is built to swap AI providers freely and treat voice as a first-class input, not an afterthought, while staying easy to extend with new commands.
+
+## How it works
+
+A slash-command framework handles text, backed by the Vercel AI SDK so it can route between OpenAI, Anthropic, OpenRouter, or Google without touching the rest of the bot. Voice channels are handled through a speech-to-text/text-to-speech pipeline, and it comes with web search and memory built in. Upstash Redis handles rate-limiting so it holds up under heavy use.
+
+## Stack
+
+- Bun, TypeScript, discord.js.
+- OpenAI/Anthropic/OpenRouter/Google providers.
+- Upstash Redis, Pino, ESLint/Prettier.

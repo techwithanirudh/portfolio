@@ -1,25 +1,24 @@
 ---
 title: AnirudhGPT
-description: Next.js chat UI with Firebase client/admin setup and a lightweight prompt workflow.
+description: An OpenAI-powered chat app with saved conversation history and sign-in.
 date: 2023-04-05
 github: https://github.com/techwithanirudh/ChatGPT-With-Memory
 image: /images/projects/anirudh_gpt/cover.jpg
 tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 ---
 
-AnirudhGPT is a compact Next.js chat UI that wires Firebase on the client and admin sides. The app mixes App Router and legacy pages, which keeps the UI modern while preserving a straightforward routing structure for chat views and assets.
+AnirudhGPT is a small chat app built on top of OpenAI, with sign-in and chat history handled through Firebase. Conversations are saved as you go, so you can close the app and pick up where you left off.
 
-Firebase handles the data layer, with Firestore as the primary store and admin access configured for server-side operations. The UI is intentionally lightweight, using Tailwind for layout and a small component set so the chat flow stays fast to iterate.
+## Why it exists
 
-<Tabs items={['Highlights', 'Stack']}>
-  <Tab value="Highlights">
-    - Chat-first UI with reusable message components.
-    - Firebase client + admin setup for Firestore access.
-    - Simple routing split between `app` and `pages`.
-  </Tab>
-  <Tab value="Stack">
-    - Next.js, TypeScript, Tailwind, PostCSS.
-    - Firebase SDKs + Firestore.
-    - Minimal build scripts and config surface.
-  </Tab>
-</Tabs>
+This was one of my earlier projects, built when hosted ChatGPT clones were still novel and I wanted to understand what it actually took to wire a chat UI up to an LLM and keep history around per user, rather than treating it as a black box.
+
+## How it works
+
+The UI is chat-first, built from a small set of reusable message components. Firebase handles both sides: a client SDK for the app itself, and an admin setup for server-side operations, with Firestore as the store behind conversation history. Routing is split between the Next.js `app` and `pages` directories, a byproduct of it being built early and never fully migrated.
+
+## Stack
+
+- Next.js, TypeScript, Tailwind, PostCSS.
+- Firebase SDKs + Firestore.
+- Minimal build scripts and config surface.

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-05-13T07:53:02.082Z",
+  "generated": "2026-08-02T13:07:39.897Z",
   "previews": {
     "ac8bc5b8d08d": {
       "generatedAt": "2026-05-13T07:45:44.634Z",
@@ -137,28 +137,12 @@
       "url": "https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss",
       "width": 1200
     },
-    "cb9875639394": {
-      "generatedAt": "2026-05-13T07:49:06.663Z",
-      "height": 630,
-      "screenshotPath": "/previews/cb9875639394.jpeg",
-      "status": "success",
-      "url": "http://github.com/imdevarsh",
-      "width": 1200
-    },
     "710b564caf6c": {
       "generatedAt": "2026-05-13T07:49:20.025Z",
       "height": 630,
       "screenshotPath": "/previews/710b564caf6c.jpeg",
       "status": "success",
       "url": "https://ai-sdk.dev/",
-      "width": 1200
-    },
-    "4aebea249e7a": {
-      "generatedAt": "2026-05-13T07:49:22.142Z",
-      "height": 630,
-      "screenshotPath": "/previews/4aebea249e7a.jpeg",
-      "status": "success",
-      "url": "https://docs.slack.dev/ai/",
       "width": 1200
     },
     "d837814b3e6a": {
@@ -223,14 +207,6 @@
       "screenshotPath": "/previews/fc13252fcf80.jpeg",
       "status": "success",
       "url": "https://pi.dev/",
-      "width": 1200
-    },
-    "b0cd4dc55392": {
-      "generatedAt": "2026-05-13T07:50:01.890Z",
-      "height": 630,
-      "screenshotPath": "/previews/b0cd4dc55392.jpeg",
-      "status": "success",
-      "url": "https://kibty.town/",
       "width": 1200
     },
     "b7b6824c62df": {
@@ -338,8 +314,8 @@
       "width": 1200
     },
     "18288a8a634d": {
-      "errorMessage": "HTTP 503",
-      "generatedAt": "2026-05-13T07:51:20.937Z",
+      "errorMessage": "goto: net::ERR_CONNECTION_RESET at https://diary.techwithanirudh.com/\nCall log:\n\u001b[2m  - navigating to \"https://diary.techwithanirudh.com/\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "generatedAt": "2026-08-02T13:07:39.842Z",
       "height": 630,
       "screenshotPath": "/previews/18288a8a634d.jpeg",
       "status": "failed",
@@ -400,6 +376,51 @@
       "screenshotPath": "/previews/321711601ea2.jpeg",
       "status": "success",
       "url": "https://github.com/techwithanirudh/coolify-tweaks",
+      "width": 1200
+    },
+    "0ca6bee2db41": {
+      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/techwithanirudh/mastra-slack-agent-template\nCall log:\n\u001b[2m  - navigating to \"https://github.com/techwithanirudh/mastra-slack-agent-template\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "generatedAt": "2026-08-02T13:07:07.052Z",
+      "height": 630,
+      "screenshotPath": "/previews/0ca6bee2db41.jpeg",
+      "status": "failed",
+      "url": "https://github.com/techwithanirudh/mastra-slack-agent-template",
+      "width": 1200
+    },
+    "b9126ce9c4d1": {
+      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/imdevarsh\nCall log:\n\u001b[2m  - navigating to \"https://github.com/imdevarsh\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "generatedAt": "2026-08-02T13:06:36.854Z",
+      "height": 630,
+      "screenshotPath": "/previews/b9126ce9c4d1.jpeg",
+      "status": "failed",
+      "url": "https://github.com/imdevarsh",
+      "width": 1200
+    },
+    "e957b346cb8e": {
+      "errorMessage": "goto: net::ERR_CONNECTION_RESET at https://chat-sdk.dev/\nCall log:\n\u001b[2m  - navigating to \"https://chat-sdk.dev/\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "generatedAt": "2026-08-02T13:07:02.535Z",
+      "height": 630,
+      "screenshotPath": "/previews/e957b346cb8e.jpeg",
+      "status": "failed",
+      "url": "https://chat-sdk.dev/",
+      "width": 1200
+    },
+    "976382ced949": {
+      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md\nCall log:\n\u001b[2m  - navigating to \"https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "generatedAt": "2026-08-02T13:07:10.603Z",
+      "height": 630,
+      "screenshotPath": "/previews/976382ced949.jpeg",
+      "status": "failed",
+      "url": "https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md",
+      "width": 1200
+    },
+    "ffcdc169a659": {
+      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/techwithanirudh/remotely\nCall log:\n\u001b[2m  - navigating to \"https://github.com/techwithanirudh/remotely\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "generatedAt": "2026-08-02T13:07:14.135Z",
+      "height": 630,
+      "screenshotPath": "/previews/ffcdc169a659.jpeg",
+      "status": "failed",
+      "url": "https://github.com/techwithanirudh/remotely",
       "width": 1200
     }
   }
