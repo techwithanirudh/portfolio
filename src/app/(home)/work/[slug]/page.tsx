@@ -122,15 +122,9 @@ export default async function Page(props: {
         <TOCMinimap />
         <article className='flex min-h-full min-w-0 flex-1 flex-col'>
           <TOCPopover />
-          <ViewAnimation
-            delay={0.1}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 p-4'>
-              <Mdx components={{ ...mdxComponents, GitHubCode }} />
-            </div>
-          </ViewAnimation>
+          <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 p-4'>
+            <Mdx components={{ ...mdxComponents, GitHubCode }} />
+          </div>
         </article>
       </SectionBody>
       <WorkJsonLd page={page} />

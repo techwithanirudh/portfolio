@@ -49,7 +49,7 @@ export function TOCMinimap({ className }: { className?: string }) {
       <div className='sticky top-14'>
         <HoverCard closeDelay={100} openDelay={100}>
           <HoverCardTrigger asChild>
-            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-4 pb-3 pl-6'>
+            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-7 pb-3 pl-6'>
               {items.map((item) => (
                 <div
                   aria-hidden
