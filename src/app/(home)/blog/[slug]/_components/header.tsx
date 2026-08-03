@@ -1,7 +1,7 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as motion from 'motion/react-client'
 import { BlurImage } from '@/components/blur-image'
-import { TagCard } from '@/components/features/blog/tag-card'
+import { TagCard } from '@/components/features/blog'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage as MDXPage } from '@/lib/source'

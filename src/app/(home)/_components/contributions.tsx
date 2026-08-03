@@ -10,7 +10,7 @@ import {
   ContributionGraphFooter,
   ContributionGraphLegend,
   ContributionGraphTotalCount,
-} from '@/components/features/contributions/contribution-graph'
+} from '@/components/features/contributions'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import {

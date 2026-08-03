@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { PostCard } from '@/components/features/blog/post-card'
+import { PostCard } from '@/components/features/blog'
 import { Section } from '@/components/layout/sections'
 import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { ViewAnimation } from '@/components/view-animation'

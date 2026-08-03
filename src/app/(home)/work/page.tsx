@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import { WorkCard } from '@/components/features/work/work-card'
+import { WorkCard } from '@/components/features/work'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { Wrapper } from '@/components/layout/wrapper'

@@ -1,6 +1,6 @@
 'use client'
 
-import { WorkExperience } from '@/components/features/work/work-experience'
+import { WorkExperience } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
 import {
   SplitSection,

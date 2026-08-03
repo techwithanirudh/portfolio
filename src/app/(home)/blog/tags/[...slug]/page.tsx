@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
-import { PostCard } from '@/components/features/blog/post-card'
+import { PostCard } from '@/components/features/blog'
 import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'

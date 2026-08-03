@@ -1,4 +1,4 @@
-import { UserButton } from '@/components/features/auth/user-button'
+import { UserButton } from '@/components/features/auth'
 import { Clock } from '@/components/layout/footer/clock'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { ViewAnimation } from '@/components/view-animation'
