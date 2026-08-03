@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { TagCard } from '@/components/features/blog/tag-card'
 import { CollectionPageJsonLd } from '@/components/json-ld'
-import { SectionBody } from '@/components/layout/sections/section-body'
+import { SectionBody } from '@/components/layout/sections/body'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
 import { title as homeTitle } from '@/constants/site'

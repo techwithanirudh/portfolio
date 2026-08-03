@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type React from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/layout/sections/section'
+import { Section } from '@/components/layout/sections'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 

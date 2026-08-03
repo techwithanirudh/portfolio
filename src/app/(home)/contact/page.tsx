@@ -4,7 +4,7 @@ import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
-} from '@/components/layout/sections/split-section'
+} from '@/components/layout/sections/split'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
 import { createMetadata } from '@/lib/metadata'

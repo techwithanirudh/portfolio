@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import { Section } from './sections/section'
+import { Section } from './index'
 
 interface SeparatorProps {
   className?: string

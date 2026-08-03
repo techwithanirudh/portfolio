@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { ProfilePageJsonLd } from '@/components/json-ld'
-import Separator from '@/components/layout/separator'
+import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { description as homeDescription } from '@/constants/site'

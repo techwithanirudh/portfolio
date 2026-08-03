@@ -5,8 +5,8 @@ import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAISearchContext } from '@/components/features/assistant/chat'
-import { FloatingPill } from '@/components/layout/header/mobile/floating-pill'
-import { MenuPanel } from '@/components/layout/header/mobile/menu-panel'
+import { MenuPanel } from '@/components/layout/header/mobile/menu'
+import { FloatingPill } from '@/components/layout/header/mobile/pill'
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)

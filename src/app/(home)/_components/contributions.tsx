@@ -12,7 +12,7 @@ import {
   ContributionGraphTotalCount,
 } from '@/components/features/contributions/contribution-graph'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/layout/sections/section'
+import { Section } from '@/components/layout/sections'
 import {
   Tooltip,
   TooltipContent,

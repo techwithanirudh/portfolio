@@ -1,9 +1,9 @@
-import { SectionHeader } from '@/components/layout/sections/section-header'
+import { SectionHeader } from '@/components/layout/sections/header'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
-} from '@/components/layout/sections/split-section'
+} from '@/components/layout/sections/split'
 import {
   Accordion,
   AccordionContent,

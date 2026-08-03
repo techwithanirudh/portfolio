@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { PostComments } from '@/app/(home)/blog/[slug]/page.client'
-import { Section } from '@/components/layout/sections/section'
-import { SectionBody } from '@/components/layout/sections/section-body'
+import { Section } from '@/components/layout/sections'
+import { SectionBody } from '@/components/layout/sections/body'
 import { cn } from '@/lib/utils'
 
 interface MdxLayoutProps {
