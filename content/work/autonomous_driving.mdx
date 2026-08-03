@@ -12,9 +12,9 @@ This research project replaces faces in self-driving car videos. The goal is to 
 
 ## How it works
 
-MediaPipe Face Mesh finds facial landmarks on the original and replacement faces. OpenCV uses those landmarks to warp the replacement face into the same position. The project also supports a live webcam for testing.
+MediaPipe Face Mesh finds landmarks on the original and replacement faces. Those landmarks are split into triangles, and OpenCV warps each replacement triangle onto the original face. This keeps the pose and expression aligned. The project also supports a live webcam for testing.
 
 ## Stack
 
 - Python, OpenCV, MediaPipe, NumPy.
-- Simple scripts for capture and mesh tooling.
+- Python scripts for capture and mesh tooling.

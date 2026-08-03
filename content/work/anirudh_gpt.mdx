@@ -7,14 +7,13 @@ image: /images/projects/anirudh_gpt/cover.jpg
 tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 ---
 
-AnirudhGPT is an AI chat app that uses the OpenAI API. You can sign in, save conversations, and come back to them later.
+AnirudhGPT is an AI chat app that uses the OpenAI API. You can sign in, save conversations, and come back to them later. It was an early project for learning how an AI chat app works from the UI to the database.
 
 ## How it works
 
-The app is built from small message components. Firebase handles sign-in and Firestore stores the conversation history. It uses both the Next.js `app` and `pages` directories because it was built before I moved everything to the App Router.
+The chat UI uses reusable message components. Firebase handles sign-in, and Firestore stores conversation history. The app also has a Firebase Admin setup for server-side operations. It uses both the Next.js `app` and `pages` directories because it was built before the move to the App Router.
 
 ## Stack
 
 - Next.js, TypeScript, Tailwind, PostCSS.
 - Firebase SDKs + Firestore.
-- Minimal build scripts and config surface.
