@@ -82,27 +82,123 @@ function TOCPopoverContent({ className }: { className?: string }) {
       </CollapsibleTrigger>
 
       <CollapsibleContent>
-        <ul className='flex max-h-[50vh] flex-col overflow-y-auto px-4 pb-2 md:px-6'>
-          {items.map((item) => (
-            <li className='flex py-1' key={item.id}>
-              <a
-                className={cn(
-                  'line-clamp-2 w-full text-muted-foreground text-sm transition-colors hover:text-foreground',
-                  item.active && 'text-foreground',
-                  'data-[depth=3]:pl-4 data-[depth=4]:pl-8'
-                )}
-                data-active={item.active}
-                data-depth={item.original.depth}
-                href={item.original.url}
-              >
-                {item.original.title}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <TOCList items={items} />
       </CollapsibleContent>
     </Collapsible>
   )
+}
+
+function TOCList({ items }: { items: ReturnType<typeof useItems> }) {
+  return (
+    <ul className='flex max-h-[50vh] flex-col overflow-y-auto px-4 pb-2 md:px-6'>
+      {items.map((item, index) => {
+        const isFirst = index === 0
+        const isLast = index === items.length - 1
+        const currentLineOffset = getLineOffset(item.original.depth)
+        const previousLineOffset = isFirst
+          ? currentLineOffset
+          : getLineOffset(
+              items[index - 1]?.original.depth ?? item.original.depth
+            )
+        const nextLineOffset = isLast
+          ? currentLineOffset
+          : getLineOffset(
+              items[index + 1]?.original.depth ?? item.original.depth
+            )
+
+        return (
+          <li
+            className={cn(
+              'prose relative py-1.5 text-sm',
+              isFirst && 'pt-0',
+              isLast && 'pb-0'
+            )}
+            key={item.id}
+          >
+            <TOCTrack
+              currentLineOffset={currentLineOffset}
+              nextLineOffset={nextLineOffset}
+              previousLineOffset={previousLineOffset}
+            />
+            <a
+              className={cn(
+                'relative block scroll-m-4 text-muted-foreground transition-colors hover:text-foreground',
+                item.active && 'text-foreground'
+              )}
+              data-active={item.active}
+              data-depth={item.original.depth}
+              href={item.original.url}
+              style={{
+                paddingInlineStart: getItemOffset(item.original.depth),
+              }}
+            >
+              {item.original.title}
+            </a>
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
+function TOCTrack({
+  currentLineOffset,
+  nextLineOffset,
+  previousLineOffset,
+}: {
+  currentLineOffset: number
+  nextLineOffset: number
+  previousLineOffset: number
+}) {
+  return (
+    <svg
+      aria-hidden
+      className={cn(
+        'absolute inset-s-0 -top-1.5 bottom-0 -z-1 h-[calc(100%+--spacing(1.5))] rtl:-scale-x-100',
+        currentLineOffset !== nextLineOffset && 'bottom-1.5 h-full'
+      )}
+      style={{ width: Math.max(previousLineOffset, currentLineOffset) + 9 }}
+    >
+      {previousLineOffset !== currentLineOffset && (
+        <path
+          className='stroke-foreground/10'
+          d={`M ${previousLineOffset + 0.5} 0 C ${previousLineOffset + 0.5} 8 ${currentLineOffset + 0.5} 4 ${currentLineOffset + 0.5} 12`}
+          fill='none'
+          strokeWidth='1'
+        />
+      )}
+      <line
+        className='stroke-foreground/10'
+        strokeWidth='1'
+        x1={currentLineOffset + 0.5}
+        x2={currentLineOffset + 0.5}
+        y1={previousLineOffset === currentLineOffset ? '6' : '12'}
+        y2='100%'
+      />
+    </svg>
+  )
+}
+
+const BASE_LINE_OFFSET = 8
+
+function getItemOffset(depth: number) {
+  if (depth <= 2) {
+    return 12 + BASE_LINE_OFFSET
+  }
+  if (depth === 3) {
+    return 24 + BASE_LINE_OFFSET
+  }
+  return 36 + BASE_LINE_OFFSET
+}
+
+function getLineOffset(depth: number) {
+  if (depth <= 2) {
+    return BASE_LINE_OFFSET
+  }
+  if (depth === 3) {
+    return 8 + BASE_LINE_OFFSET
+  }
+  return 16 + BASE_LINE_OFFSET
 }
 
 function ProgressCircle({
