@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Section } from '@/components/layout/sections/section'
+import { Section } from '@/components/layout/sections'
 import { cn } from '@/lib/utils'
 
 interface SectionBodyProps {

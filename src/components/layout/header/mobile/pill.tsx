@@ -1,7 +1,7 @@
 'use client'
 
 import { Icons } from '@/components/icons/icons'
-import { NavItem } from '@/components/layout/header/mobile/nav-item'
+import { NavItem } from '@/components/layout/header/mobile/item'
 import { cn } from '@/lib/utils'
 
 export function FloatingPill({

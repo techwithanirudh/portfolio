@@ -2,8 +2,8 @@
 
 import { cva } from 'class-variance-authority'
 import Image from 'next/image'
-import { Section } from '@/components/layout/sections/section'
-import { SectionHeader } from '@/components/layout/sections/section-header'
+import { Section } from '@/components/layout/sections'
+import { SectionHeader } from '@/components/layout/sections/header'
 import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
 import { skills, technologies } from '@/constants/portfolio/skills'

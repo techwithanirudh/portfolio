@@ -1,10 +1,10 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import type { ReactNode } from 'react'
-import { Section } from '@/components/layout/sections/section'
+import { Section } from '@/components/layout/sections'
 import {
   SectionHeader,
   type SectionHeaderProps,
-} from '@/components/layout/sections/section-header'
+} from '@/components/layout/sections/header'
 import { cn } from '@/lib/utils'
 
 const splitSectionVariants = cva('grid divide-y divide-dashed divide-border', {
