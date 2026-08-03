@@ -5,7 +5,7 @@ import { SoundProvider } from '@web-kits/audio/react'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import Analytics from '@/components/analytics'
-import { AISearch, AISearchTrigger } from '@/components/features/assistant'
+import { Assistant, AssistantTrigger } from '@/components/features/assistant'
 import { MobileNav } from '@/components/layout/header/mobile'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -19,7 +19,7 @@ export function Provider({
 }): React.ReactElement {
   return (
     <SoundProvider>
-      <AISearch>
+      <Assistant>
         <ProgressProvider
           color='var(--color-primary)'
           delay={200}
@@ -35,9 +35,9 @@ export function Provider({
             <NuqsAdapter>{children}</NuqsAdapter>
           </TooltipProvider>
         </ProgressProvider>
-        <AISearchTrigger />
+        <AssistantTrigger />
         <MobileNav />
-      </AISearch>
+      </Assistant>
       <Analytics />
       <Toaster position='top-center' />
       <TailwindIndicator />

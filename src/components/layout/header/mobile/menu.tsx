@@ -11,12 +11,12 @@ import { cn } from '@/lib/utils'
 export function MenuPanel({
   open,
   menuId,
-  onAIChatOpen,
+  onAssistantOpen,
   onClose,
 }: {
   open: boolean
   menuId: string
-  onAIChatOpen: () => void
+  onAssistantOpen: () => void
   onClose: () => void
 }) {
   const pathname = usePathname()
@@ -99,9 +99,9 @@ export function MenuPanel({
         </div>
         <div className='flex items-center gap-1'>
           <button
-            aria-label='Ask AI'
+            aria-label='Open assistant'
             className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
-            onClick={onAIChatOpen}
+            onClick={onAssistantOpen}
             type='button'
           >
             <Icons.aiChat />

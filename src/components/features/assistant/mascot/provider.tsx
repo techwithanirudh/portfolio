@@ -12,28 +12,28 @@ import {
 } from 'react'
 
 type AgentLoaders = Parameters<typeof initAgent>[0]
-export type ClippyAgent = Awaited<ReturnType<typeof initAgent>>
+export type MascotAgent = Awaited<ReturnType<typeof initAgent>>
 
-const ClippyContext = createContext<
-  { agent: ClippyAgent | undefined } | undefined
+const MascotContext = createContext<
+  { agent: MascotAgent | undefined } | undefined
 >(undefined)
 
-export function useClippy() {
-  const ctx = useContext(ClippyContext)
+export function useMascot() {
+  const ctx = useContext(MascotContext)
   if (!ctx) {
-    throw new Error('useClippy must be used within ClippyProvider')
+    throw new Error('useMascot must be used within MascotProvider')
   }
   return ctx
 }
 
-interface ClippyProviderProps {
+interface MascotProviderProps {
   agent?: AgentLoaders
   children?: ReactNode
 }
 
-export function ClippyProvider({ children, agent }: ClippyProviderProps) {
-  const [currentAgent, setCurrentAgent] = useState<ClippyAgent | undefined>()
-  const instance = useRef<ClippyAgent | null>(null)
+export function MascotProvider({ children, agent }: MascotProviderProps) {
+  const [currentAgent, setCurrentAgent] = useState<MascotAgent | undefined>()
+  const instance = useRef<MascotAgent | null>(null)
 
   useEffect(() => {
     if (!agent) {
@@ -46,7 +46,7 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
       .then(({ initAgent }) =>
         initAgent({ ...agent, sound: () => Promise.resolve({ default: {} }) })
       )
-      .then((loaded: ClippyAgent) => {
+      .then((loaded: MascotAgent) => {
         if (cancelled) {
           loaded.dispose()
           return
@@ -55,7 +55,7 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
         setCurrentAgent(loaded)
       })
       .catch((error: unknown) => {
-        console.error('Failed to load Clippy:', error)
+        console.error('Failed to load mascot:', error)
       })
 
     return () => {
@@ -92,6 +92,6 @@ export function ClippyProvider({ children, agent }: ClippyProviderProps) {
   const value = useMemo(() => ({ agent: currentAgent }), [currentAgent])
 
   return (
-    <ClippyContext.Provider value={value}>{children}</ClippyContext.Provider>
+    <MascotContext.Provider value={value}>{children}</MascotContext.Provider>
   )
 }

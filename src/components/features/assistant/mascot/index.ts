@@ -1,1 +1,1 @@
-export { ClippyProvider, useClippy } from './provider'
+export { MascotProvider, useMascot } from './provider'

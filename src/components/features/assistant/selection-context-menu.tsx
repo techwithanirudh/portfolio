@@ -17,14 +17,14 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
-import { useAISearchContext } from './chat'
+import { useAssistantContext } from './assistant'
 
 interface PopupState {
   text: string
 }
 
 export function SelectionContent({ children }: { children: ReactNode }) {
-  const { setContext, setOpen } = useAISearchContext()
+  const { setContext, setOpen } = useAssistantContext()
   const containerRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupState | null>(null)
 

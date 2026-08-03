@@ -4,7 +4,7 @@ import { Presence } from '@radix-ui/react-presence'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useAISearchContext } from '@/components/features/assistant'
+import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
 
@@ -13,7 +13,7 @@ export function MobileNav() {
   const pathname = usePathname()
   const previousPathname = useRef(pathname)
   const { setOpenSearch } = useSearchContext()
-  const { setOpen: setOpenAI } = useAISearchContext()
+  const { setOpen: setOpenAssistant } = useAssistantContext()
 
   const closeMenu = useCallback(() => setOpen(false), [])
 
@@ -56,9 +56,9 @@ export function MobileNav() {
       <Presence present={open}>
         <MenuPanel
           menuId='mobile-navigation-menu'
-          onAIChatOpen={() => {
+          onAssistantOpen={() => {
             closeMenu()
-            setOpenAI(true)
+            setOpenAssistant(true)
           }}
           onClose={closeMenu}
           open={open}

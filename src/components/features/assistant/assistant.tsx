@@ -29,17 +29,17 @@ import {
   type ToolName,
 } from '@/app/api/chat/utils/tools/confirmation'
 import {
-  ClippyProvider,
-  useClippy,
+  MascotProvider,
+  useMascot,
 } from '@/components/features/assistant/mascot'
 import { Rover } from '@/components/features/assistant/mascot/agents/rover'
 import {
   playSubmitAnimation,
-  useClippyPanel,
+  useMascotPanel,
 } from '@/components/features/assistant/mascot/hooks'
 import {
-  AIContactForm,
-  AIContactFormSkeleton,
+  ContactForm,
+  ContactFormSkeleton,
 } from '@/components/features/assistant/tools/contact-form'
 import { Icons } from '@/components/icons/icons'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -55,7 +55,7 @@ import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
 
-const AISearchContext = createContext<{
+const AssistantContext = createContext<{
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   chat: UseChatHelpers<MyUIMessage>
@@ -63,23 +63,23 @@ const AISearchContext = createContext<{
   setContext: Dispatch<SetStateAction<string | null>>
 } | null>(null)
 
-export function useAISearchContext() {
-  const ctx = use(AISearchContext)
+export function useAssistantContext() {
+  const ctx = use(AssistantContext)
   if (!ctx) {
-    throw new Error('useAISearchContext must be used within AISearch')
+    throw new Error('useAssistantContext must be used within Assistant')
   }
   return ctx
 }
 
 export function useChatContext() {
-  const ctx = use(AISearchContext)
+  const ctx = use(AssistantContext)
   if (!ctx) {
-    throw new Error('useChatContext must be used within AISearch')
+    throw new Error('useChatContext must be used within Assistant')
   }
   return ctx.chat
 }
 
-export function AISearch({ children }: { children: ReactNode }) {
+export function Assistant({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
@@ -104,8 +104,8 @@ export function AISearch({ children }: { children: ReactNode }) {
   })
 
   return (
-    <ClippyProvider agent={isMobile ? undefined : Rover}>
-      <AISearchContext
+    <MascotProvider agent={isMobile ? undefined : Rover}>
+      <AssistantContext
         value={useMemo(
           () => ({
             chat,
@@ -118,14 +118,14 @@ export function AISearch({ children }: { children: ReactNode }) {
         )}
       >
         {children}
-        <AISearchPanel />
-      </AISearchContext>
-    </ClippyProvider>
+        <AssistantPanel />
+      </AssistantContext>
+    </MascotProvider>
   )
 }
 
 function Header() {
-  const { setOpen, chat, setContext } = useAISearchContext()
+  const { setOpen, chat, setContext } = useAssistantContext()
   const playNewChat = useSound(toggleOn)
 
   return (
@@ -175,7 +175,7 @@ function Header() {
   )
 }
 
-function SearchAIActions() {
+function AssistantActions() {
   const { messages, status, regenerate } = useChatContext()
   const isLoading = status === 'streaming'
   const canShow =
@@ -210,10 +210,10 @@ function SearchAIActions() {
 const StorageKeyInput = '__ai_search_input'
 const MaxSourcePreviewChars = 120
 
-function SearchAIInput(props: ComponentProps<'form'>) {
+function AssistantInput(props: ComponentProps<'form'>) {
   const { status, sendMessage, stop, messages } = useChatContext()
-  const { setContext, context } = useAISearchContext()
-  const { agent } = useClippy()
+  const { setContext, context } = useAssistantContext()
+  const { agent } = useMascot()
   const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
@@ -554,11 +554,11 @@ const Message = memo(function Message({
                 : undefined
 
             if (!isSubmitted && part.state !== 'input-available') {
-              return <AIContactFormSkeleton key={part.toolCallId} />
+              return <ContactFormSkeleton key={part.toolCallId} />
             }
 
             return (
-              <AIContactForm
+              <ContactForm
                 isSubmitted={isSubmitted}
                 key={part.toolCallId}
                 prefill={part.input?.prefill ?? undefined}
@@ -574,10 +574,10 @@ const Message = memo(function Message({
   )
 })
 
-function AISearchPanel() {
-  const { open, setOpen } = useAISearchContext()
+function AssistantPanel() {
+  const { open, setOpen } = useAssistantContext()
   const chat = useChatContext()
-  const { agent } = useClippy()
+  const { agent } = useMascot()
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === 'Escape' && open) {
@@ -595,7 +595,7 @@ function AISearchPanel() {
     return () => window.removeEventListener('keydown', onKeyPress)
   }, [])
 
-  useClippyPanel({
+  useMascotPanel({
     agent,
     messages: chat.messages,
     open,
@@ -606,7 +606,7 @@ function AISearchPanel() {
     <>
       <Presence present={open}>
         <button
-          aria-label='Close AI panel'
+          aria-label='Close assistant panel'
           className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in lg:hidden'
           data-state={open ? 'open' : 'closed'}
           onClick={() => setOpen(false)}
@@ -628,9 +628,9 @@ function AISearchPanel() {
               status={chat.status}
             />
             <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
-              <SearchAIInput />
+              <AssistantInput />
               <div className='flex items-center gap-1.5 p-2'>
-                <SearchAIActions />
+                <AssistantActions />
               </div>
             </div>
           </div>
