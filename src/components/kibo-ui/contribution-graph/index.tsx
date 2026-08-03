@@ -357,10 +357,12 @@ export interface ContributionGraphCalendarProps
   }) => ReactNode
   className?: string
   hideMonthLabels?: boolean
+  title?: string
 }
 
 export const ContributionGraphCalendar = ({
   hideMonthLabels = false,
+  title = 'Contribution Graph',
   className,
   children,
   ...props
@@ -384,9 +386,12 @@ export const ContributionGraphCalendar = ({
         viewBox={`0 0 ${width} ${height}`}
         width={width}
       >
-        <title>Contribution Graph</title>
+        <title>{title}</title>
         {!hideMonthLabels && (
-          <g className='fill-current'>
+          <g
+            className='fill-current selection:fill-selection-foreground'
+            data-slot='month-labels'
+          >
             {monthLabels.map(({ label, weekIndex }) => (
               <text
                 dominantBaseline='hanging'
