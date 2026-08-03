@@ -2,10 +2,10 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { HeroSection } from '@/components/layout/sections/hero'
 import { Wrapper } from '@/components/layout/wrapper'
-import { BackButton } from '@/components/shared/back-button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { title as homeTitle } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
+import { BackButton } from './_components/back-button'
 import { SearchClient } from './_components/search-client'
 
 export default function Page() {

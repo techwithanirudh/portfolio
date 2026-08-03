@@ -1,7 +1,7 @@
 import { resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { ActiveLink } from '@/components/shared/active-link'
+import { ActiveLink } from '@/components/layout/footer/active-link'
 import { ViewAnimation } from '@/components/shared/view-animation'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'

@@ -1,6 +1,6 @@
 import { UserButton } from '@/components/features/auth/user-button'
+import { Clock } from '@/components/layout/footer/clock'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
-import { Clock } from '@/components/shared/clock'
 import { ViewAnimation } from '@/components/shared/view-animation'
 import { owner } from '@/constants/site'
 import { cn } from '@/lib/utils'

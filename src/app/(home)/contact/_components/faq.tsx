@@ -4,7 +4,6 @@ import {
   SplitSectionContent,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split-section'
-import { InlineLink } from '@/components/shared/inline-link'
 import { ViewAnimation } from '@/components/shared/view-animation'
 import {
   Accordion,
@@ -12,6 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { InlineLink } from './inline-link'
 
 const faq = [
   {
