@@ -24,7 +24,7 @@ export function FloatingPill({
   ]
 
   return (
-    <div className='fixed inset-x-0 bottom-4 z-[32] flex justify-center sm:hidden'>
+    <div className='fixed inset-x-0 bottom-4 z-[32] flex justify-center lg:hidden'>
       <div className='flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'>
         <button
           aria-label='Search'
