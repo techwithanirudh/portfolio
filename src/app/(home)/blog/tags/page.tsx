@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { TagCard } from '@/components/features/blog/tag-card'
+import { TagCard } from '@/components/features/blog'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { SectionBody } from '@/components/layout/sections/body'
 import { Wrapper } from '@/components/layout/wrapper'

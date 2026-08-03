@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { WorkCard } from '@/components/features/work/work-card'
+import { WorkCard } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
