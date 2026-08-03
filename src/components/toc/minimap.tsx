@@ -43,7 +43,7 @@ function TOCMinimapContent({ className }: { className?: string }) {
               {items.map((item) => (
                 <div
                   aria-hidden
-                  className='pointer-events-none h-0.5 w-6 shrink-0 rounded-xs bg-muted-foreground/50 transition-colors data-[depth=3]:ml-2 data-[depth=4]:ml-4 data-[depth=3]:w-4 data-[depth=4]:w-2 data-[active=true]:bg-foreground'
+                  className='pointer-events-none h-0.5 w-6 shrink-0 rounded-xs bg-muted-foreground/50 transition-colors data-[depth=3]:ml-2 data-[depth=4]:ml-4 data-[depth=3]:w-4 data-[depth=4]:w-2 data-[active=true]:bg-fd-primary'
                   data-active={item.active}
                   data-depth={item.original.depth}
                   key={item.id}
@@ -63,7 +63,7 @@ function TOCMinimapContent({ className }: { className?: string }) {
               {items.map((item) => (
                 <li className='flex py-1' key={item.id}>
                   <a
-                    className='line-clamp-2 w-full text-muted-foreground transition-colors hover:text-foreground data-active:text-foreground'
+                    className='line-clamp-2 w-full text-muted-foreground transition-colors hover:text-foreground data-active:text-fd-primary'
                     data-active={item.active}
                     data-depth={item.original.depth}
                     href={item.original.url}
