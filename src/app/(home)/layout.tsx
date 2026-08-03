@@ -1,6 +1,6 @@
 import { HomeLayout } from 'fumadocs-ui/layouts/home'
 import type { ReactNode } from 'react'
-import { SelectionContent } from '@/components/features/assistant/selection-context-menu'
+import { SelectionContent } from '@/components/features/assistant'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
 import { linkItems } from '@/constants/navigation'
