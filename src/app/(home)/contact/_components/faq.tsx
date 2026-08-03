@@ -4,13 +4,13 @@ import {
   SplitSectionContent,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split-section'
-import { ViewAnimation } from '@/components/shared/view-animation'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { ViewAnimation } from '@/components/view-animation'
 import { InlineLink } from './inline-link'
 
 const faq = [

@@ -3,8 +3,8 @@ import { WorkCard } from '@/components/features/work/work-card'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections/section'
 import { SectionHeader } from '@/components/layout/sections/section-header'
-import { ViewAnimation } from '@/components/shared/view-animation'
 import { buttonVariants } from '@/components/ui/button'
+import { ViewAnimation } from '@/components/view-animation'
 import type { WorkPage } from '@/lib/source'
 
 export default function WorkPreview({ works }: { works: WorkPage[] }) {

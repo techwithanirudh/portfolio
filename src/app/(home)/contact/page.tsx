@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
+import { ContactPageJsonLd } from '@/components/json-ld'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split-section'
 import { Wrapper } from '@/components/layout/wrapper'
-import { ContactPageJsonLd } from '@/components/seo/json-ld'
-import { ViewAnimation } from '@/components/shared/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import { createMetadata } from '@/lib/metadata'
 import { ContactForm } from './_components/contact-form'
 import { FAQ } from './_components/faq'

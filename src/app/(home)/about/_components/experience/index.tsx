@@ -8,8 +8,8 @@ import {
   SplitSectionHeader,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split-section'
-import { ViewAnimation } from '@/components/shared/view-animation'
 import { Button } from '@/components/ui/button'
+import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {

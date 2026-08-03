@@ -8,13 +8,13 @@ import { type ComponentProps, useCallback, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevrons-up-down'
 import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
-import { ViewAnimation } from '@/components/shared/view-animation'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { Separator } from '@/components/ui/separator'
+import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import type {
   ExperienceItemProps,

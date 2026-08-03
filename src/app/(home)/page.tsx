@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
+import { ProfilePageJsonLd } from '@/components/json-ld'
 import Separator from '@/components/layout/separator'
 import { Wrapper } from '@/components/layout/wrapper'
-import { ProfilePageJsonLd } from '@/components/seo/json-ld'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { description as homeDescription } from '@/constants/site'
 import { getGitHubContributions } from '@/lib/github-contributions'

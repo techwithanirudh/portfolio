@@ -1,5 +1,5 @@
 import { Children, isValidElement, type ReactNode } from 'react'
-import { ViewAnimation } from '@/components/shared/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {

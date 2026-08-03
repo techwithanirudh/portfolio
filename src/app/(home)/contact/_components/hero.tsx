@@ -1,10 +1,10 @@
 import { SectionHeader } from '@/components/layout/sections/section-header'
-import { ViewAnimation } from '@/components/shared/view-animation'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
 
 export const Hero = () => (
