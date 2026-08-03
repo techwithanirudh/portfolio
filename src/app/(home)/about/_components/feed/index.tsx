@@ -3,7 +3,7 @@ import {
   SplitSectionContent,
   SplitSectionHeader,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import { getActivityItems } from './actions'

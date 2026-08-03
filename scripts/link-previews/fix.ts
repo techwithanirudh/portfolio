@@ -1,6 +1,6 @@
 import { readFiles } from 'next-validate-link'
 import { chromium } from 'playwright'
-import { hashUrl, type LinkPreviewEntry } from '@/lib/link-preview'
+import { hashUrl, type LinkPreviewEntry } from '@/lib/link-preview.shared'
 import { content } from './config'
 import {
   captureScreenshot,

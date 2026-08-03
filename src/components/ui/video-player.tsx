@@ -10,7 +10,7 @@ import {
 } from '@vidstack/react/player/layouts/default'
 import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
-import './video-player.css';
+import './video-player.css'
 
 export interface VideoPlayerProps extends ComponentProps<typeof MediaPlayer> {
   poster?: string

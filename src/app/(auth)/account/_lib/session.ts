@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
-import { getLoginUrl } from '@/lib/auth-client'
+import { getLoginUrl } from '@/lib/auth-url'
 import { getSession } from '@/server/auth'
 
 export const getSessionCached = cache(getSession)

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { ProfilePageJsonLd } from '@/components/json-ld'
-import { Wrapper } from '@/components/wrapper'
+import { Wrapper } from '@/components/layout/wrapper'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
 import { getSortedByDatePosts } from '@/lib/source'

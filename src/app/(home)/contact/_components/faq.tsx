@@ -1,10 +1,9 @@
-import { InlineLink } from '@/components/inline-link'
-import { SectionHeader } from '@/components/sections/section-header'
+import { SectionHeader } from '@/components/layout/sections/header'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split'
 import {
   Accordion,
   AccordionContent,
@@ -12,6 +11,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { ViewAnimation } from '@/components/view-animation'
+import { InlineLink } from './inline-link'
 
 const faq = [
   {

@@ -2,7 +2,6 @@
 
 import { Suspense, use } from 'react'
 
-import { Icons } from '@/components/icons/icons'
 import {
   type Activity,
   ContributionGraph,
@@ -11,8 +10,9 @@ import {
   ContributionGraphFooter,
   ContributionGraphLegend,
   ContributionGraphTotalCount,
-} from '@/components/kibo-ui/contribution-graph'
-import { Section } from '@/components/section'
+} from '@/components/features/contributions'
+import { Icons } from '@/components/icons/icons'
+import { Section } from '@/components/layout/sections'
 import {
   Tooltip,
   TooltipContent,

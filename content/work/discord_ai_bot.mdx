@@ -1,21 +1,17 @@
 ---
 title: Discord AI Bot
-description: A Discord bot with AI chat, voice support, and web search.
+description: A Discord bot that can chat, search the web, and talk in voice channels.
 date: 2025-10-21
 github: https://github.com/techwithanirudh/discord-ai-bot
 image: /images/projects/discord_ai_bot/cover.png
 tags: ['Discord', 'AI', 'Bun', 'TypeScript']
 ---
 
-Discord AI Bot answers questions in text channels and can join voice channels to listen and talk back.
-
-## Why it exists
-
-Most Discord AI bots are locked to one provider and stop at text. This one is built to swap AI providers freely and treat voice as a first-class input, not an afterthought, while staying easy to extend with new commands.
+Discord AI Bot answers questions in text channels and can join voice channels to listen and talk.
 
 ## How it works
 
-A slash-command framework handles text, backed by the Vercel AI SDK so it can route between OpenAI, Anthropic, OpenRouter, or Google without touching the rest of the bot. Voice channels are handled through a speech-to-text/text-to-speech pipeline, and it comes with web search and memory built in. Upstash Redis handles rate-limiting so it holds up under heavy use.
+Slash commands handle text messages. The Vercel AI SDK connects the bot to OpenAI, Anthropic, OpenRouter, or Google. Voice uses a speech-to-text and text-to-speech pipeline. The bot also has web search and memory, while Upstash Redis handles rate limits.
 
 ## Stack
 

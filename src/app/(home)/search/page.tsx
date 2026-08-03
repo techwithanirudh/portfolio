@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { BackButton } from '@/components/back-button'
-import { HeroSection } from '@/components/sections/hero'
+import { HeroSection } from '@/components/layout/sections/hero'
+import { Wrapper } from '@/components/layout/wrapper'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Wrapper } from '@/components/wrapper'
 import { title as homeTitle } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
+import { BackButton } from './_components/back-button'
 import { SearchClient } from './_components/search-client'
 
 export default function Page() {

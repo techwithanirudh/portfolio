@@ -1,4 +1,4 @@
-import { SectionHeader } from '@/components/sections/section-header'
+import { SectionHeader } from '@/components/layout/sections/header'
 import {
   Tooltip,
   TooltipContent,

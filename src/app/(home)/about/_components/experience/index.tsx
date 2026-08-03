@@ -1,15 +1,15 @@
 'use client'
 
+import { WorkExperience } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionHeader,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
-import { WorkExperience } from '@/components/work-experience'
 import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {

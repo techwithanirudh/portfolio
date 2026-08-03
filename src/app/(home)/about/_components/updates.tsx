@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/section'
-import { SectionHeader } from '@/components/sections/section-header'
+import { Section } from '@/components/layout/sections'
+import { SectionHeader } from '@/components/layout/sections/header'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Carousel,

@@ -1,6 +1,6 @@
 ---
 title: Mastra Slack Agent Template
-description: Customizable Slack agent built on Mastra, with access to a sandbox, GitHub, and more.
+description: A Slack agent template with tools, sandboxes, and GitHub access.
 date: 2026-07-15
 order: 1
 github: https://github.com/techwithanirudh/mastra-slack-agent-template
@@ -8,19 +8,15 @@ image: /images/projects/mastra_slack_agent_template/cover.png
 tags: ['TypeScript', 'Mastra', 'Bun', 'Slack', 'E2B', 'PostgreSQL']
 ---
 
-A starting point for teams who want their own Slack agent instead of a hosted one. It runs as a long-lived Bun process, handles mentions, DMs, threads, files, and workspace search, and streams replies back into Slack with live tool-activity widgets instead of one blob of text at the end.
-
-## Why it exists
-
-Hosted Slack bots are fine until you want them to actually do something, like run a script or poke at a repo, instead of just talking. Building that yourself usually means solving sandboxing, memory, and tool orchestration before you've written a single feature. This template does that part for you, so you can point it at a Slack workspace and start adding what you actually want.
+A starting point for building a Slack agent. It handles mentions, DMs, threads, files, workspace search, and streamed replies.
 
 ## How it works
 
-Every thread gets its own isolated E2B sandbox, with persistent files, shell access, and a browser, so the agent can run commands and inspect files without ever touching the host machine. Bigger requests get split across subagents (orchestrator, explore, research, execute, summarize) instead of one model trying to do everything in a single pass.
+Each thread gets its own E2B sandbox with files, shell access, and a browser. The agent can run commands without touching the host machine. Larger requests can be split between several smaller agents.
 
-Around that core sit web research through Exa, image generation, and scheduled tasks, with optional GitHub and AgentMail accounts. New capabilities go in as skills or MCP servers, so extending the agent doesn't mean forking the runtime itself.
+It also includes web research through Exa, image generation, scheduled tasks, and optional GitHub and AgentMail accounts. New features can be added as skills or MCP servers.
 
-Models are routed through OpenRouter, memory and state live in PostgreSQL, and observability runs locally. The [configuration guide](https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md) walks through setting up each service, since the template only comes alive once the Slack app and credentials exist.
+OpenRouter handles model access, and PostgreSQL stores memory and state. The [configuration guide](https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md) explains how to set up the services and Slack app.
 
 ## Stack
 

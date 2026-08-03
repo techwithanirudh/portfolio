@@ -4,9 +4,9 @@ import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split'
+import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
-import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
 import { ContactForm } from './_components/contact-form'
 import { FAQ } from './_components/faq'

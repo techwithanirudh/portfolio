@@ -1,15 +1,15 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { WebPageJsonLd } from '@/components/json-ld'
-import { Section } from '@/components/section'
+import { Section } from '@/components/layout/sections'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionHeader,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split'
+import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
-import { Wrapper } from '@/components/wrapper'
 import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'

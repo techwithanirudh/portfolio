@@ -1,6 +1,6 @@
 ---
 title: Maskio
-description: A retro platformer where you jump levels, dodge hazards, and collect coins.
+description: A pixel-art platformer with levels, hazards, and coins.
 date: 2021-08-10
 website: https://maskio.techwithanirudh.com/
 github: https://github.com/techwithanirudh/Maskio
@@ -8,18 +8,13 @@ image: /images/projects/maskio/cover.jpg
 tags: ['KaboomJS', 'Game Development', 'Node.js']
 ---
 
-Maskio is a pixel-art platformer: jump across platforms, dodge spiky hazards, and collect coins across multiple worlds.
-
-## Why it exists
-
-This was a project to learn KaboomJS by building something with an actual gameplay loop, rather than a single tech demo, complete with scenes, sprites, and collision handling.
+Maskio is a pixel-art platformer. Jump across platforms, avoid spikes, and collect coins across multiple worlds.
 
 ## How it works
 
-Levels are built from KaboomJS scenes with sprite-based collision detection for platforms, hazards, and coins. It works with keyboard controls on desktop and touch controls on mobile. esbuild bundles everything quickly, and a small Express server serves the build in both development and production.
+KaboomJS scenes define the levels and sprite collisions for platforms, hazards, and coins. The game supports keyboard controls on desktop and touch controls on mobile. esbuild builds it, and Express serves it in development and production.
 
 ## Stack
 
 - KaboomJS, Node.js, Express.
 - esbuild, nodemon.
-- Lightweight scripts for build and serve.

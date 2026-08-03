@@ -11,7 +11,7 @@ import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { Fragment, type ReactNode, useEffect } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/section'
+import { Section } from '@/components/layout/sections'
 import {
   InputGroup,
   InputGroupAddon,
