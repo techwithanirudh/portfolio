@@ -72,7 +72,7 @@ export function MenuPanel({
                   )}
                   href={item.url}
                   key={item.url}
-                  onClick={onClose}
+                  onClick={() => setTimeout(onClose, 0)}
                 >
                   {'icon' in item ? item.icon : null}
                   {item.text}
