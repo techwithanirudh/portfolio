@@ -94,21 +94,20 @@ export function Assistant({ children }: { children: ReactNode }) {
       api: '/api/chat',
     }),
   })
+  const value = useMemo(
+    () => ({
+      chat,
+      context,
+      open,
+      setContext,
+      setOpen,
+    }),
+    [chat, context, open]
+  )
 
   return (
     <MascotProvider agent={isMobile ? undefined : Rover}>
-      <AssistantContext
-        value={useMemo(
-          () => ({
-            chat,
-            context,
-            open,
-            setContext,
-            setOpen,
-          }),
-          [chat, context, open]
-        )}
-      >
+      <AssistantContext value={value}>
         {children}
         <AssistantPanel />
       </AssistantContext>
@@ -172,7 +171,7 @@ function AssistantActions() {
   const { messages, status, regenerate } = chat
   const isLoading = status === 'streaming'
   const canShow =
-    !isLoading && messages?.length > 0 && messages.at(-1)?.role === 'assistant'
+    !isLoading && messages.length > 0 && messages.at(-1)?.role === 'assistant'
   const playRegenerate = useSound(tap)
 
   return (
@@ -200,7 +199,7 @@ function AssistantActions() {
   )
 }
 
-const StorageKeyInput = '__ai_search_input'
+const assistantInputStorageKey = '__ai_search_input'
 const MaxSourcePreviewChars = 120
 
 function AssistantInput(props: ComponentProps<'form'>) {
@@ -210,7 +209,7 @@ function AssistantInput(props: ComponentProps<'form'>) {
   const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
-    () => localStorage.getItem(StorageKeyInput) ?? ''
+    () => localStorage.getItem(assistantInputStorageKey) ?? ''
   )
   const hasPendingToolInput = messages.some((message) =>
     message.parts?.some((part) => {
@@ -224,7 +223,7 @@ function AssistantInput(props: ComponentProps<'form'>) {
   const isLoading =
     status === 'streaming' || status === 'submitted' || hasPendingToolInput
   const saveInput = useDebounceCallback(
-    (value: string) => localStorage.setItem(StorageKeyInput, value),
+    (value: string) => localStorage.setItem(assistantInputStorageKey, value),
     300
   )
 
@@ -247,7 +246,7 @@ function AssistantInput(props: ComponentProps<'form'>) {
 
     setInput('')
     setContext(null)
-    localStorage.removeItem(StorageKeyInput)
+    localStorage.removeItem(assistantInputStorageKey)
 
     await sendMessage({
       parts: [
