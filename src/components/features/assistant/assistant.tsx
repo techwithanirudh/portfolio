@@ -71,14 +71,6 @@ export function useAssistantContext() {
   return ctx
 }
 
-export function useChatContext() {
-  const ctx = use(AssistantContext)
-  if (!ctx) {
-    throw new Error('useChatContext must be used within Assistant')
-  }
-  return ctx.chat
-}
-
 export function Assistant({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
@@ -176,7 +168,8 @@ function Header() {
 }
 
 function AssistantActions() {
-  const { messages, status, regenerate } = useChatContext()
+  const { chat } = useAssistantContext()
+  const { messages, status, regenerate } = chat
   const isLoading = status === 'streaming'
   const canShow =
     !isLoading && messages?.length > 0 && messages.at(-1)?.role === 'assistant'
@@ -211,8 +204,8 @@ const StorageKeyInput = '__ai_search_input'
 const MaxSourcePreviewChars = 120
 
 function AssistantInput(props: ComponentProps<'form'>) {
-  const { status, sendMessage, stop, messages } = useChatContext()
-  const { setContext, context } = useAssistantContext()
+  const { chat, setContext, context } = useAssistantContext()
+  const { status, sendMessage, stop, messages } = chat
   const { agent } = useMascot()
   const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
@@ -575,8 +568,7 @@ const Message = memo(function Message({
 })
 
 function AssistantPanel() {
-  const { open, setOpen } = useAssistantContext()
-  const chat = useChatContext()
+  const { chat, open, setOpen } = useAssistantContext()
   const { agent } = useMascot()
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
