@@ -36,7 +36,7 @@ export default function CTA(): React.ReactElement {
               initial={{ opacity: 0, translateY: -6 }}
               whileInView={{ opacity: 1, translateY: 0 }}
             >
-              <Button asChild className='gap-4' size='lg'>
+              <Button asChild size='lg'>
                 <Link href='/contact'>
                   Contact Me{' '}
                   <Icons.arrowRight className='icon-arrow-button size-4' />
