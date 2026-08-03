@@ -1,4 +1,3 @@
-import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
@@ -54,14 +53,14 @@ export default async function Page(props: {
   )
 
   return (
-    <TOCProvider toc={toc}>
+    <>
       <Header page={page} tags={tags} />
 
       <SectionBody className='flex'>
-        <TOCMinimap />
+        <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
           <div className='flex min-w-0 flex-1 flex-col'>
-            <TOCPopover />
+            <TOCPopover items={toc} />
             <MdxContent
               beforeComments={
                 <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
@@ -81,7 +80,7 @@ export default async function Page(props: {
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
-    </TOCProvider>
+    </>
   )
 }
 

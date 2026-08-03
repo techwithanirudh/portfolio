@@ -1,4 +1,3 @@
-import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
@@ -115,20 +114,20 @@ export default async function Page(props: {
   const { body: Mdx, toc } = page.data
 
   return (
-    <TOCProvider toc={toc}>
+    <>
       <Header page={page} />
 
       <SectionBody className='flex'>
-        <TOCMinimap />
+        <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col'>
-          <TOCPopover />
+          <TOCPopover items={toc} />
           <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 p-4'>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </div>
         </article>
       </SectionBody>
       <WorkJsonLd page={page} />
-    </TOCProvider>
+    </>
   )
 }
 
