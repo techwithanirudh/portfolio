@@ -38,7 +38,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
   return (
     <Collapsible
       className={cn(
-        'not-prose sticky top-14 z-10 border-border border-b bg-background/80 backdrop-blur-sm xl:hidden',
+        'not-prose sticky top-14 z-10 border-border border-b bg-background/80 backdrop-blur-sm xl:block 2xl:hidden',
         className
       )}
       onOpenChange={setOpen}
