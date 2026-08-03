@@ -49,16 +49,14 @@ export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
               width={preview.width}
             />
             <div className='flex items-center gap-2 border-border border-t border-dashed px-3 py-2.5 text-muted-foreground text-xs'>
-              {faviconUrl && (
-                <Image
-                  alt=''
-                  className='size-4 shrink-0 rounded-sm object-contain'
-                  height={16}
-                  src={faviconUrl}
-                  unoptimized
-                  width={16}
-                />
-              )}
+              <Image
+                alt=''
+                className='size-4 shrink-0 rounded-sm object-contain'
+                height={16}
+                src={faviconUrl}
+                unoptimized
+                width={16}
+              />
               <span className='min-w-0 flex-1 truncate'>{displayUrl}</span>
               <Icons.arrowUpRight className='size-3.5 shrink-0 transition-transform will-change-transform group-hover:scale-125' />
             </div>
