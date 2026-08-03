@@ -27,7 +27,7 @@ import {
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { ViewAnimation } from '@/components/shared/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'

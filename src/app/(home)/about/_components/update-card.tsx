@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type React from 'react'
+import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
-import { BlurImage } from '@/components/shared/blur-image'
 
 interface UpdateCardProps {
   author: string

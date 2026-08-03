@@ -1,9 +1,9 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as motion from 'motion/react-client'
+import { BlurImage } from '@/components/blur-image'
 import { TagCard } from '@/components/features/blog/tag-card'
 import { Section } from '@/components/layout/sections/section'
-import { BlurImage } from '@/components/shared/blur-image'
-import { ViewAnimation } from '@/components/shared/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage as MDXPage } from '@/lib/source'
 
 const formatPostDate = (date: Date) =>

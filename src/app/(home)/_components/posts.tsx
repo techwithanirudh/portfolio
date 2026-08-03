@@ -1,8 +1,8 @@
 import type { HTMLAttributes } from 'react'
 import { PostCard } from '@/components/features/blog/post-card'
 import { Section } from '@/components/layout/sections/section'
-import { SearchRedirectInput } from '@/components/shared/search-redirect-input'
-import { ViewAnimation } from '@/components/shared/view-animation'
+import { SearchRedirectInput } from '@/components/search-redirect-input'
+import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
 

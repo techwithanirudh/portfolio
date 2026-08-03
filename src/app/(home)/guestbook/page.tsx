@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { WebPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections/section'
 import {
   SplitSection,
@@ -8,8 +9,7 @@ import {
   SplitSectionSidebar,
 } from '@/components/layout/sections/split-section'
 import { Wrapper } from '@/components/layout/wrapper'
-import { WebPageJsonLd } from '@/components/seo/json-ld'
-import { ViewAnimation } from '@/components/shared/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'

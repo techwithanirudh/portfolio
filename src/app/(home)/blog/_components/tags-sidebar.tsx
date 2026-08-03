@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { ViewAnimation } from '@/components/shared/view-animation'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 const MAX_TAGS = 8

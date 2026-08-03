@@ -5,7 +5,7 @@ import {
   SplitSectionHeader,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split-section'
-import { ViewAnimation } from '@/components/shared/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 
 export function NewsletterSection() {
   return (

@@ -1,8 +1,8 @@
 'use client'
 
 import { Icons } from '@/components/icons/icons'
-import { ViewAnimation } from '@/components/shared/view-animation'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { ViewAnimation } from '@/components/view-animation'
 import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { GuestbookEntryCard } from './entry-card'
 
