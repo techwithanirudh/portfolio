@@ -10,6 +10,7 @@ import { HeroSection } from '@/components/sections/hero'
 import { ViewAnimation } from '@/components/view-animation'
 import { postsPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
+import { parsePageParam } from '@/lib/pagination'
 import { getPostsByTag, getTags } from '@/lib/source'
 
 export const dynamicParams = false
@@ -97,9 +98,7 @@ export default async function Page(props: {
     return notFound()
   }
 
-  const pageIndex = searchParams.page
-    ? Number.parseInt(searchParams.page[0] ?? '', 10) - 1
-    : 0
+  const pageIndex = parsePageParam(searchParams.page) - 1
 
   if (pageIndex < 0 || pageIndex >= pageCount(tag)) {
     notFound()
@@ -144,14 +143,7 @@ export default async function Page(props: {
 
 export const generateStaticParams = () => {
   const tags = getTags()
-  return [
-    ...tags.map((tag) => ({ slug: [tag] })),
-    ...tags.flatMap((tag) =>
-      Array.from({ length: pageCount(tag) }, (_, index) => ({
-        slug: [tag, (index + 1).toString()],
-      }))
-    ),
-  ]
+  return tags.map((tag) => ({ slug: [tag] }))
 }
 
 interface Props {
@@ -167,9 +159,14 @@ export async function generateMetadata(
   const searchParams = await props.searchParams
 
   const tag = params.slug[0]
-  const pageIndex = searchParams.page
-    ? Number.parseInt(searchParams.page.toString(), 10)
-    : 1
+  if (!tag) {
+    notFound()
+  }
+  const pageIndex = parsePageParam(searchParams.page)
+
+  if (pageIndex < 1 || pageIndex > pageCount(tag)) {
+    notFound()
+  }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
   const pageTitle = isFirstPage

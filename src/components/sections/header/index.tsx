@@ -180,7 +180,7 @@ export const Header = ({
           </ViewAnimation>
         </div>
       </div>
-      <ul className='ms-auto -me-1.5 hidden flex-row items-center sm:flex lg:hidden'>
+      <ul className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
             <ViewAnimation
