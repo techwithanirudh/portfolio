@@ -2,8 +2,8 @@
 
 import { useSound } from '@web-kits/audio/react'
 import { useMemo, useRef, useState } from 'react'
+import { CopyStateIcon } from '@/components/features/assistant/copy-button'
 import { Icons } from '@/components/icons/icons'
-import { CopyStateIcon } from '@/components/shared/copy-button'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
 import {
