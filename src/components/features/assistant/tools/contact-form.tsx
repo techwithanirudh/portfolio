@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useSound } from '@web-kits/audio/react'
 import { contact } from '@/app/(home)/contact/actions/contact'
-import { useChatContext } from '@/components/features/assistant/assistant'
+import { useAssistantContext } from '@/components/features/assistant/assistant'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -35,7 +35,8 @@ export function ContactForm({
   isSubmitted,
   submittedData,
 }: ContactFormProps) {
-  const { addToolOutput, sendMessage } = useChatContext()
+  const { chat } = useAssistantContext()
+  const { addToolOutput, sendMessage } = chat
   const playPop = useSound(pop)
   const playError = useSound(error)
 
