@@ -12,7 +12,7 @@ const getPosition = () => ({
   y: window.innerHeight - 100,
 })
 
-function ClippyTriggerInner() {
+function FloatingAssistantTrigger() {
   const { setOpen } = useAISearchContext()
   const { agent } = useClippy()
 
@@ -69,6 +69,6 @@ function ClippyTriggerInner() {
 }
 
 export const AISearchTrigger = dynamic(
-  () => Promise.resolve(ClippyTriggerInner),
+  () => Promise.resolve(FloatingAssistantTrigger),
   { ssr: false }
 )
