@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
-import { unstable_cache } from 'next/cache'
 import { ProfilePageJsonLd } from '@/components/json-ld'
-import type { Activity } from '@/components/kibo-ui/contribution-graph'
 import Separator from '@/components/separator'
 import { Wrapper } from '@/components/wrapper'
 import { testimonials } from '@/constants/portfolio/testimonials'
-import { baseOptions, description as homeDescription } from '@/constants/site'
+import { description as homeDescription } from '@/constants/site'
+import { getGitHubContributions } from '@/lib/github-contributions'
 import { createMetadata } from '@/lib/metadata'
 import { getSortedWork } from '@/lib/source'
 import About from './_components/about'
@@ -24,41 +23,9 @@ export const metadata: Metadata = createMetadata({
   twitter: { images: '/banner.png' },
 })
 
-const githubUrl = baseOptions.githubUrl ?? ''
-const githubUsername = githubUrl.split('/').filter(Boolean).at(-1)
-
-interface ContributionResponse {
-  contributions: Activity[]
-  total: Record<string, number>
-}
-
-const getCachedContributions = unstable_cache(
-  async () => {
-    if (!githubUsername) {
-      throw new Error('GitHub username is missing from baseOptions.')
-    }
-
-    const url = new URL(
-      `/v4/${githubUsername}?y=last`,
-      'https://github-contributions-api.jogruber.de'
-    )
-    const response = await fetch(url)
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch GitHub contributions.')
-    }
-
-    const data = (await response.json()) as ContributionResponse
-
-    return data.contributions
-  },
-  ['github-contributions'],
-  { revalidate: 60 * 60 * 24 }
-)
-
 export default async function Home() {
   const works = getSortedWork().slice(0, 4)
-  const contributions = await getCachedContributions()
+  const contributions = getGitHubContributions()
 
   return (
     <>
@@ -73,7 +40,7 @@ export default async function Home() {
         <WorkPreview works={works} />
         <Testimonials testimonials={testimonials} />
         <Separator />
-        <Contributions data={contributions} />
+        <Contributions contributions={contributions} />
         <Separator />
         <CTA />
       </Wrapper>
