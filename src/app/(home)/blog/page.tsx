@@ -8,6 +8,7 @@ import { SectionBody } from '@/components/section-body'
 import { Wrapper } from '@/components/wrapper'
 import { postsPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
+import { parsePageParam } from '@/lib/pagination'
 import { getPostsByTag, getSortedByDatePosts, getTags } from '@/lib/source'
 import { Hero } from './_components/hero'
 import { NewsletterSection } from './_components/newsletter-section'
@@ -48,9 +49,7 @@ export default async function Page(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
   const searchParams = await props.searchParams
-  const pageIndex = searchParams.page
-    ? Number.parseInt(searchParams.page[0] ?? '', 10) - 1
-    : 0
+  const pageIndex = parsePageParam(searchParams.page) - 1
   if (pageIndex < 0 || pageIndex >= pageCount) {
     notFound()
   }
@@ -93,16 +92,7 @@ export default async function Page(props: {
   )
 }
 
-export const generateStaticParams = () => {
-  const slugs = Array.from({ length: pageCount }, (_, index) => ({
-    slug: [(index + 1).toString()],
-  }))
-
-  return [{ slug: [] }, ...slugs]
-}
-
 interface Props {
-  params: Promise<{ slug: string[] }>
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
@@ -112,9 +102,11 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const searchParams = await props.searchParams
 
-  const pageIndex = searchParams.page
-    ? Number.parseInt(searchParams.page as string, 10)
-    : 1
+  const pageIndex = parsePageParam(searchParams.page)
+
+  if (pageIndex < 1 || pageIndex > pageCount) {
+    notFound()
+  }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
   const pageTitle = isFirstPage ? 'Posts' : `Posts - Page ${pageIndex}`

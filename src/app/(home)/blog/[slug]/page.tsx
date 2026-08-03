@@ -9,6 +9,7 @@ import { GitHubCode } from '@/components/mdx/github-code'
 import { MdxContent } from '@/components/mdx-layout'
 import { SectionBody } from '@/components/section-body'
 import { TOCMinimap, TOCPopover } from '@/components/toc'
+import { baseUrl } from '@/constants'
 import { owner, repo } from '@/constants/config/github'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
@@ -46,9 +47,12 @@ export default async function Page(props: {
       <div className='flex flex-col gap-2'>
         <LLMCopyButtonWithViewOptions
           githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
-          markdownUrl={`/blog.mdx/${params.slug}`}
+          markdownUrl={new URL(`/blog.mdx/${params.slug}`, baseUrl).toString()}
         />
-        <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
+        <ShareMenu
+          title={page.data.title ?? 'Untitled'}
+          url={new URL(page.url, baseUrl).toString()}
+        />
       </div>
     </>
   )

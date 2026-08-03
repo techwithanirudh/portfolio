@@ -39,7 +39,11 @@ function TOCMinimapContent({ className }: { className?: string }) {
       <div className='sticky top-14'>
         <HoverCard closeDelay={100} openDelay={100}>
           <HoverCardTrigger asChild>
-            <div className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-7 pb-3 pl-6'>
+            <button
+              aria-label='Open table of contents'
+              className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-7 pb-3 pl-6 outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+              type='button'
+            >
               {items.map((item) => (
                 <div
                   aria-hidden
@@ -49,7 +53,7 @@ function TOCMinimapContent({ className }: { className?: string }) {
                   key={item.id}
                 />
               ))}
-            </div>
+            </button>
           </HoverCardTrigger>
 
           <HoverCardContent

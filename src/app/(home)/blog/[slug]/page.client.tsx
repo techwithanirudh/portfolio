@@ -2,6 +2,7 @@
 
 import { Comments } from '@fuma-comment/react'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,16 +16,16 @@ import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
 export function ShareMenu({ title, url }: { title: string; url: string }) {
-  const absoluteUrl =
-    typeof window === 'undefined'
-      ? url
-      : new URL(url, window.location.origin).toString()
+  const [canShare, setCanShare] = useState(false)
+  const encoded = encodeURIComponent(url)
 
-  const encoded = encodeURIComponent(absoluteUrl)
+  useEffect(() => {
+    setCanShare('share' in navigator)
+  }, [])
 
   const copyLink = async () => {
     try {
-      await navigator.clipboard.writeText(absoluteUrl)
+      await navigator.clipboard.writeText(url)
       toast.success('Link copied')
     } catch {
       toast.error('Unable to copy link')
@@ -73,11 +74,10 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
             Share on LinkedIn
           </a>
         </DropdownMenuItem>
-        {typeof navigator !== 'undefined' && 'share' in navigator && (
+        {canShare && (
           <DropdownMenuItem
-            onClick={(e) => {
-              e.preventDefault()
-              navigator.share({ title, url: absoluteUrl }).catch((error) => {
+            onClick={() => {
+              navigator.share({ title, url }).catch((error) => {
                 if (process.env.NODE_ENV !== 'production') {
                   console.error(error)
                 }
