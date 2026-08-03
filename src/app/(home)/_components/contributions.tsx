@@ -1,5 +1,8 @@
 'use client'
 
+import { Suspense, use } from 'react'
+
+import { Icons } from '@/components/icons/icons'
 import {
   type Activity,
   ContributionGraph,
@@ -20,10 +23,11 @@ import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
 interface ContributionsProps {
-  data: Activity[]
+  contributions: Promise<Activity[]>
 }
 
-const Contributions = ({ data }: ContributionsProps) => {
+const ContributionsGraph = ({ contributions }: ContributionsProps) => {
+  const data = use(contributions)
   const isMobile = useIsMobile()
   const blockSize = isMobile ? 10 : 23.5
 
@@ -35,12 +39,17 @@ const Contributions = ({ data }: ContributionsProps) => {
         whileInView={{ opacity: 1 }}
       >
         <ContributionGraph
+          aria-label='GitHub Contributions Graph'
           blockMargin={isMobile ? 1 : 2}
           blockSize={blockSize}
           className='w-full'
           data={data}
         >
-          <ContributionGraphCalendar className='overflow-auto'>
+          <ContributionGraphCalendar
+            aria-hidden
+            className='overflow-auto'
+            title='GitHub Contributions'
+          >
             {({ activity, dayIndex, weekIndex }) => (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -63,14 +72,21 @@ const Contributions = ({ data }: ContributionsProps) => {
                   <p className='font-semibold'>{activity.date}</p>
                   <p>
                     <span className='tabular-nums'>{activity.count}</span>{' '}
-                    contributions
+                    {activity.count === 1 ? 'contribution' : 'contributions'}
                   </p>
                 </TooltipContent>
               </Tooltip>
             )}
           </ContributionGraphCalendar>
           <ContributionGraphFooter>
-            <ContributionGraphTotalCount />
+            <ContributionGraphTotalCount>
+              {({ totalCount }) => (
+                <div className='text-muted-foreground'>
+                  {totalCount.toLocaleString('en')} contributions in the past
+                  365 days.
+                </div>
+              )}
+            </ContributionGraphTotalCount>
             <ContributionGraphLegend>
               {({ level }) => (
                 <div
@@ -99,5 +115,17 @@ const Contributions = ({ data }: ContributionsProps) => {
     </Section>
   )
 }
+
+const Contributions = ({ contributions }: ContributionsProps) => (
+  <Suspense fallback={<ContributionsFallback />}>
+    <ContributionsGraph contributions={contributions} />
+  </Suspense>
+)
+
+export const ContributionsFallback = () => (
+  <Section className='relative flex h-45 w-full items-center justify-center p-6'>
+    <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
+  </Section>
+)
 
 export default Contributions
