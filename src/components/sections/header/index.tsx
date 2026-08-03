@@ -122,7 +122,7 @@ export const Header = ({
           </ViewAnimation>
           {nav.children}
         </div>
-        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-md:hidden'>
+        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-lg:hidden'>
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
@@ -180,7 +180,7 @@ export const Header = ({
           </ViewAnimation>
         </div>
       </div>
-      <ul className='ms-auto -me-1.5 hidden flex-row items-center sm:flex lg:hidden'>
+      <ul className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
             <ViewAnimation
@@ -221,7 +221,7 @@ export const Header = ({
               .filter((item) => !isSecondary(item))
               .map((item, i) => (
                 <MobileNavigationMenuLinkItem
-                  className='sm:hidden'
+                  className='lg:hidden'
                   item={item}
                   key={i.toString()}
                 />

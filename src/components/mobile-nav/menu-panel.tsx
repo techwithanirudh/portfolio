@@ -10,10 +10,12 @@ import { cn } from '@/lib/utils'
 
 export function MenuPanel({
   menuOpen,
+  menuId,
   onAIChatOpen,
   onClose,
 }: {
   menuOpen: boolean
+  menuId: string
   onAIChatOpen: () => void
   onClose: () => void
 }) {
@@ -37,10 +39,14 @@ export function MenuPanel({
 
   return (
     <div
+      aria-label='Mobile navigation'
+      aria-modal='true'
       className={cn(
-        'fixed inset-x-4 bottom-20 z-[32] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
+        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background md:hidden',
         menuOpen ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
       )}
+      id={menuId}
+      role='dialog'
     >
       <nav className='flex flex-col divide-y divide-dashed divide-border'>
         {menuRows.map((row) => (
@@ -66,7 +72,7 @@ export function MenuPanel({
                   )}
                   href={item.url}
                   key={item.url}
-                  onClick={onClose}
+                  onClick={() => setTimeout(onClose, 0)}
                 >
                   {'icon' in item ? item.icon : null}
                   {item.text}

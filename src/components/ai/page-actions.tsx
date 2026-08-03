@@ -40,6 +40,9 @@ function useMarkdownCopy(markdownUrl: string) {
         await navigator.clipboard.write([
           new ClipboardItem({
             'text/plain': fetch(markdownUrl).then(async (res) => {
+              if (!res.ok) {
+                throw new Error(`Failed to fetch markdown: ${res.status}`)
+              }
               const content = await res.text()
               cache.set(markdownUrl, content)
               return content
@@ -103,10 +106,7 @@ export function ViewOptions({
   disabled?: boolean
 }) {
   const items = useMemo(() => {
-    const fullMarkdownUrl =
-      typeof window === 'undefined'
-        ? 'loading'
-        : new URL(markdownUrl, window.location.origin).toString()
+    const fullMarkdownUrl = markdownUrl
 
     const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`
 

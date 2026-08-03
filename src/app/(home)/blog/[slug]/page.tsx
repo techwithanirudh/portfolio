@@ -9,6 +9,7 @@ import { GitHubCode } from '@/components/mdx/github-code'
 import { MdxContent } from '@/components/mdx-layout'
 import { SectionBody } from '@/components/section-body'
 import { TOCMinimap, TOCPopover } from '@/components/toc'
+import { baseUrl } from '@/constants'
 import { owner, repo } from '@/constants/config/github'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
@@ -46,9 +47,12 @@ export default async function Page(props: {
       <div className='flex flex-col gap-2'>
         <LLMCopyButtonWithViewOptions
           githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
-          markdownUrl={`/blog.mdx/${params.slug}`}
+          markdownUrl={new URL(`/blog.mdx/${params.slug}`, baseUrl).toString()}
         />
-        <ShareMenu title={page.data.title ?? 'Untitled'} url={page.url} />
+        <ShareMenu
+          title={page.data.title ?? 'Untitled'}
+          url={new URL(page.url, baseUrl).toString()}
+        />
       </div>
     </>
   )
@@ -58,10 +62,10 @@ export default async function Page(props: {
       <Header page={page} tags={tags} />
 
       <SectionBody className='flex'>
-        <TOCMinimap />
+        <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
           <div className='flex min-w-0 flex-1 flex-col'>
-            <TOCPopover />
+            <TOCPopover items={toc} />
             <MdxContent
               beforeComments={
                 <aside className='flex flex-col gap-4 border-border border-t border-dashed p-4 text-sm lg:hidden'>
