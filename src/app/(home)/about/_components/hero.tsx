@@ -1,5 +1,5 @@
 import type React from 'react'
-import { HeroSection } from '@/components/sections/hero'
+import { HeroSection } from '@/components/layout/sections/hero'
 
 export default function Hero(): React.ReactElement {
   return (

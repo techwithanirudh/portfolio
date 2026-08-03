@@ -1,6 +1,6 @@
 import { HomeLayout } from 'fumadocs-ui/layouts/home'
 import type { ReactNode } from 'react'
-import { Header } from '@/components/sections/header'
+import { Header } from '@/components/layout/header'
 import { linkItems } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 

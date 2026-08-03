@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { HeroSection } from '@/components/sections/hero'
+import { HeroSection } from '@/components/layout/sections/hero'
 
 const CurrentPostsCount = ({
   startIndex,

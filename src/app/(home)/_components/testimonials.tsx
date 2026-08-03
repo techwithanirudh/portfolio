@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/section'
-import { SectionHeader } from '@/components/sections/section-header'
+import { Section } from '@/components/layout/sections/section'
+import { SectionHeader } from '@/components/layout/sections/section-header'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Carousel,
@@ -11,7 +12,6 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel'
-import { ViewAnimation } from '@/components/view-animation'
 
 interface Testimonial {
   author: {

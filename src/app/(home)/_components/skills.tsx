@@ -2,10 +2,10 @@
 
 import { cva } from 'class-variance-authority'
 import Image from 'next/image'
-import { Section } from '@/components/section'
-import { SectionHeader } from '@/components/sections/section-header'
+import { Section } from '@/components/layout/sections/section'
+import { SectionHeader } from '@/components/layout/sections/section-header'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import { Badge } from '@/components/ui/badge'
-import { ViewAnimation } from '@/components/view-animation'
 import { skills, technologies } from '@/constants/portfolio/skills'
 import type { TechStackItem } from '@/types'
 

@@ -1,7 +1,7 @@
 import 'server-only'
 
 import { unstable_cache } from 'next/cache'
-import type { Activity } from '@/components/kibo-ui/contribution-graph'
+import type { Activity } from '@/components/features/contributions/contribution-graph'
 import { baseOptions } from '@/constants/site'
 
 interface ContributionResponse {

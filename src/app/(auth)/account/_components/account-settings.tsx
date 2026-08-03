@@ -5,7 +5,7 @@ import { format, formatDistanceToNow } from 'date-fns'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { UserAvatar } from '@/components/auth/user-avatar'
+import { UserAvatar } from '@/components/features/auth/user-avatar'
 import { Icons } from '@/components/icons/icons'
 import {
   AlertDialog,

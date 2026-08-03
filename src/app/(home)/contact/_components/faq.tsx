@@ -1,17 +1,17 @@
-import { InlineLink } from '@/components/inline-link'
-import { SectionHeader } from '@/components/sections/section-header'
+import { SectionHeader } from '@/components/layout/sections/section-header'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split-section'
+import { InlineLink } from '@/components/shared/inline-link'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
-import { ViewAnimation } from '@/components/view-animation'
 
 const faq = [
   {

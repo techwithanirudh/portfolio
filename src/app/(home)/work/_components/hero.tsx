@@ -1,4 +1,4 @@
-import { HeroSection } from '@/components/sections/hero'
+import { HeroSection } from '@/components/layout/sections/hero'
 
 export const Hero = (_props: {
   totalWorks: number

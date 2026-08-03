@@ -5,9 +5,9 @@ import {
   SplitSectionContent,
   SplitSectionHeader,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split-section'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import { buttonVariants } from '@/components/ui/button'
-import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 export default function Detailed(): React.ReactElement {

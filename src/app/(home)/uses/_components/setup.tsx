@@ -1,4 +1,4 @@
-import { BlurImage } from '@/components/blur-image'
+import { BlurImage } from '@/components/shared/blur-image'
 
 export function Setup() {
   return (
