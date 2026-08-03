@@ -79,19 +79,21 @@ function TOCPopoverContent({ className }: { className?: string }) {
       </CollapsibleTrigger>
 
       <CollapsibleContent>
-        <TOCItems className='max-h-[50vh] overflow-y-auto px-4 pb-2 md:px-6'>
-          {items.map((item) => (
-            <TOCItem
-              className={cn(
-                'text-muted-foreground hover:text-foreground',
-                item.active && 'text-foreground'
-              )}
-              item={item.original}
-              key={item.id}
-              onClick={() => setOpen(false)}
-            />
-          ))}
-        </TOCItems>
+        <div className='flex max-h-[50vh] flex-col overflow-y-auto px-4 pb-2 md:px-6'>
+          <TOCItems>
+            {items.map((item) => (
+              <TOCItem
+                className={cn(
+                  'text-muted-foreground hover:text-foreground',
+                  item.active && 'text-foreground'
+                )}
+                item={item.original}
+                key={item.id}
+                onClick={() => setOpen(false)}
+              />
+            ))}
+          </TOCItems>
+        </div>
       </CollapsibleContent>
     </Collapsible>
   )
