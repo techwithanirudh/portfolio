@@ -3,7 +3,7 @@
 import type { LenisOptions } from 'lenis'
 import { useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
-import { Lenis } from './scroll/lenis'
+import { Lenis } from './lenis'
 
 interface WrapperProps {
   children: ReactNode
