@@ -11,13 +11,13 @@ import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { Fragment, type ReactNode, useEffect } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/section'
+import { Section } from '@/components/layout/sections/section'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
-import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
 

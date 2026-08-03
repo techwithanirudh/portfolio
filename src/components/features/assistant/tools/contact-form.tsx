@@ -1,0 +1,260 @@
+'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
+import { useSound } from '@web-kits/audio/react'
+import { contact } from '@/app/(home)/contact/actions/contact'
+import { useChatContext } from '@/components/features/assistant/chat'
+import { Icons } from '@/components/icons/icons'
+import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Textarea } from '@/components/ui/textarea'
+import { error, pop } from '@/lib/audio/minimal'
+import type { Contact } from '@/lib/validators/contact'
+import { ContactSchema } from '@/lib/validators/contact'
+
+interface AIContactFormProps {
+  isSubmitted: boolean
+  prefill?: Partial<Contact>
+  submittedData?: Contact
+  toolCallId: string
+}
+
+export function AIContactForm({
+  toolCallId,
+  prefill,
+  isSubmitted,
+  submittedData,
+}: AIContactFormProps) {
+  const { addToolOutput, sendMessage } = useChatContext()
+  const playPop = useSound(pop)
+  const playError = useSound(error)
+
+  const { form, action, handleSubmitWithAction } = useHookFormAction(
+    contact,
+    zodResolver(ContactSchema),
+    {
+      actionProps: {
+        onError: () => {
+          playError()
+        },
+        onSuccess: () => {
+          playPop()
+          const { name, email, message } = form.getValues()
+          addToolOutput({
+            output: {
+              email,
+              message,
+              name,
+              success: true,
+            },
+            tool: 'showContactForm',
+            toolCallId,
+          })
+          sendMessage()
+        },
+      },
+      errorMapProps: {},
+      formProps: {
+        defaultValues: {
+          email: prefill?.email ?? '',
+          message: prefill?.message ?? '',
+          name: prefill?.name ?? '',
+        },
+        mode: 'onBlur',
+      },
+    }
+  )
+
+  const isExecuting = action.status === 'executing'
+
+  if (isSubmitted && submittedData) {
+    return (
+      <div className='flex flex-col gap-2 rounded-md border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
+        <div className='flex items-center gap-2'>
+          <Icons.success className='size-4 shrink-0' />
+          <p>message sent! anirudh will get back to you soon.</p>
+        </div>
+        <div className='mt-1 space-y-1 text-xs opacity-80'>
+          <p>
+            <span className='font-medium'>from:</span> {submittedData.name} (
+            {submittedData.email})
+          </p>
+          <p>
+            <span className='font-medium'>message:</span>{' '}
+            {submittedData.message}
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  if (isSubmitted && !submittedData) {
+    return (
+      <div className='flex flex-col gap-2 rounded-md border border-muted-foreground/30 border-dashed bg-muted/40 p-3 text-muted-foreground text-sm'>
+        <div className='flex items-center gap-2'>
+          <Icons.success className='size-4 shrink-0' />
+          <p>message canceled. you can keep chatting.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const handleCancel = () => {
+    addToolOutput({
+      output: {
+        reason: 'user canceled the form',
+        success: false,
+      },
+      tool: 'showContactForm',
+      toolCallId,
+    })
+    sendMessage()
+  }
+
+  return (
+    <Form {...form}>
+      <form
+        className='flex flex-col gap-3 rounded-md border border-dashed p-3'
+        onSubmit={handleSubmitWithAction}
+      >
+        <p className='text-fd-muted-foreground text-xs'>
+          fill this out and i&apos;ll send it to anirudh for you!
+        </p>
+
+        <FormField
+          control={form.control}
+          name='name'
+          render={({ field }) => (
+            <FormItem className='space-y-1'>
+              <FormLabel className='text-xs'>name</FormLabel>
+              <FormControl>
+                <Input
+                  className='h-8 text-sm'
+                  disabled={isExecuting}
+                  placeholder='your name'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className='text-xs' />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <FormItem className='space-y-1'>
+              <FormLabel className='text-xs'>email</FormLabel>
+              <FormControl>
+                <Input
+                  className='h-8 text-sm'
+                  disabled={isExecuting}
+                  placeholder='you@example.com'
+                  type='email'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className='text-xs' />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='message'
+          render={({ field }) => (
+            <FormItem className='space-y-1'>
+              <FormLabel className='text-xs'>message</FormLabel>
+              <FormControl>
+                <Textarea
+                  className='min-h-20 resize-none text-sm'
+                  disabled={isExecuting}
+                  placeholder='what would you like to tell anirudh?'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className='text-xs' />
+            </FormItem>
+          )}
+        />
+
+        {action.result.serverError && (
+          <div className='flex items-center gap-2 text-destructive text-xs'>
+            <Icons.warning className='size-3.5 shrink-0' />
+            <p>
+              {typeof action.result.serverError === 'string'
+                ? action.result.serverError
+                : 'Failed to send message'}
+            </p>
+          </div>
+        )}
+
+        <div className='flex items-center gap-2'>
+          <Button
+            className='h-8 flex-1 gap-1.5 text-sm'
+            disabled={isExecuting}
+            size='sm'
+            type='submit'
+          >
+            {isExecuting ? (
+              <>
+                <Icons.spinner className='size-3.5 animate-spin' />
+                sending...
+              </>
+            ) : (
+              <>
+                <Icons.send className='size-3.5' />
+                send message
+              </>
+            )}
+          </Button>
+          <Button
+            className='h-8 text-sm'
+            disabled={isExecuting}
+            onClick={handleCancel}
+            size='sm'
+            type='button'
+            variant='secondary'
+          >
+            cancel
+          </Button>
+        </div>
+      </form>
+    </Form>
+  )
+}
+
+export function AIContactFormSkeleton() {
+  return (
+    <div className='flex flex-col gap-3 rounded-md border border-dashed p-3'>
+      <Skeleton className='h-3 w-48' />
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-12' />
+        <Skeleton className='h-8 w-full' />
+      </div>
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-14' />
+        <Skeleton className='h-8 w-full' />
+      </div>
+      <div className='space-y-2'>
+        <Skeleton className='h-3 w-16' />
+        <Skeleton className='h-20 w-full' />
+      </div>
+      <div className='flex items-center gap-2'>
+        <Skeleton className='h-8 w-28 flex-1' />
+        <Skeleton className='h-8 w-20' />
+      </div>
+    </div>
+  )
+}

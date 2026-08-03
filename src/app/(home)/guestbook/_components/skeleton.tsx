@@ -1,5 +1,5 @@
+import { ViewAnimation } from '@/components/shared/view-animation'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ViewAnimation } from '@/components/view-animation'
 
 const guestbookSkeletonItems = ['first', 'second', 'third', 'fourth']
 

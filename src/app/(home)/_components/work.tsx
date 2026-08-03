@@ -1,10 +1,10 @@
 import Link from 'next/link'
+import { WorkCard } from '@/components/features/work/work-card'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/section'
-import { SectionHeader } from '@/components/sections/section-header'
+import { Section } from '@/components/layout/sections/section'
+import { SectionHeader } from '@/components/layout/sections/section-header'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import { buttonVariants } from '@/components/ui/button'
-import { ViewAnimation } from '@/components/view-animation'
-import { WorkCard } from '@/components/work/work-card'
 import type { WorkPage } from '@/lib/source'
 
 export default function WorkPreview({ works }: { works: WorkPage[] }) {

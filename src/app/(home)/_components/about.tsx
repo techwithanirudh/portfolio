@@ -1,14 +1,14 @@
 import Link from 'next/link'
+import { Prose } from '@/components/content/mdx/prose'
 import { Icons } from '@/components/icons/icons'
-import { Prose } from '@/components/prose'
-import { SectionHeader } from '@/components/sections/section-header'
+import { SectionHeader } from '@/components/layout/sections/section-header'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
-} from '@/components/sections/split-section'
+} from '@/components/layout/sections/split-section'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import { buttonVariants } from '@/components/ui/button'
-import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 export default function About(): React.ReactElement {

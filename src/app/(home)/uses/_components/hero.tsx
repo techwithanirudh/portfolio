@@ -1,4 +1,4 @@
-import { HeroSection } from '@/components/sections/hero'
+import { HeroSection } from '@/components/layout/sections/hero'
 
 interface HeroProps {
   description: string

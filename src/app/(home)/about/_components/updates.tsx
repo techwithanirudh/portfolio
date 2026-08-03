@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/section'
-import { SectionHeader } from '@/components/sections/section-header'
+import { Section } from '@/components/layout/sections/section'
+import { SectionHeader } from '@/components/layout/sections/section-header'
+import { ViewAnimation } from '@/components/shared/view-animation'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel'
-import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
 import { UpdateCard } from './update-card'
 

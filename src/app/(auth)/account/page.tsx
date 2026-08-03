@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { Footer } from '@/components/sections/footer'
+import { Footer } from '@/components/layout/footer'
 import { createMetadata } from '@/lib/metadata'
 import { AccountLogoutButton } from './_components/account-logout-button'
 import { AccountSettingsSection } from './_components/account-settings-section'
