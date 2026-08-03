@@ -1,24 +1,19 @@
 import 'server-only'
 
-import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { cache } from 'react'
+import {
+  hashUrl,
+  type LinkPreviewEntry,
+  type LinkPreviewManifest,
+} from './link-preview.shared'
 
-export interface LinkPreviewEntry {
-  errorMessage?: string
-  generatedAt: string
-  height: number
-  screenshotPath: string
-  status: 'failed' | 'success'
-  url: string
-  width: number
-}
-
-export interface LinkPreviewManifest {
-  generated: string
-  previews: Record<string, LinkPreviewEntry>
-}
+export type {
+  LinkPreviewEntry,
+  LinkPreviewManifest,
+} from './link-preview.shared'
+export { hashUrl } from './link-preview.shared'
 
 const manifestPath = path.join(
   process.cwd(),
@@ -26,10 +21,6 @@ const manifestPath = path.join(
   'previews',
   'manifest.json'
 )
-
-export function hashUrl(url: string): string {
-  return crypto.createHash('sha256').update(url).digest('hex').slice(0, 12)
-}
 
 export const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
   if (!fs.existsSync(manifestPath)) {

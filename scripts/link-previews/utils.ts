@@ -10,7 +10,7 @@ import {
   hashUrl,
   type LinkPreviewEntry,
   type LinkPreviewManifest,
-} from '@/lib/link-preview'
+} from '@/lib/link-preview.shared'
 import { detection, exclusions, screenshot } from './config'
 import type { CaptureScreenshotResult } from './types'
 
