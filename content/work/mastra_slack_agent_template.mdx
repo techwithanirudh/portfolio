@@ -10,10 +10,6 @@ tags: ['TypeScript', 'Mastra', 'Bun', 'Slack', 'E2B', 'PostgreSQL']
 
 A starting point for building a Slack agent. It handles mentions, DMs, threads, files, workspace search, and streamed replies.
 
-## Build an agent that can use tools
-
-The agent can do more than chat: it can run scripts and work with a repository. The template includes the basic pieces so you can focus on the agent itself.
-
 ## How it works
 
 Each thread gets its own E2B sandbox with files, shell access, and a browser. The agent can run commands without touching the host machine. Larger requests can be split between several smaller agents.

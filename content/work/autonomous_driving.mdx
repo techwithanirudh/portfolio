@@ -10,10 +10,6 @@ tags: ['Research', 'AI', 'Autonomous Driving', 'Privacy']
 
 This research project replaces faces in self-driving car videos. The goal is to hide who was recorded while keeping the footage useful for training driving models.
 
-## Protect privacy in driving data
-
-Driving datasets often include people who did not agree to be recorded. Blurring faces hides their identity but also removes facial detail. This project tests whether replacing faces can protect identity while keeping that detail.
-
 ## How it works
 
 MediaPipe Face Mesh finds facial landmarks on the original and replacement faces. OpenCV uses those landmarks to warp the replacement face into the same position. The project also supports a live webcam for testing.
