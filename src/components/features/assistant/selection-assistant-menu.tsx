@@ -23,7 +23,7 @@ interface PopupState {
   text: string
 }
 
-export function SelectionContent({ children }: { children: ReactNode }) {
+export function SelectionAssistantMenu({ children }: { children: ReactNode }) {
   const { setContext, setOpen } = useAssistantContext()
   const containerRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupState | null>(null)
