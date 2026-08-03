@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { Prose } from '@/components/content/mdx/prose'
 import { Icons } from '@/components/icons/icons'
 import { SectionHeader } from '@/components/layout/sections/header'
 import {
@@ -7,6 +6,7 @@ import {
   SplitSectionContent,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split'
+import { Prose } from '@/components/prose'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'

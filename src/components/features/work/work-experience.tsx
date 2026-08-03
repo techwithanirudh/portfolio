@@ -8,6 +8,7 @@ import { type ComponentProps, useCallback, useRef } from 'react'
 import ReactMarkdown from 'react-markdown'
 import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevrons-up-down'
 import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
+import { Prose } from '@/components/prose'
 import {
   Collapsible,
   CollapsibleContent,
@@ -231,18 +232,6 @@ export function ExperiencePositionItem({
         )}
       </div>
     </Collapsible>
-  )
-}
-
-function Prose({ className, ...props }: ComponentProps<'div'>) {
-  return (
-    <div
-      className={cn(
-        'prose prose-content prose-zinc dark:prose-invert max-w-none',
-        className
-      )}
-      {...props}
-    />
   )
 }
 
