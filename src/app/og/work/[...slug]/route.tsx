@@ -24,7 +24,7 @@ export const GET = async (
       description: page.data.description ?? '',
       title: page.data.title ?? 'Untitled',
     }),
-    await getImageResponseOptions()
+    getImageResponseOptions()
   )
 }
 
