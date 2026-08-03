@@ -19,7 +19,7 @@ export function MobileNav() {
       <Presence present={menuOpen}>
         <button
           aria-label='Close menu'
-          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in sm:hidden'
+          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in lg:hidden'
           data-state={menuOpen ? 'open' : 'closed'}
           onClick={closeMenu}
           type='button'

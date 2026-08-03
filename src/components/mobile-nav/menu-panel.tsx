@@ -38,7 +38,7 @@ export function MenuPanel({
   return (
     <div
       className={cn(
-        'fixed inset-x-4 bottom-20 z-[32] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
+        'fixed inset-x-4 bottom-20 z-[32] overflow-hidden rounded-xl border border-dashed bg-background lg:hidden',
         menuOpen ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
       )}
     >
