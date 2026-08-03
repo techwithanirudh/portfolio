@@ -43,7 +43,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
     >
       <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-left text-muted-foreground text-sm outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 md:px-6 [&_svg]:size-4'>
         <ProgressCircle
-          className={cn('shrink-0', open && 'text-foreground')}
+          className={cn('shrink-0', open && 'text-fd-primary')}
           value={
             (items.findLastIndex((item) => item.active) + 1) /
             Math.max(1, items.length)
@@ -85,7 +85,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
               <TOCItem
                 className={cn(
                   'text-muted-foreground hover:text-foreground',
-                  item.active && 'text-foreground'
+                  item.active && 'text-fd-primary'
                 )}
                 item={item.original}
                 key={item.id}
