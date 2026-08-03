@@ -1,5 +1,6 @@
 import { unstable_cache } from 'next/cache'
 import { activity, owner } from '@/constants/config'
+import { env } from '@/env'
 import { octokit } from '@/lib/github'
 import type { GitHubEvent, PushCommit } from './event'
 
@@ -54,23 +55,31 @@ const getPushEventCommits = async (
 
 const getCachedActivityItems = unstable_cache(
   async (): Promise<ActivityEventItem[]> => {
-    const activity = await octokit.rest.activity.listPublicEventsForUser({
-      per_page: limit,
-      username: owner,
-    })
+    if (!env.GITHUB_TOKEN) {
+      return []
+    }
 
-    const events = activity.data.slice(0, limit)
-    const items = await Promise.all(
-      events.map(async (event) => ({
-        commits:
-          event.type === 'PushEvent'
-            ? await getPushEventCommits(event)
-            : undefined,
-        event,
-      }))
-    )
+    try {
+      const activity = await octokit.rest.activity.listPublicEventsForUser({
+        per_page: limit,
+        username: owner,
+      })
 
-    return items
+      const events = activity.data.slice(0, limit)
+      const items = await Promise.all(
+        events.map(async (event) => ({
+          commits:
+            event.type === 'PushEvent'
+              ? await getPushEventCommits(event)
+              : undefined,
+          event,
+        }))
+      )
+
+      return items
+    } catch {
+      return []
+    }
   },
   ['github-activity', owner],
   { revalidate: 5 * 60 }

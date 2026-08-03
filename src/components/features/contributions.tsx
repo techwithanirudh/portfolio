@@ -210,7 +210,7 @@ const getMonthLabels = (
 
       if (index === 0) {
         const nextLabel = labels[1]
-        return nextLabel ? nextLabel.weekIndex - weekIndex >= minWeeks : false
+        return nextLabel ? nextLabel.weekIndex - weekIndex >= minWeeks : true
       }
 
       if (index === labels.length - 1) {
@@ -247,6 +247,7 @@ export const ContributionGraph = ({
   totalCount: totalCountProp = undefined,
   weekStart = 0,
   className,
+  children,
   ...props
 }: ContributionGraphProps) => {
   const maxLevel = Math.max(1, maxLevelProp)
@@ -296,7 +297,9 @@ export const ContributionGraph = ({
         className={cn('flex w-max max-w-full flex-col gap-2', className)}
         style={{ fontSize, ...style }}
         {...props}
-      />
+      >
+        {children}
+      </div>
     </ContributionGraphContext.Provider>
   )
 }

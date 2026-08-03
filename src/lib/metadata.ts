@@ -34,7 +34,7 @@ export function createMetadata(override: Metadata): Metadata {
     alternates: {
       canonical: '/',
       types: {
-        'application/rss+xml': '/api/rss.xml',
+        'application/rss+xml': '/blog/rss.xml',
       },
       ...override.alternates,
     },

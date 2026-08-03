@@ -21,15 +21,19 @@ export const getGitHubContributions = unstable_cache(
       process.env.GITHUB_CONTRIBUTIONS_API_URL ||
         'https://github-contributions-api.jogruber.de'
     )
-    const response = await fetch(url)
+    try {
+      const response = await fetch(url)
 
-    if (!response.ok) {
+      if (!response.ok) {
+        return []
+      }
+
+      const data = (await response.json()) as ContributionResponse
+
+      return Array.isArray(data.contributions) ? data.contributions : []
+    } catch {
       return []
     }
-
-    const data = (await response.json()) as ContributionResponse
-
-    return data.contributions ?? []
   },
   ['github-contributions', githubUsername ?? 'unknown'],
   { revalidate: 60 * 60 * 24 }
