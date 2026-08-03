@@ -1,21 +1,21 @@
 ---
 title: Transcript Seeker
-description: Upload or join meetings, transcribe them, and chat with your recordings.
+description: An app for recording meetings, reading transcripts, and asking questions about them.
 date: 2025-05-02
 github: https://github.com/Meeting-BaaS/transcript-seeker
 image: /images/projects/transcript_seeker/cover.png
 tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
 ---
 
-Transcript Seeker connects to Zoom, Google Meet, and other platforms through the MeetingBaaS API, or you can just upload your own audio or video files.
+Transcript Seeker records meetings from Zoom, Google Meet, and other platforms, or lets you upload an audio or video file. You can read the transcript and ask questions about it.
 
 ## Why it exists
 
-Meeting recordings are easy to make and hard to actually use afterward. This gives them a proper interface: synced playback and transcript, search, and an AI you can ask about what was said, instead of scrubbing through a video hoping to find the right moment.
+It is hard to find one sentence in a long meeting recording. This app keeps the video and transcript together, lets you search them, and lets you ask an AI about what was said.
 
 ## How it works
 
-The interface syncs playback with the transcript, so clicking any word jumps you to that moment in the recording. MeetingBaaS bots handle joining and recording meetings automatically, while AI chat and summarization tools let you search or explore a transcript conversationally. It's local-first, using PGLite in the browser with optional Turso/SQLite for persistent calendar data, all within a Turborepo workspace with a Nitro proxy and Drizzle ORM behind the scenes.
+The transcript follows the recording, so clicking a word jumps to that moment. MeetingBaaS bots can join and record meetings. AI chat and summaries help you search the transcript. PGLite stores data in the browser, with optional Turso/SQLite storage for calendar data.
 
 ## Stack
 

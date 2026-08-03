@@ -1,6 +1,6 @@
 ---
 title: Remotely
-description: Drive your Mac's pointer with the TV remote already sitting on the couch. No dongle, no account, nothing leaves the machine.
+description: Use a TV remote as a mouse for a Mac connected to a TV.
 date: 2026-07-30
 order: 5
 github: https://github.com/techwithanirudh/remotely
@@ -8,15 +8,15 @@ image: /images/projects/remotely/cover.png
 tags: ['Swift', 'SwiftUI', 'macOS', 'HDMI-CEC', 'Accessibility']
 ---
 
-A Mac plugged into a TV is a great setup right up to the moment you need the pointer, and the trackpad is across the room. Remotely fixes that with the remote already in your hand: the arrows move the cursor, the centre button clicks, and nothing else has to be bought or paired.
+Remotely lets you use a TV remote to control the pointer on a Mac connected to a TV. The arrows move the cursor, the centre button clicks, and nothing else needs to be bought or paired.
 
 ## Why it exists
 
-Macs can hear TV remotes over the HDMI cable, but macOS keeps that channel to itself and hands nothing to third-party apps; the usual door is locked and stays locked. It does, however, narrate every button press into the system log. So Remotely reads the log, works out which button was pressed, and moves the pointer accordingly. A side door, but a reliable one.
+I wanted to control a Mac from the couch without buying another device. macOS does not give apps direct access to TV remote buttons, but it writes those button presses to the system log. Remotely reads the log and moves the pointer.
 
 ## How it works
 
-The rest is making it feel like a mouse rather than a D-pad. Tapping an arrow nudges a few pixels for small targets; holding one glides, picking up speed the longer you hold. Press Back twice and the arrows scroll instead of move, with a chip by the cursor showing which mode you're in. Twenty actions can be rebound, keyboard shortcuts included. It all runs on the Mac: no account, no network, no analytics.
+Tapping an arrow moves the pointer a little. Holding it moves faster. Press Back twice to switch the arrows to scrolling. You can also rebind twenty actions, including keyboard shortcuts. Everything runs on the Mac with no account or network connection.
 
 ## Stack
 

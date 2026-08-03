@@ -1,21 +1,21 @@
 ---
 title: Classnotes Buddy
-description: A web app for uploading and sharing class notes, free to use.
+description: A site for uploading and sharing class notes.
 date: 2023-01-18
 website: https://notes.techwithanirudh.com/
 image: /images/projects/classnotes_buddy/cover.png
 tags: ['Turborepo', 'Supabase', 'Next.js', 'Drizzle']
 ---
 
-Classnotes Buddy lets you upload class notes and share them with a link, with everything synced instantly across your devices.
+Classnotes Buddy is a place to upload class notes and share them with a link. Your notes stay in sync when you open them on another device.
 
 ## Why it exists
 
-Sharing class notes usually means a group chat full of photos of a whiteboard, or a folder link nobody can find later. This gives notes a proper home: upload once, get a link, and it's synced everywhere you open it.
+I wanted a simple way to share notes without sending photos through a group chat or losing a folder link. Upload the notes once, then share the link.
 
 ## How it works
 
-Uploads sync instantly across devices, with Supabase handling auth (email and OAuth) and profile syncing behind the scenes, and Drizzle managing the Postgres schema. It's built on a Turborepo workspace extending the create-t3-turbo stack, with a Next.js web client today and an Expo mobile app in progress.
+Supabase handles email and OAuth sign-in. Drizzle manages the Postgres database, and uploads sync across devices. The project is a Turborepo workspace with a Next.js web app and an Expo mobile app in progress.
 
 ## Stack
 

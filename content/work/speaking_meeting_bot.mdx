@@ -1,21 +1,21 @@
 ---
 title: Speaking Meeting Bot
-description: AI agents that join Google Meet and Teams calls with custom personalities.
+description: AI agents that join Google Meet and Teams calls and speak with different personalities.
 date: 2025-06-09
 github: https://github.com/Meeting-BaaS/speaking-meeting-bot
 image: /images/projects/speaking_meeting_bot/cover.png
 tags: ['Python', 'FastAPI', 'Pipecat', 'MeetingBaaS', 'WebSocket']
 ---
 
-Speaking Meeting Bot deploys AI agents that can join Google Meet or Teams calls with distinct personalities.
+Speaking Meeting Bot lets AI agents join Google Meet and Teams calls and speak with different personalities.
 
 ## Why it exists
 
-A meeting bot that just transcribes is only half useful. This one actually participates, with a personality you can shape, so it fits a specific role in a call instead of being a generic assistant bolted on.
+I wanted a meeting bot that could speak instead of only transcribing. You can give each agent its own personality and use it for a specific role in a call.
 
 ## How it works
 
-Each agent's behavior, tone, and knowledge are defined in Markdown files you can edit without touching code, which makes it easy to tune a persona without redeploying. A FastAPI service exposes REST and WebSocket endpoints for spawning bots, and MeetingBaaS APIs handle actually joining the call. The audio pipeline runs through Pipecat, combining speech-to-text, text-to-speech, and OpenAI for reasoning, with ngrok for local development and a standard base URL setup in production.
+Each agent's behavior, tone, and knowledge live in a Markdown file, so you can change the personality without changing code. FastAPI starts the bots, MeetingBaaS joins the calls, and Pipecat handles the audio. OpenAI handles the responses. ngrok is used during local development.
 
 ## Stack
 

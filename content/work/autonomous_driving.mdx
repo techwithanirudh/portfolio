@@ -1,6 +1,6 @@
 ---
 title: Solving Autonomous Driving Privacy Challenges using AI
-description: A face-swapping prototype for protecting privacy in autonomous-driving datasets.
+description: A research project that replaces faces in driving videos to protect privacy.
 date: 2022-04-15
 website: https://osf.io/mtfpy/
 github: https://github.com/techwithanirudh/AutonomousDrivingPaperCode/
@@ -8,15 +8,15 @@ image: /images/projects/autonomous_driving/cover.png
 tags: ['Research', 'AI', 'Autonomous Driving', 'Privacy']
 ---
 
-Self-driving cars record a lot of video, and that video usually has bystanders' faces in it. This research prototype swaps those faces out for a different one, so the footage can still be used to train driving models without keeping anyone's real identity in the data.
+This research project replaces faces in self-driving car videos. The goal is to hide who was recorded while keeping the footage useful for training driving models.
 
 ## Why it exists
 
-Autonomous-driving datasets are full of people who never agreed to be recorded. Blurring faces protects privacy but throws away the facial geometry some models rely on. Swapping in a different, consistent face keeps that geometry intact while removing the real identity, which was the question this project set out to test.
+Driving datasets often include people who did not agree to be recorded. Blurring faces hides their identity but also removes facial detail. This project tests whether replacing faces can protect identity while keeping that detail.
 
 ## How it works
 
-MediaPipe's Face Mesh maps out facial landmarks on both the original and replacement face. Those landmarks define a triangulation, and OpenCV warps each triangle from the replacement face onto the same geometry as the original, so pose and expression still line up naturally. It also supports live webcam input, which made it easier to test the face swap in real time while building it.
+MediaPipe Face Mesh finds facial landmarks on the original and replacement faces. OpenCV uses those landmarks to warp the replacement face into the same position. The project also supports a live webcam for testing.
 
 ## Stack
 
