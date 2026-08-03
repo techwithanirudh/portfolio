@@ -1,7 +1,7 @@
 export {
-  AISearch,
-  useAISearchContext,
+  Assistant,
+  useAssistantContext,
   useChatContext,
-} from './chat'
-export { AISearchTrigger } from './search-trigger'
+} from './assistant'
 export { SelectionContent } from './selection-context-menu'
+export { AssistantTrigger } from './trigger'

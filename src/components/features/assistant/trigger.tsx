@@ -2,8 +2,8 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
-import { useAISearchContext } from '@/components/features/assistant/chat'
-import { useClippy } from '@/components/features/assistant/mascot'
+import { useAssistantContext } from '@/components/features/assistant/assistant'
+import { useMascot } from '@/components/features/assistant/mascot'
 import { animations } from '@/components/features/assistant/mascot/constants'
 import { playAnimation } from '@/components/features/assistant/mascot/utils'
 
@@ -12,9 +12,9 @@ const getPosition = () => ({
   y: window.innerHeight - 100,
 })
 
-function FloatingAssistantTrigger() {
-  const { setOpen } = useAISearchContext()
-  const { agent } = useClippy()
+function InnerTrigger() {
+  const { setOpen } = useAssistantContext()
+  const { agent } = useMascot()
 
   useEffect(() => {
     if (!agent) {
@@ -68,7 +68,6 @@ function FloatingAssistantTrigger() {
   return null
 }
 
-export const AISearchTrigger = dynamic(
-  () => Promise.resolve(FloatingAssistantTrigger),
-  { ssr: false }
-)
+export const AssistantTrigger = dynamic(() => Promise.resolve(InnerTrigger), {
+  ssr: false,
+})

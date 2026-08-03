@@ -6,23 +6,23 @@ import { useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
 import { animations } from './constants'
-import type { ClippyAgent } from './provider'
+import type { MascotAgent } from './provider'
 import { playAnimation } from './utils'
 
-export const playSubmitAnimation = (agent: ClippyAgent | undefined) => {
+export const playSubmitAnimation = (agent: MascotAgent | undefined) => {
   if (!agent) {
     return
   }
   playAnimation(agent, animations.submit, { interrupt: true })
 }
 
-export function useClippyPanel({
+export function useMascotPanel({
   agent,
   messages,
   open,
   status,
 }: {
-  agent: ClippyAgent | undefined
+  agent: MascotAgent | undefined
   messages: MyUIMessage[]
   open: boolean
   status: UseChatHelpers<MyUIMessage>['status']

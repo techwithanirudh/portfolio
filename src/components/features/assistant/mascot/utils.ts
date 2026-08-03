@@ -1,4 +1,4 @@
-import type { ClippyAgent } from './provider'
+import type { MascotAgent } from './provider'
 
 type Animation = string | readonly string[]
 
@@ -10,7 +10,7 @@ function pickAnimation(animation: Animation): string {
 }
 
 export function playAnimation(
-  agent: ClippyAgent,
+  agent: MascotAgent,
   animation: Animation,
   { interrupt = false }: { interrupt?: boolean } = {}
 ) {

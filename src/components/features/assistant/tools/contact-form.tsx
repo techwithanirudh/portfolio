@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useSound } from '@web-kits/audio/react'
 import { contact } from '@/app/(home)/contact/actions/contact'
-import { useChatContext } from '@/components/features/assistant/chat'
+import { useChatContext } from '@/components/features/assistant/assistant'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,19 +22,19 @@ import { error, pop } from '@/lib/audio/minimal'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
-interface AIContactFormProps {
+interface ContactFormProps {
   isSubmitted: boolean
   prefill?: Partial<Contact>
   submittedData?: Contact
   toolCallId: string
 }
 
-export function AIContactForm({
+export function ContactForm({
   toolCallId,
   prefill,
   isSubmitted,
   submittedData,
-}: AIContactFormProps) {
+}: ContactFormProps) {
   const { addToolOutput, sendMessage } = useChatContext()
   const playPop = useSound(pop)
   const playError = useSound(error)
@@ -235,7 +235,7 @@ export function AIContactForm({
   )
 }
 
-export function AIContactFormSkeleton() {
+export function ContactFormSkeleton() {
   return (
     <div className='flex flex-col gap-3 rounded-md border border-dashed p-3'>
       <Skeleton className='h-3 w-48' />
