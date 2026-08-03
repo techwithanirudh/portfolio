@@ -1,3 +1,4 @@
+import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
@@ -53,7 +54,7 @@ export default async function Page(props: {
   )
 
   return (
-    <>
+    <TOCProvider toc={toc}>
       <Header page={page} tags={tags} />
 
       <SectionBody className='flex'>
@@ -80,7 +81,7 @@ export default async function Page(props: {
         </article>
       </SectionBody>
       <PostJsonLd page={page} />
-    </>
+    </TOCProvider>
   )
 }
 
