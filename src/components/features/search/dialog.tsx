@@ -32,8 +32,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
-import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
+import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
 
 const NAV_SOUND_THROTTLE_MS = 60
 
@@ -314,7 +314,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
                 <CommandSeparator />
               </>
             )}
-
           </CommandList>
 
           <CommandMenuFooter />
