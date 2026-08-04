@@ -171,11 +171,23 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   const accountItems = user
     ? [
-        { action: 'account' as const, icon: <Icons.user className='size-4' />, title: 'Account' },
-        { action: 'logout' as const, icon: <Icons.logOut className='size-4' />, title: 'Log Out' },
+        {
+          action: 'account' as const,
+          icon: <Icons.user className='size-4' />,
+          title: 'Account',
+        },
+        {
+          action: 'logout' as const,
+          icon: <Icons.logOut className='size-4' />,
+          title: 'Log Out',
+        },
       ]
     : [
-        { action: 'signin' as const, icon: <Icons.logIn className='size-4' />, title: 'Sign In' },
+        {
+          action: 'signin' as const,
+          icon: <Icons.logIn className='size-4' />,
+          title: 'Sign In',
+        },
       ]
 
   const handleAccountAction = async (
