@@ -197,7 +197,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
     if (item.kind === 'account') {
-      handleAccountAction(item.action)
+      void handleAccountAction(item.action)
       return
     }
 
