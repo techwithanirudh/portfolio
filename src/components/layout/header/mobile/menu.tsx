@@ -122,7 +122,9 @@ export function MenuPanel({
               onClick={() => setTimeout(onClose, 0)}
             >
               <Icons.user className='size-3.5 shrink-0' />
-              <span className='truncate'>{user.name || user.email || 'Account'}</span>
+              <span className='truncate'>
+                {user.name || user.email || 'Account'}
+              </span>
             </Link>
             <button
               className='flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground'
