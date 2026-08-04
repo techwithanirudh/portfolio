@@ -1,10 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
+import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
@@ -20,6 +21,9 @@ export function MenuPanel({
   onClose: () => void
 }) {
   const pathname = usePathname()
+  const router = useRouter()
+  const { data: sessionData } = useSession()
+  const user = sessionData?.user ?? null
   const menuItems = [
     {
       active: 'url' as const,
@@ -108,6 +112,44 @@ export function MenuPanel({
           </button>
           <ThemeToggle />
         </div>
+      </div>
+      <div className='flex items-center justify-between border-t border-dashed px-3 py-2'>
+        {user ? (
+          <>
+            <Link
+              className='flex min-w-0 items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
+              href='/account'
+              onClick={() => setTimeout(onClose, 0)}
+            >
+              <Icons.user className='size-3.5 shrink-0' />
+              <span className='truncate'>
+                {user.name || user.email || 'Account'}
+              </span>
+            </Link>
+            <button
+              className='flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
+              onClick={async () => {
+                await signOut()
+                onClose()
+                router.push('/')
+                router.refresh()
+              }}
+              type='button'
+            >
+              <Icons.logOut className='size-3.5' />
+              Log Out
+            </button>
+          </>
+        ) : (
+          <Link
+            className='flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
+            href={getLoginUrl(pathname)}
+            onClick={() => setTimeout(onClose, 0)}
+          >
+            <Icons.logIn className='size-3.5' />
+            Sign In
+          </Link>
+        )}
       </div>
     </div>
   )

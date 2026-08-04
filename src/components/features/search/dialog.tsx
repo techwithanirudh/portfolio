@@ -4,7 +4,7 @@ import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useLenis } from 'lenis/react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { CommandMenuFooter } from '@/components/features/search/footer'
@@ -33,11 +33,14 @@ import {
 } from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
+import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
+import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
 
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
+  const pathname = usePathname()
   const router = useRouter()
   const lenis = useLenis()
   const { setTheme, theme } = useTheme()
@@ -57,10 +60,43 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
+  const { data: sessionData } = useSession()
+  const user = sessionData?.user ?? null
+
+  const accountItems = useMemo<SearchCommandItem[]>(
+    () =>
+      user
+        ? [
+            {
+              action: 'account',
+              icon: <Icons.user className='size-4' />,
+              kind: 'account',
+              title: 'Account',
+            },
+            {
+              action: 'logout',
+              icon: <Icons.logOut className='size-4' />,
+              kind: 'account',
+              title: 'Log Out',
+            },
+          ]
+        : [
+            {
+              action: 'signin',
+              icon: <Icons.logIn className='size-4' />,
+              kind: 'account',
+              title: 'Sign In',
+            },
+          ],
+    [user]
+  )
 
   const isEmpty = !search.trim()
 
-  const allGroups = useMemo(() => buildCommandGroups(search), [search])
+  const allGroups = useMemo(
+    () => buildCommandGroups(search, accountItems),
+    [accountItems, search]
+  )
   const groups = isEmpty
     ? allGroups.filter((g) => g.position !== 'after')
     : allGroups
@@ -140,7 +176,33 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
   }
 
-  const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
+  const handleAccountAction = async (action: SearchCommandItem['action']) => {
+    playConfirm()
+    close()
+
+    if (action === 'account') {
+      navigateToUrl('/account')
+      return
+    }
+
+    if (action === 'signin') {
+      navigateToUrl(getLoginUrl(pathname))
+      return
+    }
+
+    await signOut()
+    router.push('/')
+    router.refresh()
+  }
+
+  const handleSelect = async (
+    item: (typeof groups)[number]['items'][number]
+  ) => {
+    if (item.kind === 'account') {
+      await handleAccountAction(item.action)
+      return
+    }
+
     playConfirm()
 
     if (item.kind === 'theme') {
