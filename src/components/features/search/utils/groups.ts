@@ -95,8 +95,7 @@ export function buildCommandGroups(
   }
 
   const filteredAccountItems = accountItems.filter(
-    (item) =>
-      isEmpty || defaultFilter(item.title, search, item.keywords) > 0
+    (item) => isEmpty || defaultFilter(item.title, search, item.keywords) > 0
   )
 
   return filteredAccountItems.length > 0
