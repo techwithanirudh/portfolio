@@ -195,9 +195,11 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     router.refresh()
   }
 
-  const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
+  const handleSelect = async (
+    item: (typeof groups)[number]['items'][number]
+  ) => {
     if (item.kind === 'account') {
-      void handleAccountAction(item.action)
+      await handleAccountAction(item.action)
       return
     }
 
@@ -309,7 +311,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             {isEmpty ? null : (
               <SearchResultsList groups={tagGroups} onSelect={go} />
             )}
-
           </CommandList>
 
           <CommandMenuFooter />
