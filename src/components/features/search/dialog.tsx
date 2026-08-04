@@ -4,7 +4,7 @@ import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useLenis } from 'lenis/react'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { CommandMenuFooter } from '@/components/features/search/footer'
@@ -32,12 +32,14 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
+import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 
 const NAV_SOUND_THROTTLE_MS = 60
 
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
+  const pathname = usePathname()
   const router = useRouter()
   const lenis = useLenis()
   const { setTheme, theme } = useTheme()
@@ -57,6 +59,8 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
+  const { data: sessionData } = useSession()
+  const user = sessionData?.user ?? null
 
   const isEmpty = !search.trim()
 
@@ -165,6 +169,36 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     navigateToUrl(url)
   }
 
+  const accountItems = user
+    ? [
+        { action: 'account' as const, icon: <Icons.user className='size-4' />, title: 'Account' },
+        { action: 'logout' as const, icon: <Icons.logOut className='size-4' />, title: 'Log Out' },
+      ]
+    : [
+        { action: 'signin' as const, icon: <Icons.logIn className='size-4' />, title: 'Sign In' },
+      ]
+
+  const handleAccountAction = async (
+    action: (typeof accountItems)[number]['action']
+  ) => {
+    playConfirm()
+    close()
+
+    if (action === 'account') {
+      navigateToUrl('/account')
+      return
+    }
+
+    if (action === 'signin') {
+      navigateToUrl(getLoginUrl(pathname))
+      return
+    }
+
+    await signOut()
+    router.push('/')
+    router.refresh()
+  }
+
   const renderCommandItem = (item: CommandItemData) => (
     <CommandItem
       data-checked={
@@ -214,6 +248,25 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 scroll-pt-2 scroll-pb-1.5 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
             data-lenis-prevent
           >
+            {accountItems.length > 0 && (
+              <>
+                <CommandGroup heading='Account'>
+                  {accountItems.map((item) => (
+                    <CommandItem
+                      key={item.action}
+                      keywords={['account', 'user', 'logout', 'sign in']}
+                      onSelect={() => handleAccountAction(item.action)}
+                      value={item.title}
+                    >
+                      <span className='text-muted-foreground'>{item.icon}</span>
+                      {item.title}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+                <CommandSeparator />
+              </>
+            )}
+
             {groups.map(({ group, items }, i) => (
               <Fragment key={group}>
                 {i > 0 && <CommandSeparator />}
