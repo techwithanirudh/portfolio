@@ -34,6 +34,7 @@ import {
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
+import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
 
@@ -62,9 +63,40 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { data: sessionData } = useSession()
   const user = sessionData?.user ?? null
 
+  const accountItems = useMemo<SearchCommandItem[]>(
+    () =>
+      user
+        ? [
+            {
+              action: 'account',
+              icon: <Icons.user className='size-4' />,
+              kind: 'account',
+              title: 'Account',
+            },
+            {
+              action: 'logout',
+              icon: <Icons.logOut className='size-4' />,
+              kind: 'account',
+              title: 'Log Out',
+            },
+          ]
+        : [
+            {
+              action: 'signin',
+              icon: <Icons.logIn className='size-4' />,
+              kind: 'account',
+              title: 'Sign In',
+            },
+          ],
+    [user]
+  )
+
   const isEmpty = !search.trim()
 
-  const allGroups = useMemo(() => buildCommandGroups(search), [search])
+  const allGroups = useMemo(
+    () => buildCommandGroups(search, accountItems),
+    [accountItems, search]
+  )
   const groups = isEmpty
     ? allGroups.filter((g) => g.position !== 'after')
     : allGroups
@@ -144,7 +176,31 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
   }
 
+  const handleAccountAction = async (action: SearchCommandItem['action']) => {
+    playConfirm()
+    close()
+
+    if (action === 'account') {
+      navigateToUrl('/account')
+      return
+    }
+
+    if (action === 'signin') {
+      navigateToUrl(getLoginUrl(pathname))
+      return
+    }
+
+    await signOut()
+    router.push('/')
+    router.refresh()
+  }
+
   const handleSelect = (item: (typeof groups)[number]['items'][number]) => {
+    if (item.kind === 'account') {
+      handleAccountAction(item.action)
+      return
+    }
+
     playConfirm()
 
     if (item.kind === 'theme') {
@@ -167,48 +223,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     playConfirm()
     close()
     navigateToUrl(url)
-  }
-
-  const accountItems = user
-    ? [
-        {
-          action: 'account' as const,
-          icon: <Icons.user className='size-4' />,
-          title: 'Account',
-        },
-        {
-          action: 'logout' as const,
-          icon: <Icons.logOut className='size-4' />,
-          title: 'Log Out',
-        },
-      ]
-    : [
-        {
-          action: 'signin' as const,
-          icon: <Icons.logIn className='size-4' />,
-          title: 'Sign In',
-        },
-      ]
-
-  const handleAccountAction = async (
-    action: (typeof accountItems)[number]['action']
-  ) => {
-    playConfirm()
-    close()
-
-    if (action === 'account') {
-      navigateToUrl('/account')
-      return
-    }
-
-    if (action === 'signin') {
-      navigateToUrl(getLoginUrl(pathname))
-      return
-    }
-
-    await signOut()
-    router.push('/')
-    router.refresh()
   }
 
   const renderCommandItem = (item: CommandItemData) => (
@@ -296,24 +310,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               <SearchResultsList groups={tagGroups} onSelect={go} />
             )}
 
-            {accountItems.length > 0 && (
-              <>
-                <CommandGroup heading='Account'>
-                  {accountItems.map((item) => (
-                    <CommandItem
-                      key={item.action}
-                      keywords={['account', 'user', 'logout', 'sign in']}
-                      onSelect={() => handleAccountAction(item.action)}
-                      value={item.title}
-                    >
-                      <span className='text-muted-foreground'>{item.icon}</span>
-                      {item.title}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                <CommandSeparator />
-              </>
-            )}
           </CommandList>
 
           <CommandMenuFooter />
