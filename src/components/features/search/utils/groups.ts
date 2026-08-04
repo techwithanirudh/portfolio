@@ -2,6 +2,7 @@ import { defaultFilter } from 'cmdk'
 import type { SortedResult } from 'fumadocs-core/search'
 import type { PageEntry } from '@/app/actions/pages'
 import { commands } from '@/constants/search'
+import type { CommandItem } from '@/types/search'
 import type { SearchPageGroup, SearchTagGroup } from '@/types/search/results'
 
 function tagFromUrl(url: string): string {
@@ -101,7 +102,11 @@ export function buildCommandGroups(
   return filteredAccountItems.length > 0
     ? [
         ...commandGroups,
-        { group: 'Account', items: filteredAccountItems, position: 'after' as const },
+        {
+          group: 'Account',
+          items: filteredAccountItems,
+          position: 'after' as const,
+        },
       ]
     : commandGroups
 }
