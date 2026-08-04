@@ -73,10 +73,12 @@ function bucketPageGroupsByTag(
   return orderTagGroups(tagMap)
 }
 
-export function buildCommandGroups(search: string) {
+export function buildCommandGroups(
+  search: string,
+  accountItems: CommandItem[] = []
+) {
   const isEmpty = !search.trim()
-
-  return commands
+  const commandGroups = commands
     .map(({ group, position, items }) => ({
       group,
       items: items.filter(
@@ -86,6 +88,22 @@ export function buildCommandGroups(search: string) {
       position,
     }))
     .filter(({ items }) => items.length > 0)
+
+  if (accountItems.length === 0) {
+    return commandGroups
+  }
+
+  const filteredAccountItems = accountItems.filter(
+    (item) =>
+      isEmpty || defaultFilter(item.title, search, item.keywords) > 0
+  )
+
+  return filteredAccountItems.length > 0
+    ? [
+        ...commandGroups,
+        { group: 'Account', items: filteredAccountItems, position: 'after' as const },
+      ]
+    : commandGroups
 }
 
 export function buildSearchTagGroups(
