@@ -248,25 +248,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 scroll-pt-2 scroll-pb-1.5 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
             data-lenis-prevent
           >
-            {accountItems.length > 0 && (
-              <>
-                <CommandGroup heading='Account'>
-                  {accountItems.map((item) => (
-                    <CommandItem
-                      key={item.action}
-                      keywords={['account', 'user', 'logout', 'sign in']}
-                      onSelect={() => handleAccountAction(item.action)}
-                      value={item.title}
-                    >
-                      <span className='text-muted-foreground'>{item.icon}</span>
-                      {item.title}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-                <CommandSeparator />
-              </>
-            )}
-
             {groups.map(({ group, items }, i) => (
               <Fragment key={group}>
                 {i > 0 && <CommandSeparator />}
@@ -302,6 +283,26 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             {isEmpty ? null : (
               <SearchResultsList groups={tagGroups} onSelect={go} />
             )}
+
+            {accountItems.length > 0 && (
+              <>
+                <CommandGroup heading='Account'>
+                  {accountItems.map((item) => (
+                    <CommandItem
+                      key={item.action}
+                      keywords={['account', 'user', 'logout', 'sign in']}
+                      onSelect={() => handleAccountAction(item.action)}
+                      value={item.title}
+                    >
+                      <span className='text-muted-foreground'>{item.icon}</span>
+                      {item.title}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+                <CommandSeparator />
+              </>
+            )}
+
           </CommandList>
 
           <CommandMenuFooter />
