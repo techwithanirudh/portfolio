@@ -5,8 +5,8 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
-import { isActive } from '@/lib/is-active'
 import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
+import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
 export function MenuPanel({
@@ -117,7 +117,7 @@ export function MenuPanel({
         {user ? (
           <>
             <Link
-              className='flex min-w-0 items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground'
+              className='flex min-w-0 items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
               href='/account'
               onClick={() => setTimeout(onClose, 0)}
             >
@@ -127,7 +127,7 @@ export function MenuPanel({
               </span>
             </Link>
             <button
-              className='flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground'
+              className='flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
               onClick={async () => {
                 await signOut()
                 onClose()
@@ -142,7 +142,7 @@ export function MenuPanel({
           </>
         ) : (
           <Link
-            className='flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground'
+            className='flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
             href={getLoginUrl(pathname)}
             onClick={() => setTimeout(onClose, 0)}
           >
