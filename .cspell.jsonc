@@ -171,6 +171,13 @@
     "KHTML",
     "networkidle",
     "domcontentloaded",
-    "trackpad"
+    "trackpad",
+    "oiia",
+    "Oiia",
+    "OIIA",
+    "COOLDOWN",
+    "HITBOX",
+    "boing",
+    "Boing"
   ]
 }
