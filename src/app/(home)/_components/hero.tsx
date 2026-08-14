@@ -10,6 +10,7 @@ import { linkItems } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 import { cn } from '@/lib/utils'
 import heroImage from '../../../../public/images/gradient-noise-purple-azure-light.png'
+import { HeroName } from './hero-name'
 
 const Hero = () => {
   const links = resolveLinkItems({
@@ -53,7 +54,7 @@ const Hero = () => {
             'md:text-5xl'
           )}
         >
-          Hi! I'm Anirudh!
+          <HeroName />
         </h1>
       </ViewAnimation>
       <ViewAnimation
