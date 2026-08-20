@@ -10,59 +10,58 @@ export function OiiaWidget() {
   return (
     <AnimatePresence>
       {mode === 'oiia' && (
-        <motion.div
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          className='fixed bottom-5 left-1/2 z-[10000] flex -translate-x-1/2 flex-col items-center gap-1.5'
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          transition={{ damping: 30, stiffness: 400, type: 'spring' }}
-        >
-          {/* Tip */}
-          <p className='flex select-none items-center gap-2 rounded-full border border-black/10 bg-white/75 p-1.5 text-black/70 text-xs backdrop-blur-xl dark:border-white/20 dark:bg-black/60 dark:text-white/70'>
-            make two collide to spawn a new oiia
-          </p>
+        <div className='fixed inset-x-0 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-[10000] flex justify-center px-4 md:bottom-5'>
+          <motion.div
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className='flex w-full max-w-xs flex-col overflow-hidden rounded-2xl border bg-background/80 shadow-lg backdrop-blur-md sm:w-auto'
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ damping: 30, stiffness: 400, type: 'spring' }}
+          >
+            <p className='select-none px-4 py-2 text-center text-muted-foreground text-xs'>
+              collide two cats to spawn a new one
+            </p>
 
-          {/* Controls pill */}
-          <div className='flex items-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-2 shadow-2xl backdrop-blur-xl'>
-            {/* Count */}
-            <div className='flex items-center gap-1.5'>
-              <span aria-label='cat' className='text-base' role='img'>
-                🐱
-              </span>
-              <motion.span
-                animate={{ scale: [1, 1.4, 1] }}
-                className='min-w-[1.5rem] text-center font-bold font-mono text-sm text-white tabular-nums'
-                key={catCount}
-                transition={{ duration: 0.25, ease: 'backOut' }}
+            <div className='flex items-center gap-1 border-t px-2 py-1.5'>
+              <div className='flex flex-1 items-center justify-center gap-1.5 px-2'>
+                <span aria-label='cat' className='text-base' role='img'>
+                  🐱
+                </span>
+                <motion.span
+                  animate={{ scale: [1, 1.4, 1] }}
+                  className='min-w-[1.5rem] text-center font-mono font-semibold text-foreground text-sm tabular-nums'
+                  key={catCount}
+                  transition={{ duration: 0.25, ease: 'backOut' }}
+                >
+                  {catCount}
+                </motion.span>
+              </div>
+
+              <div className='h-4 w-px bg-border' />
+
+              <button
+                aria-label='Clear all OIIA cats'
+                className='flex items-center gap-1 rounded-full px-2 py-1 font-medium text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-accent-foreground'
+                onClick={clearAll}
+                type='button'
               >
-                {catCount}
-              </motion.span>
+                <span>🎉</span>
+                <span>Clear</span>
+              </button>
+
+              <div className='h-4 w-px bg-border' />
+
+              <button
+                aria-label='Disable OIIA mode'
+                className='flex size-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground'
+                onClick={disable}
+                type='button'
+              >
+                <Icons.close className='size-3.5' />
+              </button>
             </div>
-
-            <div className='h-4 w-px bg-white/25' />
-
-            <button
-              aria-label='Clear all OIIA cats'
-              className='flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white/70 text-xs transition-all hover:scale-110 hover:bg-white/15 hover:text-white active:scale-95'
-              onClick={clearAll}
-              type='button'
-            >
-              <span>🎉</span>
-              <span>Clear</span>
-            </button>
-
-            <div className='h-4 w-px bg-white/25' />
-
-            <button
-              aria-label='Disable OIIA mode'
-              className='rounded-full p-1 font-medium text-white/40 transition-all hover:scale-110 hover:bg-white/15 hover:text-white/80 active:scale-95'
-              onClick={disable}
-              type='button'
-            >
-              <Icons.close className='size-3.5' />
-            </button>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   )
