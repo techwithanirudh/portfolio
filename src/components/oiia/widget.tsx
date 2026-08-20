@@ -1,10 +1,11 @@
 'use client'
 
 import { AnimatePresence, motion } from 'motion/react'
-import { useOiiaMode } from './oiia-provider'
+import { Icons } from '@/components/icons/icons'
+import { useOiiaMode } from './provider'
 
 export function OiiaWidget() {
-  const { mode, catCount, requestClearAll, disableOiia } = useOiiaMode()
+  const { mode, catCount, clearAll, disable } = useOiiaMode()
 
   return (
     <AnimatePresence>
@@ -43,7 +44,7 @@ export function OiiaWidget() {
             <button
               aria-label='Clear all OIIA cats'
               className='flex items-center gap-1 rounded-full px-2 py-0.5 font-medium text-white/70 text-xs transition-all hover:scale-110 hover:bg-white/15 hover:text-white active:scale-95'
-              onClick={requestClearAll}
+              onClick={clearAll}
               type='button'
             >
               <span>🎉</span>
@@ -54,11 +55,11 @@ export function OiiaWidget() {
 
             <button
               aria-label='Disable OIIA mode'
-              className='rounded-full px-2 py-0.5 font-medium text-white/40 text-xs transition-all hover:scale-110 hover:bg-white/15 hover:text-white/80 active:scale-95'
-              onClick={disableOiia}
+              className='rounded-full p-1 font-medium text-white/40 transition-all hover:scale-110 hover:bg-white/15 hover:text-white/80 active:scale-95'
+              onClick={disable}
               type='button'
             >
-              ✕
+              <Icons.close className='size-3.5' />
             </button>
           </div>
         </motion.div>

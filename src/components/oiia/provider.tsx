@@ -11,16 +11,18 @@ import {
   useState,
 } from 'react'
 
-type OiiaMode = 'default' | 'oiia'
+export type OiiaMode = 'default' | 'oiia'
+
+export const OIIA_TITLE = 'OIIA'
 
 interface OiiaContextValue {
   catCount: number
+  clearAll: () => void
   clearAllRequest: number
   clicksRemaining: number
-  disableOiia: () => void
+  disable: () => void
   mode: OiiaMode
-  registerOiiaClick: () => { remaining: number; mode: OiiaMode }
-  requestClearAll: () => void
+  registerClick: () => { remaining: number; mode: OiiaMode }
   setCatCount: (n: number) => void
 }
 
@@ -37,9 +39,12 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.classList.toggle('oiia', mode === 'oiia')
+    return () => {
+      document.documentElement.classList.remove('oiia')
+    }
   }, [mode])
 
-  const registerOiiaClick = useCallback((): {
+  const registerClick = useCallback((): {
     remaining: number
     mode: OiiaMode
   } => {
@@ -62,27 +67,24 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
     return { mode: nextMode, remaining: 0 }
   }, [mode])
 
-  const disableOiia = useCallback(() => {
+  const disable = useCallback(() => {
     setMode('default')
     clicksRef.current = CLICKS_TO_ENABLE
     setClicksRemaining(CLICKS_TO_ENABLE)
     setCatCount(0)
   }, [])
 
-  const requestClearAll = useCallback(
-    () => setClearAllRequest((n) => n + 1),
-    []
-  )
+  const clearAll = useCallback(() => setClearAllRequest((n) => n + 1), [])
 
   const value = useMemo(
     () => ({
       catCount,
+      clearAll,
       clearAllRequest,
       clicksRemaining,
-      disableOiia,
+      disable,
       mode,
-      registerOiiaClick,
-      requestClearAll,
+      registerClick,
       setCatCount,
     }),
     [
@@ -90,9 +92,9 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
       clicksRemaining,
       catCount,
       clearAllRequest,
-      requestClearAll,
-      registerOiiaClick,
-      disableOiia,
+      clearAll,
+      registerClick,
+      disable,
     ]
   )
 

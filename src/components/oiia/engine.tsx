@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react'
 import {
   createOiiaEngine,
   type OiiaEngine as OiiaEngineHandle,
-} from './oiia-physics'
-import { useOiiaMode } from './oiia-provider'
+} from './physics'
+import { useOiiaMode } from './provider'
 
 export function OiiaEngine() {
   const { mode, setCatCount, clearAllRequest } = useOiiaMode()
@@ -59,18 +59,25 @@ export function OiiaEngine() {
     }
     const e = engine.current
     engine.current = null
+    let cancelled = false
 
     e.clear(() => {
-      if (!(isActive.current && container.current)) {
+      if (cancelled || !(isActive.current && container.current)) {
         return
       }
       import('matter-js').then((M) => {
-        if (!(isActive.current && container.current)) {
+        if (cancelled || !(isActive.current && container.current)) {
           return
         }
         engine.current = createOiiaEngine(M, container.current, setCatCount)
       })
     })
+
+    return () => {
+      cancelled = true
+      engine.current?.destroy()
+      engine.current = null
+    }
   }, [clearAllRequest, setCatCount])
 
   return (

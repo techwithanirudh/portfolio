@@ -7,13 +7,7 @@ import type { ReactNode } from 'react'
 import Analytics from '@/components/analytics'
 import { Assistant, AssistantTrigger } from '@/components/features/assistant'
 import { MobileNav } from '@/components/layout/header/mobile'
-import {
-  OiiaAudio,
-  OiiaEngine,
-  OiiaProvider,
-  OiiaWidget,
-  useOiiaMode,
-} from '@/components/oiia'
+import { Oiia, OiiaProvider, useOiiaMode } from '@/components/oiia'
 import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
@@ -59,9 +53,7 @@ export function Provider({
         <Toaster position='top-center' />
         <TailwindIndicator />
         <SmartCursor />
-        <OiiaEngine />
-        <OiiaWidget />
-        <OiiaAudio />
+        <Oiia />
       </OiiaProvider>
     </SoundProvider>
   )

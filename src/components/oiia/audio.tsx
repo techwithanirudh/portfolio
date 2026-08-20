@@ -1,11 +1,12 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useOiiaMode } from './oiia-provider'
+import { useOiiaMode } from './provider'
 
 // playlist= plays them in order, loop=1 cycles back after the last one
 const PLAYLIST = 'IxX_QHay02M,A2LGuBlDloQ'
 const FIRST_ID = 'IxX_QHay02M'
+const YOUTUBE_ORIGIN = 'https://www.youtube-nocookie.com'
 
 const MIN_VOL = 5
 const MAX_VOL = 85
@@ -28,7 +29,7 @@ export function OiiaAudio() {
         event: 'command',
         func: 'setVolume',
       }),
-      '*'
+      YOUTUBE_ORIGIN
     )
   }, [catCount])
 
@@ -38,7 +39,7 @@ export function OiiaAudio() {
 
   return (
     <iframe
-      allow='autoplay; picture-in-picture 0'
+      allow='autoplay'
       aria-hidden='true'
       className='pointer-events-none fixed'
       onLoad={() => {
@@ -48,7 +49,7 @@ export function OiiaAudio() {
             event: 'command',
             func: 'setVolume',
           }),
-          '*'
+          YOUTUBE_ORIGIN
         )
       }}
       ref={iframeRef}

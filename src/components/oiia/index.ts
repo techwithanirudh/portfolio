@@ -1,4 +1,7 @@
-export { OiiaAudio } from './oiia-audio'
-export { OiiaEngine } from './oiia-engine'
-export { OiiaProvider, useOiiaMode } from './oiia-provider'
-export { OiiaWidget } from './oiia-widget'
+export {
+  OIIA_TITLE,
+  type OiiaMode,
+  OiiaProvider,
+  useOiiaMode,
+} from './provider'
+export { Oiia } from './root'
