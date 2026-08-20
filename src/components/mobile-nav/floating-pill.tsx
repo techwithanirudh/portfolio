@@ -24,7 +24,13 @@ export function FloatingPill({
   ]
 
   return (
-    <div className='fixed inset-x-0 bottom-[calc(--spacing(2)+env(safe-area-inset-bottom,0))] z-[22] flex justify-center sm:hidden'>
+    <div
+      // Neutral backdrop-filter disqualifies this fixed element from
+      // Safari 26's chrome-tint sampling (which otherwise freezes at
+      // whatever color was present on page load), so the tint falls
+      // through to <body>'s background instead, which updates live.
+      className='fixed inset-x-0 bottom-[calc(--spacing(2)+env(safe-area-inset-bottom,0))] z-[22] flex justify-center backdrop-blur-none backdrop-saturate-100 sm:hidden'
+    >
       <div className='flex items-center gap-0.5 rounded-xl bg-popover py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 dark:ring-foreground/20'>
         <button
           aria-label='Search'

@@ -18,7 +18,12 @@ export function MobileNav() {
     <>
       <div
         aria-hidden
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-20 sm:hidden'
+        // Safari 26 only samples a fixed element's background at
+        // load/navigation time, so a live theme change here would go
+        // stale. A neutral backdrop-filter disqualifies it from being
+        // sampled at all, so Safari falls through to <body>'s
+        // background instead, which does update live.
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-20 backdrop-blur-none backdrop-saturate-100 sm:hidden'
       >
         <div className='h-16 bg-gradient-to-t from-background to-transparent' />
         <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />

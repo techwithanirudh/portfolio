@@ -37,8 +37,10 @@ export function MenuPanel({
 
   return (
     <div
+      // Neutral backdrop-filter (see mobile-nav.tsx) keeps this out of
+      // Safari 26's fixed-element chrome-tint sampling.
       className={cn(
-        'fixed inset-x-4 bottom-16 z-[22] overflow-hidden rounded-xl border border-dashed bg-background sm:hidden',
+        'fixed inset-x-4 bottom-16 z-[22] overflow-hidden rounded-xl border border-dashed bg-background backdrop-blur-none backdrop-saturate-100 sm:hidden',
         menuOpen ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
       )}
     >
