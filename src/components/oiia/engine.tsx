@@ -12,6 +12,16 @@ export function OiiaEngine() {
   const container = useRef<HTMLDivElement>(null)
   const engine = useRef<OiiaEngineHandle | null>(null)
   const isActive = useRef(false)
+  const clearing = useRef(false)
+  const cancelled = useRef(false)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally re-runs on mode change to reset the cancellation flag for the next activation
+  useEffect(() => {
+    cancelled.current = false
+    return () => {
+      cancelled.current = true
+    }
+  }, [mode])
 
   useEffect(() => {
     isActive.current = mode === 'oiia'
@@ -37,47 +47,42 @@ export function OiiaEngine() {
       return
     }
     const el = container.current
-    let cancelled = false
+    let mountCancelled = false
 
     import('matter-js').then((M) => {
-      if (cancelled) {
+      if (mountCancelled) {
         return
       }
       engine.current = createOiiaEngine(M, el, setCatCount)
     })
 
     return () => {
-      cancelled = true
+      mountCancelled = true
       engine.current?.destroy()
       engine.current = null
     }
   }, [mode, setCatCount])
 
   useEffect(() => {
-    if (clearAllRequest === 0 || !engine.current) {
+    if (clearAllRequest === 0 || clearing.current || !engine.current) {
       return
     }
     const e = engine.current
     engine.current = null
-    let cancelled = false
+    clearing.current = true
 
     e.clear(() => {
-      if (cancelled || !(isActive.current && container.current)) {
+      clearing.current = false
+      if (cancelled.current || !(isActive.current && container.current)) {
         return
       }
       import('matter-js').then((M) => {
-        if (cancelled || !(isActive.current && container.current)) {
+        if (cancelled.current || !(isActive.current && container.current)) {
           return
         }
         engine.current = createOiiaEngine(M, container.current, setCatCount)
       })
     })
-
-    return () => {
-      cancelled = true
-      engine.current?.destroy()
-      engine.current = null
-    }
   }, [clearAllRequest, setCatCount])
 
   return (

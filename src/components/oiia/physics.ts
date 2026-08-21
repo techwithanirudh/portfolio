@@ -160,6 +160,11 @@ export function createOiiaEngine(
     img.alt = 'OIIA cat'
     img.style.cssText =
       'width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;'
+    img.onerror = () => {
+      img.remove()
+      el.textContent = '🐱'
+      el.style.cssText += `display:flex;align-items:center;justify-content:center;font-size:${visualRadius}px;`
+    }
     el.appendChild(img)
     container.appendChild(el)
     requestAnimationFrame(() => {
