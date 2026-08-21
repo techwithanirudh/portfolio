@@ -5,11 +5,6 @@ export const description =
   'Design engineer and full-stack developer who blends design and code to build beautiful, functional web experiences with Next.js, React, and TypeScript.'
 export const owner = 'Anirudh Sriram'
 
-export const META_THEME_COLORS = {
-  dark: '#09090b',
-  light: '#ffffff',
-}
-
 export const baseOptions: BaseLayoutProps = {
   githubUrl: 'https://github.com/techwithanirudh',
   nav: {
