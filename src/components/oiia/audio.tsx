@@ -39,7 +39,7 @@ export function OiiaAudio() {
 
   return (
     <iframe
-      allow='autoplay'
+      allow="autoplay; picture-in-picture 'none'"
       aria-hidden='true'
       className='pointer-events-none fixed'
       onLoad={() => {

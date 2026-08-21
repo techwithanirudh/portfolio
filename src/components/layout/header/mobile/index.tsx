@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
+import { useOiiaMode } from '@/components/oiia'
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)
@@ -14,8 +15,15 @@ export function MobileNav() {
   const previousPathname = useRef(pathname)
   const { setOpenSearch } = useSearchContext()
   const { setOpen: setOpenAssistant } = useAssistantContext()
+  const { mode } = useOiiaMode()
 
   const closeMenu = useCallback(() => setOpen(false), [])
+
+  useEffect(() => {
+    if (mode === 'oiia') {
+      closeMenu()
+    }
+  }, [closeMenu, mode])
 
   useEffect(() => {
     if (previousPathname.current === pathname) {
@@ -40,6 +48,10 @@ export function MobileNav() {
     document.addEventListener('keydown', closeOnEscape)
     return () => document.removeEventListener('keydown', closeOnEscape)
   }, [closeMenu, open])
+
+  if (mode === 'oiia') {
+    return null
+  }
 
   return (
     <>
