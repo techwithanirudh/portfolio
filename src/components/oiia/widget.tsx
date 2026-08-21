@@ -18,7 +18,7 @@ export function OiiaWidget() {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ damping: 30, stiffness: 400, type: 'spring' }}
           >
-            <div className='flex h-8 items-center gap-1.5 rounded-full px-2.5 text-primary'>
+            <div className='flex h-8 items-center gap-1.5 rounded-full px-2 text-primary'>
               <Icons.pawPrint className='size-4' />
               <motion.span
                 animate={{ scale: [1, 1.3, 1] }}
