@@ -23,7 +23,7 @@ export function HeroName() {
             const clicks = result.remaining === 1 ? 'click' : 'clicks'
             toast(`${result.remaining} ${clicks} remaining`)
           } else if (result.mode === 'oiia') {
-            toast('oiia mode enabled')
+            toast('oiia mode enabled — collide two cats to spawn more')
           } else {
             toast('oiia mode disabled')
           }
