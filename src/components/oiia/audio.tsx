@@ -78,6 +78,36 @@ export function OiiaAudio() {
     return () => window.removeEventListener('message', onMessage)
   }, [mode])
 
+  // A backgrounded tab can still count as "prominent playing media" and get
+  // pulled into picture-in-picture by the browser. Pausing on hide removes
+  // the video from consideration entirely, regardless of the exact heuristic.
+  useEffect(() => {
+    if (mode !== 'oiia') {
+      return
+    }
+
+    const setPlaying = (playing: boolean) => {
+      if (!readyRef.current) {
+        return
+      }
+      postToPlayer(iframeRef.current, {
+        args: [],
+        event: 'command',
+        func: playing ? 'playVideo' : 'pauseVideo',
+      })
+    }
+
+    const onVisibilityChange = () => setPlaying(!document.hidden)
+    const onPageHide = () => setPlaying(false)
+
+    document.addEventListener('visibilitychange', onVisibilityChange)
+    window.addEventListener('pagehide', onPageHide)
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibilityChange)
+      window.removeEventListener('pagehide', onPageHide)
+    }
+  }, [mode])
+
   if (mode !== 'oiia') {
     return null
   }
