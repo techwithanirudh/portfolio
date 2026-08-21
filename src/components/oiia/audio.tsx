@@ -78,7 +78,7 @@ export function OiiaAudio() {
     return () => window.removeEventListener('message', onMessage)
   }, [mode])
 
-  // A backgrounded tab can still count as "prominent playing media" and get
+  // A hidden tab can still count as "prominent playing media" and get
   // pulled into picture-in-picture by the browser. Pausing on hide removes
   // the video from consideration entirely, regardless of the exact heuristic.
   useEffect(() => {
