@@ -116,7 +116,8 @@ export function createOiiaEngine(
   const immunityTimeouts = new Map<number, number>()
   let nextId = 0,
     lastSpawn = 0,
-    clearing = false
+    clearing = false,
+    clearTimeoutId: number | null = null
   let rafId = 0,
     drag: Matter.Constraint | null = null,
     dragId: number | null = null
@@ -346,7 +347,8 @@ export function createOiiaEngine(
         i++
       }
 
-      setTimeout(() => {
+      clearTimeoutId = window.setTimeout(() => {
+        clearTimeoutId = null
         teardown()
         container.innerHTML = ''
         onCount(0)
@@ -354,6 +356,10 @@ export function createOiiaEngine(
       }, 650)
     },
     destroy() {
+      if (clearTimeoutId !== null) {
+        window.clearTimeout(clearTimeoutId)
+        clearTimeoutId = null
+      }
       teardown()
       container.innerHTML = ''
       onCount(0)

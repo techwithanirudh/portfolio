@@ -13,6 +13,7 @@ export function OiiaEngine() {
   const engine = useRef<OiiaEngineHandle | null>(null)
   const isActive = useRef(false)
   const clearing = useRef(false)
+  const clearingEngine = useRef<OiiaEngineHandle | null>(null)
   const cancelled = useRef(false)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally re-runs on mode change to reset the cancellation flag for the next activation
@@ -20,6 +21,9 @@ export function OiiaEngine() {
     cancelled.current = false
     return () => {
       cancelled.current = true
+      clearing.current = false
+      clearingEngine.current?.destroy()
+      clearingEngine.current = null
     }
   }, [mode])
 
@@ -70,9 +74,13 @@ export function OiiaEngine() {
     const e = engine.current
     engine.current = null
     clearing.current = true
+    clearingEngine.current = e
 
     e.clear(() => {
       clearing.current = false
+      if (clearingEngine.current === e) {
+        clearingEngine.current = null
+      }
       if (cancelled.current || !(isActive.current && container.current)) {
         return
       }
