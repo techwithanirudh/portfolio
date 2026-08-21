@@ -176,7 +176,9 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
   }
 
-  const handleAccountAction = async (action: SearchCommandItem['action']) => {
+  const handleAccountAction = async (
+    action: Extract<SearchCommandItem, { kind: 'account' }>['action']
+  ) => {
     playConfirm()
     close()
 

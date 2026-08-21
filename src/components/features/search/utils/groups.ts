@@ -100,12 +100,12 @@ export function buildCommandGroups(
 
   return filteredAccountItems.length > 0
     ? [
-        ...commandGroups,
         {
           group: 'Account',
           items: filteredAccountItems,
           position: 'after' as const,
         },
+        ...commandGroups,
       ]
     : commandGroups
 }
