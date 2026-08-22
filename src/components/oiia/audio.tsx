@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useOiiaMode } from './provider'
 
 // playlist= plays them in order, loop=1 cycles back after the last one
@@ -26,7 +26,6 @@ export function OiiaAudio() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const catCountRef = useRef(catCount)
   const readyRef = useRef(false)
-  const [tabVisible, setTabVisible] = useState(true)
 
   useEffect(() => {
     catCountRef.current = catCount
@@ -79,35 +78,7 @@ export function OiiaAudio() {
     return () => window.removeEventListener('message', onMessage)
   }, [mode])
 
-  // Asking the player to pause via postMessage is an async round-trip that
-  // can lose the race against the browser's own auto-picture-in-picture
-  // promotion, and often never arrives at all once the page is actually
-  // unloading. Unmounting the iframe kills the underlying media
-  // synchronously instead, so there is nothing left for the browser to
-  // promote into PiP.
-  useEffect(() => {
-    if (mode !== 'oiia') {
-      return
-    }
-
-    const onVisibilityChange = () => {
-      readyRef.current = false
-      setTabVisible(!document.hidden)
-    }
-    const onPageHide = () => {
-      readyRef.current = false
-      setTabVisible(false)
-    }
-
-    document.addEventListener('visibilitychange', onVisibilityChange)
-    window.addEventListener('pagehide', onPageHide)
-    return () => {
-      document.removeEventListener('visibilitychange', onVisibilityChange)
-      window.removeEventListener('pagehide', onPageHide)
-    }
-  }, [mode])
-
-  if (mode !== 'oiia' || !tabVisible) {
+  if (mode !== 'oiia') {
     return null
   }
 

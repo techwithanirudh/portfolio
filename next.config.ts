@@ -21,6 +21,19 @@ async function createNextConfig(): Promise<NextConfig> {
       useTypeScriptCli: true,
       viewTransition: true,
     },
+    async headers() {
+      return [
+        {
+          headers: [
+            {
+              key: 'Permissions-Policy',
+              value: 'picture-in-picture=()',
+            },
+          ],
+          source: '/:path*',
+        },
+      ]
+    },
     images: {
       dangerouslyAllowSVG: true,
       qualities: [100, 75, 85, 95],
