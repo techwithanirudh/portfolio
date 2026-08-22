@@ -10,10 +10,10 @@ export function OiiaWidget() {
   return (
     <AnimatePresence>
       {mode === 'oiia' && (
-        <div className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[10000] flex justify-center'>
+        <div className='pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[10000] flex justify-center'>
           <motion.div
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className='flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'
+            className='pointer-events-auto flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ damping: 30, stiffness: 400, type: 'spring' }}
