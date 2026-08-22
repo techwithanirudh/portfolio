@@ -1,3 +1,5 @@
+import { defineSound, ensureReady } from '@web-kits/audio'
+
 const GIF = 'https://media.tenor.com/8VuZc8I8f7EAAAAj/oiia-cat.gif'
 const INITIAL = 5
 const MAX = 60
@@ -39,44 +41,24 @@ export interface OiiaEngine {
   destroy: () => void
 }
 
-// Reuse one AudioContext so each boing doesn't pay construction latency
-let sharedCtx: AudioContext | null = null
+const playBoing = defineSound({
+  envelope: { attack: 0, decay: 0.28, release: 0, sustain: 0 },
+  gain: 0.12,
+  source: { frequency: { end: 220, start: 700 }, type: 'sine' },
+})
+
 let lastBoingAt = 0
 function boing() {
-  try {
-    const now = performance.now()
-    if (now - lastBoingAt < SOUND_COOLDOWN) {
-      return
-    }
-    lastBoingAt = now
-    const Ctx =
-      window.AudioContext ||
-      (window as Window & { webkitAudioContext?: typeof AudioContext })
-        .webkitAudioContext
-    if (!Ctx) {
-      return
-    }
-    sharedCtx ??= new Ctx()
-    if (sharedCtx.state === 'suspended') {
-      sharedCtx.resume()
-    }
-    const osc = sharedCtx.createOscillator()
-    const gain = sharedCtx.createGain()
-    osc.connect(gain)
-    gain.connect(sharedCtx.destination)
-    osc.type = 'sine'
-    osc.frequency.setValueAtTime(700, sharedCtx.currentTime)
-    osc.frequency.exponentialRampToValueAtTime(
-      220,
-      sharedCtx.currentTime + 0.14
-    )
-    gain.gain.setValueAtTime(0.12, sharedCtx.currentTime)
-    gain.gain.exponentialRampToValueAtTime(0.001, sharedCtx.currentTime + 0.28)
-    osc.start(sharedCtx.currentTime)
-    osc.stop(sharedCtx.currentTime + 0.28)
-  } catch {
-    /* unavailable before first user gesture */
+  const now = performance.now()
+  if (now - lastBoingAt < SOUND_COOLDOWN) {
+    return
   }
+  lastBoingAt = now
+  ensureReady()
+    .then(() => playBoing())
+    .catch(() => {
+      // Browsers can reject audio until a trusted user gesture has occurred.
+    })
 }
 
 export function createOiiaEngine(
