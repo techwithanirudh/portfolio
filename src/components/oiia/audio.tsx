@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useOiiaMode } from './provider'
 
 // playlist= plays them in order, loop=1 cycles back after the last one
@@ -26,6 +26,7 @@ export function OiiaAudio() {
   const iframeRef = useRef<HTMLIFrameElement>(null)
   const catCountRef = useRef(catCount)
   const readyRef = useRef(false)
+  const [tabVisible, setTabVisible] = useState(true)
 
   useEffect(() => {
     catCountRef.current = catCount
@@ -78,27 +79,25 @@ export function OiiaAudio() {
     return () => window.removeEventListener('message', onMessage)
   }, [mode])
 
-  // A hidden tab can still count as "prominent playing media" and get
-  // pulled into picture-in-picture by the browser. Pausing on hide removes
-  // the video from consideration entirely, regardless of the exact heuristic.
+  // Asking the player to pause via postMessage is an async round-trip that
+  // can lose the race against the browser's own auto-picture-in-picture
+  // promotion, and often never arrives at all once the page is actually
+  // unloading. Unmounting the iframe kills the underlying media
+  // synchronously instead, so there is nothing left for the browser to
+  // promote into PiP.
   useEffect(() => {
     if (mode !== 'oiia') {
       return
     }
 
-    const setPlaying = (playing: boolean) => {
-      if (!readyRef.current) {
-        return
-      }
-      postToPlayer(iframeRef.current, {
-        args: [],
-        event: 'command',
-        func: playing ? 'playVideo' : 'pauseVideo',
-      })
+    const onVisibilityChange = () => {
+      readyRef.current = false
+      setTabVisible(!document.hidden)
     }
-
-    const onVisibilityChange = () => setPlaying(!document.hidden)
-    const onPageHide = () => setPlaying(false)
+    const onPageHide = () => {
+      readyRef.current = false
+      setTabVisible(false)
+    }
 
     document.addEventListener('visibilitychange', onVisibilityChange)
     window.addEventListener('pagehide', onPageHide)
@@ -108,7 +107,7 @@ export function OiiaAudio() {
     }
   }, [mode])
 
-  if (mode !== 'oiia') {
+  if (mode !== 'oiia' || !tabVisible) {
     return null
   }
 
