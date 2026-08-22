@@ -5,8 +5,6 @@ import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { META_THEME_COLORS } from '@/constants/site'
-import { useMetaColor } from '@/hooks/use-meta-color'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
@@ -41,38 +39,15 @@ export function ThemeToggle({
   const { resolvedTheme, setTheme, systemTheme, theme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const playToggle = useSound(toggleOn)
-  const { setMetaColor } = useMetaColor()
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  useEffect(() => {
-    setMetaColor(
-      resolvedTheme === 'dark'
-        ? META_THEME_COLORS.dark
-        : META_THEME_COLORS.light
-    )
-  }, [resolvedTheme, setMetaColor])
-
   useThemeShortcut()
 
   const handleChangeTheme = async (next: Theme) => {
     playToggle()
-
-    let nextResolvedTheme = next
-    if (next === 'system') {
-      nextResolvedTheme = window.matchMedia('(prefers-color-scheme: dark)')
-        .matches
-        ? 'dark'
-        : 'light'
-    }
-
-    setMetaColor(
-      nextResolvedTheme === 'dark'
-        ? META_THEME_COLORS.dark
-        : META_THEME_COLORS.light
-    )
 
     function update() {
       setTheme(next)
