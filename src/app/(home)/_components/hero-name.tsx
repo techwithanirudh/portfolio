@@ -14,7 +14,7 @@ export function HeroName() {
       <button
         aria-pressed={isOiia}
         className={cn(
-          'inline-flex items-baseline rounded-sm px-1 transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          'inline-flex items-baseline rounded-sm px-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           isOiia && 'text-primary'
         )}
         onClick={() => {
