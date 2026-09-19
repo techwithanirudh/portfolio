@@ -1,4 +1,3 @@
-import { openai } from '@ai-sdk/openai'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { customProvider } from 'ai'
 import { createRetryable } from 'ai-retry'
@@ -9,20 +8,30 @@ const hackclub = createOpenRouter({
   baseURL: 'https://ai.hackclub.com/proxy/v1',
 })
 
+const onError = (context: {
+  current: { model: { provider: string; modelId: string } }
+}) => {
+  const { model } = context.current
+  console.error(
+    `error with model ${model.provider}/${model.modelId}, switching to next model`
+  )
+}
+
+const chatModel = createRetryable({
+  model: hackclub('z-ai/glm-5.3-flash'),
+  onError,
+  retries: [hackclub('deepseek/deepseek-v4.1-flash')],
+})
+
 const moderationModel = createRetryable({
   model: hackclub('google/gemini-3-flash-preview'),
-  onError: (context) => {
-    const { model } = context.current
-    console.error(
-      `error with model ${model.provider}/${model.modelId}, switching to next model`
-    )
-  },
-  retries: [hackclub('google/gemini-2.5-flash'), openai('gpt-5.4-mini')],
+  onError,
+  retries: [hackclub('google/gemini-2.5-flash')],
 })
 
 export const provider = customProvider({
   languageModels: {
-    'chat-model': openai('gpt-5-mini'),
+    'chat-model': chatModel,
     'moderation-model': moderationModel,
   },
 })

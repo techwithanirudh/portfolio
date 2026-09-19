@@ -29,7 +29,6 @@
     "prepare": "lefthook install"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.27",
     "@ai-sdk/react": "^4.0.50",
     "@bprogress/next": "^3.2.12",
     "@fuma-comment/react": "^1.5.0",
