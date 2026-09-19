@@ -45,8 +45,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     HACKCLUB_API_KEY: z.string().min(1).startsWith('sk-hc-'),
-    // OpenAI
-    OPENAI_API_KEY: z.string().min(1).startsWith('sk-proj-'),
     // Resend
     RESEND_API_KEY: z.string().min(1).startsWith('re_'),
     RESEND_AUDIENCE_ID: z.string().min(1),

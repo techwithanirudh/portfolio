@@ -1,4 +1,3 @@
-import { openai } from '@ai-sdk/openai'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { customProvider } from 'ai'
 import { createRetryable } from 'ai-retry'
@@ -17,12 +16,12 @@ const moderationModel = createRetryable({
       `error with model ${model.provider}/${model.modelId}, switching to next model`
     )
   },
-  retries: [hackclub('google/gemini-2.5-flash'), openai('gpt-5.4-mini')],
+  retries: [hackclub('google/gemini-2.5-flash')],
 })
 
 export const provider = customProvider({
   languageModels: {
-    'chat-model': openai('gpt-5-mini'),
+    'chat-model': hackclub('z-ai/glm-5.3-flash'),
     'moderation-model': moderationModel,
   },
 })
