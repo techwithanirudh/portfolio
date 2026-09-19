@@ -105,6 +105,7 @@ import {
   ChevronRight,
   ChevronUp,
   CornerDownLeft,
+  DogIcon,
   type LucideIcon,
   PawPrintIcon,
 } from 'lucide-react'
@@ -198,6 +199,7 @@ export const Icons = {
   cpu: hugeIcon(ChipIcon),
   cursor: CursorIcon,
   desktop: hugeIcon(Tv02Icon),
+  dog: lucideIcon(DogIcon),
   download: hugeIcon(Download01Icon),
   ellipsis: hugeIcon(MoreVerticalIcon),
   eraser: hugeIcon(EraserIcon),

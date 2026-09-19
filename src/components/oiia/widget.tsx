@@ -5,7 +5,8 @@ import { Icons } from '@/components/icons/icons'
 import { useOiiaMode } from './provider'
 
 export function OiiaWidget() {
-  const { mode, catCount, clearAll, disable } = useOiiaMode()
+  const { mode, catCount, clearAll, disable, species, toggleSpecies } =
+    useOiiaMode()
 
   return (
     <AnimatePresence>
@@ -19,7 +20,11 @@ export function OiiaWidget() {
             transition={{ damping: 30, stiffness: 400, type: 'spring' }}
           >
             <div className='flex h-8 items-center gap-1.5 rounded-full px-2 text-primary'>
-              <Icons.pawPrint className='size-4' />
+              {species === 'cat' ? (
+                <Icons.pawPrint className='size-4' />
+              ) : (
+                <Icons.dog className='size-4' />
+              )}
               <motion.span
                 animate={{ scale: [1, 1.3, 1] }}
                 className='min-w-[1ch] text-center font-semibold text-sm tabular-nums'
@@ -33,7 +38,28 @@ export function OiiaWidget() {
             <div className='mx-1 h-4 w-px bg-border' />
 
             <button
-              aria-label='Clear all OIIA cats'
+              aria-label={
+                species === 'cat'
+                  ? 'Switch to rover mode'
+                  : 'Switch to cat mode'
+              }
+              className='flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+              onClick={toggleSpecies}
+              type='button'
+            >
+              {species === 'cat' ? (
+                <Icons.pawPrint className='size-4' />
+              ) : (
+                <Icons.dog className='size-4' />
+              )}
+            </button>
+
+            <div className='mx-1 h-4 w-px bg-border' />
+
+            <button
+              aria-label={
+                species === 'cat' ? 'Clear all cats' : 'Clear all rovers'
+              }
               className='flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
               onClick={clearAll}
               type='button'
