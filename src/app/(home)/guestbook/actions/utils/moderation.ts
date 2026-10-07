@@ -21,14 +21,15 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
 
   if (signature) {
     userContent.push({
-      image: signature.data,
+      data: signature.data,
       mediaType: signature.mediaType,
-      type: 'image',
+      type: 'file',
     })
   }
 
   try {
     const { output } = await generateText({
+      instructions: moderationPrompt,
       messages: [
         {
           content: userContent,
@@ -39,7 +40,6 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
       output: Output.object({
         schema: ModerationResultSchema,
       }),
-      system: moderationPrompt,
     })
 
     return output

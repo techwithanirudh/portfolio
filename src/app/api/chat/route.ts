@@ -3,9 +3,9 @@ import {
   createUIMessageStream,
   createUIMessageStreamResponse,
   InvalidToolInputError,
+  isStepCount,
   NoSuchToolError,
   smoothStream,
-  stepCountIs,
   streamText,
 } from 'ai'
 import { env } from '@/env'
@@ -67,6 +67,9 @@ export async function POST(request: Request) {
             chunking: 'line',
             delayInMs: 20,
           }),
+          instructions: systemPrompt({
+            llms,
+          }),
           messages: modelMessages,
           model: provider.languageModel('chat-model'),
           providerOptions: {
@@ -77,10 +80,7 @@ export async function POST(request: Request) {
               textVerbosity: 'medium',
             },
           },
-          stopWhen: stepCountIs(10),
-          system: systemPrompt({
-            llms,
-          }),
+          stopWhen: isStepCount(10),
           toolChoice: 'auto',
           tools: {
             getPageContent,

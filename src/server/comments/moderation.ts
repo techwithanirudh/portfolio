@@ -75,6 +75,7 @@ export const moderateComment = async (content: Content) => {
 
   try {
     const { output } = await generateText({
+      instructions: moderationPrompt,
       messages: [
         {
           content: userContent,
@@ -85,7 +86,6 @@ export const moderateComment = async (content: Content) => {
       output: Output.object({
         schema: ModerationResultSchema,
       }),
-      system: moderationPrompt,
     })
 
     if (!output) {
