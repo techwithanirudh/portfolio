@@ -53,7 +53,11 @@ export function ThemeToggle({
       setTheme(next)
     }
 
-    if (document.startViewTransition && next !== resolvedTheme) {
+    // Touch devices skip the view transition: its fixed snapshot overlay
+    // appears to stop Safari 26 from re-sampling <body> for the browser UI tint.
+    const isTouch = window.matchMedia('(pointer: coarse)').matches
+
+    if (document.startViewTransition && next !== resolvedTheme && !isTouch) {
       document.documentElement.style.viewTransitionName = 'theme-transition'
       try {
         await document.startViewTransition(update).finished
