@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tint lab</title>
+<style>
+  :root { --bg-hsl: hsl(0 0% 96.1%); --bg-oklch: oklch(0.97 0 0); }
+  html.dark { --bg-hsl: hsl(0 0% 7.1%); --bg-oklch: oklch(0.18 0 0); }
+  html[data-m="class"] body { background-color: #f5f5f5; }
+  html[data-m="class"].dark body { background-color: #121212; }
+  html[data-m="hsl"] body { background-color: var(--bg-hsl); }
+  html[data-m="oklch"] body { background-color: var(--bg-oklch); }
+  body { margin: 0; padding: 16px; min-height: 200vh; font: 16px/1.45 system-ui, sans-serif; background-color: #f5f5f5; color: #111; }
+  h1 { font-size: 20px; margin: 0 0 8px; }
+  p { margin: 0 0 12px; }
+  button { display: block; width: 100%; margin: 0 0 10px; padding: 14px 12px; font: inherit; text-align: left; border: 1px solid #888; border-radius: 10px; background: rgba(128,128,128,.18); color: inherit; }
+  button small { display: block; opacity: .7; font-size: 13px; }
+  #status { margin: 12px 0; padding: 10px; border-radius: 10px; background: rgba(128,128,128,.18); font-family: ui-monospace, monospace; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>Safari tint lab</h1>
+<p>Tap one button at a time <b>without reloading</b>. Each tap flips light/dark using a different method. Watch the top and bottom bar tint, then tell me which buttons updated it right away. (Needs Settings → Apps → Safari → Tabs → Allow Website Tinting.)</p>
+
+<button data-m="inline">1. Body inline style, hex<small>What the safari-color-tinting demo does</small></button>
+<button data-m="class">2. Class on html, hex in a CSS rule<small>No CSS variables</small></button>
+<button data-m="hsl">3. Class on html, CSS variable, hsl()<small>How our site changes theme</small></button>
+<button data-m="oklch">4. Class on html, CSS variable, oklch()<small>Same, different color syntax</small></button>
+<button data-m="html-inline">5. html inline style, hex<small>Background on the root element instead of body</small></button>
+<button data-m="vt-inline">6. Body inline style inside a view transition<small>Method 1 wrapped in startViewTransition</small></button>
+<button data-m="strip">7. Body inline style + replace a 4px fixed strip<small>Our current BrowserTint approach</small></button>
+
+<div id="status">current: light, method: none</div>
+<p>Scroll space below, in case scrolling matters.</p>
+
+<script>
+  const LIGHT = '#f5f5f5', DARK = '#121212'
+  const html = document.documentElement
+  const body = document.body
+  const status = document.getElementById('status')
+  let dark = false
+  let strip = null
+
+  function clear() {
+    body.style.backgroundColor = ''
+    html.style.backgroundColor = ''
+    html.removeAttribute('data-m')
+    html.classList.remove('dark')
+    if (strip) { strip.remove(); strip = null }
+  }
+
+  function set(method, color) {
+    clear()
+    body.style.color = dark ? '#eee' : '#111'
+    if (method === 'inline' || method === 'vt-inline') body.style.backgroundColor = color
+    else if (method === 'html-inline') { body.style.backgroundColor = 'transparent'; html.style.backgroundColor = color }
+    else if (method === 'strip') {
+      body.style.backgroundColor = color
+      strip = document.createElement('div')
+      strip.style.cssText = 'position:fixed;top:0;left:0;right:0;height:4px;z-index:0;pointer-events:none;background:' + color
+      body.appendChild(strip)
+    } else {
+      html.dataset.m = method
+      html.classList.toggle('dark', dark)
+    }
+  }
+
+  document.querySelectorAll('button[data-m]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const method = el.dataset.m
+      dark = !dark
+      const color = dark ? DARK : LIGHT
+      if (method === 'vt-inline' && document.startViewTransition) {
+        document.startViewTransition(() => set(method, color))
+      } else {
+        set(method, color)
+      }
+      status.textContent = 'current: ' + (dark ? 'dark' : 'light') + ', method: ' + method
+    })
+  })
+</script>
+</body>
+</html>
