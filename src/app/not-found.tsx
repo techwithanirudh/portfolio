@@ -10,7 +10,7 @@ import { createMetadata } from '@/lib/metadata'
 export default function NotFound() {
   return (
     <SiteShell>
-      <div className='container relative mx-auto flex min-h-[28rem] flex-1 items-center justify-center overflow-hidden border-border border-x border-dashed px-4'>
+      <div className='container relative mx-auto flex min-h-[28rem] flex-1 items-center justify-center overflow-hidden border-border border-x border-dashed px-4 pb-32 md:pb-0'>
         <div className='flex flex-col items-center gap-4 text-center'>
           <p className='font-mono text-muted-foreground text-xs uppercase tracking-widest'>
             404
@@ -26,8 +26,8 @@ export default function NotFound() {
             <AskSimbaButton />
           </div>
         </div>
-        {/* Rover lives in the corner on md+; on mobile the mascot doesn't load, so he peeks over the edge instead */}
-        <div className='absolute -right-12 bottom-0 h-28 overflow-hidden md:hidden'>
+        {/* Rover lives in the corner on md+; on mobile the mascot doesn't load, so he sits on the bottom edge instead */}
+        <div className='absolute -right-12 bottom-0 md:hidden'>
           <SimbaSprite />
         </div>
       </div>
