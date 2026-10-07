@@ -14,7 +14,7 @@ Depensa is a mobile expense tracker. It pulls your purchase history from the mer
 
 Instead of sending an AI agent to browse on every sync, Depensa uses AI to learn or repair a connector for each merchant. A plain, deterministic extractor handles routine syncs, which keeps recurring work fast, cheap, and easy to test.
 
-You sign in to each merchant yourself, MFA included, in a browser inside the app. Depensa never reads what you type into the forms or your credentials. Once you are signed in, the app grabs the session cookies from that in-app browser and loads them into a Firecrawl cloud browser profile on the server. Later syncs run from that profile, so you are not asked to log in again each time. Real access validation happens on the first connector run.
+You sign in to each merchant yourself, MFA included, in a browser inside the app. Depensa never reads your username or password. Once you are signed in, the app grabs the session cookies from that in-app browser and loads them into a Firecrawl cloud browser profile on the server. Those cookies are authentication tokens, so they are treated as sensitive. Later syncs run from that profile, so you are not asked to log in again each time. Real access validation happens on the first connector run.
 
 Convex handles auth, data, actions, and scheduled work. Merchant orders land in one reactive timeline, with named and tagged connections so duplicate accounts per site work fine.
 
