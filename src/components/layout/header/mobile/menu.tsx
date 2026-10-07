@@ -42,9 +42,7 @@ export function MenuPanel({
       aria-label='Mobile navigation'
       aria-modal='true'
       className={cn(
-        // Neutral backdrop-filter (see pill.tsx) keeps this out of Safari
-        // 26's fixed-element chrome-tint sampling.
-        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background backdrop-blur-none backdrop-saturate-100 md:hidden',
+        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background md:hidden',
         open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
       )}
       id={menuId}

@@ -45,10 +45,7 @@ export function MobileNav() {
     <>
       <div
         aria-hidden
-        // Neutral backdrop-filter (see pill.tsx/menu.tsx) keeps this out of
-        // Safari 26's fixed-element chrome-tint sampling, so the tint falls
-        // through to <body>'s background instead, which updates live.
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 backdrop-blur-none backdrop-saturate-100 md:hidden'
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 md:hidden'
       >
         <div className='h-16 bg-gradient-to-t from-background to-transparent' />
         <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />

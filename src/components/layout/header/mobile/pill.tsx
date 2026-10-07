@@ -26,15 +26,7 @@ export function FloatingPill({
   ]
 
   return (
-    <div
-      // Neutral backdrop-filter disqualifies this fixed element from
-      // Safari 26's chrome-tint sampling (which otherwise freezes at
-      // whatever color was present on page load), so the tint falls
-      // through to <body>'s background instead, which updates live with
-      // the theme. Applied here (the actual position:fixed element) rather
-      // than the inner pill div, since that's what Safari samples.
-      className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center backdrop-blur-none backdrop-saturate-100 md:hidden'
-    >
+    <div className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
       <div className='flex items-center gap-0.5 rounded-full border bg-background px-1.5 py-1.5 shadow-lg'>
         <button
           aria-label='Search'
