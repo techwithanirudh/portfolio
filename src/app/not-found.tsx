@@ -27,7 +27,7 @@ export default function NotFound() {
           </div>
         </div>
         {/* Rover lives in the corner on md+; on mobile the mascot doesn't load, so he sits on the bottom edge instead */}
-        <div className='absolute -right-8 -bottom-3 md:hidden'>
+        <div className='absolute -right-8 -bottom-[18px] md:hidden'>
           <SimbaSprite />
         </div>
       </div>
