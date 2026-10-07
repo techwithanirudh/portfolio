@@ -54,7 +54,9 @@ export function MobileNav() {
       <Presence present={open}>
         <button
           aria-label='Close menu'
-          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in md:hidden'
+          // backdrop-blur keeps this full-screen overlay from being sampled
+          // as a Safari 26 browser-UI tint source while the menu is open.
+          className='fixed inset-0 z-[31] bg-background/50 backdrop-blur-sm data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in md:hidden'
           data-state={open ? 'open' : 'closed'}
           onClick={closeMenu}
           type='button'
