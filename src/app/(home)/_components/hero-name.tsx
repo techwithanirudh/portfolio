@@ -4,8 +4,6 @@ import { CLICKS_TO_ENABLE, useOiiaMode } from '@/components/oiia'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
-const SILENT_CLICKS = 3
-
 export function HeroName() {
   const { mode, registerClick } = useOiiaMode()
   const isOiia = mode === 'oiia'
@@ -23,7 +21,7 @@ export function HeroName() {
           const result = registerClick()
           if (result.remaining > 0) {
             const clicksDone = CLICKS_TO_ENABLE - result.remaining
-            if (clicksDone > SILENT_CLICKS) {
+            if (clicksDone > 3) {
               const clicks = result.remaining === 1 ? 'click' : 'clicks'
               toast(`${result.remaining} ${clicks} remaining`)
             }
