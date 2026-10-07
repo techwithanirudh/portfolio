@@ -173,11 +173,17 @@
     "networkidle",
     "domcontentloaded",
     "trackpad",
+    "oiia",
+    "Oiia",
+    "OIIA",
+    "COOLDOWN",
+    "HITBOX",
+    "boing",
+    "Boing",
     "depensa",
     "Firecrawl",
     "MKTP",
     "Uniwind",
-    "quiverai",
-    "deepseek"
+    "quiverai"
   ]
 }

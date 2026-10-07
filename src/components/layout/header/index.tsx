@@ -27,6 +27,7 @@ import {
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { OIIA_TITLE, useOiiaMode } from '@/components/oiia'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
@@ -83,6 +84,7 @@ export const Header = ({
   searchToggle = {},
   className,
 }: HomeLayoutProps & { className?: string }) => {
+  const { mode } = useOiiaMode()
   const { navItems, menuItems } = useMemo(() => {
     const navItems: LinkItemType[] = []
     const menuItems: LinkItemType[] = []
@@ -115,10 +117,13 @@ export const Header = ({
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            {renderNavTitle(nav, {
-              className:
-                'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
-            })}
+            {renderNavTitle(
+              mode === 'oiia' ? { ...nav, title: OIIA_TITLE } : nav,
+              {
+                className:
+                  'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
+              }
+            )}
           </ViewAnimation>
           {nav.children}
         </div>
