@@ -12,6 +12,8 @@ import { getSortedByDatePosts } from '@/lib/source'
 const chipClass =
   'inline-flex items-center gap-2 rounded-full border border-border border-dashed px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:border-solid hover:text-foreground'
 
+const SIMBA_LINE = "i sniffed everywhere, but that page isn't here."
+
 export default function NotFound() {
   const latest = getSortedByDatePosts()[0]
 
@@ -19,12 +21,11 @@ export default function NotFound() {
     <SiteShell>
       <div className='container mx-auto flex flex-1 items-center justify-center border-border border-x border-dashed px-4 py-16'>
         <div className='flex w-full max-w-lg flex-col items-center gap-8 text-center'>
-          <div className='flex flex-col items-center gap-3'>
+          {/* Rover lives in the corner on md+; this card dog is for mobile, where the mascot doesn't load */}
+          <div className='flex flex-col items-center gap-3 md:hidden'>
             <div className='relative rounded-2xl border border-border bg-card px-5 py-4 text-sm after:absolute after:top-full after:left-1/2 after:size-3 after:-translate-x-1/2 after:-translate-y-1.5 after:rotate-45 after:border-border after:border-r after:border-b after:bg-card'>
               <span className='font-medium text-foreground'>woof!</span>{' '}
-              <span className='text-muted-foreground'>
-                i sniffed everywhere, but that page isn't here.
-              </span>
+              <span className='text-muted-foreground'>{SIMBA_LINE}</span>
             </div>
             <SimbaSprite />
           </div>
@@ -36,6 +37,10 @@ export default function NotFound() {
             <h1 className='text-balance font-semibold text-2xl tracking-tight'>
               This page could not be found.
             </h1>
+            <p className='hidden text-muted-foreground text-sm md:block'>
+              <span className='font-medium text-foreground'>woof!</span>{' '}
+              {SIMBA_LINE}
+            </p>
           </div>
 
           <div className='flex flex-wrap justify-center gap-2'>
