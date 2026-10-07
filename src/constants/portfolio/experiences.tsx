@@ -3,6 +3,7 @@ import type { ExperienceItemType } from '@/types/experience'
 
 export const experiences: ExperienceItemType[] = [
   {
+    companyLogo: '/images/companies/quiverai.png',
     companyName: 'QuiverAI',
     companyWebsite: 'https://quiver.ai',
     id: 'quiverai',
