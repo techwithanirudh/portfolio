@@ -1,45 +1,76 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { AskSimbaButton } from '@/components/features/not-found/ask-simba-button'
+import { SimbaSprite } from '@/components/features/not-found/simba-sprite'
 import { Icons } from '@/components/icons/icons'
+import { SiteShell } from '@/components/layout/site-shell'
 import { buttonVariants } from '@/components/ui/button'
+import { linkItems } from '@/constants/navigation'
 import { createMetadata } from '@/lib/metadata'
+import { getSortedByDatePosts } from '@/lib/source'
+
+const chipClass =
+  'inline-flex items-center gap-2 rounded-full border border-border border-dashed px-3 py-1.5 text-muted-foreground text-sm transition-colors hover:border-solid hover:text-foreground'
 
 export default function NotFound() {
+  const latest = getSortedByDatePosts()[0]
+
   return (
-    <main className='flex flex-1'>
-      <div className='container relative mx-auto flex min-h-full flex-1 items-center justify-center border-border border-x border-dashed'>
-        <div className='flex w-fit flex-col items-center justify-center gap-4 px-4'>
-          <div className='flex flex-col items-center text-center sm:flex-row'>
-            <h1 className='border-border font-extrabold text-2xl text-foreground tracking-tight sm:mr-6 sm:border-r sm:pr-6 sm:text-3xl'>
-              404
-            </h1>
-            <h2 className='mt-2 text-pretty text-muted-foreground sm:mt-0'>
-              This page could not be found.
-            </h2>
+    <SiteShell>
+      <div className='container mx-auto flex flex-1 items-center justify-center border-border border-x border-dashed px-4 py-16'>
+        <div className='flex w-full max-w-lg flex-col items-center gap-8 text-center'>
+          <div className='flex flex-col items-center gap-3'>
+            <div className='relative rounded-2xl border border-border bg-card px-5 py-4 text-sm after:absolute after:top-full after:left-1/2 after:size-3 after:-translate-x-1/2 after:-translate-y-1.5 after:rotate-45 after:border-border after:border-r after:border-b after:bg-card'>
+              <span className='font-medium text-foreground'>woof!</span>{' '}
+              <span className='text-muted-foreground'>
+                i sniffed everywhere, but that page isn't here.
+              </span>
+            </div>
+            <SimbaSprite />
           </div>
-          <Link
-            className={buttonVariants({
-              className: 'w-full',
-            })}
-            href='/'
-          >
-            Go Home
-            <Icons.arrowRight className='icon-arrow-button size-4' />
-          </Link>
+
+          <div className='flex flex-col gap-1'>
+            <p className='font-mono text-muted-foreground text-xs uppercase tracking-widest'>
+              404
+            </p>
+            <h1 className='text-balance font-semibold text-2xl tracking-tight'>
+              This page could not be found.
+            </h1>
+          </div>
+
+          <div className='flex flex-wrap justify-center gap-2'>
+            <Link className={buttonVariants()} href='/'>
+              Go Home
+              <Icons.arrowRight className='icon-arrow-button size-4' />
+            </Link>
+            <AskSimbaButton />
+          </div>
+
+          <ul className='flex flex-wrap justify-center gap-2'>
+            {linkItems.map((item) =>
+              item.type === undefined || item.type === 'main' ? (
+                <li key={item.url}>
+                  <Link className={chipClass} href={item.url}>
+                    {item.text}
+                  </Link>
+                </li>
+              ) : null
+            )}
+            {latest ? (
+              <li>
+                <Link className={chipClass} href={latest.url}>
+                  Latest: {latest.data.title}
+                </Link>
+              </li>
+            ) : null}
+          </ul>
         </div>
       </div>
-    </main>
+    </SiteShell>
   )
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>
-}): Promise<Metadata> {
-  const _params = await props.params
-  const description = 'The page you are looking for could not be found.'
-
-  return createMetadata({
-    description,
-    title: 'Not Found',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  description: 'The page you are looking for could not be found.',
+  title: 'Not Found',
+})
