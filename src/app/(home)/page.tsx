@@ -38,9 +38,9 @@ export default async function Home() {
         <Separator />
         <Skills />
         <Separator />
-        <ExperiencePreview />
-        <Separator />
         <WorkPreview works={works} />
+        <Separator />
+        <ExperiencePreview />
         <Testimonials testimonials={testimonials} />
         <Separator />
         <Contributions contributions={contributions} />
