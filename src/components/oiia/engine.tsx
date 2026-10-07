@@ -8,14 +8,13 @@ import {
 import { useOiiaMode } from './provider'
 
 export function OiiaEngine() {
-  const { mode, setCatCount, clearAllRequest, species } = useOiiaMode()
+  const { mode, setCatCount, clearAllRequest } = useOiiaMode()
   const container = useRef<HTMLDivElement>(null)
   const engine = useRef<OiiaEngineHandle | null>(null)
   const isActive = useRef(false)
   const clearing = useRef(false)
   const clearingEngine = useRef<OiiaEngineHandle | null>(null)
   const cancelled = useRef(false)
-  const speciesRef = useRef(species)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally re-runs on mode change to reset the cancellation flag for the next activation
   useEffect(() => {
@@ -58,7 +57,7 @@ export function OiiaEngine() {
       if (mountCancelled) {
         return
       }
-      engine.current = createOiiaEngine(M, el, setCatCount, speciesRef.current)
+      engine.current = createOiiaEngine(M, el, setCatCount)
     })
 
     return () => {
@@ -67,11 +66,6 @@ export function OiiaEngine() {
       engine.current = null
     }
   }, [mode, setCatCount])
-
-  useEffect(() => {
-    speciesRef.current = species
-    engine.current?.setSpecies(species)
-  }, [species])
 
   useEffect(() => {
     if (clearAllRequest === 0 || clearing.current || !engine.current) {
@@ -94,12 +88,7 @@ export function OiiaEngine() {
         if (cancelled.current || !(isActive.current && container.current)) {
           return
         }
-        engine.current = createOiiaEngine(
-          M,
-          container.current,
-          setCatCount,
-          speciesRef.current
-        )
+        engine.current = createOiiaEngine(M, container.current, setCatCount)
       })
     })
   }, [clearAllRequest, setCatCount])

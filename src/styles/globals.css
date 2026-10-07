@@ -147,15 +147,6 @@ html > body[data-scroll-locked] {
   --color-fd-popover-foreground: hsl(75, 35%, 88%);
 }
 
-@keyframes oiia-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 @layer base {
   a {
     @apply [overflow-wrap:anywhere] decoration-wavy;

@@ -1,22 +1,6 @@
 import { defineSound, ensureReady } from '@web-kits/audio'
 
-export type Species = 'cat' | 'dog'
-
 const GIF = 'https://media.tenor.com/8VuZc8I8f7EAAAAj/oiia-cat.gif'
-// clippyjs' Rover sprite sheet; RestPose is the frame at [0, 0].
-const ROVER_SPRITE = '/assets/clippy/rover.png'
-const ROVER_FRAME_SIZE = 80
-
-let roverImagePromise: Promise<HTMLImageElement> | null = null
-function loadRoverImage(): Promise<HTMLImageElement> {
-  roverImagePromise ??= new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload = () => resolve(img)
-    img.onerror = reject
-    img.src = ROVER_SPRITE
-  })
-  return roverImagePromise
-}
 const INITIAL = 5
 const MAX = 60
 const COOLDOWN = 350
@@ -55,7 +39,6 @@ function pickRadius(): number {
 export interface OiiaEngine {
   clear: (onDone: () => void) => void
   destroy: () => void
-  setSpecies: (next: Species) => void
 }
 
 const playBoing = defineSound({
@@ -81,10 +64,8 @@ function boing() {
 export function createOiiaEngine(
   M: typeof import('matter-js'),
   container: HTMLDivElement,
-  onCount: (n: number) => void,
-  initialSpecies: Species = 'cat'
+  onCount: (n: number) => void
 ): OiiaEngine {
-  let species: Species = initialSpecies
   const engine = M.Engine.create({ gravity: { x: 0, y: 0 } })
   const runner = M.Runner.create()
   M.Runner.run(runner, engine)
@@ -123,52 +104,6 @@ export function createOiiaEngine(
     drag: Matter.Constraint | null = null,
     dragId: number | null = null
 
-  function renderCreature(el: HTMLDivElement, visualRadius: number) {
-    el.innerHTML = ''
-    if (species === 'dog') {
-      const size = visualRadius * 2
-      const dpr = window.devicePixelRatio || 1
-      const canvas = document.createElement('canvas')
-      canvas.width = size * dpr
-      canvas.height = size * dpr
-      canvas.style.cssText = `width:${size}px;height:${size}px;border-radius:9999px;pointer-events:none;user-select:none;animation:oiia-spin 0.9s linear infinite;`
-      el.appendChild(canvas)
-      loadRoverImage()
-        .then((img) => {
-          canvas
-            .getContext('2d')
-            ?.drawImage(
-              img,
-              0,
-              0,
-              ROVER_FRAME_SIZE,
-              ROVER_FRAME_SIZE,
-              0,
-              0,
-              canvas.width,
-              canvas.height
-            )
-        })
-        .catch(() => {
-          canvas.remove()
-          el.textContent = '🐶'
-          el.style.cssText += `display:flex;align-items:center;justify-content:center;font-size:${visualRadius}px;`
-        })
-      return
-    }
-    const img = document.createElement('img')
-    img.src = GIF
-    img.alt = 'OIIA cat'
-    img.style.cssText =
-      'width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;'
-    img.onerror = () => {
-      img.remove()
-      el.textContent = '🐱'
-      el.style.cssText += `display:flex;align-items:center;justify-content:center;font-size:${visualRadius}px;`
-    }
-    el.appendChild(img)
-  }
-
   function spawnCat(x?: number, y?: number, halo?: string) {
     if (bodies.size >= MAX) {
       return
@@ -203,7 +138,17 @@ export function createOiiaEngine(
     }
     // Start translated offscreen so no flash at (0,0) before the RAF loop positions it
     el.style.cssText = `${el.style.cssText}position:absolute;width:${visualRadius * 2}px;height:${visualRadius * 2}px;top:0;left:0;pointer-events:auto;will-change:transform;cursor:grab;z-index:2;opacity:0;transition:opacity 0.2s ease-out;transform:translate3d(-9999px,-9999px,0);`
-    renderCreature(el, visualRadius)
+    const img = document.createElement('img')
+    img.src = GIF
+    img.alt = 'OIIA cat'
+    img.style.cssText =
+      'width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none;-webkit-user-drag:none;'
+    img.onerror = () => {
+      img.remove()
+      el.textContent = '🐱'
+      el.style.cssText += `display:flex;align-items:center;justify-content:center;font-size:${visualRadius}px;`
+    }
+    el.appendChild(img)
     container.appendChild(el)
     requestAnimationFrame(() => {
       el.style.opacity = '1'
@@ -400,15 +345,6 @@ export function createOiiaEngine(
       teardown()
       container.innerHTML = ''
       onCount(0)
-    },
-    setSpecies(next) {
-      if (next === species) {
-        return
-      }
-      species = next
-      for (const [id, el] of els) {
-        renderCreature(el, radii.get(id) ?? 34)
-      }
     },
   }
 }

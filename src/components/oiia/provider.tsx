@@ -12,7 +12,6 @@ import {
 } from 'react'
 
 export type OiiaMode = 'default' | 'oiia'
-export type OiiaSpecies = 'cat' | 'dog'
 
 export const OIIA_TITLE = 'OIIA'
 
@@ -25,8 +24,6 @@ interface OiiaContextValue {
   mode: OiiaMode
   registerClick: () => { remaining: number; mode: OiiaMode }
   setCatCount: (n: number) => void
-  species: OiiaSpecies
-  toggleSpecies: () => void
 }
 
 const OiiaContext = createContext<OiiaContextValue | null>(null)
@@ -38,7 +35,6 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
   const [clicksRemaining, setClicksRemaining] = useState(CLICKS_TO_ENABLE)
   const [catCount, setCatCount] = useState(0)
   const [clearAllRequest, setClearAllRequest] = useState(0)
-  const [species, setSpecies] = useState<OiiaSpecies>('cat')
   const clicksRef = useRef(CLICKS_TO_ENABLE)
 
   useEffect(() => {
@@ -80,11 +76,6 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
 
   const clearAll = useCallback(() => setClearAllRequest((n) => n + 1), [])
 
-  const toggleSpecies = useCallback(
-    () => setSpecies((s) => (s === 'cat' ? 'dog' : 'cat')),
-    []
-  )
-
   const value = useMemo(
     () => ({
       catCount,
@@ -95,8 +86,6 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
       mode,
       registerClick,
       setCatCount,
-      species,
-      toggleSpecies,
     }),
     [
       mode,
@@ -106,8 +95,6 @@ export function OiiaProvider({ children }: { children: ReactNode }) {
       clearAll,
       registerClick,
       disable,
-      species,
-      toggleSpecies,
     ]
   )
 
