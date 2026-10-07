@@ -3,6 +3,24 @@ import type { ExperienceItemType } from '@/types/experience'
 
 export const experiences: ExperienceItemType[] = [
   {
+    companyName: 'QuiverAI',
+    companyWebsite: 'https://quiver.ai',
+    id: 'quiverai',
+    isCurrentEmployer: true,
+    positions: [
+      {
+        description:
+          'Working on QuiverAI, a platform for generating, editing, and animating SVG graphics with AI.',
+        employmentPeriod: { start: '08.2026' },
+        icon: <Icons.codeXml />,
+        id: '1',
+        isExpanded: true,
+        skills: ['TypeScript', 'React', 'Next.js', 'Node.js'],
+        title: 'Software Engineer',
+      },
+    ],
+  },
+  {
     companyLogo: '/images/companies/energent.png',
     companyName: 'Energent.ai',
     companyWebsite: 'https://energent.ai',

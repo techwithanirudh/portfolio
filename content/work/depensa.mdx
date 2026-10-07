@@ -1,0 +1,27 @@
+---
+title: Depensa
+description: A mobile expense tracker that turns merchant purchase history into one detailed timeline.
+date: 2026-09-15
+website: https://depensa.techwithanirudh.com/
+tags: ['Expo', 'React Native', 'Convex', 'Firecrawl', 'HeroUI Native']
+---
+
+Depensa is a mobile expense tracker. It pulls your purchase history from the merchants you shop with and merges it into one itemized, deduplicated timeline, so you see what you bought and not just a bank line that says "AMZN MKTP".
+
+## How it works
+
+Instead of sending an AI agent to browse on every sync, Depensa uses AI to learn or repair a connector for each merchant. A plain, deterministic extractor handles routine syncs, which keeps recurring work fast, cheap, and easy to test.
+
+You sign in and finish MFA yourself inside an embedded Firecrawl live view. Depensa never reads form contents or credentials. Tapping **Done** only checks that the browser navigated, saves the browser profile, and leaves real access validation to the first connector run.
+
+Convex handles auth, data, actions, and scheduled work. Merchant orders land in one reactive timeline, with named and tagged connections so duplicate accounts per site work fine.
+
+## Stack
+
+- Expo, React Native, Expo Router (iOS and Android).
+- HeroUI Native, Uniwind, Tailwind CSS 4.
+- Convex, Better Auth.
+- Firecrawl cloud browsers with persistent profiles.
+- Bun workspaces, Turborepo, TypeScript.
+
+This one is not open source.
