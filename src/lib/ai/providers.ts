@@ -1,3 +1,4 @@
+import { openai } from '@ai-sdk/openai'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { customProvider } from 'ai'
 import { createRetryable } from 'ai-retry'
@@ -18,9 +19,12 @@ const onError = (context: {
 }
 
 const chatModel = createRetryable({
-  model: hackclub('z-ai/glm-5.3-flash'),
+  model: openai('gpt-6-luna'),
   onError,
-  retries: [hackclub('deepseek/deepseek-v4.1-flash')],
+  retries: [
+    hackclub('z-ai/glm-5.3-flash'),
+    hackclub('deepseek/deepseek-v4.1-flash'),
+  ],
 })
 
 const moderationModel = createRetryable({
