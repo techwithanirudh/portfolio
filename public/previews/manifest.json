@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-03T15:34:45.209Z",
+  "generated": "2026-10-07T18:29:26.784Z",
   "previews": {
     "ac8bc5b8d08d": {
       "generatedAt": "2026-05-13T07:45:44.634Z",
@@ -421,6 +421,14 @@
       "screenshotPath": "/previews/ffcdc169a659.jpeg",
       "status": "failed",
       "url": "https://github.com/techwithanirudh/remotely",
+      "width": 1200
+    },
+    "71ccdb1bc2a5": {
+      "generatedAt": "2026-10-07T18:29:26.688Z",
+      "height": 630,
+      "screenshotPath": "/previews/71ccdb1bc2a5.jpeg",
+      "status": "success",
+      "url": "https://depensa.techwithanirudh.com/",
       "width": 1200
     }
   }
