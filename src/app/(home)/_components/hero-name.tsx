@@ -1,8 +1,10 @@
 'use client'
 
-import { useOiiaMode } from '@/components/oiia'
+import { CLICKS_TO_ENABLE, useOiiaMode } from '@/components/oiia'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
+
+const SILENT_CLICKS = 3
 
 export function HeroName() {
   const { mode, registerClick } = useOiiaMode()
@@ -20,8 +22,11 @@ export function HeroName() {
         onClick={() => {
           const result = registerClick()
           if (result.remaining > 0) {
-            const clicks = result.remaining === 1 ? 'click' : 'clicks'
-            toast(`${result.remaining} ${clicks} remaining`)
+            const clicksDone = CLICKS_TO_ENABLE - result.remaining
+            if (clicksDone > SILENT_CLICKS) {
+              const clicks = result.remaining === 1 ? 'click' : 'clicks'
+              toast(`${result.remaining} ${clicks} remaining`)
+            }
           } else if (result.mode === 'oiia') {
             toast('oiia mode enabled, collide two cats to spawn more')
           } else {

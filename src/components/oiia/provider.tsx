@@ -28,7 +28,7 @@ interface OiiaContextValue {
 
 const OiiaContext = createContext<OiiaContextValue | null>(null)
 
-const CLICKS_TO_ENABLE = 3
+export const CLICKS_TO_ENABLE = 15
 
 export function OiiaProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<OiiaMode>('default')
