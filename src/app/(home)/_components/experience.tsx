@@ -74,18 +74,18 @@ function ExperienceCard({ experience }: { experience: ExperienceItemType }) {
   const duration = formatDuration(start, end)
 
   return (
-    <article className='group flex h-full flex-col justify-between gap-6 p-6 transition-colors duration-300 hover:bg-card lg:gap-20'>
+    <article className='flex h-full flex-col justify-between gap-6 p-6 transition-colors duration-300 hover:bg-card lg:gap-20'>
       <div className='flex items-start justify-between gap-2'>
         {experience.companyLogo ? (
           <Image
             alt=''
-            className='size-12 rounded-lg transition-transform duration-300 ease-out will-change-transform motion-safe:group-hover:rotate-12 motion-safe:group-hover:scale-125'
+            className='size-12 rounded-lg icon-tilt'
             height={48}
             src={experience.companyLogo}
             width={48}
           />
         ) : (
-          <span className='size-12 rounded-lg bg-muted transition-transform duration-300 ease-out will-change-transform motion-safe:group-hover:rotate-12 motion-safe:group-hover:scale-125' />
+          <span className='size-12 rounded-lg bg-muted icon-tilt' />
         )}
         {experience.isCurrentEmployer && <NowBadge />}
       </div>
