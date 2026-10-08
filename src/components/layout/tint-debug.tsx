@@ -1,5 +1,7 @@
 'use client'
 
+// cspell:ignore tintdebug
+
 import { useTheme } from 'next-themes'
 import { useEffect, useRef, useState } from 'react'
 
@@ -30,7 +32,7 @@ const labels: Record<Group, string> = {
   strips: 'edge strips',
 }
 
-/** Temporary: only active with ?tintdebug=1, to bisect Safari tint issues. */
+/** Temporary: only active with the tint debug query param, to bisect Safari tint issues. */
 export function TintDebug() {
   const { resolvedTheme, setTheme } = useTheme()
   const [enabled, setEnabled] = useState(false)
