@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 import CustomSearchDialog from '@/components/features/search'
 import { BrowserTint } from '@/components/layout/browser-tint'
+import { TintDebug } from '@/components/layout/tint-debug'
 import { ThemeProvider } from '@/components/theme-provider'
 import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
@@ -134,6 +135,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             enableSystem
           >
             <BrowserTint />
+            <TintDebug />
             <RootProvider
               search={{
                 SearchDialog: CustomSearchDialog,
