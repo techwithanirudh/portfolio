@@ -9,7 +9,6 @@ import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 import { formatDuration, formatPeriod } from '@/lib/employment-period'
-import { cn } from '@/lib/utils'
 import type { ExperienceItemType } from '@/types/experience'
 
 const previewCount = 3
@@ -75,23 +74,18 @@ function ExperienceCard({ experience }: { experience: ExperienceItemType }) {
   const duration = formatDuration(start, end)
 
   return (
-    <article
-      className={cn(
-        'flex h-full flex-col justify-between gap-6 p-6 lg:gap-20',
-        experience.isCurrentEmployer && 'bg-card/60'
-      )}
-    >
+    <article className='flex h-full flex-col justify-between gap-28 p-6 transition-colors duration-300 hover:bg-card sm:gap-34 md:gap-40 lg:gap-46'>
       <div className='flex items-start justify-between gap-2'>
         {experience.companyLogo ? (
           <Image
             alt=''
-            className='size-12 rounded-lg'
+            className='size-12 rounded-lg icon-tilt'
             height={48}
             src={experience.companyLogo}
             width={48}
           />
         ) : (
-          <span className='size-12 rounded-lg bg-muted' />
+          <span className='size-12 rounded-lg bg-muted icon-tilt' />
         )}
         {experience.isCurrentEmployer && <NowBadge />}
       </div>

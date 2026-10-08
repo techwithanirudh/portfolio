@@ -13,11 +13,12 @@ export const experiences: ExperienceItemType[] = [
         description:
           'Working at QuiverAI, a platform for generating, editing, and animating SVG graphics with AI.',
         employmentPeriod: { start: '08.2026' },
+        employmentType: 'Internship',
         icon: <Icons.codeXml />,
         id: '1',
         isExpanded: true,
         skills: ['TypeScript', 'React', 'Next.js', 'Node.js'],
-        title: 'Software Engineer',
+        title: 'Software Engineering Intern',
       },
     ],
   },
