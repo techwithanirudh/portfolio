@@ -74,7 +74,7 @@ function ExperienceCard({ experience }: { experience: ExperienceItemType }) {
   const duration = formatDuration(start, end)
 
   return (
-    <article className='flex h-full flex-col justify-between gap-6 p-6 transition-colors duration-300 hover:bg-card lg:gap-20'>
+    <article className='flex h-full flex-col justify-between gap-28 p-6 transition-colors duration-300 hover:bg-card sm:gap-34 md:gap-40 lg:gap-46'>
       <div className='flex items-start justify-between gap-2'>
         {experience.companyLogo ? (
           <Image
