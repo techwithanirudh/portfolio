@@ -26,7 +26,10 @@ export function FloatingPill({
   ]
 
   return (
-    <div className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
+    // The pill is itself the fixed element and is narrower than 80% of the
+    // viewport, so Safari 26 never samples it as a browser-UI tint source (a
+    // full-width fixed wrapper around it kept the bottom tint stale).
+    <div className='fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] left-1/2 z-[32] w-max -translate-x-1/2 md:hidden'>
       <div className='flex items-center gap-0.5 rounded-full border bg-background px-1.5 py-1.5 shadow-lg'>
         <button
           aria-label='Search'

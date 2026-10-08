@@ -43,12 +43,15 @@ export function MobileNav() {
 
   return (
     <>
+      {/* The fixed wrapper has no background and the visuals are absolute
+          children: Safari 26 samples fixed elements at the bottom edge for
+          browser-UI tint, which would go stale on a theme toggle. */}
       <div
         aria-hidden
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 md:hidden'
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 h-[calc(4rem+env(safe-area-inset-bottom,0px))] md:hidden'
       >
-        <div className='h-16 bg-gradient-to-t from-background to-transparent' />
-        <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
+        <div className='absolute inset-x-0 bottom-[env(safe-area-inset-bottom,0px)] h-16 bg-gradient-to-t from-background to-transparent' />
+        <div className='absolute inset-x-0 bottom-0 h-[env(safe-area-inset-bottom,0px)] bg-background' />
       </div>
 
       <Presence present={open}>
