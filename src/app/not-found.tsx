@@ -1,45 +1,41 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { AskSimbaButton } from '@/components/features/not-found/ask-simba-button'
+import { SimbaSprite } from '@/components/features/not-found/simba-sprite'
 import { Icons } from '@/components/icons/icons'
+import { SiteShell } from '@/components/layout/site-shell'
 import { buttonVariants } from '@/components/ui/button'
 import { createMetadata } from '@/lib/metadata'
 
 export default function NotFound() {
   return (
-    <main className='flex flex-1'>
-      <div className='container relative mx-auto flex min-h-full flex-1 items-center justify-center border-border border-x border-dashed'>
-        <div className='flex w-fit flex-col items-center justify-center gap-4 px-4'>
-          <div className='flex flex-col items-center text-center sm:flex-row'>
-            <h1 className='border-border font-extrabold text-2xl text-foreground tracking-tight sm:mr-6 sm:border-r sm:pr-6 sm:text-3xl'>
-              404
-            </h1>
-            <h2 className='mt-2 text-pretty text-muted-foreground sm:mt-0'>
-              This page could not be found.
-            </h2>
+    <SiteShell>
+      <div className='container relative mx-auto flex min-h-[28rem] flex-1 items-center justify-center overflow-hidden border-border border-x border-dashed px-4 pb-32 md:pb-0'>
+        <div className='flex flex-col items-center gap-4 text-center'>
+          <p className='font-mono text-muted-foreground text-xs uppercase tracking-widest'>
+            404
+          </p>
+          <h1 className='text-balance font-semibold text-2xl tracking-tight'>
+            Simba couldn't sniff this one out.
+          </h1>
+          <div className='mt-2 flex flex-wrap justify-center gap-2'>
+            <Link className={buttonVariants()} href='/'>
+              Go Home
+              <Icons.arrowRight className='icon-arrow-button size-4' />
+            </Link>
+            <AskSimbaButton />
           </div>
-          <Link
-            className={buttonVariants({
-              className: 'w-full',
-            })}
-            href='/'
-          >
-            Go Home
-            <Icons.arrowRight className='icon-arrow-button size-4' />
-          </Link>
+        </div>
+        {/* Rover lives in the corner on md+; on mobile the mascot doesn't load, so he sits on the bottom edge instead */}
+        <div className='absolute -right-[43px] -bottom-3 md:hidden'>
+          <SimbaSprite />
         </div>
       </div>
-    </main>
+    </SiteShell>
   )
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>
-}): Promise<Metadata> {
-  const _params = await props.params
-  const description = 'The page you are looking for could not be found.'
-
-  return createMetadata({
-    description,
-    title: 'Not Found',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  description: 'The page you are looking for could not be found.',
+  title: 'Not Found',
+})
