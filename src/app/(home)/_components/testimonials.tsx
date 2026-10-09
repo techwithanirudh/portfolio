@@ -99,7 +99,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
         <SectionHeader
           align='left'
           className='px-6'
-          description="I've had the pleasure of working with some amazing people. Here is what they have to say about my work."
+          description="I've worked with some great people. Here's what they say about working with me."
           title='What others are saying'
         />
 

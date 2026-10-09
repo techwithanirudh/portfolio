@@ -17,7 +17,7 @@ export function getImageResponseOptions(): ImageResponseOptions {
 
 export function generate({
   title,
-  description = 'Learn more about this work by visiting the website.',
+  description = 'Read more about this project on the website.',
 }: GenerateProps): ReactElement {
   return (
     <div

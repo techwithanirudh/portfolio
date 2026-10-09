@@ -5,7 +5,7 @@ export function Setup() {
     <div>
       <div className='border-border border-b border-dashed p-6'>
         <p className='text-muted-foreground'>
-          A cozy workspace built for focus, with the gear I rely on every day.
+          My desk, and the gear I use every day.
         </p>
       </div>
       <figure>

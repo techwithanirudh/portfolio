@@ -21,7 +21,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
       <SplitSection cols='three'>
         <SplitSectionSidebar background='dashed'>
           <SplitSectionHeader
-            description='Fresh events from across my GitHub.'
+            description='Recent activity from my GitHub.'
             sticky
             title='Live Activity'
           />

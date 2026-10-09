@@ -40,7 +40,7 @@ export default function Contact(): React.ReactElement {
       </SplitSection>
       <FAQ />
       <ContactPageJsonLd
-        description='Contact me for any inquiries, feedback.'
+        description='Contact me with questions or feedback.'
         path='/contact'
         title='Contact'
       />
@@ -52,7 +52,7 @@ export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
   const _params = await props.params
-  const description = 'Contact me for any inquiries, feedback.'
+  const description = 'Contact me with questions or feedback.'
 
   return createMetadata({
     alternates: {

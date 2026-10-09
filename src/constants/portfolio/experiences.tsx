@@ -85,7 +85,7 @@ export const experiences: ExperienceItemType[] = [
     positions: [
       {
         description:
-          'Built Coolify Tweaks, Shadcn SaaS Landing, and various open-source projects.',
+          'Built Coolify Tweaks, Shadcn SaaS Landing, and other open-source projects.',
         employmentPeriod: { start: '2021' },
         employmentType: 'Part-time',
         icon: <Icons.globe />,
@@ -116,7 +116,7 @@ export const experiences: ExperienceItemType[] = [
       },
       {
         description:
-          'Created robotics experiments including Snake, Vernie, Humanoid Robot, and Gripper using Mindstorms / Lego Boost.',
+          'Created robotics experiments including Snake, Vernie, Humanoid Robot, and Gripper using Mindstorms and Lego Boost.',
         employmentPeriod: { end: '2019', start: '2018' },
         employmentType: 'Part-time',
         icon: <Icons.cpu />,

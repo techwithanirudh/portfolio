@@ -63,8 +63,8 @@ const Hero = () => {
         whileInView={{ opacity: 1, translateY: 0 }}
       >
         <p className='max-w-sm text-pretty text-center text-base text-muted-foreground leading-relaxed tracking-tight sm:max-w-xl sm:text-lg md:text-xl'>
-          I'm a design engineer and full-stack developer who blends design and
-          development to build beautiful, functional websites.
+          I'm a design engineer and full-stack developer who designs websites
+          and writes the code behind them.
         </p>
       </ViewAnimation>
 
