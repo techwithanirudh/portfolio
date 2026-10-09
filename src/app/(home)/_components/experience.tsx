@@ -79,13 +79,13 @@ function ExperienceCard({ experience }: { experience: ExperienceItemType }) {
         {experience.companyLogo ? (
           <Image
             alt=''
-            className='size-12 rounded-lg icon-tilt'
+            className='icon-tilt size-12 rounded-lg'
             height={48}
             src={experience.companyLogo}
             width={48}
           />
         ) : (
-          <span className='size-12 rounded-lg bg-muted icon-tilt' />
+          <span className='icon-tilt size-12 rounded-lg bg-muted' />
         )}
         {experience.isCurrentEmployer && <NowBadge />}
       </div>
