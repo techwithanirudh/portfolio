@@ -43,7 +43,7 @@ export const subscribe = actionClient
         })
 
         return {
-          message: 'You are already subscribed to our newsletter!',
+          message: "You're already subscribed to the newsletter.",
           success: true,
         }
       }
@@ -70,7 +70,7 @@ export const subscribe = actionClient
       })
 
       return {
-        message: 'You are now subscribed to our newsletter!',
+        message: "You're subscribed. Thanks for signing up!",
         success: true,
       }
     } catch (error) {
@@ -78,6 +78,8 @@ export const subscribe = actionClient
       if (error instanceof ActionError) {
         throw error
       }
-      throw new ActionError('Oops, something went wrong while subscribing.')
+      throw new ActionError(
+        'Something went wrong while subscribing. Please try again.'
+      )
     }
   })

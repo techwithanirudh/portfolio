@@ -26,8 +26,8 @@ export default function CTA(): React.ReactElement {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <p className='typography-body text-pretty text-center text-muted-foreground sm:text-xl'>
-              Have questions or want to connect? Reach out through the contact
-              form or find me on social platforms.
+              Have a question or an idea? Send me a message through the contact
+              form or find me on social media.
             </p>
           </ViewAnimation>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center'>
