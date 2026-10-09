@@ -6,7 +6,7 @@ import type {
 
 export const technology = [
   {
-    description: 'App Router foundation with server components and streaming.',
+    description: 'App Router with server components and streaming.',
     name: 'Next.js',
     url: 'https://nextjs.org',
   },
@@ -26,12 +26,12 @@ export const technology = [
     url: 'https://fumadocs.dev',
   },
   {
-    description: 'Accessible primitives and customized UI building blocks.',
-    name: 'Radix UI + shadcn/ui',
+    description: 'Accessible primitives and components I customized.',
+    name: 'Radix UI and shadcn/ui',
     url: 'https://ui.shadcn.com',
   },
   {
-    description: 'Reliable relational database for data persistence.',
+    description: 'Relational database that stores the site data.',
     name: 'PostgreSQL',
     url: 'https://www.postgresql.org',
   },
@@ -41,7 +41,7 @@ export const technology = [
     url: 'https://orm.drizzle.team',
   },
   {
-    description: 'Subtle reveals and transitions for a calmer rhythm.',
+    description: 'Subtle reveal and transition animations.',
     name: 'Motion',
     url: 'https://motion.dev',
   },
