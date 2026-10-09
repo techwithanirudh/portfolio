@@ -3,6 +3,7 @@
 import { Presence } from '@radix-ui/react-presence'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
@@ -16,6 +17,23 @@ export function MobileNav() {
   const { setOpen: setOpenAssistant } = useAssistantContext()
 
   const closeMenu = useCallback(() => setOpen(false), [])
+
+  // Safari 26 tints its bottom bar from the fixed elements at the bottom edge
+  // (the fade and the pill) and does not re-read their color when it changes
+  // in place. It does re-sample when they are added, so they are re-mounted
+  // after every theme change. Hiding them made the tint follow the theme.
+  const { resolvedTheme } = useTheme()
+  const [tintGeneration, setTintGeneration] = useState(0)
+
+  useEffect(() => {
+    if (!resolvedTheme) {
+      return
+    }
+
+    // Wait a frame so the new theme class is applied before re-mounting.
+    const frame = requestAnimationFrame(() => setTintGeneration((n) => n + 1))
+    return () => cancelAnimationFrame(frame)
+  }, [resolvedTheme])
 
   useEffect(() => {
     if (previousPathname.current === pathname) {
@@ -43,15 +61,13 @@ export function MobileNav() {
 
   return (
     <>
-      {/* The fixed wrapper has no background and the visuals are absolute
-          children: Safari 26 samples fixed elements at the bottom edge for
-          browser-UI tint, which would go stale on a theme toggle. */}
       <div
         aria-hidden
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 h-[calc(4rem+env(safe-area-inset-bottom,0px))] md:hidden'
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 md:hidden'
+        key={`fade-${tintGeneration}`}
       >
-        <div className='absolute inset-x-0 bottom-[env(safe-area-inset-bottom,0px)] h-16 bg-gradient-to-t from-background to-transparent' />
-        <div className='absolute inset-x-0 bottom-0 h-[env(safe-area-inset-bottom,0px)] bg-background' />
+        <div className='h-16 bg-gradient-to-t from-background to-transparent' />
+        <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
       </div>
 
       <Presence present={open}>
@@ -79,6 +95,7 @@ export function MobileNav() {
       </Presence>
 
       <FloatingPill
+        key={`pill-${tintGeneration}`}
         menuId='mobile-navigation-menu'
         onMenuToggle={() => setOpen((value) => !value)}
         onSearchOpen={() => {
