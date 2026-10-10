@@ -8,7 +8,6 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
-import { cn } from '@/lib/utils'
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)
@@ -20,17 +19,11 @@ export function MobileNav() {
   const closeMenu = useCallback(() => setOpen(false), [])
 
   // Safari 26 tints its bottom bar from the fixed elements at the bottom edge
-  // (the fade, the pill and, while the menu is open, its overlay) and does not
-  // re-read their color when it changes in place. It does re-sample when they
-  // are added, so they are re-mounted after every theme change. Hiding them
-  // made the tint follow the theme.
+  // (the fade and the pill) and does not re-read their color when it changes
+  // in place. It does re-sample when they are added, so they are re-mounted
+  // after every theme change. Hiding them made the tint follow the theme.
   const { resolvedTheme } = useTheme()
   const [tintGeneration, setTintGeneration] = useState(0)
-  // True once the overlay was re-mounted while the menu stayed open, so the
-  // new overlay doesn't replay its fade-in.
-  const [overlayRemounted, setOverlayRemounted] = useState(false)
-  const openRef = useRef(open)
-  openRef.current = open
 
   useEffect(() => {
     if (!resolvedTheme) {
@@ -38,18 +31,9 @@ export function MobileNav() {
     }
 
     // Wait a frame so the new theme class is applied before re-mounting.
-    const frame = requestAnimationFrame(() => {
-      setTintGeneration((n) => n + 1)
-      setOverlayRemounted(openRef.current)
-    })
+    const frame = requestAnimationFrame(() => setTintGeneration((n) => n + 1))
     return () => cancelAnimationFrame(frame)
   }, [resolvedTheme])
-
-  useEffect(() => {
-    if (!open) {
-      setOverlayRemounted(false)
-    }
-  }, [open])
 
   useEffect(() => {
     if (previousPathname.current === pathname) {
@@ -89,14 +73,13 @@ export function MobileNav() {
       <Presence present={open}>
         <button
           aria-label='Close menu'
-          // backdrop-blur keeps this full-screen overlay from being sampled
-          // as a Safari 26 browser-UI tint source while the menu is open.
-          className={cn(
-            'fixed inset-0 z-[31] bg-background/50 backdrop-blur-sm data-[state=closed]:animate-fd-fade-out md:hidden',
-            !overlayRemounted && 'data-[state=open]:animate-fd-fade-in'
-          )}
+          // No background-color on purpose: Safari 26 samples a full-screen
+          // fixed element with a background for its browser-UI tint, and that
+          // color went stale on a theme toggle while the menu was open. The
+          // dim is a backdrop-filter instead: a 50% white wash in light mode
+          // (invert, halve, invert) and a 50% darken in dark mode.
+          className='fixed inset-0 z-[31] [-webkit-backdrop-filter:blur(4px)_invert(1)_brightness(0.5)_invert(1)] [backdrop-filter:blur(4px)_invert(1)_brightness(0.5)_invert(1)] data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in md:hidden dark:[-webkit-backdrop-filter:blur(4px)_brightness(0.5)] dark:[backdrop-filter:blur(4px)_brightness(0.5)]'
           data-state={open ? 'open' : 'closed'}
-          key={`overlay-${tintGeneration}`}
           onClick={closeMenu}
           type='button'
         />
