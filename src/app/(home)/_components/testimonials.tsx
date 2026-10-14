@@ -1,5 +1,4 @@
-import { Section } from '@/components/layout/sections'
-import { SectionLabel } from '@/components/layout/sections/label'
+import { Panel, PanelHeader, PanelTitle } from '@/components/layout/panel'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { ViewAnimation } from '@/components/view-animation'
 import type { Testimonial } from '@/types'
@@ -12,9 +11,11 @@ const initials = (name: string) =>
     .toUpperCase()
 
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
-  <Section className='flex flex-col gap-4 py-6'>
-    <SectionLabel>kind_words</SectionLabel>
-    <ul className='divide-y divide-dashed divide-border border-border border-y border-dashed'>
+  <Panel>
+    <PanelHeader>
+      <PanelTitle>kind_words</PanelTitle>
+    </PanelHeader>
+    <ul className='divide-y divide-dashed divide-line'>
       {testimonials.slice(0, 3).map((testimonial, index) => (
         <ViewAnimation
           blur={false}
@@ -23,7 +24,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
           key={testimonial.author.name}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <li className='flex flex-col gap-3 px-4 py-4 sm:px-6'>
+          <li className='flex flex-col gap-3 p-4'>
             <blockquote className='text-pretty text-muted-foreground text-sm leading-relaxed'>
               <span aria-hidden className='font-mono text-primary'>
                 "
@@ -43,7 +44,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
         </ViewAnimation>
       ))}
     </ul>
-  </Section>
+  </Panel>
 )
 
 export default Testimonials

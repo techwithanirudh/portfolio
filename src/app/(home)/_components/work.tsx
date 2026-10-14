@@ -1,28 +1,31 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/layout/sections'
-import { SectionLabel } from '@/components/layout/sections/label'
+import {
+  Panel,
+  PanelAction,
+  PanelHeader,
+  PanelTitle,
+} from '@/components/layout/panel'
 import { ViewAnimation } from '@/components/view-animation'
 import type { WorkPage } from '@/lib/source'
 
 export default function WorkPreview({ works }: { works: WorkPage[] }) {
   return (
-    <Section className='flex flex-col gap-4 py-6'>
-      <SectionLabel
-        action={
+    <Panel>
+      <PanelHeader>
+        <PanelTitle>work</PanelTitle>
+        <PanelAction>
           <Link
-            className='font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+            className='transition-colors hover:text-foreground'
             href='/work'
           >
             view_all
             <Icons.arrowRight className='icon-arrow-button ml-1 inline size-3' />
           </Link>
-        }
-      >
-        work
-      </SectionLabel>
-      <ul className='divide-y divide-dashed divide-border border-border border-y border-dashed'>
+        </PanelAction>
+      </PanelHeader>
+      <ul className='divide-y divide-dashed divide-line'>
         {works.map((work, index) => (
           <ViewAnimation
             blur={false}
@@ -33,7 +36,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           >
             <li>
               <Link
-                className='group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-card sm:px-6'
+                className='group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-card'
                 data-sound-hover
                 href={work.url}
               >
@@ -63,6 +66,6 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           </ViewAnimation>
         ))}
       </ul>
-    </Section>
+    </Panel>
   )
 }

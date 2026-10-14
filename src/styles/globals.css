@@ -47,6 +47,7 @@
   --color-destructive-foreground: hsl(0 0% 98%);
 
   --color-border: var(--color-fd-border);
+  --color-line: var(--line);
   --color-input: var(--color-fd-border);
   --color-ring: var(--color-fd-ring);
 
@@ -64,6 +65,11 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Screen lines reach 100vw past the column, clip (not hide) keeps sticky working */
+body {
+  overflow-x: clip;
+}
+
 html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
   margin-right: 0px !important;
@@ -75,6 +81,12 @@ html > body[data-scroll-locked] {
     --typography-hero-width: 56rem;
     --typography-title-width: 40rem;
     --typography-body-width: 60ch;
+    /* Softer than border, for the full-bleed screen lines */
+    --line: color-mix(
+      in oklab,
+      var(--color-fd-border) 70%,
+      var(--color-fd-background)
+    );
   }
 }
 
@@ -524,5 +536,68 @@ html > body[data-scroll-locked] {
 
   @media (prefers-reduced-motion: reduce) {
     animation: none;
+  }
+}
+
+/*
+ * Full-bleed horizontal rules that run past the column edges.
+ * Adapted from chanhdai.com (MIT, (c) Chanh Dai): github.com/ncdai/chanhdai.com
+ */
+@utility screen-line-top {
+  @apply relative;
+  &:before {
+    content: "";
+    @apply absolute top-0 left-[-100vw] -z-1 h-px w-[200vw] bg-line;
+  }
+}
+
+@utility screen-line-bottom {
+  @apply relative;
+  &:after {
+    content: "";
+    @apply absolute bottom-0 left-[-100vw] -z-1 h-px w-[200vw] bg-line;
+  }
+}
+
+@utility screen-dashed-line-top {
+  @apply screen-line-top;
+  &:before {
+    @apply bg-transparent bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
+  }
+}
+
+@utility screen-dashed-line-bottom {
+  @apply screen-line-bottom;
+  &:after {
+    @apply bg-transparent bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
+  }
+}
+
+@utility screen-line-top-none {
+  @apply before:content-none;
+}
+
+@utility screen-line-bottom-none {
+  @apply after:content-none;
+}
+
+@keyframes wave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
   }
 }

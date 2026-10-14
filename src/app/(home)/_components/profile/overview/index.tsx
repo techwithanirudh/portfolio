@@ -1,0 +1,61 @@
+// Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
+import { Icons } from '@/components/icons/icons'
+import { Panel, PanelContent } from '@/components/layout/panel'
+import { experiences } from '@/constants/portfolio/experiences'
+import { profile } from '@/constants/portfolio/profile'
+import { EmailItem } from './email-item'
+import {
+  IntroItem,
+  IntroItemContent,
+  IntroItemIcon,
+  IntroItemLink,
+} from './intro-item'
+import { LocalTimeItem } from './local-time-item'
+
+const current = experiences.find((experience) => experience.isCurrentEmployer)
+const currentRole = current?.positions[0]?.title
+
+export function Overview() {
+  return (
+    <Panel className='relative'>
+      <h2 className='sr-only'>Overview</h2>
+      <PanelContent className='grid gap-x-4 gap-y-2.5 sm:grid-cols-2'>
+        {current && (
+          <IntroItem className='sm:col-span-2'>
+            <IntroItemIcon>
+              <Icons.codeXml />
+            </IntroItemIcon>
+            <IntroItemContent>
+              {currentRole} @{' '}
+              <IntroItemLink
+                className='font-medium'
+                href={current.companyWebsite}
+              >
+                {current.companyName}
+              </IntroItemLink>
+            </IntroItemContent>
+          </IntroItem>
+        )}
+        <IntroItem>
+          <IntroItemIcon>
+            <Icons.globe />
+          </IntroItemIcon>
+          <IntroItemContent>{profile.location}</IntroItemContent>
+        </IntroItem>
+        <LocalTimeItem timeZone={profile.timeZone} />
+        <EmailItem emailB64={profile.emailB64} />
+        <IntroItem>
+          <IntroItemIcon>
+            <Icons.github />
+          </IntroItemIcon>
+          <IntroItemContent>
+            <IntroItemLink href='https://github.com/techwithanirudh'>
+              techwithanirudh
+            </IntroItemLink>
+          </IntroItemContent>
+        </IntroItem>
+      </PanelContent>
+      <div className='pointer-events-none absolute inset-y-0 left-1/2 -z-1 w-px -translate-x-2.25 border-line border-r border-dashed max-sm:hidden' />
+    </Panel>
+  )
+}

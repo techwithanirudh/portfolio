@@ -1,19 +1,25 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/layout/sections'
-import { SectionLabel } from '@/components/layout/sections/label'
+import {
+  Panel,
+  PanelContent,
+  PanelHeader,
+  PanelTitle,
+} from '@/components/layout/panel'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 const Contact = () => (
-  <Section className='flex flex-col gap-4 py-6'>
-    <SectionLabel>say_hi</SectionLabel>
+  <Panel>
+    <PanelHeader>
+      <PanelTitle>say_hi</PanelTitle>
+    </PanelHeader>
     <ViewAnimation
       initial={{ opacity: 0, translateY: -6 }}
       whileInView={{ opacity: 1, translateY: 0 }}
     >
-      <div className='flex flex-col gap-4 px-4 sm:px-6'>
+      <PanelContent className='flex flex-col gap-4'>
         <p className='max-w-md text-pretty text-muted-foreground text-sm leading-relaxed'>
           Got a question, an idea, or a weird project? My inbox is open, and the
           dog is always listening.
@@ -36,9 +42,9 @@ const Contact = () => (
             hello@techwithanirudh.com
           </a>
         </div>
-      </div>
+      </PanelContent>
     </ViewAnimation>
-  </Section>
+  </Panel>
 )
 
 export default Contact
