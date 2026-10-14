@@ -4,17 +4,30 @@ import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 import { useAssistantContext } from '@/components/features/assistant/assistant'
 import { useMascot } from '@/components/features/assistant/mascot'
-import { animations } from '@/components/features/assistant/mascot/constants'
+import {
+  type AvatarName,
+  animations,
+  avatarMeta,
+} from '@/components/features/assistant/mascot/constants'
 import { playAnimation } from '@/components/features/assistant/mascot/utils'
 
-const getPosition = () => ({
-  x: window.innerWidth - 90,
-  y: window.innerHeight - 100,
-})
+// Matches the panel's right-4 inset so the dog lines up with it
+const EDGE_OFFSET = 16
+
+// Avatars differ in frame size and in the empty space around the dog, and the
+// element has no size until it is shown, so anchor the visible dog using the
+// known frame size and padding
+const getPosition = (avatar: AvatarName) => {
+  const { frame, padding } = avatarMeta[avatar]
+  return {
+    x: window.innerWidth - EDGE_OFFSET - frame[0] + padding.right,
+    y: window.innerHeight - EDGE_OFFSET - frame[1] + padding.bottom,
+  }
+}
 
 function InnerTrigger() {
   const { setOpen } = useAssistantContext()
-  const { agent } = useMascot()
+  const { agent, avatar } = useMascot()
 
   useEffect(() => {
     if (!agent) {
@@ -25,22 +38,29 @@ function InnerTrigger() {
     const cyclesUntilAction = () => 3 + Math.floor(Math.random() * 4)
     let target = cyclesUntilAction()
 
+    // Avatars name their animations differently, so use what this one has
+    const rest = animations.rest.find((name) => agent.hasAnimation(name))
+    const actions = animations.idle.filter((name) => agent.hasAnimation(name))
+
     const onQueueEmpty = () => {
-      if (idleCycles >= target) {
+      if (idleCycles >= target && actions.length > 0) {
         idleCycles = 0
         target = cyclesUntilAction()
-        playAnimation(agent, animations.idle)
-      } else {
+        playAnimation(agent, actions)
+      } else if (rest) {
         idleCycles++
-        agent.play('Idle', 3000)
+        agent.play(rest, 3000)
       }
     }
     agent._onQueueEmpty = onQueueEmpty
     agent._queue._onEmptyCallback = onQueueEmpty
 
-    const { x, y } = getPosition()
-    agent._el.style.left = `${x}px`
-    agent._el.style.top = `${y}px`
+    const place = () => {
+      const { x, y } = getPosition(avatar)
+      agent._el.style.left = `${x}px`
+      agent._el.style.top = `${y}px`
+    }
+    place()
     agent._el.style.zIndex = '45'
     agent.show(true)
 
@@ -50,20 +70,32 @@ function InnerTrigger() {
       setOpen((prev) => !prev)
     }
 
-    const handleResize = () => {
-      const { x, y } = getPosition()
-      agent._el.style.left = `${x}px`
-      agent._el.style.top = `${y}px`
+    const handleHover = () => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return
+      }
+      agent._el.animate(
+        [
+          { transform: 'rotate(0deg)' },
+          { transform: 'rotate(-6deg)' },
+          { transform: 'rotate(5deg)' },
+          { transform: 'rotate(-3deg)' },
+          { transform: 'rotate(0deg)' },
+        ],
+        { duration: 450, easing: 'ease-in-out' }
+      )
     }
 
     agent._el.addEventListener('click', handleClick)
-    window.addEventListener('resize', handleResize)
+    agent._el.addEventListener('mouseenter', handleHover)
+    window.addEventListener('resize', place)
 
     return () => {
       agent._el.removeEventListener('click', handleClick)
-      window.removeEventListener('resize', handleResize)
+      agent._el.removeEventListener('mouseenter', handleHover)
+      window.removeEventListener('resize', place)
     }
-  }, [agent, setOpen])
+  }, [agent, avatar, setOpen])
 
   return null
 }

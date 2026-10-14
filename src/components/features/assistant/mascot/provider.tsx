@@ -4,18 +4,36 @@ import type { initAgent } from 'clippyjs'
 import {
   createContext,
   type ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react'
+import { avatars } from './agents'
+import { type AvatarName, avatarNames, defaultAvatar } from './constants'
 
-type AgentLoaders = Parameters<typeof initAgent>[0]
+const avatarStorageKey = '__mascot_avatar'
+
+function readStoredAvatar(): AvatarName {
+  try {
+    const stored = localStorage.getItem(avatarStorageKey)
+    return avatarNames.find((name) => name === stored) ?? defaultAvatar
+  } catch {
+    return defaultAvatar
+  }
+}
+
 export type MascotAgent = Awaited<ReturnType<typeof initAgent>>
 
 const MascotContext = createContext<
-  { agent: MascotAgent | undefined } | undefined
+  | {
+      agent: MascotAgent | undefined
+      avatar: AvatarName
+      setAvatar: (avatar: AvatarName) => void
+    }
+  | undefined
 >(undefined)
 
 export function useMascot() {
@@ -27,24 +45,35 @@ export function useMascot() {
 }
 
 interface MascotProviderProps {
-  agent?: AgentLoaders
   children?: ReactNode
+  disabled?: boolean
 }
 
-export function MascotProvider({ children, agent }: MascotProviderProps) {
+export function MascotProvider({ children, disabled }: MascotProviderProps) {
+  const [avatar, setAvatarState] = useState<AvatarName>(readStoredAvatar)
   const [currentAgent, setCurrentAgent] = useState<MascotAgent | undefined>()
   const instance = useRef<MascotAgent | null>(null)
 
+  const setAvatar = useCallback((next: AvatarName) => {
+    setAvatarState(next)
+    try {
+      localStorage.setItem(avatarStorageKey, next)
+    } catch {
+      // storage can be blocked, the avatar just won't persist
+    }
+  }, [])
+
   useEffect(() => {
-    if (!agent) {
+    if (disabled) {
       return
     }
 
+    const loaders = avatars[avatar]
     let cancelled = false
 
     import('clippyjs')
       .then(({ initAgent }) =>
-        initAgent({ ...agent, sound: () => Promise.resolve({ default: {} }) })
+        initAgent({ ...loaders, sound: () => Promise.resolve({ default: {} }) })
       )
       .then((loaded: MascotAgent) => {
         if (cancelled) {
@@ -64,12 +93,15 @@ export function MascotProvider({ children, agent }: MascotProviderProps) {
       instance.current = null
       setCurrentAgent(undefined)
     }
-  }, [agent])
+  }, [avatar, disabled])
 
   useEffect(() => {
     if (!currentAgent) {
       return
     }
+
+    // The custom cursor steps aside over the mascot so it isn't blended into it
+    currentAgent._el.dataset.nativeCursor = ''
 
     const blockDrag = (event: MouseEvent | TouchEvent) => {
       event.stopImmediatePropagation()
@@ -89,7 +121,10 @@ export function MascotProvider({ children, agent }: MascotProviderProps) {
     }
   }, [currentAgent])
 
-  const value = useMemo(() => ({ agent: currentAgent }), [currentAgent])
+  const value = useMemo(
+    () => ({ agent: currentAgent, avatar, setAvatar }),
+    [currentAgent, avatar, setAvatar]
+  )
 
   return (
     <MascotContext.Provider value={value}>{children}</MascotContext.Provider>
