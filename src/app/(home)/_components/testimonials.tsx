@@ -1,5 +1,6 @@
 'use client'
 
+import { useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
@@ -40,7 +41,7 @@ const TestimonialCard = ({
     initial={{ opacity: 0, scale: 0.98, translateX: -12 }}
     whileInView={{ opacity: 1, scale: 1, translateX: 0 }}
   >
-    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-all duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
+    <div className='flex h-full flex-col justify-between gap-12 p-6 transition-all duration-300 hover:bg-card sm:p-8'>
       <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>
@@ -52,10 +53,7 @@ const TestimonialCard = ({
         <p className='flex flex-row items-center gap-2 text-sm'>
           <span className='text-muted-foreground'>By</span>
           <Avatar className='h-6 w-6' outlined={false}>
-            <AvatarImage
-              alt={testimonial.author.name}
-              src={testimonial.author.image}
-            />
+            <AvatarImage alt='' src={testimonial.author.image} />
             <AvatarFallback>
               {testimonial.author.name
                 .split(' ')
@@ -74,9 +72,10 @@ const TestimonialCard = ({
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
-    if (!api) {
+    if (!api || prefersReducedMotion) {
       return
     }
 
@@ -91,7 +90,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
     }, 2500)
 
     return () => clearTimeout(timer)
-  }, [api, current])
+  }, [api, current, prefersReducedMotion])
 
   return (
     <Section className='relative w-full pt-10'>
@@ -112,7 +111,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {testimonials.map((item, index) => (
                 <CarouselItem
-                  className='pl-0 md:basis-1/2'
+                  className='pl-0'
                   key={`${item.title}-${item.author.name}`}
                 >
                   <TestimonialCard index={index} testimonial={item} />

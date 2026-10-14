@@ -4,15 +4,11 @@ import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { description as homeDescription } from '@/constants/site'
-import { getGitHubContributions } from '@/lib/github-contributions'
 import { createMetadata } from '@/lib/metadata'
 import { getSortedWork } from '@/lib/source'
-import About from './_components/about'
-import Contributions from './_components/contributions'
 import CTA from './_components/cta'
 import ExperiencePreview from './_components/experience'
 import Hero from './_components/hero'
-import Skills from './_components/skills'
 import Testimonials from './_components/testimonials'
 import WorkPreview from './_components/work'
 
@@ -25,8 +21,7 @@ export const metadata: Metadata = createMetadata({
 })
 
 export default async function Home() {
-  const works = getSortedWork().slice(0, 4)
-  const contributions = getGitHubContributions()
+  const works = getSortedWork().slice(0, 3)
 
   return (
     <>
@@ -34,17 +29,11 @@ export default async function Home() {
       <Wrapper>
         <Hero />
         <Separator />
-        <About />
-        <Separator />
         <ExperiencePreview />
-        <Separator />
-        <Skills />
         <Separator />
         <WorkPreview works={works} />
         <Separator />
         <Testimonials testimonials={testimonials} />
-        <Separator />
-        <Contributions contributions={contributions} />
         <Separator />
         <CTA />
       </Wrapper>

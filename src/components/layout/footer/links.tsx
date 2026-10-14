@@ -5,7 +5,7 @@ import { ActiveLink } from '@/components/layout/footer/active-link'
 import { ViewAnimation } from '@/components/view-animation'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
-import { getSortedWork } from '@/lib/source'
+import { cn } from '@/lib/utils'
 
 interface ListItem {
   external?: boolean
@@ -26,8 +26,6 @@ export const Links = () => {
   const navItems = links.filter((item) =>
     ['nav', 'all'].includes(item.on ?? 'all')
   )
-
-  const works = getSortedWork()
 
   const lists: ListItem[] = [
     {
@@ -62,13 +60,6 @@ export const Links = () => {
       title: 'More',
     },
     {
-      items: works.slice(0, 5).map((work) => ({
-        children: work.data.title,
-        href: work.url,
-      })),
-      title: 'Work',
-    },
-    {
       items: socials.map((social) => ({
         children: (
           <span className='inline-flex items-center gap-1.5 [&_svg]:size-4'>
@@ -84,10 +75,13 @@ export const Links = () => {
   ]
 
   return (
-    <div className='grid grid-cols-2 gap-6 text-muted-foreground text-sm sm:grid-cols-4 sm:gap-8'>
+    <div className='grid grid-cols-2 gap-6 text-muted-foreground text-sm sm:grid-cols-3 sm:gap-8'>
       {lists.map((list, index) => (
         <ViewAnimation
-          className='flex flex-col gap-3 sm:gap-6'
+          className={cn(
+            'flex flex-col gap-3 sm:gap-6',
+            index === lists.length - 1 && 'max-sm:col-span-2'
+          )}
           delay={0.05 * index}
           initial={{ opacity: 0, translateY: -6 }}
           key={list.title}

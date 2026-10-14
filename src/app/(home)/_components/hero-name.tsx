@@ -12,6 +12,7 @@ export function HeroName() {
     <>
       Hi! I'm{' '}
       <button
+        aria-describedby='oiia-hint'
         aria-pressed={isOiia}
         className={cn(
           'inline-flex items-baseline rounded-sm px-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
@@ -35,6 +36,9 @@ export function HeroName() {
       >
         {isOiia ? 'OIIA' : 'Anirudh'}
       </button>
+      <span className='sr-only' id='oiia-hint'>
+        Press repeatedly to toggle OIIA mode, a hidden easter egg.
+      </span>
       !
     </>
   )
