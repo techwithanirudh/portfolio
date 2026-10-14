@@ -33,45 +33,51 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label='Share'
-          className='w-full justify-start border-none shadow-none active:scale-none'
-          size='sm'
-          variant='secondary'
-        >
-          <Icons.share className='text-muted-foreground' />
-          Share
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            aria-label='Share'
+            className='w-full justify-start border-none shadow-none active:scale-none'
+            size='sm'
+            variant='secondary'
+          />
+        }
+      >
+        <Icons.share className='text-muted-foreground' />
+        Share
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='start'
         collisionPadding={8}
-        onCloseAutoFocus={(e) => e.preventDefault()}
+        finalFocus={false}
       >
         <DropdownMenuItem onClick={copyLink}>
           <Icons.link className='size-4' />
           Copy link
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <a
-            href={`https://x.com/intent/tweet?url=${encoded}&text=${encodeURIComponent(title)}`}
-            rel='noopener'
-            target='_blank'
-          >
-            <Icons.x className='size-4' />
-            Share on X
-          </a>
+        <DropdownMenuItem
+          render={
+            <a
+              href={`https://x.com/intent/tweet?url=${encoded}&text=${encodeURIComponent(title)}`}
+              rel='noopener'
+              target='_blank'
+            />
+          }
+        >
+          <Icons.x className='size-4' />
+          Share on X
         </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <a
-            href={`https://www.linkedin.com/sharing/share-offsite?url=${encoded}`}
-            rel='noopener'
-            target='_blank'
-          >
-            <Icons.linkedin className='size-4' />
-            Share on LinkedIn
-          </a>
+        <DropdownMenuItem
+          render={
+            <a
+              href={`https://www.linkedin.com/sharing/share-offsite?url=${encoded}`}
+              rel='noopener'
+              target='_blank'
+            />
+          }
+        >
+          <Icons.linkedin className='size-4' />
+          Share on LinkedIn
         </DropdownMenuItem>
         {canShare && (
           <DropdownMenuItem

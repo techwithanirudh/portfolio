@@ -26,7 +26,7 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
       initial={{ opacity: 0, translateY: -6 }}
       whileInView={{ opacity: 1, translateY: 0 }}
     >
-      <Accordion collapsible type='single'>
+      <Accordion>
         <AccordionItem className='border-0 px-3 py-2.5' value='tags'>
           <AccordionTrigger className='!p-0 hover:no-underline'>
             <span className='flex items-center gap-2 text-muted-foreground'>

@@ -49,41 +49,44 @@ export function UserButton({ className, classNames }: UserButtonProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className={cn('rounded-md bg-transparent')}>
-        <Button
-          aria-label={'User Menu'}
-          className={cn(
-            'size-auto rounded-md border-none p-0',
-            'bg-secondary hover:bg-secondary/80',
-            classNames?.trigger?.base
-          )}
-          disabled={isPending}
-          variant='ghost'
-        >
-          {isPending ? (
-            <Skeleton
-              className={cn(
-                'size-8 rounded-md',
-                className,
-                classNames?.base,
-                classNames?.skeleton,
-                classNames?.trigger?.skeleton
-              )}
-            />
-          ) : (
-            <UserAvatar
-              className={cn('size-8', className, classNames?.base)}
-              classNames={classNames?.trigger?.avatar}
-              user={user}
-            />
-          )}
-        </Button>
+      <DropdownMenuTrigger
+        className={cn('rounded-md bg-transparent')}
+        render={
+          <Button
+            aria-label={'User Menu'}
+            className={cn(
+              'size-auto rounded-md border-none p-0',
+              'bg-secondary hover:bg-secondary/80',
+              classNames?.trigger?.base
+            )}
+            disabled={isPending}
+            variant='ghost'
+          />
+        }
+      >
+        {isPending ? (
+          <Skeleton
+            className={cn(
+              'size-8 rounded-md',
+              className,
+              classNames?.base,
+              classNames?.skeleton,
+              classNames?.trigger?.skeleton
+            )}
+          />
+        ) : (
+          <UserAvatar
+            className={cn('size-8', className, classNames?.base)}
+            classNames={classNames?.trigger?.avatar}
+            user={user}
+          />
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align='start'
         className={cn('w-fit min-w-56 max-w-64', classNames?.content?.base)}
-        onCloseAutoFocus={(e) => e.preventDefault()}
+        finalFocus={false}
         side='top'
       >
         {user ? (
@@ -110,11 +113,12 @@ export function UserButton({ className, classNames }: UserButtonProps) {
 
         {user ? (
           <>
-            <DropdownMenuItem asChild className={classNames?.content?.menuItem}>
-              <Link href='/account'>
-                <Icons.user className='size-4' />
-                Account
-              </Link>
+            <DropdownMenuItem
+              className={classNames?.content?.menuItem}
+              render={<Link href='/account' />}
+            >
+              <Icons.user className='size-4' />
+              Account
             </DropdownMenuItem>
 
             <DropdownMenuSeparator className={classNames?.content?.separator} />

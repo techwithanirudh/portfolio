@@ -137,36 +137,36 @@ export function ViewOptions({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label='View Options'
-          className='size-8 border-none shadow-none active:scale-none'
-          disabled={disabled}
-          size='icon-sm'
-          variant='secondary'
-        >
-          <Icons.chevronDown className='mt-0.5 size-4' />
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            aria-label='View Options'
+            className='size-8 border-none shadow-none active:scale-none'
+            disabled={disabled}
+            size='icon-sm'
+            variant='secondary'
+          />
+        }
+      >
+        <Icons.chevronDown className='mt-0.5 size-4' />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
         className='max-w-none gap-0.5 rounded-xl p-1.5'
-        onCloseAutoFocus={(e) => e.preventDefault()}
+        finalFocus={false}
         style={menuWidth ? { width: menuWidth } : undefined}
       >
         {items.map(({ title, href, icon: Icon }) => (
           <DropdownMenuItem
-            asChild
             className='group/item gap-2.5 rounded-lg p-1.5 pr-2 font-medium'
             key={href}
+            render={<a href={href} rel='noopener' target='_blank' />}
           >
-            <a href={href} rel='noopener' target='_blank'>
-              <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border transition-colors group-focus/item:bg-background'>
-                <Icon className='size-4' />
-              </span>
-              <span className='truncate'>{title}</span>
-              <Icons.arrowUpRight className='ml-auto size-3.5 -translate-x-1 text-muted-foreground opacity-0 transition-[opacity,transform] duration-150 group-focus/item:translate-x-0 group-focus/item:opacity-100' />
-            </a>
+            <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border transition-colors group-focus/item:bg-background'>
+              <Icon className='size-4' />
+            </span>
+            <span className='truncate'>{title}</span>
+            <Icons.arrowUpRight className='ml-auto size-3.5 -translate-x-1 text-muted-foreground opacity-0 transition-[opacity,transform] duration-150 group-focus/item:translate-x-0 group-focus/item:opacity-100' />
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

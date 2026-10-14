@@ -44,7 +44,7 @@ export function UserAvatar({
           'rounded-md bg-transparent uppercase',
           classNames?.fallback
         )}
-        delayMs={src ? 200 : 0}
+        delay={src ? 200 : 0}
       >
         {firstTwoCharacters(name) ?? (
           <Icons.user className={cn('w-[55%]', classNames?.fallbackIcon)} />

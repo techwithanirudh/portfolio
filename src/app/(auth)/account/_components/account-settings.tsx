@@ -107,10 +107,10 @@ function EditNameDialog({ name }: { name: string }) {
       }}
       open={open}
     >
-      <AlertDialogTrigger asChild>
-        <Button shape='square' size='sm' variant='secondary'>
-          Edit
-        </Button>
+      <AlertDialogTrigger
+        render={<Button shape='square' size='sm' variant='secondary' />}
+      >
+        Edit
       </AlertDialogTrigger>
       <AlertDialogContent className='dashed-frame rounded-none shadow-none ring-0'>
         <AlertDialogHeader>
