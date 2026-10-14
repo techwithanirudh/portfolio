@@ -8,18 +8,13 @@ type SectionProps = {
 } & HTMLAttributes<HTMLDivElement>
 
 const Cross = () => (
-  <div className='relative h-6 w-6'>
-    <div className='absolute left-3 h-6 w-px bg-background' />
-    <div className='absolute top-3 h-px w-6 bg-background' />
-
-    <ViewAnimation
-      className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-    >
-      <Icons.add className='size-5 text-border/70 dark:text-border' />
-    </ViewAnimation>
-  </div>
+  <ViewAnimation
+    className='flex h-6 w-6 items-center justify-center'
+    initial={{ opacity: 0 }}
+    whileInView={{ opacity: 1 }}
+  >
+    <Icons.add className='size-5 text-border/70 dark:text-border' />
+  </ViewAnimation>
 )
 
 export const Section = ({

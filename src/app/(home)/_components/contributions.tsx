@@ -29,7 +29,7 @@ interface ContributionsProps {
 const ContributionsGraph = ({ contributions }: ContributionsProps) => {
   const data = use(contributions)
   const isMobile = useIsMobile()
-  const blockSize = isMobile ? 10 : 23.5
+  const blockSize = isMobile ? 12 : 23.5
 
   return (
     <Section className='relative w-full p-6'>
@@ -40,14 +40,14 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
       >
         <ContributionGraph
           aria-label='GitHub Contributions Graph'
-          blockMargin={isMobile ? 1 : 2}
+          blockMargin={isMobile ? 3 : 2}
           blockSize={blockSize}
           className='w-full'
           data={data}
         >
           <ContributionGraphCalendar
             aria-hidden
-            className='overflow-auto'
+            className='overflow-x-auto pb-2'
             title='GitHub Contributions'
           >
             {({ activity, dayIndex, weekIndex }) => (
