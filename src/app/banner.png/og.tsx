@@ -33,6 +33,17 @@ export function getImageResponseOptions(): ImageResponseOptions {
   }
 }
 
+function getTitleSize(title?: string): number {
+  const length = title?.length ?? 0
+  if (length > 80) {
+    return 48
+  }
+  if (length > 40) {
+    return 56
+  }
+  return length > 20 ? 64 : 80
+}
+
 export function generate({
   title = 'John Doe',
   subtitle,
@@ -52,7 +63,7 @@ export function generate({
       <div tw='flex flex-col absolute w-[896px] justify-end inset-24 items-start'>
         <div
           style={{
-            fontSize: title && title.length > 20 ? 64 : 80,
+            fontSize: getTitleSize(title),
             fontWeight: 600,
             letterSpacing: '-0.04em',
             textWrap: 'balance',

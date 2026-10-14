@@ -20,6 +20,22 @@ export function getSimpleOgImage(
   return `/og?${params}`
 }
 
+const MAX_OG_TITLE = 160
+const MAX_OG_DESCRIPTION = 320
+
+const clamp = (value: string, max: number) =>
+  value.length > max ? `${value.slice(0, max - 1).trimEnd()}…` : value
+
+/** Keeps `/og` params bounded so arbitrary query strings can't blow up renders. */
+export function clampOgParams(title: string, description?: string) {
+  return {
+    description: description
+      ? clamp(description, MAX_OG_DESCRIPTION)
+      : undefined,
+    title: clamp(title, MAX_OG_TITLE),
+  }
+}
+
 export function createMetadata(override: Metadata): Metadata {
   const ogTitle =
     typeof override.title === 'string' ? override.title : undefined
@@ -50,12 +66,25 @@ export function createMetadata(override: Metadata): Metadata {
     openGraph: {
       description: override.description ?? undefined,
       images: defaultImage,
+      locale: 'en_US',
       siteName: title,
       title: override.title ?? undefined,
       url: baseUrl.href,
       ...override.openGraph,
     },
     publisher: owner,
+    robots: {
+      follow: true,
+      googleBot: {
+        follow: true,
+        index: true,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+        'max-video-preview': -1,
+      },
+      index: true,
+      ...(typeof override.robots === 'object' ? override.robots : {}),
+    },
     twitter: {
       card: 'summary_large_image',
       creator: '@AnirudhWith',

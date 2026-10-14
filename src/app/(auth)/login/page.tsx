@@ -11,6 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       url: '/login',
     },
+    robots: { follow: false, index: false },
     title: 'Sign In',
   })
 }
