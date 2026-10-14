@@ -7,6 +7,7 @@ import { useLenis } from 'lenis/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { CommandMenuFooter } from '@/components/features/search/footer'
 import { SearchResults as SearchResultsList } from '@/components/features/search/results'
 import {
@@ -33,7 +34,7 @@ import {
 } from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
-import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
+import { signOut, useSession } from '@/lib/auth-client'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
@@ -41,6 +42,7 @@ const NAV_SOUND_THROTTLE_MS = 60
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
   const pathname = usePathname()
+  const { openSignIn } = useSignInModal()
   const router = useRouter()
   const lenis = useLenis()
   const { setTheme, theme } = useTheme()
@@ -188,7 +190,8 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (action === 'signin') {
-      navigateToUrl(getLoginUrl(pathname))
+      onOpenChange(false)
+      openSignIn(pathname)
       return
     }
 

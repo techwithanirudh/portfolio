@@ -57,6 +57,16 @@ async function createNextConfig(): Promise<NextConfig> {
     poweredByHeader: false,
     productionBrowserSourceMaps: process.env.SOURCE_MAPS === 'true',
     reactStrictMode: true,
+    async redirects() {
+      return [
+        // The sign-in page is now a modal; keep old links working.
+        {
+          destination: '/?signin=%2F',
+          permanent: false,
+          source: '/login',
+        },
+      ]
+    },
     async rewrites() {
       return [
         {

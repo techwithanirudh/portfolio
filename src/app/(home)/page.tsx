@@ -36,11 +36,12 @@ export default async function Home() {
         <Separator />
         <About />
         <Separator />
+        <ExperiencePreview />
+        <Separator />
         <Skills />
         <Separator />
         <WorkPreview works={works} />
         <Separator />
-        <ExperiencePreview />
         <Testimonials testimonials={testimonials} />
         <Separator />
         <Contributions contributions={contributions} />

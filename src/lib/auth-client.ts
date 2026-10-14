@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 
 import type { auth } from '@/server/auth'
 
-export { getLoginUrl } from './auth-url'
+export { getSignInUrl } from './auth-url'
 
 // @see https://github.com/better-auth/better-auth/issues/1391
 export const authClient: ReturnType<typeof createAuthClient> = createAuthClient(
