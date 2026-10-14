@@ -118,7 +118,7 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
         }}
         open={open}
       >
-        <DialogContent className='rounded-none border border-border border-dashed bg-background ring-0 sm:max-w-sm'>
+        <DialogContent className='max-sm:data-closed:slide-out-to-bottom max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
           <DialogHeader>
             <DialogTitle className='text-lg'>Sign In</DialogTitle>
             <DialogDescription>
@@ -132,8 +132,7 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
                 disabled={loadingProvider !== null}
                 key={id}
                 onClick={() => signInWithProvider(id)}
-                shape='square'
-                variant='dashed'
+                variant='outline'
               >
                 {loadingProvider === id ? (
                   <Icons.spinner className='size-4 animate-spin' />
