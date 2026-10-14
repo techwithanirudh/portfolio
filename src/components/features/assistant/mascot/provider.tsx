@@ -3,19 +3,27 @@
 import type { initAgent } from 'clippyjs'
 import {
   createContext,
+  type Dispatch,
   type ReactNode,
+  type SetStateAction,
   useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react'
+import { avatars } from './agents'
+import type { AvatarName } from './constants'
 
-type AgentLoaders = Parameters<typeof initAgent>[0]
 export type MascotAgent = Awaited<ReturnType<typeof initAgent>>
 
 const MascotContext = createContext<
-  { agent: MascotAgent | undefined } | undefined
+  | {
+      agent: MascotAgent | undefined
+      avatar: AvatarName
+      setAvatar: Dispatch<SetStateAction<AvatarName>>
+    }
+  | undefined
 >(undefined)
 
 export function useMascot() {
@@ -27,24 +35,26 @@ export function useMascot() {
 }
 
 interface MascotProviderProps {
-  agent?: AgentLoaders
   children?: ReactNode
+  disabled?: boolean
 }
 
-export function MascotProvider({ children, agent }: MascotProviderProps) {
+export function MascotProvider({ children, disabled }: MascotProviderProps) {
+  const [avatar, setAvatar] = useState<AvatarName>('rover')
   const [currentAgent, setCurrentAgent] = useState<MascotAgent | undefined>()
   const instance = useRef<MascotAgent | null>(null)
 
   useEffect(() => {
-    if (!agent) {
+    if (disabled) {
       return
     }
 
+    const loaders = avatars[avatar]
     let cancelled = false
 
     import('clippyjs')
       .then(({ initAgent }) =>
-        initAgent({ ...agent, sound: () => Promise.resolve({ default: {} }) })
+        initAgent({ ...loaders, sound: () => Promise.resolve({ default: {} }) })
       )
       .then((loaded: MascotAgent) => {
         if (cancelled) {
@@ -64,12 +74,15 @@ export function MascotProvider({ children, agent }: MascotProviderProps) {
       instance.current = null
       setCurrentAgent(undefined)
     }
-  }, [agent])
+  }, [avatar, disabled])
 
   useEffect(() => {
     if (!currentAgent) {
       return
     }
+
+    // The custom cursor steps aside over the mascot so it isn't blended into it
+    currentAgent._el.dataset.nativeCursor = ''
 
     const blockDrag = (event: MouseEvent | TouchEvent) => {
       event.stopImmediatePropagation()
@@ -89,7 +102,10 @@ export function MascotProvider({ children, agent }: MascotProviderProps) {
     }
   }, [currentAgent])
 
-  const value = useMemo(() => ({ agent: currentAgent }), [currentAgent])
+  const value = useMemo(
+    () => ({ agent: currentAgent, avatar, setAvatar }),
+    [currentAgent, avatar]
+  )
 
   return (
     <MascotContext.Provider value={value}>{children}</MascotContext.Provider>

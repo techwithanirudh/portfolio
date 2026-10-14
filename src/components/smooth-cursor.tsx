@@ -34,6 +34,7 @@ export function SmoothCursor({
   const [hasMoved, setHasMoved] = useState(false)
   const [isMoving, setIsMoving] = useState(false)
   const [isOverPointer, setIsOverPointer] = useState(false)
+  const [isOverNative, setIsOverNative] = useState(false)
   const lastMousePos = useRef<Position>({ x: 0, y: 0 })
   const velocity = useRef<Position>({ x: 0, y: 0 })
   const lastUpdateTime = useRef(Date.now())
@@ -86,6 +87,8 @@ export function SmoothCursor({
     const checkIfOverElement = (e: MouseEvent) => {
       const element = document.elementFromPoint(e.clientX, e.clientY)
       if (element) {
+        // Elements like the mascot opt out so the native cursor shows instead
+        setIsOverNative(element.closest('[data-native-cursor]') !== null)
         const isPointerElement =
           element.closest('a, button') !== null ||
           window.getComputedStyle(element).cursor === 'pointer'
@@ -184,7 +187,7 @@ export function SmoothCursor({
 
   return (
     <motion.div
-      className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${isMoving || cursorType === 'pointer' || isOverPointer ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
+      className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${(isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
       style={{
         backfaceVisibility: 'hidden',
         left: cursorX,

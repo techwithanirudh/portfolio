@@ -93,6 +93,10 @@ export const MessageMetadata = ({
         Icon = Icons.mail
         label = 'Fetching contact form'
         break
+      case 'animate':
+        Icon = Icons.pawPrint
+        label = 'Doing a trick'
+        break
       default:
         label = `Running ${name}`
         break

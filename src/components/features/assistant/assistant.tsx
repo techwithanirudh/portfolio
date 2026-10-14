@@ -32,10 +32,10 @@ import {
   MascotProvider,
   useMascot,
 } from '@/components/features/assistant/mascot'
-import { Rover } from '@/components/features/assistant/mascot/agents/rover'
 import {
   playSubmitAnimation,
   useMascotPanel,
+  useMascotTools,
 } from '@/components/features/assistant/mascot/hooks'
 import {
   ContactForm,
@@ -106,7 +106,7 @@ export function Assistant({ children }: { children: ReactNode }) {
   )
 
   return (
-    <MascotProvider agent={isMobile ? undefined : Rover}>
+    <MascotProvider disabled={isMobile}>
       <AssistantContext value={value}>
         {children}
         <AssistantPanel />
@@ -592,6 +592,7 @@ function AssistantPanel() {
     open,
     status: chat.status,
   })
+  useMascotTools(chat.messages)
 
   return (
     <>

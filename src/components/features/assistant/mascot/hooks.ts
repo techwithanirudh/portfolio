@@ -2,11 +2,11 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { isToolUIPart } from 'ai'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
-import { animations } from './constants'
-import type { MascotAgent } from './provider'
+import { animations, type MoodName, moodAnimations } from './constants'
+import { type MascotAgent, useMascot } from './provider'
 import { playAnimation } from './utils'
 
 export const playSubmitAnimation = (agent: MascotAgent | undefined) => {
@@ -59,10 +59,52 @@ export function useMascotPanel({
       return
     }
     const toolPart = (messages.at(-1)?.parts ?? []).find(isToolUIPart)
-    if (!toolPart || lastTool.current === toolPart.type) {
+    if (
+      !toolPart ||
+      toolPart.type === 'tool-animate' ||
+      lastTool.current === toolPart.type
+    ) {
       return
     }
     lastTool.current = toolPart.type
     playAnimation(agent, animations.tool, { interrupt: true })
   })
+}
+
+export function useMascotTools(messages: MyUIMessage[]) {
+  const { agent, avatar, setAvatar } = useMascot()
+  const handled = useRef(new Set<string>())
+  const pendingMood = useRef<MoodName | null>(null)
+
+  useEffect(() => {
+    const part = (messages.at(-1)?.parts ?? []).find(
+      (item) => item.type === 'tool-animate'
+    )
+    if (part?.state !== 'output-available') {
+      return
+    }
+    if (handled.current.has(part.toolCallId)) {
+      return
+    }
+    handled.current.add(part.toolCallId)
+
+    const { avatar: nextAvatar, mood } = part.input ?? {}
+    if (nextAvatar && nextAvatar !== avatar) {
+      // The new agent isn't loaded yet, so the mood waits for it
+      pendingMood.current = mood ?? null
+      setAvatar(nextAvatar)
+      return
+    }
+    if (agent && mood) {
+      playAnimation(agent, moodAnimations[avatar][mood], { interrupt: true })
+    }
+  }, [messages, agent, avatar, setAvatar])
+
+  useEffect(() => {
+    if (!(agent && pendingMood.current)) {
+      return
+    }
+    playAnimation(agent, moodAnimations[avatar][pendingMood.current])
+    pendingMood.current = null
+  }, [agent, avatar])
 }
