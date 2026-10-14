@@ -54,11 +54,7 @@ export const FAQ = () => (
     </SplitSectionSidebar>
 
     <SplitSectionContent>
-      <Accordion
-        className='w-full [&>[data-slot=accordion-item]:last-child]:border-b-0 [&>[data-slot=accordion-item]]:border-border [&>[data-slot=accordion-item]]:border-b [&>[data-slot=accordion-item]]:border-dashed'
-        collapsible
-        type='single'
-      >
+      <Accordion className='w-full [&>[data-slot=accordion-item]:last-child]:border-b-0 [&>[data-slot=accordion-item]]:border-border [&>[data-slot=accordion-item]]:border-b [&>[data-slot=accordion-item]]:border-dashed'>
         {faq.map((item, index) => (
           <ViewAnimation
             blur={false}

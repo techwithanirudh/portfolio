@@ -23,16 +23,20 @@ export function LinkPreviewCard({ children, className, href, preview }: Props) {
   const faviconUrl = `https://www.google.com/s2/favicons?domain=${displayUrl}&sz=32`
 
   return (
-    <HoverCard closeDelay={120} openDelay={180}>
-      <HoverCardTrigger asChild>
-        <a
-          className={className}
-          href={href}
-          rel='noopener noreferrer'
-          target='_blank'
-        >
-          {children}
-        </a>
+    <HoverCard>
+      <HoverCardTrigger
+        closeDelay={120}
+        delay={180}
+        render={
+          <a
+            className={className}
+            href={href}
+            rel='noopener noreferrer'
+            target='_blank'
+          />
+        }
+      >
+        {children}
       </HoverCardTrigger>
       <HoverCardContent className='not-prose w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden border-dashed bg-card p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
         <a

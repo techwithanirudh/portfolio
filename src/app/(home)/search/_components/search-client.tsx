@@ -93,10 +93,7 @@ export function SearchClient() {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none'>
-              <InputGroupAddon
-                className='border-0 pl-3 text-muted-foreground'
-                focusInputOnClick
-              >
+              <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
               <InputGroupInput

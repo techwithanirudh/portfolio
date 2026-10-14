@@ -1,7 +1,6 @@
 'use client'
 
-import type * as LabelPrimitive from '@radix-ui/react-label'
-import { Slot } from 'radix-ui'
+import { mergeProps } from '@base-ui/react/merge-props'
 import * as React from 'react'
 import {
   Controller,
@@ -88,7 +87,7 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
 function FormLabel({
   className,
   ...props
-}: React.ComponentProps<typeof LabelPrimitive.Root>) {
+}: React.ComponentProps<typeof Label>) {
   const { error, formItemId } = useFormField()
 
   return (
@@ -102,19 +101,29 @@ function FormLabel({
   )
 }
 
-function FormControl({ ...props }: React.ComponentProps<typeof Slot.Root>) {
+function FormControl({
+  children,
+  className,
+}: {
+  children: React.ReactElement
+  className?: string
+}) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
 
-  return (
-    <Slot.Root
-      aria-describedby={
-        error ? `${formDescriptionId} ${formMessageId}` : `${formDescriptionId}`
-      }
-      aria-invalid={!!error}
-      data-slot='form-control'
-      id={formItemId}
-      {...props}
-    />
+  return React.cloneElement(
+    children,
+    mergeProps(
+      {
+        'aria-describedby': error
+          ? `${formDescriptionId} ${formMessageId}`
+          : `${formDescriptionId}`,
+        'aria-invalid': !!error,
+        className,
+        'data-slot': 'form-control',
+        id: formItemId,
+      },
+      children.props as Record<string, unknown>
+    )
   )
 }
 

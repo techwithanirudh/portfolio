@@ -121,18 +121,20 @@ export const GuestbookReactions = ({
           </Button>
         ))}
         <Popover onOpenChange={setIsOpen} open={isOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              className='gap-2 px-3 text-xs'
-              disabled={!canReact || status === 'executing'}
-              shape='square'
-              size='sm'
-              type='button'
-              variant='dashed'
-            >
-              <Icons.add className='size-3' />
-              Add
-            </Button>
+          <PopoverTrigger
+            render={
+              <Button
+                className='gap-2 px-3 text-xs'
+                disabled={!canReact || status === 'executing'}
+                shape='square'
+                size='sm'
+                type='button'
+                variant='dashed'
+              />
+            }
+          >
+            <Icons.add className='size-3' />
+            Add
           </PopoverTrigger>
           <PopoverContent className='w-fit p-0'>
             <EmojiPicker

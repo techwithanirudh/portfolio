@@ -109,14 +109,16 @@ export const GuestbookForm = () => {
             You need an account to post.
           </p>
         </div>
-        <Button asChild className='w-full'>
-          <Link href={getLoginUrl('/guestbook')}>
-            <span>Sign in to post</span>
-            <Icons.arrowRight
-              className='icon-arrow-button size-4'
-              data-icon='inline-end'
-            />
-          </Link>
+        <Button
+          className='w-full'
+          nativeButton={false}
+          render={<Link href={getLoginUrl('/guestbook')} />}
+        >
+          <span>Sign in to post</span>
+          <Icons.arrowRight
+            className='icon-arrow-button size-4'
+            data-icon='inline-end'
+          />
         </Button>
       </div>
     )

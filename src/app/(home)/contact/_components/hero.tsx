@@ -24,18 +24,20 @@ export const Hero = () => (
           key={social.url}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <a
-                aria-label={social.name}
-                className='icon-pop flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
-                href={social.url}
-                key={social.name}
-                rel='noopener noreferrer'
-                target='_blank'
-              >
-                {social.icon}
-              </a>
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <a
+                  aria-label={social.name}
+                  className='icon-pop flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
+                  href={social.url}
+                  key={social.name}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                />
+              }
+            >
+              {social.icon}
             </TooltipTrigger>
             <TooltipContent align='center' side='bottom'>
               <p className='text-sm'>{social.name}</p>

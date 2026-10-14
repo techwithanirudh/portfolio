@@ -90,54 +90,56 @@ export function Clock({ className }: ClockProps) {
 
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          aria-label={accessibleLabel}
-          className='rounded-full'
-          size='icon'
-          variant='ghost'
+      <TooltipTrigger
+        render={
+          <Button
+            aria-label={accessibleLabel}
+            className='rounded-full'
+            size='icon'
+            variant='ghost'
+          />
+        }
+      >
+        <time
+          className={cn(
+            'relative block size-8 rotate-180 rounded-full border border-border',
+            className
+          )}
+          dateTime={time.toISOString()}
+          style={timeStyles}
         >
-          <time
+          <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
+
+          <div
+            className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
+            style={{
+              ...HAND_ORIGIN,
+              transform:
+                'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
+            }}
+          />
+
+          <div
+            className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
+            style={{
+              ...HAND_ORIGIN,
+              transform:
+                'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
+            }}
+          />
+
+          <div
             className={cn(
-              'relative block size-8 rotate-180 rounded-full border border-border',
-              className
+              HAND_BASE_CLASSES,
+              'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
             )}
-            dateTime={time.toISOString()}
-            style={timeStyles}
-          >
-            <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
-
-            <div
-              className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
-              style={{
-                ...HAND_ORIGIN,
-                transform:
-                  'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
-              }}
-            />
-
-            <div
-              className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
-              style={{
-                ...HAND_ORIGIN,
-                transform:
-                  'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
-              }}
-            />
-
-            <div
-              className={cn(
-                HAND_BASE_CLASSES,
-                'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
-              )}
-              style={{
-                ...HAND_ORIGIN,
-                transform:
-                  'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
-              }}
-            />
-          </time>
-        </Button>
+            style={{
+              ...HAND_ORIGIN,
+              transform:
+                'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
+            }}
+          />
+        </time>
       </TooltipTrigger>
       <TooltipContent>
         <p>{timeString}</p>

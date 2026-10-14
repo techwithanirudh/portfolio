@@ -16,18 +16,20 @@ export const DeleteActionButton = ({
   onClick,
 }: DeleteActionButtonProps) => (
   <Tooltip>
-    <TooltipTrigger asChild>
-      <Button
-        aria-label='Delete entry'
-        className='text-destructive'
-        disabled={disabled}
-        onClick={onClick}
-        shape='square'
-        size='icon'
-        variant='ghost'
-      >
-        <Icons.trash className='size-4' />
-      </Button>
+    <TooltipTrigger
+      render={
+        <Button
+          aria-label='Delete entry'
+          className='text-destructive'
+          disabled={disabled}
+          onClick={onClick}
+          shape='square'
+          size='icon'
+          variant='ghost'
+        />
+      }
+    >
+      <Icons.trash className='size-4' />
     </TooltipTrigger>
     <TooltipContent>Delete entry</TooltipContent>
   </Tooltip>

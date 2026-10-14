@@ -28,10 +28,7 @@ export const DeleteEntryModal = ({
 
   return (
     <Dialog onOpenChange={isBusy ? undefined : onOpenChange} open={isOpen}>
-      <DialogContent
-        onEscapeKeyDown={isBusy ? (e) => e.preventDefault() : undefined}
-        onPointerDownOutside={isBusy ? (e) => e.preventDefault() : undefined}
-      >
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete entry?</DialogTitle>
           <DialogDescription>
