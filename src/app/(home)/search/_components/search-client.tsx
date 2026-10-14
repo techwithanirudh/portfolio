@@ -1,6 +1,5 @@
 'use client'
 
-import type { HighlightedText } from 'fumadocs-core/search'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import {
   SearchDialog,
@@ -9,7 +8,7 @@ import {
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
-import { Fragment, type ReactNode, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import {
@@ -21,30 +20,11 @@ import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
-const renderHighlights = (
-  highlights: HighlightedText<ReactNode>[],
-  badge?: string
-) => (
-  <span className='inline-flex w-full items-center justify-between'>
-    <span>
-      {highlights.map((node, index) => {
-        if (node.styles?.highlight) {
-          return (
-            <span className='text-primary underline' key={index.toString()}>
-              {node.content}
-            </span>
-          )
-        }
-
-        return <Fragment key={index.toString()}>{node.content}</Fragment>
-      })}
+const ItemBadge = ({ label }: { label: string }) => (
+  <span className='pointer-events-none absolute inset-y-0 right-5 flex items-center'>
+    <span className='rounded-full border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
+      {label}
     </span>
-
-    {badge ? (
-      <span className='mr-2 rounded-full border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
-        {badge}
-      </span>
-    ) : null}
   </span>
 )
 
@@ -182,17 +162,16 @@ export function SearchClient() {
           className='[&>div]:!p-0'
           data-lenis-prevent
           Item={({ item, onClick }) => (
-            <SearchDialogListItem
-              className='rounded-none border-border border-b border-dashed px-3 py-3 last:border-b-0'
-              item={item}
-              onClick={onClick}
-              renderHighlights={(highlights) =>
-                renderHighlights(
-                  highlights,
-                  item.type === 'page' ? getItemTag(item.url) : undefined
-                )
-              }
-            />
+            <div className='relative'>
+              <SearchDialogListItem
+                className='rounded-none border-border border-b border-dashed px-3 py-3 last:border-b-0'
+                item={item}
+                onClick={onClick}
+              />
+              {item.type === 'page' ? (
+                <ItemBadge label={getItemTag(item.url)} />
+              ) : null}
+            </div>
           )}
           items={query.data === 'empty' ? null : query.data}
         />
