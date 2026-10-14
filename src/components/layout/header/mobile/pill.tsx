@@ -26,7 +26,10 @@ export function FloatingPill({
   ]
 
   return (
-    <div className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
+    <div
+      className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'
+      data-mobile-nav-pill=''
+    >
       <div className='flex items-center gap-0.5 rounded-full border bg-background px-1.5 py-1.5 shadow-lg'>
         <button
           aria-label='Search'

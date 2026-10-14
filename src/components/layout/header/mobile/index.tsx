@@ -59,6 +59,39 @@ export function MobileNav() {
     return () => document.removeEventListener('keydown', closeOnEscape)
   }, [closeMenu, open])
 
+  // There is no overlay element while the menu is open (Safari 26 sampled it
+  // for the browser-UI tint). The dim is a pseudo-element on <html> driven by
+  // this attribute, and taps outside the menu are caught here instead. The tap
+  // only closes the menu and does not reach the page underneath.
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    document.documentElement.setAttribute('data-mobile-menu-open', '')
+
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (
+        event.target instanceof Element &&
+        event.target.closest(
+          '#mobile-navigation-menu, [data-mobile-nav-pill], .tint-debug'
+        )
+      ) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      closeMenu()
+    }
+
+    document.addEventListener('click', closeOnOutsideClick, true)
+    return () => {
+      document.documentElement.removeAttribute('data-mobile-menu-open')
+      document.removeEventListener('click', closeOnOutsideClick, true)
+    }
+  }, [closeMenu, open])
+
   return (
     <>
       <div
@@ -69,21 +102,6 @@ export function MobileNav() {
         <div className='h-16 bg-gradient-to-t from-background to-transparent' />
         <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
       </div>
-
-      <Presence present={open}>
-        <button
-          aria-label='Close menu'
-          // No background-color on purpose: Safari 26 samples a full-screen
-          // fixed element with a background for its browser-UI tint, and that
-          // color went stale on a theme toggle while the menu was open. The
-          // dim is a backdrop-filter instead: a 50% white wash in light mode
-          // (invert, halve, invert) and a 50% darken in dark mode.
-          className='fixed inset-0 z-[31] [-webkit-backdrop-filter:blur(4px)_invert(1)_brightness(0.5)_invert(1)] [backdrop-filter:blur(4px)_invert(1)_brightness(0.5)_invert(1)] data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in md:hidden dark:[-webkit-backdrop-filter:blur(4px)_brightness(0.5)] dark:[backdrop-filter:blur(4px)_brightness(0.5)]'
-          data-state={open ? 'open' : 'closed'}
-          onClick={closeMenu}
-          type='button'
-        />
-      </Presence>
 
       <Presence present={open}>
         <MenuPanel
