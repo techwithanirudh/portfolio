@@ -71,7 +71,7 @@ export function SearchResults({ groups, onSelect }: SearchResultsProps) {
                 </CommandItem>
                 {group.children.map((child) => (
                   <CommandItem
-                    className='pl-6 text-muted-foreground text-xs'
+                    className='pl-6 text-muted-foreground text-xs [&_svg:not([class*=size-])]:size-3'
                     key={child.id}
                     onSelect={() => onSelect(child.url)}
                     value={child.id}
