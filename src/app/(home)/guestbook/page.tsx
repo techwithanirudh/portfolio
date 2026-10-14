@@ -24,18 +24,12 @@ async function GuestbookEntriesSection() {
   const entries = await getGuestbookEntries(currentUserId)
 
   return (
-    <ViewAnimation
-      delay={0.15}
-      initial={{ opacity: 0, translateY: 6 }}
-      whileInView={{ opacity: 1, translateY: 0 }}
-    >
-      <GuestbookEntries
-        currentUserId={currentUserId}
-        entries={entries}
-        isAdmin={isAdmin}
-        isSignedIn={Boolean(currentUserId)}
-      />
-    </ViewAnimation>
+    <GuestbookEntries
+      currentUserId={currentUserId}
+      entries={entries}
+      isAdmin={isAdmin}
+      isSignedIn={Boolean(currentUserId)}
+    />
   )
 }
 

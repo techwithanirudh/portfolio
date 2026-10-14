@@ -1,7 +1,12 @@
+'use client'
+
+import { getImageProps } from 'next/image'
 import Link from 'next/link'
 import { ViewTransition } from 'react'
-import { BlurImage } from '@/components/blur-image'
+import { preload } from 'react-dom'
+import { BlurImage, IMAGE_QUALITY } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
+import { WORK_COVER_SIZES } from './cover'
 
 interface WorkCardProps {
   description: string
@@ -12,6 +17,23 @@ interface WorkCardProps {
 }
 
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
+
+// The case study cover is requested at a larger size than the card's, so warm
+// the exact srcset it will use and the shared-element morph lands on a loaded image.
+const preloadCover = (src: string, alt: string) => {
+  const { props } = getImageProps({
+    alt,
+    fill: true,
+    quality: IMAGE_QUALITY,
+    sizes: WORK_COVER_SIZES,
+    src,
+  })
+  preload(props.src, {
+    as: 'image',
+    imageSizes: props.sizes,
+    imageSrcSet: props.srcSet,
+  })
+}
 
 export const WorkCard = ({
   title,
@@ -26,12 +48,15 @@ export const WorkCard = ({
     <Link
       className='group flex h-full flex-col gap-4 bg-card/60 p-6 transition-colors hover:bg-card'
       href={url}
+      onFocus={() => image && preloadCover(image, title)}
+      onPointerEnter={() => image && preloadCover(image, title)}
       transitionTypes={['work-card']}
     >
       {image && (
         <ViewTransition name={`${transitionName}-image`} share={transition}>
           <BlurImage
             alt={title}
+            blur={false}
             className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform will-change-transform group-hover:scale-102'
             fill
             imageClassName='object-cover'

@@ -2,7 +2,6 @@
 
 import { Icons } from '@/components/icons/icons'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ViewAnimation } from '@/components/view-animation'
 import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { GuestbookEntryCard } from './entry-card'
 
@@ -33,20 +32,14 @@ export const GuestbookEntries = ({
   return (
     <ScrollArea className='h-[32rem] w-full' data-lenis-prevent>
       <div className='divide-y divide-dashed divide-border'>
-        {entries.map((entry, index) => (
-          <ViewAnimation
-            delay={0.05 * index}
-            initial={{ opacity: 0, translateY: 6 }}
+        {entries.map((entry) => (
+          <GuestbookEntryCard
+            currentUserId={currentUserId}
+            entry={entry}
+            isAdmin={isAdmin}
+            isSignedIn={isSignedIn}
             key={entry.id}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <GuestbookEntryCard
-              currentUserId={currentUserId}
-              entry={entry}
-              isAdmin={isAdmin}
-              isSignedIn={isSignedIn}
-            />
-          </ViewAnimation>
+          />
         ))}
       </div>
     </ScrollArea>
