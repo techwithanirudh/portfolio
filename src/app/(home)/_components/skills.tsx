@@ -97,7 +97,7 @@ const Skills = () => (
                     <li className='flex' key={label}>
                       <Badge
                         asChild
-                        className='gap-1.5 rounded-full px-2.5 py-1 font-mono text-xs transition-transform will-change-transform hover:-rotate-4 hover:scale-105'
+                        className='group/tag gap-1.5 rounded-full px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
                         variant='outline'
                       >
                         <a
@@ -109,7 +109,7 @@ const Skills = () => (
                             <Image
                               alt=''
                               aria-hidden
-                              className='size-3.5'
+                              className='size-3.5 opacity-60 grayscale transition group-hover/tag:opacity-100 group-hover/tag:grayscale-0'
                               height={14}
                               src={icon}
                               unoptimized
@@ -120,7 +120,7 @@ const Skills = () => (
                               <Image
                                 alt=''
                                 aria-hidden
-                                className='size-3.5 dark:hidden'
+                                className='size-3.5 opacity-60 grayscale transition group-hover/tag:opacity-100 group-hover/tag:grayscale-0 dark:hidden'
                                 height={14}
                                 src={icon.light}
                                 unoptimized
@@ -129,7 +129,7 @@ const Skills = () => (
                               <Image
                                 alt=''
                                 aria-hidden
-                                className='hidden size-3.5 dark:block'
+                                className='hidden size-3.5 opacity-60 grayscale transition group-hover/tag:opacity-100 group-hover/tag:grayscale-0 dark:block'
                                 height={14}
                                 src={icon.dark}
                                 unoptimized
