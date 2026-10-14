@@ -1,64 +1,67 @@
+import Image from 'next/image'
 import Link from 'next/link'
-import { WorkCard } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import { SectionHeader } from '@/components/layout/sections/header'
-import { buttonVariants } from '@/components/ui/button'
+import { SectionLabel } from '@/components/layout/sections/label'
 import { ViewAnimation } from '@/components/view-animation'
 import type { WorkPage } from '@/lib/source'
 
 export default function WorkPreview({ works }: { works: WorkPage[] }) {
   return (
-    <Section className='relative w-full pt-10'>
-      <div className='flex flex-col gap-10'>
-        <SectionHeader
-          align='left'
-          className='px-6'
-          description='A snapshot of recent projects and collaborations.'
-          title='Work'
-        />
-        <div className='divider-top-dashed'>
-          <div className='grid grid-cols-1 divide-dashed divide-border text-left lg:grid-cols-2 lg:divide-x [&>*:last-child]:border-b-0 lg:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
-            {works.map((work, index) => (
-              <ViewAnimation
-                blur={false}
-                delay={0.05 * index}
-                duration={0.25}
-                initial={{ opacity: 0 }}
-                key={work.url}
-                whileInView={{ opacity: 1 }}
-              >
-                <WorkCard
-                  description={work.data.description ?? ''}
-                  image={work.data.image ?? null}
-                  slugs={work.slugs}
-                  title={work.data.title ?? 'Untitled'}
-                  url={work.url}
-                />
-              </ViewAnimation>
-            ))}
-          </div>
-
+    <Section className='flex flex-col gap-4 py-6'>
+      <SectionLabel
+        action={
+          <Link
+            className='font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+            href='/work'
+          >
+            view_all
+            <Icons.arrowRight className='icon-arrow-button ml-1 inline size-3' />
+          </Link>
+        }
+      >
+        work
+      </SectionLabel>
+      <ul className='divide-y divide-dashed divide-border border-border border-y border-dashed'>
+        {works.map((work, index) => (
           <ViewAnimation
             blur={false}
-            delay={0.05 * works.length}
+            delay={0.05 * index}
             initial={{ opacity: 0, translateY: -6 }}
+            key={work.url}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <Link
-              className={buttonVariants({
-                className: 'w-full py-8 active:scale-none active:opacity-80',
-                shape: 'square',
-                variant: 'default',
-              })}
-              href='/work'
-            >
-              View More
-              <Icons.arrowRight className='icon-arrow-button size-5' />
-            </Link>
+            <li>
+              <Link
+                className='group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-card sm:px-6'
+                href={work.url}
+              >
+                {work.data.image ? (
+                  <Image
+                    alt=''
+                    className='h-14 w-24 shrink-0 rounded-md border border-border object-cover'
+                    height={56}
+                    sizes='96px'
+                    src={work.data.image}
+                    width={96}
+                  />
+                ) : (
+                  <span className='h-14 w-24 shrink-0 rounded-md bg-muted' />
+                )}
+                <div className='min-w-0 flex-1'>
+                  <h3 className='font-medium text-sm tracking-tight'>
+                    {work.data.title ?? 'Untitled'}
+                  </h3>
+                  <p className='line-clamp-2 text-[13px] text-muted-foreground'>
+                    {work.data.description}
+                  </p>
+                </div>
+                <Icons.arrowRight className='size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground' />
+              </Link>
+            </li>
           </ViewAnimation>
-        </div>
-      </div>
+        ))}
+      </ul>
     </Section>
   )
 }

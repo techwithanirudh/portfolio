@@ -72,6 +72,12 @@ const renderNavTitle = (
   return (
     <Link href={href} {...props}>
       {title as ReactNode}
+      {typeof title === 'string' && (
+        <span
+          aria-hidden
+          className='caret -ml-1.5 h-4 w-1.5 translate-y-px bg-primary'
+        />
+      )}
     </Link>
   )
 }
@@ -121,13 +127,13 @@ export const Header = ({
               mode === 'oiia' ? { ...nav, title: OIIA_TITLE } : nav,
               {
                 className:
-                  'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
+                  'inline-flex items-center gap-2.5 font-heading font-medium tracking-tighter',
               }
             )}
           </ViewAnimation>
           {nav.children}
         </div>
-        <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-lg:hidden'>
+        <ul className='ml-6 flex flex-row items-center gap-1 max-lg:hidden'>
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
@@ -137,13 +143,16 @@ export const Header = ({
                 key={i.toString()}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >
-                <NavigationMenuLinkItem className='text-sm' item={item} />
+                <NavigationMenuLinkItem
+                  className='font-mono text-[13px]'
+                  item={item}
+                />
               </ViewAnimation>
             ))}
         </ul>
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
           <ViewAnimation
-            className='w-60 flex-none'
+            className='w-36 flex-none'
             delay={0.15}
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}

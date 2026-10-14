@@ -57,6 +57,7 @@
   /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-mono);
 }
 
 html {
@@ -94,6 +95,12 @@ html > body[data-scroll-locked] {
 
   [id] {
     @apply scroll-mt-20;
+  }
+
+  /* Mono headings are the brand; body copy stays in the readable sans. */
+  #main-content :is(h1, h2) {
+    font-family: var(--font-heading);
+    letter-spacing: -0.04em;
   }
 }
 
@@ -162,7 +169,7 @@ html > body[data-scroll-locked] {
   padding-inline: 0rem;
   margin-inline: auto;
 
-  @apply 2xl:max-w-[1400px];
+  @apply max-w-4xl;
 }
 
 @utility link-underline {
@@ -498,5 +505,24 @@ html > body[data-scroll-locked] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@utility caret {
+  animation: caret-blink 1.1s steps(1) infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
   }
 }

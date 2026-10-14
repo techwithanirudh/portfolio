@@ -1,128 +1,49 @@
-'use client'
-
-import { useReducedMotion } from 'motion/react'
-import { useEffect, useState } from 'react'
-import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import { SectionHeader } from '@/components/layout/sections/header'
+import { SectionLabel } from '@/components/layout/sections/label'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  Carousel,
-  type CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel'
 import { ViewAnimation } from '@/components/view-animation'
+import type { Testimonial } from '@/types'
 
-interface Testimonial {
-  author: {
-    name: string
-    image: string
-  }
-  description: string
-  title: string
-}
+const initials = (name: string) =>
+  name
+    .split(' ')
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
 
-interface TestimonialsProps {
-  testimonials: Testimonial[]
-}
-
-const TestimonialCard = ({
-  testimonial,
-  index,
-}: {
-  testimonial: Testimonial
-  index: number
-}) => (
-  <ViewAnimation
-    blur={false}
-    className='h-full'
-    delay={0.1 + index * 0.05}
-    initial={{ opacity: 0, scale: 0.98, translateX: -12 }}
-    whileInView={{ opacity: 1, scale: 1, translateX: 0 }}
-  >
-    <div className='flex h-full flex-col justify-between gap-12 p-6 transition-all duration-300 hover:bg-card sm:p-8'>
-      <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
-      <div className='flex flex-col gap-4'>
-        <div className='flex flex-col'>
-          <h3 className='text-xl tracking-tight'>{testimonial.title}</h3>
-          <p className='text-base text-muted-foreground'>
-            {testimonial.description}
-          </p>
-        </div>
-        <p className='flex flex-row items-center gap-2 text-sm'>
-          <span className='text-muted-foreground'>By</span>
-          <Avatar className='h-6 w-6' outlined={false}>
-            <AvatarImage alt='' src={testimonial.author.image} />
-            <AvatarFallback>
-              {testimonial.author.name
-                .split(' ')
-                .map((n) => n[0])
-                .join('')
-                .toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span>{testimonial.author.name}</span>
-        </p>
-      </div>
-    </div>
-  </ViewAnimation>
-)
-
-const Testimonials = ({ testimonials }: TestimonialsProps) => {
-  const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
-  const prefersReducedMotion = useReducedMotion()
-
-  useEffect(() => {
-    if (!api || prefersReducedMotion) {
-      return
-    }
-
-    const timer = setTimeout(() => {
-      if (api.selectedScrollSnap() + 1 === api.scrollSnapList().length) {
-        setCurrent(0)
-        api.scrollTo(0)
-      } else {
-        api.scrollNext()
-        setCurrent(current + 1)
-      }
-    }, 2500)
-
-    return () => clearTimeout(timer)
-  }, [api, current, prefersReducedMotion])
-
-  return (
-    <Section className='relative w-full pt-10'>
-      <div className='flex flex-col gap-10'>
-        <SectionHeader
-          align='left'
-          className='px-6'
-          description="I've worked with some great people. Here's what they say about working with me."
-          title='What others are saying'
-        />
-
+const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
+  <Section className='flex flex-col gap-4 py-6'>
+    <SectionLabel>kind_words</SectionLabel>
+    <ul className='divide-y divide-dashed divide-border border-border border-y border-dashed'>
+      {testimonials.slice(0, 3).map((testimonial, index) => (
         <ViewAnimation
           blur={false}
-          initial={{ opacity: 0, translateY: 16 }}
+          delay={0.05 * index}
+          initial={{ opacity: 0, translateY: -6 }}
+          key={testimonial.author.name}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <Carousel className='divider-top-dashed' setApi={setApi}>
-            <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
-              {testimonials.map((item, index) => (
-                <CarouselItem
-                  className='pl-0'
-                  key={`${item.title}-${item.author.name}`}
-                >
-                  <TestimonialCard index={index} testimonial={item} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
+          <li className='flex flex-col gap-3 px-4 py-4 sm:px-6'>
+            <blockquote className='text-pretty text-muted-foreground text-sm leading-relaxed'>
+              <span aria-hidden className='font-mono text-primary'>
+                "
+              </span>
+              {testimonial.description}
+            </blockquote>
+            <p className='flex items-center gap-2 font-mono text-xs'>
+              <Avatar className='size-5' outlined={false}>
+                <AvatarImage alt='' src={testimonial.author.image} />
+                <AvatarFallback>
+                  {initials(testimonial.author.name)}
+                </AvatarFallback>
+              </Avatar>
+              {testimonial.author.name}
+            </p>
+          </li>
         </ViewAnimation>
-      </div>
-    </Section>
-  )
-}
+      ))}
+    </ul>
+  </Section>
+)
 
 export default Testimonials
