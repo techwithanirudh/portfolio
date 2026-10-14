@@ -23,7 +23,7 @@ const groupByCategory = (items: TechStackItem[]) => {
 }
 
 const featureItemVariants = cva(
-  'flex flex-col gap-6 p-6 transition-colors hover:bg-card/80',
+  'flex flex-col justify-between gap-28 p-6 hover:bg-card/80 sm:gap-34 md:gap-40 lg:gap-46',
   {
     defaultVariants: {
       size: 'sm',
@@ -39,11 +39,11 @@ const featureItemVariants = cva(
 
 const Skills = () => (
   <Section className='relative w-full pt-10' id='stack'>
-    <div className='flex flex-col gap-8'>
+    <div className='flex flex-col gap-10'>
       <SectionHeader
         align='left'
         className='px-6'
-        description='The languages and tools I build with'
+        description='Focused on building practical projects with modern tools'
         title='My Expertise'
       />
 
@@ -59,15 +59,12 @@ const Skills = () => (
               key={feature.id}
               whileInView={{ opacity: 1 }}
             >
-              <feature.Icon
-                className='icon-tilt size-7 text-muted-foreground'
-                strokeWidth={1.25}
-              />
-              <div className='flex flex-col gap-1'>
+              <feature.Icon className='icon-tilt h-8 w-8' strokeWidth={1} />
+              <div className='flex flex-col'>
                 <h3 className='text-balance text-xl tracking-tight'>
                   {feature.title}
                 </h3>
-                <p className='max-w-xs text-pretty text-muted-foreground text-sm'>
+                <p className='max-w-xs text-pretty text-base text-muted-foreground'>
                   {feature.description}
                 </p>
               </div>
@@ -79,7 +76,7 @@ const Skills = () => (
           {Object.entries(groupByCategory(technologies)).map(
             ([category, items], index) => (
               <ViewAnimation
-                className='divider-bottom-dashed grid items-center gap-y-2 py-5 last:border-none sm:grid-cols-[11rem_1fr] sm:items-start'
+                className='divider-bottom-dashed grid items-center gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'
                 delay={0.05 * index}
                 initial={{ opacity: 0, translateY: -6 }}
                 key={category}
