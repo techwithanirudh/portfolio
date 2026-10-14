@@ -32,6 +32,7 @@ export const WorkCard = ({
         <ViewTransition name={`${transitionName}-image`} share={transition}>
           <BlurImage
             alt={title}
+            blur={false}
             className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform will-change-transform group-hover:scale-102'
             fill
             imageClassName='object-cover'

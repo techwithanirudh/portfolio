@@ -1,5 +1,6 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as motion from 'motion/react-client'
+import { ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { TagCard } from '@/components/features/blog'
 import { Section } from '@/components/layout/sections'
@@ -41,12 +42,7 @@ export const Header = ({ page, tags }: HeaderProps) => {
             className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent'
             style={{ viewTransitionName: 'none' }}
           />
-          <motion.div
-            animate={{ opacity: 1 }}
-            className='relative z-5 mt-auto p-8 md:p-16'
-            initial={{ opacity: 0 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
-          >
+          <div className='relative z-5 mt-auto p-8 md:p-16'>
             {tags?.length ? (
               <div className='mb-4 hidden gap-2 md:flex md:flex-wrap'>
                 {tags.map((tag, index) => (
@@ -65,17 +61,27 @@ export const Header = ({ page, tags }: HeaderProps) => {
               </div>
             ) : null}
             <div className='mb-4 space-y-4 text-balance'>
-              <h1 className='typography-hero max-w-2xl text-balance font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
-                {page.data.title ?? 'Untitled'}
-              </h1>
+              <ViewTransition
+                name={`blog/${page.slugs.join('/')}-title`}
+                share='via-blur'
+              >
+                <h1 className='typography-hero max-w-2xl text-balance font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
+                  {page.data.title ?? 'Untitled'}
+                </h1>
+              </ViewTransition>
               <p className='typography-body hidden max-w-3xl text-pretty text-slate-100 leading-8 md:block dark:text-foreground/85'>
                 {page.data.description ?? ''}
               </p>
             </div>
-            <div className='flex items-center gap-6 text-slate-200 text-xs dark:text-foreground/45'>
+            <motion.div
+              animate={{ opacity: 1 }}
+              className='flex items-center gap-6 text-slate-200 text-xs dark:text-foreground/45'
+              initial={{ opacity: 0 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
+            >
               <span>{formattedDate}</span>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </Section>
