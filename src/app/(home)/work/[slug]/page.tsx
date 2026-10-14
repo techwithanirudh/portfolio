@@ -6,6 +6,7 @@ import { BlurImage } from '@/components/blur-image'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
 import { TOCMinimap, TOCPopover } from '@/components/features/toc'
+import { WORK_COVER_SIZES } from '@/components/features/work/cover'
 import { PreviewButton } from '@/components/features/work/preview-button'
 import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
@@ -59,7 +60,7 @@ function Header(props: { page: MDXPage }) {
               fill
               imageClassName='object-cover'
               lazy={false}
-              sizes='(min-width: 1024px) 1200px, 100vw'
+              sizes={WORK_COVER_SIZES}
               src={page.data.image}
             />
           </ViewTransition>

@@ -7,6 +7,8 @@ import { useCallback, useState } from 'react'
  */
 import { cn } from '@/lib/utils'
 
+export const IMAGE_QUALITY = 80
+
 type ImageProps = {
   /** Set to false for shared-element transitions so the snapshot is never blurred. */
   blur?: boolean
@@ -41,18 +43,16 @@ const BlurImage = (props: ImageProps) => {
       <NextImage
         alt={alt}
         className={cn(
+          'transition-[filter,scale] duration-700 ease-in-out motion-reduce:transition-none',
           isLoading && 'scale-[1.02] blur-xl grayscale',
           imageClassName
         )}
         loading={lazy ? 'lazy' : undefined}
         onLoad={() => setLoaded(true)}
         priority={!lazy}
-        quality={100}
+        quality={IMAGE_QUALITY}
         ref={imageRef}
         src={src}
-        style={{
-          transition: 'filter 700ms ease, scale 150ms ease',
-        }}
         {...rest}
       />
     </div>
