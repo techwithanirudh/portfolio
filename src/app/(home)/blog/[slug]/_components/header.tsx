@@ -26,13 +26,13 @@ export const Header = ({ page, tags }: HeaderProps) => {
     <Section>
       <FrameDecoration />
       <div className='relative h-[280px] overflow-clip md:h-[420px] lg:h-[600px]'>
-        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl bg-primary/80 shadow-xl'>
+        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image && (
             <BlurImage
               alt={page.data.title ?? 'Blog cover image'}
-              className='absolute inset-0 h-full w-full rounded-2xl'
+              className='absolute inset-0 h-full w-full'
               fill
-              imageClassName='object-cover rounded-2xl'
+              imageClassName='object-cover'
               sizes='(min-width: 1024px) 800px, 100vw'
               src={image}
             />
