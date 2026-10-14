@@ -37,17 +37,14 @@ export default function GuestbookPage() {
   return (
     <Wrapper>
       <SplitSection>
-        <SplitSectionSidebar className='px-6 py-14'>
+        <SplitSectionSidebar className='pt-10'>
           <SplitSectionHeader
             description='Share a quick hello, a thought about the work, or a suggestion.'
             title='Guestbook'
           />
         </SplitSectionSidebar>
 
-        <SplitSectionContent
-          className='flex w-full items-center px-6 py-14'
-          inset
-        >
+        <SplitSectionContent className='flex w-full items-center p-4' inset>
           <ViewAnimation
             className='w-full'
             delay={0.1}

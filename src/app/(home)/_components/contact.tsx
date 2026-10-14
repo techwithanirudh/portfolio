@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils'
 const Contact = () => (
   <Panel>
     <PanelHeader>
-      <PanelTitle>say_hi</PanelTitle>
+      <PanelTitle>Get in touch</PanelTitle>
     </PanelHeader>
     <ViewAnimation
       initial={{ opacity: 0, translateY: -6 }}
@@ -28,11 +28,11 @@ const Contact = () => (
           <Link
             className={cn(
               buttonVariants({ size: 'lg', variant: 'default' }),
-              'rounded-full font-mono'
+              'rounded-full'
             )}
             href='/contact'
           >
-            contact_me
+            Contact me
             <Icons.arrowRight className='icon-arrow-button size-4' />
           </Link>
           <a

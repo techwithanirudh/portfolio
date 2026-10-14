@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ProfilePageJsonLd } from '@/components/json-ld'
+import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { description as homeDescription } from '@/constants/site'
@@ -23,11 +24,6 @@ export const metadata: Metadata = createMetadata({
   twitter: { images: '/banner.png' },
 })
 
-// Hatched spacer between panels, the same band the old Separator drew
-const Gap = () => (
-  <div aria-hidden className='h-8 border-line border-x bg-dashed' />
-)
-
 export default async function Home() {
   const works = getSortedWork().slice(0, 3)
 
@@ -35,23 +31,23 @@ export default async function Home() {
     <>
       <ProfilePageJsonLd description={homeDescription} path='/' title='Home' />
       <Wrapper>
-        <div className='container mx-auto px-2 sm:px-0'>
+        <div className='container mx-auto'>
           <ProfileCover />
           <ProfileHeader />
-          <Gap />
+          <Separator />
           <Overview />
           <SocialLinks />
-          <Gap />
+          <Separator />
           <About />
-          <Gap />
+          <Separator />
           <ExperiencePreview />
-          <Gap />
+          <Separator />
           <WorkPreview works={works} />
-          <Gap />
+          <Separator />
           <Testimonials testimonials={testimonials} />
-          <Gap />
+          <Separator />
           <Contact />
-          <Gap />
+          <Separator />
         </div>
       </Wrapper>
     </>

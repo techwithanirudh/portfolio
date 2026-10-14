@@ -181,7 +181,7 @@ html > body[data-scroll-locked] {
   padding-inline: 0rem;
   margin-inline: auto;
 
-  @apply max-w-4xl;
+  @apply max-w-3xl;
 }
 
 @utility link-underline {

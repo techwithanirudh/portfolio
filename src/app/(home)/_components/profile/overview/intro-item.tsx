@@ -1,13 +1,30 @@
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
 import type { ComponentProps } from 'react'
+import { IconTile } from '@/components/ui/icon-tile'
 import { cn } from '@/lib/utils'
 
-export { IconTile as IntroItemIcon } from '@/components/ui/icon-tile'
+export function IntroItemIcon({
+  className,
+  ...props
+}: ComponentProps<typeof IconTile>) {
+  return (
+    <IconTile
+      className={cn(
+        'transition-transform duration-300 ease-out group-hover/intro:-rotate-6 group-hover/intro:scale-110 motion-reduce:transition-none',
+        className
+      )}
+      {...props}
+    />
+  )
+}
 
 export function IntroItem({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div
-      className={cn('flex items-center gap-4 font-mono text-[13px]', className)}
+      className={cn(
+        'group/intro flex items-center gap-4 font-mono text-[13px]',
+        className
+      )}
       {...props}
     />
   )

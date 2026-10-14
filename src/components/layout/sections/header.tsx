@@ -1,8 +1,8 @@
-import { Children, isValidElement, type ReactNode } from 'react'
-import { ViewAnimation } from '@/components/view-animation'
+import { Children, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {
+  /** Kept for older call sites, headers are always left aligned now. */
   align?: 'left' | 'center'
   children?: ReactNode
   className?: string
@@ -20,62 +20,35 @@ export const SectionHeader = ({
   className,
   titleClassName,
   descriptionClassName,
-  align = 'center',
   sticky = false,
 }: SectionHeaderProps) => (
   <div
     className={cn(
-      'flex flex-col gap-4',
-      align === 'center' ? 'items-center text-center' : 'items-start text-left',
-      sticky ? 'sm:sticky sm:top-16' : null,
+      'flex flex-col items-start text-left',
+      sticky && 'lg:sticky lg:top-16',
       className
     )}
   >
-    <ViewAnimation
-      initial={{ opacity: 0, translateY: -6 }}
-      whileInView={{ opacity: 1, translateY: 0 }}
+    <h2
+      className={cn(
+        'screen-line-bottom w-full px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
+        titleClassName
+      )}
     >
-      <h2
+      {title}
+    </h2>
+    {description && (
+      <p
         className={cn(
-          'typography-title text-balance font-regular text-3xl leading-tight tracking-tighter',
-          'md:text-5xl',
-          titleClassName
+          'text-pretty px-4 pt-3 text-muted-foreground text-sm',
+          descriptionClassName
         )}
       >
-        {title}
-      </h2>
-    </ViewAnimation>
-    {description && (
-      <ViewAnimation
-        delay={0.1}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
-        <p
-          className={cn(
-            'text-pretty text-base text-muted-foreground',
-            descriptionClassName
-          )}
-        >
-          {description}
-        </p>
-      </ViewAnimation>
+        {description}
+      </p>
     )}
-    {Children.map(Children.toArray(children), (child, index) => {
-      const key = isValidElement(child)
-        ? (child.key ?? `section-header-child-${index}`)
-        : `${String(child)}-${index}`
-
-      return child ? (
-        <ViewAnimation
-          delay={0.1 + index * 0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={key}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {child}
-        </ViewAnimation>
-      ) : null
-    })}
+    {Children.toArray(children).length > 0 && (
+      <div className='flex flex-wrap gap-2 px-4 pt-3'>{children}</div>
+    )}
   </div>
 )

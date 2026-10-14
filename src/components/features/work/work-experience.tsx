@@ -53,13 +53,13 @@ export function WorkExperience({
 
 export function ExperienceItem({ experience }: ExperienceItemProps) {
   return (
-    <div className='space-y-4 p-4'>
+    <div className='group/exp space-y-4 p-4'>
       <div className='not-prose flex items-center gap-3'>
         <div className='flex size-6 shrink-0 items-center justify-center'>
           {experience.companyLogo ? (
             <Image
               alt={experience.companyName}
-              className='size-6 rounded'
+              className='size-6 rounded transition-transform duration-300 ease-out group-hover/exp:-rotate-6 group-hover/exp:scale-110 motion-reduce:transition-none'
               height={24}
               src={experience.companyLogo}
               width={24}

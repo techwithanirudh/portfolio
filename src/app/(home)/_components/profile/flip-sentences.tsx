@@ -19,9 +19,6 @@ export function FlipSentences({
 
   return (
     <div className={cn('flex items-center', className)} ref={ref}>
-      <span aria-hidden className='mr-2 font-mono text-primary text-sm'>
-        &gt;
-      </span>
       <TextFlip
         className='text-balance font-mono text-muted-foreground text-sm'
         interval={3}

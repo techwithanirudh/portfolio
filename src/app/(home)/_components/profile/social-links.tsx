@@ -22,7 +22,7 @@ export function SocialLinks() {
                 <TooltipTrigger
                   render={
                     <Button
-                      className="text-foreground/80 shadow-none [&_svg:not([class*='size-'])]:size-4"
+                      className="text-foreground/80 shadow-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:-rotate-6 hover:[&_svg]:scale-115"
                       nativeButton={false}
                       render={
                         <a

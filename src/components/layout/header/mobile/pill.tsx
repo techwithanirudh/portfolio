@@ -27,17 +27,18 @@ export function FloatingPill({
 
   return (
     <div className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
-      <div className='flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'>
+      <div className='flex items-center gap-0.5 rounded-2xl bg-popover/90 py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 backdrop-blur-md dark:ring-foreground/20'>
         <button
           aria-label='Search'
-          className='flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+          className='flex h-8 min-w-20 items-center gap-2 text-muted-foreground text-sm transition-[color,scale] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-95'
           onClick={onSearchOpen}
           type='button'
         >
           <Icons.search className='size-4' />
+          Search
         </button>
 
-        <div className='mx-1 h-4 w-px bg-border' />
+        <div className='mr-1 ml-2.5 h-5 w-px bg-line' />
 
         {primaryLinks.map((link) => (
           <NavItem
@@ -49,14 +50,14 @@ export function FloatingPill({
           />
         ))}
 
-        <div className='mx-1 h-4 w-px bg-border' />
+        <div className='mx-1 h-5 w-px bg-line' />
 
         <button
           aria-controls={menuId}
           aria-expanded={open}
           aria-label='Toggle menu'
           className={cn(
-            'relative flex size-8 items-center justify-center rounded-full transition-colors',
+            'relative flex size-8 items-center justify-center rounded-xl transition-[color,background-color,scale] active:scale-90',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
             open
               ? 'bg-primary/10 text-primary'

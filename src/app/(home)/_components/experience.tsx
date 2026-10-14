@@ -16,14 +16,14 @@ export default function ExperiencePreview() {
   return (
     <Panel id='experience'>
       <PanelHeader>
-        <PanelTitle>experience</PanelTitle>
+        <PanelTitle>Experience</PanelTitle>
         <PanelTitleSup>({experiences.length})</PanelTitleSup>
         <PanelAction>
           <Link
             className='transition-colors hover:text-foreground'
             href='/about#experience'
           >
-            view_all
+            View all
             <Icons.arrowRight className='icon-arrow-button ml-1 inline size-3' />
           </Link>
         </PanelAction>

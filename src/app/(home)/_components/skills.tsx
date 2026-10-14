@@ -23,14 +23,14 @@ const groupByCategory = (items: TechStackItem[]) => {
 }
 
 const featureItemVariants = cva(
-  'flex flex-col justify-between gap-28 p-6 hover:bg-card/80 sm:gap-34 md:gap-40 lg:gap-46',
+  'group flex flex-col gap-6 p-4 transition-colors hover:bg-card/80',
   {
     defaultVariants: {
       size: 'sm',
     },
     variants: {
       size: {
-        lg: 'lg:col-span-2',
+        lg: 'sm:col-span-2',
         sm: '',
       },
     },
@@ -38,17 +38,16 @@ const featureItemVariants = cva(
 )
 
 const Skills = () => (
-  <Section className='relative w-full pt-10' id='stack'>
-    <div className='flex flex-col gap-10'>
+  <Section className='relative w-full' id='stack'>
+    <div className='flex flex-col'>
       <SectionHeader
-        align='left'
-        className='px-6'
-        description='Focused on building practical projects with modern tools'
-        title='My Expertise'
+        className='pb-4'
+        description='Focused on building practical projects with modern tools.'
+        title='Stack'
       />
 
-      <div className='divider-top-dashed'>
-        <div className='grid grid-cols-1 divide-dashed divide-border text-left lg:grid-cols-3 lg:divide-x [&>*:last-child]:border-b-0 lg:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
+      <div className='screen-line-top'>
+        <div className='grid grid-cols-1 divide-dashed divide-line text-left sm:grid-cols-3 sm:divide-x [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-line [&>*]:border-b [&>*]:border-dashed'>
           {skills.map((feature, index) => (
             <ViewAnimation
               className={featureItemVariants({
@@ -59,12 +58,15 @@ const Skills = () => (
               key={feature.id}
               whileInView={{ opacity: 1 }}
             >
-              <feature.Icon className='icon-tilt h-8 w-8' strokeWidth={1} />
+              <feature.Icon
+                className='size-6 text-muted-foreground transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-125 group-hover:text-primary'
+                strokeWidth={1.5}
+              />
               <div className='flex flex-col'>
-                <h3 className='text-balance text-xl tracking-tight'>
+                <h3 className='text-balance font-medium tracking-tight'>
                   {feature.title}
                 </h3>
-                <p className='max-w-xs text-pretty text-base text-muted-foreground'>
+                <p className='max-w-xs text-pretty text-muted-foreground text-sm'>
                   {feature.description}
                 </p>
               </div>
@@ -72,17 +74,17 @@ const Skills = () => (
           ))}
         </div>
 
-        <div className='divider-top-dashed'>
+        <div className='screen-line-top'>
           {Object.entries(groupByCategory(technologies)).map(
             ([category, items], index) => (
               <ViewAnimation
-                className='divider-bottom-dashed grid items-center gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'
+                className='grid items-center gap-y-2 border-line border-b border-dashed py-3 last:border-none sm:grid-cols-[9rem_1fr]'
                 delay={0.05 * index}
                 initial={{ opacity: 0, translateY: -6 }}
                 key={category}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >
-                <div className='px-6 text-muted-foreground text-sm sm:pr-0'>
+                <div className='px-4 font-mono text-muted-foreground text-xs sm:pr-0'>
                   <span
                     aria-hidden
                     className='mr-1.5 select-none font-mono text-muted-foreground/50'
@@ -92,7 +94,7 @@ const Skills = () => (
                   {category}
                 </div>
 
-                <ul className='flex flex-wrap gap-1.5 px-6 sm:pl-0'>
+                <ul className='flex flex-wrap gap-1.5 px-4 sm:pl-0'>
                   {items.map(({ label, icon, href }) => (
                     <li className='flex' key={label}>
                       <Badge

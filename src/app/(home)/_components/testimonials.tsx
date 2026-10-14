@@ -13,7 +13,7 @@ const initials = (name: string) =>
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
   <Panel>
     <PanelHeader>
-      <PanelTitle>kind_words</PanelTitle>
+      <PanelTitle>Testimonials</PanelTitle>
     </PanelHeader>
     <ul className='divide-y divide-dashed divide-line'>
       {testimonials.slice(0, 3).map((testimonial, index) => (
@@ -24,7 +24,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
           key={testimonial.author.name}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <li className='flex flex-col gap-3 p-4'>
+          <li className='group flex flex-col gap-3 p-4 transition-colors hover:bg-card'>
             <blockquote className='text-pretty text-muted-foreground text-sm leading-relaxed'>
               <span aria-hidden className='font-mono text-primary'>
                 "
@@ -32,7 +32,10 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
               {testimonial.description}
             </blockquote>
             <p className='flex items-center gap-2 font-mono text-xs'>
-              <Avatar className='size-5' outlined={false}>
+              <Avatar
+                className='size-5 transition-transform duration-300 group-hover:scale-125'
+                outlined={false}
+              >
                 <AvatarImage alt='' src={testimonial.author.image} />
                 <AvatarFallback>
                   {initials(testimonial.author.name)}

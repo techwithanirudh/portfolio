@@ -1,456 +1,113 @@
 'use client'
 
-import { cva } from 'class-variance-authority'
+import { usePathname } from 'fumadocs-core/framework'
+// Layout adapted from chanhdai.com's SiteHeader (MIT, (c) Chanh Dai):
+// https://github.com/ncdai/chanhdai.com
 import Link from 'fumadocs-core/link'
-import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from 'fumadocs-ui/components/ui/navigation-menu'
 import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
-import {
-  type LinkItemType,
-  type NavOptions,
-  resolveLinkItems,
-} from 'fumadocs-ui/layouts/shared'
-import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
-import {
-  type ComponentProps,
-  Fragment,
-  type ReactNode,
-  useMemo,
-  useState,
-} from 'react'
-import { Icons } from '@/components/icons/icons'
+import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
+import { type ReactNode, useMemo } from 'react'
 import { OIIA_TITLE, useOiiaMode } from '@/components/oiia'
-import { ViewAnimation } from '@/components/view-animation'
+import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
-
-import { LinkItem } from './link-item'
-import { LargeSearchToggle, SearchToggle } from './search-toggle'
+import { SearchToggle } from './search-toggle'
 import { ThemeToggle } from './theme-toggle'
 
-const navItemVariants = cva('[&_svg]:size-4', {
-  defaultVariants: {
-    variant: 'main',
-  },
-  variants: {
-    variant: {
-      button: buttonVariants({
-        className: 'gap-1.5',
-        color: 'secondary',
-      }),
-      icon: buttonVariants({
-        color: 'ghost',
-        size: 'icon',
-      }),
-      main: 'inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
-    },
-  },
-})
-
-const renderNavTitle = (
-  nav: HomeLayoutProps['nav'],
-  props: ComponentProps<'a'>
-): ReactNode => {
-  const title = nav?.title
-  const href = nav?.url ?? '/'
-
-  if (!title) {
-    return null
-  }
-
-  if (typeof title === 'function') {
-    return title({ href, ...props }) as ReactNode
-  }
-
-  return (
-    <Link href={href} {...props}>
-      {title as ReactNode}
-      {typeof title === 'string' && (
-        <span
-          aria-hidden
-          className='caret -ml-1.5 h-4 w-1.5 translate-y-px bg-primary'
-        />
-      )}
-    </Link>
-  )
-}
+const Divider = ({ className }: { className?: string }) => (
+  <span
+    aria-hidden
+    className={cn('h-5 w-px shrink-0 self-center bg-line', className)}
+  />
+)
 
 export const Header = ({
   nav = {},
   links,
   githubUrl,
-  themeSwitch = {},
-  searchToggle = {},
   className,
 }: HomeLayoutProps & { className?: string }) => {
   const { mode } = useOiiaMode()
-  const { navItems, menuItems } = useMemo(() => {
-    const navItems: LinkItemType[] = []
-    const menuItems: LinkItemType[] = []
+  const pathname = usePathname()
 
-    for (const item of resolveLinkItems({ githubUrl, links })) {
-      switch (item.on ?? 'all') {
-        case 'menu':
-          menuItems.push(item)
-          break
-        case 'nav':
-          navItems.push(item)
-          break
-        default:
-          navItems.push(item)
-          menuItems.push(item)
-      }
+  const { mainItems, iconItems } = useMemo(() => {
+    const items = resolveLinkItems({ githubUrl, links }).filter(
+      (item) => (item.on ?? 'all') !== 'menu'
+    )
+    return {
+      iconItems: items.filter((item) => item.type === 'icon'),
+      mainItems: items.filter(
+        (item): item is Extract<LinkItemType, { url: string }> =>
+          (item.type === undefined || item.type === 'main') && 'url' in item
+      ),
     }
-
-    return { menuItems, navItems }
   }, [links, githubUrl])
 
+  const title = (mode === 'oiia' ? OIIA_TITLE : nav.title) as ReactNode
+
   return (
-    <HeaderNavigationMenu
-      className={className}
-      transparentMode={nav.transparentMode}
+    <header
+      className={cn(
+        'sticky top-0 z-40 max-w-screen overflow-x-clip bg-background/90 px-2 backdrop-blur-md',
+        className
+      )}
+      id='nd-nav'
     >
-      <div className='relative flex w-full items-center'>
-        <div className='flex items-center gap-2'>
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            {renderNavTitle(
-              mode === 'oiia' ? { ...nav, title: OIIA_TITLE } : nav,
-              {
-                className:
-                  'inline-flex items-center gap-2.5 font-heading font-medium tracking-tighter',
-              }
-            )}
-          </ViewAnimation>
-          {nav.children}
-        </div>
-        <ul className='ml-6 flex flex-row items-center gap-1 max-lg:hidden'>
-          {navItems
-            .filter((item) => !isSecondary(item))
-            .map((item, i) => (
-              <ViewAnimation
-                delay={0.05 * i}
-                initial={{ opacity: 0, translateY: -6 }}
-                key={i.toString()}
-                whileInView={{ opacity: 1, translateY: 0 }}
+      <div className='screen-line-top screen-line-bottom container mx-auto flex h-14 items-center gap-2 border-line border-x pr-2 pl-4 sm:gap-4'>
+        <Link
+          aria-label='Home'
+          className='group/brand inline-flex items-center font-heading font-medium text-lg tracking-tighter'
+          href={nav.url ?? '/'}
+        >
+          {title}
+          {typeof title === 'string' && (
+            <span
+              aria-hidden
+              className='caret ml-0.5 h-4 w-1.5 translate-y-px bg-primary transition-transform group-hover/brand:scale-y-125'
+            />
+          )}
+        </Link>
+
+        <div className='flex-1' />
+
+        <nav className='flex items-center gap-4 max-md:hidden'>
+          {mainItems.map((item) => {
+            const active =
+              item.active !== 'none' &&
+              isActive(item.url, pathname, item.active === 'nested-url')
+            return (
+              <Link
+                aria-current={active ? 'page' : undefined}
+                className='relative font-medium text-muted-foreground text-sm tracking-wide transition-colors after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform hover:text-foreground hover:after:scale-x-100 aria-[current=page]:text-foreground aria-[current=page]:after:scale-x-100'
+                external={item.external}
+                href={item.url}
+                key={item.url}
               >
-                <NavigationMenuLinkItem
-                  className='font-mono text-[13px]'
-                  item={item}
-                />
-              </ViewAnimation>
-            ))}
-        </ul>
-        <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
-          <ViewAnimation
-            className='w-36 flex-none'
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            {searchToggle.enabled !== false &&
-              (searchToggle.components?.lg ?? (
-                <LargeSearchToggle
-                  className='w-full rounded-full ps-2.5'
-                  hideIfDisabled
-                />
-              ))}
-          </ViewAnimation>
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            {themeSwitch.enabled !== false &&
-              (themeSwitch.component ?? (
-                <ThemeToggle mode={themeSwitch?.mode} />
-              ))}
-          </ViewAnimation>
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <ul className='flex flex-row items-center gap-2 empty:hidden'>
-              {navItems.filter(isSecondary).map((item, i) => (
-                <NavigationMenuLinkItem
-                  className={cn(
-                    item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
-                  )}
-                  item={item}
-                  key={i.toString()}
-                />
-              ))}
-            </ul>
-          </ViewAnimation>
-        </div>
-      </div>
-      <ul className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
-        {searchToggle.enabled !== false &&
-          (searchToggle.components?.sm ?? (
-            <ViewAnimation
-              delay={0.1}
-              initial={{ opacity: 0, translateY: -6 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <SearchToggle className='p-2' hideIfDisabled />
-            </ViewAnimation>
-          ))}
-        <NavigationMenuItem>
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <NavigationMenuTrigger
-              aria-label='Toggle Menu'
-              className={cn(
-                buttonVariants({
-                  className: 'group [&_svg]:size-5.5',
-                  color: 'ghost',
-                  size: 'icon',
-                })
-              )}
-              onPointerMove={
-                nav.enableHoverToOpen
-                  ? undefined
-                  : (event) => event.preventDefault()
-              }
-            >
-              <Icons.menu className='transition-all duration-300 group-data-[state=open]:hidden' />
-              <Icons.close className='hidden transition-all duration-300 group-data-[state=open]:block' />
-            </NavigationMenuTrigger>
-          </ViewAnimation>
-          <NavigationMenuContent className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end'>
-            {menuItems
-              .filter((item) => !isSecondary(item))
-              .map((item, i) => (
-                <MobileNavigationMenuLinkItem
-                  className='lg:hidden'
-                  item={item}
-                  key={i.toString()}
-                />
-              ))}
-            <div className='-ms-1.5 flex flex-row items-center gap-2 max-sm:mt-2'>
-              {menuItems.filter(isSecondary).map((item, i) => (
-                <MobileNavigationMenuLinkItem
-                  className={cn(item.type === 'icon' && '-mx-1 first:ms-0')}
-                  item={item}
-                  key={i.toString()}
-                />
-              ))}
-              {themeSwitch.enabled !== false &&
-                (themeSwitch.component ?? (
-                  <ThemeToggle mode={themeSwitch?.mode} />
-                ))}
-            </div>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </ul>
-    </HeaderNavigationMenu>
-  )
-}
-
-const HeaderNavigationMenu = ({
-  transparentMode = 'none',
-  ...props
-}: ComponentProps<'div'> & {
-  transparentMode?: NavOptions['transparentMode']
-}) => {
-  const [value, setValue] = useState('')
-  const isTop = useIsScrollTop({ enabled: transparentMode === 'top' }) ?? true
-  const isTransparent =
-    transparentMode === 'top' ? isTop : transparentMode === 'always'
-
-  return (
-    <NavigationMenu asChild onValueChange={setValue} value={value}>
-      <header
-        id='nd-nav'
-        {...props}
-        className={cn(
-          'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors',
-          props.className
-        )}
-      >
-        <div
-          className={cn(
-            'backdrop-blur-lg transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
-            // value.length > 0 && 'max-lg:rounded-b-2xl max-lg:shadow-lg',
-            'container border-border border-dashed sm:border-x',
-            (!isTransparent || value.length > 0) && 'bg-fd-background/80'
-          )}
-        >
-          <NavigationMenuList
-            asChild
-            className='flex h-14 w-full items-center px-4 lg:px-6'
-          >
-            <nav>{props.children}</nav>
-          </NavigationMenuList>
-          <NavigationMenuViewport />
-        </div>
-      </header>
-    </NavigationMenu>
-  )
-}
-
-const isSecondary = (item: LinkItemType): boolean =>
-  ('secondary' in item && item.secondary === true) || item.type === 'icon'
-
-const NavigationMenuLinkItem = ({
-  item,
-  ...props
-}: {
-  item: LinkItemType
-  className?: string
-}) => {
-  if (item.type === 'custom') {
-    return <div {...props}>{item.children}</div>
-  }
-
-  if (item.type === 'menu') {
-    const children = item.items.map((child, j) => {
-      if (child.type === 'custom') {
-        return <Fragment key={j.toString()}>{child.children}</Fragment>
-      }
-
-      const {
-        banner = child.icon ? (
-          <div className='w-fit rounded-md border bg-fd-muted p-1 [&_svg]:size-4'>
-            {child.icon}
-          </div>
-        ) : null,
-        ...rest
-      } = child.menu ?? {}
-
-      return (
-        <NavigationMenuLink asChild key={child.url}>
-          <Link
-            external={child.external}
-            href={child.url}
-            {...rest}
-            className={cn(
-              'flex flex-col gap-2 rounded-lg border border-border bg-fd-card p-3 transition-colors hover:bg-fd-accent/80 hover:text-fd-accent-foreground',
-              rest.className
-            )}
-          >
-            {rest.children ?? (
-              <>
-                {banner}
-                <p className='font-medium text-base'>{child.text}</p>
-                <p className='text-fd-muted-foreground text-sm empty:hidden'>
-                  {child.description}
-                </p>
-              </>
-            )}
-          </Link>
-        </NavigationMenuLink>
-      )
-    })
-
-    return (
-      <NavigationMenuItem {...props}>
-        <NavigationMenuTrigger className={cn(navItemVariants(), 'rounded-md')}>
-          {item.url ? (
-            <Link external={item.external} href={item.url}>
-              {item.text}
-            </Link>
-          ) : (
-            item.text
-          )}
-        </NavigationMenuTrigger>
-        <NavigationMenuContent className='grid grid-cols-1 gap-2 p-4 md:grid-cols-2 lg:grid-cols-3'>
-          {children}
-        </NavigationMenuContent>
-      </NavigationMenuItem>
-    )
-  }
-
-  return (
-    <NavigationMenuItem {...props}>
-      <NavigationMenuLink asChild>
-        <LinkItem
-          aria-label={item.type === 'icon' ? item.label : undefined}
-          className={cn(navItemVariants({ variant: item.type }))}
-          item={item}
-        >
-          {item.type === 'icon' ? item.icon : item.text}
-        </LinkItem>
-      </NavigationMenuLink>
-    </NavigationMenuItem>
-  )
-}
-
-const MobileNavigationMenuLinkItem = ({
-  item,
-  ...props
-}: {
-  item: LinkItemType
-  className?: string
-}) => {
-  if (item.type === 'custom') {
-    return <div className={cn('grid', props.className)}>{item.children}</div>
-  }
-
-  if (item.type === 'menu') {
-    const header = (
-      <>
-        {item.icon}
-        {item.text}
-      </>
-    )
-
-    return (
-      <div className={cn('mb-4 flex flex-col', props.className)}>
-        <p className='mb-1 text-fd-muted-foreground text-sm'>
-          {item.url ? (
-            <NavigationMenuLink asChild>
-              <Link external={item.external} href={item.url}>
-                {header}
+                {item.text}
               </Link>
-            </NavigationMenuLink>
-          ) : (
-            header
-          )}
-        </p>
-        {item.items.map((child, i) => (
-          <MobileNavigationMenuLinkItem item={child} key={i.toString()} />
-        ))}
-      </div>
-    )
-  }
+            )
+          })}
+        </nav>
 
-  return (
-    <NavigationMenuLink asChild>
-      <LinkItem
-        aria-label={item.type === 'icon' ? item.label : undefined}
-        className={cn(
-          {
-            button: buttonVariants({
-              className: 'gap-1.5 [&_svg]:size-4',
-              color: 'secondary',
-            }),
-            icon: buttonVariants({
-              color: 'ghost',
-              size: 'icon',
-            }),
-            main: 'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-fd-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-fd-primary [&_svg]:size-4',
-          }[item.type ?? 'main'],
-          props.className
-        )}
-        item={item}
-      >
-        {item.icon}
-        {item.type === 'icon' ? undefined : item.text}
-      </LinkItem>
-    </NavigationMenuLink>
+        <div className='flex items-center'>
+          <Divider className='mr-2 max-md:hidden' />
+          <SearchToggle className='text-muted-foreground' hideIfDisabled />
+          {iconItems.map((item) =>
+            'url' in item ? (
+              <Link
+                aria-label={item.label ?? item.text?.toString()}
+                className='inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-4'
+                external={item.external}
+                href={item.url}
+                key={item.url}
+              >
+                {item.icon}
+              </Link>
+            ) : null
+          )}
+          <Divider className='mx-2' />
+          <ThemeToggle />
+        </div>
+      </div>
+    </header>
   )
 }

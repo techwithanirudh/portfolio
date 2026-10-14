@@ -10,7 +10,7 @@ export default function About() {
   return (
     <Panel id='about'>
       <PanelHeader>
-        <PanelTitle>about</PanelTitle>
+        <PanelTitle>About</PanelTitle>
       </PanelHeader>
       <PanelContent className='space-y-3 text-pretty text-muted-foreground leading-relaxed'>
         <p>

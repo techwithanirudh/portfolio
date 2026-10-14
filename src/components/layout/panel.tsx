@@ -28,24 +28,16 @@ export function PanelHeader({ className, ...props }: ComponentProps<'header'>) {
   )
 }
 
-// Terminal-path title, "~/experience", so every section reads as a directory
-export function PanelTitle({
-  children,
-  className,
-  ...props
-}: Omit<ComponentProps<'h2'>, 'children'> & { children: string }) {
+export function PanelTitle({ className, ...props }: ComponentProps<'h2'>) {
   return (
     <h2
       className={cn(
-        'font-heading text-2xl tracking-tight! sm:text-3xl',
+        'font-heading font-medium text-2xl tracking-tight sm:text-3xl',
         className
       )}
       data-slot='panel-title'
       {...props}
-    >
-      <span className='text-primary'>~/</span>
-      {children}
-    </h2>
+    />
   )
 }
 

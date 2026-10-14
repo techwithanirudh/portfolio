@@ -14,7 +14,7 @@ export const Hero = () => (
       description="Have a question or want to connect? Send me a message and I'll reply within a week."
       title='Contact Me'
     />
-    <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>
+    <div className='mx-4 mt-3 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>
       {socials.map((social, index) => (
         <ViewAnimation
           blur={false}
