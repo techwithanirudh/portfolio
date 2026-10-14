@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -13,9 +13,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
+import { signOut, useSession } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
+import { useSignInModal } from './sign-in-modal'
 import type { UserAvatarClassNames } from './user-avatar'
 import { UserAvatar } from './user-avatar'
 
@@ -42,7 +43,7 @@ export interface UserButtonProps {
 
 export function UserButton({ className, classNames }: UserButtonProps) {
   const router = useRouter()
-  const pathname = usePathname()
+  const { openSignIn } = useSignInModal()
   const { data: sessionData, isPending } = useSession()
   const user = sessionData?.user ?? null
 
@@ -130,11 +131,12 @@ export function UserButton({ className, classNames }: UserButtonProps) {
             </DropdownMenuItem>
           </>
         ) : (
-          <DropdownMenuItem asChild className={classNames?.content?.menuItem}>
-            <Link href={getLoginUrl(pathname)}>
-              <Icons.logIn className='size-4' />
-              Sign In
-            </Link>
+          <DropdownMenuItem
+            className={classNames?.content?.menuItem}
+            onClick={() => openSignIn()}
+          >
+            <Icons.logIn className='size-4' />
+            Sign In
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>
