@@ -573,6 +573,14 @@ html > body[data-scroll-locked] {
   }
 }
 
+/* Stacked sections share one rule instead of drawing two lines 1px apart */
+[data-slot="section"]
+  + [data-slot="section"]
+  > div
+  > [data-slot="section-inner"]::before {
+  content: none;
+}
+
 @utility screen-line-top-none {
   @apply before:content-none;
 }

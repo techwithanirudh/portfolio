@@ -12,6 +12,7 @@ interface PostCardProps {
   url: string
 }
 
+// Post row after chanhdai.com's blog list (MIT, (c) Chanh Dai)
 export const PostCard: React.FC<PostCardProps> = ({
   title,
   description,
@@ -21,27 +22,23 @@ export const PostCard: React.FC<PostCardProps> = ({
   slugs,
 }) => (
   <Link
-    className='block bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
+    className='group flex items-start gap-4 p-4 transition-colors hover:bg-card'
+    data-sound-hover
     href={url}
   >
-    <div className='flex flex-col gap-2'>
+    <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
       <ViewTransition name={`blog/${slugs.join('/')}-title`} share='via-blur'>
-        <h2 className='font-medium text-lg md:text-xl lg:text-2xl'>{title}</h2>
+        <h2 className='text-balance font-medium font-sans text-base tracking-tight transition-colors group-hover:text-primary'>
+          {title}
+        </h2>
       </ViewTransition>
-      <p className='line-clamp-3 overflow-hidden text-ellipsis text-medium text-muted-foreground'>
+      <p className='line-clamp-2 text-pretty text-muted-foreground text-sm'>
         {description}
       </p>
-      <div className='mt-8 inline-flex items-center gap-2 text-muted-foreground text-sm'>
-        <span className='inline-flex items-center gap-1 capitalize'>
-          <Icons.user className='icon-pop size-4' />
-          {author}
-        </span>
-        <span>•</span>
-        <span className='inline-flex items-center gap-1'>
-          <Icons.calendar className='icon-pop size-4' />
-          {date}
-        </span>
-      </div>
+      <p className='font-mono text-muted-foreground/80 text-xs'>
+        {date} <span aria-hidden>·</span> {author}
+      </p>
     </div>
+    <Icons.arrowRight className='mt-1 size-4 shrink-0 text-muted-foreground transition-[transform,color] duration-300 group-hover:-rotate-45 group-hover:text-foreground' />
   </Link>
 )

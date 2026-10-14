@@ -1,122 +1,34 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import { ViewAnimation } from '@/components/view-animation'
-import { cn } from '@/lib/utils'
 
 const MAX_TAGS = 8
 
-interface TagsSidebarProps {
+interface TagsRowProps {
   tags: Array<{ name: string; count: number }>
 }
 
-export function TagsAccordion({ tags }: TagsSidebarProps) {
-  const displayedTags = tags.slice(0, MAX_TAGS)
-  const hasMoreTags = tags.length > MAX_TAGS
-
+// One scrollable line of tag chips, it fits the single column on every width
+export function TagsRow({ tags }: TagsRowProps) {
   return (
-    <ViewAnimation
-      className='lg:hidden'
-      delay={0.05}
-      initial={{ opacity: 0, translateY: -6 }}
-      whileInView={{ opacity: 1, translateY: 0 }}
-    >
-      <Accordion>
-        <AccordionItem className='border-0 px-3 py-2.5' value='tags'>
-          <AccordionTrigger className='!p-0 hover:no-underline'>
-            <span className='flex items-center gap-2 text-muted-foreground'>
-              <Icons.tag className='size-4' />
-              Browse by Tag
-            </span>
-          </AccordionTrigger>
-          <AccordionContent className='!h-auto pt-6'>
-            <div className='grid grid-cols-2 gap-px border border-border border-dashed bg-border'>
-              {displayedTags.map((tag, index) => (
-                <ViewAnimation
-                  delay={0.05 * index}
-                  initial={{ opacity: 0 }}
-                  key={tag.name}
-                  whileInView={{ opacity: 1 }}
-                >
-                  <Link
-                    className='flex items-center justify-between bg-background p-3 text-muted-foreground text-sm transition-colors hover:bg-card/80'
-                    href={`/blog/tags/${tag.name}`}
-                  >
-                    <span>{tag.name}</span>
-                    <span className='text-xs'>({tag.count})</span>
-                  </Link>
-                </ViewAnimation>
-              ))}
-            </div>
-            <Link
-              className='group mt-3 flex items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground'
-              href='/blog/tags'
-            >
-              {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}
-              <Icons.arrowRight className='icon-arrow size-4' />
-            </Link>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </ViewAnimation>
-  )
-}
-
-export function TagsSidebar({ tags }: TagsSidebarProps) {
-  const displayedTags = tags.slice(0, MAX_TAGS)
-  const hasMoreTags = tags.length > MAX_TAGS
-
-  return (
-    <div className='sticky top-14 flex w-full flex-col divide-y divide-dashed divide-border self-start lg:min-h-[calc(100vh-22rem)]'>
-      <ViewAnimation initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
-        <div className='flex h-10 items-center gap-2 px-3'>
-          <Icons.tag className='icon-pop size-4 text-muted-foreground' />
-          <span className='font-medium text-muted-foreground text-sm'>
-            Tags
-          </span>
-        </div>
-      </ViewAnimation>
-      <div className='flex flex-col divide-y divide-dashed divide-border'>
-        {displayedTags.map((tag, index) => (
-          <ViewAnimation
-            delay={0.05 * index}
-            initial={{ opacity: 0 }}
-            key={tag.name}
-            whileInView={{ opacity: 1 }}
-          >
-            <Link
-              className={cn(
-                'group flex items-center justify-between px-4 py-2 text-sm transition-colors',
-                'text-muted-foreground hover:bg-card/80'
-              )}
-              href={`/blog/tags/${tag.name}`}
-            >
-              <span className='transition-transform group-hover:translate-x-0.5'>
-                {tag.name}
-              </span>
-              <span className='text-xs'>({tag.count})</span>
-            </Link>
-          </ViewAnimation>
-        ))}
-        <ViewAnimation
-          delay={0.05 * displayedTags.length}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+    <div className='no-scrollbar flex items-center gap-1.5 overflow-x-auto px-4 py-2'>
+      <Icons.tag className='mr-1 size-3.5 shrink-0 text-muted-foreground' />
+      {tags.slice(0, MAX_TAGS).map((tag) => (
+        <Link
+          className='inline-flex shrink-0 items-center gap-1 rounded-md border border-line px-2 py-0.5 font-mono text-muted-foreground text-xs transition-colors hover:border-primary/40 hover:text-foreground'
+          href={`/blog/tags/${tag.name}`}
+          key={tag.name}
         >
-          <Link
-            className='group flex items-center gap-2 px-4 py-2 text-muted-foreground text-sm transition-colors hover:bg-card/80 hover:text-foreground'
-            href='/blog/tags'
-          >
-            {hasMoreTags ? `View all ${tags.length} tags` : 'View all tags'}
-            <Icons.arrowRight className='icon-arrow size-4' />
-          </Link>
-        </ViewAnimation>
-      </div>
+          {tag.name}
+          <span className='text-muted-foreground/60'>{tag.count}</span>
+        </Link>
+      ))}
+      <Link
+        className='group ml-auto inline-flex shrink-0 items-center gap-1 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+        href='/blog/tags'
+      >
+        All tags
+        <Icons.arrowRight className='size-3 transition-transform group-hover:translate-x-0.5' />
+      </Link>
     </div>
   )
 }

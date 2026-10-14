@@ -13,13 +13,14 @@ export const Section = ({
   className,
   ...props
 }: SectionProps) => (
-  <section className={sectionClassName} {...props}>
+  <section className={sectionClassName} data-slot='section' {...props}>
     <div className='container relative mx-auto'>
       <div
         className={cn(
           'screen-line-top screen-line-bottom border-line border-x',
           className
         )}
+        data-slot='section-inner'
       >
         {children}
       </div>

@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
-import { TagCard } from '@/components/features/blog'
+import Link from 'next/link'
+import { Icons } from '@/components/icons/icons'
 import { CollectionPageJsonLd } from '@/components/json-ld'
-import { SectionBody } from '@/components/layout/sections/body'
+import { Section } from '@/components/layout/sections'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
 import { title as homeTitle } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
-import { getTags } from '@/lib/source'
+import { getPostsByTag, getTags } from '@/lib/source'
 import { Hero } from './_components/hero'
 
 export default function Page() {
@@ -15,34 +16,30 @@ export default function Page() {
   return (
     <Wrapper>
       <Hero />
-      <SectionBody>
-        <div className='grid grid-cols-1 divide-y divide-dashed divide-border sm:grid-cols-2 lg:grid-cols-4'>
+      <Section>
+        <div className='flex flex-wrap gap-2 p-4'>
           {tags.map((tag, index) => (
             <ViewAnimation
-              className='size-full'
-              delay={0.05 * index}
-              initial={{ opacity: 0 }}
+              delay={0.03 * index}
+              initial={{ opacity: 0, translateY: -4 }}
               key={tag}
-              whileInView={{ opacity: 1 }}
+              whileInView={{ opacity: 1, translateY: 0 }}
             >
-              <TagCard
-                className='size-full items-center justify-start gap-2 rounded-none border-r border-dashed bg-card/50 p-6 hover:bg-card/80'
-                displayCount
-                name={tag}
-              />
+              <Link
+                className='group inline-flex items-center gap-2 rounded-lg border border-line bg-card/40 px-3 py-1.5 font-mono text-sm transition-[color,border-color,transform] hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary active:scale-95'
+                data-sound-hover
+                href={`/blog/tags/${tag}`}
+              >
+                <Icons.tag className='size-3.5 text-muted-foreground transition-transform group-hover:-rotate-12 group-hover:text-primary' />
+                {tag}
+                <span className='text-muted-foreground text-xs'>
+                  {getPostsByTag(tag).length}
+                </span>
+              </Link>
             </ViewAnimation>
           ))}
-          {tags.length % 2 === 1 && (
-            <ViewAnimation
-              delay={0.05 * tags.length}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-            >
-              <div className='size-full border-border border-dashed bg-dashed sm:border-b' />
-            </ViewAnimation>
-          )}
         </div>
-      </SectionBody>
+      </Section>
       <CollectionPageJsonLd
         description='Browse blog posts by topic.'
         path='/blog/tags'
