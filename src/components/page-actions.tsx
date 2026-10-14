@@ -1,7 +1,7 @@
 'use client'
 
 import { useSound } from '@web-kits/audio/react'
-import { useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CopyStateIcon } from '@/components/copy-button'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -99,10 +99,12 @@ export function ViewOptions({
   markdownUrl,
   githubUrl,
   disabled = false,
+  menuWidth,
 }: {
   markdownUrl: string
   githubUrl: string
   disabled?: boolean
+  menuWidth?: number
 }) {
   const items = useMemo(() => {
     const fullMarkdownUrl = markdownUrl
@@ -121,11 +123,6 @@ export function ViewOptions({
         title: 'Open in GitHub',
       },
       {
-        href: `https://scira.ai/?${new URLSearchParams({ q })}`,
-        icon: Icons.scira,
-        title: 'Open in Scira AI',
-      },
-      {
         href: `https://chatgpt.com/?${new URLSearchParams({ hints: 'search', q })}`,
         icon: Icons.openai,
         title: 'Open in ChatGPT',
@@ -134,11 +131,6 @@ export function ViewOptions({
         href: `https://claude.ai/new?${new URLSearchParams({ q })}`,
         icon: Icons.claude,
         title: 'Open in Claude',
-      },
-      {
-        href: `https://t3.chat/new?${new URLSearchParams({ q })}`,
-        icon: Icons.messageCircle,
-        title: 'Open in T3 Chat',
       },
     ]
   }, [githubUrl, markdownUrl])
@@ -158,14 +150,22 @@ export function ViewOptions({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
-        className='w-full max-w-full'
+        className='max-w-none gap-0.5 rounded-xl p-1.5'
         onCloseAutoFocus={(e) => e.preventDefault()}
+        style={menuWidth ? { width: menuWidth } : undefined}
       >
         {items.map(({ title, href, icon: Icon }) => (
-          <DropdownMenuItem asChild key={href}>
+          <DropdownMenuItem
+            asChild
+            className='group/item gap-2.5 rounded-lg p-1.5 pr-2 font-medium'
+            key={href}
+          >
             <a href={href} rel='noopener' target='_blank'>
-              <Icon />
-              {title}
+              <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border transition-colors group-focus/item:bg-background'>
+                <Icon className='size-4' />
+              </span>
+              <span className='truncate'>{title}</span>
+              <Icons.arrowUpRight className='ml-auto size-3.5 -translate-x-1 text-muted-foreground opacity-0 transition-[opacity,transform] duration-150 group-focus/item:translate-x-0 group-focus/item:opacity-100' />
             </a>
           </DropdownMenuItem>
         ))}
@@ -182,15 +182,30 @@ export function LLMCopyButtonWithViewOptions({
   githubUrl: string
 }) {
   const { state, isCopying, handleCopy } = useMarkdownCopy(markdownUrl)
+  const groupRef = useRef<HTMLDivElement>(null)
+  const [menuWidth, setMenuWidth] = useState<number>()
+
+  useEffect(() => {
+    const group = groupRef.current
+    if (!group) {
+      return
+    }
+    const observer = new ResizeObserver(([entry]) =>
+      setMenuWidth(entry?.borderBoxSize[0]?.inlineSize)
+    )
+    observer.observe(group)
+    return () => observer.disconnect()
+  }, [])
 
   return (
-    <ButtonGroup className='w-full min-w-0'>
+    <ButtonGroup className='w-full min-w-0' ref={groupRef}>
       <LLMCopyButton isCopying={isCopying} onClick={handleCopy} state={state} />
       <ButtonGroupSeparator className='border-secondary border-y-4 data-vertical:my-0 dark:bg-white/20' />
       <ViewOptions
         disabled={isCopying}
         githubUrl={githubUrl}
         markdownUrl={markdownUrl}
+        menuWidth={menuWidth}
       />
     </ButtonGroup>
   )
