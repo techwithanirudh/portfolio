@@ -41,6 +41,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       url: '/search',
     },
+    robots: { follow: false, index: false },
     title: 'Search',
   })
 }

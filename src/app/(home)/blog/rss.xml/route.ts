@@ -2,7 +2,7 @@ import { Feed } from 'feed'
 import { baseUrl } from '@/constants'
 import { description, owner, title } from '@/constants/site'
 import { getBlogPageImage } from '@/lib/metadata'
-import { getPosts } from '@/lib/source'
+import { getSortedByDatePosts } from '@/lib/source'
 
 export const dynamic = 'force-static'
 
@@ -17,28 +17,31 @@ const escapeForXML = (str: string): string =>
 export const GET = () => {
   const feed = createFeed()
 
-  return new Response(feed.atom1(), {
+  return new Response(feed.rss2(), {
     headers: {
-      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+      'Content-Type': 'application/rss+xml; charset=utf-8',
     },
   })
 }
 
 function createFeed(): Feed {
+  const posts = getSortedByDatePosts()
+  const latest = posts[0]?.data
   const feed = new Feed({
     copyright: `All rights reserved ${new Date().getFullYear()}, ${owner}`,
     description,
     favicon: new URL('/favicon.ico', baseUrl).href,
     feed: new URL('/blog/rss.xml', baseUrl).href,
+    feedLinks: { rss: new URL('/blog/rss.xml', baseUrl).href },
     id: baseUrl.href,
     image: new URL('/banner.png', baseUrl).href,
     language: 'en',
     link: baseUrl.href,
     title,
-    updated: new Date(),
+    updated: latest?.lastModified ?? latest?.date,
   })
 
-  const posts = getPosts()
   for (const post of posts) {
     feed.addItem({
       author: [
@@ -47,7 +50,8 @@ function createFeed(): Feed {
           // link: new URL('/about', baseUrl).href,
         },
       ],
-      date: post.data.date,
+      category: post.data.tags?.map((name) => ({ name })),
+      date: post.data.lastModified ?? post.data.date,
       description: post.data.description,
       image: {
         title: post.data.title,
@@ -57,6 +61,7 @@ function createFeed(): Feed {
         ),
       },
       link: new URL(post.url, baseUrl).href,
+      published: post.data.date,
       title: post.data.title,
     })
   }

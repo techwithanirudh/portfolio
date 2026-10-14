@@ -116,6 +116,7 @@ export async function generateMetadata(props: {
         ? new Date(page.data.lastModified).toISOString()
         : new Date(page.data.date).toISOString(),
       publishedTime: new Date(page.data.date).toISOString(),
+      tags: page.data.tags,
       type: 'article',
       url: `/blog/${page.slugs.join('/')}`,
     },
