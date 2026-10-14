@@ -6,6 +6,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import Analytics from '@/components/analytics'
 import { Assistant, AssistantTrigger } from '@/components/features/assistant'
+import { SignInModalProvider } from '@/components/features/auth'
 import { MobileNav } from '@/components/layout/header/mobile'
 import { Oiia, OiiaProvider, useOiiaMode } from '@/components/oiia'
 import { SmoothCursor } from '@/components/smooth-cursor'
@@ -43,7 +44,9 @@ export function Provider({
             stopDelay={200}
           >
             <TooltipProvider>
-              <NuqsAdapter>{children}</NuqsAdapter>
+              <SignInModalProvider>
+                <NuqsAdapter>{children}</NuqsAdapter>
+              </SignInModalProvider>
             </TooltipProvider>
           </ProgressProvider>
           <AssistantTrigger />

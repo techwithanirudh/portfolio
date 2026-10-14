@@ -1,8 +1,8 @@
 'use client'
 
 import { Comments } from '@fuma-comment/react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useSignInModal } from '@/components/features/auth'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,7 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { getLoginUrl } from '@/lib/auth-client'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
@@ -100,13 +99,13 @@ export function PostComments({
   slug: string
   className?: string
 }) {
-  const router = useRouter()
+  const signInModal = useSignInModal()
 
   return (
     <Comments
       auth={{
         signIn: () => {
-          router.push(getLoginUrl(`/blog/${slug}`))
+          signInModal.open(`/blog/${slug}`)
         },
         type: 'api',
       }}

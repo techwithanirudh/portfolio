@@ -18,7 +18,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -38,15 +37,15 @@ interface AccountSettingsProps {
 
 export function AccountSettings({ user }: AccountSettingsProps) {
   return (
-    <Card className='dashed-stack' variant='flat'>
-      <div className='flex items-center justify-between p-4 sm:p-6'>
+    <div className='divide-y divide-dashed divide-border'>
+      <div className='flex items-center justify-between p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Avatar</span>
           <UserAvatar className='size-16' user={user} />
         </div>
       </div>
 
-      <div className='flex items-center justify-between p-4 sm:p-6'>
+      <div className='flex items-center justify-between p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Display Name</span>
           <span className='text-sm'>{user.name || 'No name set'}</span>
@@ -54,20 +53,20 @@ export function AccountSettings({ user }: AccountSettingsProps) {
         <EditNameDialog name={user.name ?? ''} />
       </div>
 
-      <div className='p-4 sm:p-6'>
+      <div className='p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Email</span>
           <span className='text-sm'>{user.email}</span>
         </div>
       </div>
 
-      <div className='p-4 sm:p-6'>
+      <div className='p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Account Created</span>
           <span className='text-sm'>{formatAccountDate(user.createdAt)}</span>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }
 

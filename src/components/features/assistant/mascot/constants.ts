@@ -1,3 +1,8 @@
+import type {
+  MascotAvatarName,
+  MascotMood,
+} from '@/app/api/chat/utils/tools/animate-mascot'
+
 interface Animations {
   bye: string
   idle: readonly string[]
@@ -33,4 +38,30 @@ export const animations: Animations = {
   show: 'Show',
   submit: 'Books',
   tool: 'Searching',
+}
+
+export const moodAnimations: Record<
+  MascotAvatarName,
+  Record<MascotMood, string>
+> = {
+  rocky: {
+    celebrate: 'Congratulate',
+    'get-attention': 'GetAttention',
+    greet: 'Greeting',
+    'look-up': 'LookUp',
+    search: 'Searching',
+    surprised: 'Alert',
+    think: 'Thinking',
+    write: 'Writing',
+  },
+  rover: {
+    celebrate: 'Congratulate',
+    'get-attention': 'GetAttention',
+    greet: 'Greet',
+    'look-up': 'LookUp',
+    search: 'Searching',
+    surprised: 'Surprised',
+    think: 'Thinking',
+    write: 'Writing',
+  },
 }
