@@ -19,7 +19,6 @@ async function createNextConfig(): Promise<NextConfig> {
       // TypeScript 7 dropped the compiler API Next.js reaches for directly, so
       // it has to shell out to tsc instead.
       useTypeScriptCli: true,
-      viewTransition: true,
     },
     images: {
       dangerouslyAllowSVG: true,
