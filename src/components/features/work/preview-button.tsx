@@ -23,14 +23,23 @@ export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
   const faviconUrl = `https://www.google.com/s2/favicons?domain=${displayUrl}&sz=32`
 
   return (
-    <HoverCard closeDelay={120} openDelay={180}>
-      <HoverCardTrigger asChild>
-        <Button asChild size='sm' variant='secondary'>
-          <Link href={href} rel='noopener noreferrer' target='_blank'>
-            {icon}
-            {label}
-          </Link>
-        </Button>
+    <HoverCard>
+      <HoverCardTrigger
+        closeDelay={120}
+        delay={180}
+        render={
+          <Button
+            nativeButton={false}
+            render={
+              <Link href={href} rel='noopener noreferrer' target='_blank' />
+            }
+            size='sm'
+            variant='secondary'
+          />
+        }
+      >
+        {icon}
+        {label}
       </HoverCardTrigger>
       {preview && (
         <HoverCardContent className='not-prose w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden border-dashed bg-card p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>

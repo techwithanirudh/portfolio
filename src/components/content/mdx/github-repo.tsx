@@ -98,20 +98,24 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
     const linkLabel = label ?? details.name
 
     return (
-      <HoverCard closeDelay={120} openDelay={120}>
-        <HoverCardTrigger asChild>
-          <a
-            className={cn(
-              'not-prose inline-flex items-center gap-1.5 text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              className
-            )}
-            href={details.url}
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
-            <span>{linkLabel}</span>
-          </a>
+      <HoverCard>
+        <HoverCardTrigger
+          closeDelay={120}
+          delay={120}
+          render={
+            <a
+              className={cn(
+                'not-prose inline-flex items-center gap-1.5 text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                className
+              )}
+              href={details.url}
+              rel='noopener noreferrer'
+              target='_blank'
+            />
+          }
+        >
+          <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
+          <span>{linkLabel}</span>
         </HoverCardTrigger>
         <HoverCardContent className='not-prose w-96 max-w-[calc(100vw-2rem)] border-dashed p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
           <div className='flex flex-col bg-card/60'>

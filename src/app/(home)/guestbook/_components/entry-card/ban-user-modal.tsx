@@ -32,10 +32,7 @@ export const BanUserModal = ({
 
   return (
     <Dialog onOpenChange={isBusy ? undefined : onOpenChange} open={isOpen}>
-      <DialogContent
-        onEscapeKeyDown={isBusy ? (e) => e.preventDefault() : undefined}
-        onPointerDownOutside={isBusy ? (e) => e.preventDefault() : undefined}
-      >
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>{isBanned ? 'Unban user?' : 'Ban user?'}</DialogTitle>
           <DialogDescription>

@@ -145,28 +145,31 @@ export function ViewOptions({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label='View Options'
-          className='size-8 border-none shadow-none active:scale-none'
-          disabled={disabled}
-          size='icon-sm'
-          variant='secondary'
-        >
-          <Icons.chevronDown className='mt-0.5 size-4' />
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            aria-label='View Options'
+            className='size-8 border-none shadow-none active:scale-none'
+            disabled={disabled}
+            size='icon-sm'
+            variant='secondary'
+          />
+        }
+      >
+        <Icons.chevronDown className='mt-0.5 size-4' />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
         className='w-full max-w-full'
-        onCloseAutoFocus={(e) => e.preventDefault()}
+        finalFocus={false}
       >
         {items.map(({ title, href, icon: Icon }) => (
-          <DropdownMenuItem asChild key={href}>
-            <a href={href} rel='noopener' target='_blank'>
-              <Icon />
-              {title}
-            </a>
+          <DropdownMenuItem
+            key={href}
+            render={<a href={href} rel='noopener' target='_blank' />}
+          >
+            <Icon />
+            {title}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

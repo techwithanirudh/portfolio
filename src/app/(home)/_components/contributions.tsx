@@ -52,21 +52,19 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
           >
             {({ activity, dayIndex, weekIndex }) => (
               <Tooltip>
-                <TooltipTrigger asChild>
-                  <g>
-                    <ContributionGraphBlock
-                      activity={activity}
-                      className={cn(
-                        'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-                        'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-                        'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-                        'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
-                        'cursor-pointer'
-                      )}
-                      dayIndex={dayIndex}
-                      weekIndex={weekIndex}
-                    />
-                  </g>
+                <TooltipTrigger render={<g />}>
+                  <ContributionGraphBlock
+                    activity={activity}
+                    className={cn(
+                      'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
+                      'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
+                      'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
+                      'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
+                      'cursor-pointer'
+                    )}
+                    dayIndex={dayIndex}
+                    weekIndex={weekIndex}
+                  />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className='font-semibold'>{activity.date}</p>

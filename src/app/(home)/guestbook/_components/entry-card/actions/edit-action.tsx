@@ -16,17 +16,19 @@ export const EditActionButton = ({
   onClick,
 }: EditActionButtonProps) => (
   <Tooltip>
-    <TooltipTrigger asChild>
-      <Button
-        aria-label='Edit entry'
-        disabled={disabled}
-        onClick={onClick}
-        shape='square'
-        size='icon'
-        variant='ghost'
-      >
-        <Icons.pencil className='size-4' />
-      </Button>
+    <TooltipTrigger
+      render={
+        <Button
+          aria-label='Edit entry'
+          disabled={disabled}
+          onClick={onClick}
+          shape='square'
+          size='icon'
+          variant='ghost'
+        />
+      }
+    >
+      <Icons.pencil className='size-4' />
     </TooltipTrigger>
     <TooltipContent>Edit entry</TooltipContent>
   </Tooltip>

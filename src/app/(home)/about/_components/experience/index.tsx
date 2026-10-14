@@ -26,11 +26,15 @@ export default function Experience(): React.ReactElement {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <Button asChild className='w-fit' size='sm' variant='default'>
-              <a href='/resume.pdf' rel='noopener' target='_blank'>
-                Resume
-                <Icons.download className='inline-block' />
-              </a>
+            <Button
+              className='w-fit'
+              nativeButton={false}
+              render={<a href='/resume.pdf' rel='noopener' target='_blank' />}
+              size='sm'
+              variant='default'
+            >
+              Resume
+              <Icons.download className='inline-block' />
             </Button>
           </ViewAnimation>
         </SplitSectionHeader>

@@ -59,10 +59,12 @@ const ErrorPage = ({ error }: { error: Error }) => {
               </code>
             </div>
           </details>
-          <Button asChild className='mt-2 w-fit'>
-            <Link aria-label='Go back home' href='/'>
-              Go home
-            </Link>
+          <Button
+            className='mt-2 w-fit'
+            nativeButton={false}
+            render={<Link aria-label='Go back home' href='/' />}
+          >
+            Go home
           </Button>
         </div>
       </div>
