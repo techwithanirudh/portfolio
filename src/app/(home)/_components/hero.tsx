@@ -129,6 +129,7 @@ const Hero = () => (
               buttonVariants({ size: 'lg', variant: 'default' }),
               'rounded-full font-mono'
             )}
+            data-sound-hover
             href='/work'
           >
             see_work

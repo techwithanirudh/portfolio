@@ -33,7 +33,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
-import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
+import { click, collapse, keyPress, notification } from '@/lib/audio/mechanical'
 import { signOut, useSession } from '@/lib/auth-client'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 

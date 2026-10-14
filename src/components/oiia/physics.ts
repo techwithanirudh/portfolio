@@ -1,4 +1,5 @@
-import { defineSound, ensureReady } from '@web-kits/audio'
+import type { SoundDefinition } from '@web-kits/audio'
+import { playSound } from '@/lib/audio/preferences'
 
 const GIF = 'https://media.tenor.com/8VuZc8I8f7EAAAAj/oiia-cat.gif'
 const INITIAL = 5
@@ -41,11 +42,11 @@ export interface OiiaEngine {
   destroy: () => void
 }
 
-const playBoing = defineSound({
+const boingSound: SoundDefinition = {
   envelope: { attack: 0, decay: 0.28, release: 0, sustain: 0 },
   gain: 0.12,
   source: { frequency: { end: 220, start: 700 }, type: 'sine' },
-})
+}
 
 let lastBoingAt = 0
 function boing() {
@@ -54,11 +55,7 @@ function boing() {
     return
   }
   lastBoingAt = now
-  ensureReady()
-    .then(() => playBoing())
-    .catch(() => {
-      // Browsers can reject audio until a trusted user gesture has occurred.
-    })
+  playSound(boingSound)
 }
 
 export function createOiiaEngine(

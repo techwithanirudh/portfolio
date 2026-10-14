@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { UserButton } from '@/components/features/auth'
 import { Clock } from '@/components/layout/footer/clock'
+import { SoundToggle } from '@/components/layout/footer/sound-toggle'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
@@ -61,6 +62,7 @@ export const Footer = () => (
         </p>
         <div className='flex items-center gap-2'>
           <Clock />
+          <SoundToggle />
           <ThemeToggle mode='light-dark-system' />
         </div>
       </div>

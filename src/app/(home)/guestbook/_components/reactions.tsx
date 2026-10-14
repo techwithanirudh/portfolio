@@ -16,7 +16,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { error, pop } from '@/lib/audio/minimal'
+import { error, pop } from '@/lib/audio/mechanical'
 import { cn } from '@/lib/utils'
 import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'

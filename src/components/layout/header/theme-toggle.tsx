@@ -6,7 +6,7 @@ import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
-import { toggleOn } from '@/lib/audio/minimal'
+import { toggleOn } from '@/lib/audio/mechanical'
 import { cn } from '@/lib/utils'
 
 type Theme = 'light' | 'dark' | 'system'

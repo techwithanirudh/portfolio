@@ -6,7 +6,7 @@ import { useWebHaptics } from 'web-haptics/react'
 import {
   error as errorSound,
   success as successSound,
-} from '@/lib/audio/minimal'
+} from '@/lib/audio/mechanical'
 
 export type CopyState = 'idle' | 'done' | 'error'
 

@@ -16,7 +16,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { tap } from '@/lib/audio/minimal'
+import { tap } from '@/lib/audio/mechanical'
 
 // The header icon is the current avatar, and opens a menu to switch it
 export function AvatarMenu() {

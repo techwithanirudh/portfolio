@@ -1,6 +1,8 @@
 'use client'
 
 import { CLICKS_TO_ENABLE, useOiiaMode } from '@/components/oiia'
+import { tap } from '@/lib/audio/mechanical'
+import { playSound } from '@/lib/audio/preferences'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
@@ -19,6 +21,10 @@ export function HeroName() {
         )}
         onClick={() => {
           const result = registerClick()
+          // Each click lands a semitone higher, like winding something up
+          playSound(tap, {
+            detune: (CLICKS_TO_ENABLE - result.remaining) * 100,
+          })
           if (result.remaining > 0) {
             const clicksDone = CLICKS_TO_ENABLE - result.remaining
             if (clicksDone > 3) {

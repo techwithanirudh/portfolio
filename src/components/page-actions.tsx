@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
-import { copy as copySound } from '@/lib/audio/minimal'
+import { copy as copySound } from '@/lib/audio/mechanical'
 
 const cache = new Map<string, string>()
 

@@ -12,6 +12,8 @@ import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { UiSounds } from '@/components/ui-sounds'
+import { useSoundEnabled } from '@/lib/audio/preferences'
 
 // Hide the regular smooth cursor while OIIA mode is active
 function SmartCursor() {
@@ -27,8 +29,11 @@ export function Provider({
 }: {
   children: ReactNode
 }): React.ReactElement {
+  const soundEnabled = useSoundEnabled()
+
   return (
-    <SoundProvider>
+    <SoundProvider enabled={soundEnabled}>
+      <UiSounds />
       <OiiaProvider>
         <Assistant>
           <ProgressProvider

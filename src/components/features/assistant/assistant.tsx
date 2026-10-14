@@ -51,7 +51,7 @@ import {
   success,
   tap,
   toggleOn,
-} from '@/lib/audio/minimal'
+} from '@/lib/audio/mechanical'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'

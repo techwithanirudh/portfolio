@@ -18,7 +18,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
-import { error, pop } from '@/lib/audio/minimal'
+import { error, pop } from '@/lib/audio/mechanical'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 

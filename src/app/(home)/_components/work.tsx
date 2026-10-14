@@ -34,6 +34,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
             <li>
               <Link
                 className='group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-card sm:px-6'
+                data-sound-hover
                 href={work.url}
               >
                 {work.data.image ? (
