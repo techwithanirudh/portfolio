@@ -4,17 +4,29 @@ import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
 import { useAssistantContext } from '@/components/features/assistant/assistant'
 import { useMascot } from '@/components/features/assistant/mascot'
-import { animations } from '@/components/features/assistant/mascot/constants'
+import {
+  type AvatarName,
+  animations,
+  avatarMeta,
+} from '@/components/features/assistant/mascot/constants'
 import { playAnimation } from '@/components/features/assistant/mascot/utils'
 
-const getPosition = () => ({
-  x: window.innerWidth - 90,
-  y: window.innerHeight - 100,
-})
+// Matches the panel's right-4 inset so the dog lines up with it
+const EDGE_OFFSET = 16
+
+// Avatars have different frame sizes, and the element has no size until it
+// is shown, so anchor by the known frame size
+const getPosition = (avatar: AvatarName) => {
+  const [width, height] = avatarMeta[avatar].frame
+  return {
+    x: window.innerWidth - EDGE_OFFSET - width,
+    y: window.innerHeight - EDGE_OFFSET - height,
+  }
+}
 
 function InnerTrigger() {
   const { setOpen } = useAssistantContext()
-  const { agent } = useMascot()
+  const { agent, avatar } = useMascot()
 
   useEffect(() => {
     if (!agent) {
@@ -38,9 +50,12 @@ function InnerTrigger() {
     agent._onQueueEmpty = onQueueEmpty
     agent._queue._onEmptyCallback = onQueueEmpty
 
-    const { x, y } = getPosition()
-    agent._el.style.left = `${x}px`
-    agent._el.style.top = `${y}px`
+    const place = () => {
+      const { x, y } = getPosition(avatar)
+      agent._el.style.left = `${x}px`
+      agent._el.style.top = `${y}px`
+    }
+    place()
     agent._el.style.zIndex = '45'
     agent.show(true)
 
@@ -50,20 +65,14 @@ function InnerTrigger() {
       setOpen((prev) => !prev)
     }
 
-    const handleResize = () => {
-      const { x, y } = getPosition()
-      agent._el.style.left = `${x}px`
-      agent._el.style.top = `${y}px`
-    }
-
     agent._el.addEventListener('click', handleClick)
-    window.addEventListener('resize', handleResize)
+    window.addEventListener('resize', place)
 
     return () => {
       agent._el.removeEventListener('click', handleClick)
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', place)
     }
-  }, [agent, setOpen])
+  }, [agent, avatar, setOpen])
 
   return null
 }

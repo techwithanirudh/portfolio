@@ -38,6 +38,35 @@ export const animations: Animations = {
 export const avatarNames = ['rover', 'rocky'] as const
 export type AvatarName = (typeof avatarNames)[number]
 
+export const defaultAvatar: AvatarName = 'rover'
+
+// Sprite sheet details let the UI show an avatar's first frame as an icon
+export const avatarMeta: Record<
+  AvatarName,
+  {
+    description: string
+    frame: readonly [number, number]
+    label: string
+    sheet: readonly [number, number]
+    sprite: string
+  }
+> = {
+  rocky: {
+    description: 'Laid-back tech dog with a taste for wizardry.',
+    frame: [124, 93],
+    label: 'Rocky',
+    sheet: [3472, 3348],
+    sprite: '/assets/clippy/rocky/rocky.png',
+  },
+  rover: {
+    description: 'The classic search pup. Loyal, a little goofy.',
+    frame: [80, 80],
+    label: 'Rover',
+    sheet: [2160, 2160],
+    sprite: '/assets/clippy/rover.png',
+  },
+}
+
 export const moodNames = [
   'greet',
   'celebrate',

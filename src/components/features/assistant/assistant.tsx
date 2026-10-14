@@ -28,6 +28,7 @@ import {
   getToolsRequiringConfirmation,
   type ToolName,
 } from '@/app/api/chat/utils/tools/confirmation'
+import { AvatarMenu } from '@/components/features/assistant/avatar-menu'
 import {
   MascotProvider,
   useMascot,
@@ -118,12 +119,17 @@ export function Assistant({ children }: { children: ReactNode }) {
 function Header() {
   const { setOpen, chat, setContext } = useAssistantContext()
   const playNewChat = useSound(toggleOn)
+  const isMobile = useIsMobile()
 
   return (
     <div className='sticky top-0 flex h-10 items-start'>
       <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
         <div className='flex items-center gap-2'>
-          <Icons.pawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
+          {isMobile ? (
+            <Icons.pawPrint className='size-4 text-fd-primary' />
+          ) : (
+            <AvatarMenu />
+          )}
           <p className='font-medium text-sm'>Ask Simba</p>
         </div>
       </div>

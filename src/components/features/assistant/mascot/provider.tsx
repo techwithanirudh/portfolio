@@ -3,9 +3,8 @@
 import type { initAgent } from 'clippyjs'
 import {
   createContext,
-  type Dispatch,
   type ReactNode,
-  type SetStateAction,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -13,7 +12,18 @@ import {
   useState,
 } from 'react'
 import { avatars } from './agents'
-import type { AvatarName } from './constants'
+import { type AvatarName, avatarNames, defaultAvatar } from './constants'
+
+const avatarStorageKey = '__mascot_avatar'
+
+function readStoredAvatar(): AvatarName {
+  try {
+    const stored = localStorage.getItem(avatarStorageKey)
+    return avatarNames.find((name) => name === stored) ?? defaultAvatar
+  } catch {
+    return defaultAvatar
+  }
+}
 
 export type MascotAgent = Awaited<ReturnType<typeof initAgent>>
 
@@ -21,7 +31,7 @@ const MascotContext = createContext<
   | {
       agent: MascotAgent | undefined
       avatar: AvatarName
-      setAvatar: Dispatch<SetStateAction<AvatarName>>
+      setAvatar: (avatar: AvatarName) => void
     }
   | undefined
 >(undefined)
@@ -40,9 +50,18 @@ interface MascotProviderProps {
 }
 
 export function MascotProvider({ children, disabled }: MascotProviderProps) {
-  const [avatar, setAvatar] = useState<AvatarName>('rover')
+  const [avatar, setAvatarState] = useState<AvatarName>(readStoredAvatar)
   const [currentAgent, setCurrentAgent] = useState<MascotAgent | undefined>()
   const instance = useRef<MascotAgent | null>(null)
+
+  const setAvatar = useCallback((next: AvatarName) => {
+    setAvatarState(next)
+    try {
+      localStorage.setItem(avatarStorageKey, next)
+    } catch {
+      // storage can be blocked, the avatar just won't persist
+    }
+  }, [])
 
   useEffect(() => {
     if (disabled) {
@@ -104,7 +123,7 @@ export function MascotProvider({ children, disabled }: MascotProviderProps) {
 
   const value = useMemo(
     () => ({ agent: currentAgent, avatar, setAvatar }),
-    [currentAgent, avatar]
+    [currentAgent, avatar, setAvatar]
   )
 
   return (
