@@ -405,6 +405,37 @@ function TextInput(props: ComponentProps<'textarea'>) {
   )
 }
 
+function SuggestionChip({ text }: { text: string }) {
+  const { chat } = useAssistantContext()
+  const { agent } = useMascot()
+  const playSend = useSound(send)
+
+  return (
+    <button
+      className={cn(
+        buttonVariants({
+          className: 'rounded-none border border-dashed text-xs',
+          color: 'secondary',
+          size: 'sm',
+        })
+      )}
+      onClick={() => {
+        playSubmitAnimation(agent)
+        playSend()
+        chat.sendMessage({
+          parts: [
+            { data: { location: window.location.href }, type: 'data-client' },
+            { text, type: 'text' },
+          ],
+        })
+      }}
+      type='button'
+    >
+      {text}
+    </button>
+  )
+}
+
 const roleName: Record<string, string> = {
   assistant: 'assistant',
   user: 'you',
@@ -468,6 +499,7 @@ function MessageList({
               heya! im simba, anirudh's dog. i can answer questions about him,
               his work, or the site.
             </p>
+            <SuggestionChip text='do a trick' />
           </div>
         ) : (
           messages.map((item, idx) => (
