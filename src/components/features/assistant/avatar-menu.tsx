@@ -28,11 +28,11 @@ export function AvatarMenu() {
       <DropdownMenuTrigger
         aria-label='Change avatar'
         className='rounded-sm transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-fd-ring'
+        data-native-cursor
       >
         <AvatarIcon avatar={avatar} size={24} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='start' className='z-[60] w-64'>
-        <DropdownMenuLabel>Choose an avatar</DropdownMenuLabel>
         <DropdownMenuRadioGroup
           onValueChange={(value) => {
             playTap()
@@ -40,6 +40,8 @@ export function AvatarMenu() {
           }}
           value={avatar}
         >
+          {/* Base UI requires group labels to live inside a group */}
+          <DropdownMenuLabel>Choose an avatar</DropdownMenuLabel>
           {avatarNames.map((name) => (
             <DropdownMenuRadioItem className='gap-3' key={name} value={name}>
               <AvatarIcon avatar={name} size={32} />
