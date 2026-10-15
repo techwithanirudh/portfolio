@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 // Matches public/images/portrait.svg, which is the same drawing minus the eyes
 const VIEW_BOX = '-29 -29 1005 1218'
 // How far (in SVG units) the eyes can drift towards the cursor
-const MAX_OFFSET = 18
+const MAX_OFFSET = 24
 // Cursor distance (in px) at which the eyes reach MAX_OFFSET
 const REACH = 320
 
