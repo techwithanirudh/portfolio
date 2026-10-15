@@ -69,6 +69,7 @@ export const work = defineCollections({
      * without it falls in behind, newest first.
      */
     order: z.number().optional(),
+    tags: z.array(z.string()).optional(),
     website: z.string().optional(),
   }),
   type: 'doc',
