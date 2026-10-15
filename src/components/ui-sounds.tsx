@@ -1,8 +1,7 @@
 'use client'
 
 import type { PlayOptions } from '@web-kits/audio'
-import { usePathname } from 'next/navigation'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import {
   checkbox,
   click,
@@ -11,7 +10,6 @@ import {
   expand,
   hover as hoverSound,
   keyPress,
-  pageEnter,
   send,
   tabSwitch,
   tap,
@@ -111,17 +109,6 @@ const playSubmit = (form: HTMLFormElement) => {
 // the same tactile feedback, so new components get sound without wiring it up.
 // Components that play their own sound simply are not links, tabs or switches.
 export function UiSounds() {
-  const pathname = usePathname()
-  const previousPath = useRef(pathname)
-
-  useEffect(() => {
-    if (previousPath.current === pathname) {
-      return
-    }
-    previousPath.current = pathname
-    playSound(pageEnter, jitter(20, 0.05))
-  }, [pathname])
-
   useEffect(() => {
     let lastHover = 0
     let lastHovered: Element | null = null
