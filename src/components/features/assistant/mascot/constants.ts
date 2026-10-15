@@ -10,7 +10,7 @@ type FullPose = (typeof fullPoses)[number]
 type Muzzle = 'neutral' | 'smile' | 'surprise'
 
 // A rig pose moves the seated Simba's parts; a full pose swaps in a whole
-// drawing (lying down, standing) and crossfades to it
+// drawing (lying down, standing) and pops into it
 export type Pose =
   | {
       head: number

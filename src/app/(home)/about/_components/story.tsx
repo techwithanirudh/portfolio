@@ -9,15 +9,21 @@ import { ViewAnimation } from '@/components/view-animation'
 const chapters = [
   {
     body: [
-      'It started with Lego. I built, broke and rebuilt whatever I could think of, and the rebuilding was always the fun part.',
+      'It started with tinkering. Arduino sketches, the Atal Tinkering Lab at school, and competitions like ATL Tinkerpreneur, Bosch and HCL Jigsaw. I also ran a game server, which taught me more about keeping things alive than any class did.',
     ],
-    title: 'Lego first',
+    title: 'Tinkering first',
   },
   {
     body: [
-      "Lego turned into code. I moved from robots and gadgets to websites and apps, and I'm self-taught the whole way, mostly by shipping things and fixing the bugs that taught me more than any tutorial did.",
+      'My oldest repo is Gork, a Discord bot from August 2022 that tries a little too hard to talk like a human. It grew up into Gorkie for Slack, sandboxes and all, and somewhere along the way I stopped calling it a hobby.',
     ],
     title: 'Then code',
+  },
+  {
+    body: [
+      "Lately that's Depensa, a finance app I've pushed around 1,500 commits into since March. In between I take side quests, like a Swift app that bridges my TV remote over HDMI-CEC, or restyling Proxmox because the default UI bugged me.",
+    ],
+    title: 'Shipping things',
   },
   {
     body: [
@@ -27,7 +33,7 @@ const chapters = [
   },
   {
     body: [
-      "Away from the keyboard there's Simba, a very good dog and the one answering questions in the corner of this site.",
+      "Away from the keyboard there's Simba, a very good dog and the one answering questions in the corner of this site. There's also a home lab that's always half rebuilt, a 3D printer, and a microwave mug cake recipe I will defend.",
     ],
     title: 'Off the keyboard',
   },

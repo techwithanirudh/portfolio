@@ -50,6 +50,13 @@ const LinkCard = ({
   </Link>
 )
 
+const stats = [
+  { label: 'Writing code since', value: '2022' },
+  { label: 'Commits, give or take', value: '2,600+' },
+  { label: 'Repos worth keeping', value: '16' },
+  { label: 'Mostly in', value: 'TypeScript' },
+]
+
 const recentActivity = async () => {
   try {
     return (await getActivityItems()).slice(0, 4)
@@ -82,6 +89,16 @@ export default async function More(): Promise<React.ReactElement> {
           <span className='text-muted-foreground text-sm'>
             Working on IST, usually with something compiling in the background.
           </span>
+        </Card>
+        <Card label='By the numbers'>
+          <dl className='grid grid-cols-2 gap-3'>
+            {stats.map(({ label, value }) => (
+              <div key={label}>
+                <dt className='text-muted-foreground text-xs'>{label}</dt>
+                <dd className='font-medium font-mono tabular-nums'>{value}</dd>
+              </div>
+            ))}
+          </dl>
         </Card>
         <LinkCard
           description='The hardware, apps and tools I use every day.'
