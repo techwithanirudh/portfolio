@@ -14,8 +14,10 @@ export default function ExperiencePreview() {
   return (
     <Panel id='experience'>
       <PanelHeader>
-        <PanelTitle>Experience</PanelTitle>
-        <PanelTitleSup>({experiences.length})</PanelTitleSup>
+        <PanelTitle>
+          Experience
+          <PanelTitleSup>({experiences.length})</PanelTitleSup>
+        </PanelTitle>
       </PanelHeader>
       <WorkExperience experiences={experiences.slice(0, previewCount)} />
       <PanelButton href='/about#experience'>View all experience</PanelButton>

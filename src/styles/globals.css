@@ -616,3 +616,22 @@ html > body[data-scroll-locked] {
     transform: rotate(10deg);
   }
 }
+
+/* Printing /resume: only the resume sheet, on white paper */
+@media print {
+  @page {
+    margin: 12mm;
+    size: A4;
+  }
+
+  html:has([data-resume]),
+  body:has([data-resume]) {
+    color-scheme: light;
+    background: #fff !important;
+  }
+
+  body:has([data-resume])
+    *:not([data-resume], [data-resume] *, :has([data-resume])) {
+    display: none !important;
+  }
+}

@@ -24,7 +24,7 @@ If you're curious, my journey began with Lego sets as a kid, building, breaking,
 - Name: ${owner}
 - Display Name: ${title}
 - Website: ${baseUrl.toString()}
-- Resume: ${url('/resume.pdf')}
+- Resume: ${url('/resume')}
 
 ## Social Links
 

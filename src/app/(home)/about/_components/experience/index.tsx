@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { WorkExperience } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
 import {
@@ -21,7 +22,7 @@ export default function Experience(): React.ReactElement {
             <Button
               className='h-full px-5 ring-0 active:scale-100 active:opacity-90'
               nativeButton={false}
-              render={<a href='/resume.pdf' rel='noopener' target='_blank' />}
+              render={<Link href='/resume' />}
               shape='square'
               variant='default'
             >

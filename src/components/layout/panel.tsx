@@ -48,7 +48,7 @@ export function PanelTitleSup({ className, ...props }: ComponentProps<'sup'>) {
   return (
     <sup
       className={cn(
-        '-top-[0.75em] ml-1 font-mono text-muted-foreground text-xs tracking-normal',
+        '-top-[0.9em] ml-0.5 font-mono text-muted-foreground text-xs tracking-normal',
         className
       )}
       {...props}
