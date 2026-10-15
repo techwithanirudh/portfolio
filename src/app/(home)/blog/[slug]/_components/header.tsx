@@ -1,8 +1,8 @@
-// adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
-import * as motion from 'motion/react-client'
-import { ViewTransition } from 'react'
+import Link from 'next/link'
+import { type ReactNode, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { TagCard } from '@/components/features/blog'
+import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage as MDXPage } from '@/lib/source'
@@ -10,97 +10,105 @@ import type { BlogPage as MDXPage } from '@/lib/source'
 const formatPostDate = (date: Date) =>
   date.toLocaleDateString('en-US', {
     day: 'numeric',
-    month: 'long',
+    month: 'short',
     year: 'numeric',
   })
 
 interface HeaderProps {
+  actions?: ReactNode
   page: MDXPage
   tags?: string[]
 }
 
-export const Header = ({ page, tags }: HeaderProps) => {
+// Post heading after chanhdai.com's doc pages (MIT, (c) Chanh Dai): back link,
+// title between full-width lines, description, then the meta row and cover.
+export const Header = ({ page, tags, actions }: HeaderProps) => {
   const image = page.data.image
-  const formattedDate = formatPostDate(page.data.date)
+  const lastModified = page.data.lastModified
+    ? new Date(page.data.lastModified)
+    : null
 
   return (
-    <Section>
-      <FrameDecoration />
-      <div className='relative h-[280px] overflow-clip md:h-[420px] lg:h-[600px]'>
-        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
-          {image && (
+    <Section className='screen-line-top-none'>
+      <div className='flex items-center justify-between gap-2 px-4 py-2.5'>
+        <Link
+          className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+          href='/blog'
+        >
+          <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
+          Blog
+        </Link>
+        {actions && <div className='flex items-center gap-2'>{actions}</div>}
+      </div>
+
+      <ViewTransition
+        name={`blog/${page.slugs.join('/')}-title`}
+        share='via-blur'
+      >
+        <h1 className='screen-line-top screen-line-bottom text-balance px-4 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
+          {page.data.title ?? 'Untitled'}
+        </h1>
+      </ViewTransition>
+
+      {page.data.description && (
+        <p className='screen-line-bottom text-balance p-4 text-muted-foreground'>
+          {page.data.description}
+        </p>
+      )}
+
+      <dl className='screen-line-bottom flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2 font-mono text-muted-foreground text-xs'>
+        <div className='flex gap-1.5'>
+          <dt className='sr-only'>Written by</dt>
+          <dd>{page.data.author ?? 'Anirudh'}</dd>
+        </div>
+        <div className='flex gap-1.5'>
+          <dt className='sr-only'>Published</dt>
+          <dd>
+            <time dateTime={new Date(page.data.date).toISOString()}>
+              {formatPostDate(new Date(page.data.date))}
+            </time>
+          </dd>
+        </div>
+        {lastModified && (
+          <div className='flex gap-1.5'>
+            <dt>updated</dt>
+            <dd>
+              <time dateTime={lastModified.toISOString()}>
+                {formatPostDate(lastModified)}
+              </time>
+            </dd>
+          </div>
+        )}
+        {tags?.length ? (
+          <div className='ml-auto flex flex-wrap gap-1.5'>
+            <dt className='sr-only'>Tags</dt>
+            {tags.map((tag) => (
+              <dd key={tag}>
+                <TagCard className='h-6 px-2 text-xs' name={tag} />
+              </dd>
+            ))}
+          </div>
+        ) : null}
+      </dl>
+
+      {image && (
+        <ViewAnimation
+          blur={false}
+          initial={{ opacity: 0, scale: 0.99 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+        >
+          <div className='p-2'>
             <BlurImage
               alt={page.data.title ?? 'Blog cover image'}
-              className='absolute inset-0 h-full w-full'
+              className='relative aspect-[2/1] w-full overflow-hidden rounded-xl border border-line'
               fill
               imageClassName='object-cover'
-              sizes='(min-width: 1024px) 800px, 100vw'
+              sizes='(min-width: 768px) 768px, 100vw'
               src={image}
             />
-          )}
-          <div
-            className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent'
-            style={{ viewTransitionName: 'none' }}
-          />
-          <div className='relative z-5 mt-auto p-8 md:p-16'>
-            {tags?.length ? (
-              <div className='mb-4 hidden gap-2 md:flex md:flex-wrap'>
-                {tags.map((tag, index) => (
-                  <ViewAnimation
-                    delay={0.1 + index * 0.05}
-                    initial={{ opacity: 0, translateY: -6 }}
-                    key={tag}
-                    whileInView={{ opacity: 1, translateY: 0 }}
-                  >
-                    <TagCard
-                      className='border border-white/60 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
-                      name={tag}
-                    />
-                  </ViewAnimation>
-                ))}
-              </div>
-            ) : null}
-            <div className='mb-4 space-y-4 text-balance'>
-              <ViewTransition
-                name={`blog/${page.slugs.join('/')}-title`}
-                share='via-blur'
-              >
-                <h1 className='typography-hero max-w-2xl text-balance font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
-                  {page.data.title ?? 'Untitled'}
-                </h1>
-              </ViewTransition>
-              <p className='typography-body hidden max-w-3xl text-pretty text-slate-100 leading-8 md:block dark:text-foreground/85'>
-                {page.data.description ?? ''}
-              </p>
-            </div>
-            <motion.div
-              animate={{ opacity: 1 }}
-              className='flex items-center gap-6 text-slate-200 text-xs dark:text-foreground/45'
-              initial={{ opacity: 0 }}
-              transition={{ delay: 0.3, duration: 0.3 }}
-            >
-              <span>{formattedDate}</span>
-            </motion.div>
           </div>
-        </div>
-      </div>
+        </ViewAnimation>
+      )}
     </Section>
   )
 }
-
-const FrameDecoration = () => (
-  <>
-    <span className='absolute top-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:top-12 dark:bg-white/15' />
-    <span className='absolute bottom-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:bottom-12 dark:bg-white/15' />
-    <span className='absolute left-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:left-12 dark:bg-white/15' />
-    <span className='absolute right-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:right-12 dark:bg-white/15' />
-    <span className='absolute top-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute top-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute top-12 right-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute top-[44.5px] right-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute bottom-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute bottom-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute right-[44.5px] bottom-12 z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute right-[48px] bottom-[44.5px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
-  </>
-)

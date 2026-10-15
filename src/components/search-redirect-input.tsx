@@ -42,11 +42,11 @@ export function SearchRedirectInput({
   return (
     <InputGroup
       className={cn(
-        '!bg-background h-10 overflow-hidden rounded-none border-0 shadow-none',
+        '!bg-background focus-within:!bg-card/60 h-12 overflow-hidden rounded-none border-0 pr-2 shadow-none ring-0! transition-colors',
         className
       )}
     >
-      <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
+      <InputGroupAddon className='border-0 pl-4 text-muted-foreground'>
         <Icons.search className='icon-turn size-4' />
       </InputGroupAddon>
       <InputGroupInput

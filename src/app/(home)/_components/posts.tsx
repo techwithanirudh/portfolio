@@ -17,7 +17,7 @@ export default function Posts({
     <Section
       {...props}
       className={cn(
-        'flex flex-col divide-y divide-dashed divide-border',
+        'flex flex-col divide-y divide-dashed divide-line',
         className
       )}
     >
@@ -32,9 +32,13 @@ export default function Posts({
           tag='blog'
         />
       </ViewAnimation>
-      <div className='grid divide-y divide-dashed divide-border text-left'>
+      <div className='grid divide-y divide-dashed divide-line text-left'>
         {posts.map((post, index) => {
-          const date = new Date(post.data.date).toDateString()
+          const date = new Date(post.data.date).toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric',
+          })
           return (
             <ViewAnimation
               delay={0.05 * index}

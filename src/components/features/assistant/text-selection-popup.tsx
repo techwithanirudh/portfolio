@@ -126,10 +126,7 @@ export function TextSelectionPopup({ children }: { children: ReactNode }) {
         the separators back on the sections themselves. `divide-y` skips the
         last child, so the rule above the footer is restored explicitly.
       */}
-      <div
-        className='contents divide-y divide-dashed divide-border [&>:last-child]:border-border [&>:last-child]:border-b [&>:last-child]:border-dashed'
-        ref={containerRef}
-      >
+      <div className='contents' ref={containerRef}>
         {children}
       </div>
       {popup &&

@@ -1,5 +1,6 @@
 import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
@@ -12,11 +13,9 @@ import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { SectionBody } from '@/components/layout/sections/body'
-import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
 import { getWork, getWorkPages, type WorkPage as MDXPage } from '@/lib/source'
-import { cn } from '@/lib/utils'
 
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
 
@@ -41,67 +40,58 @@ function Header(props: { page: MDXPage }) {
   }
 
   return (
-    <Section className='p-4 lg:p-6'>
-      <div
-        className={cn(
-          'flex flex-col items-start justify-center gap-4 py-8 md:gap-6',
-          'sm:items-center sm:rounded-lg sm:border sm:bg-card sm:p-10 sm:shadow-xs'
-        )}
-      >
-        {page.data.image && (
-          <ViewTransition
-            name={`${page.slugs.join('/')}-image`}
-            share={transition}
-          >
-            <BlurImage
-              alt={page.data.title ?? 'Work cover image'}
-              blur={false}
-              className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
-              fill
-              imageClassName='object-cover'
-              lazy={false}
-              sizes={WORK_COVER_SIZES}
-              src={page.data.image}
-            />
-          </ViewTransition>
-        )}
-        <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
-          <ViewTransition
-            name={`${page.slugs.join('/')}-title`}
-            share={transition}
-          >
-            <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-              {page.data.title ?? 'Untitled'}
-            </h1>
-          </ViewTransition>
-          <ViewTransition
-            name={`${page.slugs.join('/')}-description`}
-            share={transition}
-          >
-            <p className='typography-body mx-auto text-pretty'>
-              {page.data.description ?? ''}
-            </p>
-          </ViewTransition>
-        </div>
+    <Section className='screen-line-top-none'>
+      <div className='flex flex-wrap items-center justify-between gap-2 px-4 py-2.5'>
+        <Link
+          className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+          href='/work'
+        >
+          <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
+          Work
+        </Link>
         {links.length > 0 && (
-          <ViewAnimation
-            delay={0.1}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <div className='flex flex-wrap gap-3'>
-              {links.map((link) => (
-                <PreviewButton
-                  href={link.href}
-                  icon={link.icon}
-                  key={link.href}
-                  label={link.label}
-                />
-              ))}
-            </div>
-          </ViewAnimation>
+          <div className='flex flex-wrap gap-2'>
+            {links.map((link) => (
+              <PreviewButton
+                href={link.href}
+                icon={link.icon}
+                key={link.href}
+                label={link.label}
+              />
+            ))}
+          </div>
         )}
       </div>
+      <ViewTransition name={`${page.slugs.join('/')}-title`} share={transition}>
+        <h1 className='screen-line-top screen-line-bottom text-balance px-4 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
+          {page.data.title ?? 'Untitled'}
+        </h1>
+      </ViewTransition>
+      <ViewTransition
+        name={`${page.slugs.join('/')}-description`}
+        share={transition}
+      >
+        <p className='screen-line-bottom text-pretty p-4 text-muted-foreground'>
+          {page.data.description ?? ''}
+        </p>
+      </ViewTransition>
+      {page.data.image && (
+        <ViewTransition
+          name={`${page.slugs.join('/')}-image`}
+          share={transition}
+        >
+          <BlurImage
+            alt={page.data.title ?? 'Work cover image'}
+            blur={false}
+            className='relative aspect-video w-full border-line border-b bg-card/50'
+            fill
+            imageClassName='object-cover'
+            lazy={false}
+            sizes={WORK_COVER_SIZES}
+            src={page.data.image}
+          />
+        </ViewTransition>
+      )}
     </Section>
   )
 }

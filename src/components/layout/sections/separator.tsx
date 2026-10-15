@@ -1,17 +1,19 @@
 import { cn } from '@/lib/utils'
-import { Section } from './index'
 
 interface SeparatorProps {
   className?: string
+  /** Kept for older call sites, the band is always hatched. */
   variant?: 'dashed' | 'transparent'
 }
 
-const Separator = ({ className, variant = 'dashed' }: SeparatorProps) => (
-  <Section sectionClassName='max-sm:hidden'>
+// Hatched band between panels
+const Separator = ({ className }: SeparatorProps) => (
+  <div className='container mx-auto'>
     <div
-      className={cn('h-8', variant === 'dashed' && 'bg-dashed', className)}
+      aria-hidden
+      className={cn('h-8 border-line border-x bg-dashed', className)}
     />
-  </Section>
+  </div>
 )
 
 export default Separator

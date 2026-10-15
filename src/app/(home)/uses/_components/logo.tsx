@@ -42,7 +42,7 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
       >
         <Image
           alt={alt}
-          className='rounded-lg object-contain'
+          className='object-contain'
           fill
           sizes={`${size}px`}
           src={logo}
@@ -58,14 +58,14 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
     >
       <Image
         alt={alt}
-        className='rounded object-contain dark:hidden'
+        className='object-contain dark:hidden'
         fill
         sizes={`${size}px`}
         src={logo.light}
       />
       <Image
         alt={alt}
-        className='hidden rounded object-contain dark:block'
+        className='hidden object-contain dark:block'
         fill
         sizes={`${size}px`}
         src={logo.dark}

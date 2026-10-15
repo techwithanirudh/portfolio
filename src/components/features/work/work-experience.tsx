@@ -4,9 +4,10 @@ import { Briefcase01Icon, Infinity01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { type ComponentProps, useCallback, useRef } from 'react'
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown, { type Components } from 'react-markdown'
 import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevrons-up-down'
 import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
+import { PreviewLink } from '@/components/preview-link'
 import { Prose } from '@/components/prose'
 import {
   Collapsible,
@@ -31,6 +32,11 @@ export type {
   WorkExperienceProps,
 } from '@/types/experience'
 
+const markdownComponents: Components = {
+  a: ({ children, href }) =>
+    href ? <PreviewLink href={href}>{children}</PreviewLink> : children,
+}
+
 export function WorkExperience({
   className,
   experiences,
@@ -53,13 +59,13 @@ export function WorkExperience({
 
 export function ExperienceItem({ experience }: ExperienceItemProps) {
   return (
-    <div className='space-y-4 p-4'>
+    <div className='group/exp space-y-4 p-4'>
       <div className='not-prose flex items-center gap-3'>
         <div className='flex size-6 shrink-0 items-center justify-center'>
           {experience.companyLogo ? (
             <Image
               alt={experience.companyName}
-              className='size-6 rounded'
+              className='size-6 rounded transition-transform duration-300 ease-out group-hover/exp:-rotate-6 group-hover/exp:scale-110 motion-reduce:transition-none'
               height={24}
               src={experience.companyLogo}
               width={24}
@@ -71,14 +77,9 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
 
         <h3 className='font-semibold text-lg leading-snug'>
           {experience.companyWebsite ? (
-            <a
-              className='link'
-              href={experience.companyWebsite}
-              rel='noopener noreferrer'
-              target='_blank'
-            >
+            <PreviewLink className='link' href={experience.companyWebsite}>
               {experience.companyName}
-            </a>
+            </PreviewLink>
           ) : (
             experience.companyName
           )}
@@ -217,7 +218,9 @@ export function ExperiencePositionItem({
       <CollapsibleContent className='overflow-hidden'>
         {position.description && (
           <Prose className='pt-2 pl-9'>
-            <ReactMarkdown>{position.description}</ReactMarkdown>
+            <ReactMarkdown components={markdownComponents}>
+              {position.description}
+            </ReactMarkdown>
           </Prose>
         )}
       </CollapsibleContent>

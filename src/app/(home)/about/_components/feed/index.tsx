@@ -1,13 +1,11 @@
-import {
-  SplitSection,
-  SplitSectionContent,
-  SplitSectionHeader,
-  SplitSectionSidebar,
-} from '@/components/layout/sections/split'
+import { Section } from '@/components/layout/sections'
+import { SectionHeader } from '@/components/layout/sections/header'
+import Separator from '@/components/layout/sections/separator'
 import { ViewAnimation } from '@/components/view-animation'
-import { cn } from '@/lib/utils'
 import { getActivityItems } from './actions'
 import { GitHubEvent as GitHubEventComponent } from './event'
+
+const MAX_ITEMS = 12
 
 export default async function Feed(): Promise<React.ReactElement | null> {
   try {
@@ -17,37 +15,35 @@ export default async function Feed(): Promise<React.ReactElement | null> {
       return null
     }
 
+    // Brings its own trailing separator so an empty feed leaves no double band
     return (
-      <SplitSection cols='three'>
-        <SplitSectionSidebar background='dashed'>
-          <SplitSectionHeader
+      <>
+        <Section>
+          <SectionHeader
             description='Recent activity from my GitHub.'
-            sticky
-            title='Live Activity'
+            title='Activity'
           />
-        </SplitSectionSidebar>
-        <SplitSectionContent
-          className={cn(
-            'lg:col-span-2',
-            'relative flex max-w-full flex-col gap-2 overflow-x-auto font-mono text-muted-foreground text-xs',
-            'lg:overflow-visible lg:text-sm',
-            'lg:px-8'
-          )}
-          inset
-        >
-          {items.map((item, index) => (
-            <ViewAnimation
-              delay={0.05 * index}
-              initial={{ opacity: 0, translateY: -8 }}
-              key={item.event.id}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
-              <GitHubEventComponent commits={item.commits} event={item.event} />
-            </ViewAnimation>
-          ))}
-          <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
-        </SplitSectionContent>
-      </SplitSection>
+          {/* The mask fades whole rows out instead of laying a gradient over text */}
+          <ul className='mask-b-from-60% divide-y divide-dashed divide-line font-mono text-muted-foreground text-xs'>
+            {items.slice(0, MAX_ITEMS).map((item, index) => (
+              <ViewAnimation
+                delay={0.03 * index}
+                initial={{ opacity: 0, translateY: -4 }}
+                key={item.event.id}
+                whileInView={{ opacity: 1, translateY: 0 }}
+              >
+                <li className='group min-w-0 px-4 py-2 transition-colors hover:bg-card hover:text-foreground'>
+                  <GitHubEventComponent
+                    commits={item.commits}
+                    event={item.event}
+                  />
+                </li>
+              </ViewAnimation>
+            ))}
+          </ul>
+        </Section>
+        <Separator />
+      </>
     )
   } catch {
     return null

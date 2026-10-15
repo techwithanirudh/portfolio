@@ -1,10 +1,10 @@
 import type { Metadata, ResolvingMetadata } from 'next'
+import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
 import { PostCard } from '@/components/features/blog'
 import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
-import { SectionBody } from '@/components/layout/sections/body'
 import { HeroSection } from '@/components/layout/sections/hero'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { ViewAnimation } from '@/components/view-animation'
@@ -18,28 +18,6 @@ export const dynamicParams = false
 const totalPosts = (title: string) => getPostsByTag(title).length
 const pageCount = (title: string) => Math.ceil(totalPosts(title) / postsPerPage)
 
-const CurrentPostsCount = ({
-  startIndex,
-  endIndex,
-  tag,
-}: {
-  startIndex: number
-  endIndex: number
-  tag: string
-}) => {
-  const total = totalPosts(tag)
-  const start = startIndex + 1
-  const end = endIndex < total ? endIndex : total
-  if (start === end) {
-    return <span>({start})</span>
-  }
-  return (
-    <span>
-      ({start}-{end})
-    </span>
-  )
-}
-
 const Header = ({
   tag,
   startIndex,
@@ -48,25 +26,32 @@ const Header = ({
   tag: string
   startIndex: number
   endIndex: number
-}) => (
-  <HeroSection
-    align='start'
-    title={
-      <div className='flex items-center justify-between gap-4'>
+}) => {
+  const total = totalPosts(tag)
+  const end = Math.min(endIndex, total)
+  return (
+    <HeroSection
+      caption={
+        <Link
+          className='group inline-flex items-center gap-1.5 transition-colors hover:text-foreground'
+          href='/blog/tags'
+        >
+          <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
+          Tags
+        </Link>
+      }
+      description={`${total} ${total === 1 ? 'post' : 'posts'} tagged ${tag}${
+        total > end - startIndex ? `, showing ${startIndex + 1}-${end}` : ''
+      }.`}
+      title={
         <span className='flex items-center gap-2'>
-          <Icons.tag className='icon-tilt text-muted-foreground' size={20} />
-          {tag} <span className='text-muted-foreground'>Posts</span>{' '}
-          <CurrentPostsCount
-            endIndex={endIndex}
-            startIndex={startIndex}
-            tag={tag}
-          />
+          <Icons.tag className='size-6 text-primary' />
+          {tag}
         </span>
-      </div>
-    }
-    variant='compact'
-  />
-)
+      }
+    />
+  )
+}
 
 const Pagination = ({ pageIndex, tag }: { pageIndex: number; tag: string }) => {
   const handlePageChange = async (page: number) => {
@@ -75,7 +60,7 @@ const Pagination = ({ pageIndex, tag }: { pageIndex: number; tag: string }) => {
   }
 
   return (
-    <Section className='bg-dashed'>
+    <Section>
       <NumberedPagination
         currentPage={pageIndex + 1}
         onPageChange={handlePageChange}
@@ -111,10 +96,14 @@ export default async function Page(props: {
   return (
     <>
       <Header endIndex={endIndex} startIndex={startIndex} tag={tag} />
-      <SectionBody>
-        <div className='grid divide-y divide-dashed divide-border text-left'>
+      <Section>
+        <div className='grid divide-y divide-dashed divide-line text-left'>
           {posts.map((post, index) => {
-            const date = new Date(post.data.date).toDateString()
+            const date = new Date(post.data.date).toLocaleDateString('en-US', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+            })
             return (
               <ViewAnimation
                 delay={0.05 * index}
@@ -134,7 +123,7 @@ export default async function Page(props: {
             )
           })}
         </div>
-      </SectionBody>
+      </Section>
       {pageCount(tag) > 1 && <Pagination pageIndex={pageIndex} tag={tag} />}
       <TagJsonLd tag={tag} />
     </>

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
-import { copy as copySound } from '@/lib/audio/minimal'
+import { copy as copySound } from '@/lib/audio/mechanical'
 
 const cache = new Map<string, string>()
 
@@ -78,6 +78,7 @@ export function LLMCopyButton({
     <Button
       aria-busy={isCopying}
       className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
+      data-sound-press='off'
       disabled={isCopying}
       onClick={onClick}
       size='sm'
@@ -166,7 +167,7 @@ export function ViewOptions({
               <Icon className='size-4' />
             </span>
             <span className='truncate'>{title}</span>
-            <Icons.arrowUpRight className='ml-auto size-3.5 -translate-x-1 text-muted-foreground opacity-0 transition-[opacity,transform] duration-150 group-focus/item:translate-x-0 group-focus/item:opacity-100' />
+            <Icons.arrowUpRight className='ml-auto size-3.5 -translate-x-1 text-muted-foreground opacity-0 transition-[opacity,translate] duration-150 group-focus/item:translate-x-0 group-focus/item:opacity-100' />
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

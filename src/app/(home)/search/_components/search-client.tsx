@@ -21,8 +21,8 @@ import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
 const ItemBadge = ({ label }: { label: string }) => (
-  <span className='pointer-events-none absolute inset-y-0 right-5 flex items-center'>
-    <span className='rounded-full border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
+  <span className='pointer-events-none absolute inset-y-0 right-4 flex items-center'>
+    <span className='border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground uppercase tracking-wide'>
       {label}
     </span>
   </span>
@@ -92,8 +92,8 @@ export function SearchClient() {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none'>
-              <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
+            <InputGroup className='!bg-background h-12 rounded-none border-0 border-line border-b shadow-none'>
+              <InputGroupAddon className='border-0 pl-4 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
               <InputGroupInput
@@ -105,7 +105,10 @@ export function SearchClient() {
                 value={search}
               />
               {search.length > 0 && (
-                <InputGroupAddon align='inline-end' className='pr-3'>
+                <InputGroupAddon
+                  align='inline-end'
+                  className='pr-4 font-mono text-xs tabular-nums'
+                >
                   {resultCount} results
                 </InputGroupAddon>
               )}
@@ -116,7 +119,7 @@ export function SearchClient() {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <div className='flex w-full flex-wrap justify-between divide-x divide-dashed divide-border border-border border-y border-dashed'>
+            <div className='flex w-full divide-x divide-line border-line border-b'>
               {tags.map((scopeOption) => {
                 const value = scopeOption.value ?? 'all'
                 const isActive = scopeParam === value
@@ -124,10 +127,10 @@ export function SearchClient() {
                   <button
                     aria-pressed={isActive}
                     className={cn(
-                      'inline-flex flex-1 items-center gap-2 p-2 px-3 text-sm transition-colors',
+                      'inline-flex h-10 flex-1 items-center justify-center font-mono text-xs lowercase transition-colors',
                       isActive
                         ? 'bg-card text-card-foreground'
-                        : 'bg-transparent text-muted-foreground hover:text-card-foreground'
+                        : 'bg-transparent text-muted-foreground hover:bg-card/80 hover:text-card-foreground'
                     )}
                     key={value}
                     onClick={() => {
@@ -148,20 +151,18 @@ export function SearchClient() {
             initial={{ opacity: 0, translateY: -6 }}
             whileInView={{ opacity: 1, translateY: 0 }}
           >
-            <div className='flex max-h-[460px] w-full flex-col overflow-y-auto p-1'>
-              <div className='py-12 text-center text-fd-muted-foreground text-sm'>
-                Start typing to search.
-              </div>
+            <div className='py-16 text-center font-mono text-muted-foreground text-xs'>
+              {'// start typing to search posts and work'}
             </div>
           </ViewAnimation>
         )}
         <SearchDialogList
-          className='[&>div]:!p-0'
+          className='[&>div]:!max-h-none [&>div]:!overflow-visible [&>div]:!p-0'
           data-lenis-prevent
           Item={({ item, onClick }) => (
             <div className='relative'>
               <SearchDialogListItem
-                className='rounded-none border-border border-b border-dashed px-3 py-3 last:border-b-0'
+                className='rounded-none border-line border-b px-4 py-3'
                 item={item}
                 onClick={onClick}
               />

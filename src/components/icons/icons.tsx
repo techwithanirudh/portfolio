@@ -107,6 +107,8 @@ import {
   CornerDownLeft,
   type LucideIcon,
   PawPrintIcon,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
 import type { ComponentProps } from 'react'
 import {
@@ -275,6 +277,8 @@ export const Icons = {
   v0: V0Icon,
   verified: hugeIcon(CheckmarkCircle01Icon),
   verifiedAdmin: hugeIcon(CheckmarkBadge02Icon),
+  volumeOff: lucideIcon(VolumeX),
+  volumeOn: lucideIcon(Volume2),
   warning: hugeIcon(Alert02Icon),
   work: hugeIcon(Briefcase02Icon),
   wrench: hugeIcon(Wrench01Icon),

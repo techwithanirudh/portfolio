@@ -4,12 +4,13 @@ import { useCommandState } from 'cmdk'
 import { Icons } from '@/components/icons/icons'
 import { Kbd } from '@/components/ui/kbd'
 import { COMMAND_META_MAP } from '@/constants/search'
+import { title } from '@/constants/site'
 import type { CommandKind } from '@/types/search'
 
-const ENTER_LABELS: Record<CommandKind, string> = {
-  command: 'Run Command',
-  link: 'Open Link',
-  page: 'Go to Page',
+const ENTER_ACTION_LABELS: Record<CommandKind, string> = {
+  command: 'Run command',
+  link: 'Open link',
+  page: 'Go to page',
 }
 
 export function CommandMenuFooter() {
@@ -18,13 +19,24 @@ export function CommandMenuFooter() {
   )
 
   return (
-    <div className='flex h-10 items-center justify-end px-3 font-medium text-xs max-sm:hidden'>
-      <div className='flex shrink-0 items-center gap-2'>
-        <span>{ENTER_LABELS[kind]}</span>
-        <Kbd data-icon='inline-end'>
-          <Icons.cornerDownLeft />
-        </Kbd>
+    <>
+      <div className='flex h-10' />
+
+      <div className='absolute inset-x-0 bottom-0 flex h-10 items-center justify-between gap-2 px-4 font-medium text-xs'>
+        <span
+          aria-hidden
+          className='font-heading text-muted-foreground text-sm tracking-tighter'
+        >
+          {title}
+        </span>
+
+        <div className='flex items-center gap-2 max-sm:hidden'>
+          <span>{ENTER_ACTION_LABELS[kind]}</span>
+          <Kbd>
+            <Icons.cornerDownLeft />
+          </Kbd>
+        </div>
       </div>
-    </div>
+    </>
   )
 }

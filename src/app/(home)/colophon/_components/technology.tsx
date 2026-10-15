@@ -1,3 +1,4 @@
+import { PreviewLink } from '@/components/preview-link'
 import { technology } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
@@ -15,29 +16,26 @@ export const Technology = () => {
   return (
     <div className={colophonGridClassName}>
       {technology.map((item, index) => {
-        const hasLink = Boolean(item.url)
-        const WrapperTag = hasLink ? 'a' : 'div'
-        const linkProps = hasLink
-          ? {
-              href: item.url,
-              rel: 'noopener noreferrer',
-              target: '_blank',
-            }
-          : {}
-
-        return (
-          <WrapperTag
-            className={cn(
-              'flex h-full flex-col gap-2 bg-card/50 p-6 text-left transition-colors',
-              colophonCardBorderClasses(index),
-              hasLink && 'hover:bg-card/80'
-            )}
-            key={item.name}
-            {...linkProps}
-          >
+        const className = cn(
+          'flex h-full flex-col gap-2 bg-card/50 p-6 text-left transition-colors',
+          colophonCardBorderClasses(index),
+          item.url && 'hover:bg-card/80'
+        )
+        const content = (
+          <>
             <h3 className='font-medium text-foreground text-sm'>{item.name}</h3>
             <p className='text-muted-foreground text-xs'>{item.description}</p>
-          </WrapperTag>
+          </>
+        )
+
+        return item.url ? (
+          <PreviewLink className={className} href={item.url} key={item.name}>
+            {content}
+          </PreviewLink>
+        ) : (
+          <div className={className} key={item.name}>
+            {content}
+          </div>
         )
       })}
       {fillerKeys.map((key, fillerIndex) => (

@@ -13,10 +13,10 @@ export function NewsletterSection() {
       <SplitSectionSidebar>
         <SplitSectionHeader
           description='Get notified when I publish new posts. No spam, unsubscribe anytime.'
-          title='Subscribe to the newsletter'
+          title='Newsletter'
         />
       </SplitSectionSidebar>
-      <SplitSectionContent inset>
+      <SplitSectionContent>
         <ViewAnimation
           className='flex size-full items-center'
           delay={0.15}

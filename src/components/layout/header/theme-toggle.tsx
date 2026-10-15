@@ -6,22 +6,19 @@ import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
-import { toggleOn } from '@/lib/audio/minimal'
+import { toggleOn } from '@/lib/audio/mechanical'
 import { cn } from '@/lib/utils'
 
 type Theme = 'light' | 'dark' | 'system'
 
-const itemVariants = cva(
-  'size-6.5 rounded-full p-1.5 text-fd-muted-foreground',
-  {
-    variants: {
-      active: {
-        false: 'text-fd-muted-foreground',
-        true: 'bg-fd-accent text-fd-accent-foreground',
-      },
+const itemVariants = cva('size-6.5 p-1.5 text-fd-muted-foreground', {
+  variants: {
+    active: {
+      false: 'text-fd-muted-foreground',
+      true: 'bg-fd-accent text-fd-accent-foreground',
     },
-  }
-)
+  },
+})
 
 const full = [
   ['light', Icons.sun] as const,
@@ -69,10 +66,7 @@ export function ThemeToggle({
     }
   }
 
-  const container = cn(
-    'inline-flex items-center rounded-full border p-1',
-    className
-  )
+  const container = cn('inline-flex items-center border p-1', className)
 
   if (mode === 'light-dark') {
     const value = mounted ? resolvedTheme : null
@@ -81,6 +75,7 @@ export function ThemeToggle({
       <button
         aria-label={'Toggle Theme'}
         className={container}
+        data-sound-press='off'
         data-theme-toggle=''
         onClick={() =>
           handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')

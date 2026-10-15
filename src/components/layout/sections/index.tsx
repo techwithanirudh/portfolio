@@ -1,38 +1,28 @@
 import type { HTMLAttributes } from 'react'
-import { Icons } from '@/components/icons/icons'
-import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 type SectionProps = {
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
-const Cross = () => (
-  <ViewAnimation
-    className='flex h-6 w-6 items-center justify-center'
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-  >
-    <Icons.add className='size-5 text-border/70 dark:text-border' />
-  </ViewAnimation>
-)
-
+// One column panel with side rules and lines that run the full screen width,
+// after chanhdai.com's Panel (MIT, (c) Chanh Dai)
 export const Section = ({
   children,
   sectionClassName,
   className,
   ...props
 }: SectionProps) => (
-  <section className={sectionClassName} {...props}>
+  <section className={sectionClassName} data-slot='section' {...props}>
     <div className='container relative mx-auto'>
-      <div className={cn('border-border border-dashed sm:border-x', className)}>
+      <div
+        className={cn(
+          'screen-line-top screen-line-bottom border-line border-x',
+          className
+        )}
+        data-slot='section-inner'
+      >
         {children}
-      </div>
-      <div className='absolute -bottom-3 -left-3 z-10 hidden h-6 sm:block'>
-        <Cross />
-      </div>
-      <div className='absolute -right-3 -bottom-3 z-10 hidden h-6 -translate-x-px sm:block'>
-        <Cross />
       </div>
     </div>
   </section>

@@ -7,31 +7,33 @@ import {
 } from '@/components/layout/sections/header'
 import { cn } from '@/lib/utils'
 
-const splitSectionVariants = cva('grid divide-y divide-dashed divide-border', {
+// The column is too narrow for side-by-side splits, so the sidebar stacks on
+// top and reads as the section header. `cols` stays for older call sites.
+const splitSectionVariants = cva('grid', {
   defaultVariants: {
     cols: 'two',
   },
   variants: {
     cols: {
-      three: 'lg:grid-cols-3 lg:divide-x lg:divide-y-0',
-      two: 'lg:grid-cols-2 lg:divide-x lg:divide-y-0',
+      three: '',
+      two: '',
     },
   },
 })
 
-const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
+const splitSectionSidebarVariants = cva('flex flex-col', {
   defaultVariants: {
     background: 'default',
     inset: true,
   },
   variants: {
     background: {
-      dashed: 'bg-dashed',
+      dashed: '',
       default: '',
     },
     inset: {
       false: '',
-      true: 'px-6 py-8',
+      true: '',
     },
   },
 })
@@ -93,7 +95,7 @@ const splitSectionContentVariants = cva('', {
   variants: {
     inset: {
       false: '',
-      true: 'px-6 py-8',
+      true: 'p-4',
     },
   },
 })

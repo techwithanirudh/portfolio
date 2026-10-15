@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { ProfilePageJsonLd } from '@/components/json-ld'
+import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { description as homeDescription } from '@/constants/site'
 import { getGitHubContributions } from '@/lib/github-contributions'
 import { createMetadata } from '@/lib/metadata'
 import { getSortedByDatePosts } from '@/lib/source'
+import Contact from '../_components/contact'
 import Contributions from '../_components/contributions'
-import CTA from '../_components/cta'
 import Skills from '../_components/skills'
 import Detailed from './_components/detailed'
 import Experience from './_components/experience'
@@ -35,12 +36,19 @@ export default function AboutPage() {
       <Wrapper>
         <Hero />
         <Detailed />
+        <Separator />
         <Skills />
+        <Separator />
         <Experience />
+        <Separator />
         <Contributions contributions={contributions} />
+        <Separator />
         <Updates posts={posts} />
+        <Separator />
         <Feed />
-        <CTA />
+        <div className='container mx-auto'>
+          <Contact />
+        </div>
       </Wrapper>
     </>
   )

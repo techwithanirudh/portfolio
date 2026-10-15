@@ -100,7 +100,7 @@ const PushEvent = ({
   }
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icons.gitCommit className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>{description}</div>
       <EventDate date={event.created_at ?? null} />
@@ -119,7 +119,7 @@ const PullRequestEvent = ({ event }: { event: GitHubEvent }) => {
     : `Merged ${title} on ${repoName}`
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icons.gitPullRequest className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>{description}</div>
       <EventDate date={event.created_at ?? null} />
@@ -144,7 +144,7 @@ const IssuesEvent = ({ event }: { event: GitHubEvent }) => {
   }
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icon className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>
         {event.actor?.login ?? 'Someone'} {action} {issueTitle} on{' '}
@@ -156,7 +156,7 @@ const IssuesEvent = ({ event }: { event: GitHubEvent }) => {
 }
 
 const PublicEvent = ({ event }: { event: GitHubEvent }) => (
-  <div className='flex items-center gap-4'>
+  <div className='flex min-w-0 items-center gap-3'>
     <Icons.feedPublic className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
     <div className='flex-1 truncate'>
       Open-sourced {getRepoName(event)} on GitHub
@@ -174,7 +174,7 @@ const IssueCommentEvent = ({ event }: { event: GitHubEvent }) => {
     : issueTitle
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icons.comment className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>Commented on {issueLabel}</div>
       <EventDate date={event.created_at ?? null} />
@@ -194,7 +194,7 @@ const CreateEvent = ({ event }: { event: GitHubEvent }) => {
   }
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icon className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>
         Created a {refType} on {getRepoName(event)}
@@ -210,7 +210,7 @@ const DeleteEvent = ({ event }: { event: GitHubEvent }) => {
   const Icon = refType === 'branch' ? Icons.gitBranch : Icons.gitTag
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icon className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>
         Deleted a {refType} on {getRepoName(event)}
@@ -221,7 +221,7 @@ const DeleteEvent = ({ event }: { event: GitHubEvent }) => {
 }
 
 const WatchEvent = ({ event }: { event: GitHubEvent }) => (
-  <div className='flex items-center gap-4'>
+  <div className='flex min-w-0 items-center gap-3'>
     <Icons.star className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
     <div className='flex-1 truncate'>Starred {getRepoName(event)}</div>
     <EventDate date={event.created_at ?? null} />
@@ -229,7 +229,7 @@ const WatchEvent = ({ event }: { event: GitHubEvent }) => (
 )
 
 const ForkEvent = ({ event }: { event: GitHubEvent }) => (
-  <div className='flex items-center gap-4'>
+  <div className='flex min-w-0 items-center gap-3'>
     <Icons.repoForked className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
     <div className='flex-1 truncate'>Forked {getRepoName(event)}</div>
     <EventDate date={event.created_at ?? null} />
@@ -244,7 +244,7 @@ const PullRequestReviewEvent = ({ event }: { event: GitHubEvent }) => {
   const label = number ? `${title} (#${number})` : title
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icons.gitPullRequest className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>Reviewed pull request {label}</div>
       <EventDate date={event.created_at ?? null} />
@@ -260,7 +260,7 @@ const PullRequestReviewCommentEvent = ({ event }: { event: GitHubEvent }) => {
   const label = number ? `${title} (#${number})` : title
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex min-w-0 items-center gap-3'>
       <Icons.gitPullRequest className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
       <div className='flex-1 truncate'>Commented on pull request {label}</div>
       <EventDate date={event.created_at ?? null} />
@@ -269,7 +269,7 @@ const PullRequestReviewCommentEvent = ({ event }: { event: GitHubEvent }) => {
 }
 
 const PullRequestReviewThreadEvent = ({ event }: { event: GitHubEvent }) => (
-  <div className='flex items-center gap-4'>
+  <div className='flex min-w-0 items-center gap-3'>
     <Icons.gitPullRequest className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />
     <div className='flex-1 truncate'>
       Marked a pull request thread as {event.payload?.action ?? 'resolved'} on{' '}

@@ -47,20 +47,33 @@
   --color-destructive-foreground: hsl(0 0% 98%);
 
   --color-border: var(--color-fd-border);
+  --color-line: var(--line);
   --color-input: var(--color-fd-border);
   --color-ring: var(--color-fd-ring);
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* an1rudh is all square: every radius token resolves to 0 */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
 
   /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-mono);
 }
 
 html {
   scrollbar-gutter: stable;
+}
+
+/* Screen lines reach 100vw past the column, clip (not hide) keeps sticky working */
+body {
+  overflow-x: clip;
 }
 
 html > body[data-scroll-locked] {
@@ -70,10 +83,16 @@ html > body[data-scroll-locked] {
 
 @layer base {
   :root {
-    --radius: 0.5rem;
+    --radius: 0px;
     --typography-hero-width: 56rem;
     --typography-title-width: 40rem;
     --typography-body-width: 60ch;
+    /* Softer than border, for the full-bleed screen lines */
+    --line: color-mix(
+      in oklab,
+      var(--color-fd-border) 70%,
+      var(--color-fd-background)
+    );
   }
 }
 
@@ -95,12 +114,31 @@ html > body[data-scroll-locked] {
   [id] {
     @apply scroll-mt-20;
   }
+
+  /* Mono headings are the brand; body copy stays in the readable sans. */
+  #main-content :is(h1, h2) {
+    font-family: var(--font-heading);
+    letter-spacing: -0.04em;
+  }
 }
 
 @theme {
   --color-fd-primary-foreground: hsl(0, 0%, 98%);
   --color-fd-primary: hsl(226, 55%, 45%);
   --color-fd-ring: hsl(0, 0%, 63.9%);
+
+  /* Portrait eyes, a quick blink every few seconds */
+  --animate-blink: blink 4.5s ease-in-out infinite;
+  @keyframes blink {
+    0%,
+    94%,
+    100% {
+      scale: 1 1;
+    }
+    97% {
+      scale: 1 0.1;
+    }
+  }
 }
 
 .dark {
@@ -162,7 +200,7 @@ html > body[data-scroll-locked] {
   padding-inline: 0rem;
   margin-inline: auto;
 
-  @apply 2xl:max-w-[1400px];
+  @apply max-w-3xl;
 }
 
 @utility link-underline {
@@ -264,16 +302,17 @@ html > body[data-scroll-locked] {
     @apply transition-transform hover:scale-125 will-change-transform;
   }
 
+  /* Icons also react when their row (a .group) is hovered */
   .icon-tilt {
-    @apply transition-transform hover:rotate-12 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:rotate-12 hover:scale-125 group-hover:rotate-12 group-hover:scale-125 will-change-transform;
   }
 
   .icon-tilt-reverse {
-    @apply transition-transform hover:-rotate-12 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:-rotate-12 hover:scale-125 group-hover:-rotate-12 group-hover:scale-125 will-change-transform;
   }
 
   .icon-turn {
-    @apply transition-transform hover:rotate-90 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:rotate-90 hover:scale-125 group-hover:rotate-90 group-hover:scale-125 will-change-transform;
   }
 
   .icon-arrow {
@@ -498,5 +537,82 @@ html > body[data-scroll-locked] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * Full-bleed horizontal rules that run past the column edges.
+ * Adapted from chanhdai.com (MIT, (c) Chanh Dai): github.com/ncdai/chanhdai.com
+ */
+@utility screen-line-top {
+  @apply relative;
+  &:before {
+    content: "";
+    @apply absolute top-0 left-[-100vw] -z-1 h-px w-[200vw] bg-line;
+  }
+}
+
+@utility screen-line-bottom {
+  @apply relative;
+  &:after {
+    content: "";
+    @apply absolute bottom-0 left-[-100vw] -z-1 h-px w-[200vw] bg-line;
+  }
+}
+
+@utility screen-dashed-line-top {
+  @apply screen-line-top;
+  &:before {
+    @apply bg-transparent bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
+  }
+}
+
+@utility screen-dashed-line-bottom {
+  @apply screen-line-bottom;
+  &:after {
+    @apply bg-transparent bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
+  }
+}
+
+/* Stacked sections and panels share one rule instead of drawing two lines
+   1px apart, and the first block under the header reuses the header's line */
+:is([data-slot="section"], [data-slot="panel"])
+  + [data-slot="section"]
+  > div
+  > [data-slot="section-inner"]::before,
+:is([data-slot="section"], [data-slot="panel"]) + [data-slot="panel"]::before,
+#main-content
+  [data-slot="section"]:first-child
+  > div
+  > [data-slot="section-inner"]::before {
+  content: none;
+}
+
+@utility screen-line-top-none {
+  @apply before:content-none;
+}
+
+@utility screen-line-bottom-none {
+  @apply after:content-none;
+}
+
+@keyframes wave {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10%,
+  30% {
+    transform: rotate(14deg);
+  }
+  20% {
+    transform: rotate(-8deg);
+  }
+  40% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(10deg);
   }
 }

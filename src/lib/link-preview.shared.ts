@@ -10,6 +10,11 @@ export interface LinkPreviewEntry {
   width: number
 }
 
+export type LinkPreviewImage = Pick<
+  LinkPreviewEntry,
+  'height' | 'screenshotPath' | 'width'
+>
+
 export interface LinkPreviewManifest {
   generated: string
   previews: Record<string, LinkPreviewEntry>

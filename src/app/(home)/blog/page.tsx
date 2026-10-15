@@ -3,7 +3,6 @@ import { notFound, redirect } from 'next/navigation'
 import Posts from '@/app/(home)/_components/posts'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
-import { SectionBody } from '@/components/layout/sections/body'
 import { Wrapper } from '@/components/layout/wrapper'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { postsPerPage } from '@/constants/config'
@@ -12,7 +11,7 @@ import { parsePageParam } from '@/lib/pagination'
 import { getPostsByTag, getSortedByDatePosts, getTags } from '@/lib/source'
 import { Hero } from './_components/hero'
 import { NewsletterSection } from './_components/newsletter-section'
-import { TagsAccordion, TagsSidebar } from './_components/tags-sidebar'
+import { TagsRow } from './_components/tags-sidebar'
 
 export const dynamicParams = false
 
@@ -34,7 +33,7 @@ const Pagination = ({ pageIndex }: { pageIndex: number }) => {
   }
 
   return (
-    <Section className='bg-dashed'>
+    <Section>
       <NumberedPagination
         currentPage={pageIndex + 1}
         onPageChange={handlePageChange}
@@ -66,21 +65,10 @@ export default async function Page(props: {
         startIndex={startIndex}
         totalPosts={totalPosts}
       />
-      <SectionBody>
-        <div className='grid h-full lg:grid-cols-[1fr_280px]'>
-          <div className='min-w-0 divide-y divide-dashed divide-border lg:border-border lg:border-r lg:border-dashed'>
-            <TagsAccordion tags={tags} />
-            <Posts
-              className='h-full border-none'
-              posts={posts}
-              sectionClassName='flex flex-1'
-            />
-          </div>
-          <aside className='hidden lg:block'>
-            <TagsSidebar tags={tags} />
-          </aside>
-        </div>
-      </SectionBody>
+      <Section>
+        <TagsRow tags={tags} />
+      </Section>
+      <Posts posts={posts} />
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <NewsletterSection />
       <CollectionPageJsonLd

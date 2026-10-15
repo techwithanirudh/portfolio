@@ -17,7 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { Label } from '@/components/ui/label'
 import {
   SignaturePad,
   type SignaturePadHandle,
@@ -26,8 +25,17 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { useSession } from '@/lib/auth-client'
 import { toast } from '@/lib/toast'
+import { cn } from '@/lib/utils'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
+
+// Flush, ruled form to match the contact form
+const fieldClassName = 'gap-0 border-line border-b'
+const textareaClassName =
+  'max-h-[20rem] min-h-[10rem] resize-y rounded-none border-0 bg-transparent px-4 py-3 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
+const hintClassName = 'border-line border-t px-4 py-2 text-xs'
+const buttonClassName =
+  'h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90'
 
 export const GuestbookForm = () => {
   const router = useRouter()
@@ -85,32 +93,26 @@ export const GuestbookForm = () => {
 
   if (isPending) {
     return (
-      <div className='w-full space-y-6'>
-        <div className='grid gap-2'>
-          <Skeleton className='h-3.5 w-16' />
-          <Skeleton className='h-40 w-full' />
-          <Skeleton className='h-5 w-36' />
-        </div>
-        <Skeleton className='h-9 w-full' />
+      <div className='flex w-full flex-col'>
+        <Skeleton className='h-40 w-full rounded-none' />
+        <Skeleton className='h-15 w-full rounded-none border-line border-t' />
       </div>
     )
   }
 
   if (!(user || isPending)) {
     return (
-      <div className='w-full space-y-6'>
-        <div className='grid gap-2'>
-          <Label>Message</Label>
-          <div className='flex h-40 items-center justify-center rounded-md border border-input bg-background px-4 text-center'>
-            <p className='text-muted-foreground text-sm'>
-              Sign in to leave a guestbook message.
-            </p>
-          </div>
+      <div className='flex w-full flex-col'>
+        <div className='flex h-40 items-center justify-center border-line border-b px-4 text-center'>
           <p className='text-muted-foreground text-sm'>
-            You need an account to post.
+            Sign in to leave a guestbook message.
           </p>
         </div>
-        <Button className='w-full' onClick={() => openSignIn('/guestbook')}>
+        <Button
+          className={buttonClassName}
+          onClick={() => openSignIn('/guestbook')}
+          shape='square'
+        >
           <span>Sign in to post</span>
           <Icons.arrowRight
             className='icon-arrow-button size-4'
@@ -132,25 +134,25 @@ export const GuestbookForm = () => {
           onSubmit={handleSubmitWithAction}
         >
           <Activity mode={step === 1 ? 'visible' : 'hidden'}>
-            <div className='space-y-6'>
+            <div className='flex flex-col'>
               <FormField
                 control={form.control}
                 name='message'
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Message</FormLabel>
+                  <FormItem className={fieldClassName}>
+                    <FormLabel className='sr-only'>Message</FormLabel>
                     <FormControl>
                       <Textarea
-                        className='min-h-[10rem] resize-y bg-background'
+                        className={textareaClassName}
                         disabled={isExecuting}
                         placeholder='Say hello...'
                         {...field}
                       />
                     </FormControl>
                     {form.formState.errors.message ? (
-                      <FormMessage />
+                      <FormMessage className={hintClassName} />
                     ) : (
-                      <FormDescription>
+                      <FormDescription className={hintClassName}>
                         Posting as {user?.name ?? 'Guest'}.
                       </FormDescription>
                     )}
@@ -158,9 +160,10 @@ export const GuestbookForm = () => {
                 )}
               />
               <Button
-                className='w-full'
+                className={buttonClassName}
                 disabled={isExecuting}
                 onClick={goToNextStep}
+                shape='square'
                 type='button'
               >
                 <span>Next</span>
@@ -172,28 +175,35 @@ export const GuestbookForm = () => {
             </div>
           </Activity>
           <Activity mode={step === 2 ? 'visible' : 'hidden'}>
-            <div className='space-y-6'>
-              <FormItem>
-                <FormLabel>Signature</FormLabel>
+            <div className='flex flex-col'>
+              <FormItem className={fieldClassName}>
+                <FormLabel className='sr-only'>Signature</FormLabel>
                 <SignaturePad
+                  className='[&>canvas]:rounded-none [&>canvas]:border-0 [&>canvas]:bg-transparent [&>canvas]:shadow-none'
                   disabled={isExecuting}
                   onChange={(dataUrl) => form.setValue('signature', dataUrl)}
                   onClear={() => form.setValue('signature', undefined)}
                   ref={signaturePad}
                 />
               </FormItem>
-              <div className='flex gap-2'>
+              <div className='flex'>
                 <Button
-                  className='flex-1'
+                  className={cn(buttonClassName, 'flex-1 border-line border-r')}
                   disabled={isExecuting}
                   onClick={() => setStep(1)}
+                  shape='square'
                   type='button'
                   variant='secondary'
                 >
                   <Icons.arrowLeft className='size-4' />
                   Back
                 </Button>
-                <Button className='flex-1' disabled={isExecuting} type='submit'>
+                <Button
+                  className={cn(buttonClassName, 'flex-1')}
+                  disabled={isExecuting}
+                  shape='square'
+                  type='submit'
+                >
                   {isExecuting ? (
                     <Icons.spinner className='size-4 animate-spin' />
                   ) : null}
@@ -203,7 +213,7 @@ export const GuestbookForm = () => {
             </div>
           </Activity>
           {action.status === 'hasSucceeded' && (
-            <Alert className='mt-6 border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+            <Alert className='rounded-none border-0 border-emerald-500/15 border-t bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
               <Icons.success size={16} />
               <AlertTitle className='mb-0 leading-normal'>
                 Thanks for signing the guestbook!
@@ -211,7 +221,7 @@ export const GuestbookForm = () => {
             </Alert>
           )}
           {action.result.serverError && (
-            <Alert className='mt-6 border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+            <Alert className='rounded-none border-0 border-destructive/15 border-t bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
               <Icons.warning className='size-4' />
               <AlertTitle className='mb-0 leading-normal'>
                 {action.result.serverError}

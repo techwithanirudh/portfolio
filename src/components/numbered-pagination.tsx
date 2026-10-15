@@ -7,6 +7,13 @@ import {
   PaginationItem,
 } from '@/components/ui/pagination'
 import { usePagination } from '@/hooks/use-pagination'
+import { cn } from '@/lib/utils'
+
+// Flush square cells split by rules, so the bar sits on the section's lines
+const cellClassName =
+  'size-12 shadow-none ring-0 hover:z-10 focus-visible:z-10 active:scale-100'
+const ellipsisClassName =
+  'flex size-12 items-center justify-center font-mono text-muted-foreground text-sm'
 
 interface NumberedPaginationProps {
   currentPage: number
@@ -36,42 +43,36 @@ function NumberedPagination({
 
   return (
     <Pagination>
-      <PaginationContent className='grid w-full grid-cols-[1fr_auto_1fr] items-center gap-0'>
-        <PaginationItem className='flex'>
-          {currentPage > 1 && (
-            <Button
-              aria-label='Go to previous page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage - 1)}
-              shape='square'
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
-            </Button>
-          )}
+      <PaginationContent className='grid h-12 w-full grid-cols-[auto_1fr_auto] items-stretch gap-0'>
+        <PaginationItem className='flex border-line border-r'>
+          <Button
+            aria-label='Go to previous page'
+            className={cellClassName}
+            disabled={currentPage <= 1}
+            onClick={handlePageChange(currentPage - 1)}
+            shape='square'
+            size='icon'
+            variant='ghost'
+          >
+            <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
+          </Button>
         </PaginationItem>
 
-        <PaginationItem className='justify-self-center'>
-          <ul className='inline-flex items-center gap-1 -space-x-px rtl:space-x-reverse'>
+        <PaginationItem className='flex justify-center'>
+          <ul className='flex divide-x divide-line border-line border-x'>
             {showLeftEllipsis && (
-              <PaginationItem>
-                <Button
-                  className='pointer-events-none shadow-none'
-                  shape='square'
-                  size='icon'
-                  variant='ghost'
-                >
+              <PaginationItem className='flex'>
+                <span aria-hidden='true' className={ellipsisClassName}>
                   ...
-                </Button>
+                </span>
               </PaginationItem>
             )}
 
             {pages.map((page) => (
-              <PaginationItem className='w-max' key={page}>
+              <PaginationItem className='flex' key={page}>
                 <Button
                   aria-current={page === currentPage ? 'page' : undefined}
-                  className='shadow-none hover:z-10 focus-visible:z-10'
+                  className={cn(cellClassName, 'font-mono tabular-nums')}
                   onClick={handlePageChange(page)}
                   shape='square'
                   size='icon'
@@ -83,37 +84,27 @@ function NumberedPagination({
             ))}
 
             {showRightEllipsis && (
-              <PaginationItem>
-                <Button
-                  className='pointer-events-none shadow-none'
-                  shape='square'
-                  size='icon'
-                  variant='ghost'
-                >
+              <PaginationItem className='flex'>
+                <span aria-hidden='true' className={ellipsisClassName}>
                   ...
-                </Button>
+                </span>
               </PaginationItem>
             )}
           </ul>
         </PaginationItem>
 
-        <PaginationItem className='flex justify-end'>
-          {currentPage < totalPages && (
-            <Button
-              aria-label='Go to next page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage + 1)}
-              shape='square'
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.chevronRight
-                aria-hidden='true'
-                size={16}
-                strokeWidth={2}
-              />
-            </Button>
-          )}
+        <PaginationItem className='flex border-line border-l'>
+          <Button
+            aria-label='Go to next page'
+            className={cellClassName}
+            disabled={currentPage >= totalPages}
+            onClick={handlePageChange(currentPage + 1)}
+            shape='square'
+            size='icon'
+            variant='ghost'
+          >
+            <Icons.chevronRight aria-hidden='true' size={16} strokeWidth={2} />
+          </Button>
         </PaginationItem>
       </PaginationContent>
     </Pagination>

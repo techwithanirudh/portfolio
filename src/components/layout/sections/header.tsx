@@ -1,8 +1,17 @@
-import { Children, isValidElement, type ReactNode } from 'react'
+import { Children, type ReactNode } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
+// Only the text animates in, the rules stay put so the grid never shifts
+const rise = {
+  initial: { opacity: 0, translateY: -6 },
+  whileInView: { opacity: 1, translateY: 0 },
+}
+
 export interface SectionHeaderProps {
+  /** Sits on the right of the title row, for a single compact control */
+  action?: ReactNode
+  /** Kept for older call sites, headers are always left aligned now. */
   align?: 'left' | 'center'
   children?: ReactNode
   className?: string
@@ -14,68 +23,60 @@ export interface SectionHeaderProps {
 }
 
 export const SectionHeader = ({
+  action,
   title,
   description,
   children,
   className,
   titleClassName,
   descriptionClassName,
-  align = 'center',
   sticky = false,
-}: SectionHeaderProps) => (
-  <div
-    className={cn(
-      'flex flex-col gap-4',
-      align === 'center' ? 'items-center text-center' : 'items-start text-left',
-      sticky ? 'sm:sticky sm:top-16' : null,
-      className
-    )}
-  >
-    <ViewAnimation
-      initial={{ opacity: 0, translateY: -6 }}
-      whileInView={{ opacity: 1, translateY: 0 }}
+}: SectionHeaderProps) => {
+  const hasChildren = Children.toArray(children).length > 0
+  return (
+    <div
+      className={cn(
+        'flex flex-col items-start text-left',
+        // The intro block gets its own rule so the content below never runs into it
+        (description || hasChildren) && 'screen-line-bottom pb-3',
+        sticky && 'lg:sticky lg:top-16',
+        className
+      )}
     >
-      <h2
-        className={cn(
-          'typography-title text-balance font-regular text-3xl leading-tight tracking-tighter',
-          'md:text-5xl',
-          titleClassName
-        )}
-      >
-        {title}
-      </h2>
-    </ViewAnimation>
-    {description && (
-      <ViewAnimation
-        delay={0.1}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
-        <p
-          className={cn(
-            'text-pretty text-base text-muted-foreground',
-            descriptionClassName
-          )}
-        >
-          {description}
-        </p>
-      </ViewAnimation>
-    )}
-    {Children.map(Children.toArray(children), (child, index) => {
-      const key = isValidElement(child)
-        ? (child.key ?? `section-header-child-${index}`)
-        : `${String(child)}-${index}`
-
-      return child ? (
-        <ViewAnimation
-          delay={0.1 + index * 0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={key}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {child}
+      <div className='screen-line-bottom flex w-full items-stretch justify-between gap-4'>
+        <ViewAnimation {...rise}>
+          <h2
+            className={cn(
+              'px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
+              titleClassName
+            )}
+          >
+            {title}
+          </h2>
         </ViewAnimation>
-      ) : null
-    })}
-  </div>
-)
+        {action && <div className='flex shrink-0'>{action}</div>}
+      </div>
+      {description && (
+        <ViewAnimation {...rise} className='w-full' delay={0.05}>
+          <p
+            className={cn(
+              'text-pretty px-4 pt-3 text-muted-foreground text-sm',
+              descriptionClassName
+            )}
+          >
+            {description}
+          </p>
+        </ViewAnimation>
+      )}
+      {hasChildren && (
+        <ViewAnimation
+          {...rise}
+          className='flex flex-wrap gap-2 px-4 pt-3'
+          delay={0.1}
+        >
+          {children}
+        </ViewAnimation>
+      )}
+    </div>
+  )
+}

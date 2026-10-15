@@ -1,27 +1,7 @@
-import { cva, type VariantProps } from 'class-variance-authority'
 import { Children, type ReactNode } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import { Section } from './index'
-
-const heroVariants = cva('flex flex-col', {
-  defaultVariants: {
-    align: 'center',
-    variant: 'default',
-  },
-  variants: {
-    align: {
-      center: 'items-start justify-center sm:items-center',
-      end: 'items-start justify-center sm:items-end',
-      start: 'items-start justify-center sm:items-start',
-    },
-    variant: {
-      compact: 'gap-4 py-6 lg:py-12 lg:px-2',
-      default:
-        'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
-    },
-  },
-})
 
 interface HeroProps {
   caption?: string | ReactNode | null
@@ -33,6 +13,8 @@ interface HeroProps {
   title: string | ReactNode
 }
 
+// Page heading after chanhdai.com's PageHeading (MIT, (c) Chanh Dai): a small
+// tagline, a big title between full-width lines, then the description.
 export const HeroSection = ({
   image,
   caption,
@@ -41,76 +23,50 @@ export const HeroSection = ({
   children,
   className,
   sectionClassName,
-  variant,
-  align,
-}: HeroProps &
-  VariantProps<typeof heroVariants> & {
-    asChild?: boolean
-  }) => (
-  <Section className={cn('px-6 sm:p-4', sectionClassName)}>
-    <div className={cn(heroVariants({ align, className, variant }))}>
-      {image && (
+}: HeroProps & {
+  /** Kept for older call sites, every page heading is left aligned now. */
+  align?: 'center' | 'start' | 'end' | null
+  /** Kept for older call sites. */
+  variant?: 'default' | 'compact' | null
+}) => (
+  <Section className={cn('screen-line-top-none pt-10', sectionClassName)}>
+    <div className={cn('flex flex-col', className)}>
+      {image && <div className='px-4 pb-4'>{image}</div>}
+      {caption && (
         <ViewAnimation
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          {image}
+          <p className='px-4 pb-3 font-heading font-medium text-muted-foreground text-sm/none tracking-wider'>
+            {caption}
+          </p>
         </ViewAnimation>
       )}
-      <div className='flex flex-col gap-4 sm:items-center'>
-        {caption && (
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <small className='block text-balance text-muted-foreground text-sm sm:text-base'>
-              {caption}
-            </small>
-          </ViewAnimation>
-        )}
+      <ViewAnimation
+        delay={0.05}
+        initial={{ opacity: 0, translateY: -6 }}
+        whileInView={{ opacity: 1, translateY: 0 }}
+      >
+        <h1 className='screen-line-bottom text-balance px-4 pb-2 font-heading font-medium text-4xl tracking-tight'>
+          {title}
+        </h1>
+      </ViewAnimation>
+      {description && (
         <ViewAnimation
           delay={0.1}
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <h1
-            className={cn(
-              'typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter',
-              'sm:text-center sm:text-4xl sm:leading-tight',
-              'md:text-5xl md:leading-tight',
-              variant === 'compact' && 'text-left sm:text-left'
-            )}
-          >
-            {title}
-          </h1>
+          <p className='text-balance p-4 text-base text-muted-foreground'>
+            {description}
+          </p>
         </ViewAnimation>
-        {description && (
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <p
-              className={cn(
-                'text-pretty text-muted-foreground text-sm sm:text-base',
-                variant === 'compact' &&
-                  'text-left text-lg leading-relaxed tracking-tight'
-              )}
-            >
-              {description}
-            </p>
-          </ViewAnimation>
-        )}
-      </div>
-      {Children.map(children, (child, index) => (
-        <ViewAnimation
-          delay={0.1 + index * 0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {child}
-        </ViewAnimation>
-      ))}
+      )}
+      {Children.count(children) > 0 && (
+        <div className='flex flex-wrap items-center gap-2 px-4 pb-4'>
+          {Children.map(children, (child) => child)}
+        </div>
+      )}
     </div>
   </Section>
 )

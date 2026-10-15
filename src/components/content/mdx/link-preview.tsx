@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import type { ComponentProps } from 'react'
+import { PreviewLink } from '@/components/preview-link'
 import { getLinkPreview } from '@/lib/link-preview'
 import { cn } from '@/lib/utils'
-import { LinkPreviewCard } from './link-preview.client'
 
 type LinkProps = ComponentProps<'a'>
 
@@ -45,9 +45,9 @@ export function LinkPreview({
   }
 
   return (
-    <LinkPreviewCard className={className} href={href} preview={preview}>
+    <PreviewLink className={className} href={href} preview={preview} {...props}>
       {children}
-    </LinkPreviewCard>
+    </PreviewLink>
   )
 }
 

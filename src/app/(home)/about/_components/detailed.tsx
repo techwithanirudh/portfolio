@@ -20,7 +20,7 @@ export default function Detailed(): React.ReactElement {
           title='Overview'
         />
       </SplitSectionSidebar>
-      <SplitSectionContent className='lg:col-span-2' inset>
+      <SplitSectionContent inset>
         <ViewAnimation
           className='h-full'
           delay={0.1}

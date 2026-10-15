@@ -1,6 +1,8 @@
 'use client'
 
 import { CLICKS_TO_ENABLE, useOiiaMode } from '@/components/oiia'
+import { tap } from '@/lib/audio/mechanical'
+import { playSound } from '@/lib/audio/preferences'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
@@ -10,16 +12,19 @@ export function HeroName() {
 
   return (
     <>
-      Hi! I'm{' '}
       <button
         aria-describedby='oiia-hint'
         aria-pressed={isOiia}
         className={cn(
-          'inline-flex items-baseline rounded-sm px-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          'inline-flex items-baseline rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           isOiia && 'text-primary'
         )}
         onClick={() => {
           const result = registerClick()
+          // Each click lands a semitone higher, like winding something up
+          playSound(tap, {
+            detune: (CLICKS_TO_ENABLE - result.remaining) * 100,
+          })
           if (result.remaining > 0) {
             const clicksDone = CLICKS_TO_ENABLE - result.remaining
             if (clicksDone > 3) {
@@ -34,12 +39,11 @@ export function HeroName() {
         }}
         type='button'
       >
-        {isOiia ? 'OIIA' : 'Anirudh'}
+        {isOiia ? 'OIIA' : 'an1rudh'}
       </button>
       <span className='sr-only' id='oiia-hint'>
         Press repeatedly to toggle OIIA mode, a hidden easter egg.
       </span>
-      !
     </>
   )
 }

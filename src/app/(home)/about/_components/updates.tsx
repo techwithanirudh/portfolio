@@ -1,74 +1,56 @@
 import Link from 'next/link'
-import { Icons } from '@/components/icons/icons'
+import { ViewTransition } from 'react'
+import { PanelButton } from '@/components/layout/panel'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
-import { buttonVariants } from '@/components/ui/button'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
-import { UpdateCard } from './update-card'
 
+const formatDate = (date: Date) =>
+  date.toLocaleDateString('en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  })
+
+// Post list rows after chanhdai.com's blog list (MIT, (c) Chanh Dai)
 const Updates = ({ posts }: { posts: BlogPage[] }) => (
-  <Section className='relative w-full pt-10'>
-    <div className='flex flex-col gap-10'>
-      <SectionHeader align='left' className='px-6' title='Blog' />
-
-      <div className='divider-top-dashed'>
-        <Carousel className='w-full'>
-          <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
-            {posts.map((post, index) => {
-              const date = new Date(post.data.date).toDateString()
-              return (
-                <CarouselItem
-                  className='flex min-h-full basis-full pl-0 md:basis-1/2 lg:basis-1/3'
-                  key={post.url}
-                >
-                  <ViewAnimation
-                    delay={0.05 * index}
-                    initial={{ opacity: 0, translateY: -6 }}
-                    whileInView={{ opacity: 1, translateY: 0 }}
-                  >
-                    <UpdateCard
-                      author={post.data.author}
-                      date={date}
-                      description={post.data.description ?? ''}
-                      image={post.data.image}
-                      slugs={post.slugs}
-                      tags={post.data.tags}
-                      title={post.data.title}
-                      url={post.url}
-                    />
-                  </ViewAnimation>
-                </CarouselItem>
-              )
-            })}
-          </CarouselContent>
-        </Carousel>
-
+  <Section className='relative w-full'>
+    <SectionHeader title='Blog' />
+    <ul className='divide-y divide-dashed divide-line'>
+      {posts.slice(0, 5).map((post, index) => (
         <ViewAnimation
-          blur={false}
-          delay={0.05 * posts.length}
+          delay={0.05 * index}
           initial={{ opacity: 0, translateY: -6 }}
+          key={post.url}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <Link
-            className={buttonVariants({
-              className: 'w-full py-8 active:scale-none active:opacity-80',
-              shape: 'square',
-              variant: 'default',
-            })}
-            href='/blog'
-          >
-            View More
-            <Icons.arrowRight className='icon-arrow-button size-5' />
-          </Link>
+          <li>
+            <Link
+              className='group flex items-baseline gap-4 px-4 py-3 transition-colors hover:bg-card'
+              data-sound-hover
+              href={post.url}
+            >
+              <ViewTransition
+                name={`blog/${post.slugs.join('/')}-title`}
+                share='via-blur'
+              >
+                <span className='min-w-0 flex-1 text-balance font-medium text-sm transition-colors group-hover:text-primary'>
+                  {post.data.title}
+                </span>
+              </ViewTransition>
+              <time
+                className='shrink-0 font-mono text-muted-foreground text-xs tabular-nums'
+                dateTime={new Date(post.data.date).toISOString()}
+              >
+                {formatDate(new Date(post.data.date))}
+              </time>
+            </Link>
+          </li>
         </ViewAnimation>
-      </div>
-    </div>
+      ))}
+    </ul>
+    <PanelButton href='/blog'>All posts</PanelButton>
   </Section>
 )
 
