@@ -2,9 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
-import { SIMBA_SPRITE, simbaAgent } from './agents/simba'
-
-type AnimationName = keyof typeof simbaAgent.animations
+import { type AnimationName, SIMBA } from './constants'
 
 // Plays one of Simba's sprite animations on a loop, outside the assistant.
 // Reduced motion keeps him on the first frame.
@@ -18,7 +16,7 @@ export function SimbaLoop({
   /** Rest on the last frame between loops, in ms */
   pause?: number
 }) {
-  const { frames } = simbaAgent.animations[animation]
+  const { frames } = SIMBA.animations[animation]
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -33,15 +31,15 @@ export function SimbaLoop({
     return () => clearTimeout(timer)
   }, [frames, index, pause])
 
-  const [x = 0, y = 0] = frames[index]?.images[0] ?? []
-  const [width, height] = simbaAgent.framesize
+  const { x = 0, y = 0 } = frames[index] ?? {}
+  const [width, height] = SIMBA.frame
 
   return (
     <span
       aria-hidden
       className={cn('block shrink-0 bg-no-repeat', className)}
       style={{
-        backgroundImage: `url(${SIMBA_SPRITE})`,
+        backgroundImage: `url(${SIMBA.sprite})`,
         backgroundPosition: `-${x}px -${y}px`,
         height,
         width,

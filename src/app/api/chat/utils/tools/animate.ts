@@ -1,30 +1,14 @@
 import { tool } from 'ai'
 import { z } from 'zod'
-import {
-  avatarNames,
-  moodNames,
-} from '@/components/features/assistant/mascot/constants'
+import { moodNames } from '@/components/features/assistant/mascot/constants'
 
 export const animateTool = tool({
   description:
-    'Make the dog on screen do an animation or swap to another avatar. Use it when the user asks you to do a trick, show a reaction, or change how you look.',
-  execute: ({ avatar, mood }) => ({
-    avatar,
-    mood,
-    success: true,
+    'Make Simba, the dog on screen, do an animation. Use it when the user asks you to do a trick or show a reaction.',
+  execute: ({ mood }) => ({ mood, success: true }),
+  inputSchema: z.object({
+    mood: z
+      .enum(moodNames)
+      .describe('Animation to play, e.g. celebrate, think, surprised'),
   }),
-  inputSchema: z
-    .object({
-      avatar: z
-        .enum(avatarNames)
-        .optional()
-        .describe('Avatar to switch to: rover (default dog) or rocky'),
-      mood: z
-        .enum(moodNames)
-        .optional()
-        .describe('Animation to play, e.g. celebrate, think, surprised'),
-    })
-    .refine((input) => input.avatar || input.mood, {
-      message: 'Provide an avatar, a mood, or both',
-    }),
 })

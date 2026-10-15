@@ -1,89 +1,38 @@
 'use client'
 
-import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
 import { useAssistantContext } from '@/components/features/assistant/assistant'
 import { useMascot } from '@/components/features/assistant/mascot'
-import {
-  type AvatarName,
-  animations,
-  avatarMeta,
-} from '@/components/features/assistant/mascot/constants'
-import { playAnimation } from '@/components/features/assistant/mascot/utils'
+import { SIMBA } from '@/components/features/assistant/mascot/constants'
+import { MascotSprite } from '@/components/features/assistant/mascot/sprite'
 
-// Matches the panel's right-4 inset so the dog lines up with it
+// Matches the panel's right-4 inset so Simba lines up with it
 const EDGE_OFFSET = 16
 
-// Avatars differ in frame size and in the empty space around the dog, and the
-// element has no size until it is shown, so anchor the visible dog using the
-// known frame size and padding
-const getPosition = (avatar: AvatarName) => {
-  const { frame, padding } = avatarMeta[avatar]
-  return {
-    x: window.innerWidth - EDGE_OFFSET - frame[0] + padding.right,
-    y: window.innerHeight - EDGE_OFFSET - frame[1] + padding.bottom,
+// Simba sits in the bottom right gutter and opens the assistant. Below lg
+// there's no gutter for him, so he's hidden there (see [data-mascot]).
+export function AssistantTrigger() {
+  const { open, setOpen } = useAssistantContext()
+  const mascot = useMascot()
+
+  if (!mascot) {
+    return null
   }
+
+  return (
+    <button
+      aria-expanded={open}
+      aria-label={open ? 'Close the assistant' : 'Ask Simba'}
+      className='fixed z-45 origin-bottom transition-transform duration-300 ease-out hover:scale-110 active:scale-95'
+      data-mascot
+      data-sound-hover
+      onClick={() => setOpen((prev) => !prev)}
+      style={{
+        bottom: EDGE_OFFSET - SIMBA.padding.bottom,
+        right: EDGE_OFFSET - SIMBA.padding.right,
+      }}
+      type='button'
+    >
+      <MascotSprite mascot={mascot} />
+    </button>
+  )
 }
-
-function InnerTrigger() {
-  const { setOpen } = useAssistantContext()
-  const { agent, avatar } = useMascot()
-
-  useEffect(() => {
-    if (!agent) {
-      return
-    }
-
-    let idleCycles = 0
-    const cyclesUntilAction = () => 3 + Math.floor(Math.random() * 4)
-    let target = cyclesUntilAction()
-
-    // Avatars name their animations differently, so use what this one has
-    const rest = animations.rest.find((name) => agent.hasAnimation(name))
-    const actions = animations.idle.filter((name) => agent.hasAnimation(name))
-
-    const onQueueEmpty = () => {
-      if (idleCycles >= target && actions.length > 0) {
-        idleCycles = 0
-        target = cyclesUntilAction()
-        playAnimation(agent, actions)
-      } else if (rest) {
-        idleCycles++
-        agent.play(rest, 3000)
-      }
-    }
-    agent._onQueueEmpty = onQueueEmpty
-    agent._queue._onEmptyCallback = onQueueEmpty
-
-    const place = () => {
-      const { x, y } = getPosition(avatar)
-      agent._el.style.left = `${x}px`
-      agent._el.style.top = `${y}px`
-    }
-    place()
-    agent._el.style.zIndex = '45'
-    // Below lg there's no side gutter for the dog, so it would sit on content
-    agent._el.dataset.mascot = ''
-    agent.show(true)
-
-    const handleClick = (event: Event) => {
-      event.preventDefault()
-      event.stopPropagation()
-      setOpen((prev) => !prev)
-    }
-
-    agent._el.addEventListener('click', handleClick)
-    window.addEventListener('resize', place)
-
-    return () => {
-      agent._el.removeEventListener('click', handleClick)
-      window.removeEventListener('resize', place)
-    }
-  }, [agent, avatar, setOpen])
-
-  return null
-}
-
-export const AssistantTrigger = dynamic(() => Promise.resolve(InnerTrigger), {
-  ssr: false,
-})

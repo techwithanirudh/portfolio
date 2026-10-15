@@ -74,6 +74,7 @@ function TOCMinimapContent({ className }: { className?: string }) {
                     className='line-clamp-2 w-full text-muted-foreground transition-colors hover:text-foreground data-active:text-fd-primary'
                     data-active={item.active}
                     data-depth={item.original.depth}
+                    data-sound-hover
                     href={item.original.url}
                   >
                     {item.original.title}

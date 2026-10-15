@@ -113,7 +113,7 @@ export function ExperiencePositionItem({
     >
       <CollapsibleTrigger
         className={cn(
-          'group/experience-position not-prose block w-full select-none text-left',
+          'group/experience-position not-prose block w-full select-none text-left focus-visible:outline-2 focus-visible:outline-ring focus-visible:-outline-offset-2 focus-visible:outline-offset-2',
           'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 hover:before:bg-card',
           'data-disabled:before:content-none'
         )}

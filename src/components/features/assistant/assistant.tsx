@@ -27,7 +27,6 @@ import {
   getToolsRequiringConfirmation,
   type ToolName,
 } from '@/app/api/chat/utils/tools/confirmation'
-import { AvatarMenu } from '@/components/features/assistant/avatar-menu'
 import {
   MascotProvider,
   useMascot,
@@ -124,7 +123,10 @@ function Header() {
   return (
     <div className='sticky top-0 flex h-10 items-stretch'>
       <div className='flex h-full flex-1 items-center justify-between overflow-hidden bg-fd-card px-3 text-fd-card-foreground'>
-        <AvatarMenu />
+        <span className='flex items-center gap-2'>
+          <AvatarIcon size={24} />
+          <span className='font-medium text-sm'>Ask Simba</span>
+        </span>
       </div>
 
       <div className='flex h-full'>
@@ -204,7 +206,7 @@ const MaxSourcePreviewChars = 120
 function AssistantInput(props: ComponentProps<'form'>) {
   const { chat, setContext, context } = useAssistantContext()
   const { status, sendMessage, stop, messages } = chat
-  const { agent } = useMascot()
+  const mascot = useMascot()
   const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
   const [input, setInput] = useState(
@@ -240,7 +242,7 @@ function AssistantInput(props: ComponentProps<'form'>) {
     const messageText =
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
-    playSubmitAnimation(agent)
+    playSubmitAnimation(mascot)
     playSend()
 
     setInput('')
@@ -413,7 +415,6 @@ function MessageList({
   status: string
 } & ComponentProps<'div'>) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const { avatar } = useMascot()
 
   useEffect(() => {
     const container = containerRef.current
@@ -458,7 +459,6 @@ function MessageList({
         {messages.length === 0 ? (
           <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
             <AvatarIcon
-              avatar={avatar}
               className='transition-transform hover:scale-110'
               size={64}
             />
@@ -572,7 +572,7 @@ const Message = memo(function Message({
 
 function AssistantPanel() {
   const { chat, open, setOpen } = useAssistantContext()
-  const { agent } = useMascot()
+  const mascot = useMascot()
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === 'Escape' && open) {
@@ -591,7 +591,7 @@ function AssistantPanel() {
   }, [])
 
   useMascotPanel({
-    agent,
+    mascot,
     messages: chat.messages,
     open,
     status: chat.status,

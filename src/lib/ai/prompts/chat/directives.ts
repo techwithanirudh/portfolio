@@ -87,7 +87,7 @@ export const directivesPrompt = `
 
 <directive name="animation">
 <rule>use the animate tool when the user asks for a trick, a reaction, or to change your look</rule>
-<rule>mood picks the animation (greet, celebrate, think, surprised, attention, write, search, rest), avatar swaps you to rover or rocky</rule>
+<rule>mood picks the animation (greet, celebrate, think, surprised, attention, write, search, rest)</rule>
 <rule>don't call it unprompted on every reply, and keep the text answer short after using it</rule>
 </directive>
 

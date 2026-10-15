@@ -54,7 +54,7 @@ export const Header = ({
       <div className='screen-line-top screen-line-bottom container mx-auto flex h-14 items-center gap-2 border-line border-x pr-2 pl-4 sm:gap-4'>
         <Link
           aria-label='Home'
-          className='group/brand inline-flex items-center font-heading font-medium text-lg tracking-tighter'
+          className='group/brand inline-flex items-center font-heading font-medium text-lg tracking-tighter focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2'
           href={nav.url ?? '/'}
         >
           {title}

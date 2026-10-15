@@ -658,9 +658,3 @@ html > body[data-scroll-locked] {
     display: none !important;
   }
 }
-
-/* One visible keyboard focus ring everywhere, square like the rest */
-:focus-visible {
-  outline: 2px solid var(--color-ring);
-  outline-offset: 2px;
-}

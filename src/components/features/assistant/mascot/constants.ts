@@ -1,102 +1,53 @@
+import simba from './simba.json'
+
+export type AnimationName = keyof typeof simba.animations
+
+export interface Frame {
+  duration: number
+  x: number
+  y: number
+}
+
+// Simba, a Shih Tzu. The sheet is cut into equal cells with his feet on
+// each cell's floor; simba.json maps every animation to its cells.
+export const SIMBA = {
+  animations: simba.animations as Record<AnimationName, { frames: Frame[] }>,
+  frame: simba.frame as [number, number],
+  // Transparent space right of and below him in his resting frame
+  padding: { bottom: 2, right: 0 },
+  sheet: simba.sheet as [number, number],
+  sprite: '/assets/mascot/simba.webp',
+}
+
 interface Animations {
-  bye: string
-  idle: readonly string[]
-  open: readonly string[]
-  rest: readonly string[]
-  show: string
-  submit: string
-  tool: string
+  bye: AnimationName
+  idle: readonly AnimationName[]
+  open: readonly AnimationName[]
+  rest: AnimationName
+  show: AnimationName
+  submit: AnimationName
+  tool: AnimationName
 }
 
 export const animations: Animations = {
   bye: 'Hide',
   idle: [
-    // Rocky has different animation names, unknown ones are filtered out
     'Alert',
-    'CheckingSomething',
-    'GestureDown',
-    'GestureRight',
-    'GestureUp',
-    'GetArtsy',
-    'GetTechy',
-    'GetWizardy',
-    'Greeting',
-    'LookLeft',
-    'LookRight',
-    'Wave',
-    'Acknowledge',
-    'CharacterSucceeds',
-    'ClickedOn',
-    'Congratulate',
-    'Cooking',
-    'Embarrassed',
-    'GetAttention',
-    'GetAttentionMinor',
-    'GestureLeft',
-    'Greet',
-    'ImageSearching',
-    'LookUp',
-    'LookUpLeft',
-    'Pleased',
-    'Surprised',
-    'Thinking',
-    'Travel',
-    'Writing',
-    // Simba's own
     'Butterfly',
+    'Embarrassed',
     'Flower',
+    'GetAttention',
+    'Greet',
+    'LookUp',
     'Play',
+    'Pleased',
+    'Thinking',
   ],
   open: ['ClickedOn', 'Pleased'],
-  // Played in a loop between idle actions, whichever the avatar has
-  rest: ['Idle', 'Idle(1)', 'RestPose'],
+  rest: 'Idle',
   show: 'Show',
   submit: 'Books',
   tool: 'Searching',
-}
-
-export const avatarNames = ['simba', 'rover', 'rocky'] as const
-export type AvatarName = (typeof avatarNames)[number]
-
-export const defaultAvatar: AvatarName = 'simba'
-
-// Sprite sheet details let the UI show an avatar's first frame as an icon
-export const avatarMeta: Record<
-  AvatarName,
-  {
-    description: string
-    frame: readonly [number, number]
-    // Transparent padding right/below the dog in its idle frame
-    padding: { bottom: number; right: number }
-    label: string
-    sheet: readonly [number, number]
-    sprite: string
-  }
-> = {
-  rocky: {
-    description: 'Laid-back tech dog with a taste for wizardry.',
-    frame: [124, 93],
-    label: 'Rocky',
-    padding: { bottom: 0, right: 32 },
-    sheet: [3472, 3348],
-    sprite: '/assets/clippy/rocky/rocky.png',
-  },
-  rover: {
-    description: 'The classic search pup. Loyal, a little goofy.',
-    frame: [80, 80],
-    label: 'Rover',
-    padding: { bottom: 6, right: 11 },
-    sheet: [2160, 2160],
-    sprite: '/assets/clippy/rover.png',
-  },
-  simba: {
-    description: 'The real one. Fluffy, curious, easily distracted.',
-    frame: [104, 100],
-    label: 'Simba',
-    padding: { bottom: 2, right: 0 },
-    sheet: [2496, 1000],
-    sprite: '/assets/clippy/simba/simba.webp',
-  },
 }
 
 export const moodNames = [
@@ -111,36 +62,13 @@ export const moodNames = [
 ] as const
 export type MoodName = (typeof moodNames)[number]
 
-// Each avatar names its animations differently, so moods map onto both
-export const moodAnimations: Record<AvatarName, Record<MoodName, string>> = {
-  rocky: {
-    attention: 'GetAttention',
-    celebrate: 'Congratulate',
-    greet: 'Greeting',
-    rest: 'RestPose',
-    search: 'Searching',
-    surprised: 'Alert',
-    think: 'Thinking',
-    write: 'Writing',
-  },
-  rover: {
-    attention: 'GetAttention',
-    celebrate: 'Congratulate',
-    greet: 'Greet',
-    rest: 'RestPose',
-    search: 'Searching',
-    surprised: 'Surprised',
-    think: 'Thinking',
-    write: 'Writing',
-  },
-  simba: {
-    attention: 'GetAttention',
-    celebrate: 'Congratulate',
-    greet: 'Greet',
-    rest: 'RestPose',
-    search: 'Searching',
-    surprised: 'Surprised',
-    think: 'Thinking',
-    write: 'Writing',
-  },
+export const moodAnimations: Record<MoodName, AnimationName> = {
+  attention: 'GetAttention',
+  celebrate: 'Congratulate',
+  greet: 'Greet',
+  rest: 'RestPose',
+  search: 'Searching',
+  surprised: 'Surprised',
+  think: 'Thinking',
+  write: 'Writing',
 }

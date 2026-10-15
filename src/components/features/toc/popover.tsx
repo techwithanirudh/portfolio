@@ -108,6 +108,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
               <TOCItems>
                 {items.map((item) => (
                   <TOCItem
+                    data-sound-hover
                     item={item.original}
                     key={item.id}
                     onClick={() => setOpen(false)}

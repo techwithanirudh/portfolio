@@ -1,23 +1,21 @@
 import { cn } from '@/lib/utils'
-import { type AvatarName, avatarMeta } from './constants'
+import { SIMBA } from './constants'
 
-// Shows the avatar's first sprite frame, scaled to fit a square of `size`.
+// Shows Simba's first sprite frame, scaled to fit a square of `size`.
 // The frame's transparent padding is offset so the dog itself sits centered.
 export function AvatarIcon({
-  avatar,
   className,
   size = 24,
 }: {
-  avatar: AvatarName
   className?: string
   size?: number
 }) {
-  const { frame, label, padding, sheet, sprite } = avatarMeta[avatar]
+  const { frame, padding, sheet, sprite } = SIMBA
   const scale = size / Math.max(...frame)
 
   return (
     <span
-      aria-label={label}
+      aria-label='Simba'
       className={cn(
         'inline-flex shrink-0 items-center justify-center',
         className
