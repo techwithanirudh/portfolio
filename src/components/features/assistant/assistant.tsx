@@ -124,10 +124,7 @@ function Header() {
   return (
     <div className='sticky top-0 flex h-10 items-stretch'>
       <div className='flex h-full flex-1 items-center justify-between overflow-hidden bg-fd-card px-3 text-fd-card-foreground'>
-        <div className='flex items-center gap-2'>
-          <AvatarMenu />
-          <p className='font-medium text-sm'>Ask Simba</p>
-        </div>
+        <AvatarMenu />
       </div>
 
       <div className='flex h-full'>

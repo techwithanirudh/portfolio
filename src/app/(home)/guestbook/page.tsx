@@ -46,7 +46,7 @@ export default function GuestbookPage() {
           />
         </SplitSectionSidebar>
 
-        <SplitSectionContent className='flex w-full items-center p-4' inset>
+        <SplitSectionContent className='flex w-full items-stretch'>
           <ViewAnimation
             className='w-full'
             delay={0.1}

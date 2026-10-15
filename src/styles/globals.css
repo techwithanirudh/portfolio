@@ -289,16 +289,17 @@ html > body[data-scroll-locked] {
     @apply transition-transform hover:scale-125 will-change-transform;
   }
 
+  /* Icons also react when their row (a .group) is hovered */
   .icon-tilt {
-    @apply transition-transform hover:rotate-12 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:rotate-12 hover:scale-125 group-hover:rotate-12 group-hover:scale-125 will-change-transform;
   }
 
   .icon-tilt-reverse {
-    @apply transition-transform hover:-rotate-12 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:-rotate-12 hover:scale-125 group-hover:-rotate-12 group-hover:scale-125 will-change-transform;
   }
 
   .icon-turn {
-    @apply transition-transform hover:rotate-90 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:rotate-90 hover:scale-125 group-hover:rotate-90 group-hover:scale-125 will-change-transform;
   }
 
   .icon-arrow {

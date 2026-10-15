@@ -26,11 +26,11 @@ export function FloatingPill({
   ]
 
   return (
-    <div className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
-      <div className='flex items-center gap-0.5 rounded-2xl bg-popover/90 py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 backdrop-blur-md dark:ring-foreground/20'>
+    <div className='fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex md:hidden'>
+      <div className='flex w-full items-center gap-0.5 rounded-2xl bg-popover/90 py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 backdrop-blur-md dark:ring-foreground/20'>
         <button
           aria-label='Search'
-          className='flex h-8 min-w-20 items-center gap-2 text-muted-foreground text-sm transition-[color,scale] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-95'
+          className='flex h-8 min-w-20 flex-1 items-center gap-2 text-muted-foreground text-sm transition-[color,scale] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-95'
           onClick={onSearchOpen}
           type='button'
         >

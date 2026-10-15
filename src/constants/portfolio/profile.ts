@@ -17,5 +17,6 @@ export const profile = {
   ],
   handle: 'an1rudh',
   location: 'India',
+  pronouns: 'he/him',
   timeZone: 'Asia/Kolkata',
 } as const

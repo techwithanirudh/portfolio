@@ -22,7 +22,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   slugs,
 }) => (
   <Link
-    className='group flex items-start gap-4 p-4 transition-colors hover:bg-card'
+    className='group flex items-start gap-4 px-4 py-6 transition-colors hover:bg-card'
     data-sound-hover
     href={url}
   >

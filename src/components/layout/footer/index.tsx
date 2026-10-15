@@ -15,7 +15,7 @@ const links = [
 ]
 
 export const Footer = () => (
-  <footer className='pb-24 sm:pb-16'>
+  <footer className='pb-24 md:pb-0'>
     <div className='container mx-auto'>
       <div className='screen-line-bottom border-line border-x'>
         <ViewAnimation

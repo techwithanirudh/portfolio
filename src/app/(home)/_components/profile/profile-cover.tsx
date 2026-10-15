@@ -3,7 +3,7 @@ import { GrainField } from '@/components/shader/grain-field'
 
 // Which shader fills the cover. 'dither' is the interactive dot field,
 // 'grain' is Paper's grain gradient.
-const COVER: 'dither' | 'grain' = 'grain'
+const COVER: 'dither' | 'grain' = 'dither'
 
 export function ProfileCover() {
   return (

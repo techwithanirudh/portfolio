@@ -21,7 +21,7 @@ export function Overview() {
       <h2 className='sr-only'>Overview</h2>
       <PanelContent className='grid gap-x-4 gap-y-2.5 sm:grid-cols-2'>
         {current && (
-          <IntroItem className='sm:col-span-2'>
+          <IntroItem>
             <IntroItemIcon>
               <Icons.codeXml />
             </IntroItemIcon>
@@ -40,6 +40,12 @@ export function Overview() {
             </IntroItemContent>
           </IntroItem>
         )}
+        <IntroItem>
+          <IntroItemIcon>
+            <Icons.user />
+          </IntroItemIcon>
+          <IntroItemContent>{profile.pronouns}</IntroItemContent>
+        </IntroItem>
         <IntroItem>
           <IntroItemIcon>
             <Icons.globe />
