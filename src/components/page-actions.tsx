@@ -77,13 +77,13 @@ export function LLMCopyButton({
   return (
     <Button
       aria-busy={isCopying}
-      className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
+      className='h-full rounded-none border-none bg-transparent px-3 shadow-none hover:bg-card/80 active:scale-none dark:bg-transparent'
       data-sound-press='off'
       disabled={isCopying}
       onClick={onClick}
       size='sm'
       type='button'
-      variant='secondary'
+      variant='ghost'
     >
       <CopyStateIcon
         doneIcon={<Icons.check className='text-muted-foreground' />}
@@ -142,10 +142,10 @@ export function ViewOptions({
         render={
           <Button
             aria-label='View Options'
-            className='size-8 border-none shadow-none active:scale-none'
+            className='h-full w-10 rounded-none border-none bg-transparent shadow-none hover:bg-card/80 active:scale-none dark:bg-transparent'
             disabled={disabled}
             size='icon-sm'
-            variant='secondary'
+            variant='ghost'
           />
         }
       >
@@ -199,9 +199,9 @@ export function LLMCopyButtonWithViewOptions({
   }, [])
 
   return (
-    <ButtonGroup className='w-full min-w-0' ref={groupRef}>
+    <ButtonGroup className='h-full min-w-0' ref={groupRef}>
       <LLMCopyButton isCopying={isCopying} onClick={handleCopy} state={state} />
-      <ButtonGroupSeparator className='border-secondary border-y-4 data-vertical:my-0 dark:bg-white/20' />
+      <ButtonGroupSeparator className='bg-line data-vertical:my-0' />
       <ViewOptions
         disabled={isCopying}
         githubUrl={githubUrl}

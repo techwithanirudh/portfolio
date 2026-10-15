@@ -10,7 +10,7 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
       rel='noopener noreferrer'
       target='_blank'
     >
-      <div className='relative transition-[translate,scale] duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-110'>
+      <div className='relative transition-[scale] duration-300 ease-out group-hover:scale-110'>
         <div className='grid size-14 place-items-center border border-line bg-card'>
           <Logo alt={name} className='bg-transparent' logo={logo} size={32} />
         </div>

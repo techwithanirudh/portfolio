@@ -4,7 +4,7 @@ const guestbookSkeletonItems = ['first', 'second', 'third', 'fourth']
 
 export function GuestbookEntriesSkeleton() {
   return (
-    <div className='h-[32rem] w-full divide-y divide-dashed divide-border overflow-hidden'>
+    <div className='w-full divide-y divide-line'>
       {guestbookSkeletonItems.map((item) => (
         <div className='relative grid gap-4 bg-card/50 px-6 py-6' key={item}>
           <div className='flex items-start justify-between gap-3'>

@@ -17,7 +17,9 @@ const links = [
 export const Footer = () => (
   <footer className='pb-24 md:pb-0'>
     <div className='container mx-auto'>
-      <div className='screen-line-bottom border-line border-x'>
+      <div className='screen-line-top screen-line-bottom border-line border-x'>
+        {/* Every page ends on the same hatched band before the footer */}
+        <div aria-hidden className='screen-line-bottom h-8 bg-dashed' />
         <ViewAnimation
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}

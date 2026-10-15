@@ -13,11 +13,6 @@ export function ProfileCover() {
       ) : (
         <DitherField className='absolute inset-0' />
       )}
-      {COVER === 'dither' && (
-        <p className='pointer-events-none absolute bottom-2 left-3 pointer-fine:block hidden select-none font-mono text-[11px] text-muted-foreground/70'>
-          {'// move your cursor over the dots'}
-        </p>
-      )}
     </div>
   )
 }

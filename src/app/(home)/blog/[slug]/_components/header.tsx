@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { type ReactNode, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
-import { TagCard } from '@/components/features/blog'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
@@ -30,15 +29,19 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
 
   return (
     <Section className='screen-line-top-none'>
-      <div className='flex items-center justify-between gap-2 px-4 py-2.5'>
+      <div className='flex h-10 items-stretch justify-between gap-2'>
         <Link
-          className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+          className='group inline-flex items-center gap-1.5 px-4 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
           href='/blog'
         >
           <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
           Blog
         </Link>
-        {actions && <div className='flex items-center gap-2'>{actions}</div>}
+        {actions && (
+          <div className='flex items-stretch divide-x divide-line border-line border-l'>
+            {actions}
+          </div>
+        )}
       </div>
 
       <ViewTransition
@@ -80,11 +83,17 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
           </div>
         )}
         {tags?.length ? (
-          <div className='ml-auto flex flex-wrap gap-1.5'>
+          <div className='ml-auto flex flex-wrap gap-x-3 gap-y-1'>
             <dt className='sr-only'>Tags</dt>
             {tags.map((tag) => (
               <dd key={tag}>
-                <TagCard className='h-6 px-2 text-xs' name={tag} />
+                <Link
+                  className='group inline-flex items-center gap-1 transition-colors hover:text-foreground'
+                  href={`/blog/tags/${tag}`}
+                >
+                  <Icons.tag className='size-3.5 transition-transform will-change-transform group-hover:rotate-12 group-hover:scale-125' />
+                  {tag}
+                </Link>
               </dd>
             ))}
           </div>

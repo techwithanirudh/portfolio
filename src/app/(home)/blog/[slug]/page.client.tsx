@@ -37,20 +37,16 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
         render={
           <Button
             aria-label='Share'
-            className='w-full justify-start border-none shadow-none active:scale-none'
+            className='h-full rounded-none border-none bg-transparent px-3 shadow-none hover:bg-card/80 active:scale-none dark:bg-transparent'
             size='sm'
-            variant='secondary'
+            variant='ghost'
           />
         }
       >
         <Icons.share className='text-muted-foreground' />
         Share
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align='start'
-        collisionPadding={8}
-        finalFocus={false}
-      >
+      <DropdownMenuContent align='end' collisionPadding={8} finalFocus={false}>
         <DropdownMenuItem onClick={copyLink}>
           <Icons.link className='size-4' />
           Copy link

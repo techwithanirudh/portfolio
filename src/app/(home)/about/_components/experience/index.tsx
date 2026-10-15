@@ -26,7 +26,7 @@ export default function Experience(): React.ReactElement {
               variant='default'
             >
               Resume
-              <Icons.download className='transition-transform group-hover/button:translate-y-0.5' />
+              <Icons.download className='transition-transform will-change-transform group-hover/button:-rotate-12 group-hover/button:scale-125' />
             </Button>
           }
           description='A timeline of the roles I have held.'

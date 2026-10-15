@@ -47,7 +47,6 @@ export default async function Home() {
           <Testimonials testimonials={testimonials} />
           <Separator />
           <Contact />
-          <Separator />
         </div>
       </Wrapper>
     </>

@@ -158,7 +158,6 @@ export function SearchClient() {
         )}
         <SearchDialogList
           className='[&>div]:!max-h-none [&>div]:!overflow-visible [&>div]:!p-0'
-          data-lenis-prevent
           Item={({ item, onClick }) => (
             <div className='relative'>
               <SearchDialogListItem
