@@ -21,12 +21,6 @@ const Contact = () => (
           Got a question, an idea, or a weird project? My inbox is open, and the
           dog is always listening.
         </p>
-        <a
-          className='font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
-          href='mailto:hello@techwithanirudh.com'
-        >
-          hello@techwithanirudh.com
-        </a>
       </PanelContent>
     </ViewAnimation>
     <PanelButton href='/contact'>Contact me</PanelButton>

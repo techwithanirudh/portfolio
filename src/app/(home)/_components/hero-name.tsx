@@ -41,10 +41,6 @@ export function HeroName() {
       >
         {isOiia ? 'OIIA' : 'an1rudh'}
       </button>
-      <span
-        aria-hidden
-        className='caret ml-1 inline-block h-[0.85em] w-[0.5ch] translate-y-[0.08em] bg-primary'
-      />
       <span className='sr-only' id='oiia-hint'>
         Press repeatedly to toggle OIIA mode, a hidden easter egg.
       </span>

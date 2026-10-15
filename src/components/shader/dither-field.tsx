@@ -3,8 +3,8 @@
 import { useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
-// Halftone field in the primary blue. The shader paints one dot per cell and
-// sizes it from a domain-warped noise field, so it reads as a grid of dots
+// Halftone field in the old hero's violet-to-azure glow. One dot per cell,
+// sized from a warped blob plus noise, so it reads as a gradient made of dots
 // that breathe. The pointer drops ripples into the field.
 const VERTEX = `
 attribute vec2 aPos;
@@ -20,7 +20,8 @@ uniform vec2 uRes;
 uniform float uTime;
 uniform vec2 uPointer;
 uniform float uCell;
-uniform vec3 uColor;
+uniform vec3 uViolet;
+uniform vec3 uAzure;
 uniform float uDark;
 
 float hash(vec2 p) {
@@ -57,36 +58,42 @@ void main() {
   vec2 local = fract(frag / uCell) - 0.5;
   vec2 center = (cellId + 0.5) * uCell;
 
-  // Aspect-correct coordinates, anchored to the cell center
+  float aspect = uRes.x / uRes.y;
+  vec2 st = center / uRes;
   vec2 uv = center / uRes.y;
   float t = uTime * 0.12;
 
-  vec2 q = vec2(fbm(uv * 2.2 + t), fbm(uv * 2.2 + vec2(5.2, 1.3) - t));
-  float field = fbm(uv * 2.6 + 2.2 * q + vec2(t * 0.6, 0.0));
+  // The old hero's violet-to-azure glow: a warped blob sitting low on the
+  // right, so the left stays calm behind text
+  vec2 warp = vec2(fbm(uv * 1.6 + t), fbm(uv * 1.6 + vec2(5.2, 1.3) - t)) - 0.5;
+  vec2 blobCenter = vec2(0.82 + 0.05 * sin(uTime * 0.21), 0.2 + 0.08 * cos(uTime * 0.17));
+  vec2 offset = (st - blobCenter) * vec2(aspect * 0.42, 1.0) + warp * 0.55;
+  float dist = length(offset);
+  float glow = 1.0 - smoothstep(0.0, 0.62, dist);
 
-  // Sweep of light from the right edge so the left stays calm behind text
-  float sweep = smoothstep(0.0, 1.0, center.x / uRes.x);
-  field = field * (0.35 + 0.9 * sweep);
+  // Azure in the core, violet toward the rim, nudged by noise so it shifts
+  float core = 1.0 - smoothstep(0.0, 0.38, dist + (fbm(uv * 3.0 - t) - 0.5) * 0.25);
+  vec3 color = mix(uViolet, uAzure, core);
+
+  float field = glow * (0.75 + 0.5 * fbm(uv * 2.6 + 2.2 * warp + vec2(t * 0.6, 0.0)));
 
   // Pointer ripple
   if (uPointer.x >= 0.0) {
-    float d = distance(center / uRes, uPointer) * (uRes.x / uRes.y);
+    float d = distance(st, uPointer) * aspect;
     float ring = sin(d * 38.0 - uTime * 4.0) * exp(-d * 5.0);
     field += ring * 0.28;
     field += exp(-d * 9.0) * 0.35;
   }
 
-  // Fade out toward the bottom so the banner melts into the page
-  float fade = smoothstep(0.0, 0.85, center.y / uRes.y);
-  field *= fade;
-
-  float radius = clamp(field * 1.15 - 0.12, 0.0, 0.5);
-  float dist = length(local);
+  float radius = clamp(field * 0.62 - 0.04, 0.0, 0.5);
   float aa = 1.5 / uCell;
-  float dotMask = 1.0 - smoothstep(radius - aa, radius + aa, dist);
+  float dotMask = 1.0 - smoothstep(radius - aa, radius + aa, length(local));
+  float dots = dotMask * smoothstep(0.02, 0.2, radius);
 
-  float alpha = dotMask * mix(0.9, 1.0, uDark) * smoothstep(0.02, 0.25, radius);
-  gl_FragColor = vec4(uColor * alpha, alpha);
+  // A faint wash of the gradient under the dots keeps it reading as a glow
+  float wash = glow * glow * mix(0.14, 0.2, uDark);
+  float alpha = max(dots * mix(0.85, 1.0, uDark), wash);
+  gl_FragColor = vec4(color * alpha, alpha);
 }
 `
 
@@ -126,20 +133,11 @@ const createProgram = (gl: WebGLRenderingContext): WebGLProgram | null => {
   return gl.getProgramParameter(program, gl.LINK_STATUS) ? program : null
 }
 
-// The theme color is an hsl() custom property, so let the browser resolve it
-// and read the pixel back instead of parsing color strings by hand.
-const readPrimary = (el: HTMLElement): Rgb => {
-  const probe = document.createElement('canvas')
-  probe.width = 1
-  probe.height = 1
-  const ctx = probe.getContext('2d', { willReadFrequently: true })
-  if (!ctx) {
-    return [0.2, 0.34, 0.7]
-  }
-  ctx.fillStyle = getComputedStyle(el).getPropertyValue('--color-fd-primary')
-  ctx.fillRect(0, 0, 1, 1)
-  const [r = 52, g = 86, b = 178] = ctx.getImageData(0, 0, 1, 1).data
-  return [r / 255, g / 255, b / 255]
+// Sampled from the old hero's gradient-noise-purple-azure image. Light mode
+// runs a touch deeper so the dots hold up on the pale background.
+const PALETTE: Record<'light' | 'dark', { violet: Rgb; azure: Rgb }> = {
+  dark: { azure: [0.42, 0.83, 0.95], violet: [0.62, 0.5, 0.95] },
+  light: { azure: [0.22, 0.66, 0.9], violet: [0.5, 0.36, 0.88] },
 }
 
 export function DitherField({ className }: { className?: string }) {
@@ -181,12 +179,12 @@ export function DitherField({ className }: { className?: string }) {
     const uTime = uniform('uTime')
     const uPointer = uniform('uPointer')
     const uCell = uniform('uCell')
-    const uColor = uniform('uColor')
+    const uViolet = uniform('uViolet')
+    const uAzure = uniform('uAzure')
     const uDark = uniform('uDark')
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     const pointer = { x: -1, y: -1 }
-    let color = readPrimary(host)
     let dark = document.documentElement.classList.contains('dark') ? 1 : 0
     let visible = true
     let frame = 0
@@ -209,7 +207,9 @@ export function DitherField({ className }: { className?: string }) {
       gl.uniform1f(uTime, reducedMotion.matches ? 24 : (now - start) / 1000)
       gl.uniform2f(uPointer, pointer.x, pointer.y)
       gl.uniform1f(uCell, CELL_PX * dpr)
-      gl.uniform3f(uColor, color[0], color[1], color[2])
+      const { violet, azure } = PALETTE[dark ? 'dark' : 'light']
+      gl.uniform3f(uViolet, ...violet)
+      gl.uniform3f(uAzure, ...azure)
       gl.uniform1f(uDark, dark)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
@@ -254,7 +254,6 @@ export function DitherField({ className }: { className?: string }) {
 
     const themeObserver = new MutationObserver(() => {
       dark = document.documentElement.classList.contains('dark') ? 1 : 0
-      color = readPrimary(host)
       draw(performance.now())
     })
     themeObserver.observe(document.documentElement, {

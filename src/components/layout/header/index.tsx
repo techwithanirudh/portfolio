@@ -59,12 +59,6 @@ export const Header = ({
           href={nav.url ?? '/'}
         >
           {title}
-          {typeof title === 'string' && (
-            <span
-              aria-hidden
-              className='caret ml-0.5 h-4 w-1.5 translate-y-px bg-primary transition-transform group-hover/brand:scale-y-125'
-            />
-          )}
         </Link>
 
         <div className='flex-1' />
