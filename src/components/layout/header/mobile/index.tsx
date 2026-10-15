@@ -115,10 +115,6 @@ export function MobileNav() {
     return () => document.removeEventListener('keydown', closeOnEscape)
   }, [closeMenu, open])
 
-  if (mode === 'oiia') {
-    return null
-  }
-
   return (
     <>
       <div
@@ -130,28 +126,32 @@ export function MobileNav() {
         <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
       </div>
 
-      <Presence present={open}>
-        <MenuPanel
-          menuId='mobile-navigation-menu'
-          onAssistantOpen={() => {
-            closeMenu()
-            setOpenAssistant(true)
-          }}
-          onClose={closeMenu}
-          open={open}
-        />
-      </Presence>
+      {mode !== 'oiia' && (
+        <>
+          <Presence present={open}>
+            <MenuPanel
+              menuId='mobile-navigation-menu'
+              onAssistantOpen={() => {
+                closeMenu()
+                setOpenAssistant(true)
+              }}
+              onClose={closeMenu}
+              open={open}
+            />
+          </Presence>
 
-      <FloatingPill
-        key={`pill-${tintGeneration}`}
-        menuId='mobile-navigation-menu'
-        onMenuToggle={() => setOpen((value) => !value)}
-        onSearchOpen={() => {
-          closeMenu()
-          setOpenSearch(true)
-        }}
-        open={open}
-      />
+          <FloatingPill
+            key={`pill-${tintGeneration}`}
+            menuId='mobile-navigation-menu'
+            onMenuToggle={() => setOpen((value) => !value)}
+            onSearchOpen={() => {
+              closeMenu()
+              setOpenSearch(true)
+            }}
+            open={open}
+          />
+        </>
+      )}
     </>
   )
 }
