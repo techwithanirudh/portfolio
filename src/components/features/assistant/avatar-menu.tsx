@@ -32,7 +32,6 @@ export function AvatarMenu() {
         <AvatarIcon avatar={avatar} size={24} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='start' className='z-[60] w-64'>
-        <DropdownMenuLabel>Choose an avatar</DropdownMenuLabel>
         <DropdownMenuRadioGroup
           onValueChange={(value) => {
             playTap()
@@ -40,6 +39,8 @@ export function AvatarMenu() {
           }}
           value={avatar}
         >
+          {/* Base UI requires group labels to live inside a group */}
+          <DropdownMenuLabel>Choose an avatar</DropdownMenuLabel>
           {avatarNames.map((name) => (
             <DropdownMenuRadioItem className='gap-3' key={name} value={name}>
               <AvatarIcon avatar={name} size={32} />

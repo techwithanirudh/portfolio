@@ -70,29 +70,11 @@ function InnerTrigger() {
       setOpen((prev) => !prev)
     }
 
-    const handleHover = () => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        return
-      }
-      agent._el.animate(
-        [
-          { transform: 'rotate(0deg)' },
-          { transform: 'rotate(-6deg)' },
-          { transform: 'rotate(5deg)' },
-          { transform: 'rotate(-3deg)' },
-          { transform: 'rotate(0deg)' },
-        ],
-        { duration: 450, easing: 'ease-in-out' }
-      )
-    }
-
     agent._el.addEventListener('click', handleClick)
-    agent._el.addEventListener('mouseenter', handleHover)
     window.addEventListener('resize', place)
 
     return () => {
       agent._el.removeEventListener('click', handleClick)
-      agent._el.removeEventListener('mouseenter', handleHover)
       window.removeEventListener('resize', place)
     }
   }, [agent, avatar, setOpen])
