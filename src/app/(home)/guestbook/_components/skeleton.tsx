@@ -23,7 +23,7 @@ export function GuestbookEntriesSkeleton() {
               <Skeleton className='h-7 w-16' />
               <Skeleton className='h-7 w-14' />
             </div>
-            <Skeleton className='h-[63px] w-[140px] rounded border border-border border-dashed' />
+            <Skeleton className='h-[63px] w-[140px] border border-line' />
           </div>
         </div>
       ))}

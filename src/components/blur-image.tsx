@@ -7,7 +7,7 @@ import { useCallback, useState } from 'react'
  */
 import { cn } from '@/lib/utils'
 
-export const IMAGE_QUALITY = 80
+export const IMAGE_QUALITY = 85
 
 type ImageProps = {
   /** Set to false for shared-element transitions so the snapshot is never blurred. */

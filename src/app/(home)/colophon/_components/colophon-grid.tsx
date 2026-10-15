@@ -5,7 +5,7 @@ export const colophonGridClassName =
 
 export const colophonCardBorderClasses = (index: number) =>
   cn(
-    'border-border border-dashed',
+    'border-line',
     index > 0 && 'border-t',
     index < 2 && 'sm:border-t-0',
     index < 3 && 'lg:border-t-0',

@@ -42,16 +42,16 @@ export function MenuPanel({
       aria-label='Mobile navigation'
       aria-modal='true'
       className={cn(
-        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background md:hidden',
+        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border bg-background md:hidden',
         open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
       )}
       id={menuId}
       role='dialog'
     >
-      <nav className='flex flex-col divide-y divide-dashed divide-border'>
+      <nav className='flex flex-col divide-y divide-line'>
         {menuRows.map((row) => (
           <div
-            className='grid grid-cols-2 divide-x divide-dashed divide-border'
+            className='grid grid-cols-2 divide-x divide-line'
             key={row.map((item) => item.url).join('-')}
           >
             {row.map((item) => {
@@ -82,7 +82,7 @@ export function MenuPanel({
           </div>
         ))}
       </nav>
-      <div className='flex items-center justify-between border-t border-dashed px-3 py-2'>
+      <div className='flex items-center justify-between border-t px-3 py-2'>
         <div className='flex items-center'>
           {socials.map((social) => (
             <a

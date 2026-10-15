@@ -17,7 +17,7 @@ const formatDate = (date: Date) =>
 const Updates = ({ posts }: { posts: BlogPage[] }) => (
   <Section className='relative w-full'>
     <SectionHeader title='Blog' />
-    <ul className='divide-y divide-dashed divide-line'>
+    <ul className='divide-y divide-line'>
       {posts.slice(0, 5).map((post, index) => (
         <ViewAnimation
           delay={0.05 * index}

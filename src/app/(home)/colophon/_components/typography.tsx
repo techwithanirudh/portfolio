@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 
 export const Typography = () => (
   <div className='grid grid-cols-1 text-left sm:grid-cols-2'>
-    <div className='border-border border-b border-dashed bg-card/50 p-6 text-muted-foreground text-sm sm:col-span-2'>
+    <div className='border-line border-b bg-card/50 p-4 text-muted-foreground text-sm sm:col-span-2'>
       <p>
         Geist Sans sets most of the interface, and Geist Mono sets code and
         labels.
@@ -12,7 +12,7 @@ export const Typography = () => (
     {typography.map((item, index) => (
       <div
         className={cn(
-          'flex items-center gap-2 border-border border-dashed bg-card/50 p-6 text-foreground text-sm transition-colors hover:bg-card/80',
+          'flex items-center gap-2 border-line bg-card/50 p-4 text-foreground text-sm transition-colors hover:bg-card/80',
           index > 0 && 'border-t',
           index < 2 && 'sm:border-t-0',
           index % 2 === 0 && 'sm:border-r',

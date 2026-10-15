@@ -16,7 +16,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
       <PanelHeader>
         <PanelTitle>Projects</PanelTitle>
       </PanelHeader>
-      <ul className='divide-y divide-dashed divide-line'>
+      <ul className='divide-y divide-line'>
         {works.map((work, index) => (
           <ViewAnimation
             blur={false}

@@ -11,39 +11,49 @@ export function HeroName() {
   const isOiia = mode === 'oiia'
 
   return (
-    <>
-      <button
-        aria-describedby='oiia-hint'
-        aria-pressed={isOiia}
-        className={cn(
-          'inline-flex items-baseline rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-          isOiia && 'text-primary'
-        )}
-        onClick={() => {
-          const result = registerClick()
-          // Each click lands a semitone higher, like winding something up
-          playSound(tap, {
-            detune: (CLICKS_TO_ENABLE - result.remaining) * 100,
-          })
-          if (result.remaining > 0) {
-            const clicksDone = CLICKS_TO_ENABLE - result.remaining
-            if (clicksDone > 3) {
-              const clicks = result.remaining === 1 ? 'click' : 'clicks'
-              toast(`${result.remaining} ${clicks} remaining`)
-            }
-          } else if (result.mode === 'oiia') {
-            toast('oiia mode enabled, collide two cats to spawn more')
-          } else {
-            toast('oiia mode disabled')
+    <button
+      aria-describedby='oiia-hint'
+      aria-pressed={isOiia}
+      className={cn(
+        'inline-flex items-baseline rounded-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        isOiia && 'text-primary'
+      )}
+      onClick={() => {
+        const result = registerClick()
+        // Each click lands a semitone higher, like winding something up
+        playSound(tap, {
+          detune: (CLICKS_TO_ENABLE - result.remaining) * 100,
+        })
+        if (result.remaining > 0) {
+          const clicksDone = CLICKS_TO_ENABLE - result.remaining
+          if (clicksDone > 3) {
+            const clicks = result.remaining === 1 ? 'click' : 'clicks'
+            toast(`${result.remaining} ${clicks} remaining`)
           }
-        }}
-        type='button'
-      >
-        {isOiia ? 'OIIA' : 'an1rudh'}
-      </button>
-      <span className='sr-only' id='oiia-hint'>
-        Press repeatedly to toggle OIIA mode, a hidden easter egg.
-      </span>
-    </>
+        } else if (result.mode === 'oiia') {
+          toast('oiia mode enabled, collide two cats to spawn more')
+        } else {
+          toast('oiia mode disabled')
+        }
+      }}
+      type='button'
+    >
+      {/* The heading keeps its real name for screen readers in OIIA mode */}
+      {isOiia ? (
+        <>
+          <span aria-hidden>OIIA</span>
+          <span className='sr-only'>an1rudh</span>
+        </>
+      ) : (
+        'an1rudh'
+      )}
+    </button>
   )
 }
+
+// Lives outside the h1 so the heading's name stays just the name
+export const HeroNameHint = () => (
+  <span className='sr-only' id='oiia-hint'>
+    Press repeatedly to toggle OIIA mode, a hidden easter egg.
+  </span>
+)

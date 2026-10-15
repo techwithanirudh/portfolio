@@ -30,7 +30,7 @@ export const PostCard: React.FC<PostCardProps> = ({
       <p className='line-clamp-2 text-pretty text-muted-foreground text-sm'>
         {description}
       </p>
-      <p className='font-mono text-muted-foreground/80 text-xs'>
+      <p className='font-mono text-muted-foreground text-xs'>
         {date} <span aria-hidden>·</span> {author}
       </p>
     </div>

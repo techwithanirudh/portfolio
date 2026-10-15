@@ -233,7 +233,7 @@ export const GuestbookEntryCard = ({
           />
         )}
         {entry.signature && !isEditing ? (
-          <div className='h-[63px] w-[140px] rounded border border-border border-dashed bg-card'>
+          <div className='h-[63px] w-[140px] border border-line bg-card'>
             <Image
               alt={`Signature by ${entry.name}`}
               className='h-[63px] w-[140px] object-contain dark:invert'

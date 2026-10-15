@@ -15,15 +15,28 @@ import { ViewAnimation } from '@/components/view-animation'
 import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'
-import { GuestbookEntries } from './_components/entries'
+import { GuestbookEntries, GuestbookEntriesError } from './_components/entries'
 import { GuestbookForm } from './_components/form'
 import { GuestbookEntriesSkeleton } from './_components/skeleton'
 
-async function GuestbookEntriesSection() {
+const loadEntries = async () => {
   const session = await getSession()
   const currentUserId = session?.user.id ?? null
   const isAdmin = session?.user.role === 'admin'
   const entries = await getGuestbookEntries(currentUserId)
+  return { currentUserId, entries, isAdmin }
+}
+
+async function GuestbookEntriesSection() {
+  // A database hiccup shouldn't take the heading and form down with it
+  const result = await loadEntries().catch((error: unknown) => {
+    console.error('Failed to load guestbook entries', error)
+    return null
+  })
+  if (!result) {
+    return <GuestbookEntriesError />
+  }
+  const { currentUserId, entries, isAdmin } = result
 
   return (
     <GuestbookEntries
@@ -41,6 +54,7 @@ export default function GuestbookPage() {
       <SplitSection>
         <SplitSectionSidebar className='pt-10'>
           <SplitSectionHeader
+            as='h1'
             description='Share a quick hello, a thought about the work, or a suggestion.'
             title='Guestbook'
           />

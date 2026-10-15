@@ -17,7 +17,7 @@ export const Technology = () => {
     <div className={colophonGridClassName}>
       {technology.map((item, index) => {
         const className = cn(
-          'flex h-full flex-col gap-2 bg-card/50 p-6 text-left transition-colors',
+          'flex h-full flex-col gap-2 bg-card/50 p-4 text-left transition-colors',
           colophonCardBorderClasses(index),
           item.url && 'hover:bg-card/80'
         )

@@ -15,7 +15,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
     <PanelHeader>
       <PanelTitle>Testimonials</PanelTitle>
     </PanelHeader>
-    <ul className='divide-y divide-dashed divide-line'>
+    <ul className='divide-y divide-line'>
       {testimonials.slice(0, 3).map((testimonial, index) => (
         <ViewAnimation
           blur={false}

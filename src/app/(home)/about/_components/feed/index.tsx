@@ -24,7 +24,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
             title='Activity'
           />
           {/* The mask fades whole rows out instead of laying a gradient over text */}
-          <ul className='mask-b-from-60% divide-y divide-dashed divide-line font-mono text-muted-foreground text-xs'>
+          <ul className='mask-b-from-60% divide-y divide-line font-mono text-muted-foreground text-xs'>
             {items.slice(0, MAX_ITEMS).map((item, index) => (
               <ViewAnimation
                 delay={0.03 * index}

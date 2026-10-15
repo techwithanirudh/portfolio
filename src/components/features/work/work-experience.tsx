@@ -7,6 +7,7 @@ import { type ComponentProps, useCallback, useRef } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevrons-up-down'
 import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
+import { Icons } from '@/components/icons/icons'
 import { PreviewLink } from '@/components/preview-link'
 import { Prose } from '@/components/prose'
 import {
@@ -42,7 +43,7 @@ export function WorkExperience({
   experiences,
 }: WorkExperienceProps) {
   return (
-    <div className={cn('divide-y divide-dashed divide-border', className)}>
+    <div className={cn('divide-y divide-line', className)}>
       {experiences.map((experience, index) => (
         <ViewAnimation
           delay={0.05 * index}
@@ -65,13 +66,13 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
           {experience.companyLogo ? (
             <Image
               alt={experience.companyName}
-              className='size-6 rounded transition-transform duration-300 ease-out group-hover/exp:-rotate-6 group-hover/exp:scale-110 motion-reduce:transition-none'
+              className='size-6 transition-transform duration-300 ease-out group-hover/exp:-rotate-6 group-hover/exp:scale-110 motion-reduce:transition-none'
               height={24}
               src={experience.companyLogo}
               width={24}
             />
           ) : (
-            <span className='flex size-3 border bg-muted' />
+            <Icons.code className='size-4 text-muted-foreground' />
           )}
         </div>
 
@@ -140,7 +141,7 @@ export function ExperiencePositionItem({
       <CollapsibleTrigger
         className={cn(
           'group/experience-position not-prose block w-full select-none text-left',
-          'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:rounded hover:before:bg-muted/40',
+          'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 hover:before:bg-muted/40',
           'data-disabled:before:content-none'
         )}
       >
@@ -149,7 +150,7 @@ export function ExperiencePositionItem({
             className={cn(
               'flex size-6 shrink-0 items-center justify-center',
               'bg-muted text-muted-foreground',
-              'border border-border',
+              'border border-line',
               "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0"
             )}
           >
@@ -242,7 +243,7 @@ function Skill({ className, ...props }: ComponentProps<'span'>) {
   return (
     <span
       className={cn(
-        'inline-flex items-center border border-border border-dashed bg-muted/50 px-1.5 py-0.5 font-mono text-muted-foreground text-xs',
+        'inline-flex items-center border border-line bg-muted/50 px-1.5 py-0.5 font-mono text-muted-foreground text-xs',
         className
       )}
       {...props}

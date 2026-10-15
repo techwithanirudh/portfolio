@@ -46,7 +46,7 @@ const Skills = () => (
       />
 
       <div>
-        <div className='grid grid-cols-1 divide-dashed divide-line text-left sm:grid-cols-3 sm:divide-x [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-line [&>*]:border-b [&>*]:border-dashed'>
+        <div className='grid grid-cols-1 divide-line text-left sm:grid-cols-3 sm:divide-x [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-line [&>*]:border-b'>
           {skills.map((feature, index) => (
             <ViewAnimation
               className={featureItemVariants({
@@ -77,7 +77,7 @@ const Skills = () => (
           {Object.entries(groupByCategory(technologies)).map(
             ([category, items], index) => (
               <ViewAnimation
-                className='grid items-center gap-y-2 border-line border-b border-dashed py-3 last:border-none sm:grid-cols-[9rem_1fr]'
+                className='grid items-center gap-y-2 border-line border-b py-3 last:border-none sm:grid-cols-[9rem_1fr]'
                 delay={0.05 * index}
                 initial={{ opacity: 0, translateY: -6 }}
                 key={category}

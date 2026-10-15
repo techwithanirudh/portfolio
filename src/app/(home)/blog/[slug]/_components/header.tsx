@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { BackLink } from '@/components/back-link'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
@@ -30,13 +31,9 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
   return (
     <Section className='screen-line-top-none'>
       <div className='flex h-10 items-stretch justify-between gap-2'>
-        <Link
-          className='group inline-flex items-center gap-1.5 px-4 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
-          href='/blog'
-        >
-          <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
+        <BackLink className='px-4' href='/blog'>
           Blog
-        </Link>
+        </BackLink>
         {actions && (
           <div className='flex items-stretch divide-x divide-line border-line border-l'>
             {actions}

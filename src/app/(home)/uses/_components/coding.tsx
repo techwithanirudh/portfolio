@@ -4,7 +4,7 @@ import { PreviewLink } from '@/components/preview-link'
 export function Coding() {
   return (
     <div>
-      <div className='border-border border-b border-dashed p-6'>
+      <div className='border-line border-b p-4'>
         <p className='text-muted-foreground'>
           I use{' '}
           <PreviewLink
@@ -46,7 +46,7 @@ export function Coding() {
       </div>
 
       <figure>
-        <div className='border-border border-b border-dashed'>
+        <div className='border-line border-b'>
           <BlurImage
             alt='My VS Code setup'
             className='h-full w-full dark:hidden'

@@ -3,13 +3,13 @@ import { BlurImage } from '@/components/blur-image'
 export function Setup() {
   return (
     <div>
-      <div className='border-border border-b border-dashed p-6'>
+      <div className='border-line border-b p-4'>
         <p className='text-muted-foreground'>
           My desk, and the gear I use every day.
         </p>
       </div>
       <figure>
-        <div className='overflow-hidden border-border border-b border-dashed'>
+        <div className='overflow-hidden border-line border-b'>
           <BlurImage
             alt='My desk setup in 2025'
             className='aspect-[21/9] w-full'

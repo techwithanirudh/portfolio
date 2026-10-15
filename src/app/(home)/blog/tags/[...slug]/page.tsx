@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import Link from 'next/link'
 import { notFound, redirect } from 'next/navigation'
+import { BackLink } from '@/components/back-link'
 import { PostCard } from '@/components/features/blog'
 import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
@@ -32,13 +32,9 @@ const Header = ({
   return (
     <HeroSection
       caption={
-        <Link
-          className='group inline-flex items-center gap-1.5 transition-colors hover:text-foreground'
-          href='/blog/tags'
-        >
-          <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
+        <BackLink className='font-heading text-sm' href='/blog/tags'>
           Tags
-        </Link>
+        </BackLink>
       }
       description={`${total} ${total === 1 ? 'post' : 'posts'} tagged ${tag}${
         total > end - startIndex ? `, showing ${startIndex + 1}-${end}` : ''
@@ -97,7 +93,7 @@ export default async function Page(props: {
     <>
       <Header endIndex={endIndex} startIndex={startIndex} tag={tag} />
       <Section>
-        <div className='grid divide-y divide-dashed divide-line text-left'>
+        <div className='grid divide-y divide-line text-left'>
           {posts.map((post, index) => {
             const date = new Date(post.data.date).toLocaleDateString('en-US', {
               day: 'numeric',

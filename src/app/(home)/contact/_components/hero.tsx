@@ -11,6 +11,7 @@ export const Hero = () => (
   <div className='flex flex-col'>
     <SectionHeader
       align='left'
+      as='h1'
       description="Have a question or want to connect? Send me a message and I'll reply within a week."
       title='Contact Me'
     />

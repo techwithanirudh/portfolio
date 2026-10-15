@@ -1,8 +1,8 @@
 import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { type ReactElement, ViewTransition } from 'react'
+import { BackLink } from '@/components/back-link'
 import { BlurImage } from '@/components/blur-image'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
@@ -41,16 +41,12 @@ function Header(props: { page: MDXPage }) {
 
   return (
     <Section className='screen-line-top-none'>
-      <div className='flex flex-wrap items-center justify-between gap-2 px-4 py-2.5'>
-        <Link
-          className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
-          href='/projects'
-        >
-          <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
-          Work
-        </Link>
+      <div className='flex h-10 items-stretch justify-between gap-2'>
+        <BackLink className='px-4' href='/projects'>
+          Projects
+        </BackLink>
         {links.length > 0 && (
-          <div className='flex flex-wrap gap-2'>
+          <div className='flex items-stretch divide-x divide-line border-line border-l'>
             {links.map((link) => (
               <PreviewButton
                 href={link.href}

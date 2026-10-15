@@ -11,7 +11,7 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
   return (
     <Wrapper
       className={cn(
-        'group/item flex items-center gap-3 bg-card/50 p-4 transition-colors sm:gap-4 sm:p-6',
+        'group/item flex items-center gap-3 bg-card/50 p-4 transition-colors sm:gap-4',
         url && 'hover:bg-card/80'
       )}
       {...linkProps}
@@ -52,7 +52,7 @@ interface HardwareGridProps {
 
 export function HardwareGrid({ items }: HardwareGridProps) {
   return (
-    <div className='grid divide-x divide-dashed divide-border sm:grid-cols-2 [&>*:nth-last-child(-n+1)]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
+    <div className='grid divide-x divide-line sm:grid-cols-2 [&>*:nth-last-child(-n+1)]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-line [&>*]:border-b'>
       {items.map((item) => (
         <HardwareCard key={item.name} {...item} />
       ))}

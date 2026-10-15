@@ -13,6 +13,8 @@ export interface SectionHeaderProps {
   action?: ReactNode
   /** Kept for older call sites, headers are always left aligned now. */
   align?: 'left' | 'center'
+  /** Heading level; page-level headers (contact, guestbook) use h1 */
+  as?: 'h1' | 'h2'
   children?: ReactNode
   className?: string
   description?: string | ReactNode | null
@@ -24,6 +26,7 @@ export interface SectionHeaderProps {
 
 export const SectionHeader = ({
   action,
+  as: Heading = 'h2',
   title,
   description,
   children,
@@ -45,14 +48,14 @@ export const SectionHeader = ({
     >
       <div className='screen-line-bottom flex w-full items-stretch justify-between gap-4'>
         <ViewAnimation {...rise}>
-          <h2
+          <Heading
             className={cn(
               'px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
               titleClassName
             )}
           >
             {title}
-          </h2>
+          </Heading>
         </ViewAnimation>
         {action && <div className='flex shrink-0'>{action}</div>}
       </div>

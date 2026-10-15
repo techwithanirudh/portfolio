@@ -88,7 +88,7 @@ export const WorkCard = ({
             </p>
           </ViewTransition>
           {meta.length > 0 && (
-            <p className='mt-1 font-mono text-muted-foreground/80 text-xs tabular-nums'>
+            <p className='mt-1 font-mono text-muted-foreground text-xs tabular-nums'>
               {meta.join(' · ')}
             </p>
           )}

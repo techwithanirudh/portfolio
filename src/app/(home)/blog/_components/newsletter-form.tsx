@@ -69,6 +69,7 @@ export const NewsletterForm = () => {
           </div>
 
           <Button
+            aria-label='Subscribe'
             className='h-auto w-16 shrink-0 px-0 ring-0 active:scale-100 active:opacity-90'
             disabled={action.status === 'executing'}
             shape='square'

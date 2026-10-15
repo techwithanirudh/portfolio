@@ -12,10 +12,12 @@ interface PreviewButtonProps {
 export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
   return (
     <PreviewLink
+      // A flush cell in the header row, like the blog post's actions
       className={buttonVariants({
-        shape: 'square',
+        className:
+          'h-full rounded-none px-3 hover:bg-card/80 active:scale-none [&_svg]:text-muted-foreground',
         size: 'sm',
-        variant: 'secondary',
+        variant: 'ghost',
       })}
       href={href}
       preview={getLinkPreview(href)}

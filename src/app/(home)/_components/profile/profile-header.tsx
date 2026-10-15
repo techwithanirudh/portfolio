@@ -1,6 +1,6 @@
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
 import { profile } from '@/constants/portfolio/profile'
-import { HeroName } from '../hero-name'
+import { HeroName, HeroNameHint } from '../hero-name'
 import { FlipSentences } from './flip-sentences'
 import { Portrait } from './portrait'
 import { WavingHello } from './waving-hello'
@@ -23,6 +23,7 @@ export function ProfileHeader() {
           <h1 className='-translate-y-px font-normal text-[2rem]/none tracking-tighter sm:text-[2.5rem]/none'>
             <HeroName />
           </h1>
+          <HeroNameHint />
         </div>
         <FlipSentences className='h-10 border-line border-t pl-4'>
           {profile.flipSentences}

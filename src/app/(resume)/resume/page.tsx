@@ -68,7 +68,7 @@ export default function ResumePage() {
         <PrintButton />
       </div>
 
-      <article className='mx-auto flex max-w-[210mm] flex-col gap-6 bg-white p-[14mm] text-[13px] leading-relaxed shadow-sm print:max-w-none print:p-0 print:shadow-none'>
+      <article className='mx-auto flex max-w-[210mm] flex-col gap-6 bg-white p-6 text-[13px] leading-relaxed shadow-sm sm:p-[14mm] print:max-w-none print:p-0 print:shadow-none'>
         <header className='flex flex-col gap-2'>
           <div className='flex flex-wrap items-baseline justify-between gap-x-4'>
             <h1 className='font-heading font-medium text-3xl tracking-tight'>
@@ -138,7 +138,7 @@ export default function ResumePage() {
         <ResumeSection title='Selected projects'>
           <ol className='grid gap-x-6 gap-y-3 sm:grid-cols-2 print:grid-cols-2'>
             {projects.map((project) => (
-              <li className='break-inside-avoid' key={project.url}>
+              <li className='min-w-0 break-inside-avoid' key={project.url}>
                 <div className='flex items-baseline justify-between gap-2'>
                   <h3 className='font-medium'>
                     <a href={new URL(project.url, baseUrl).toString()}>

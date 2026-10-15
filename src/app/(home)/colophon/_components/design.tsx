@@ -14,17 +14,17 @@ const palette = [
 ]
 
 export const Design = () => (
-  <div className='flex flex-col divide-y divide-dashed divide-border text-left'>
-    <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
+  <div className='flex flex-col divide-y divide-line text-left'>
+    <div className='space-y-4 bg-card/50 p-4 text-muted-foreground text-sm'>
       <p>
-        A layout with wide spacing and dashed borders. Geist Sans sets headings
-        and body text, and Geist Mono sets code and labels.
+        A ruled grid with square corners, screen-wide rules and hatched bands.
+        Geist Mono sets headings and labels, Geist Sans sets body text.
       </p>
     </div>
-    <div className='bg-card/50 p-6'>
+    <div className='bg-card/50 p-4'>
       <div className='pb-3 font-medium text-foreground text-sm'>Palette</div>
       <div className='grid gap-3'>
-        <div className='flex overflow-auto rounded-md border border-border'>
+        <div className='flex overflow-auto border border-line'>
           {palette.map((tone) => (
             <div
               className={cn(

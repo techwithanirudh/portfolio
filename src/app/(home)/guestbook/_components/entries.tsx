@@ -43,3 +43,13 @@ export const GuestbookEntries = ({
     </ScrollArea>
   )
 }
+
+// Shown when the entries can't be loaded, so the rest of the page still works
+export const GuestbookEntriesError = () => (
+  <div className='flex h-[32rem] flex-col items-center justify-center gap-2 px-6 text-center'>
+    <Icons.mail className='size-6 text-muted-foreground' />
+    <p className='text-muted-foreground text-sm'>
+      Couldn't load the entries right now. Try again in a bit.
+    </p>
+  </div>
+)

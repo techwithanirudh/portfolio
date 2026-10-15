@@ -19,7 +19,7 @@ export function TagsRow({ tags }: TagsRowProps) {
           key={tag.name}
         >
           {tag.name}
-          <span className='text-muted-foreground/60'>{tag.count}</span>
+          <span className='text-muted-foreground'>{tag.count}</span>
         </Link>
       ))}
       <Link

@@ -141,6 +141,12 @@ html > body[data-scroll-locked] {
   }
 }
 
+/* Fumadocs' light muted text sits at 4.35:1 on the background; a touch darker
+   clears WCAG AA. Zero-specificity root so .dark and .oiia still win */
+:where(:root):not(.dark) {
+  --color-fd-muted-foreground: hsl(0, 0%, 40%);
+}
+
 .dark {
   --color-fd-ring: hsl(234, 100%, 83%);
   --color-fd-primary: hsl(234, 100%, 83%);
