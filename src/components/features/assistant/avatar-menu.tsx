@@ -8,6 +8,7 @@ import {
   avatarMeta,
   avatarNames,
 } from '@/components/features/assistant/mascot/constants'
+import { Icons } from '@/components/icons/icons'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,7 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { tap } from '@/lib/audio/minimal'
 
-// The header icon is the current avatar, and opens a menu to switch it
+// The whole header title (avatar + name) opens a menu to switch the avatar
 export function AvatarMenu() {
   const { avatar, setAvatar } = useMascot()
   const playTap = useSound(tap)
@@ -27,10 +28,12 @@ export function AvatarMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label='Change avatar'
-        className='rounded-sm transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-fd-ring'
+        className='flex h-full min-w-0 flex-1 items-center gap-2 rounded-none bg-fd-card px-3 text-fd-card-foreground transition-colors hover:bg-fd-accent/50 focus-visible:outline-2 focus-visible:outline-fd-ring focus-visible:-outline-offset-2'
         data-native-cursor
       >
         <AvatarIcon avatar={avatar} size={24} />
+        <span className='font-medium text-sm'>Ask Simba</span>
+        <Icons.chevronDown className='size-3.5 text-fd-muted-foreground' />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='start' className='z-[60] w-64'>
         <DropdownMenuRadioGroup

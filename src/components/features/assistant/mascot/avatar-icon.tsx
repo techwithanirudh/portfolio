@@ -11,7 +11,7 @@ export function AvatarIcon({
   className?: string
   size?: number
 }) {
-  const { frame, label, sheet, sprite } = avatarMeta[avatar]
+  const { frame, label, padding, sheet, sprite } = avatarMeta[avatar]
   const scale = size / Math.max(...frame)
 
   return (
@@ -31,6 +31,8 @@ export function AvatarIcon({
           backgroundRepeat: 'no-repeat',
           backgroundSize: `${sheet[0] * scale}px ${sheet[1] * scale}px`,
           height: frame[1] * scale,
+          // Sprites sit unevenly in their frame, so shift the dog to center
+          transform: `translateY(${((padding.bottom - padding.top) / 2) * scale}px)`,
           width: frame[0] * scale,
         }}
       />
