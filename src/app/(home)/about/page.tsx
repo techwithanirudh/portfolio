@@ -4,14 +4,11 @@ import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
-import { getSortedByDatePosts } from '@/lib/source'
 import Contact from '../_components/contact'
-import Skills from '../_components/skills'
-import Detailed from './_components/detailed'
 import Experience from './_components/experience'
-import Feed from './_components/feed'
 import Hero from './_components/hero'
-import Updates from './_components/updates'
+import More from './_components/more'
+import Story from './_components/story'
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: '/about' },
@@ -21,8 +18,6 @@ export const metadata: Metadata = createMetadata({
 })
 
 export default function AboutPage() {
-  const posts = getSortedByDatePosts()
-
   return (
     <>
       <ProfilePageJsonLd
@@ -33,15 +28,12 @@ export default function AboutPage() {
       <Wrapper>
         <Hero />
         <Separator />
-        <Detailed />
-        <Separator />
-        <Skills />
+        <Story />
         <Separator />
         <Experience />
         <Separator />
-        <Updates posts={posts} />
+        <More />
         <Separator />
-        <Feed />
         <Contact />
       </Wrapper>
     </>
