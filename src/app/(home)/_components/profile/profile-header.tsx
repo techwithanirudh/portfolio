@@ -1,8 +1,8 @@
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
-import Image from 'next/image'
 import { profile } from '@/constants/portfolio/profile'
 import { HeroName } from '../hero-name'
 import { FlipSentences } from './flip-sentences'
+import { Portrait } from './portrait'
 import { WavingHello } from './waving-hello'
 
 export function ProfileHeader() {
@@ -11,14 +11,7 @@ export function ProfileHeader() {
       <div className='shrink-0 border-line border-r'>
         <div className='m-1'>
           <div className='relative size-28 overflow-hidden rounded-[0.875rem] sm:size-36'>
-            <Image
-              alt='Portrait of an1rudh'
-              className='size-full select-none object-cover'
-              height={144}
-              priority
-              src='/images/profile.png'
-              width={144}
-            />
+            <Portrait />
             <div className='pointer-events-none absolute inset-0 inset-ring-1 inset-ring-foreground/15 rounded-[inherit] dark:inset-ring-foreground/10' />
           </div>
         </div>

@@ -126,6 +126,19 @@ html > body[data-scroll-locked] {
   --color-fd-primary-foreground: hsl(0, 0%, 98%);
   --color-fd-primary: hsl(226, 55%, 45%);
   --color-fd-ring: hsl(0, 0%, 63.9%);
+
+  /* Portrait eyes, a quick blink every few seconds */
+  --animate-blink: blink 4.5s ease-in-out infinite;
+  @keyframes blink {
+    0%,
+    94%,
+    100% {
+      scale: 1 1;
+    }
+    97% {
+      scale: 1 0.1;
+    }
+  }
 }
 
 .dark {

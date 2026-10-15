@@ -1,0 +1,80 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+
+// Matches public/images/portrait.svg, which is the same drawing minus the eyes
+const VIEW_BOX = '-29 -29 1005 1218'
+// How far (in SVG units) the eyes can drift towards the cursor
+const MAX_OFFSET = 18
+// Cursor distance (in px) at which the eyes reach MAX_OFFSET
+const REACH = 320
+
+// Portrait whose eyes follow the cursor around the page
+export function Portrait() {
+  const eyesRef = useRef<SVGGElement>(null)
+
+  useEffect(() => {
+    const eyes = eyesRef.current
+    if (
+      !eyes ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return
+    }
+
+    let frame = 0
+    const onMove = (event: PointerEvent) => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const rect = eyes.getBoundingClientRect()
+        const dx = event.clientX - (rect.left + rect.width / 2)
+        const dy = event.clientY - (rect.top + rect.height / 2)
+        const distance = Math.hypot(dx, dy) || 1
+        const reach = Math.min(distance / REACH, 1) * MAX_OFFSET
+        eyes.style.translate = `${(dx / distance) * reach}px ${(dy / distance) * reach}px`
+      })
+    }
+    const onLeave = () => {
+      eyes.style.translate = ''
+    }
+
+    window.addEventListener('pointermove', onMove, { passive: true })
+    document.documentElement.addEventListener('pointerleave', onLeave)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('pointermove', onMove)
+      document.documentElement.removeEventListener('pointerleave', onLeave)
+    }
+  }, [])
+
+  return (
+    <div className='relative size-full select-none'>
+      {/* biome-ignore lint/performance/noImgElement: static SVG, next/image adds nothing here */}
+      <img
+        alt='Portrait of an1rudh'
+        className='size-full object-cover'
+        draggable={false}
+        height={1218}
+        src='/images/portrait.svg'
+        width={1005}
+      />
+      <svg
+        aria-hidden
+        className='pointer-events-none absolute inset-0 size-full'
+        preserveAspectRatio='xMidYMid slice'
+        viewBox={VIEW_BOX}
+      >
+        <g
+          className='transition-[translate] duration-300 ease-out'
+          fill='#292929'
+          ref={eyesRef}
+        >
+          <g className='[&>path]:origin-center [&>path]:animate-blink [&>path]:[transform-box:fill-box] motion-reduce:[&>path]:animate-none'>
+            <path d='m291 487c5-14 16-23 27-22 16 0 27 15 23 32-4 19-16 57-23 79-4 14-16 22-29 19-14-3-23-15-19-31 5-22 15-56 21-77z' />
+            <path d='m570 564c4-15 16-25 28-24 15-1 25 11 23 28-1 10-6 24-10 38l-12 39c-4 14-16 24-28 22-15-2-24-13-22-28 3-13 7-27 11-40z' />
+          </g>
+        </g>
+      </svg>
+    </div>
+  )
+}
