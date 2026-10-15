@@ -16,7 +16,7 @@ import '@/styles/globals.css'
 import 'fumadocs-ui/components/image-zoom2.css'
 import 'katex/dist/katex.css'
 import { Body } from './layout.client'
-import { Provider } from './provider'
+import { Provider, SoundsProvider } from './provider'
 
 const geistSans = Geist({
   subsets: ['latin'],
@@ -131,18 +131,20 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             disableTransitionOnChange
             enableSystem
           >
-            <SignInModalProvider>
-              <RootProvider
-                search={{
-                  SearchDialog: CustomSearchDialog,
-                }}
-                theme={{
-                  enabled: false,
-                }}
-              >
-                <Provider>{children}</Provider>
-              </RootProvider>
-            </SignInModalProvider>
+            <SoundsProvider>
+              <SignInModalProvider>
+                <RootProvider
+                  search={{
+                    SearchDialog: CustomSearchDialog,
+                  }}
+                  theme={{
+                    enabled: false,
+                  }}
+                >
+                  <Provider>{children}</Provider>
+                </RootProvider>
+              </SignInModalProvider>
+            </SoundsProvider>
           </ThemeProvider>
         </PagesProvider>
       </Body>

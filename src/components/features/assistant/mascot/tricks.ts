@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import type { TrickName } from './constants'
 import type { MascotAgent } from './provider'
 
@@ -70,7 +71,7 @@ export function playTrick(agent: MascotAgent, name: TrickName) {
     agent.play(sprite)
   }
 
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (prefersReducedMotion()) {
     return
   }
 

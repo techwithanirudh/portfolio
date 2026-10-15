@@ -94,6 +94,18 @@ export const commands: CommandGroup[] = [
     position: 'after',
   },
   {
+    group: 'Preferences',
+    items: [
+      {
+        icon: <Icons.volumeOn className='size-4' />,
+        keywords: ['sound', 'audio', 'mute', 'unmute', 'volume'],
+        kind: 'sound',
+        title: 'Toggle sound',
+      },
+    ],
+    position: 'after',
+  },
+  {
     group: 'Others',
     items: [
       {
@@ -124,7 +136,7 @@ export const COMMAND_META_MAP = new Map<string, CommandKind>(
     items.map((item) => {
       let kind: CommandKind = 'page'
 
-      if (item.kind === 'theme') {
+      if (item.kind === 'theme' || item.kind === 'sound') {
         kind = 'command'
       }
 
