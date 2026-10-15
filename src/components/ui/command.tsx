@@ -48,11 +48,6 @@ function CommandDialog({
 }) {
   return (
     <Dialog {...props}>
-      <DialogHeader className="sr-only">
-        <DialogTitle render={<span />}>{title}</DialogTitle>
-        <DialogDescription>{description}</DialogDescription>
-      </DialogHeader>
-
       <DialogContent
         data-slot="command-dialog-content"
         className={cn(
@@ -62,6 +57,12 @@ function CommandDialog({
         showCloseButton={false}
         showOverlay={false}
       >
+        {/* Inside the popup so it names the dialog instead of sitting in the
+            page body on every route */}
+        <DialogHeader className="sr-only">
+          <DialogTitle render={<span />}>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
         <Command
           {...commandProps}
           className={cn(

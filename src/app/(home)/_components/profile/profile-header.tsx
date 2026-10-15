@@ -20,7 +20,7 @@ export function ProfileHeader() {
       <div className='flex min-w-0 flex-col justify-end'>
         <WavingHello />
         <div className='flex items-center gap-2 border-line border-t pl-4'>
-          <h1 className='-translate-y-px font-normal text-[2rem]/none tracking-tighter sm:text-[2.5rem]/none'>
+          <h1 className='-translate-y-px font-normal text-[clamp(1.5rem,7.4vw,2rem)]/none tracking-tighter sm:text-[2.5rem]/none'>
             <HeroName />
           </h1>
           <HeroNameHint />

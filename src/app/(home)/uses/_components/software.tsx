@@ -40,7 +40,9 @@ export function SoftwareGrid({ items }: SoftwareGridProps) {
     // Every tile draws its own right and bottom rule, the outer edges get
     // clipped so the rails and the next section line do the framing
     <div className='overflow-hidden'>
-      <div className='-mr-px -mb-px grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 [&>*]:border-line [&>*]:border-r [&>*]:border-b'>
+      {/* Tiles are opaque, so the hatch only shows in the empty cells that
+          close out the last row */}
+      <div className='-mr-px -mb-px grid grid-cols-3 bg-dashed sm:grid-cols-4 md:grid-cols-6 [&>*]:border-line [&>*]:border-r [&>*]:border-b'>
         {sortedItems.map((item) => (
           <AppIcon key={item.name} {...item} />
         ))}

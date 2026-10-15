@@ -44,7 +44,7 @@ export default async function Page(props: {
     <TOCProvider toc={toc}>
       <Header actions={pageActions} page={page} tags={tags} />
 
-      <SectionBody className='flex'>
+      <SectionBody className='flex' grow>
         <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col'>
           <TOCPopover items={toc} />

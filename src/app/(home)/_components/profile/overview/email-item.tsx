@@ -31,12 +31,14 @@ export function EmailItem({ emailB64 }: { emailB64: string }) {
       </IntroItemIcon>
       <IntroItemContent className='flex min-w-0'>
         {/* Copies instead of opening a mail app, most people want the address */}
+        {/* The visible address is the name; the action and result are spoken
+            around it so the label still matches what's on screen */}
         <button
-          aria-label={state === 'done' ? 'Email copied' : 'Copy email'}
           className='group/copy flex min-w-0 cursor-copy items-center gap-1.5 text-left'
           onClick={() => copy(() => atob(emailB64))}
           type='button'
         >
+          <span className='sr-only'>Copy </span>
           <span
             className='link-underline min-w-0 break-all'
             id={id}
@@ -52,6 +54,9 @@ export function EmailItem({ emailB64 }: { emailB64: string }) {
             <CopyStateIcon state={state} />
           </span>
         </button>
+        <span aria-live='polite' className='sr-only'>
+          {state === 'done' ? 'Email copied' : ''}
+        </span>
       </IntroItemContent>
       <InlineScript
         html={`(${revealEncodedText.toString()})(${JSON.stringify(id)},${JSON.stringify(emailB64)})`}

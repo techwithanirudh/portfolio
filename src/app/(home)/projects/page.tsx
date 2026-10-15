@@ -101,6 +101,8 @@ export default async function Page(props: {
                   description={entry.data.description ?? ''}
                   image={entry.data.image ?? null}
                   meta={getWorkMeta(entry)}
+                  // The first row is the LCP on both layouts
+                  priority={index < 2}
                   slugs={entry.slugs}
                   title={entry.data.title ?? 'Untitled'}
                   url={entry.url}

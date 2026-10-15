@@ -31,7 +31,7 @@ export function FloatingPill({
 
   return (
     // A compact dock centered over the page, not a full width bar
-    <div className='pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
+    <div className='pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[42] flex justify-center md:hidden'>
       <div className='pointer-events-auto flex items-center gap-0.5 bg-popover/90 p-1 shadow-md ring ring-foreground/10 backdrop-blur-md dark:ring-foreground/20'>
         <button
           aria-label='Search'

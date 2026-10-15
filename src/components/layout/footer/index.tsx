@@ -7,11 +7,13 @@ import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
 import { title } from '@/constants/site'
 
+// Feeds are route handlers, not pages, so they need a full document load;
+// the client router would try to render them and 404
 const links = [
   { href: '/uses', label: 'uses' },
   { href: '/colophon', label: 'colophon' },
-  { href: '/rss.xml', label: 'rss' },
-  { href: '/sitemap.xml', label: 'sitemap' },
+  { document: true, href: '/rss.xml', label: 'rss' },
+  { document: true, href: '/sitemap.xml', label: 'sitemap' },
 ]
 
 export const Footer = () => (
@@ -27,21 +29,30 @@ export const Footer = () => (
             <ul className='flex flex-wrap items-center gap-x-4 gap-y-2'>
               {links.map((link) => (
                 <li key={link.href}>
-                  <Link
-                    className='transition-colors hover:text-foreground'
-                    href={link.href}
-                  >
-                    {link.label}
-                  </Link>
+                  {link.document ? (
+                    <a
+                      className='transition-colors hover:text-foreground'
+                      href={link.href}
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      className='transition-colors hover:text-foreground'
+                      href={link.href}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
-            <ul className='flex items-center gap-3 [&_svg]:size-4'>
+            <ul className='-mx-1 flex items-center gap-1 [&_svg]:size-4'>
               {socials.map((social) => (
                 <li key={social.name}>
                   <a
                     aria-label={social.name}
-                    className='group block transition-colors hover:text-foreground'
+                    className='group flex size-7 items-center justify-center transition-colors hover:text-foreground'
                     href={social.url}
                     rel='noopener noreferrer'
                     target={

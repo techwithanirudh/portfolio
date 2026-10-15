@@ -15,7 +15,8 @@ export function HeroName() {
       aria-describedby='oiia-hint'
       aria-pressed={isOiia}
       className={cn(
-        'inline-flex items-baseline transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        // Left aligned so a wrapped name on narrow phones doesn't center
+        'inline-flex items-baseline text-left transition-colors',
         isOiia && 'text-primary'
       )}
       onClick={() => {

@@ -1,4 +1,4 @@
-import simba from './simba.json'
+import simba from '@/public/assets/mascot/simba/animations.json'
 
 export type AnimationName = keyof typeof simba.animations
 
@@ -8,17 +8,14 @@ export interface Frame {
   y: number
 }
 
-// The sheet moves between key poses through 30ms blend frames, which reads
-// as twitchy. Stretch the blends and linger a bit longer on each pose.
-const BLEND_MS = 40
-const BLEND_PACE = 2.5
+// Painted in-betweens run at their own timing; the key poses hold a little
+// longer than the original sheet so he doesn't feel hurried
+const TWEEN_MS = 100
 const POSE_PACE = 1.35
 
 const pace = ({ duration, ...frame }: Frame): Frame => ({
   ...frame,
-  duration: Math.round(
-    duration <= BLEND_MS ? duration * BLEND_PACE : duration * POSE_PACE
-  ),
+  duration: duration <= TWEEN_MS ? duration : Math.round(duration * POSE_PACE),
 })
 
 const pacedAnimations = Object.fromEntries(
@@ -28,15 +25,16 @@ const pacedAnimations = Object.fromEntries(
   ])
 ) as Record<AnimationName, { frames: Frame[] }>
 
-// Simba, a Shih Tzu. The sheet is cut into equal cells with his feet on
-// each cell's floor; simba.json maps every animation to its cells.
+// Simba, a Shih Tzu. The original hand-painted poses with painted
+// in-betweens, one row per animation in equal cells, feet on each cell's
+// floor; animations.json maps names to cells.
 export const SIMBA = {
   animations: pacedAnimations,
   frame: simba.frame as [number, number],
   // Transparent space right of and below him in his resting frame
   padding: { bottom: 2, right: 0 },
   sheet: simba.sheet as [number, number],
-  sprite: '/assets/mascot/simba.webp',
+  sprite: '/assets/mascot/simba/sheet.webp',
 }
 
 interface Animations {
