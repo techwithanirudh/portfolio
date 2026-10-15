@@ -19,7 +19,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
         {works.map((work, index) => (
           <ViewAnimation as='li' delay={0.05 * index} key={work.url}>
             <Link
-              className='group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-card'
+              className='group flex items-center gap-4 px-4 py-5 transition-colors hover:bg-card'
               data-sound-hover
               href={work.url}
               transitionTypes={['work-card']}
