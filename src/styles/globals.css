@@ -84,8 +84,8 @@ html > body[data-scroll-locked] {
 
   body {
     font-synthesis-weight: none;
-    text-rendering: optimizeLegibility;
     text-wrap: pretty;
+    text-rendering: optimizeLegibility;
     @apply bg-background text-foreground antialiased;
   }
 
