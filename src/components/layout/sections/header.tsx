@@ -1,5 +1,12 @@
 import { Children, type ReactNode } from 'react'
+import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
+
+// Only the text animates in, the rules stay put so the grid never shifts
+const rise = {
+  initial: { opacity: 0, translateY: -6 },
+  whileInView: { opacity: 1, translateY: 0 },
+}
 
 export interface SectionHeaderProps {
   /** Sits on the right of the title row, for a single compact control */
@@ -37,28 +44,38 @@ export const SectionHeader = ({
       )}
     >
       <div className='screen-line-bottom flex w-full items-stretch justify-between gap-4'>
-        <h2
-          className={cn(
-            'px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
-            titleClassName
-          )}
-        >
-          {title}
-        </h2>
+        <ViewAnimation {...rise}>
+          <h2
+            className={cn(
+              'px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
+              titleClassName
+            )}
+          >
+            {title}
+          </h2>
+        </ViewAnimation>
         {action && <div className='flex shrink-0'>{action}</div>}
       </div>
       {description && (
-        <p
-          className={cn(
-            'text-pretty px-4 pt-3 text-muted-foreground text-sm',
-            descriptionClassName
-          )}
-        >
-          {description}
-        </p>
+        <ViewAnimation {...rise} className='w-full' delay={0.05}>
+          <p
+            className={cn(
+              'text-pretty px-4 pt-3 text-muted-foreground text-sm',
+              descriptionClassName
+            )}
+          >
+            {description}
+          </p>
+        </ViewAnimation>
       )}
       {hasChildren && (
-        <div className='flex flex-wrap gap-2 px-4 pt-3'>{children}</div>
+        <ViewAnimation
+          {...rise}
+          className='flex flex-wrap gap-2 px-4 pt-3'
+          delay={0.1}
+        >
+          {children}
+        </ViewAnimation>
       )}
     </div>
   )
