@@ -72,7 +72,7 @@ export default function GuestbookPage() {
         </SplitSectionContent>
       </SplitSection>
       <Separator />
-      <Section>
+      <Section fill>
         <SectionHeader title='Recent entries' />
         <Suspense fallback={<GuestbookEntriesSkeleton />}>
           <GuestbookEntriesSection />
