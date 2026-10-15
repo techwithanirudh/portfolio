@@ -31,7 +31,6 @@ export function NavItem({
       href={href}
     >
       {active && (
-        // The highlight slides between tabs instead of blinking
         <motion.span
           className='absolute inset-0 bg-primary/10'
           layoutId='mobile-nav-active'

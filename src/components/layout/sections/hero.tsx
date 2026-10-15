@@ -12,8 +12,7 @@ interface HeroProps {
   title: string | ReactNode
 }
 
-// Page heading after chanhdai.com's PageHeading (MIT, (c) Chanh Dai): a small
-// tagline, a big title between full-width lines, then the description.
+// After chanhdai.com's PageHeading (MIT, (c) Chanh Dai)
 export const HeroSection = ({
   image,
   caption,
@@ -31,8 +30,7 @@ export const HeroSection = ({
           {caption}
         </p>
       )}
-      {/* Headers paint as one piece: animating some lines and not others
-          reads as jank, and the title is usually the LCP anyway */}
+      {/* Not animated, the title is usually the LCP */}
       <h1 className='screen-line-bottom text-balance px-4 pb-3 font-heading font-medium text-4xl tracking-tight'>
         {title}
       </h1>

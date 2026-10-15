@@ -14,7 +14,6 @@ import { PrintButton } from './print-button'
 const PROJECT_COUNT = 6
 
 const markdownLink = /\[([^\]]+)\]\([^)]+\)/g
-// Position copy is markdown on the site; the resume only needs the words
 const plainText = (markdown: string) => markdown.replace(markdownLink, '$1')
 
 const formatPeriod = ({ start, end }: { start: string; end?: string }) =>
@@ -47,7 +46,6 @@ const ResumeSection = ({
   </section>
 )
 
-// Generated from the same data as the site, so it never drifts out of date
 export default function ResumePage() {
   const projects = getSortedWork().slice(0, PROJECT_COUNT)
   const links = socials.filter((social) => social.name !== 'YouTube')
@@ -149,7 +147,6 @@ export default function ResumePage() {
                     {new Date(project.data.date).getFullYear()}
                   </span>
                 </div>
-                {/* Fixed two-line blurb and one-line stack keep every card the same height */}
                 <p className='line-clamp-2 min-h-[2lh] text-neutral-700'>
                   {project.data.description}
                 </p>

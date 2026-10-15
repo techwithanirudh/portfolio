@@ -13,8 +13,6 @@ interface BackLinkProps {
   href: string
 }
 
-// Mono "← Section" link at the top of detail pages. Goes back to the list
-// page you came from (e.g. /projects?page=3) when RememberListPage saw it.
 export const BackLink = ({ children, className, href }: BackLinkProps) => {
   const [target, setTarget] = useState(href)
 
@@ -25,7 +23,7 @@ export const BackLink = ({ children, className, href }: BackLinkProps) => {
         setTarget(saved)
       }
     } catch {
-      // Storage can be blocked; the plain list URL is fine then
+      // Storage can be blocked, the plain list URL is fine then
     }
   }, [href])
 
@@ -43,8 +41,6 @@ export const BackLink = ({ children, className, href }: BackLinkProps) => {
   )
 }
 
-// Rendered on a list page; remembers its exact URL (page, filters) when you
-// open something from it, so that page's BackLink returns to the same spot
 export const RememberListPage = ({ href }: { href: string }) => {
   useEffect(() => {
     const remember = () => {
@@ -54,7 +50,7 @@ export const RememberListPage = ({ href }: { href: string }) => {
           window.location.pathname + window.location.search
         )
       } catch {
-        // Nothing to do; BackLink falls back to the list's first page
+        // Storage can be blocked, BackLink falls back to the first page
       }
     }
     document.addEventListener('click', remember, { capture: true })

@@ -17,8 +17,6 @@ const initials = (name: string) =>
     .join('')
     .toUpperCase()
 
-// Every quote is clamped to the same few lines so the cards line up; the
-// long ones get a "more" that opens the rest in place
 const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
   const quoteRef = useRef<HTMLQuoteElement>(null)
   const [clamped, setClamped] = useState(false)
@@ -80,8 +78,6 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 }
 
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
-  // Drifts on its own, but holds still while someone hovers or tabs into
-  // it, and never moves for reduced motion
   const [autoplay] = useState(() =>
     Autoplay({
       delay: 6000,
@@ -94,8 +90,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
     autoplay,
   ])
 
-  // Autoplay needs a way to stop it for good (WCAG 2.2.2); reduced motion
-  // starts it paused
+  // WCAG 2.2.2 needs a way to stop autoplay for good
   const [paused, setPaused] = useState(false)
 
   useEffect(() => {

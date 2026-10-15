@@ -8,8 +8,7 @@ export interface Frame {
   y: number
 }
 
-// Painted in-betweens run at their own timing; the key poses hold a touch
-// shorter than the original sheet so he stays lively
+// Key poses run a touch faster than the sheet so he stays lively
 const TWEEN_MS = 100
 const POSE_PACE = 0.85
 
@@ -25,9 +24,6 @@ const pacedAnimations = Object.fromEntries(
   ])
 ) as Record<AnimationName, { frames: Frame[] }>
 
-// Simba, a Shih Tzu. The original hand-painted poses with painted
-// in-betweens, one row per animation in equal cells, feet on each cell's
-// floor; animations.json maps names to cells.
 export const SIMBA = {
   animations: pacedAnimations,
   frame: simba.frame as [number, number],

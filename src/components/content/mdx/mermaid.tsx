@@ -1,8 +1,7 @@
 import { renderMermaidSVG } from 'beautiful-mermaid'
 import { CodeBlock, Pre } from 'fumadocs-ui/components/codeblock'
 
-// The renderer @imports its fonts from Google; the site's own fonts are
-// already loaded, so drop the extra third-party request
+// The renderer @imports Google fonts the site already loads
 const FONT_IMPORT = /@import url\([^)]*\);/g
 
 export function Mermaid({ chart }: { chart: string }) {
@@ -15,8 +14,7 @@ export function Mermaid({ chart }: { chart: string }) {
     }).replace(FONT_IMPORT, '')
 
     return (
-      // A figure, not a region, so several diagrams don't read as identical
-      // landmarks
+      // A figure, not a region, so several diagrams aren't identical landmarks
       <figure
         aria-label='Diagram'
         className='overflow-x-auto [&_svg_.mono]:font-mono [&_svg_text]:font-sans'

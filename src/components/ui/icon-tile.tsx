@@ -2,7 +2,6 @@
 import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 
-// Small framed chip for the leading icon of list items and metadata rows
 export function IconTile({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div

@@ -48,7 +48,6 @@ function createFeed(): Feed {
       author: [
         {
           name: post.data.author,
-          // link: new URL('/about', baseUrl).href,
         },
       ],
       category: post.data.tags?.map((name) => ({ name })),

@@ -4,16 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import { preload } from 'react-dom'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 
-// Matches public/images/portrait.svg: the drawing minus the eyes and the sky,
-// which is painted behind it as a CSS gradient (the cover shader's palette in
-// dark mode)
+// Matches public/images/portrait.svg
 const VIEW_BOX = '0 0 947 1160'
 // How far (in SVG units) the eyes can drift towards the cursor
 const MAX_OFFSET = 24
 // Cursor distance (in px) at which the eyes reach MAX_OFFSET
 const REACH = 320
 
-// Portrait whose eyes follow the cursor around the page
 const SRC = '/images/portrait.svg'
 
 export function Portrait() {

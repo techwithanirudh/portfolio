@@ -4,7 +4,6 @@ interface SeparatorProps {
   className?: string
 }
 
-// Hatched band between panels
 const Separator = ({ className }: SeparatorProps) => (
   <div className='container mx-auto'>
     <div

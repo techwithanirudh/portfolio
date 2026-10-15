@@ -7,7 +7,6 @@ import type { SimbaController } from './controller'
 
 const first = () => SIMBA.animations.Idle.frames[0] ?? { x: 0, y: 0 }
 
-// Draws the controller's current frame from the sprite sheet
 export function MascotSprite({
   className,
   mascot,

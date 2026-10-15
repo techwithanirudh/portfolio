@@ -6,8 +6,7 @@ import {
 } from '@/components/layout/sections/header'
 import { cn } from '@/lib/utils'
 
-// The column is too narrow for side-by-side splits, so the sidebar stacks on
-// top and reads as the section header
+// The column is too narrow for side by side, so the sidebar stacks on top
 interface SplitSectionProps {
   children: ReactNode
   className?: string

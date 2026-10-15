@@ -14,7 +14,6 @@ interface MessageMetadataProps {
   parts: MyUIMessage['parts']
 }
 
-// Simba's paw spins while a reply hasn't produced anything yet
 export const MessagePending = () => (
   <div className='flex items-center gap-2'>
     <Icons.pawPrint

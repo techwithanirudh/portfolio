@@ -1,8 +1,7 @@
 import { cn } from '@/lib/utils'
 import { SIMBA } from './constants'
 
-// Shows Simba's first sprite frame, scaled to fit a square of `size`.
-// The frame's transparent padding is offset so the dog itself sits centered.
+// Offsets the frame's transparent padding so the dog sits centered
 export function AvatarIcon({
   className,
   size = 24,

@@ -9,8 +9,7 @@ import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { useIsClient } from '@/hooks/use-is-client'
 import { IntroItem, IntroItemContent, IntroItemIcon } from './intro-item'
 
-// Writes the decoded address before first paint, so the served HTML never
-// carries it in plain text and there is still no flash on hydration.
+// Runs before first paint so the HTML never has the address and nothing flashes
 function revealEncodedText(id: string, textB64: string) {
   const el = document.getElementById(id)
   if (el) {
@@ -31,8 +30,7 @@ export function EmailItem({ emailB64 }: { emailB64: string }) {
       </IntroItemIcon>
       <IntroItemContent className='flex min-w-0'>
         {/* Copies instead of opening a mail app, most people want the address */}
-        {/* The visible address is the name; the action and result are spoken
-            around it so the label still matches what's on screen */}
+        {/* The visible address is the accessible name, so the label matches the screen */}
         <button
           className='group/copy flex min-w-0 cursor-copy items-center gap-1.5 text-left'
           onClick={() => copy(() => atob(emailB64))}

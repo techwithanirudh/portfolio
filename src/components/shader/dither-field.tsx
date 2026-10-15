@@ -5,9 +5,6 @@ import { useEffect, useRef } from 'react'
 import { reducedMotionQuery } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 
-// Square halftone field in two layers: a fine back grid that pans slowly and
-// a coarse front grid whose cells grow from domain-warped fbm. Weighted to the
-// right so the left stays calm behind text. Pointer drops ripples.
 const VERTEX = `
 attribute vec2 aPos;
 void main() {
@@ -42,7 +39,6 @@ float fbm(vec2 p) {
   return v;
 }
 
-// Field value at a point in uv space (height-normalised)
 float field(vec2 uv, float t, float aspect) {
   vec2 q = vec2(fbm(uv * 1.2 + vec2(t, 0.0)), fbm(uv * 1.2 + vec2(3.1, 7.7) - t * 0.7));
   float f = fbm(uv * 1.8 + 2.4 * q + vec2(-t * 1.4, 0.0));
@@ -58,7 +54,6 @@ float layer(vec2 frag, float cell, float t, float aspect, out float val) {
   vec2 c = (id + 0.5) * cell;
   vec2 uv = c / uRes.y;
   val = field(uv, t, aspect);
-  // Pointer ripple, as in v1
   if (uPointer.x >= 0.0) {
     float d = distance(c / uRes, uPointer) * aspect;
     val += sin(d * 38.0 - uTime * 4.0) * exp(-d * 5.0) * 0.25 + exp(-d * 9.0) * 0.3;
@@ -96,8 +91,7 @@ void main() {
 `
 
 const CELL_PX = 10
-// Cells are 10px, so 1.5x is already crisp and saves ~45% of the fragments
-// a 2x screen would shade
+// 10px cells are crisp at 1.5x, and it shades ~45% fewer fragments than 2x
 const MAX_DPR = 1.5
 // A slow drift doesn't need 60fps; 30 halves the GPU and main-thread cost
 const FRAME_MS = 1000 / 30

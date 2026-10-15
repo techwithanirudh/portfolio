@@ -3,7 +3,6 @@
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 
-// Browsers' "Save as PDF" turns the print stylesheet into the resume PDF
 export function PrintButton() {
   return (
     <Button onClick={() => window.print()} size='sm'>

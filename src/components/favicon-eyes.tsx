@@ -3,9 +3,7 @@
 import { useEffect } from 'react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
-// A small easter egg: the favicon is the portrait, and its eyes follow the
-// pointer around the page, blink now and then, and shut while you're in
-// another tab. Geometry is measured from the 512px icon.
+// Geometry is measured from the 512px icon
 const SOURCE = '/icon.png'
 const SIZE = 64
 // Drawn at a larger size first so the painted-over eyes leave no seams
@@ -16,12 +14,10 @@ const EYES = [
   { x: 157, y: 226 },
   { x: 321, y: 269 },
 ]
-// Each eye is a capsule tilted about 16 degrees off vertical
 const EYE = { angle: (16 * Math.PI) / 180, length: 77, width: 29 }
-// How far the eyes can wander from rest, in icon pixels
+// In icon pixels
 const REACH = { x: 12, y: 10 }
-// Gaze snaps to this many steps each way, so tiny pointer moves don't
-// re-encode the icon, and redraws are capped at about 15 a second
+// Snapped gaze and capped redraws keep tiny pointer moves from re-encoding the icon
 const STEPS = 4
 const MIN_FRAME_MS = 1000 / 15
 const capsule = (
@@ -89,7 +85,6 @@ export function FaviconEyes() {
       context.drawImage(image, 0, 0, WORK, WORK)
       context.scale(WORK / 512, WORK / 512)
       for (const eye of EYES) {
-        // Paint over the drawn eye, then redraw it where it's looking
         context.save()
         context.translate(eye.x, eye.y)
         context.rotate(EYE.angle)

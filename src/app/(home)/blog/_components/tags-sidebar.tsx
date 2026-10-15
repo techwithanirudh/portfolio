@@ -7,7 +7,6 @@ interface TagsRowProps {
   tags: Array<{ name: string; count: number }>
 }
 
-// Tag chips wrap onto extra lines instead of hiding behind a scroll
 export function TagsRow({ tags }: TagsRowProps) {
   return (
     <div className='flex flex-wrap items-center gap-1.5 px-4 py-2'>

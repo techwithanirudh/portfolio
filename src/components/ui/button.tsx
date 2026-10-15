@@ -21,7 +21,6 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
         link: 'text-primary underline-offset-4 hover:underline',
-        // A flush cell in a ruled header row, like the blog post's actions
         toolbar:
           'border-none bg-transparent shadow-none hover:bg-card/80 hover:text-accent-foreground active:scale-none aria-expanded:bg-accent aria-expanded:text-accent-foreground dark:bg-transparent dark:hover:bg-accent/50',
       },
@@ -65,7 +64,6 @@ function Button({
   )
 }
 
-// A bare icon control for headers, docks and menus
 const iconButtonClassName =
   'flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground'
 

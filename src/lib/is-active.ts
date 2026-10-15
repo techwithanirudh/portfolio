@@ -5,9 +5,6 @@ function normalize(urlOrPath: string) {
   return urlOrPath
 }
 
-/**
- * @returns if `href` is matching the given pathname
- */
 export function isActive(
   href: string,
   pathname: string,

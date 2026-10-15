@@ -28,8 +28,7 @@ export const GuestbookEntries = ({
   }
 
   return (
-    // Fills whatever height the section gets (see Section's fill) and
-    // scrolls within it
+    // Scrolls within the height Section's fill gives it
     <div className='min-h-0 flex-1'>
       <ScrollArea className='h-full w-full' data-lenis-prevent>
         <div className='divide-y divide-line'>
@@ -48,7 +47,6 @@ export const GuestbookEntries = ({
   )
 }
 
-// Shown when the entries can't be loaded, so the rest of the page still works
 export const GuestbookEntriesError = () => (
   <div className='flex min-h-0 flex-1 flex-col items-center justify-center gap-2 px-6 text-center'>
     <Icons.mail className='size-6 text-muted-foreground' />

@@ -45,7 +45,6 @@ export type ToolHeaderProps = ComponentProps<typeof CollapsibleTrigger> & {
   title: string
   state: ToolState
   icon?: ReactNode
-  // Overrides the status text, e.g. "sent" instead of "done"
   status?: string
 }
 

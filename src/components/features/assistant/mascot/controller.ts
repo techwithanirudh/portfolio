@@ -4,12 +4,8 @@ import { type AnimationName, animations, type Frame, SIMBA } from './constants'
 const pick = <T>(items: readonly T[]) =>
   items[Math.floor(Math.random() * items.length)] as T
 
-// Rest loops this many times before Simba does something on his own
 const restCycles = () => 3 + Math.floor(Math.random() * 4)
 
-// Plays Simba's sprite animations from a queue. Between queued animations
-// he rests, and every few rests he picks an idle trick. Reduced motion
-// keeps him on his first frame.
 export class SimbaController {
   private frame: Frame = SIMBA.animations[animations.rest].frames[0] ?? {
     duration: 0,
@@ -46,7 +42,6 @@ export class SimbaController {
     return name in SIMBA.animations
   }
 
-  /** Queue an animation, or cut in and play it now with `interrupt` */
   play(name: AnimationName, { interrupt = false } = {}) {
     if (interrupt) {
       this.queue = [name]
@@ -60,13 +55,11 @@ export class SimbaController {
     }
   }
 
-  /** Drop everything queued and go back to resting */
   stop() {
     this.queue = []
     this.stopCurrent()
   }
 
-  /** Skip the rest of the animation that is playing */
   stopCurrent() {
     clearTimeout(this.timer)
     this.current = null

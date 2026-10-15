@@ -7,9 +7,8 @@ interface RuledGridProps {
   className?: string
 }
 
-// Every cell draws its own right and bottom rule and the outer edges get
-// clipped, so the rails and the next section line do the framing. Cells are
-// opaque, so the hatch only shows in the empty cells closing out the last row
+// Cells draw their own right and bottom rules and the outer edges get clipped,
+// so the rails and the next section line do the framing
 export function RuledGrid({
   as: Component = 'div',
   children,

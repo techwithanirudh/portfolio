@@ -5,10 +5,7 @@ import { cn } from '@/lib/utils'
 interface SectionBodyProps {
   children: ReactNode
   className?: string
-  /**
-   * Take the leftover viewport height in place of the layout's PageFill, so
-   * whatever ends the body (like comments) sits right above the footer
-   */
+  /** Takes the leftover viewport height in place of the layout's PageFill */
   grow?: boolean
   sectionClassName?: string
 }

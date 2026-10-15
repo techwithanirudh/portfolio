@@ -19,8 +19,7 @@ interface HeaderProps {
   tags?: string[]
 }
 
-// Post heading after chanhdai.com's doc pages (MIT, (c) Chanh Dai): back link,
-// title between full-width lines, description, then the meta row and cover.
+// After chanhdai.com's doc pages (MIT, (c) Chanh Dai)
 export const Header = ({ page, tags, actions }: HeaderProps) => {
   const image = page.data.image
   const lastModified = page.data.lastModified
@@ -92,7 +91,7 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
       </dl>
 
       {image && (
-        // Flush like the project cover, and eager since it's the LCP
+        // Eager since it's the LCP
         <BlurImage
           alt={page.data.title ?? 'Blog cover image'}
           blur={false}

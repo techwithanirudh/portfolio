@@ -21,7 +21,7 @@ import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
-// The page keeps its own always-open list, apart from the Cmd+K dialog
+// Its own handle, so the page list stays apart from the Cmd+K dialog
 const pageDialogHandle = Dialog.createHandle()
 
 const ItemBadge = ({ label }: { label: string }) => (

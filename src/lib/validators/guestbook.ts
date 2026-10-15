@@ -1,6 +1,5 @@
 import { z } from 'zod'
 
-// Input schemas
 export const GuestbookEntrySchema = z.object({
   message: z
     .string()
@@ -40,7 +39,6 @@ export const ModerationResultSchema = z.object({
   reason: z.string().min(1).max(120),
 })
 
-// Output schemas
 export const GuestbookReactionItemSchema = z.object({
   count: z.number(),
   emoji: z.string(),
@@ -60,7 +58,6 @@ export const GuestbookEntryItemSchema = z.object({
   userId: z.string(),
 })
 
-// Inferred types
 export type GuestbookEntry = z.infer<typeof GuestbookEntrySchema>
 export type GuestbookReaction = z.infer<typeof GuestbookReactionSchema>
 export type GuestbookEdit = z.infer<typeof GuestbookEditSchema>

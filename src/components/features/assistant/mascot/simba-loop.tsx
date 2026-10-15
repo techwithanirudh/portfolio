@@ -5,8 +5,6 @@ import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 import { type AnimationName, SIMBA } from './constants'
 
-// Plays one of Simba's sprite animations on a loop, outside the assistant.
-// Reduced motion keeps him on the first frame.
 export function SimbaLoop({
   animation,
   className,
@@ -14,7 +12,7 @@ export function SimbaLoop({
 }: {
   animation: AnimationName
   className?: string
-  /** Rest on the last frame between loops, in ms */
+  /** ms */
   pause?: number
 }) {
   const { frames } = SIMBA.animations[animation]

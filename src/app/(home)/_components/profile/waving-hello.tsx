@@ -1,5 +1,4 @@
-// Greeting that cycles through languages, after jahir.dev
-// (MIT, (c) Jahir Fiquitiva): https://github.com/jahirfiquitiva/jahir.dev
+// After jahir.dev (MIT, (c) Jahir Fiquitiva): https://github.com/jahirfiquitiva/jahir.dev
 import { TextFlip } from '@/components/text-flip'
 import { profile } from '@/constants/portfolio/profile'
 

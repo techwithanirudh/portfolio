@@ -41,8 +41,6 @@
   --color-accent: var(--color-fd-accent);
   --color-accent-foreground: var(--color-fd-accent-foreground);
 
-  /* --color-destructive: var(--color-fd-destructive);
-  --color-destructive-foreground: var(--color-fd-destructive-foreground); */
   --color-destructive: hsl(0 84.2% 60.2%);
   --color-destructive-foreground: hsl(0 0% 98%);
 
@@ -51,7 +49,6 @@
   --color-input: var(--color-fd-border);
   --color-ring: var(--color-fd-ring);
 
-  /* an1rudh is all square: every radius token resolves to 0 */
   --radius-xs: 0;
   --radius-sm: 0;
   --radius-md: 0;
@@ -61,7 +58,6 @@
   --radius-3xl: 0;
   --radius-4xl: 0;
 
-  /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-geist-mono);
@@ -87,7 +83,6 @@ html > body[data-scroll-locked] {
     --typography-hero-width: 56rem;
     --typography-title-width: 40rem;
     --typography-body-width: 60ch;
-    /* Softer than border, for the full-bleed screen lines */
     --line: color-mix(
       in oklab,
       var(--color-fd-border) 70%,
@@ -101,9 +96,8 @@ html > body[data-scroll-locked] {
     @apply border-border outline-ring/50;
   }
 
-  /* One keyboard focus ring for every control. Zero specificity, so a
-     component's own focus-visible classes still win. Text fields use
-     field-focus instead, and popups (tabindex -1) stay unringed */
+  /* Zero specificity so a component's own focus-visible classes win. Text
+     fields use field-focus, and popups (tabindex -1) stay unringed */
   :where(
     a[href],
     button,
@@ -133,7 +127,6 @@ html > body[data-scroll-locked] {
     @apply scroll-mt-20;
   }
 
-  /* Mono headings are the brand; body copy stays in the readable sans. */
   #main-content :is(h1, h2) {
     font-family: var(--font-heading);
     letter-spacing: -0.04em;
@@ -145,7 +138,6 @@ html > body[data-scroll-locked] {
   --color-fd-primary: hsl(226, 55%, 45%);
   --color-fd-ring: hsl(226, 55%, 45%);
 
-  /* Portrait eyes, a quick blink every few seconds */
   --animate-blink: blink 4.5s ease-in-out infinite;
   @keyframes blink {
     0%,
@@ -302,7 +294,6 @@ html > body[data-scroll-locked] {
     @apply transition-transform hover:scale-125 will-change-transform;
   }
 
-  /* Icons also react when their row (a .group) is hovered */
   .icon-tilt {
     @apply transition-transform hover:rotate-12 hover:scale-125 group-hover:rotate-12 group-hover:scale-125 will-change-transform;
   }
@@ -379,7 +370,7 @@ html > body[data-scroll-locked] {
     }
   }
 
-  /* util for faster than default (250ms) transitions. Typically used to make exits faster so they don't visually overlap with enters */
+  /* Faster exits so they don't overlap the enters */
   ::view-transition-group(.duration-100) {
     animation-duration: 100ms;
   }
@@ -409,7 +400,7 @@ html > body[data-scroll-locked] {
     animation-duration: 450ms;
   }
 
-  /* Prevent background color flash during transition */
+  /* Stops a background color flash during the transition */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     mix-blend-mode: normal;
@@ -437,10 +428,7 @@ html > body[data-scroll-locked] {
   }
 }
 
-/*
- * Full-bleed horizontal rules that run past the column edges.
- * Adapted from chanhdai.com (MIT, (c) Chanh Dai): github.com/ncdai/chanhdai.com
- */
+/* Adapted from chanhdai.com (MIT, (c) Chanh Dai): github.com/ncdai/chanhdai.com */
 @utility screen-line-top {
   @apply relative;
   &:before {
@@ -495,7 +483,6 @@ html > body[data-scroll-locked] {
   }
 }
 
-/* Printing /resume: only the resume sheet, on white paper */
 @media print {
   @page {
     margin: 12mm;
@@ -514,13 +501,8 @@ html > body[data-scroll-locked] {
   }
 }
 
-/*
- * One entrance for the whole site: every section block and every
- * [data-reveal-item] fades and rises in the first time it scrolls into view.
- * Hidden only while the inline reveal script has flagged <html>, so no JS
- * means nothing is hidden; the script's Web Animation then holds them visible.
- * The first section is above the fold and carries the LCP, so it never hides.
- */
+/* Hidden only while the reveal script flags <html>, so without JS nothing
+   hides. The first section carries the LCP, so it never hides */
 :root[data-reveal]
 :is([data-slot="section-inner"] > *, [data-reveal-item]):not(
   #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
@@ -528,21 +510,18 @@ html > body[data-scroll-locked] {
   opacity: 0;
 }
 
-/* The floating mascot only has a gutter to sit in from lg up; smaller
-   screens reach the assistant from the menu instead */
+/* No gutter for the mascot below lg, the menu opens the assistant there */
 @media (width < 64rem) {
   [data-mascot] {
     display: none !important;
   }
 }
 
-/* The resume is a sheet of paper, no mascot on it */
 :root:has([data-resume]) [data-mascot] {
   display: none !important;
 }
 
-/* Focus for flush, ruled text fields: a lifted background and an inset
-   accent bar, since an outside ring would collide with the rules */
+/* An outside ring would collide with the rules of flush fields */
 @utility field-focus {
   &:focus-visible,
   &:has(:focus-visible) {

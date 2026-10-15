@@ -40,7 +40,6 @@ export function useSignInModal(): SignInModalContextValue {
   return ctx
 }
 
-// Opens the modal when the server sent the visitor here with `?signin=/path`.
 function SignInParamListener({
   onOpen,
 }: {

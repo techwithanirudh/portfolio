@@ -11,9 +11,7 @@ import { WORK_COVER_SIZES } from './cover'
 interface WorkCardProps {
   description: string
   image?: string | null
-  /** Short mono labels under the description, such as the year. */
   meta?: string[]
-  /** Load the cover eagerly, for cards above the fold. */
   priority?: boolean
   slugs: string[]
   title: string
@@ -22,8 +20,8 @@ interface WorkCardProps {
 
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
 
-// The case study cover is requested at a larger size than the card's, so warm
-// the exact srcset it will use and the shared-element morph lands on a loaded image.
+// The case study asks for a bigger cover, so warm its exact srcset and the
+// shared-element morph lands on a loaded image
 const preloadCover = (src: string, alt: string) => {
   const { props } = getImageProps({
     alt,
@@ -39,7 +37,6 @@ const preloadCover = (src: string, alt: string) => {
   })
 }
 
-// Flush, ruled project cell: edge to edge cover, mono title, one line of copy
 export const WorkCard = ({
   title,
   description,

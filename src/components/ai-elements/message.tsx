@@ -9,8 +9,7 @@ export type MessageProps = ComponentProps<'div'> & {
   from: UIMessage['role']
 }
 
-// One turn in the log. The site reads messages as a flat transcript (no
-// bubbles), so `from` only sets data hooks for styling
+// No bubbles, so `from` only sets data hooks for styling
 export const Message = ({ className, from, ...props }: MessageProps) => (
   <div
     className={cn(
@@ -52,8 +51,7 @@ export type MessageResponseProps = Omit<ComponentProps<'div'>, 'children'> & {
   children: string
 }
 
-// Streams markdown through the site's renderer, so code blocks, links and
-// headings match the docs instead of a second markdown stack
+// The site's own renderer, so replies match the docs
 export const MessageResponse = memo(
   ({ className, children, ...props }: MessageResponseProps) => (
     <div

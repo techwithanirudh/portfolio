@@ -12,9 +12,7 @@ export type WorkPage = ReturnType<typeof getWorkPages>[number]
 
 const workPages = getWorkPages()
 
-/**
- * Pinned projects lead, in `order`; everything else follows, newest first.
- */
+// Pinned projects lead in `order`, the rest follow newest first
 export const getSortedWork = () =>
   workPages.toSorted((a, b) => {
     const aOrder = a.data.order

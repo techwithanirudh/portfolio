@@ -1,8 +1,6 @@
 'use client'
 
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
-// Runs before hydration on the server render, and stays inert on the client so
-// React does not warn about script tags.
 export function InlineScript({ html }: { html: string }) {
   return (
     <script

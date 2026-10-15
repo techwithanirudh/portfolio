@@ -109,8 +109,7 @@ function ExperiencePositionItem({ position }: ExperiencePositionItemProps) {
       defaultOpen={position.isExpanded}
       disabled={!position.description}
     >
-      {/* The heading wraps the trigger since buttons only take phrasing
-          content, so everything inside is spans styled as before */}
+      {/* The heading wraps the trigger since buttons only take phrasing content */}
       <h4 className='not-prose'>
         <CollapsibleTrigger
           className={cn(

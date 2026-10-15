@@ -22,8 +22,6 @@ export type SourcesTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
   count: number
 }
 
-// The search glyph turns into a chevron on hover and while open, so the row
-// reads as a disclosure without an extra icon
 export const SourcesTrigger = ({
   className,
   count,

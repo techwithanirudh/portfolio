@@ -162,8 +162,6 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   )
 }
 
-// Ruled rows for flush forms: each field draws its own bottom rule and its
-// hint sits under a rule of its own
 const flushItemClassName = 'gap-0 border-line border-b'
 const flushHintClassName = 'border-line border-t px-4 py-2 text-xs'
 

@@ -4,8 +4,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { useOiiaMode } from './provider'
 
-// The cats, physics and audio only load once someone finds the easter egg,
-// then stay mounted so turning it off can still animate out
+// Stays mounted once found so turning it off can still animate out
 const OiiaScene = dynamic(() => import('./scene').then((mod) => mod.OiiaScene))
 
 export function Oiia() {

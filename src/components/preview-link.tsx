@@ -132,7 +132,6 @@ function LinkPreviewPopup({
   )
 }
 
-// Posts and projects preview their own cover, title and blurb
 function PagePreviewPopup({
   href,
   preview,

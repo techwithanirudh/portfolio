@@ -21,7 +21,6 @@ export function HeroName() {
       )}
       onClick={() => {
         const result = registerClick()
-        // Each click lands a semitone higher, like winding something up
         playSound(tap, {
           detune: (CLICKS_TO_ENABLE - result.remaining) * 100,
         })

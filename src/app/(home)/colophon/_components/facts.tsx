@@ -1,6 +1,5 @@
 import { facts } from '@/constants/portfolio/colophon'
 
-// A printer's imprint for the site: the four answers people ask about first
 export const Facts = () => (
   <dl className='grid grid-cols-2 sm:grid-cols-4 sm:[&>*:not(:last-child)]:border-r max-sm:[&>*:nth-child(-n+2)]:border-b max-sm:[&>*:nth-child(odd)]:border-r [&>*]:border-line'>
     {facts.map((fact) => (

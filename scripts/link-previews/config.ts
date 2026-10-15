@@ -65,8 +65,6 @@ export const exclusions: ExclusionsConfig = {
 }
 
 export const detection: DetectionConfig = {
-  components: {
-    // Card: ['href'],
-  },
+  components: {},
   frontmatter: ['website', 'github'],
 }

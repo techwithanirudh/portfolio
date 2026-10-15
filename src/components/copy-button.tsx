@@ -20,11 +20,8 @@ const motionIconProps: HTMLMotionProps<'span'> = {
 }
 
 interface CopyStateIconProps {
-  /** Custom icon for done state. */
   doneIcon?: React.ReactNode
-  /** Custom icon for error state. */
   errorIcon?: React.ReactNode
-  /** Custom icon for idle state. */
   idleIcon?: React.ReactNode
   state: CopyState
 }

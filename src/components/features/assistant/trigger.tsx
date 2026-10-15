@@ -8,8 +8,7 @@ import { MascotSprite } from '@/components/features/assistant/mascot/sprite'
 // Matches the panel's right-4 inset so Simba lines up with it
 const EDGE_OFFSET = 16
 
-// Simba sits in the bottom right gutter and opens the assistant. Below lg
-// there's no gutter for him, so he's hidden there (see [data-mascot]).
+// Hidden below lg by [data-mascot] in globals.css
 export function AssistantTrigger() {
   const { open, setOpen } = useAssistantContext()
   const mascot = useMascot()

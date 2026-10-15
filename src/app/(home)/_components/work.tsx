@@ -59,7 +59,6 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
                   </p>
                 </ViewTransition>
               </div>
-              {/* Year and stack in mono, so a row scans like the resume */}
               <div className='hidden shrink-0 flex-col items-end gap-1 font-mono text-muted-foreground text-xs sm:flex'>
                 <span className='text-foreground/80 tabular-nums'>
                   {new Date(work.data.date).getFullYear()}

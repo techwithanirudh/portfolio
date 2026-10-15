@@ -22,8 +22,7 @@ import { toast } from '@/lib/toast'
 import { ContactSchema } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
-// Placeholders carry the meaning, so labels are screen-reader only and the
-// only hint row is an error
+// Placeholders carry the meaning, so labels are screen reader only
 
 const ContactFormInner = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(

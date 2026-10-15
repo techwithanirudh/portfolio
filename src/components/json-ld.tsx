@@ -45,8 +45,6 @@ function makeGraph(...nodes: object[]) {
   return { '@context': 'https://schema.org', '@graph': nodes }
 }
 
-// --- Blog post ---
-
 export const PostJsonLd = ({ page }: { page: BlogPage }) => {
   const url = new URL(page.url, baseUrl.href).href
   const image = new URL(getBlogPageImage(page).url, baseUrl.href).href
@@ -79,8 +77,6 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => {
   return <JsonLd graph={makeGraph(post, breadcrumbs)} />
 }
 
-// --- Work case study ---
-
 export const WorkJsonLd = ({ page }: { page: WorkPage }) => {
   const url = new URL(page.url, baseUrl.href).href
   const image = new URL(getWorkPageImage(page).url, baseUrl.href).href
@@ -110,8 +106,6 @@ export const WorkJsonLd = ({ page }: { page: WorkPage }) => {
 
   return <JsonLd graph={makeGraph(article, breadcrumbs)} />
 }
-
-// --- Page helpers ---
 
 interface PageJsonLdProps {
   breadcrumbs?: { name: string; url: string }[]
@@ -157,31 +151,21 @@ function PageJsonLdBase({
   return <JsonLd graph={makeGraph(page, makeBreadcrumbs(crumbs))} />
 }
 
-// --- Generic web page (fallback) ---
-
 export const WebPageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase props={props} type='WebPage' />
 )
-
-// --- Collection page (listings: blog, work, tags) ---
 
 export const CollectionPageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase props={props} type='CollectionPage' />
 )
 
-// --- Contact page ---
-
 export const ContactPageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase props={props} type='ContactPage' />
 )
 
-// --- About page (colophon, uses) ---
-
 export const AboutPageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase props={props} type='AboutPage' />
 )
-
-// --- Profile page ---
 
 export const ProfilePageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase
@@ -192,8 +176,6 @@ export const ProfilePageJsonLd = (props: PageJsonLdProps) => (
     type='ProfilePage'
   />
 )
-
-// --- Blog tag page ---
 
 export const TagJsonLd = ({ tag }: { tag: string }) => {
   const tagUrl = new URL(`/blog/tags/${tag}`, baseUrl.href).href

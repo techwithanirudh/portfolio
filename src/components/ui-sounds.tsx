@@ -20,8 +20,7 @@ import { playSound } from '@/lib/audio/preferences'
 
 const PRESS =
   'a[href], button:not([type="submit"]), [role="tab"], [role="switch"], [role="checkbox"], [aria-expanded]'
-// Rows and controls that react visually to hover also tick; plain inline
-// links in prose stay quiet
+// Plain inline links in prose stay quiet
 const HOVER = [
   '[data-sound-hover]',
   '[data-slot="button"]',
@@ -61,7 +60,7 @@ const isTextField = (el: EventTarget | null): el is HTMLElement => {
 }
 
 const playPress = (el: Element) => {
-  // Accordions, menus and popovers: the trigger says where it is heading
+  // aria-expanded flips after the click handlers ran, so read it a tick later
   if (el.hasAttribute('aria-expanded')) {
     setTimeout(() => {
       const open = el.getAttribute('aria-expanded') === 'true'
@@ -97,8 +96,7 @@ const playPress = (el: Element) => {
   playSound(click, jitter(60, 0.1))
 }
 
-// A submit either trips the validator, which marks fields aria-invalid, or
-// goes through. Server results are voiced by the toast that follows.
+// Server results are voiced by the toast that follows
 const playSubmit = (form: HTMLFormElement) => {
   setTimeout(() => {
     const invalid = form.querySelector('[aria-invalid="true"]')
@@ -106,10 +104,6 @@ const playSubmit = (form: HTMLFormElement) => {
   }, VALIDATION_DELAY)
 }
 
-// One set of document listeners gives every link, button, disclosure, form,
-// tab, switch and text field
-// the same tactile feedback, so new components get sound without wiring it up.
-// Components that play their own sound simply are not links, tabs or switches.
 export function UiSounds() {
   useEffect(() => {
     let lastHover = 0

@@ -1,8 +1,4 @@
-// Runs inline in <head>, before hydration, so content never waits on React.
-// It flags <html> (the CSS only hides blocks while this flag is set, so a
-// browser without JS just shows the page) and plays a Web Animation on each
-// section block and [data-reveal-item] the first time it scrolls into view.
-// Nothing touches the DOM's attributes, so hydration sees the server's HTML.
+// Runs inline in <head> so content never waits on React
 const reveal = () => {
   const root = document.documentElement
   if (!('IntersectionObserver' in window && 'animate' in root)) {
@@ -54,7 +50,7 @@ const reveal = () => {
       }
     }
   }
-  // Client side navigations swap the page in, so keep watching for new blocks
+  // Client navigations swap the page in, so keep watching for new blocks
   new MutationObserver(() => {
     if (!queued) {
       queued = true

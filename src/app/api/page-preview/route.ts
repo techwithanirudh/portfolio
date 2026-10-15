@@ -4,7 +4,6 @@ import { getPosts, getWorkPages } from '@/lib/source'
 const cacheControl =
   'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
 
-// Title, blurb and cover for an internal post or project, for hover previews
 export function GET(request: Request) {
   const path = new URL(request.url).searchParams.get('path')
   const page = [...getPosts(), ...getWorkPages()].find(

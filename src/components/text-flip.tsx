@@ -20,7 +20,7 @@ const defaultVariants: Variants = {
 interface TextFlipProps {
   children: ReactNode[]
   className?: string
-  /** Seconds between flips. */
+  /** Seconds */
   interval?: number
   onIndexChange?: (index: number) => void
   play?: boolean

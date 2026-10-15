@@ -17,7 +17,6 @@ import type { CaptureScreenshotResult } from './types'
 const mdProcessor = remark().use(remarkGfm)
 const mdxProcessor = remark().use(remarkMdx).use(remarkGfm)
 
-/** Whether a URL should have a screenshot captured (filters internal, excluded domains, etc.) */
 export function shouldGeneratePreview(url: string): boolean {
   if (!(url.startsWith('http://') || url.startsWith('https://'))) {
     return false
@@ -41,7 +40,6 @@ export function shouldGeneratePreview(url: string): boolean {
   }
 }
 
-/** Extract external URLs from an MDX/MD file's markdown links and frontmatter */
 export function extractUrls(file: FileObject): string[] {
   const urls = new Set<string>()
   const processor = file.path.endsWith('.mdx') ? mdxProcessor : mdProcessor
@@ -107,14 +105,12 @@ export function extractUrls(file: FileObject): string[] {
 
 const sourceUrlPattern = /(?:['"`]|\]\()(https?:\/\/[^'"`\s$)]+)(?=['"`)])/g
 
-/** Extract external URLs from string literals and markdown links in a source file */
 export function extractSourceUrls(source: string): string[] {
   return [...source.matchAll(sourceUrlPattern)]
     .map(([, url]) => url)
     .filter((url): url is string => Boolean(url && shouldGeneratePreview(url)))
 }
 
-/** Collect every previewable URL from content files and site source files */
 export async function collectUrls() {
   const files = await readFiles(content)
   const sourceTexts = await Promise.all(
@@ -128,7 +124,6 @@ export async function collectUrls() {
   return { fileCount: files.length + sources.length, urls: [...urls] }
 }
 
-/** Keep only preview entries whose URL hashes are present in the given URL list */
 export function previewsForUrls(
   previews: Record<string, LinkPreviewEntry>,
   urls: string[]
@@ -139,7 +134,6 @@ export function previewsForUrls(
   )
 }
 
-/** Load the existing preview manifest, or null if none exists */
 export async function loadManifest(): Promise<LinkPreviewManifest | null> {
   try {
     return JSON.parse(await fs.readFile(screenshot.paths.manifest, 'utf8'))
@@ -148,7 +142,6 @@ export async function loadManifest(): Promise<LinkPreviewManifest | null> {
   }
 }
 
-/** Write the preview manifest to disk, creating the output directory if needed */
 export async function writeManifest(
   previews: Record<string, LinkPreviewEntry>
 ) {
@@ -159,7 +152,6 @@ export async function writeManifest(
   )
 }
 
-/** Capture a full-page screenshot of a URL, returning success or an error message */
 export async function captureScreenshot(
   browser: Browser,
   url: string,
@@ -227,7 +219,6 @@ export async function captureScreenshot(
   }
 }
 
-/** Delete screenshot files not referenced by any preview entry */
 export async function removeOrphans(
   previews: Record<string, LinkPreviewEntry>
 ) {
@@ -250,7 +241,6 @@ export async function removeOrphans(
   }
 }
 
-/** Create a new manifest entry for a screenshot result */
 export function createEntry(
   url: string,
   result: CaptureScreenshotResult

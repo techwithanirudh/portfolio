@@ -89,7 +89,6 @@ interface LinkPayload {
   review?: { html_url?: string }
 }
 
-// The page on GitHub each row opens, falling back to the repo itself
 export const getEventUrl = (event: GitHubEvent, commits?: PushCommit[]) => {
   const repo = event.repo?.name
   if (!repo) {

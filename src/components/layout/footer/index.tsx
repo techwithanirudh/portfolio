@@ -7,8 +7,7 @@ import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
 import { title } from '@/constants/site'
 
-// Feeds are route handlers, not pages, so they need a full document load;
-// the client router would try to render them and 404
+// Feeds are route handlers, the client router would 404 on them
 const links = [
   { href: '/uses', label: 'uses' },
   { href: '/colophon', label: 'colophon' },
@@ -19,10 +18,8 @@ const links = [
 export const Footer = () => (
   <footer className='relative z-20 bg-background pb-24 md:pb-0'>
     <div className='container mx-auto'>
-      {/* The top rule sits 1px up so it lands on the last section's bottom
-          rule instead of doubling it */}
+      {/* 1px up so the top rule lands on the last section's bottom rule */}
       <div className='screen-line-top screen-line-bottom border-line border-x before:-top-px'>
-        {/* Every page ends on the same hatched band before the footer */}
         <div aria-hidden className='screen-line-bottom h-8 bg-dashed' />
         <ViewAnimation>
           <div className='screen-line-bottom flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3 font-mono text-muted-foreground text-xs'>

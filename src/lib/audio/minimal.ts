@@ -1,5 +1,4 @@
-// Minimal, from @web-kits/audio (raphaelsalaja/audio, MIT, (c) Raphael Salaja).
-// Quiet sine blips that sit under the grid rather than clatter on top of it.
+// From @web-kits/audio (raphaelsalaja/audio, MIT, (c) Raphael Salaja)
 import type { SoundDefinition } from '@web-kits/audio'
 
 export const checkbox: SoundDefinition = {

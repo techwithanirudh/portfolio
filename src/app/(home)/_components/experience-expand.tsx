@@ -11,13 +11,11 @@ import {
 import { cn } from '@/lib/utils'
 
 interface ExperienceExpandProps {
-  /** The roles past the preview, rendered on the server */
   children: React.ReactNode
   total: number
 }
 
-// The rest of the roles open in place instead of sending you to /about,
-// after chanhdai.com's experience list (MIT, (c) Chanh Dai)
+// After chanhdai.com's experience list (MIT, (c) Chanh Dai)
 export function ExperienceExpand({ children, total }: ExperienceExpandProps) {
   const [open, setOpen] = useState(false)
 

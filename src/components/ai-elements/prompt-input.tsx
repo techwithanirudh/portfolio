@@ -28,8 +28,7 @@ export type PromptInputProps = Omit<ComponentProps<'form'>, 'onSubmit'> & {
   ) => void | Promise<void>
 }
 
-// The text-only slice of AI Elements' PromptInput: the panel has no
-// attachments, model pickers or speech, so those parts are left out
+// Text-only slice of AI Elements' PromptInput
 export const PromptInput = ({
   className,
   onSubmit,
@@ -186,7 +185,6 @@ export const PromptInputButton = ({
 
 export type PromptInputSubmitProps = Omit<PromptInputButtonProps, 'type'> & {
   status?: ChatStatus
-  // Given while a reply is in flight, the button turns into a stop button
   onStop?: () => void
 }
 

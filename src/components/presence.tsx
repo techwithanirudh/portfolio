@@ -2,8 +2,6 @@
 
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 
-// Keeps children mounted until their exit animation finishes, so CSS exit
-// keyframes get to play. With no running animation they unmount at once.
 export function Presence({
   children,
   present,
@@ -21,8 +19,7 @@ export function Presence({
     }
     let cancelled = false
     const frame = requestAnimationFrame(() => {
-      // Only the exit animation on the top elements counts; anything looping
-      // inside (spinners, typing dots) would otherwise never finish
+      // Only top-level exits count, nested loops (spinners) never finish
       const animations = [...(ref.current?.children ?? [])]
         .flatMap((child) => child.getAnimations())
         .filter(

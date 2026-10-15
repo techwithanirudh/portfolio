@@ -8,8 +8,7 @@ import { SkipLink } from '@/components/layout/skip-link'
 import { linkItems } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 
-// The site chrome (header, ruled column, fill, footer). The root not-found
-// borrows it too, so a 404 outside (home) still looks like the site
+// Shared with the root not-found so a 404 outside (home) still looks like the site
 export const SiteShell = ({ children }: { children: ReactNode }) => (
   <>
     <SkipLink />

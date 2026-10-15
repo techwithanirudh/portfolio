@@ -13,8 +13,7 @@ interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
   root: boolean
 }
 
-// Native scrolling is the reduced motion experience, so skip Lenis (and its
-// Tempus loop) entirely, and pick it back up if the setting flips
+// Reduced motion gets native scrolling, with no Lenis or Tempus loop at all
 export function Lenis(props: LenisProps) {
   const reducedMotion = useReducedMotion()
 

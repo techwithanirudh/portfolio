@@ -377,8 +377,7 @@ function MessageList({
   status: UseChatHelpers<MyUIMessage>['status']
 }) {
   const isBusy = status === 'streaming' || status === 'submitted'
-  // Until the first chunk lands there's no assistant message to hang the
-  // spinner on, so show a placeholder turn
+  // No assistant message exists before the first chunk, so show a placeholder
   const isAwaitingReply =
     status === 'submitted' && messages.at(-1)?.role === 'user'
 

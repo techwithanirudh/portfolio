@@ -17,7 +17,6 @@ export function formatDuration(start: string, end?: string): string {
   const startHasMonth = start.includes('.')
   const endHasMonth = end ? end.includes('.') : true
 
-  // Both year-only: granularity is years, no month arithmetic needed.
   if (!startHasMonth && end && !endHasMonth) {
     const years = Number.parseInt(end, 10) - Number.parseInt(start, 10)
     if (years <= 0) {
@@ -29,7 +28,7 @@ export function formatDuration(start: string, end?: string): string {
   const startDate = parsePeriodDate(start, 'first')
   const endDate = end ? parsePeriodDate(end, 'last') : new Date()
 
-  // +1 to count both the start and end months inclusively.
+  // +1 so both end months count
   const totalMonths = differenceInMonths(endDate, startDate) + 1
   if (totalMonths <= 0) {
     return ''

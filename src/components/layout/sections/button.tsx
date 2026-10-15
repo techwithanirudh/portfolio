@@ -4,8 +4,7 @@ import { Icons } from '@/components/icons/icons'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-// Full-width square button that sits flush on a section's bottom edge,
-// after chanhdai.com's PanelButton (MIT, (c) Chanh Dai)
+// After chanhdai.com's PanelButton (MIT, (c) Chanh Dai)
 export function SectionButton({
   className,
   children,

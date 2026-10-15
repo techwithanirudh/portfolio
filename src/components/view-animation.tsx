@@ -9,9 +9,7 @@ interface ViewAnimationProps {
   delay?: number
 }
 
-// Opts an element into the site wide entrance: it fades and rises in the
-// first time it scrolls into view. The observer lives in reveal-script.ts and
-// the motion in globals.css, so this renders on the server with no JS of its own.
+// The observer lives in reveal-script.ts and the motion in globals.css
 export const ViewAnimation = ({
   as: Tag = 'div',
   delay,

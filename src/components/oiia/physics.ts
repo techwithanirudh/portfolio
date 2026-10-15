@@ -26,15 +26,15 @@ const BURST_COLORS = [
 function pickRadius(): number {
   const t = Math.random()
   if (t < 0.18) {
-    return 24 + Math.floor(Math.random() * 7) // small: 24–30
+    return 24 + Math.floor(Math.random() * 7)
   }
   if (t < 0.72) {
-    return 30 + Math.floor(Math.random() * 9) // medium: 30–38
+    return 30 + Math.floor(Math.random() * 9)
   }
   if (t < 0.92) {
-    return 42 + Math.floor(Math.random() * 12) // large: 42–53
+    return 42 + Math.floor(Math.random() * 12)
   }
-  return 56 + Math.floor(Math.random() * 16) // huge: 56–71
+  return 56 + Math.floor(Math.random() * 16)
 }
 
 export interface OiiaEngine {

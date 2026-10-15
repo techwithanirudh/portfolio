@@ -9,9 +9,7 @@ const rise = {
 }
 
 export interface SectionHeaderProps {
-  /** Sits on the right of the title row, for a single compact control */
   action?: ReactNode
-  /** Heading level; page-level headers (contact, guestbook) use h1 */
   as?: 'h1' | 'h2'
   children?: ReactNode
   className?: string
@@ -38,7 +36,6 @@ export const SectionHeader = ({
     <div
       className={cn(
         'flex flex-col items-start text-left',
-        // The intro block gets its own rule so the content below never runs into it
         (description || hasChildren) && 'screen-line-bottom pb-3',
         sticky && 'lg:sticky lg:top-16',
         className
@@ -82,7 +79,6 @@ export const SectionHeader = ({
   )
 }
 
-// Small count next to a section title, e.g. Experience (5)
 export const SectionTitleSup = ({
   className,
   ...props

@@ -97,8 +97,7 @@ export const Header = ({
                 href={item.url}
                 key={item.url}
               >
-                {/* Fumadocs' GitHub svg is role=img with no name; the link
-                    already carries one */}
+                {/* Fumadocs' GitHub svg is role=img with no name, the link has one */}
                 <span aria-hidden className='contents'>
                   {item.icon}
                 </span>

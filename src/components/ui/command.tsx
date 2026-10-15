@@ -57,8 +57,7 @@ function CommandDialog({
         showCloseButton={false}
         showOverlay={false}
       >
-        {/* Inside the popup so it names the dialog instead of sitting in the
-            page body on every route */}
+        {/* Inside the popup so it names the dialog, not every page body */}
         <DialogHeader className="sr-only">
           <DialogTitle render={<span />}>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

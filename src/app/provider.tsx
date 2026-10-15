@@ -16,8 +16,8 @@ import { UiSounds } from '@/components/ui-sounds'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { useSoundEnabled } from '@/lib/audio/preferences'
 
-// Mounted once here so the `d` shortcut fires once, no matter how many
-// theme toggles are on the page. Lives inside SoundProvider so it respects mute.
+// Mounted once so `d` fires once however many toggles render, and inside
+// SoundProvider so it respects mute
 function ThemeShortcut() {
   useThemeShortcut()
   return null

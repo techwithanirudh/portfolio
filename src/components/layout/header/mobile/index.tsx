@@ -12,8 +12,6 @@ import { Presence } from '@/components/presence'
 const MENU_ID = 'mobile-navigation-menu'
 const FOCUSABLE = 'a[href], button:not([disabled])'
 
-// The menu is modal: focus moves in on open, Tab cycles between the menu and
-// its toggle, and closing from inside hands focus back to the toggle
 const getToggle = () =>
   document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`)
 const getFocusable = () => [

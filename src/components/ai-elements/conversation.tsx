@@ -8,8 +8,6 @@ import { cn } from '@/lib/utils'
 
 export type ConversationProps = ComponentProps<typeof StickToBottom>
 
-// A live log that sticks to the newest message while it streams, and lets go
-// as soon as the reader scrolls up
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
     className={cn('relative flex-1 overflow-y-hidden', className)}

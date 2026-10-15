@@ -9,7 +9,6 @@ import {
 import { usePagination } from '@/hooks/use-pagination'
 import { cn } from '@/lib/utils'
 
-// Flush square cells split by rules, so the bar sits on the section's lines
 const cellClassName =
   'size-12 shadow-none ring-0 hover:z-10 focus-visible:z-10 active:scale-100'
 const ellipsisClassName =

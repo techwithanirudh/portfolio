@@ -3,8 +3,7 @@ import { Input as InputPrimitive } from "@base-ui/react/input"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "cn"
 
-// Flush fields sit edge to edge as ruled rows, so an outside ring would
-// collide with the rules: field-focus lifts the background instead
+// An outside ring would collide with the ruled rows, so field-focus instead
 const flushFieldClassName =
   "border-0 shadow-none transition-colors field-focus"
 const flushControlClassName = `${flushFieldClassName} bg-transparent px-4 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent`

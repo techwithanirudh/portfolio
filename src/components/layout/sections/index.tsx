@@ -2,16 +2,12 @@ import type { HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
 type SectionProps = {
-  /**
-   * Stretch to the leftover viewport height (and stand in for the layout's
-   * PageFill), so a scrolling list can fill the screen above the footer
-   */
+  /** Takes the leftover viewport height in place of the layout's PageFill */
   fill?: boolean
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
-// One column panel with side rules and lines that run the full screen width,
-// after chanhdai.com's Panel (MIT, (c) Chanh Dai)
+// After chanhdai.com's Panel (MIT, (c) Chanh Dai)
 export const Section = ({
   children,
   fill = false,

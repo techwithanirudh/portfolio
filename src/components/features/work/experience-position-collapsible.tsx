@@ -12,8 +12,7 @@ import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevr
 import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
 import { Collapsible } from '@/components/ui/collapsible'
 
-// The only interactive bit of the experience list: it owns the open state
-// callback and drives the animated chevron, everything else renders on the server.
+// The only client bit of the experience list, the rest renders on the server
 const ChevronRefContext =
   createContext<RefObject<ChevronsUpDownIconHandle | null> | null>(null)
 
