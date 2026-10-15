@@ -1,6 +1,7 @@
 import { UserButton } from '@/components/features/auth'
 import { GuestbookBand } from '@/components/guestbook-cue'
 import { Clock } from '@/components/layout/footer/clock'
+import { SoundToggle } from '@/components/layout/footer/sound-toggle'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { ViewAnimation } from '@/components/view-animation'
 import { owner } from '@/constants/site'
@@ -34,6 +35,7 @@ export const Footer = () => (
           delay={0.2}
         >
           <Clock />
+          <SoundToggle />
           <ThemeToggle mode='light-dark-system' />
         </ViewAnimation>
         <div className='flex items-center justify-between sm:hidden'>
@@ -42,6 +44,7 @@ export const Footer = () => (
           </ViewAnimation>
           <ViewAnimation className='flex items-center gap-2' delay={0.2}>
             <Clock />
+            <SoundToggle />
             <ThemeToggle mode='light-dark-system' />
           </ViewAnimation>
         </div>

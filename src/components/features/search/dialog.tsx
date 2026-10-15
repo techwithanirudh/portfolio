@@ -27,7 +27,9 @@ import {
 } from '@/components/ui/command'
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
+import { toggleSound } from '@/lib/audio/preferences'
 import { signOut, useSession } from '@/lib/auth-client'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
@@ -156,9 +158,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     const hashIndex = url.indexOf('#')
     const hash = hashIndex === -1 ? null : url.slice(hashIndex)
     const sameRouteTarget = hash ? document.querySelector(hash) : null
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
 
     router.push(url)
 
@@ -167,7 +166,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (sameRouteTarget) {
-      scrollToHashTarget(sameRouteTarget, prefersReducedMotion)
+      scrollToHashTarget(sameRouteTarget, prefersReducedMotion())
     }
   }
 
@@ -198,6 +197,12 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   ) => {
     if (item.kind === 'account') {
       await handleAccountAction(item.action)
+      return
+    }
+
+    if (item.kind === 'sound') {
+      close()
+      toggleSound()
       return
     }
 
@@ -254,6 +259,8 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       title='Command Palette'
     >
       <CommandInput
+        // Enter selects an item, which plays its own confirm sound
+        data-sound-press='off'
         onValueChange={setSearch}
         placeholder='Type a command or search...'
         value={search}

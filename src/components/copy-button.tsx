@@ -98,6 +98,7 @@ export function CopyButton({
     <Button
       aria-label='Copy'
       className='will-change-transform'
+      data-sound-press='off'
       onClick={(e) => {
         copy(text)
         onClick?.(e)

@@ -5,7 +5,6 @@ import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 
@@ -44,8 +43,6 @@ export function ThemeToggle({
     setMounted(true)
   }, [])
 
-  useThemeShortcut()
-
   const handleChangeTheme = async (next: Theme) => {
     playToggle()
 
@@ -81,6 +78,7 @@ export function ThemeToggle({
       <button
         aria-label={'Toggle Theme'}
         className={container}
+        data-sound-press='off'
         data-theme-toggle=''
         onClick={() =>
           handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
@@ -112,6 +110,7 @@ export function ThemeToggle({
         <button
           aria-label={key}
           className={itemVariants({ active: value === key })}
+          data-sound-press='off'
           key={key}
           onClick={() => handleChangeTheme(key)}
           type='button'

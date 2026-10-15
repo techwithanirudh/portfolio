@@ -11,6 +11,33 @@ import { SmoothCursor } from '@/components/smooth-cursor'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { UiSounds } from '@/components/ui-sounds'
+import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
+import { useSoundEnabled } from '@/lib/audio/preferences'
+
+// Mounted once so `d` fires once however many theme toggles render, and
+// inside SoundProvider so it respects mute
+function ThemeShortcut() {
+  useThemeShortcut()
+  return null
+}
+
+// Sits above RootProvider so the search dialog it renders respects mute too
+export function SoundsProvider({
+  children,
+}: {
+  children: ReactNode
+}): React.ReactElement {
+  const soundEnabled = useSoundEnabled()
+
+  return (
+    <SoundProvider enabled={soundEnabled}>
+      <UiSounds />
+      <ThemeShortcut />
+      {children}
+    </SoundProvider>
+  )
+}
 
 export function Provider({
   children,
@@ -18,7 +45,7 @@ export function Provider({
   children: ReactNode
 }): React.ReactElement {
   return (
-    <SoundProvider>
+    <>
       <Assistant>
         <ProgressProvider
           color='var(--color-primary)'
@@ -42,6 +69,6 @@ export function Provider({
       <Toaster position='top-center' />
       <TailwindIndicator />
       <SmoothCursor />
-    </SoundProvider>
+    </>
   )
 }

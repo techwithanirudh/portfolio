@@ -38,6 +38,7 @@ export const SearchToggle = ({
         props.className
       )}
       data-search=''
+      data-sound-press='off'
       onClick={() => setOpenSearch(true)}
       type='button'
     >
@@ -61,6 +62,7 @@ export const LargeSearchToggle = ({
   return (
     <button
       data-search-full=''
+      data-sound-press='off'
       type='button'
       {...props}
       className={cn(
