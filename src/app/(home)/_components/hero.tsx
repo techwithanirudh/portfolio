@@ -34,11 +34,7 @@ const Hero = () => {
       >
         <HeroGradient />
       </motion.div>
-      <ViewAnimation
-        delay={0.1}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
+      <ViewAnimation delay={0.1}>
         <h1
           className={cn(
             'typography-hero text-balance text-center font-normal text-4xl leading-tight tracking-tighter',
@@ -48,11 +44,7 @@ const Hero = () => {
           Hi! I'm Anirudh!
         </h1>
       </ViewAnimation>
-      <ViewAnimation
-        delay={0.15}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
+      <ViewAnimation delay={0.15}>
         <p className='max-w-sm text-pretty text-center text-base text-muted-foreground leading-relaxed tracking-tight sm:max-w-xl sm:text-lg md:text-xl'>
           I'm a design engineer and full-stack developer who designs websites
           and writes the code behind them.
@@ -60,11 +52,7 @@ const Hero = () => {
       </ViewAnimation>
 
       <div className='mt-2 flex flex-wrap items-center justify-center gap-4'>
-        <ViewAnimation
-          delay={0.2}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.2}>
           <Link
             className={cn(
               buttonVariants({
@@ -87,10 +75,7 @@ const Hero = () => {
               <ViewAnimation
                 className='flex items-center'
                 delay={0.1 + i * 0.05}
-                duration={0.25}
-                initial={{ opacity: 0, scale: 0.95, translateY: -6 }}
                 key={i.toString()}
-                whileInView={{ opacity: 1, scale: 1, translateY: 0 }}
               >
                 <Link
                   className={cn(

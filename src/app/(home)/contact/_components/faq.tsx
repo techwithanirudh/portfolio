@@ -57,13 +57,9 @@ export const FAQ = () => (
       <Accordion className='w-full [&>[data-slot=accordion-item]:last-child]:border-b-0 [&>[data-slot=accordion-item]]:border-border [&>[data-slot=accordion-item]]:border-b [&>[data-slot=accordion-item]]:border-dashed'>
         {faq.map((item, index) => (
           <ViewAnimation
-            blur={false}
             className='border-border border-b border-dashed last:border-b-0'
             delay={0.05 * index}
-            duration={0.25}
-            initial={{ opacity: 0, translateY: -6 }}
             key={item.question}
-            whileInView={{ opacity: 1, translateY: 0 }}
           >
             <AccordionItem value={`index-${index}`}>
               <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline data-open:bg-card'>

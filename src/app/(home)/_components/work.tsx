@@ -20,14 +20,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
         <div className='divider-top-dashed'>
           <div className='grid grid-cols-1 divide-dashed divide-border text-left lg:grid-cols-2 lg:divide-x [&>*:last-child]:border-b-0 lg:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
             {works.map((work, index) => (
-              <ViewAnimation
-                blur={false}
-                delay={0.05 * index}
-                duration={0.25}
-                initial={{ opacity: 0 }}
-                key={work.url}
-                whileInView={{ opacity: 1 }}
-              >
+              <ViewAnimation delay={0.05 * index} key={work.url}>
                 <WorkCard
                   description={work.data.description ?? ''}
                   image={work.data.image ?? null}
@@ -39,12 +32,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
             ))}
           </div>
 
-          <ViewAnimation
-            blur={false}
-            delay={0.05 * works.length}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.05 * works.length}>
             <Link
               className={buttonVariants({
                 className: 'w-full py-8 active:scale-none active:opacity-80',

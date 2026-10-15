@@ -20,12 +20,7 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
   const hasMoreTags = tags.length > MAX_TAGS
 
   return (
-    <ViewAnimation
-      className='lg:hidden'
-      delay={0.05}
-      initial={{ opacity: 0, translateY: -6 }}
-      whileInView={{ opacity: 1, translateY: 0 }}
-    >
+    <ViewAnimation className='lg:hidden' delay={0.05}>
       <Accordion>
         <AccordionItem className='border-0 px-3 py-2.5' value='tags'>
           <AccordionTrigger className='!p-0 hover:no-underline'>
@@ -37,12 +32,7 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
           <AccordionContent className='!h-auto pt-6'>
             <div className='grid grid-cols-2 gap-px border border-border border-dashed bg-border'>
               {displayedTags.map((tag, index) => (
-                <ViewAnimation
-                  delay={0.05 * index}
-                  initial={{ opacity: 0 }}
-                  key={tag.name}
-                  whileInView={{ opacity: 1 }}
-                >
+                <ViewAnimation delay={0.05 * index} key={tag.name}>
                   <Link
                     className='flex items-center justify-between bg-background p-3 text-muted-foreground text-sm transition-colors hover:bg-card/80'
                     href={`/blog/tags/${tag.name}`}
@@ -73,7 +63,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
 
   return (
     <div className='sticky top-14 flex w-full flex-col divide-y divide-dashed divide-border self-start lg:min-h-[calc(100vh-22rem)]'>
-      <ViewAnimation initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}>
+      <ViewAnimation>
         <div className='flex h-10 items-center gap-2 px-3'>
           <Icons.tag className='icon-pop size-4 text-muted-foreground' />
           <span className='font-medium text-muted-foreground text-sm'>
@@ -83,12 +73,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
       </ViewAnimation>
       <div className='flex flex-col divide-y divide-dashed divide-border'>
         {displayedTags.map((tag, index) => (
-          <ViewAnimation
-            delay={0.05 * index}
-            initial={{ opacity: 0 }}
-            key={tag.name}
-            whileInView={{ opacity: 1 }}
-          >
+          <ViewAnimation delay={0.05 * index} key={tag.name}>
             <Link
               className={cn(
                 'group flex items-center justify-between px-4 py-2 text-sm transition-colors',
@@ -103,11 +88,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
             </Link>
           </ViewAnimation>
         ))}
-        <ViewAnimation
-          delay={0.05 * displayedTags.length}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-        >
+        <ViewAnimation delay={0.05 * displayedTags.length}>
           <Link
             className='group flex items-center gap-2 px-4 py-2 text-muted-foreground text-sm transition-colors hover:bg-card/80 hover:text-foreground'
             href='/blog/tags'

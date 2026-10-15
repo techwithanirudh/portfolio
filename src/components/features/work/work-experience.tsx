@@ -50,12 +50,7 @@ export function WorkExperience({
   return (
     <div className={cn('divide-y divide-dashed divide-border', className)}>
       {experiences.map((experience, index) => (
-        <ViewAnimation
-          delay={0.05 * index}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={experience.id}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.05 * index} key={experience.id}>
           <ExperienceItem experience={experience} />
         </ViewAnimation>
       ))}

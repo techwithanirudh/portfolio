@@ -27,11 +27,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => (
                   className='flex min-h-full basis-full pl-0 md:basis-1/2 lg:basis-1/3'
                   key={post.url}
                 >
-                  <ViewAnimation
-                    delay={0.05 * index}
-                    initial={{ opacity: 0, translateY: -6 }}
-                    whileInView={{ opacity: 1, translateY: 0 }}
-                  >
+                  <ViewAnimation delay={0.05 * index}>
                     <UpdateCard
                       author={post.data.author}
                       date={date}
@@ -49,12 +45,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => (
           </CarouselContent>
         </Carousel>
 
-        <ViewAnimation
-          blur={false}
-          delay={0.05 * posts.length}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.05 * posts.length}>
           <Link
             className={buttonVariants({
               className: 'w-full py-8 active:scale-none active:opacity-80',

@@ -85,11 +85,7 @@ function Header(props: { page: MDXPage }) {
           </ViewTransition>
         </div>
         {links.length > 0 && (
-          <ViewAnimation
-            delay={0.1}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.1}>
             <div className='flex flex-wrap gap-3'>
               {links.map((link) => (
                 <PreviewButton

@@ -21,11 +21,7 @@ export default function Posts({
         className
       )}
     >
-      <ViewAnimation
-        delay={0.1}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
+      <ViewAnimation delay={0.1}>
         <SearchRedirectInput
           className='min-w-full'
           placeholder='Search posts...'
@@ -36,17 +32,11 @@ export default function Posts({
         {posts.map((post, index) => {
           const date = new Date(post.data.date).toDateString()
           return (
-            <ViewAnimation
-              delay={0.05 * index}
-              initial={{ opacity: 0, translateY: -6 }}
-              key={post.url}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
+            <ViewAnimation delay={0.05 * index} key={post.url}>
               <PostCard
                 author={post.data.author}
                 date={date}
                 description={post.data.description ?? ''}
-                slugs={post.slugs}
                 title={post.data.title}
                 url={post.url}
               />

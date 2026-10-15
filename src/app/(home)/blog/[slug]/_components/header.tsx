@@ -1,6 +1,5 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as motion from 'motion/react-client'
-import { ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { TagCard } from '@/components/features/blog'
 import { Section } from '@/components/layout/sections'
@@ -46,12 +45,7 @@ export const Header = ({ page, tags }: HeaderProps) => {
             {tags?.length ? (
               <div className='mb-4 hidden gap-2 md:flex md:flex-wrap'>
                 {tags.map((tag, index) => (
-                  <ViewAnimation
-                    delay={0.1 + index * 0.05}
-                    initial={{ opacity: 0, translateY: -6 }}
-                    key={tag}
-                    whileInView={{ opacity: 1, translateY: 0 }}
-                  >
+                  <ViewAnimation delay={0.1 + index * 0.05} key={tag}>
                     <TagCard
                       className='border border-white/60 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
                       name={tag}
@@ -61,14 +55,9 @@ export const Header = ({ page, tags }: HeaderProps) => {
               </div>
             ) : null}
             <div className='mb-4 space-y-4 text-balance'>
-              <ViewTransition
-                name={`blog/${page.slugs.join('/')}-title`}
-                share='via-blur'
-              >
-                <h1 className='typography-hero max-w-2xl text-balance font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
-                  {page.data.title ?? 'Untitled'}
-                </h1>
-              </ViewTransition>
+              <h1 className='typography-hero max-w-2xl text-balance font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
+                {page.data.title ?? 'Untitled'}
+              </h1>
               <p className='typography-body hidden max-w-3xl text-pretty text-slate-100 leading-8 md:block dark:text-foreground/85'>
                 {page.data.description ?? ''}
               </p>
