@@ -3,7 +3,7 @@ import { SectionHeader } from '@/components/layout/sections/header'
 import Separator from '@/components/layout/sections/separator'
 import { ViewAnimation } from '@/components/view-animation'
 import { getActivityItems } from './actions'
-import { GitHubEvent as GitHubEventComponent } from './event'
+import { GitHubEvent as GitHubEventComponent, getEventUrl } from './event'
 
 const MAX_ITEMS = 12
 
@@ -28,14 +28,22 @@ export default async function Feed(): Promise<React.ReactElement | null> {
             {items.slice(0, MAX_ITEMS).map((item, index) => (
               <ViewAnimation
                 as='li'
-                className='group min-w-0 px-4 py-2 transition-colors hover:bg-card hover:text-foreground'
+                className='min-w-0'
                 delay={0.03 * index}
                 key={item.event.id}
               >
-                <GitHubEventComponent
-                  commits={item.commits}
-                  event={item.event}
-                />
+                <a
+                  className='group block px-4 py-2 transition-colors hover:bg-card hover:text-foreground focus-visible:bg-card focus-visible:text-foreground'
+                  data-sound-hover
+                  href={getEventUrl(item.event, item.commits)}
+                  rel='noopener noreferrer'
+                  target='_blank'
+                >
+                  <GitHubEventComponent
+                    commits={item.commits}
+                    event={item.event}
+                  />
+                </a>
               </ViewAnimation>
             ))}
           </ul>

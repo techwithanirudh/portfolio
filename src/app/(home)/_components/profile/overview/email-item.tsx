@@ -2,9 +2,10 @@
 
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
 import { useId } from 'react'
-import { CopyButton } from '@/components/copy-button'
+import { CopyStateIcon } from '@/components/copy-button'
 import { Icons } from '@/components/icons/icons'
 import { InlineScript } from '@/components/inline-script'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { useIsClient } from '@/hooks/use-is-client'
 import { IntroItem, IntroItemContent, IntroItemIcon } from './intro-item'
 
@@ -21,30 +22,37 @@ export function EmailItem({ emailB64 }: { emailB64: string }) {
   const id = useId()
   const isClient = useIsClient()
   const email = isClient ? atob(emailB64) : ''
+  const { copy, state } = useCopyToClipboard()
 
   return (
     <IntroItem className='group'>
       <IntroItemIcon>
         <Icons.mail />
       </IntroItemIcon>
-      <IntroItemContent className='flex'>
-        <a
-          className='link-underline'
-          href={email ? `mailto:${email}` : undefined}
-          id={id}
-          suppressHydrationWarning
+      <IntroItemContent className='flex min-w-0'>
+        {/* Copies instead of opening a mail app, most people want the address */}
+        <button
+          aria-label={state === 'done' ? 'Email copied' : 'Copy email'}
+          className='group/copy flex min-w-0 cursor-copy items-center gap-1.5 text-left'
+          onClick={() => copy(() => atob(emailB64))}
+          type='button'
         >
-          {email}
-        </a>
+          <span
+            className='link-underline min-w-0 break-all'
+            id={id}
+            suppressHydrationWarning
+          >
+            {email}
+          </span>
+          <span
+            aria-hidden
+            className='shrink-0 text-muted-foreground opacity-0 pointer-coarse:opacity-100 transition-opacity group-hover/copy:opacity-100 group-focus-visible/copy:opacity-100 data-[state=done]:opacity-100 data-[state=error]:opacity-100 [&_svg]:size-3.5'
+            data-state={state}
+          >
+            <CopyStateIcon state={state} />
+          </span>
+        </button>
       </IntroItemContent>
-      <div className='-ml-2 opacity-0 pointer-coarse:opacity-100 transition-opacity ease-out group-hover:opacity-100 group-has-focus-visible:opacity-100'>
-        <CopyButton
-          className='text-muted-foreground'
-          size='icon-xs'
-          text={() => atob(emailB64)}
-          variant='ghost'
-        />
-      </div>
       <InlineScript
         html={`(${revealEncodedText.toString()})(${JSON.stringify(id)},${JSON.stringify(emailB64)})`}
       />

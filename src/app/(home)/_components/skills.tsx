@@ -94,6 +94,7 @@ const Skills = () => (
                         className='group/tag gap-1.5 px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
                         render={
                           <a
+                            data-sound-hover
                             href={href}
                             rel='noopener noreferrer'
                             target='_blank'

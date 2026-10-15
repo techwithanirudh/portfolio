@@ -3,11 +3,9 @@ import { ProfilePageJsonLd } from '@/components/json-ld'
 import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { description as homeDescription } from '@/constants/site'
-import { getGitHubContributions } from '@/lib/github-contributions'
 import { createMetadata } from '@/lib/metadata'
 import { getSortedByDatePosts } from '@/lib/source'
 import Contact from '../_components/contact'
-import Contributions from '../_components/contributions'
 import Skills from '../_components/skills'
 import Detailed from './_components/detailed'
 import Experience from './_components/experience'
@@ -24,7 +22,6 @@ export const metadata: Metadata = createMetadata({
 
 export default function AboutPage() {
   const posts = getSortedByDatePosts()
-  const contributions = getGitHubContributions()
 
   return (
     <>
@@ -41,8 +38,6 @@ export default function AboutPage() {
         <Skills />
         <Separator />
         <Experience />
-        <Separator />
-        <Contributions contributions={contributions} />
         <Separator />
         <Updates posts={posts} />
         <Separator />

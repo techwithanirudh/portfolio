@@ -77,6 +77,62 @@ const EventDate = ({ date }: { date: string | null }) => {
 
 const getRepoName = (event: GitHubEvent) => event.repo?.name ?? 'a repository'
 
+interface LinkPayload {
+  before?: string
+  comment?: { html_url?: string }
+  head?: string
+  issue?: { html_url?: string; number?: number }
+  pull_request?: { html_url?: string; number?: number }
+  ref?: string | null
+  ref_type?: string
+  release?: { html_url?: string }
+  review?: { html_url?: string }
+}
+
+// The page on GitHub each row opens, falling back to the repo itself
+export const getEventUrl = (event: GitHubEvent, commits?: PushCommit[]) => {
+  const repo = event.repo?.name
+  if (!repo) {
+    return 'https://github.com'
+  }
+  const base = `https://github.com/${repo}`
+  const payload = event.payload as LinkPayload
+
+  switch (event.type) {
+    case 'PushEvent': {
+      if (commits?.length === 1 && commits[0]) {
+        return `${base}/commit/${commits[0].sha}`
+      }
+      return payload.before && payload.head
+        ? `${base}/compare/${payload.before.slice(0, 12)}...${payload.head.slice(0, 12)}`
+        : `${base}/commits`
+    }
+    case 'PullRequestEvent':
+    case 'PullRequestReviewThreadEvent':
+      return (
+        payload.pull_request?.html_url ??
+        (payload.pull_request?.number
+          ? `${base}/pull/${payload.pull_request.number}`
+          : `${base}/pulls`)
+      )
+    case 'PullRequestReviewEvent':
+      return payload.review?.html_url ?? payload.pull_request?.html_url ?? base
+    case 'PullRequestReviewCommentEvent':
+    case 'IssueCommentEvent':
+      return payload.comment?.html_url ?? payload.issue?.html_url ?? base
+    case 'IssuesEvent':
+      return payload.issue?.html_url ?? base
+    case 'ReleaseEvent':
+      return payload.release?.html_url ?? `${base}/releases`
+    case 'CreateEvent':
+      return payload.ref && payload.ref_type !== 'repository'
+        ? `${base}/tree/${payload.ref}`
+        : base
+    default:
+      return base
+  }
+}
+
 const PushEvent = ({
   event,
   commits,
@@ -112,7 +168,9 @@ const PullRequestEvent = ({ event }: { event: GitHubEvent }) => {
   const payload = event.payload as PullRequestPayload
   const pullRequest = payload.pull_request
   const repoName = getRepoName(event)
-  const title = pullRequest?.title ?? 'a pull request'
+  const title =
+    pullRequest?.title ??
+    (pullRequest?.number ? `#${pullRequest.number}` : 'a pull request')
   const user = pullRequest?.user?.login
   const description = user
     ? `Merged ${user}'s ${title} on ${repoName}`
