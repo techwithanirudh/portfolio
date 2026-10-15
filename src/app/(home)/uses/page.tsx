@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { Fragment } from 'react'
 import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
+import { SectionHeader } from '@/components/layout/sections/header'
 import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
@@ -51,36 +52,21 @@ export default function UsesPage() {
       <Separator />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
-        const headingDelay = section.title ? baseDelay : 0
-        const contentDelay = section.title ? headingDelay + 0.05 : 0
+        const contentDelay = section.title ? baseDelay + 0.05 : 0
 
         return (
           <Fragment key={section.title ?? `uses-section-${index}`}>
-            {section.title && (
-              <Section className='px-4 py-2'>
-                <ViewAnimation
-                  delay={headingDelay}
-                  initial={{ opacity: 0, translateY: 6 }}
-                  whileInView={{ opacity: 1, translateY: 0 }}
-                >
-                  <h2 className='font-heading font-medium text-2xl tracking-tight sm:text-3xl'>
-                    {section.title}
-                  </h2>
-                </ViewAnimation>
-              </Section>
-            )}
             <Section>
+              {section.title && <SectionHeader title={section.title} />}
               <ViewAnimation
                 delay={contentDelay}
-                initial={{ opacity: 0, translateY: 6 }}
+                initial={{ opacity: 0, translateY: -6 }}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >
                 {section.content}
               </ViewAnimation>
             </Section>
-            {index < sections.length - 1 && (
-              <Separator variant={index < 1 ? 'dashed' : 'transparent'} />
-            )}
+            {index < sections.length - 1 && <Separator />}
           </Fragment>
         )
       })}

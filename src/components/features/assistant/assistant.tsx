@@ -368,7 +368,7 @@ function PromptContext({
       </span>
       <button
         aria-label='Remove context'
-        className='inline-flex items-center justify-center rounded-sm text-fd-muted-foreground transition-colors hover:text-fd-foreground'
+        className='inline-flex items-center justify-center text-fd-muted-foreground transition-colors hover:text-fd-foreground'
         onClick={onClear}
         type='button'
       >
@@ -514,7 +514,7 @@ const Message = memo(function Message({
       </p>
       <div className='flex flex-col gap-2'>
         {message.role === 'user' && context ? (
-          <div className='not-prose rounded-md border border-border border-dashed bg-fd-muted/40 p-2 text-xs'>
+          <div className='not-prose border border-border border-dashed bg-fd-muted/40 p-2 text-xs'>
             <p className='mb-1 font-medium text-[11px] text-fd-muted-foreground uppercase tracking-wide'>
               Context
             </p>
@@ -612,7 +612,7 @@ function AssistantPanel() {
       <Presence present={open}>
         <div
           className={cn(
-            'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]',
+            'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
           // The panel plays its own send, error and action sounds

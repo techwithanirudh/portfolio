@@ -2,8 +2,6 @@ import { cn } from '@/lib/utils'
 
 interface SeparatorProps {
   className?: string
-  /** Kept for older call sites, the band is always hatched. */
-  variant?: 'dashed' | 'transparent'
 }
 
 // Hatched band between panels

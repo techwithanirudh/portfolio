@@ -35,6 +35,7 @@ export default function AboutPage() {
       />
       <Wrapper>
         <Hero />
+        <Separator />
         <Detailed />
         <Separator />
         <Skills />
@@ -46,9 +47,8 @@ export default function AboutPage() {
         <Updates posts={posts} />
         <Separator />
         <Feed />
-        <div className='container mx-auto'>
-          <Contact />
-        </div>
+        <Separator />
+        <Contact />
       </Wrapper>
     </>
   )

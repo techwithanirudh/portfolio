@@ -34,20 +34,20 @@ export default async function Home() {
         <div className='container mx-auto'>
           <ProfileCover />
           <ProfileHeader />
-          <Separator />
-          <Overview />
-          <SocialLinks />
-          <Separator />
-          <About />
-          <Separator />
-          <ExperiencePreview />
-          <Separator />
-          <WorkPreview works={works} />
-          <Separator />
-          <Testimonials testimonials={testimonials} />
-          <Separator />
-          <Contact />
         </div>
+        <Separator />
+        <Overview />
+        <SocialLinks />
+        <Separator />
+        <About />
+        <Separator />
+        <ExperiencePreview />
+        <Separator />
+        <WorkPreview works={works} />
+        <Separator />
+        <Testimonials testimonials={testimonials} />
+        <Separator />
+        <Contact />
       </Wrapper>
     </>
   )

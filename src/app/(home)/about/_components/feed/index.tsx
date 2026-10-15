@@ -27,17 +27,17 @@ export default async function Feed(): Promise<React.ReactElement | null> {
           <ul className='mask-b-from-60% divide-y divide-line font-mono text-muted-foreground text-xs'>
             {items.slice(0, MAX_ITEMS).map((item, index) => (
               <ViewAnimation
+                as='li'
+                className='group min-w-0 px-4 py-2 transition-colors hover:bg-card hover:text-foreground'
                 delay={0.03 * index}
                 initial={{ opacity: 0, translateY: -4 }}
                 key={item.event.id}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >
-                <li className='group min-w-0 px-4 py-2 transition-colors hover:bg-card hover:text-foreground'>
-                  <GitHubEventComponent
-                    commits={item.commits}
-                    event={item.event}
-                  />
-                </li>
+                <GitHubEventComponent
+                  commits={item.commits}
+                  event={item.event}
+                />
               </ViewAnimation>
             ))}
           </ul>

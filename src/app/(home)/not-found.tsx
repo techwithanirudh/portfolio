@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { PanelButton } from '@/components/layout/panel'
+import { SectionButton } from '@/components/layout/sections/button'
 import { HeroSection } from '@/components/layout/sections/hero'
 import { createMetadata } from '@/lib/metadata'
 
@@ -18,7 +18,7 @@ export default function NotFound() {
         title='Page not found'
       />
       <div className='container mx-auto border-line border-x'>
-        <PanelButton href='/'>Back home</PanelButton>
+        <SectionButton href='/'>Back home</SectionButton>
       </div>
     </>
   )

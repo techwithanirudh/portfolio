@@ -14,7 +14,7 @@ export function TagsRow({ tags }: TagsRowProps) {
       <Icons.tag className='mr-1 size-3.5 shrink-0 text-muted-foreground' />
       {tags.slice(0, MAX_TAGS).map((tag) => (
         <Link
-          className='inline-flex shrink-0 items-center gap-1 rounded-md border border-line px-2 py-0.5 font-mono text-muted-foreground text-xs transition-colors hover:border-primary/40 hover:text-foreground'
+          className='inline-flex shrink-0 items-center gap-1 border border-line px-2 py-0.5 font-mono text-muted-foreground text-xs transition-colors hover:border-primary/40 hover:text-foreground'
           href={`/blog/tags/${tag.name}`}
           key={tag.name}
         >

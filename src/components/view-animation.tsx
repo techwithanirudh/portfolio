@@ -6,9 +6,10 @@ import { cn } from '@/lib/utils'
 
 interface ViewAnimationProps {
   animate?: Record<string, string | number>
+  /** Render as a list item so animated rows stay valid children of a list */
+  as?: 'div' | 'li'
   blur?: boolean
   children: ReactNode
-  // className?: ComponentProps<typeof motion.div>['className'];
   className?: string
   delay?: number
   duration?: number
@@ -17,6 +18,7 @@ interface ViewAnimationProps {
 }
 
 export const ViewAnimation = ({
+  as = 'div',
   initial,
   whileInView,
   animate,
@@ -31,9 +33,10 @@ export const ViewAnimation = ({
     ? { filter: 'blur(0px)', ...whileInView }
     : whileInView
   const normalizedDelay = delay ? Math.min(delay, 0.2) : delay
+  const Component = as === 'li' ? motion.li : motion.div
 
   return (
-    <motion.div
+    <Component
       animate={animate}
       className={cn(
         className,
@@ -45,6 +48,6 @@ export const ViewAnimation = ({
       whileInView={whileInViewState}
     >
       {children}
-    </motion.div>
+    </Component>
   )
 }

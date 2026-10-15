@@ -23,12 +23,7 @@ export const HeroSection = ({
   children,
   className,
   sectionClassName,
-}: HeroProps & {
-  /** Kept for older call sites, every page heading is left aligned now. */
-  align?: 'center' | 'start' | 'end' | null
-  /** Kept for older call sites. */
-  variant?: 'default' | 'compact' | null
-}) => (
+}: HeroProps) => (
   <Section className={cn('screen-line-top-none pt-10', sectionClassName)}>
     <div className={cn('flex flex-col', className)}>
       {image && <div className='px-4 pb-4'>{image}</div>}
@@ -42,15 +37,10 @@ export const HeroSection = ({
           </p>
         </ViewAnimation>
       )}
-      <ViewAnimation
-        delay={0.05}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
-        <h1 className='screen-line-bottom text-balance px-4 pb-2 font-heading font-medium text-4xl tracking-tight'>
-          {title}
-        </h1>
-      </ViewAnimation>
+      {/* The title is usually the LCP, so it paints straight away */}
+      <h1 className='screen-line-bottom text-balance px-4 pb-2 font-heading font-medium text-4xl tracking-tight'>
+        {title}
+      </h1>
       {description && (
         <ViewAnimation
           delay={0.1}

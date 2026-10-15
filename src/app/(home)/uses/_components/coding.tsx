@@ -52,6 +52,7 @@ export function Coding() {
             className='h-full w-full dark:hidden'
             height={720}
             imageClassName='h-full w-full object-cover'
+            sizes='(min-width: 768px) 768px, 100vw'
             src='/images/uses/vscode-light.png'
             width={1280}
           />
@@ -60,6 +61,7 @@ export function Coding() {
             className='hidden h-full w-full dark:block'
             height={720}
             imageClassName='h-full w-full object-cover'
+            sizes='(min-width: 768px) 768px, 100vw'
             src='/images/uses/vscode-dark.png'
             width={1280}
           />

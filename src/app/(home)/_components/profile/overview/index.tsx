@@ -1,6 +1,6 @@
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
 import { Icons } from '@/components/icons/icons'
-import { Panel, PanelContent } from '@/components/layout/panel'
+import { Section } from '@/components/layout/sections'
 import { experiences } from '@/constants/portfolio/experiences'
 import { profile } from '@/constants/portfolio/profile'
 import { EmailItem } from './email-item'
@@ -17,9 +17,9 @@ const currentRole = current?.positions[0]?.title
 
 export function Overview() {
   return (
-    <Panel className='relative'>
+    <Section>
       <h2 className='sr-only'>Overview</h2>
-      <PanelContent className='grid gap-x-4 gap-y-2.5 sm:grid-cols-2'>
+      <div className='grid gap-x-4 gap-y-2.5 p-4 sm:grid-cols-2'>
         {current && (
           <IntroItem>
             <IntroItemIcon>
@@ -64,8 +64,8 @@ export function Overview() {
             </IntroItemLink>
           </IntroItemContent>
         </IntroItem>
-      </PanelContent>
-      <div className='pointer-events-none absolute inset-y-0 left-1/2 -z-1 w-px -translate-x-2.25 border-line border-r border-dashed max-sm:hidden' />
-    </Panel>
+      </div>
+      <div className='pointer-events-none absolute inset-y-0 left-1/2 -z-1 w-px -translate-x-2.25 border-line border-r max-sm:hidden' />
+    </Section>
   )
 }

@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
+import { RememberListPage } from '@/components/back-link'
 import { WorkCard } from '@/components/features/work'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
@@ -71,6 +72,7 @@ export default async function Page(props: {
 
   return (
     <Wrapper>
+      <RememberListPage href='/projects' />
       <Hero
         endIndex={endIndex}
         startIndex={startIndex}

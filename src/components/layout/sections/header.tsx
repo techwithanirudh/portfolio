@@ -1,4 +1,4 @@
-import { Children, type ReactNode } from 'react'
+import { Children, type ComponentProps, type ReactNode } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
@@ -11,8 +11,6 @@ const rise = {
 export interface SectionHeaderProps {
   /** Sits on the right of the title row, for a single compact control */
   action?: ReactNode
-  /** Kept for older call sites, headers are always left aligned now. */
-  align?: 'left' | 'center'
   /** Heading level; page-level headers (contact, guestbook) use h1 */
   as?: 'h1' | 'h2'
   children?: ReactNode
@@ -83,3 +81,17 @@ export const SectionHeader = ({
     </div>
   )
 }
+
+// Small count next to a section title, e.g. Experience (5)
+export const SectionTitleSup = ({
+  className,
+  ...props
+}: ComponentProps<'sup'>) => (
+  <sup
+    className={cn(
+      '-top-[0.9em] ml-0.5 font-mono text-muted-foreground text-xs tracking-normal',
+      className
+    )}
+    {...props}
+  />
+)

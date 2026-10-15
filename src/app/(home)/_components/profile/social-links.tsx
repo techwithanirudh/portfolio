@@ -1,7 +1,7 @@
 'use client'
 
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
-import { Panel, PanelContent } from '@/components/layout/panel'
+import { Section } from '@/components/layout/sections'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -12,9 +12,9 @@ import { socials } from '@/constants/navigation'
 
 export function SocialLinks() {
   return (
-    <Panel>
+    <Section>
       <h2 className='sr-only'>Social links</h2>
-      <PanelContent>
+      <div className='p-4'>
         <ul className='flex flex-wrap gap-2'>
           {socials.map((social) => (
             <li key={social.name}>
@@ -47,7 +47,7 @@ export function SocialLinks() {
             </li>
           ))}
         </ul>
-      </PanelContent>
-    </Panel>
+      </div>
+    </Section>
   )
 }

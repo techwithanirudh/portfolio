@@ -1,26 +1,33 @@
 import { WorkExperience } from '@/components/features/work'
+import { Section } from '@/components/layout/sections'
 import {
-  Panel,
-  PanelButton,
-  PanelHeader,
-  PanelTitle,
-  PanelTitleSup,
-} from '@/components/layout/panel'
+  SectionHeader,
+  SectionTitleSup,
+} from '@/components/layout/sections/header'
 import { experiences } from '@/constants/portfolio/experiences'
+import { ExperienceExpand } from './experience-expand'
 
 const previewCount = 3
 
 export default function ExperiencePreview() {
+  const rest = experiences.slice(previewCount)
+
   return (
-    <Panel id='experience'>
-      <PanelHeader>
-        <PanelTitle>
-          Experience
-          <PanelTitleSup>({experiences.length})</PanelTitleSup>
-        </PanelTitle>
-      </PanelHeader>
+    <Section id='experience'>
+      <SectionHeader
+        title={
+          <>
+            Experience
+            <SectionTitleSup>({experiences.length})</SectionTitleSup>
+          </>
+        }
+      />
       <WorkExperience experiences={experiences.slice(0, previewCount)} />
-      <PanelButton href='/about#experience'>View all experience</PanelButton>
-    </Panel>
+      {rest.length > 0 && (
+        <ExperienceExpand total={experiences.length}>
+          <WorkExperience className='border-line border-t' experiences={rest} />
+        </ExperienceExpand>
+      )}
+    </Section>
   )
 }

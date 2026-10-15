@@ -28,22 +28,19 @@ export function UserAvatar({
 
   return (
     <Avatar
-      className={cn('rounded-md after:rounded-md', classNames?.base, className)}
+      className={cn('', classNames?.base, className)}
       key={src}
       outlined={false}
       {...props}
     >
       <AvatarImage
         alt={name ?? 'Avatar'}
-        className={cn('rounded-md', classNames?.image)}
+        className={cn('', classNames?.image)}
         src={src ?? undefined}
       />
 
       <AvatarFallback
-        className={cn(
-          'rounded-md bg-transparent uppercase',
-          classNames?.fallback
-        )}
+        className={cn('bg-transparent uppercase', classNames?.fallback)}
         delay={src ? 200 : 0}
       >
         {firstTwoCharacters(name) ?? (

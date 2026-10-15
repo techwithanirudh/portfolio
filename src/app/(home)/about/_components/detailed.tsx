@@ -12,15 +12,15 @@ import { cn } from '@/lib/utils'
 
 export default function Detailed(): React.ReactElement {
   return (
-    <SplitSection cols='three'>
-      <SplitSectionSidebar background='dashed'>
+    <SplitSection>
+      <SplitSectionSidebar>
         <SplitSectionHeader
           description="A quick look at my background, focus, and what I'm building next."
           sticky
           title='Overview'
         />
       </SplitSectionSidebar>
-      <SplitSectionContent inset>
+      <SplitSectionContent className='p-4'>
         <ViewAnimation
           className='h-full'
           delay={0.1}

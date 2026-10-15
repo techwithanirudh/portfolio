@@ -50,12 +50,12 @@ export function UserButton({ className, classNames }: UserButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={cn('rounded-md bg-transparent')}
+        className={cn('bg-transparent')}
         render={
           <Button
             aria-label={'User Menu'}
             className={cn(
-              'size-auto rounded-md border-none p-0',
+              'size-auto border-none p-0',
               'bg-secondary hover:bg-secondary/80',
               classNames?.trigger?.base
             )}
@@ -67,7 +67,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         {isPending ? (
           <Skeleton
             className={cn(
-              'size-8 rounded-md',
+              'size-8',
               className,
               classNames?.base,
               classNames?.skeleton,

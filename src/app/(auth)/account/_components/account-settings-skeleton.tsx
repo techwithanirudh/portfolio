@@ -7,7 +7,7 @@ export function AccountSettingsSkeleton() {
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Avatar</span>
-          <Skeleton className='size-16 rounded-md' />
+          <Skeleton className='size-16' />
         </div>
       </div>
 

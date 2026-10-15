@@ -39,7 +39,6 @@ export const FAQ = () => (
   <SplitSection>
     <SplitSectionSidebar>
       <SectionHeader
-        align='left'
         description='The usual questions. Anything else, the form above reaches me.'
         title='Frequently Asked Questions'
       />

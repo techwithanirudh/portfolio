@@ -121,7 +121,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
     <Card className='rounded-none border-0' variant='flat'>
       <div className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
         <div className='flex gap-4'>
-          <div className='flex size-10 shrink-0 items-center justify-center rounded-md bg-secondary'>
+          <div className='flex size-10 shrink-0 items-center justify-center bg-secondary'>
             <PlatformIcon aria-hidden className='size-5' />
           </div>
           <div className='space-y-1'>

@@ -21,7 +21,7 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
           <Image
             alt={name}
             className={cn(
-              'max-h-14 w-auto object-contain drop-shadow-md transition-transform',
+              'h-auto max-h-14 w-auto object-contain drop-shadow-md transition-transform',
               url && 'group-hover/item:scale-105'
             )}
             height={56}
@@ -30,7 +30,7 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
           />
         </div>
       ) : (
-        <div className='flex size-16 shrink-0 items-center justify-center rounded-lg bg-muted'>
+        <div className='flex size-16 shrink-0 items-center justify-center bg-muted'>
           <span className='font-semibold text-muted-foreground text-xs'>
             {name.slice(0, 2).toUpperCase()}
           </span>

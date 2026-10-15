@@ -33,7 +33,7 @@ export const Design = () => (
               )}
               key={tone.label}
             >
-              <span className='hidden h-6 items-center justify-center truncate rounded-sm border bg-white/80 px-2 font-medium text-[11px] text-black lg:inline-flex dark:bg-black/80 dark:text-white'>
+              <span className='hidden h-6 items-center justify-center truncate border bg-white/80 px-2 font-medium text-[11px] text-black lg:inline-flex dark:bg-black/80 dark:text-white'>
                 {tone.label}
               </span>
             </div>

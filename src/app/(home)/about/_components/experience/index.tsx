@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { WorkExperience } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
@@ -15,8 +13,8 @@ import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
-    <SplitSection cols='three' id='experience'>
-      <SplitSectionSidebar background='dashed'>
+    <SplitSection id='experience'>
+      <SplitSectionSidebar>
         <SplitSectionHeader
           action={
             <Button
@@ -24,7 +22,6 @@ export default function Experience(): React.ReactElement {
               nativeButton={false}
               render={<Link href='/resume' />}
               shape='square'
-              variant='default'
             >
               Resume
               <Icons.download className='transition-transform will-change-transform group-hover/button:-rotate-12 group-hover/button:scale-125' />

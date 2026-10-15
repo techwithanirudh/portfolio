@@ -153,17 +153,17 @@ export function ViewOptions({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
-        className='max-w-none gap-0.5 rounded-xl p-1.5'
+        className='max-w-none gap-0.5 p-1.5'
         finalFocus={false}
         style={menuWidth ? { width: menuWidth } : undefined}
       >
         {items.map(({ title, href, icon: Icon }) => (
           <DropdownMenuItem
-            className='group/item gap-2.5 rounded-lg p-1.5 pr-2 font-medium'
+            className='group/item gap-2.5 p-1.5 pr-2 font-medium'
             key={href}
             render={<a href={href} rel='noopener' target='_blank' />}
           >
-            <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border transition-colors group-focus/item:bg-background'>
+            <span className='flex size-7 shrink-0 items-center justify-center bg-muted ring-1 ring-border transition-colors group-focus/item:bg-background'>
               <Icon className='size-4' />
             </span>
             <span className='truncate'>{title}</span>

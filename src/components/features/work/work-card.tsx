@@ -75,7 +75,7 @@ export const WorkCard = ({
       <div className='flex flex-1 items-start gap-4 p-4'>
         <div className='flex min-w-0 flex-1 flex-col gap-1'>
           <ViewTransition name={`${transitionName}-title`} share={transition}>
-            <h2 className='truncate font-heading font-medium text-base tracking-tight transition-colors group-hover:text-primary'>
+            <h2 className='truncate font-medium font-sans text-base tracking-tight transition-colors group-hover:text-primary'>
               {title}
             </h2>
           </ViewTransition>

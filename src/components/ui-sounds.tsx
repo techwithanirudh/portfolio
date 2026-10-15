@@ -22,7 +22,18 @@ import { playSound } from '@/lib/audio/preferences'
 
 const PRESS =
   'a[href], button:not([type="submit"]), [role="tab"], [role="switch"], [role="checkbox"], [aria-expanded]'
-const HOVER = '[data-sound-hover], header a[href], footer a[href]'
+// Rows and controls that react visually to hover also tick; plain inline
+// links in prose stay quiet
+const HOVER = [
+  '[data-sound-hover]',
+  'header a[href]',
+  'footer a[href]',
+  '#main-content a.group[href]',
+  '[data-slot="accordion-trigger"]',
+  '[data-slot="collapsible-trigger"]',
+  '[data-slot="pagination-link"]',
+  '[data-slot="tooltip-trigger"]',
+].join(', ')
 const OPT_OUT = '[data-sound="off"]'
 // For components that already play their own sound on press or submit
 const PRESS_OPT_OUT = '[data-sound="off"], [data-sound-press="off"]'

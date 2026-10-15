@@ -1,17 +1,14 @@
-'use client'
-
-import { Briefcase01Icon, Infinity01Icon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
-import { type ComponentProps, useCallback, useRef } from 'react'
+import type { ComponentProps } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
-import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevrons-up-down'
-import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
+import {
+  ExperiencePositionChevron,
+  ExperiencePositionCollapsible,
+} from '@/components/features/work/experience-position-collapsible'
 import { Icons } from '@/components/icons/icons'
 import { PreviewLink } from '@/components/preview-link'
 import { Prose } from '@/components/prose'
 import {
-  Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
@@ -110,33 +107,14 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
 export function ExperiencePositionItem({
   position,
 }: ExperiencePositionItemProps) {
-  const chevronsIconRef = useRef<ChevronsUpDownIconHandle>(null)
-
-  const handleOpenChange = useCallback((open: boolean) => {
-    const controls = chevronsIconRef.current
-    if (!controls) {
-      return
-    }
-
-    if (open) {
-      controls.startAnimation()
-    } else {
-      controls.stopAnimation()
-    }
-  }, [])
-
   const { start, end } = position.employmentPeriod
   const isOngoing = !end
   const duration = formatDuration(start, end)
 
   return (
-    <Collapsible
+    <ExperiencePositionCollapsible
       defaultOpen={position.isExpanded}
       disabled={!position.description}
-      onOpenChange={handleOpenChange}
-      render={
-        <div className='relative last:before:absolute last:before:h-full last:before:w-4 last:before:bg-background' />
-      }
     >
       <CollapsibleTrigger
         className={cn(
@@ -154,9 +132,7 @@ export function ExperiencePositionItem({
               "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0"
             )}
           >
-            {position.icon ?? (
-              <HugeiconsIcon icon={Briefcase01Icon} strokeWidth={2} />
-            )}
+            {position.icon ?? <Icons.experience />}
           </div>
 
           <h4 className='flex-1 text-balance font-medium text-base text-foreground'>
@@ -164,7 +140,7 @@ export function ExperiencePositionItem({
           </h4>
 
           <div className='shrink-0 text-muted-foreground group-disabled/experience-position:hidden [&_svg]:size-4'>
-            <ChevronsUpDownIcon duration={0.15} ref={chevronsIconRef} />
+            <ExperiencePositionChevron />
           </div>
         </div>
 
@@ -189,11 +165,9 @@ export function ExperiencePositionItem({
               <span>{start}</span>
               <span className='font-mono'>—</span>
               {isOngoing ? (
-                <HugeiconsIcon
+                <Icons.infinity
                   aria-label='Present'
                   className='size-4.5 translate-y-[0.5px]'
-                  icon={Infinity01Icon}
-                  strokeWidth={2}
                 />
               ) : (
                 <span>{end}</span>
@@ -235,7 +209,7 @@ export function ExperiencePositionItem({
           ))}
         </ul>
       )}
-    </Collapsible>
+    </ExperiencePositionCollapsible>
   )
 }
 

@@ -1,14 +1,9 @@
 'use client'
 
-import {
-  CancelCircleIcon,
-  Copy01Icon,
-  Tick02Icon,
-} from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 import type { HTMLMotionProps, Variants } from 'motion/react'
 import { AnimatePresence, motion } from 'motion/react'
 import type { ComponentProps } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
@@ -44,19 +39,9 @@ export function CopyStateIcon({
   errorIcon,
 }: CopyStateIconProps) {
   const iconByState = {
-    done: doneIcon ?? (
-      <HugeiconsIcon data-slot='done-icon' icon={Tick02Icon} strokeWidth={2} />
-    ),
-    error: errorIcon ?? (
-      <HugeiconsIcon
-        data-slot='error-icon'
-        icon={CancelCircleIcon}
-        strokeWidth={2}
-      />
-    ),
-    idle: idleIcon ?? (
-      <HugeiconsIcon data-slot='idle-icon' icon={Copy01Icon} strokeWidth={2} />
-    ),
+    done: doneIcon ?? <Icons.check data-slot='done-icon' />,
+    error: errorIcon ?? <Icons.error data-slot='error-icon' />,
+    idle: idleIcon ?? <Icons.copy data-slot='idle-icon' />,
   }
 
   return (

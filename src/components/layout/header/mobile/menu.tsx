@@ -42,7 +42,7 @@ export function MenuPanel({
       aria-label='Mobile navigation'
       aria-modal='true'
       className={cn(
-        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border bg-background md:hidden',
+        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain border bg-background md:hidden',
         open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
       )}
       id={menuId}
@@ -106,7 +106,7 @@ export function MenuPanel({
           >
             <Icons.aiChat />
           </button>
-          <ThemeToggle />
+          <ThemeToggle mode='light-dark-system' />
         </div>
       </div>
     </div>

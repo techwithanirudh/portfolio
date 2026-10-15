@@ -10,7 +10,7 @@ export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
         <Card key={item} variant='flat'>
           <div className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
             <div className='flex gap-4'>
-              <Skeleton className='size-10 shrink-0 rounded-md' />
+              <Skeleton className='size-10 shrink-0' />
 
               <div className='space-y-1'>
                 <div className='flex items-center gap-2'>

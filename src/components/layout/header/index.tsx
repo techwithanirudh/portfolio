@@ -83,12 +83,16 @@ export const Header = ({
 
         <div className='flex items-center'>
           <Divider className='mr-2 max-md:hidden' />
-          <SearchToggle className='text-muted-foreground' hideIfDisabled />
+          {/* Phones search from the bottom pill */}
+          <SearchToggle
+            className='text-muted-foreground max-md:hidden'
+            hideIfDisabled
+          />
           {iconItems.map((item) =>
             'url' in item ? (
               <Link
                 aria-label={item.label ?? item.text?.toString()}
-                className='inline-flex size-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-4'
+                className='inline-flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-4'
                 external={item.external}
                 href={item.url}
                 key={item.url}

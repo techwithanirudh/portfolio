@@ -59,7 +59,7 @@ function Header(props: { page: MDXPage }) {
         )}
       </div>
       <ViewTransition name={`${page.slugs.join('/')}-title`} share={transition}>
-        <h1 className='screen-line-top screen-line-bottom text-balance px-4 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
+        <h1 className='screen-line-top screen-line-bottom text-balance px-4 py-2 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
           {page.data.title ?? 'Untitled'}
         </h1>
       </ViewTransition>

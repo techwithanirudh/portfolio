@@ -4,7 +4,6 @@ import { BackLink } from '@/components/back-link'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage as MDXPage } from '@/lib/source'
 
 const formatPostDate = (date: Date) =>
@@ -41,7 +40,7 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
         )}
       </div>
 
-      <h1 className='screen-line-top screen-line-bottom text-balance px-4 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
+      <h1 className='screen-line-top screen-line-bottom text-balance px-4 py-2 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
         {page.data.title ?? 'Untitled'}
       </h1>
 
@@ -93,22 +92,17 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
       </dl>
 
       {image && (
-        <ViewAnimation
+        // Flush like the project cover, and eager since it's the LCP
+        <BlurImage
+          alt={page.data.title ?? 'Blog cover image'}
           blur={false}
-          initial={{ opacity: 0, scale: 0.99 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-        >
-          <div className='p-2'>
-            <BlurImage
-              alt={page.data.title ?? 'Blog cover image'}
-              className='relative aspect-[2/1] w-full overflow-hidden rounded-xl border border-line'
-              fill
-              imageClassName='object-cover'
-              sizes='(min-width: 768px) 768px, 100vw'
-              src={image}
-            />
-          </div>
-        </ViewAnimation>
+          className='relative aspect-[2/1] w-full bg-card/50'
+          fill
+          imageClassName='object-cover'
+          lazy={false}
+          sizes='(min-width: 768px) 768px, 100vw'
+          src={image}
+        />
       )}
     </Section>
   )

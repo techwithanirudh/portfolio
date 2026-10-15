@@ -17,7 +17,7 @@ export const TagCard = ({
   return (
     <Link
       className={cn(
-        'group inline-flex items-center gap-2 rounded-lg bg-card/50 px-3 py-2 text-sm transition-colors hover:bg-card/80',
+        'group inline-flex items-center gap-2 bg-card/50 px-3 py-2 text-sm transition-colors hover:bg-card/80',
         className
       )}
       href={`/blog/tags/${name}`}

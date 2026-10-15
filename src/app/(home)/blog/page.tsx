@@ -1,9 +1,11 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import Posts from '@/app/(home)/_components/posts'
+import { RememberListPage } from '@/components/back-link'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { PageFill } from '@/components/layout/page-fill'
 import { Section } from '@/components/layout/sections'
+import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { postsPerPage } from '@/constants/config'
@@ -61,6 +63,7 @@ export default async function Page(props: {
 
   return (
     <Wrapper>
+      <RememberListPage href='/blog' />
       <Hero
         endIndex={endIndex}
         startIndex={startIndex}
@@ -73,6 +76,7 @@ export default async function Page(props: {
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       {/* Short lists leave the gap above the newsletter, not below it */}
       <PageFill />
+      <Separator />
       <NewsletterSection />
       <CollectionPageJsonLd
         description='Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'

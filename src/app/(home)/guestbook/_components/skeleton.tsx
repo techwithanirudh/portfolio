@@ -13,8 +13,8 @@ export function GuestbookEntriesSkeleton() {
               <Skeleton className='h-4 w-32' />
             </div>
             <div className='flex gap-1'>
-              <Skeleton className='size-8 rounded-md' />
-              <Skeleton className='size-8 rounded-md' />
+              <Skeleton className='size-8' />
+              <Skeleton className='size-8' />
             </div>
           </div>
           <Skeleton className='h-5 w-4/5' />
