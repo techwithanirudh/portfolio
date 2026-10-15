@@ -28,14 +28,16 @@ import {
   getToolsRequiringConfirmation,
   type ToolName,
 } from '@/app/api/chat/utils/tools/confirmation'
+import { AvatarMenu } from '@/components/features/assistant/avatar-menu'
 import {
   MascotProvider,
   useMascot,
 } from '@/components/features/assistant/mascot'
-import { Rover } from '@/components/features/assistant/mascot/agents/rover'
+import { AvatarIcon } from '@/components/features/assistant/mascot/avatar-icon'
 import {
   playSubmitAnimation,
   useMascotPanel,
+  useMascotTools,
 } from '@/components/features/assistant/mascot/hooks'
 import {
   ContactForm,
@@ -106,7 +108,7 @@ export function Assistant({ children }: { children: ReactNode }) {
   )
 
   return (
-    <MascotProvider agent={isMobile ? undefined : Rover}>
+    <MascotProvider disabled={isMobile}>
       <AssistantContext value={value}>
         {children}
         <AssistantPanel />
@@ -120,15 +122,10 @@ function Header() {
   const playNewChat = useSound(toggleOn)
 
   return (
-    <div className='sticky top-0 flex h-10 items-start'>
-      <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
-        <div className='flex items-center gap-2'>
-          <Icons.pawPrint className='size-4 text-fd-primary transition-transform duration-200 hover:-rotate-45' />
-          <p className='font-medium text-sm'>Ask Simba</p>
-        </div>
-      </div>
+    <div className='sticky top-0 flex h-10 items-stretch'>
+      <AvatarMenu />
 
-      <div className='flex min-h-full'>
+      <div className='flex'>
         <button
           className={cn(
             buttonVariants({
@@ -414,6 +411,7 @@ function MessageList({
   status: string
 } & ComponentProps<'div'>) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const { avatar } = useMascot()
 
   useEffect(() => {
     const container = containerRef.current
@@ -457,7 +455,11 @@ function MessageList({
       <div className='flex flex-1 flex-col divide-y divide-dashed divide-border'>
         {messages.length === 0 ? (
           <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
-            <Icons.pawPrint className='size-8 text-fd-primary transition-transform hover:-rotate-45 hover:scale-125' />
+            <AvatarIcon
+              avatar={avatar}
+              className='transition-transform hover:scale-110'
+              size={64}
+            />
             <p>
               heya! im simba, anirudh's dog. i can answer questions about him,
               his work, or the site.
@@ -592,6 +594,7 @@ function AssistantPanel() {
     open,
     status: chat.status,
   })
+  useMascotTools(chat.messages)
 
   return (
     <>
