@@ -3,27 +3,89 @@
 import { Presence } from '@radix-ui/react-presence'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
 import { useOiiaMode } from '@/components/oiia'
 
+const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
+const DESKTOP_QUERY = '(min-width: 768px)'
+
+// Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
+// does not re-read their color when it changes in place, but it re-samples
+// elements that are added.
+function useRemountAfterThemeApplied() {
+  const { resolvedTheme } = useTheme()
+  const [generation, setGeneration] = useState(0)
+
+  useEffect(() => {
+    if (!resolvedTheme) {
+      return
+    }
+
+    const frame = requestAnimationFrame(() => setGeneration((n) => n + 1))
+    return () => cancelAnimationFrame(frame)
+  }, [resolvedTheme])
+
+  return generation
+}
+
+function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (
+        event.target instanceof Element &&
+        event.target.closest(KEEP_OPEN_SELECTOR)
+      ) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      closeMenu()
+    }
+
+    const desktop = window.matchMedia(DESKTOP_QUERY)
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        closeMenu()
+      }
+    }
+
+    document.addEventListener('click', closeOnOutsideClick, true)
+    desktop.addEventListener('change', closeOnDesktop)
+    return () => {
+      document.removeEventListener('click', closeOnOutsideClick, true)
+      desktop.removeEventListener('change', closeOnDesktop)
+    }
+  }, [closeMenu, open])
+}
+
 export function MobileNav() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const previousPathname = useRef(pathname)
   const { setOpenSearch } = useSearchContext()
-  const { setOpen: setOpenAssistant } = useAssistantContext()
+  const { open: assistantOpen, setOpen: setOpenAssistant } =
+    useAssistantContext()
   const { mode } = useOiiaMode()
 
   const closeMenu = useCallback(() => setOpen(false), [])
 
+  const tintGeneration = useRemountAfterThemeApplied()
+  useCloseMenuOnOutsideClick(open, closeMenu)
+
   useEffect(() => {
-    if (mode === 'oiia') {
+    if (mode === 'oiia' || assistantOpen) {
       closeMenu()
     }
-  }, [closeMenu, mode])
+  }, [assistantOpen, closeMenu, mode])
 
   useEffect(() => {
     if (previousPathname.current === pathname) {
@@ -49,43 +111,43 @@ export function MobileNav() {
     return () => document.removeEventListener('keydown', closeOnEscape)
   }, [closeMenu, open])
 
-  if (mode === 'oiia') {
-    return null
-  }
-
   return (
     <>
-      <Presence present={open}>
-        <button
-          aria-label='Close menu'
-          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in md:hidden'
-          data-state={open ? 'open' : 'closed'}
-          onClick={closeMenu}
-          type='button'
-        />
-      </Presence>
+      <div
+        aria-hidden
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 md:hidden'
+        key={`fade-${tintGeneration}`}
+      >
+        <div className='h-16 bg-gradient-to-t from-background to-transparent' />
+        <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
+      </div>
 
-      <Presence present={open}>
-        <MenuPanel
-          menuId='mobile-navigation-menu'
-          onAssistantOpen={() => {
-            closeMenu()
-            setOpenAssistant(true)
-          }}
-          onClose={closeMenu}
-          open={open}
-        />
-      </Presence>
+      {mode !== 'oiia' && (
+        <>
+          <Presence present={open}>
+            <MenuPanel
+              menuId='mobile-navigation-menu'
+              onAssistantOpen={() => {
+                closeMenu()
+                setOpenAssistant(true)
+              }}
+              onClose={closeMenu}
+              open={open}
+            />
+          </Presence>
 
-      <FloatingPill
-        menuId='mobile-navigation-menu'
-        onMenuToggle={() => setOpen((value) => !value)}
-        onSearchOpen={() => {
-          closeMenu()
-          setOpenSearch(true)
-        }}
-        open={open}
-      />
+          <FloatingPill
+            key={`pill-${tintGeneration}`}
+            menuId='mobile-navigation-menu'
+            onMenuToggle={() => setOpen((value) => !value)}
+            onSearchOpen={() => {
+              closeMenu()
+              setOpenSearch(true)
+            }}
+            open={open}
+          />
+        </>
+      )}
     </>
   )
 }

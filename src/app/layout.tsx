@@ -49,6 +49,8 @@ export const viewport: Viewport = {
     { color: '#0A0A0A', media: '(prefers-color-scheme: dark)' },
     { color: '#fff', media: '(prefers-color-scheme: light)' },
   ],
+  // Required for Safari 26 to tint the bottom bar and for env(safe-area-inset-*).
+  viewportFit: 'cover',
 }
 
 const baseUrlString = baseUrl.toString()

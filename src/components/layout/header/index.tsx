@@ -268,13 +268,13 @@ const HeaderNavigationMenu = ({
         id='nd-nav'
         {...props}
         className={cn(
-          'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors',
+          'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 backdrop-blur-lg transition-colors',
           props.className
         )}
       >
         <div
           className={cn(
-            'backdrop-blur-lg transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
+            'transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
             // value.length > 0 && 'max-lg:rounded-b-2xl max-lg:shadow-lg',
             'container border-border border-dashed sm:border-x',
             (!isTransparent || value.length > 0) && 'bg-fd-background/80'

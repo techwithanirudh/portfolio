@@ -29,6 +29,9 @@ const full = [
   ['system', Icons.desktop] as const,
 ]
 
+const shouldSkipViewTransitionForBrowserTint = () =>
+  window.matchMedia('(pointer: coarse)').matches
+
 export function ThemeToggle({
   className,
   mode = 'light-dark',
@@ -53,7 +56,11 @@ export function ThemeToggle({
       setTheme(next)
     }
 
-    if (document.startViewTransition && next !== resolvedTheme) {
+    if (
+      document.startViewTransition &&
+      next !== resolvedTheme &&
+      !shouldSkipViewTransitionForBrowserTint()
+    ) {
       document.documentElement.style.viewTransitionName = 'theme-transition'
       try {
         await document.startViewTransition(update).finished

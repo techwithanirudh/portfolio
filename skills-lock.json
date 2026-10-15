@@ -17,6 +17,12 @@
       "sourceType": "github",
       "computedHash": "54b6e221bbe4e2d1a8461c3f9ecabe69daf891f964e9ee5e699c323daa018f2e"
     },
+    "no-comments": {
+      "source": "michael-denyer/pstack-claude",
+      "sourceType": "github",
+      "skillPath": "plugins/pstack/skills/no-comments/SKILL.md",
+      "computedHash": "7b53226b4d744bf81651cc0ee175c78cb68521d5f862651fdb2eda43a20144d6"
+    },
     "ultracite": {
       "source": "haydenbleasel/ultracite",
       "sourceType": "github",
