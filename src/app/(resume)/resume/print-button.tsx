@@ -1,0 +1,13 @@
+'use client'
+
+import { Icons } from '@/components/icons/icons'
+import { Button } from '@/components/ui/button'
+
+export function PrintButton() {
+  return (
+    <Button onClick={() => window.print()} size='sm'>
+      <Icons.download className='transition-transform will-change-transform group-hover/button:-rotate-12 group-hover/button:scale-125' />
+      Download PDF
+    </Button>
+  )
+}

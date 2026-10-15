@@ -50,6 +50,7 @@ export const Links = () => {
         { children: 'Guestbook', href: '/guestbook' },
         { children: 'Uses', href: '/uses' },
         { children: 'Colophon', href: '/colophon' },
+        { children: 'Resume', href: '/resume' },
         {
           children: 'V1 Portfolio',
           external: true,
