@@ -41,7 +41,7 @@ const TestimonialCard = ({
     initial={{ opacity: 0, scale: 0.98, translateX: -12 }}
     whileInView={{ opacity: 1, scale: 1, translateX: 0 }}
   >
-    <div className='flex h-full flex-col justify-between gap-12 p-6 transition-all duration-300 hover:bg-card sm:p-8'>
+    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-all duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
       <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>
@@ -111,7 +111,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {testimonials.map((item, index) => (
                 <CarouselItem
-                  className='pl-0'
+                  className='pl-0 md:basis-1/2'
                   key={`${item.title}-${item.author.name}`}
                 >
                   <TestimonialCard index={index} testimonial={item} />

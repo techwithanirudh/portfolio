@@ -21,7 +21,7 @@ export const metadata: Metadata = createMetadata({
 })
 
 export default async function Home() {
-  const works = getSortedWork().slice(0, 3)
+  const works = getSortedWork().slice(0, 4)
 
   return (
     <>
