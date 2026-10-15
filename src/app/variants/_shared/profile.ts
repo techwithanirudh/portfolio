@@ -5,7 +5,6 @@
  */
 import { socials } from '@/constants/navigation'
 import { experiences } from '@/constants/portfolio/experiences'
-import { testimonials } from '@/constants/portfolio/testimonials'
 import { description, owner } from '@/constants/site'
 import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
 
@@ -114,4 +113,5 @@ export const getWriting = () =>
     url: page.url,
   }))
 
-export { experiences, testimonials }
+export { testimonials } from '@/constants/portfolio/testimonials'
+export { experiences } from '@/constants/portfolio/experiences'
