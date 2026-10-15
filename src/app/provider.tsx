@@ -5,6 +5,7 @@ import { SoundProvider } from '@web-kits/audio/react'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import Analytics from '@/components/analytics'
+import { FaviconEyes } from '@/components/favicon-eyes'
 import { Assistant, AssistantTrigger } from '@/components/features/assistant'
 import { MobileNav } from '@/components/layout/header/mobile'
 import { Oiia, OiiaProvider } from '@/components/oiia'
@@ -24,6 +25,7 @@ export function Provider({
   return (
     <SoundProvider enabled={soundEnabled}>
       <UiSounds />
+      <FaviconEyes />
       <OiiaProvider>
         <Assistant>
           <ProgressProvider
