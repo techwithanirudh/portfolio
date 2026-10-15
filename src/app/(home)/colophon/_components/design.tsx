@@ -24,11 +24,11 @@ export const Design = () => (
     <div className='bg-card/50 p-4'>
       <div className='pb-3 font-medium text-foreground text-sm'>Palette</div>
       <div className='grid gap-3'>
-        <div className='flex overflow-auto border border-line'>
+        <div className='grid grid-cols-5 border border-line sm:grid-cols-10'>
           {palette.map((tone) => (
             <div
               className={cn(
-                'relative flex flex-1 items-center justify-center px-3 py-3 lg:min-w-20 xl:min-w-30',
+                'relative flex flex-1 items-center justify-center px-3 py-3',
                 tone.className
               )}
               key={tone.label}

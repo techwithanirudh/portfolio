@@ -62,6 +62,8 @@ function InnerTrigger() {
     }
     place()
     agent._el.style.zIndex = '45'
+    // Below lg there's no side gutter for the dog, so it would sit on content
+    agent._el.dataset.mascot = ''
     agent.show(true)
 
     const handleClick = (event: Event) => {

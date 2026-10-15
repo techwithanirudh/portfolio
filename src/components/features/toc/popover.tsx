@@ -60,12 +60,12 @@ function TOCPopoverContent({ className }: { className?: string }) {
     >
       <header
         className={cn(
-          'border-b backdrop-blur-sm transition-colors',
+          'border-line border-b bg-background/90 backdrop-blur-sm transition-colors',
           open && 'bg-fd-background/80 shadow-lg'
         )}
         ref={ref}
       >
-        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-fd-muted-foreground text-sm focus-visible:outline-none md:px-6 [&_svg]:size-4'>
+        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-fd-muted-foreground text-sm focus-visible:bg-card [&_svg]:size-4'>
           <ProgressCircle
             className={cn('shrink-0', open && 'text-fd-primary')}
             value={
@@ -103,7 +103,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <div className='flex max-h-[50vh] flex-col px-4 md:px-6'>
+          <div className='flex max-h-[50vh] flex-col px-4'>
             <TOCScrollArea>
               <TOCItems>
                 {items.map((item) => (

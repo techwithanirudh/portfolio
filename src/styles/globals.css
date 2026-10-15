@@ -125,7 +125,7 @@ html > body[data-scroll-locked] {
 @theme {
   --color-fd-primary-foreground: hsl(0, 0%, 98%);
   --color-fd-primary: hsl(226, 55%, 45%);
-  --color-fd-ring: hsl(0, 0%, 63.9%);
+  --color-fd-ring: hsl(226, 55%, 45%);
 
   /* Portrait eyes, a quick blink every few seconds */
   --animate-blink: blink 4.5s ease-in-out infinite;
@@ -649,4 +649,18 @@ html > body[data-scroll-locked] {
  */
 :root[data-reveal] :is([data-slot="section-inner"] > *, [data-reveal-item]) {
   opacity: 0;
+}
+
+/* The floating mascot only has a gutter to sit in from lg up; smaller
+   screens reach the assistant from the menu instead */
+@media (width < 64rem) {
+  [data-mascot] {
+    display: none !important;
+  }
+}
+
+/* One visible keyboard focus ring everywhere, square like the rest */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
 }

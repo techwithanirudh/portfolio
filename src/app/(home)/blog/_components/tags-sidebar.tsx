@@ -7,10 +7,10 @@ interface TagsRowProps {
   tags: Array<{ name: string; count: number }>
 }
 
-// One scrollable line of tag chips, it fits the single column on every width
+// Tag chips wrap onto extra lines instead of hiding behind a scroll
 export function TagsRow({ tags }: TagsRowProps) {
   return (
-    <div className='no-scrollbar flex items-center gap-1.5 overflow-x-auto px-4 py-2'>
+    <div className='flex flex-wrap items-center gap-1.5 px-4 py-2'>
       <Icons.tag className='mr-1 size-3.5 shrink-0 text-muted-foreground' />
       {tags.slice(0, MAX_TAGS).map((tag) => (
         <Link

@@ -44,7 +44,7 @@ export default function NotFound() {
       </Section>
       <Separator />
       <Section>
-        <ul className='grid divide-y divide-line sm:grid-cols-2 sm:divide-x sm:divide-y-0 [&>li:nth-child(-n+2)]:sm:border-line [&>li:nth-child(-n+2)]:sm:border-b'>
+        <ul className='grid divide-y divide-line sm:grid-cols-2 sm:divide-y-0 [&>li:nth-child(-n+2)]:sm:border-line [&>li:nth-child(-n+2)]:sm:border-b sm:[&>li:nth-child(odd)]:border-line sm:[&>li:nth-child(odd)]:border-r'>
           {destinations.map((item) => (
             <li key={item.href}>
               <Link

@@ -47,7 +47,6 @@ export default function AboutPage() {
         <Updates posts={posts} />
         <Separator />
         <Feed />
-        <Separator />
         <Contact />
       </Wrapper>
     </>

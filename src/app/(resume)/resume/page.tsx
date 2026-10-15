@@ -54,7 +54,7 @@ export default function ResumePage() {
 
   return (
     <main
-      className='min-h-dvh bg-neutral-100 px-4 py-8 text-neutral-900 print:bg-white print:p-0'
+      className='min-h-dvh bg-neutral-100 px-4 pt-8 pb-28 text-neutral-900 [color-scheme:light] md:pb-8 print:bg-white print:p-0'
       data-resume
     >
       <div className='mx-auto mb-4 flex max-w-[210mm] items-center justify-between print:hidden'>

@@ -52,7 +52,7 @@ interface HardwareGridProps {
 
 export function HardwareGrid({ items }: HardwareGridProps) {
   return (
-    <div className='grid divide-x divide-line sm:grid-cols-2 [&>*:nth-last-child(-n+1)]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-line [&>*]:border-b'>
+    <div className='grid sm:grid-cols-2 sm:[&>*:nth-child(odd)]:border-r [&>*:nth-last-child(-n+1)]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-line [&>*]:border-b'>
       {items.map((item) => (
         <HardwareCard key={item.name} {...item} />
       ))}
