@@ -5,8 +5,14 @@ import { isToolUIPart } from 'ai'
 import { useEffect, useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
-import { animations, type MoodName, moodAnimations } from './constants'
+import {
+  animations,
+  type MoodName,
+  moodAnimations,
+  type TrickName,
+} from './constants'
 import { type MascotAgent, useMascot } from './provider'
+import { playTrick } from './tricks'
 import { playAnimation } from './utils'
 
 export const playSubmitAnimation = (agent: MascotAgent | undefined) => {
@@ -75,6 +81,7 @@ export function useMascotTools(messages: MyUIMessage[]) {
   const { agent, avatar, setAvatar } = useMascot()
   const handled = useRef(new Set<string>())
   const pendingMood = useRef<MoodName | null>(null)
+  const pendingTrick = useRef<TrickName | null>(null)
 
   useEffect(() => {
     const part = (messages.at(-1)?.parts ?? []).find(
@@ -89,22 +96,35 @@ export function useMascotTools(messages: MyUIMessage[]) {
     handled.current.add(part.toolCallId)
 
     const { avatar: nextAvatar, mood } = part.input ?? {}
+    // The server resolves "random", so the trick shown matches the reply
+    const trick = part.output?.trick
     if (nextAvatar && nextAvatar !== avatar) {
-      // The new agent isn't loaded yet, so the mood waits for it
+      // The new agent isn't loaded yet, so the mood and trick wait for it
       pendingMood.current = mood ?? null
+      pendingTrick.current = trick ?? null
       setAvatar(nextAvatar)
       return
     }
-    if (agent && mood) {
+    if (!agent) {
+      return
+    }
+    if (trick) {
+      playTrick(agent, trick)
+    } else if (mood) {
       playAnimation(agent, moodAnimations[avatar][mood], { interrupt: true })
     }
   }, [messages, agent, avatar, setAvatar])
 
   useEffect(() => {
-    if (!(agent && pendingMood.current)) {
+    if (!agent) {
       return
     }
-    playAnimation(agent, moodAnimations[avatar][pendingMood.current])
+    if (pendingTrick.current) {
+      playTrick(agent, pendingTrick.current)
+    } else if (pendingMood.current) {
+      playAnimation(agent, moodAnimations[avatar][pendingMood.current])
+    }
     pendingMood.current = null
+    pendingTrick.current = null
   }, [agent, avatar])
 }

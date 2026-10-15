@@ -122,3 +122,21 @@ export const moodAnimations: Record<AvatarName, Record<MoodName, string>> = {
     write: 'Writing',
   },
 }
+
+export const trickNames = [
+  'spin',
+  'jump',
+  'roll_over',
+  'play_dead',
+  'backflip',
+] as const
+export type TrickName = (typeof trickNames)[number]
+
+// What each trick looks like, so the chat reply can match what happened
+export const trickDescriptions: Record<TrickName, string> = {
+  backflip: 'did a backflip',
+  jump: 'jumped up high twice',
+  play_dead: 'dropped over and played dead, then hopped back up',
+  roll_over: 'rolled over across the screen and back',
+  spin: 'spun around two full circles',
+}
