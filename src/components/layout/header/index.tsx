@@ -111,10 +111,7 @@ export const Header = ({
     >
       <div className='relative flex w-full items-center'>
         <div className='flex items-center gap-2'>
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation>
             {renderNavTitle(nav, {
               className:
                 'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
@@ -126,23 +123,13 @@ export const Header = ({
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
-              <ViewAnimation
-                delay={0.05 * i}
-                initial={{ opacity: 0, translateY: -6 }}
-                key={i.toString()}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
+              <ViewAnimation delay={0.05 * i} key={i.toString()}>
                 <NavigationMenuLinkItem className='text-sm' item={item} />
               </ViewAnimation>
             ))}
         </ul>
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
-          <ViewAnimation
-            className='w-60 flex-none'
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation className='w-60 flex-none' delay={0.15}>
             {searchToggle.enabled !== false &&
               (searchToggle.components?.lg ?? (
                 <LargeSearchToggle
@@ -151,21 +138,13 @@ export const Header = ({
                 />
               ))}
           </ViewAnimation>
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.15}>
             {themeSwitch.enabled !== false &&
               (themeSwitch.component ?? (
                 <ThemeToggle mode={themeSwitch?.mode} />
               ))}
           </ViewAnimation>
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.15}>
             <ul className='flex flex-row items-center gap-2 empty:hidden'>
               {navItems.filter(isSecondary).map((item, i) => (
                 <NavigationMenuLinkItem
@@ -183,20 +162,12 @@ export const Header = ({
       <ul className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
-            <ViewAnimation
-              delay={0.1}
-              initial={{ opacity: 0, translateY: -6 }}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
+            <ViewAnimation delay={0.1}>
               <SearchToggle className='p-2' hideIfDisabled />
             </ViewAnimation>
           ))}
         <NavigationMenuItem>
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.15}>
             <NavigationMenuTrigger
               aria-label='Toggle Menu'
               className={cn(

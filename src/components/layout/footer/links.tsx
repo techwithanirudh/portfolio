@@ -84,9 +84,7 @@ export const Links = () => {
             index === lists.length - 1 && 'max-sm:col-span-2'
           )}
           delay={0.05 * index}
-          initial={{ opacity: 0, translateY: -6 }}
           key={list.title}
-          whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='border-b pb-1 font-medium text-foreground sm:border-none sm:pb-0'>
             {list.href ? (

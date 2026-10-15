@@ -29,23 +29,13 @@ export default function ExperiencePreview() {
         <div className='divider-top-dashed'>
           <div className='grid divide-y divide-dashed divide-border lg:grid-cols-3 lg:divide-x lg:divide-y-0'>
             {recent.map((experience, index) => (
-              <ViewAnimation
-                delay={0.05 * index}
-                initial={{ opacity: 0, translateY: -6 }}
-                key={experience.id}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
+              <ViewAnimation delay={0.05 * index} key={experience.id}>
                 <ExperienceCard experience={experience} />
               </ViewAnimation>
             ))}
           </div>
 
-          <ViewAnimation
-            blur={false}
-            delay={0.05 * recent.length}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.05 * recent.length}>
             <Link
               className={buttonVariants({
                 className: 'w-full py-8 active:scale-none active:opacity-80',

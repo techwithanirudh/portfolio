@@ -34,13 +34,7 @@ const TestimonialCard = ({
   testimonial: Testimonial
   index: number
 }) => (
-  <ViewAnimation
-    blur={false}
-    className='h-full'
-    delay={0.1 + index * 0.05}
-    initial={{ opacity: 0, scale: 0.98, translateX: -12 }}
-    whileInView={{ opacity: 1, scale: 1, translateX: 0 }}
-  >
+  <ViewAnimation className='h-full' delay={0.1 + index * 0.05}>
     <div className='flex h-full flex-col justify-between gap-28 p-6 transition-all duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
       <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
       <div className='flex flex-col gap-4'>
@@ -102,11 +96,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
           title='What others are saying'
         />
 
-        <ViewAnimation
-          blur={false}
-          initial={{ opacity: 0, translateY: 16 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation>
           <Carousel className='divider-top-dashed' setApi={setApi}>
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {testimonials.map((item, index) => (

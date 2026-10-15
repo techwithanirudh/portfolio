@@ -18,23 +18,13 @@ export default function Contact(): React.ReactElement {
     <Wrapper>
       <SplitSection>
         <SplitSectionSidebar className='px-6 py-14'>
-          <ViewAnimation
-            blur={false}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation>
             <Hero />
           </ViewAnimation>
         </SplitSectionSidebar>
 
         <SplitSectionContent className='flex w-full items-center px-6 py-14'>
-          <ViewAnimation
-            blur={false}
-            className='w-full'
-            delay={0.1}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation className='w-full' delay={0.1}>
             <ContactForm />
           </ViewAnimation>
         </SplitSectionContent>

@@ -8,11 +8,7 @@ type SectionProps = {
 } & HTMLAttributes<HTMLDivElement>
 
 const Cross = () => (
-  <ViewAnimation
-    className='flex h-6 w-6 items-center justify-center'
-    initial={{ opacity: 0 }}
-    whileInView={{ opacity: 1 }}
-  >
+  <ViewAnimation className='flex h-6 w-6 items-center justify-center'>
     <Icons.add className='size-5 text-border/70 dark:text-border' />
   </ViewAnimation>
 )
@@ -23,7 +19,7 @@ export const Section = ({
   className,
   ...props
 }: SectionProps) => (
-  <section className={sectionClassName} {...props}>
+  <section className={sectionClassName} data-slot='section' {...props}>
     <div className='container relative mx-auto'>
       <div className={cn('border-border border-dashed sm:border-x', className)}>
         {children}

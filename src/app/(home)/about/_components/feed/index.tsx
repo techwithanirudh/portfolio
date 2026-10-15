@@ -36,12 +36,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
           inset
         >
           {items.map((item, index) => (
-            <ViewAnimation
-              delay={0.05 * index}
-              initial={{ opacity: 0, translateY: -8 }}
-              key={item.event.id}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
+            <ViewAnimation delay={0.05 * index} key={item.event.id}>
               <GitHubEventComponent commits={item.commits} event={item.event} />
             </ViewAnimation>
           ))}

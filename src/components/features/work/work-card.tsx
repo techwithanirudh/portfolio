@@ -11,6 +11,7 @@ import { WORK_COVER_SIZES } from './cover'
 interface WorkCardProps {
   description: string
   image?: string | null
+  priority?: boolean
   slugs: string[]
   title: string
   url: string
@@ -39,6 +40,7 @@ export const WorkCard = ({
   title,
   description,
   image,
+  priority = false,
   url,
   slugs,
 }: WorkCardProps) => {
@@ -60,6 +62,7 @@ export const WorkCard = ({
             className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform will-change-transform group-hover:scale-102'
             fill
             imageClassName='object-cover'
+            lazy={!priority}
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}
           />

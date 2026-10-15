@@ -49,30 +49,16 @@ export const HeroSection = ({
   }) => (
   <Section className={cn('px-6 sm:p-4', sectionClassName)}>
     <div className={cn(heroVariants({ align, className, variant }))}>
-      {image && (
-        <ViewAnimation
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {image}
-        </ViewAnimation>
-      )}
+      {image && <ViewAnimation>{image}</ViewAnimation>}
       <div className='flex flex-col gap-4 sm:items-center'>
         {caption && (
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation>
             <small className='block text-balance text-muted-foreground text-sm sm:text-base'>
               {caption}
             </small>
           </ViewAnimation>
         )}
-        <ViewAnimation
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.1}>
           <h1
             className={cn(
               'typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter',
@@ -85,11 +71,7 @@ export const HeroSection = ({
           </h1>
         </ViewAnimation>
         {description && (
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.15}>
             <p
               className={cn(
                 'text-pretty text-muted-foreground text-sm sm:text-base',
@@ -103,13 +85,7 @@ export const HeroSection = ({
         )}
       </div>
       {Children.map(children, (child, index) => (
-        <ViewAnimation
-          delay={0.1 + index * 0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {child}
-        </ViewAnimation>
+        <ViewAnimation delay={0.1 + index * 0.05}>{child}</ViewAnimation>
       ))}
     </div>
   </Section>

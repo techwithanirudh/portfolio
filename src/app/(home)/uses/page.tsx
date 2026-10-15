@@ -58,21 +58,13 @@ export default function UsesPage() {
           <Fragment key={section.title ?? `uses-section-${index}`}>
             {section.title && (
               <Section className='px-6 py-8'>
-                <ViewAnimation
-                  delay={headingDelay}
-                  initial={{ opacity: 0, translateY: 6 }}
-                  whileInView={{ opacity: 1, translateY: 0 }}
-                >
+                <ViewAnimation delay={headingDelay}>
                   <h2 className='font-medium text-3xl'>{section.title}</h2>
                 </ViewAnimation>
               </Section>
             )}
             <Section>
-              <ViewAnimation
-                delay={contentDelay}
-                initial={{ opacity: 0, translateY: 6 }}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
+              <ViewAnimation delay={contentDelay}>
                 {section.content}
               </ViewAnimation>
             </Section>

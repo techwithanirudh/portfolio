@@ -31,10 +31,7 @@ export const SectionHeader = ({
       className
     )}
   >
-    <ViewAnimation
-      initial={{ opacity: 0, translateY: -6 }}
-      whileInView={{ opacity: 1, translateY: 0 }}
-    >
+    <ViewAnimation>
       <h2
         className={cn(
           'typography-title text-balance font-regular text-3xl leading-tight tracking-tighter',
@@ -46,11 +43,7 @@ export const SectionHeader = ({
       </h2>
     </ViewAnimation>
     {description && (
-      <ViewAnimation
-        delay={0.1}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
+      <ViewAnimation delay={0.1}>
         <p
           className={cn(
             'text-pretty text-base text-muted-foreground',
@@ -67,12 +60,7 @@ export const SectionHeader = ({
         : `${String(child)}-${index}`
 
       return child ? (
-        <ViewAnimation
-          delay={0.1 + index * 0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={key}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.1 + index * 0.05} key={key}>
           {child}
         </ViewAnimation>
       ) : null

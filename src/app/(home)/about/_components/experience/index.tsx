@@ -21,11 +21,7 @@ export default function Experience(): React.ReactElement {
           sticky
           title='Experience'
         >
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.15}>
             <Button
               className='w-fit'
               nativeButton={false}
@@ -41,10 +37,7 @@ export default function Experience(): React.ReactElement {
       </SplitSectionSidebar>
 
       <SplitSectionContent className='px-0 py-0 lg:col-span-2'>
-        <ViewAnimation
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation>
           <WorkExperience experiences={experiences} />
         </ViewAnimation>
       </SplitSectionContent>

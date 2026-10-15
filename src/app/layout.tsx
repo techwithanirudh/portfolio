@@ -11,6 +11,7 @@ import { socials } from '@/constants/navigation'
 import { description as homeDescription, owner, title } from '@/constants/site'
 import { PagesProvider } from '@/contexts/pages'
 import { createMetadata } from '@/lib/metadata'
+import { revealScript } from '@/lib/reveal-script'
 import { getPosts, getWorkPages } from '@/lib/source'
 import '@/styles/globals.css'
 import 'fumadocs-ui/components/image-zoom2.css'
@@ -107,6 +108,17 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       suppressHydrationWarning
     >
       <head>
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: our own static code, it has to run before hydration
+          dangerouslySetInnerHTML={{ __html: revealScript }}
+        />
+        <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw script
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+          }}
+          type='application/ld+json'
+        />
         <BotIdClient
           protect={[
             {
@@ -117,13 +129,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
         />
       </head>
       <Body>
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw script
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
-          }}
-          type='application/ld+json'
-        />
         <PagesProvider pages={pages}>
           <ThemeProvider
             attribute='class'

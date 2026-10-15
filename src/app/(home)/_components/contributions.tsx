@@ -33,11 +33,7 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
 
   return (
     <Section className='relative w-full p-6'>
-      <ViewAnimation
-        className='relative w-full'
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-      >
+      <ViewAnimation className='relative w-full'>
         <ContributionGraph
           aria-label='GitHub Contributions Graph'
           blockMargin={isMobile ? 3 : 2}

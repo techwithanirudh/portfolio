@@ -55,9 +55,7 @@ const Skills = () => (
                 size: feature.size as 'sm' | 'lg',
               })}
               delay={0.05 * index}
-              initial={{ opacity: 0 }}
               key={feature.id}
-              whileInView={{ opacity: 1 }}
             >
               <feature.Icon className='icon-tilt h-8 w-8' strokeWidth={1} />
               <div className='flex flex-col'>
@@ -78,9 +76,7 @@ const Skills = () => (
               <ViewAnimation
                 className='divider-bottom-dashed grid items-center gap-y-2 py-4 last:border-none sm:grid-cols-[10rem_1fr]'
                 delay={0.05 * index}
-                initial={{ opacity: 0, translateY: -6 }}
                 key={category}
-                whileInView={{ opacity: 1, translateY: 0 }}
               >
                 <div className='px-6 text-muted-foreground text-sm sm:pr-0'>
                   <span

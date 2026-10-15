@@ -16,14 +16,7 @@ export const Hero = () => (
     />
     <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>
       {socials.map((social, index) => (
-        <ViewAnimation
-          blur={false}
-          delay={0.05 * index}
-          duration={0.25}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={social.url}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.05 * index} key={social.url}>
           <Tooltip>
             <TooltipTrigger
               render={

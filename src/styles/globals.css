@@ -513,3 +513,12 @@ html > body[data-scroll-locked] {
     scroll-behavior: auto !important;
   }
 }
+
+/* Hidden only while the reveal script flags <html>, so without JS nothing
+   hides. The first section carries the LCP, so it never hides */
+:root[data-reveal]
+[data-reveal-item]:not(
+  #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
+) {
+  opacity: 0;
+}

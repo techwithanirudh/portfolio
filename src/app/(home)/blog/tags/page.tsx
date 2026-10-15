@@ -18,13 +18,7 @@ export default function Page() {
       <SectionBody>
         <div className='grid grid-cols-1 divide-y divide-dashed divide-border sm:grid-cols-2 lg:grid-cols-4'>
           {tags.map((tag, index) => (
-            <ViewAnimation
-              className='size-full'
-              delay={0.05 * index}
-              initial={{ opacity: 0 }}
-              key={tag}
-              whileInView={{ opacity: 1 }}
-            >
+            <ViewAnimation className='size-full' delay={0.05 * index} key={tag}>
               <TagCard
                 className='size-full items-center justify-start gap-2 rounded-none border-r border-dashed bg-card/50 p-6 hover:bg-card/80'
                 displayCount
@@ -33,11 +27,7 @@ export default function Page() {
             </ViewAnimation>
           ))}
           {tags.length % 2 === 1 && (
-            <ViewAnimation
-              delay={0.05 * tags.length}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-            >
+            <ViewAnimation delay={0.05 * tags.length}>
               <div className='size-full border-border border-dashed bg-dashed sm:border-b' />
             </ViewAnimation>
           )}
