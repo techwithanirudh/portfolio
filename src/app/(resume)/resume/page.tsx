@@ -149,9 +149,12 @@ export default function ResumePage() {
                     {new Date(project.data.date).getFullYear()}
                   </span>
                 </div>
-                <p className='text-neutral-700'>{project.data.description}</p>
+                {/* Fixed two-line blurb and one-line stack keep every card the same height */}
+                <p className='line-clamp-2 min-h-[2lh] text-neutral-700'>
+                  {project.data.description}
+                </p>
                 {project.data.tags?.length ? (
-                  <p className='font-mono text-[11px] text-neutral-500'>
+                  <p className='truncate font-mono text-[11px] text-neutral-500'>
                     {project.data.tags.join(' · ')}
                   </p>
                 ) : null}

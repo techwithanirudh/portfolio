@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 
 // Matches public/images/portrait.svg: the drawing minus the eyes and the sky,
 // which is painted behind it so it can follow the theme
-const VIEW_BOX = '-29 -29 1005 1218'
+const VIEW_BOX = '0 0 947 1160'
 // How far (in SVG units) the eyes can drift towards the cursor
 const MAX_OFFSET = 24
 // Cursor distance (in px) at which the eyes reach MAX_OFFSET
@@ -50,19 +50,14 @@ export function Portrait() {
 
   return (
     <div className='relative size-full select-none bg-[linear-gradient(160deg,#c3b6fa,#9fccfa_55%,#7fd0f5)] dark:bg-[linear-gradient(160deg,#4a3fb0,#2b4aa8_55%,#1d6a8c)]'>
-      {/* Dot grid echoing the dither cover, so the portrait sits in the same world */}
-      <div
-        aria-hidden
-        className='mask-b-from-10% absolute inset-0 bg-[radial-gradient(circle,rgb(255_255_255/0.35)_1px,transparent_1.5px)] bg-size-[8px_8px] dark:bg-[radial-gradient(circle,rgb(255_255_255/0.18)_1px,transparent_1.5px)]'
-      />
       {/* biome-ignore lint/performance/noImgElement: static SVG, next/image adds nothing here */}
       <img
         alt='Portrait of an1rudh'
         className='relative size-full object-cover'
         draggable={false}
-        height={1218}
+        height={1160}
         src='/images/portrait.svg'
-        width={1005}
+        width={947}
       />
       <svg
         aria-hidden
