@@ -17,7 +17,7 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
-import { useAssistantContext } from './assistant'
+import { useAssistantContext } from './context'
 
 interface PopupState {
   text: string
