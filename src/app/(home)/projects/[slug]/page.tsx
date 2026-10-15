@@ -54,7 +54,7 @@ function Header(props: { page: MDXPage }) {
             share={transition}
           >
             <BlurImage
-              alt={page.data.title ?? 'Work cover image'}
+              alt={page.data.title ?? 'Project cover image'}
               blur={false}
               className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
               fill
@@ -161,7 +161,7 @@ export async function generateMetadata(props: {
         : new Date(page.data.date).toISOString(),
       publishedTime: new Date(page.data.date).toISOString(),
       type: 'article',
-      url: `/work/${page.slugs.join('/')}`,
+      url: `/projects/${page.slugs.join('/')}`,
     },
     title,
     twitter: {

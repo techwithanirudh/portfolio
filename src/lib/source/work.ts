@@ -3,7 +3,7 @@ import { loader } from 'fumadocs-core/source'
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server'
 
 export const workSource = loader(toFumadocsSource(work, []), {
-  baseUrl: '/work',
+  baseUrl: '/projects',
 })
 
 export const {

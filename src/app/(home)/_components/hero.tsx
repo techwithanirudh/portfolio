@@ -9,7 +9,6 @@ import { ViewAnimation } from '@/components/view-animation'
 import { linkItems } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 import { cn } from '@/lib/utils'
-import { HeroName } from './hero-name'
 
 const Hero = () => {
   const links = resolveLinkItems({
@@ -46,7 +45,7 @@ const Hero = () => {
             'md:text-5xl'
           )}
         >
-          <HeroName />
+          Hi! I'm Anirudh!
         </h1>
       </ViewAnimation>
       <ViewAnimation
@@ -74,9 +73,9 @@ const Hero = () => {
               }),
               'rounded-full bg-primary hover:bg-primary/90'
             )}
-            href='/work'
+            href='/projects'
           >
-            Browse Work
+            Browse Projects
             <Icons.arrowRight className='icon-arrow-button size-5' />
           </Link>
         </ViewAnimation>

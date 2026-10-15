@@ -30,7 +30,7 @@ export function generate({
       <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] bottom-16' />
       <div tw='flex flex-col justify-end items-start absolute inset-24 gap-4'>
         <span tw='text-[22px] font-bold uppercase text-stone-500 ml-1'>
-          Work
+          Projects
         </span>
         <div
           style={{

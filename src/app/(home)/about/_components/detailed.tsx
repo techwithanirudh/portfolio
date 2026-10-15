@@ -47,9 +47,9 @@ export default function Detailed(): React.ReactElement {
                 buttonVariants({ size: 'lg', variant: 'link' }),
                 '!p-0 h-fit'
               )}
-              href='/work'
+              href='/projects'
             >
-              View Work
+              View Projects
               <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>
           </div>

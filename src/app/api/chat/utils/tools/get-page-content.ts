@@ -13,7 +13,7 @@ const resolvePage = (path: string) => {
     return post.getPage(slugs)
   }
 
-  if (section === 'work') {
+  if (section === 'projects' || section === 'work') {
     return workSource.getPage(slugs)
   }
 

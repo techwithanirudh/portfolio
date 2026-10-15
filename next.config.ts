@@ -64,6 +64,16 @@ async function createNextConfig(): Promise<NextConfig> {
           permanent: false,
           source: '/login',
         },
+        {
+          destination: '/projects',
+          permanent: true,
+          source: '/work',
+        },
+        {
+          destination: '/projects/:path*',
+          permanent: true,
+          source: '/work/:path*',
+        },
       ]
     },
     async rewrites() {
@@ -74,7 +84,7 @@ async function createNextConfig(): Promise<NextConfig> {
         },
         {
           destination: '/work.mdx/:path*',
-          source: '/work/:path*.mdx',
+          source: '/projects/:path*.mdx',
         },
         {
           destination: '/blog/rss.xml',

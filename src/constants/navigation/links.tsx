@@ -9,28 +9,10 @@ export const linkItems: LinkItemType[] = [
     url: '/about',
   },
   {
-    active: 'none',
-    icon: <Icons.calendar />,
-    text: 'Experience',
-    url: '/#experience',
-  },
-  {
-    active: 'url',
-    icon: <Icons.mail />,
-    text: 'Contact',
-    url: '/contact',
-  },
-  {
-    active: 'url',
-    icon: <Icons.messageSquare />,
-    text: 'Guestbook',
-    url: '/guestbook',
-  },
-  {
     active: 'nested-url',
     icon: <Icons.work />,
-    text: 'Work',
-    url: '/work',
+    text: 'Projects',
+    url: '/projects',
   },
   {
     active: 'nested-url',
@@ -38,4 +20,17 @@ export const linkItems: LinkItemType[] = [
     text: 'Blog',
     url: '/blog',
   },
+  {
+    active: 'url',
+    icon: <Icons.mail />,
+    text: 'Contact',
+    url: '/contact',
+  },
 ]
+
+export const guestbookLink = {
+  active: 'url',
+  icon: <Icons.messageSquare />,
+  text: 'Guestbook',
+  url: '/guestbook',
+} satisfies LinkItemType

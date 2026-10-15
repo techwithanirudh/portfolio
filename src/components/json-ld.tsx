@@ -104,7 +104,7 @@ export const WorkJsonLd = ({ page }: { page: WorkPage }) => {
 
   const breadcrumbs = makeBreadcrumbs([
     { name: homeTitle, url: baseUrl.href },
-    { name: 'Work', url: new URL('/work', baseUrl.href).href },
+    { name: 'Projects', url: new URL('/projects', baseUrl.href).href },
     { name: page.data.title ?? 'Untitled', url },
   ])
 

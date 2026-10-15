@@ -32,11 +32,11 @@ fetch the full content of a specific page after finding it with searchDocs.
 </when-to-use>
 
 <inputs>
-- path: (required) the page path, must start with "blog/" or "work/"
+- path: (required) the page path, must start with "blog/" or "projects/"
   - correct: "blog/introducing-my-stack"
-  - correct: "work/ai-tutor"
+  - correct: "projects/ai-tutor"
   - wrong: "/blog/something" (no leading slash)
-  - wrong: "about" (must be blog/ or work/)
+  - wrong: "about" (must be blog/ or projects/)
 </inputs>
 </tool>
 

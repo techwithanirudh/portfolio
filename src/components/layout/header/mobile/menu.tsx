@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
-import { linkItems, socials } from '@/constants/navigation'
+import { guestbookLink, linkItems, socials } from '@/constants/navigation'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
@@ -28,6 +28,7 @@ export function MenuPanel({
       url: '/',
     },
     ...linkItems,
+    guestbookLink,
   ].filter(
     (item): item is typeof item & { text: string; url: string } =>
       'url' in item && 'text' in item

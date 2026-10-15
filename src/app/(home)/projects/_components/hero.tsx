@@ -8,7 +8,7 @@ export const Hero = (_props: {
   <HeroSection
     align='center'
     description='A snapshot of recent projects and collaborations.'
-    title='Work'
+    title='Projects'
     variant='default'
   />
 )

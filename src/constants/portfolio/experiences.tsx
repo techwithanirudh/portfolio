@@ -49,7 +49,7 @@ export const experiences: ExperienceItemType[] = [
     positions: [
       {
         description:
-          'Built [Transcript Seeker](/work/transcript_seeker) and [Speaking Meeting Bot](/work/speaking_meeting_bot), plus the AI chat and MCP tooling around the MeetingBaaS meeting APIs.',
+          'Built [Transcript Seeker](/projects/transcript_seeker) and [Speaking Meeting Bot](/projects/speaking_meeting_bot), plus the AI chat and MCP tooling around the MeetingBaaS meeting APIs.',
         employmentPeriod: { end: '05.2025', start: '10.2024' },
         employmentType: 'Freelance',
         icon: <Icons.codeXml />,

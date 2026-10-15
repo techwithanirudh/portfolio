@@ -15,7 +15,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           align='left'
           className='px-6'
           description='A snapshot of recent projects and collaborations.'
-          title='Work'
+          title='Projects'
         />
         <div className='divider-top-dashed'>
           <div className='grid grid-cols-1 divide-dashed divide-border text-left lg:grid-cols-2 lg:divide-x [&>*:last-child]:border-b-0 lg:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
@@ -51,7 +51,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
                 shape: 'square',
                 variant: 'default',
               })}
-              href='/work'
+              href='/projects'
             >
               View More
               <Icons.arrowRight className='icon-arrow-button size-5' />
