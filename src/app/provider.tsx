@@ -7,22 +7,12 @@ import type { ReactNode } from 'react'
 import Analytics from '@/components/analytics'
 import { Assistant, AssistantTrigger } from '@/components/features/assistant'
 import { MobileNav } from '@/components/layout/header/mobile'
-import { Oiia, OiiaProvider, useOiiaMode } from '@/components/oiia'
-import { SmoothCursor } from '@/components/smooth-cursor'
+import { Oiia, OiiaProvider } from '@/components/oiia'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { UiSounds } from '@/components/ui-sounds'
 import { useSoundEnabled } from '@/lib/audio/preferences'
-
-// Hide the regular smooth cursor while OIIA mode is active
-function SmartCursor() {
-  const { mode } = useOiiaMode()
-  if (mode === 'oiia') {
-    return null
-  }
-  return <SmoothCursor />
-}
 
 export function Provider({
   children,
@@ -57,7 +47,6 @@ export function Provider({
         <Analytics />
         <Toaster position='top-center' />
         <TailwindIndicator />
-        <SmartCursor />
         <Oiia />
       </OiiaProvider>
     </SoundProvider>

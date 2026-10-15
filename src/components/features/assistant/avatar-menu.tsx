@@ -17,7 +17,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { tap } from '@/lib/audio/mechanical'
+import { tap } from '@/lib/audio/minimal'
 
 // The header title (current avatar + name) opens a menu to switch avatars
 export function AvatarMenu() {
@@ -29,7 +29,6 @@ export function AvatarMenu() {
       <DropdownMenuTrigger
         aria-label='Ask Simba, change avatar'
         className='group -ml-3 flex h-full items-center gap-2 px-3 transition-colors hover:bg-fd-accent/60 focus-visible:bg-fd-accent/60 focus-visible:outline-none aria-expanded:bg-fd-accent/60'
-        data-native-cursor
         data-sound-press='off'
       >
         <AvatarIcon

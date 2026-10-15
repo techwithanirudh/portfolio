@@ -187,6 +187,7 @@ export function DitherField({ className }: { className?: string }) {
     let frame = 0
     const start = performance.now()
     let dpr = 1
+    let revealed = false
 
     const resize = () => {
       dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR)
@@ -207,9 +208,16 @@ export function DitherField({ className }: { className?: string }) {
       gl.uniform3f(uViolet, ...PALETTE.violet)
       gl.uniform3f(uAzure, ...PALETTE.azure)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
-      // Some browsers paint a blank WebGL canvas white until the first frame,
-      // so it stays hidden until there is something to show
-      canvas.dataset.ready = ''
+      if (!revealed) {
+        revealed = true
+        // Some browsers composite a fresh WebGL canvas as white until its first
+        // frame is on screen, so reveal it two frames after the first draw
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => {
+            canvas.dataset.ready = ''
+          })
+        )
+      }
     }
 
     const loop = (now: number) => {

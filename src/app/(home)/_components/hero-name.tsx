@@ -1,7 +1,7 @@
 'use client'
 
 import { CLICKS_TO_ENABLE, useOiiaMode } from '@/components/oiia'
-import { tap } from '@/lib/audio/mechanical'
+import { tap } from '@/lib/audio/minimal'
 import { playSound } from '@/lib/audio/preferences'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'

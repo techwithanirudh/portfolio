@@ -1,7 +1,7 @@
 'use client'
 
 import { useAssistantContext } from '@/components/features/assistant/assistant'
-import { expand } from '@/lib/audio/mechanical'
+import { expand } from '@/lib/audio/minimal'
 import { playSound } from '@/lib/audio/preferences'
 
 export function AskDog() {

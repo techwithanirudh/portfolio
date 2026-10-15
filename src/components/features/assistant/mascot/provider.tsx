@@ -100,9 +100,6 @@ export function MascotProvider({ children, disabled }: MascotProviderProps) {
       return
     }
 
-    // The custom cursor steps aside over the mascot so it isn't blended into it
-    currentAgent._el.dataset.nativeCursor = ''
-
     const blockDrag = (event: MouseEvent | TouchEvent) => {
       event.stopImmediatePropagation()
     }

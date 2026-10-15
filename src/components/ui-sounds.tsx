@@ -15,7 +15,7 @@ import {
   tap,
   toggleOff,
   toggleOn,
-} from '@/lib/audio/mechanical'
+} from '@/lib/audio/minimal'
 import { playSound } from '@/lib/audio/preferences'
 
 const PRESS =

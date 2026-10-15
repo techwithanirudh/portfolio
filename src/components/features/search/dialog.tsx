@@ -28,7 +28,7 @@ import {
   CommandList,
 } from '@/components/ui/command'
 import { usePages } from '@/contexts/pages'
-import { click, collapse, keyPress, notification } from '@/lib/audio/mechanical'
+import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 import { signOut, useSession } from '@/lib/auth-client'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 

@@ -14,7 +14,11 @@ export const PageFill = ({ fallback = false }: PageFillProps) => (
     aria-hidden
     className={cn(
       'container mx-auto w-full flex-1 border-line border-x',
-      fallback && 'in-[#main-content:has([data-page-fill=page])]:hidden'
+      // The footer draws its own top rule; a page placed fill closes itself
+      // off above whatever band follows it
+      fallback
+        ? 'in-[#main-content:has([data-page-fill=page])]:hidden'
+        : 'screen-line-bottom'
     )}
     data-page-fill={fallback ? 'fallback' : 'page'}
   />

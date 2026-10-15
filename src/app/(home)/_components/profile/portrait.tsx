@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { preload } from 'react-dom'
 
 // Matches public/images/portrait.svg: the drawing minus the eyes and the sky,
 // which is painted behind it as a CSS gradient (the cover shader's palette in
@@ -12,8 +13,29 @@ const MAX_OFFSET = 24
 const REACH = 320
 
 // Portrait whose eyes follow the cursor around the page
+const SRC = '/images/portrait.svg'
+
 export function Portrait() {
+  // Start fetching the drawing with the HTML, it's above the fold
+  preload(SRC, { as: 'image', fetchPriority: 'high' })
   const eyesRef = useRef<SVGGElement>(null)
+  const imageRef = useRef<HTMLImageElement>(null)
+  // The eyes are inline, so they'd show before the face loads without this
+  const [loaded, setLoaded] = useState(false)
+
+  useEffect(() => {
+    const image = imageRef.current
+    if (!image) {
+      return
+    }
+    if (image.complete) {
+      setLoaded(true)
+      return
+    }
+    const onLoad = () => setLoaded(true)
+    image.addEventListener('load', onLoad)
+    return () => image.removeEventListener('load', onLoad)
+  }, [])
 
   useEffect(() => {
     const eyes = eyesRef.current
@@ -56,13 +78,16 @@ export function Portrait() {
         alt='Portrait of an1rudh'
         className='relative size-full object-cover'
         draggable={false}
+        fetchPriority='high'
         height={1160}
-        src='/images/portrait.svg'
+        ref={imageRef}
+        src={SRC}
         width={947}
       />
       <svg
         aria-hidden
-        className='pointer-events-none absolute inset-0 size-full'
+        className='pointer-events-none absolute inset-0 size-full opacity-0 data-loaded:opacity-100'
+        data-loaded={loaded ? '' : undefined}
         preserveAspectRatio='xMidYMid slice'
         viewBox={VIEW_BOX}
       >

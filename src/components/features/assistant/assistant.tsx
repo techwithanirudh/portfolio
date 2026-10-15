@@ -52,7 +52,7 @@ import {
   success,
   tap,
   toggleOn,
-} from '@/lib/audio/mechanical'
+} from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'

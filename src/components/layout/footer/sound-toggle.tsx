@@ -1,7 +1,7 @@
 'use client'
 
 import { Icons } from '@/components/icons/icons'
-import { toggleOff, toggleOn } from '@/lib/audio/mechanical'
+import { toggleOff, toggleOn } from '@/lib/audio/minimal'
 import {
   playSound,
   setSoundEnabled,

@@ -1,5 +1,5 @@
 import { toast as sonnerToast } from 'sonner'
-import { error, success, tap, warning } from '@/lib/audio/mechanical'
+import { error, success, tap, warning } from '@/lib/audio/minimal'
 import { playSound } from '@/lib/audio/preferences'
 
 type SonnerToast = typeof sonnerToast

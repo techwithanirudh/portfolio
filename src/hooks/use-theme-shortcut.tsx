@@ -3,7 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { useTheme } from 'next-themes'
 import { useEffect } from 'react'
-import { toggleOn } from '@/lib/audio/mechanical'
+import { toggleOn } from '@/lib/audio/minimal'
 
 export function useThemeShortcut() {
   const { resolvedTheme, setTheme } = useTheme()
