@@ -6,6 +6,7 @@ import { BlurImage } from '@/components/blur-image'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
 import { TOCMinimap, TOCPopover } from '@/components/features/toc'
+import { WORK_COVER_SIZES } from '@/components/features/work/cover'
 import { PreviewButton } from '@/components/features/work/preview-button'
 import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
@@ -54,10 +55,12 @@ function Header(props: { page: MDXPage }) {
           >
             <BlurImage
               alt={page.data.title ?? 'Work cover image'}
+              blur={false}
               className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
               fill
               imageClassName='object-cover'
-              sizes='(min-width: 1024px) 1200px, 100vw'
+              lazy={false}
+              sizes={WORK_COVER_SIZES}
               src={page.data.image}
             />
           </ViewTransition>
