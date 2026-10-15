@@ -4,6 +4,7 @@ import { cva } from 'class-variance-authority'
 import Image from 'next/image'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
+import { PreviewLink } from '@/components/preview-link'
 import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
 import { skills, technologies } from '@/constants/portfolio/skills'
@@ -97,13 +98,7 @@ const Skills = () => (
                     <li className='flex' key={label}>
                       <Badge
                         className='group/tag gap-1.5 rounded-full px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
-                        render={
-                          <a
-                            href={href}
-                            rel='noopener noreferrer'
-                            target='_blank'
-                          />
-                        }
+                        render={<PreviewLink href={href} />}
                         variant='outline'
                       >
                         {typeof icon === 'string' ? (

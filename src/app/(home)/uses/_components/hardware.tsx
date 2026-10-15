@@ -1,21 +1,15 @@
 import Image from 'next/image'
+import { PreviewLink } from '@/components/preview-link'
 import { cn } from '@/lib/utils'
 import type { HardwareItem } from '@/types'
 
 function HardwareCard({ name, description, url, image }: HardwareItem) {
-  const Wrapper = url ? 'a' : 'div'
-  const linkProps = url
-    ? { href: url, rel: 'noopener noreferrer', target: '_blank' }
-    : {}
-
-  return (
-    <Wrapper
-      className={cn(
-        'group/item flex items-center gap-3 bg-card/50 p-4 transition-colors sm:gap-4 sm:p-6',
-        url && 'hover:bg-card/80'
-      )}
-      {...linkProps}
-    >
+  const className = cn(
+    'group/item flex items-center gap-3 bg-card/50 p-4 transition-colors sm:gap-4 sm:p-6',
+    url && 'hover:bg-card/80'
+  )
+  const content = (
+    <>
       {image ? (
         <div className='flex size-16 shrink-0 items-center justify-center'>
           <Image
@@ -42,7 +36,15 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
           <p className='text-muted-foreground text-sm'>{description}</p>
         )}
       </div>
-    </Wrapper>
+    </>
+  )
+
+  return url ? (
+    <PreviewLink className={className} href={url}>
+      {content}
+    </PreviewLink>
+  ) : (
+    <div className={className}>{content}</div>
   )
 }
 

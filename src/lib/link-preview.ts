@@ -6,14 +6,15 @@ import { cache } from 'react'
 import {
   hashUrl,
   type LinkPreviewEntry,
+  type LinkPreviewImage,
   type LinkPreviewManifest,
 } from './link-preview.shared'
 
 export type {
   LinkPreviewEntry,
+  LinkPreviewImage,
   LinkPreviewManifest,
 } from './link-preview.shared'
-export { hashUrl } from './link-preview.shared'
 
 const manifestPath = path.join(
   process.cwd(),
@@ -22,7 +23,7 @@ const manifestPath = path.join(
   'manifest.json'
 )
 
-export const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
+const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
   if (!fs.existsSync(manifestPath)) {
     return null
   }
@@ -34,7 +35,7 @@ export const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
   }
 })
 
-export function getLinkPreview(url: string): LinkPreviewEntry | null {
+function getLinkPreview(url: string): LinkPreviewEntry | null {
   const manifest = getLinkPreviewManifest()
   const preview = manifest?.previews[hashUrl(url)]
 
@@ -43,4 +44,15 @@ export function getLinkPreview(url: string): LinkPreviewEntry | null {
   }
 
   return preview
+}
+
+/** Only the fields the client card renders, so manifest bookkeeping stays on the server. */
+export function getLinkPreviewImage(url: string): LinkPreviewImage | null {
+  const preview = getLinkPreview(url)
+  if (!preview) {
+    return null
+  }
+
+  const { height, screenshotPath, width } = preview
+  return { height, screenshotPath, width }
 }
