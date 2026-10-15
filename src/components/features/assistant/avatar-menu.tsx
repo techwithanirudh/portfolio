@@ -28,6 +28,7 @@ export function AvatarMenu() {
       <DropdownMenuTrigger
         aria-label='Change avatar'
         className='rounded-sm transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-fd-ring'
+        data-native-cursor
       >
         <AvatarIcon avatar={avatar} size={24} />
       </DropdownMenuTrigger>
