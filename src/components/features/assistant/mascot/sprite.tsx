@@ -1,11 +1,10 @@
 'use client'
 
 import { useSyncExternalStore } from 'react'
-import { SIMBA } from './constants'
 import type { SimbaController } from './controller'
-import { SimbaFrame } from './frame'
+import { SimbaRig } from './rig'
 
-const first = () => SIMBA.animations.Idle.frames[0] ?? { x: 0, y: 0 }
+const rest = () => ({ duration: 0, pose: 'rest' as const })
 
 export function MascotSprite({
   className,
@@ -14,11 +13,7 @@ export function MascotSprite({
   className?: string
   mascot: SimbaController
 }) {
-  const { x, y } = useSyncExternalStore(
-    mascot.subscribe,
-    mascot.getFrame,
-    first
-  )
+  const { pose } = useSyncExternalStore(mascot.subscribe, mascot.getFrame, rest)
 
-  return <SimbaFrame className={className} x={x} y={y} />
+  return <SimbaRig className={className} pose={pose} />
 }

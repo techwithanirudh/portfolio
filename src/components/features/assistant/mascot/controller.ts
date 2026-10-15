@@ -7,11 +7,7 @@ const pick = <T>(items: readonly T[]) =>
 const restCycles = () => 3 + Math.floor(Math.random() * 4)
 
 export class SimbaController {
-  private frame: Frame = SIMBA.animations[animations.rest].frames[0] ?? {
-    duration: 0,
-    x: 0,
-    y: 0,
-  }
+  private frame: Frame = { duration: 0, pose: 'rest' }
   private current: { frames: Frame[]; index: number } | null = null
   private readonly listeners = new Set<() => void>()
   private queue: AnimationName[] = []

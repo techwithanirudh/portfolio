@@ -529,3 +529,79 @@ html > body[data-scroll-locked] {
     box-shadow: inset 2px 0 0 var(--color-ring);
   }
 }
+
+/* Simba's rig: parts move in the drawing's own coordinates */
+.simba-rig :is(g, use) {
+  transform-box: view-box;
+}
+
+.simba-root {
+  transform-origin: 69px 220px;
+  transition:
+    opacity 220ms ease-out,
+    transform 380ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.simba-rig[data-hidden] .simba-root {
+  opacity: 0;
+  transform: translateY(24px) scale(0.6);
+}
+
+.simba-fade {
+  transition: opacity 180ms ease-out;
+}
+
+.simba-head {
+  transform-origin: 66px 142px;
+  transition: transform 460ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.simba-body {
+  transform-origin: 69px 220px;
+  animation: simba-breathe 3.4s ease-in-out infinite;
+}
+
+.simba-eye {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: simba-blink 5.2s infinite;
+}
+
+.simba-paw {
+  transform-origin: 34px 170px;
+  animation: simba-wave 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes simba-breathe {
+  50% {
+    transform: scale(1.012, 1.022);
+  }
+}
+
+@keyframes simba-blink {
+  0%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+  96.5% {
+    transform: scaleY(0.12);
+  }
+}
+
+@keyframes simba-wave {
+  from {
+    transform: rotate(-6deg);
+  }
+  to {
+    transform: rotate(8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simba-rig *,
+  .simba-root {
+    transition: none !important;
+    animation: none !important;
+  }
+}

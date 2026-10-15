@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { type AnimationName, SIMBA } from './constants'
-import { SimbaFrame } from './frame'
+import { SimbaRig } from './rig'
 
 export function SimbaLoop({
   animation,
@@ -30,7 +30,5 @@ export function SimbaLoop({
     return () => clearTimeout(timer)
   }, [frames, index, pause])
 
-  const { x = 0, y = 0 } = frames[index] ?? {}
-
-  return <SimbaFrame className={className} x={x} y={y} />
+  return <SimbaRig className={className} pose={frames[index]?.pose ?? 'rest'} />
 }

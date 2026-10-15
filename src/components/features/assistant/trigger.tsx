@@ -2,7 +2,6 @@
 
 import { useAssistantContext } from '@/components/features/assistant/assistant'
 import { useMascot } from '@/components/features/assistant/mascot'
-import { SIMBA } from '@/components/features/assistant/mascot/constants'
 import { MascotSprite } from '@/components/features/assistant/mascot/sprite'
 
 // Matches the panel's right-4 inset so Simba lines up with it
@@ -25,10 +24,7 @@ export function AssistantTrigger() {
       data-mascot
       data-sound-hover
       onClick={() => setOpen((prev) => !prev)}
-      style={{
-        bottom: EDGE_OFFSET - SIMBA.padding.bottom,
-        right: EDGE_OFFSET - SIMBA.padding.right,
-      }}
+      style={{ bottom: EDGE_OFFSET, right: EDGE_OFFSET }}
       type='button'
     >
       <MascotSprite mascot={mascot} />
