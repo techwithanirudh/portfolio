@@ -8,13 +8,12 @@ export interface Frame {
   y: number
 }
 
-// Key poses run a touch faster than the sheet so he stays lively
-const TWEEN_MS = 100
+// Key poses only; the sprite crossfades between them
 const POSE_PACE = 0.85
 
 const pace = ({ duration, ...frame }: Frame): Frame => ({
   ...frame,
-  duration: duration <= TWEEN_MS ? duration : Math.round(duration * POSE_PACE),
+  duration: Math.round(duration * POSE_PACE),
 })
 
 const pacedAnimations = Object.fromEntries(

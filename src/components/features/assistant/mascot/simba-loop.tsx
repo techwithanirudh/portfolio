@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
-import { cn } from '@/lib/utils'
 import { type AnimationName, SIMBA } from './constants'
+import { SimbaFrame } from './frame'
 
 export function SimbaLoop({
   animation,
@@ -31,18 +31,6 @@ export function SimbaLoop({
   }, [frames, index, pause])
 
   const { x = 0, y = 0 } = frames[index] ?? {}
-  const [width, height] = SIMBA.frame
 
-  return (
-    <span
-      aria-hidden
-      className={cn('block shrink-0 bg-no-repeat', className)}
-      style={{
-        backgroundImage: `url(${SIMBA.sprite})`,
-        backgroundPosition: `-${x}px -${y}px`,
-        height,
-        width,
-      }}
-    />
-  )
+  return <SimbaFrame className={className} x={x} y={y} />
 }
