@@ -115,7 +115,11 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
             )}
           </ContributionGraphCalendar>
           <Tooltip open={tooltip.open}>
-            <TooltipContent anchor={tooltip.day?.rect}>
+            <TooltipContent
+              anchor={tooltip.day?.rect}
+              className='pointer-events-none'
+              sideOffset={6}
+            >
               {tooltip.day
                 ? `${tooltip.day.count} contribution${tooltip.day.count === 1 ? '' : 's'} on ${format(parseISO(tooltip.day.date), 'd MMM yyyy')}`
                 : null}
