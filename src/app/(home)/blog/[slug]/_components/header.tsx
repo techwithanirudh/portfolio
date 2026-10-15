@@ -29,8 +29,8 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
     : null
 
   return (
-    <Section className='screen-line-top-none pt-6'>
-      <div className='flex items-center justify-between gap-2 px-4 pb-4'>
+    <Section className='screen-line-top-none'>
+      <div className='flex items-center justify-between gap-2 px-4 py-2.5'>
         <Link
           className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
           href='/blog'

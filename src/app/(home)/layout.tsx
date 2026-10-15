@@ -30,6 +30,11 @@ const Layout = ({ children }: { children: ReactNode }) => (
         tabIndex={-1}
       >
         <TextSelectionPopup>{children}</TextSelectionPopup>
+        {/* Short pages keep their side rules running down to the footer */}
+        <div
+          aria-hidden
+          className='container mx-auto w-full flex-1 border-line border-x'
+        />
         <Footer />
       </div>
     </HomeLayout>

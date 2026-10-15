@@ -122,19 +122,19 @@ function Header() {
   const playNewChat = useSound(toggleOn)
 
   return (
-    <div className='sticky top-0 flex h-10 items-start'>
-      <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
+    <div className='sticky top-0 flex h-10 items-stretch'>
+      <div className='flex h-full flex-1 items-center justify-between overflow-hidden bg-fd-card px-3 text-fd-card-foreground'>
         <div className='flex items-center gap-2'>
           <AvatarMenu />
           <p className='font-medium text-sm'>Ask Simba</p>
         </div>
       </div>
 
-      <div className='flex min-h-full'>
+      <div className='flex h-full'>
         <button
           className={cn(
             buttonVariants({
-              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              className: 'size-10 rounded-none border-none [&_svg]:size-4',
               color: 'secondary',
               size: 'icon-sm',
             })
@@ -152,7 +152,7 @@ function Header() {
           aria-label='Close'
           className={cn(
             buttonVariants({
-              className: 'w-10 flex-1 rounded-none border-none [&_svg]:size-4',
+              className: 'size-10 rounded-none border-none [&_svg]:size-4',
               color: 'primary',
               size: 'icon-sm',
             })
