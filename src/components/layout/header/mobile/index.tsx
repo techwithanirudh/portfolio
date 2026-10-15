@@ -12,6 +12,7 @@ import { useOiiaMode } from '@/components/oiia'
 
 const MENU_OPEN_ATTRIBUTE = 'data-mobile-menu-open'
 const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
+const DESKTOP_QUERY = '(min-width: 768px)'
 
 // Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
 // does not re-read their color when it changes in place, but it re-samples
@@ -53,10 +54,19 @@ function useMobileMenuScrim(open: boolean, closeMenu: () => void) {
       closeMenu()
     }
 
+    const desktop = window.matchMedia(DESKTOP_QUERY)
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) {
+        closeMenu()
+      }
+    }
+
     document.addEventListener('click', closeOnOutsideClick, true)
+    desktop.addEventListener('change', closeOnDesktop)
     return () => {
       document.documentElement.removeAttribute(MENU_OPEN_ATTRIBUTE)
       document.removeEventListener('click', closeOnOutsideClick, true)
+      desktop.removeEventListener('change', closeOnDesktop)
     }
   }, [closeMenu, open])
 }
