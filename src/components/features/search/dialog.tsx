@@ -255,7 +255,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       open={open}
     >
       <DialogContent
-        className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! border-none bg-popover bg-clip-padding p-2 shadow-2xl sm:top-1/3 sm:max-w-lg sm:rounded-xl! sm:pb-11 sm:ring-4 sm:ring-neutral-200/80 dark:bg-neutral-900 dark:sm:ring-neutral-800'
+        className='top-0 flex max-w-full translate-y-0 flex-col gap-0 rounded-none! border-none bg-muted p-1 shadow-2xl ring-0 sm:top-1/3 sm:max-w-lg sm:rounded-2xl!'
         data-lenis-prevent
         showCloseButton={false}
       >
@@ -264,7 +264,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <DialogDescription>Search or jump to a page</DialogDescription>
         </DialogHeader>
         <Command
-          className='rounded-none bg-transparent **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input]:py-0'
+          className='rounded-none bg-transparent'
           onKeyDown={handleKeyDown}
           shouldFilter={false}
         >
@@ -274,46 +274,50 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             value={search}
           />
 
-          <CommandList
-            className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 scroll-pt-2 scroll-pb-1.5 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
-            data-lenis-prevent
-          >
-            {groups.map(({ group, items }, i) => (
-              <Fragment key={group}>
-                {i > 0 && <CommandSeparator />}
-                <CommandGroup heading={group}>
-                  {items.map(renderCommandItem)}
-                </CommandGroup>
-              </Fragment>
-            ))}
+          <div className='rounded-xl bg-background ring-1 ring-border'>
+            <CommandList
+              className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
+              data-lenis-prevent
+            >
+              {groups.map(({ group, items }, i) => (
+                <Fragment key={group}>
+                  {i > 0 && <CommandSeparator />}
+                  <CommandGroup heading={group}>
+                    {items.map(renderCommandItem)}
+                  </CommandGroup>
+                </Fragment>
+              ))}
 
-            {!isEmpty && query.isLoading && (
-              <div className='flex items-center justify-center py-6'>
-                <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
-              </div>
-            )}
+              {!isEmpty && query.isLoading && (
+                <div className='flex items-center justify-center py-6'>
+                  <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
+                </div>
+              )}
 
-            {hasNoResults && (
-              <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
-            )}
+              {hasNoResults && (
+                <CommandEmpty>
+                  No results for &ldquo;{search}&rdquo;
+                </CommandEmpty>
+              )}
 
-            {isEmpty ? (
-              <SearchResultsList groups={tagGroups} onSelect={go} />
-            ) : null}
+              {isEmpty ? (
+                <SearchResultsList groups={tagGroups} onSelect={go} />
+              ) : null}
 
-            {afterGroups.map(({ group, items }) => (
-              <Fragment key={group}>
-                <CommandSeparator />
-                <CommandGroup heading={group}>
-                  {items.map(renderCommandItem)}
-                </CommandGroup>
-              </Fragment>
-            ))}
+              {afterGroups.map(({ group, items }) => (
+                <Fragment key={group}>
+                  <CommandSeparator />
+                  <CommandGroup heading={group}>
+                    {items.map(renderCommandItem)}
+                  </CommandGroup>
+                </Fragment>
+              ))}
 
-            {isEmpty ? null : (
-              <SearchResultsList groups={tagGroups} onSelect={go} />
-            )}
-          </CommandList>
+              {isEmpty ? null : (
+                <SearchResultsList groups={tagGroups} onSelect={go} />
+              )}
+            </CommandList>
+          </div>
 
           <CommandMenuFooter />
         </Command>

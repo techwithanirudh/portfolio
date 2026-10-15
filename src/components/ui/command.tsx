@@ -49,7 +49,7 @@ function CommandDialog({
       </DialogHeader>
       <DialogContent
         className={cn(
-          'top-1/3 translate-y-0 overflow-hidden rounded-xl! p-0',
+          'top-1/3 translate-y-0 overflow-hidden rounded-2xl! p-0',
           className
         )}
         showCloseButton={showCloseButton}
@@ -66,13 +66,13 @@ function CommandInput({
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div
-      className='flex h-9 items-center gap-2 border-b px-3'
+      className='flex h-12 items-center gap-2 px-3'
       data-slot='command-input-wrapper'
     >
-      <Icons.search className='size-4 shrink-0 opacity-50' strokeWidth={2} />
+      <Icons.search className='size-5 shrink-0 opacity-50' strokeWidth={2} />
       <CommandPrimitive.Input
         className={cn(
-          'flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
+          'flex h-10 w-full rounded-lg bg-transparent py-2 text-base outline-hidden md:text-sm placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
           className
         )}
         data-slot='command-input'
@@ -89,7 +89,7 @@ function CommandList({
   return (
     <CommandPrimitive.List
       className={cn(
-        'no-scrollbar max-h-80 scroll-pt-2 scroll-pb-1.5 py-1.5 overflow-y-auto overflow-x-hidden outline-none',
+        'no-scrollbar max-h-80 scroll-py-2 overflow-y-auto overflow-x-hidden outline-none',
         className
       )}
       data-slot='command-list'
@@ -118,7 +118,7 @@ function CommandGroup({
   return (
     <CommandPrimitive.Group
       className={cn(
-        'overflow-hidden p-0 text-foreground **:[[cmdk-group-heading]]:scroll-mt-16 **:[[cmdk-group-heading]]:p-3 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
+        'mt-2 mb-1 overflow-hidden px-2 text-foreground **:[[cmdk-group-heading]]:scroll-mt-16 **:[[cmdk-group-heading]]:p-2 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground **:[[cmdk-group-heading]]:text-xs',
         className
       )}
       data-slot='command-group'
@@ -133,7 +133,7 @@ function CommandSeparator({
 }: React.ComponentProps<typeof CommandPrimitive.Separator>) {
   return (
     <CommandPrimitive.Separator
-      className={cn('h-1.5 bg-transparent', className)}
+      className={cn('h-px bg-border', className)}
       data-slot='command-separator'
       {...props}
     />
@@ -148,7 +148,7 @@ function CommandItem({
   return (
     <CommandPrimitive.Item
       className={cn(
-        "group/command-item relative flex h-9 cursor-default select-none items-center gap-2 rounded-md border border-transparent px-3 font-medium text-sm outline-hidden transition-[background-color,border-color,color] duration-150 data-[disabled=true]:pointer-events-none data-selected:border-input data-selected:bg-input/50 data-selected:text-foreground data-[disabled=true]:opacity-50 [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-selected:**:[svg]:text-foreground",
+        "group/command-item relative flex cursor-default select-none items-center gap-2 rounded-lg p-2 font-medium text-sm outline-hidden transition-[background-color,color] duration-150 data-[disabled=true]:pointer-events-none data-selected:bg-accent data-selected:text-accent-foreground data-[disabled=true]:opacity-50 [&_svg:not([class*='size-'])]:size-5 [&_svg]:pointer-events-none [&_svg]:shrink-0 data-selected:**:[svg]:text-foreground",
         className
       )}
       data-slot='command-item'
