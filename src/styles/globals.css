@@ -482,14 +482,6 @@ html > body[data-scroll-locked] {
   }
 }
 
-/*
- * Dim and blur behind the mobile menu. This is a pseudo-element rather than an
- * element: Safari 26 samples a full-screen fixed element for its browser-UI
- * tint, and that color went stale on a light-to-dark switch while the menu was
- * open. The dim is a 50% white wash in light mode and a 50% darken in dark
- * mode. Clicks are handled in MobileNav, since this does not take pointer
- * events.
- */
 @keyframes mobile-menu-dim-in {
   from {
     opacity: 0;
@@ -497,19 +489,24 @@ html > body[data-scroll-locked] {
 }
 
 @media (max-width: 767.98px) {
+  html[data-mobile-menu-open] {
+    --white-wash-50: invert(1) brightness(0.5) invert(1);
+    --darken-50: brightness(0.5);
+    --mobile-menu-dim: var(--white-wash-50);
+  }
+
+  html.dark[data-mobile-menu-open] {
+    --mobile-menu-dim: var(--darken-50);
+  }
+
   html[data-mobile-menu-open]::after {
     position: fixed;
     inset: 0;
     z-index: 31;
     pointer-events: none;
     content: "";
-    -webkit-backdrop-filter: blur(4px) invert(1) brightness(0.5) invert(1);
-    backdrop-filter: blur(4px) invert(1) brightness(0.5) invert(1);
+    -webkit-backdrop-filter: blur(4px) var(--mobile-menu-dim);
+    backdrop-filter: blur(4px) var(--mobile-menu-dim);
     animation: mobile-menu-dim-in 150ms ease-out;
-  }
-
-  html.dark[data-mobile-menu-open]::after {
-    -webkit-backdrop-filter: blur(4px) brightness(0.5);
-    backdrop-filter: blur(4px) brightness(0.5);
   }
 }

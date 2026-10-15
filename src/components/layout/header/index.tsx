@@ -268,9 +268,6 @@ const HeaderNavigationMenu = ({
         id='nd-nav'
         {...props}
         className={cn(
-          // The blur lives on the sticky element itself (not an inner div) so
-          // Safari 26 doesn't sample this background for browser-UI tint and
-          // lets the live-observed <body> background drive it instead.
           'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 backdrop-blur-lg transition-colors',
           props.className
         )}

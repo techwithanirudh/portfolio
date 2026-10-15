@@ -15,7 +15,7 @@ const KEEP_OPEN_SELECTOR = '#mobile-navigation-menu, [data-mobile-nav-pill]'
 
 // Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
 // does not re-read their color when it changes in place, but it re-samples
-// elements that are added. Keying them on this value re-mounts them.
+// elements that are added.
 function useRemountAfterThemeApplied() {
   const { resolvedTheme } = useTheme()
   const [generation, setGeneration] = useState(0)
@@ -32,8 +32,6 @@ function useRemountAfterThemeApplied() {
   return generation
 }
 
-// The dim behind the open menu is an `html[data-mobile-menu-open]::after`
-// rule in globals.css, not an element, so taps outside the menu are caught here.
 function useMobileMenuScrim(open: boolean, closeMenu: () => void) {
   useEffect(() => {
     if (!open) {
