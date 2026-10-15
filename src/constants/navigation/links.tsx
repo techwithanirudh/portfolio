@@ -9,6 +9,12 @@ export const linkItems: LinkItemType[] = [
     url: '/about',
   },
   {
+    active: 'none',
+    icon: <Icons.calendar />,
+    text: 'Experience',
+    url: '/#experience',
+  },
+  {
     active: 'url',
     icon: <Icons.mail />,
     text: 'Contact',

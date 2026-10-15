@@ -3,6 +3,7 @@ import { RootProvider } from 'fumadocs-ui/provider/next'
 import type { Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
+import { SignInModalProvider } from '@/components/features/auth/sign-in-modal'
 import CustomSearchDialog from '@/components/features/search'
 import { ThemeProvider } from '@/components/theme-provider'
 import { baseUrl } from '@/constants'
@@ -132,16 +133,18 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             disableTransitionOnChange
             enableSystem
           >
-            <RootProvider
-              search={{
-                SearchDialog: CustomSearchDialog,
-              }}
-              theme={{
-                enabled: false,
-              }}
-            >
-              <Provider>{children}</Provider>
-            </RootProvider>
+            <SignInModalProvider>
+              <RootProvider
+                search={{
+                  SearchDialog: CustomSearchDialog,
+                }}
+                theme={{
+                  enabled: false,
+                }}
+              >
+                <Provider>{children}</Provider>
+              </RootProvider>
+            </SignInModalProvider>
           </ThemeProvider>
         </PagesProvider>
       </Body>
