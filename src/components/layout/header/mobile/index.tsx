@@ -73,9 +73,7 @@ export function MobileNav() {
     const closeOnOutsideClick = (event: MouseEvent) => {
       if (
         event.target instanceof Element &&
-        event.target.closest(
-          '#mobile-navigation-menu, [data-mobile-nav-pill], .tint-debug'
-        )
+        event.target.closest('#mobile-navigation-menu, [data-mobile-nav-pill]')
       ) {
         return
       }
