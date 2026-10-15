@@ -47,7 +47,7 @@ export const HeroSection = ({
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
-        <h1 className='screen-line-bottom text-balance px-4 font-heading font-medium text-4xl tracking-tight'>
+        <h1 className='screen-line-bottom text-balance px-4 pb-2 font-heading font-medium text-4xl tracking-tight'>
           {title}
         </h1>
       </ViewAnimation>
