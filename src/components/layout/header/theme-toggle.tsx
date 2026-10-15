@@ -75,6 +75,7 @@ export function ThemeToggle({
       <button
         aria-label={'Toggle Theme'}
         className={container}
+        data-sound-press='off'
         data-theme-toggle=''
         onClick={() =>
           handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')

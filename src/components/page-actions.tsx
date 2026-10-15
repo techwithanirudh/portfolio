@@ -78,6 +78,7 @@ export function LLMCopyButton({
     <Button
       aria-busy={isCopying}
       className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
+      data-sound-press='off'
       disabled={isCopying}
       onClick={onClick}
       size='sm'

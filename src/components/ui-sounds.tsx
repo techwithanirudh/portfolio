@@ -6,19 +6,29 @@ import { useEffect, useRef } from 'react'
 import {
   checkbox,
   click,
+  collapse,
+  error,
+  expand,
   hover as hoverSound,
   keyPress,
   pageEnter,
+  send,
   tabSwitch,
+  tap,
   toggleOff,
   toggleOn,
 } from '@/lib/audio/mechanical'
 import { playSound } from '@/lib/audio/preferences'
 
-const PRESS = 'a[href], [role="tab"], [role="switch"], [role="checkbox"]'
+const PRESS =
+  'a[href], button:not([type="submit"]), [role="tab"], [role="switch"], [role="checkbox"], [aria-expanded]'
 const HOVER = '[data-sound-hover], header a[href], footer a[href]'
 const OPT_OUT = '[data-sound="off"]'
+// For components that already play their own sound on press or submit
+const PRESS_OPT_OUT = '[data-sound="off"], [data-sound-press="off"]'
 const HOVER_GAP = 45
+// Long enough for a client side validator to flag its fields
+const VALIDATION_DELAY = 120
 
 // Repeated plays of one sound should not feel like a sample loop
 const jitter = (detune: number, volume: number): PlayOptions => ({
@@ -40,6 +50,14 @@ const isTextField = (el: EventTarget | null): el is HTMLElement => {
 }
 
 const playPress = (el: Element) => {
+  // Accordions, menus and popovers: the trigger says where it is heading
+  if (el.hasAttribute('aria-expanded')) {
+    setTimeout(() => {
+      const open = el.getAttribute('aria-expanded') === 'true'
+      playSound(open ? expand : collapse, jitter(20, 0.06))
+    }, 16)
+    return
+  }
   const role = el.getAttribute('role')
   if (role === 'tab') {
     playSound(tabSwitch, jitter(30, 0.08))
@@ -61,10 +79,24 @@ const playPress = (el: Element) => {
     }, 16)
     return
   }
+  if (el instanceof HTMLButtonElement) {
+    playSound(tap, jitter(60, 0.1))
+    return
+  }
   playSound(click, jitter(60, 0.1))
 }
 
-// One set of document listeners gives every link, tab, switch and text field
+// A submit either trips the validator, which marks fields aria-invalid, or
+// goes through. Server results are voiced by the toast that follows.
+const playSubmit = (form: HTMLFormElement) => {
+  setTimeout(() => {
+    const invalid = form.querySelector('[aria-invalid="true"]')
+    playSound(invalid ? error : send, jitter(20, 0.06))
+  }, VALIDATION_DELAY)
+}
+
+// One set of document listeners gives every link, button, disclosure, form,
+// tab, switch and text field
 // the same tactile feedback, so new components get sound without wiring it up.
 // Components that play their own sound simply are not links, tabs or switches.
 export function UiSounds() {
@@ -88,7 +120,7 @@ export function UiSounds() {
         return
       }
       const el = event.target.closest(PRESS)
-      if (el && !el.closest(OPT_OUT)) {
+      if (el && !el.closest(PRESS_OPT_OUT)) {
         playPress(el)
       }
     }
@@ -99,8 +131,15 @@ export function UiSounds() {
         return
       }
       const el = event.target.closest(PRESS)
-      if (el && !el.closest(OPT_OUT)) {
+      if (el && !el.closest(PRESS_OPT_OUT)) {
         playPress(el)
+      }
+    }
+
+    const onSubmit = (event: SubmitEvent) => {
+      const form = event.target
+      if (form instanceof HTMLFormElement && !form.closest(PRESS_OPT_OUT)) {
+        playSubmit(form)
       }
     }
 
@@ -143,7 +182,9 @@ export function UiSounds() {
     document.addEventListener('click', onClick, { passive: true })
     document.addEventListener('pointerover', onPointerOver, { passive: true })
     document.addEventListener('keydown', onKeyDown, { passive: true })
+    document.addEventListener('submit', onSubmit, { capture: true })
     return () => {
+      document.removeEventListener('submit', onSubmit, { capture: true })
       document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('click', onClick)
       document.removeEventListener('pointerover', onPointerOver)

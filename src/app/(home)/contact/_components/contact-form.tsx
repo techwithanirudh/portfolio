@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,11 +21,12 @@ import { cn } from '@/lib/utils'
 import { ContactSchema } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
-// Fields sit flush in the grid: each one is a ruled row, label on top
+// Fields sit flush in the grid as ruled rows. Placeholders carry the meaning,
+// so labels are screen-reader only and the only hint row is an error
 const fieldClassName = 'gap-0 border-line border-b'
-const labelClassName = 'px-4 pt-3 pb-2'
+const labelClassName = 'sr-only'
 const inputClassName =
-  'h-11 rounded-none border-0 border-line border-t bg-transparent px-4 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
+  'h-12 rounded-none border-0 bg-transparent px-4 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
 const hintClassName = 'border-line border-t px-4 py-2 text-xs'
 
 const ContactFormInner = () => {
@@ -79,13 +79,7 @@ const ContactFormInner = () => {
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
-              {form.formState.errors.name ? (
-                <FormMessage className={hintClassName} />
-              ) : (
-                <FormDescription className={hintClassName}>
-                  Your full name, so I know who I'm talking to.
-                </FormDescription>
-              )}
+              <FormMessage className={hintClassName} />
             </FormItem>
           )}
         />
@@ -103,13 +97,7 @@ const ContactFormInner = () => {
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
-              {form.formState.errors.email ? (
-                <FormMessage className={hintClassName} />
-              ) : (
-                <FormDescription className={hintClassName}>
-                  I will never share your email with anyone else.
-                </FormDescription>
-              )}
+              <FormMessage className={hintClassName} />
             </FormItem>
           )}
         />
@@ -130,13 +118,7 @@ const ContactFormInner = () => {
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
-              {form.formState.errors.message ? (
-                <FormMessage className={hintClassName} />
-              ) : (
-                <FormDescription className={hintClassName}>
-                  Please include at least 30 characters.
-                </FormDescription>
-              )}
+              <FormMessage className={hintClassName} />
             </FormItem>
           )}
         />
