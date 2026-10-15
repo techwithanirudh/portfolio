@@ -1,0 +1,378 @@
+/*
+ * Status variant tokens. Everything is scoped under `.v-status` so nothing
+ * leaks into the real site. Light is the base, `.dark .v-status` the
+ * dark look the variant is designed around.
+ *
+ * `--feature-card` and the marquee keyframes are adapted from
+ * nelsonlai.dev/src/styles/globals.css (MIT, © 2025 Nelson Lai). See NOTICES.md
+ */
+
+.v-status {
+  --ground: #f7f8fa;
+  --panel: #ffffff;
+  --panel-raised: #f1f3f7;
+  --line: #e3e6ec;
+  --line-strong: #d3d8e0;
+  --text: #12151b;
+  --muted: #5d6676;
+  --faint: #8a93a3;
+  --ok: #169c5a;
+  --warn: #b7791f;
+  --down: #d93a3f;
+  --accent: #3454b4;
+  --accent-ink: #ffffff;
+  --maint: #3454b4;
+  --archived: #8a93a3;
+  --idle: #e3e6ec;
+
+  /* Ordinal career ramp (one hue, light to dark), validated on #ffffff. */
+  --kind-1: #a3afe6;
+  --kind-2: #7d8fdb;
+  --kind-3: #5a6fcc;
+  --kind-4: #3a53bf;
+  --kind-5: #1c2c7a;
+
+  /* Contribution heat, same hue. Level 0 sits on the raised panel. */
+  --heat-0: #eceff4;
+  --heat-1: #c3cbef;
+  --heat-2: #8c9ce0;
+  --heat-3: #5a6fcc;
+  --heat-4: #2c43a6;
+
+  --feature-card:
+    0 0 0 1px rgb(18 21 27 / 0.06), 0 1px 2px 0 rgb(18 21 27 / 0.04),
+    0 -1px 3px 0 rgb(0 0 0 / 0.05);
+  --feature-card-hover:
+    0 0 0 1px rgb(18 21 27 / 0.1), 0 6px 16px -6px rgb(18 21 27 / 0.12),
+    0 -1px 3px 0 rgb(0 0 0 / 0.05);
+  --glow: rgb(52 84 180 / 0.07);
+  color: var(--text);
+  color-scheme: light;
+
+  background-color: var(--ground);
+}
+
+.dark .v-status {
+  --ground: #0a0b0e;
+  --panel: #111318;
+  --panel-raised: #171a21;
+  --line: #22262f;
+  --line-strong: #2d323d;
+  --text: #e7e9ee;
+  --muted: #8b93a3;
+  --faint: #5f6878;
+  --ok: #3fcf8e;
+  --warn: #f2b84b;
+  --down: #f2555a;
+  --accent: #a8b4ff;
+  --accent-ink: #0a0b0e;
+  --maint: #a8b4ff;
+  --archived: #5f6878;
+  --idle: #22262f;
+
+  /* Validated on #111318: dim (oldest) to bright (newest). */
+  --kind-1: #36447a;
+  --kind-2: #4859a3;
+  --kind-3: #5f72cc;
+  --kind-4: #7f91ee;
+  --kind-5: #c9d0ff;
+
+  --heat-0: #1a1e26;
+  --heat-1: #2a3566;
+  --heat-2: #44559e;
+  --heat-3: #6e80dc;
+  --heat-4: #b3beff;
+
+  --feature-card:
+    0 0 0 1px rgb(255 255 255 / 0.06), 0 -1px rgb(255 255 255 / 0.1);
+  --feature-card-hover:
+    0 0 0 1px rgb(255 255 255 / 0.11), 0 -1px rgb(255 255 255 / 0.14);
+  --glow: rgb(168 180 255 / 0.07);
+  color-scheme: dark;
+}
+
+/*
+ * Rules live in the components layer so Tailwind utilities on the same
+ * element still win, which lets markup override a card's padding or colour.
+ */
+@layer components {
+  .v-status {
+    color: var(--text);
+    background-color: var(--ground);
+  }
+
+  /* --- Base ---------------------------------------------------------------- */
+
+  .v-status ::selection {
+    background: color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+
+  .v-status :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  .v-status .vs-num {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .v-status .vs-label {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .v-status .vs-card {
+    background: var(--panel);
+    border-radius: 16px;
+    box-shadow: var(--feature-card);
+  }
+
+  .v-status .vs-card-link {
+    transition:
+      box-shadow 160ms ease,
+      transform 160ms ease;
+  }
+
+  @media (hover: hover) {
+    .v-status .vs-card-link:hover {
+      box-shadow: var(--feature-card-hover);
+    }
+  }
+
+  .v-status .vs-hairline {
+    border-color: var(--line);
+  }
+
+  /* Faint glow behind the hero, dark-first but present in light too. */
+  .v-status .vs-hero-glow {
+    background:
+      radial-gradient(60% 80% at 15% 0%, var(--glow), transparent 70%),
+      radial-gradient(40% 60% at 90% 10%, var(--glow), transparent 70%);
+  }
+
+  /* Dotted ground for the status header strip. */
+  .v-status .vs-dots {
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--muted) 22%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 12px 12px;
+  }
+
+  /* --- Status dot ---------------------------------------------------------- */
+
+  .v-status .vs-dot {
+    position: relative;
+    display: inline-block;
+    flex: none;
+    width: 8px;
+    height: 8px;
+    background: var(--dot, var(--ok));
+    border-radius: 9999px;
+  }
+
+  .v-status .vs-dot[data-pulse="true"]::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    background: inherit;
+    border-radius: inherit;
+    animation: vs-pulse 2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
+  @keyframes vs-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.55;
+    }
+    70%,
+    100% {
+      transform: scale(2.8);
+      opacity: 0;
+    }
+  }
+
+  /* --- Uptime bars --------------------------------------------------------- */
+
+  .v-status .vs-bars {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: var(--bar-gap, 2px);
+    align-items: stretch;
+    height: var(--bar-h, 32px);
+  }
+
+  .v-status .vs-bar {
+    background: var(--tone, var(--idle));
+    border-radius: 2px;
+    transition:
+      opacity 120ms ease,
+      transform 120ms ease;
+  }
+
+  .v-status .vs-bar[data-state="empty"] {
+    background: transparent;
+    background-image: linear-gradient(var(--line) 0 0);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 2px;
+  }
+
+  .v-status .vs-bar[data-state="future"] {
+    background: transparent;
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+  }
+
+  .v-status .vs-bars[data-hovering="true"] .vs-bar {
+    opacity: 0.45;
+  }
+
+  .v-status .vs-bars[data-hovering="true"] .vs-bar[data-active="true"] {
+    opacity: 1;
+    transform: scaleY(1.08);
+  }
+
+  /* --- Heatmap ------------------------------------------------------------- */
+
+  .v-status .vs-heat {
+    background: var(--heat-0);
+    border-radius: 2px;
+  }
+
+  .v-status .vs-heat[data-level="1"] {
+    background: var(--heat-1);
+  }
+  .v-status .vs-heat[data-level="2"] {
+    background: var(--heat-2);
+  }
+  .v-status .vs-heat[data-level="3"] {
+    background: var(--heat-3);
+  }
+  .v-status .vs-heat[data-level="4"] {
+    background: var(--heat-4);
+  }
+
+  /* --- Marquee (adapted from nelsonlai.dev ui/marquee + keyframes) -------- */
+
+  .v-status .vs-marquee-track {
+    animation: vs-marquee-x var(--marquee-duration, 40s) linear infinite;
+  }
+
+  .v-status .vs-marquee[data-reverse="true"] .vs-marquee-track {
+    animation-direction: reverse;
+  }
+
+  @media (hover: hover) {
+    .v-status .vs-marquee[data-pause-on-hover="true"]:hover .vs-marquee-track {
+      animation-play-state: paused;
+    }
+  }
+
+  .v-status .vs-marquee:focus-within .vs-marquee-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes vs-marquee-x {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(-100% - var(--marquee-gap)));
+    }
+  }
+
+  /* --- Simba --------------------------------------------------------------- */
+
+  .v-status .vs-zzz {
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: vs-zzz 3.2s ease-in-out infinite;
+  }
+
+  .v-status .vs-zzz:nth-of-type(2) {
+    animation-delay: -1.1s;
+  }
+
+  .v-status .vs-zzz:nth-of-type(3) {
+    animation-delay: -2.2s;
+  }
+
+  @keyframes vs-zzz {
+    0% {
+      opacity: 0;
+      transform: translate(0, 4px) scale(0.8);
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(6px, -10px) scale(1.1);
+    }
+  }
+
+  .v-status .vs-breathe {
+    transform-origin: bottom center;
+    transform-box: fill-box;
+    animation: vs-breathe 3.2s ease-in-out infinite;
+  }
+
+  @keyframes vs-breathe {
+    0%,
+    100% {
+      transform: scaleY(1);
+    }
+    50% {
+      transform: scaleY(1.035);
+    }
+  }
+
+  /* --- Reduced motion ------------------------------------------------------ */
+
+  @media (prefers-reduced-motion: reduce) {
+    .v-status *,
+    .v-status *::before,
+    .v-status *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    .v-status .vs-dot[data-pulse="true"]::after,
+    .v-status .vs-zzz,
+    .v-status .vs-breathe {
+      animation: none;
+    }
+
+    .v-status .vs-zzz {
+      opacity: 0.8;
+    }
+
+    .v-status .vs-marquee-track {
+      animation: none;
+    }
+
+    /* Without motion the duplicate copy is pointless: wrap the original. */
+    .v-status .vs-marquee {
+      -webkit-mask-image: none !important;
+      mask-image: none !important;
+    }
+
+    .v-status .vs-marquee .vs-marquee-track {
+      flex-shrink: 1;
+      flex-wrap: wrap;
+    }
+
+    .v-status .vs-marquee .vs-marquee-track[aria-hidden="true"] {
+      display: none;
+    }
+  }
+}

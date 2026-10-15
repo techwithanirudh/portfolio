@@ -1,0 +1,888 @@
+/*
+ * Artboard: the site as a design file. Every token and class is scoped under
+ * .v-artboard so nothing leaks into the real site.
+ */
+
+/* Layered as components so Tailwind utilities on the same element win. */
+@layer components {
+  /* ---------------------------------------------------------------- tokens */
+
+  .v-artboard {
+    --canvas: #ececec;
+    --board: #ffffff;
+    --panel: #f7f7f7;
+    --panel-line: #e2e2e2;
+    --board-line: #ebebeb;
+    --ink: #1a1a1a;
+    --muted: #6b6b6b;
+    --faint: #9a9a9a;
+    --ruler: #f5f5f5;
+    --tick: #b4b4b4;
+    --sel: #3454b4;
+    --sel-fill: #3454b414;
+    --sel-soft: #3454b42e;
+    --sel-ink: #ffffff;
+    --handle: #ffffff;
+    --path: #e8590c;
+    --path-soft: #e8590c24;
+    --component: #7b4fe0;
+    --chip: #f3f3f3;
+    --hover: #ececec;
+    --board-shadow:
+      0 0 0 1px rgb(0 0 0 / 0.04), 0 1px 2px rgb(0 0 0 / 0.04),
+      0 8px 24px -12px rgb(0 0 0 / 0.08);
+    --float-shadow:
+      0 0 0 1px rgb(0 0 0 / 0.06), 0 2px 4px rgb(0 0 0 / 0.04),
+      0 12px 32px -8px rgb(0 0 0 / 0.16);
+    --bar-h: 44px;
+    --ruler-size: 20px;
+
+    min-height: 100svh;
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--canvas);
+  }
+
+  .dark .v-artboard {
+    --canvas: #1b1b1d;
+    --board: #232326;
+    --panel: #2a2a2d;
+    --panel-line: #38383c;
+    --board-line: #313135;
+    --ink: #ededed;
+    --muted: #a0a0a6;
+    --faint: #76767c;
+    --ruler: #202022;
+    --tick: #55555a;
+    --sel: #8fa2ff;
+    --sel-fill: #8fa2ff1a;
+    --sel-soft: #8fa2ff33;
+    --sel-ink: #10131f;
+    --handle: #ffffff;
+    --path: #ff8a4c;
+    --path-soft: #ff8a4c26;
+    --component: #b494ff;
+    --chip: #2c2c30;
+    --hover: #323236;
+    --board-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.065), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+    --float-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.07), 0 12px 32px -8px rgb(0 0 0 / 0.7);
+  }
+
+  @media (min-width: 768px) {
+    .v-artboard {
+      --bar-h: 40px;
+    }
+  }
+
+  .v-artboard ::selection {
+    background: var(--sel-soft);
+  }
+
+  .v-artboard :focus-visible {
+    outline: 2px solid var(--sel);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* ------------------------------------------------------------ type scale */
+  /* Content: 13 / 15 / 17 / 22 / 32 / 56. Tools: Geist Mono 11. */
+
+  .v-artboard .ab-t-display {
+    font-size: clamp(2.5rem, 7vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+
+  .v-artboard .ab-t-title {
+    font-size: clamp(1.625rem, 4vw, 2rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  .v-artboard .ab-t-heading {
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  .v-artboard .ab-t-lead {
+    font-size: 17px;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .v-artboard .ab-t-body {
+    font-size: 15px;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+
+  .v-artboard .ab-t-small {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .v-artboard .ab-t-label {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+  }
+
+  .v-artboard .ab-mono {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ----------------------------------------------------------- app shell */
+
+  .v-artboard .ab-bar {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    height: var(--bar-h);
+    background: var(--panel);
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .v-artboard .ab-panel {
+    background: var(--panel);
+  }
+
+  .v-artboard .ab-panel-inner {
+    position: sticky;
+    top: var(--bar-h);
+    height: calc(100svh - var(--bar-h));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: var(--panel-line) transparent;
+    scrollbar-width: thin;
+  }
+
+  .v-artboard .ab-panel-section {
+    padding: 12px 12px 14px;
+    border-bottom: 1px solid var(--panel-line);
+  }
+
+  .v-artboard .ab-panel-title {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0.01em;
+  }
+
+  .v-artboard .ab-field {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 8px;
+    font-size: 11px;
+    line-height: 16px;
+    background: var(--board);
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+
+  .v-artboard .ab-field:hover {
+    border-color: var(--panel-line);
+  }
+
+  .v-artboard .ab-field-key {
+    flex: none;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    color: var(--faint);
+  }
+
+  .dark .v-artboard .ab-field {
+    background: #323236;
+  }
+
+  /* ------------------------------------------------------------- rulers */
+
+  .v-artboard .ab-ruler {
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 9.5px;
+    font-variant-numeric: tabular-nums;
+    color: var(--faint);
+    user-select: none;
+    background-color: var(--ruler);
+  }
+
+  .v-artboard .ab-ruler-x {
+    background-image:
+      linear-gradient(to right, var(--tick) 1px, transparent 1px),
+      linear-gradient(to right, var(--tick) 1px, transparent 1px),
+      linear-gradient(to right, var(--tick) 1px, transparent 1px);
+    background-repeat: repeat-x;
+    background-position-y: bottom;
+    background-size:
+      10px 4px,
+      50px 7px,
+      100px 100%;
+  }
+
+  .v-artboard .ab-ruler-y {
+    background-image:
+      linear-gradient(to bottom, var(--tick) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--tick) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--tick) 1px, transparent 1px);
+    background-repeat: repeat-y;
+    background-position-x: right;
+    background-size:
+      4px 10px,
+      7px 50px,
+      100% 100px;
+  }
+
+  .v-artboard .ab-ruler-band-x {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: var(--sel-soft);
+  }
+
+  .v-artboard .ab-ruler-band-y {
+    position: absolute;
+    right: 0;
+    left: 0;
+    pointer-events: none;
+    background: var(--sel-soft);
+  }
+
+  .v-artboard .ab-ruler-mark {
+    position: absolute;
+    padding: 1px 2px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--sel);
+    white-space: nowrap;
+    background: var(--ruler);
+  }
+
+  .v-artboard .ab-guide {
+    position: absolute;
+    pointer-events: none;
+    background: var(--path);
+    opacity: 0;
+    will-change: transform;
+  }
+
+  .v-artboard .ab-guide[data-on] {
+    opacity: 1;
+  }
+
+  .v-artboard .ab-guide-label {
+    position: absolute;
+    padding: 1px 2px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--path);
+    white-space: nowrap;
+    background: var(--ruler);
+  }
+
+  /* ------------------------------------------------------------ artboards */
+
+  .v-artboard .ab-artboard {
+    position: relative;
+    scroll-margin-top: calc(var(--bar-h) + 56px);
+  }
+
+  .v-artboard .ab-artboard + .ab-artboard {
+    margin-top: 64px;
+  }
+
+  .v-artboard .ab-label {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    height: 24px;
+    margin-bottom: 4px;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    line-height: 16px;
+    color: var(--ink);
+  }
+
+  .v-artboard .ab-label-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 2px;
+  }
+
+  .v-artboard .ab-label-name:hover {
+    color: var(--sel);
+  }
+
+  .v-artboard .ab-label-size {
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  .v-artboard .ab-label-size:not(:empty)::before {
+    content: "— ";
+  }
+
+  .v-artboard .ab-label-hidden {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    margin-left: auto;
+    color: var(--faint);
+    white-space: nowrap;
+    border-radius: 2px;
+  }
+
+  .v-artboard .ab-label-hidden:hover {
+    color: var(--path);
+  }
+
+  .v-artboard .ab-frame {
+    position: relative;
+    background: var(--board);
+    box-shadow: var(--board-shadow);
+  }
+
+  .v-artboard [data-artboard][data-ab-selected] > .ab-frame,
+  .v-artboard .ab-frame[data-ab-selected] {
+    outline: 1px solid var(--sel);
+  }
+
+  .v-artboard .ab-rule {
+    border-color: var(--board-line);
+  }
+
+  /* ----------------------------------------------------------- selection */
+
+  .v-artboard .ab-selectable {
+    position: relative;
+    cursor: default;
+  }
+
+  .v-artboard .ab-sel {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    outline: 1px solid var(--sel);
+    opacity: 0;
+    transition: opacity 80ms linear;
+  }
+
+  .v-artboard .ab-handle {
+    position: absolute;
+    width: 7px;
+    height: 7px;
+    background: var(--handle);
+    border: 1px solid var(--sel);
+    transform: translate(-50%, -50%);
+  }
+
+  .v-artboard .ab-handle[data-h="nw"] {
+    top: 0;
+    left: 0;
+  }
+  .v-artboard .ab-handle[data-h="n"] {
+    top: 0;
+    left: 50%;
+  }
+  .v-artboard .ab-handle[data-h="ne"] {
+    top: 0;
+    left: 100%;
+  }
+  .v-artboard .ab-handle[data-h="e"] {
+    top: 50%;
+    left: 100%;
+  }
+  .v-artboard .ab-handle[data-h="se"] {
+    top: 100%;
+    left: 100%;
+  }
+  .v-artboard .ab-handle[data-h="s"] {
+    top: 100%;
+    left: 50%;
+  }
+  .v-artboard .ab-handle[data-h="sw"] {
+    top: 100%;
+    left: 0;
+  }
+  .v-artboard .ab-handle[data-h="w"] {
+    top: 50%;
+    left: 0;
+  }
+
+  .v-artboard .ab-size {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    padding: 0 4px;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    line-height: 16px;
+    color: var(--sel-ink);
+    white-space: nowrap;
+    background: var(--sel);
+    border-radius: 2px;
+    transform: translateX(-50%);
+  }
+
+  .v-artboard .ab-selectable[data-ab-selected] > .ab-sel {
+    opacity: 1;
+  }
+
+  .v-artboard [data-peek] > .ab-sel {
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .v-artboard .ab-selectable:hover > .ab-sel {
+      opacity: 1;
+    }
+  }
+
+  .v-artboard .ab-selectable:focus-within > .ab-sel {
+    opacity: 1;
+  }
+
+  /* Plain layers picked from the Layers panel. */
+  .v-artboard
+  [data-layer]:not(.ab-selectable, [data-artboard])[data-ab-selected],
+  .v-artboard [data-layer]:not(.ab-selectable, [data-artboard])[data-peek] {
+    outline: 1px solid var(--sel);
+    outline-offset: 1px;
+  }
+
+  .v-artboard [data-artboard][data-peek] > .ab-frame {
+    outline: 1px solid var(--sel);
+  }
+
+  .v-artboard .ab-inspect {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+
+  .v-artboard .ab-inspect:focus-visible {
+    top: 8px;
+    right: 8px;
+    z-index: 7;
+    width: auto;
+    height: auto;
+    padding: 2px 6px;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--sel-ink);
+    background: var(--sel);
+    border-radius: 3px;
+    clip-path: none;
+  }
+
+  /* ------------------------------------------------------- canvas pieces */
+
+  .v-artboard .ab-chip {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    height: 20px;
+    padding: 0 6px;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1;
+    color: var(--muted);
+    white-space: nowrap;
+    background: var(--chip);
+    border-radius: 3px;
+  }
+
+  .v-artboard a {
+    text-decoration-style: solid;
+  }
+
+  .v-artboard .ab-link {
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in srgb, currentColor 30%, transparent);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 120ms;
+  }
+
+  .v-artboard .ab-link:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .v-artboard .ab-btn {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    border-radius: 6px;
+    transition:
+      background-color 120ms,
+      box-shadow 120ms;
+  }
+
+  .v-artboard .ab-btn-primary {
+    color: var(--sel-ink);
+    background: var(--sel);
+  }
+
+  .v-artboard .ab-btn-primary:hover {
+    background: color-mix(in srgb, var(--sel) 88%, black);
+  }
+
+  .v-artboard .ab-btn-ghost {
+    color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--panel-line);
+  }
+
+  .v-artboard .ab-btn-ghost:hover {
+    background: var(--hover);
+  }
+
+  /* Image frames: crossed box placeholders, like an empty image fill. */
+  .v-artboard .ab-img {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: var(--chip);
+  }
+
+  .v-artboard .ab-placeholder {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    color: var(--muted);
+    background-color: var(--chip);
+    background-image:
+      linear-gradient(
+        to top right,
+        transparent calc(50% - 0.5px),
+        var(--panel-line) 50%,
+        transparent calc(50% + 0.5px)
+      ),
+      linear-gradient(
+        to bottom right,
+        transparent calc(50% - 0.5px),
+        var(--panel-line) 50%,
+        transparent calc(50% + 0.5px)
+      );
+  }
+
+  .v-artboard .ab-component-name {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--component);
+    white-space: nowrap;
+  }
+
+  /* Crop marks around the avatar frame. */
+  .v-artboard .ab-crop {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    pointer-events: none;
+    border-color: var(--ink);
+  }
+
+  .v-artboard .ab-crop[data-c="tl"] {
+    top: -20px;
+    left: -20px;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+  }
+  .v-artboard .ab-crop[data-c="tr"] {
+    top: -20px;
+    right: -20px;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+  }
+  .v-artboard .ab-crop[data-c="bl"] {
+    bottom: -20px;
+    left: -20px;
+    border-top: 1px solid;
+    border-right: 1px solid;
+  }
+  .v-artboard .ab-crop[data-c="br"] {
+    right: -20px;
+    bottom: -20px;
+    border-top: 1px solid;
+    border-left: 1px solid;
+  }
+
+  .v-artboard .ab-thirds {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.7) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.7) 1px, transparent 1px);
+    background-position: -1px -1px;
+    background-size: 33.333% 33.333%;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7);
+    opacity: 0;
+    transition: opacity 80ms linear;
+  }
+
+  .v-artboard .ab-avatar:hover .ab-thirds,
+  .v-artboard [data-ab-selected] .ab-thirds {
+    opacity: 1;
+  }
+
+  /* --------------------------------------------------------- pen path */
+
+  .v-artboard .ab-pen-ghost {
+    fill: none;
+    stroke: var(--tick);
+    stroke-width: 1;
+    stroke-dasharray: 3 4;
+  }
+
+  .v-artboard .ab-pen-stroke {
+    fill: none;
+    stroke: var(--path);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .v-artboard .ab-pen-handle-line {
+    opacity: 0.7;
+    stroke: var(--path);
+    stroke-width: 1;
+  }
+
+  .v-artboard .ab-pen-handle {
+    fill: var(--board);
+    stroke: var(--path);
+    stroke-width: 1;
+  }
+
+  .v-artboard .ab-pen-anchor {
+    fill: var(--board);
+    stroke: var(--path);
+    stroke-width: 1.25;
+    transition: fill 80ms linear;
+  }
+
+  .v-artboard .ab-pen-anchor[data-active] {
+    fill: var(--path);
+  }
+
+  .v-artboard .ab-pen-handles {
+    opacity: 0;
+    transition: opacity 80ms linear;
+  }
+
+  .v-artboard .ab-pen-handles[data-show],
+  .v-artboard[data-pen] .ab-pen-handles,
+  .v-artboard[data-outline] .ab-pen-handles {
+    opacity: 1;
+  }
+
+  /* ------------------------------------------------------------- simba */
+
+  .v-artboard .ab-simba path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .v-artboard .ab-simba .ab-simba-fill {
+    fill: currentColor;
+  }
+
+  .v-artboard .ab-simba-anchors {
+    opacity: 0;
+  }
+
+  .v-artboard[data-outline] .ab-simba-anchors,
+  .v-artboard [data-ab-selected] .ab-simba-anchors {
+    opacity: 1;
+  }
+
+  .v-artboard .ab-simba-anchors rect {
+    fill: var(--board);
+    stroke: var(--sel);
+    stroke-width: 1;
+  }
+
+  /* ----------------------------------------------------------- floating */
+
+  .v-artboard .ab-float {
+    background: var(--panel);
+    box-shadow: var(--float-shadow);
+  }
+
+  .v-artboard .ab-tool {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    color: var(--ink);
+    border-radius: 6px;
+    transition: background-color 80ms linear;
+  }
+
+  .v-artboard .ab-tool:hover {
+    background: var(--hover);
+  }
+
+  .v-artboard .ab-tool[aria-pressed="true"] {
+    color: var(--sel-ink);
+    background: var(--sel);
+  }
+
+  /* Layers rows */
+  .v-artboard .ab-layer {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+    height: 28px;
+    padding-right: 8px;
+    font-size: 11px;
+    line-height: 16px;
+    color: var(--ink);
+    text-align: left;
+    border-radius: 4px;
+  }
+
+  .v-artboard .ab-layer:hover {
+    background: var(--hover);
+  }
+
+  .v-artboard .ab-layer[data-active] {
+    font-weight: 600;
+  }
+
+  .v-artboard .ab-layer[data-selected] {
+    color: var(--sel);
+    background: var(--sel-fill);
+    box-shadow: inset 0 0 0 1px var(--sel-soft);
+  }
+
+  .v-artboard .ab-layer[data-hidden] {
+    color: var(--faint);
+  }
+
+  /* -------------------------------------------------------- outline mode */
+  /* ⌘Y: everything on the canvas turns into 1px outlines, like Illustrator. */
+
+  .v-artboard[data-outline] .ab-canvas,
+  .v-artboard[data-outline] .ab-canvas *:not(.ab-sel, .ab-sel *) {
+    background-color: transparent !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  .v-artboard[data-outline] .ab-canvas {
+    background-color: var(--board) !important;
+  }
+
+  .v-artboard[data-outline]
+    .ab-canvas
+    *:not(.ab-sel, .ab-sel *, .ab-pen-stroke) {
+    color: var(--ink) !important;
+    border-color: color-mix(in srgb, var(--ink) 55%, transparent) !important;
+  }
+
+  .v-artboard[data-outline] .ab-frame,
+  .v-artboard[data-outline] .ab-canvas [data-layer]:not([data-artboard]) {
+    outline: 1px solid color-mix(in srgb, var(--ink) 55%, transparent);
+    outline-offset: -1px;
+  }
+
+  .v-artboard[data-outline] .ab-canvas [data-outline-text] {
+    color: transparent !important;
+    -webkit-text-stroke: 1px var(--ink);
+  }
+
+  .v-artboard[data-outline] .ab-canvas .ab-img img {
+    opacity: 0;
+  }
+
+  .v-artboard[data-outline] .ab-canvas .ab-img,
+  .v-artboard[data-outline] .ab-canvas .ab-placeholder {
+    outline: 1px solid var(--ink);
+    outline-offset: -1px;
+    background-image:
+      linear-gradient(
+        to top right,
+        transparent calc(50% - 0.5px),
+        var(--ink) 50%,
+        transparent calc(50% + 0.5px)
+      ),
+      linear-gradient(
+        to bottom right,
+        transparent calc(50% - 0.5px),
+        var(--ink) 50%,
+        transparent calc(50% + 0.5px)
+      ) !important;
+  }
+
+  .v-artboard[data-outline]
+    .ab-canvas
+    svg
+    :is(path, circle, rect, line, ellipse) {
+    fill: none !important;
+    stroke: var(--ink) !important;
+    stroke-width: 1px !important;
+  }
+
+  .v-artboard[data-outline] .ab-canvas .ab-pen-stroke {
+    stroke: var(--ink) !important;
+  }
+
+  .v-artboard[data-outline] .ab-canvas .ab-simba-anchors rect,
+  .v-artboard[data-outline] .ab-canvas .ab-pen-anchor {
+    fill: var(--board) !important;
+    stroke: var(--sel) !important;
+  }
+
+  /* ------------------------------------------------------------ motion */
+
+  @media (prefers-reduced-motion: reduce) {
+    .v-artboard *,
+    .v-artboard *::before,
+    .v-artboard *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

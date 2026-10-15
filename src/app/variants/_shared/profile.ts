@@ -113,5 +113,5 @@ export const getWriting = () =>
     url: page.url,
   }))
 
-export { testimonials } from '@/constants/portfolio/testimonials'
 export { experiences } from '@/constants/portfolio/experiences'
+export { testimonials } from '@/constants/portfolio/testimonials'
