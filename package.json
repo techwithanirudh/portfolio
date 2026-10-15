@@ -46,6 +46,7 @@
     "@next-safe-action/adapter-react-hook-form": "^2.1.0",
     "@octokit/rest": "^22.0.1",
     "@openrouter/ai-sdk-provider": "^3.1.0",
+    "@paper-design/shaders-react": "^0.0.81",
     "@primer/octicons-react": "^19.40.0",
     "@radix-ui/react-presence": "^1.1.11",
     "@react-email/components": "^1.0.12",
