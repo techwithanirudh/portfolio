@@ -1,4 +1,7 @@
 'use client'
+
+// Command menu after chanhdai.com (MIT, (c) Chanh Dai)
+
 import { useSound } from '@web-kits/audio/react'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import type { SharedProps } from 'fumadocs-ui/components/dialog/search'
@@ -6,7 +9,7 @@ import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { useLenis } from 'lenis/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { CommandMenuFooter } from '@/components/features/search/footer'
 import { SearchResults as SearchResultsList } from '@/components/features/search/results'
@@ -17,25 +20,16 @@ import {
 } from '@/components/features/search/utils/groups'
 import { Icons } from '@/components/icons/icons'
 import {
-  Command,
+  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  CommandSeparator,
 } from '@/components/ui/command'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/mechanical'
 import { signOut, useSession } from '@/lib/auth-client'
-import { cn } from '@/lib/utils'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
@@ -46,7 +40,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { openSignIn } = useSignInModal()
   const router = useRouter()
   const lenis = useLenis()
-  const { setTheme, theme } = useTheme()
+  const { setTheme } = useTheme()
   const playOpen = useSound(notification)
   const playConfirm = useSound(click)
   const playCollapse = useSound(collapse)
@@ -235,21 +229,27 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   const renderCommandItem = (item: CommandItemData) => (
     <CommandItem
-      data-checked={
-        item.kind === 'theme' && theme === item.theme ? true : undefined
-      }
       key={item.title}
       keywords={item.keywords}
       onSelect={() => handleSelect(item)}
       value={item.title}
     >
-      <span className='text-muted-foreground'>{item.icon}</span>
-      {item.title}
+      {item.icon}
+      <p className='line-clamp-1'>{item.title}</p>
     </CommandItem>
   )
 
+  const renderCommandGroups = (list: typeof groups) =>
+    list.map(({ group, items }) => (
+      <CommandGroup heading={group} key={group}>
+        {items.map(renderCommandItem)}
+      </CommandGroup>
+    ))
+
   return (
-    <Dialog
+    <CommandDialog
+      commandProps={{ onKeyDown: handleKeyDown, shouldFilter: false }}
+      description='Search or jump to a page'
       onOpenChange={(next) => {
         if (!next) {
           setSearch('')
@@ -258,81 +258,37 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       }}
       open={open}
     >
-      <DialogContent
-        className='top-0 flex max-w-full translate-y-0 flex-col gap-0 border border-line bg-background p-0 shadow-2xl ring-0 sm:top-1/4 sm:max-w-xl'
-        data-lenis-prevent
-        showCloseButton={false}
-      >
-        <DialogHeader className='sr-only'>
-          <DialogTitle>Command Palette</DialogTitle>
-          <DialogDescription>Search or jump to a page</DialogDescription>
-        </DialogHeader>
-        <Command
-          className={cn(
-            'bg-transparent',
-            // Flush, ruled input row instead of a pill inside a card
-            '**:data-[slot=command-input-wrapper]:border-line **:data-[slot=command-input-wrapper]:border-b **:data-[slot=command-input-wrapper]:p-0',
-            '**:data-[slot=input-group]:h-12! **:data-[slot=input-group]:border-0 **:data-[slot=input-group]:bg-transparent **:data-[slot=input-group]:ring-0!',
-            '**:[[cmdk-group-heading]]:font-mono **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider',
-            '**:data-[slot=command-item]:data-selected:shadow-[inset_2px_0_0_var(--color-primary)]'
+      <CommandInput
+        onValueChange={setSearch}
+        placeholder='Type a command or search…'
+        value={search}
+      />
+
+      <div className='bg-background ring-1 ring-border'>
+        <CommandList className='scroll-fade min-h-80' data-lenis-prevent>
+          {hasNoResults && <CommandEmpty>No results found.</CommandEmpty>}
+
+          {renderCommandGroups(groups)}
+
+          {!isEmpty && query.isLoading && (
+            <div className='flex items-center justify-center py-8'>
+              <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
+            </div>
           )}
-          onKeyDown={handleKeyDown}
-          shouldFilter={false}
-        >
-          <CommandInput
-            onValueChange={setSearch}
-            placeholder='Type a command or search...'
-            value={search}
-          />
 
-          <div>
-            <CommandList
-              className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
-              data-lenis-prevent
-            >
-              {groups.map(({ group, items }, i) => (
-                <Fragment key={group}>
-                  {i > 0 && <CommandSeparator />}
-                  <CommandGroup heading={group}>
-                    {items.map(renderCommandItem)}
-                  </CommandGroup>
-                </Fragment>
-              ))}
+          {isEmpty ? (
+            <SearchResultsList groups={tagGroups} onSelect={go} />
+          ) : null}
 
-              {!isEmpty && query.isLoading && (
-                <div className='flex items-center justify-center py-6'>
-                  <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
-                </div>
-              )}
+          {renderCommandGroups(afterGroups)}
 
-              {hasNoResults && (
-                <CommandEmpty>
-                  No results for &ldquo;{search}&rdquo;
-                </CommandEmpty>
-              )}
+          {isEmpty ? null : (
+            <SearchResultsList groups={tagGroups} onSelect={go} />
+          )}
+        </CommandList>
+      </div>
 
-              {isEmpty ? (
-                <SearchResultsList groups={tagGroups} onSelect={go} />
-              ) : null}
-
-              {afterGroups.map(({ group, items }) => (
-                <Fragment key={group}>
-                  <CommandSeparator />
-                  <CommandGroup heading={group}>
-                    {items.map(renderCommandItem)}
-                  </CommandGroup>
-                </Fragment>
-              ))}
-
-              {isEmpty ? null : (
-                <SearchResultsList groups={tagGroups} onSelect={go} />
-              )}
-            </CommandList>
-          </div>
-
-          <CommandMenuFooter />
-        </Command>
-      </DialogContent>
-    </Dialog>
+      <CommandMenuFooter />
+    </CommandDialog>
   )
 }
