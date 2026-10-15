@@ -40,6 +40,7 @@ export async function generateMetadata(props: {
 
   return createMetadata({
     description,
+    robots: { follow: false, index: false },
     title: 'Not Found',
   })
 }
