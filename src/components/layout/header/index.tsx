@@ -180,18 +180,6 @@ export const Header = ({
           </ViewAnimation>
         </div>
       </div>
-      <a
-        aria-label='GitHub'
-        className={cn(
-          buttonVariants({ color: 'ghost', size: 'icon' }),
-          'ms-auto -me-1.5 md:hidden'
-        )}
-        href={githubUrl}
-        rel='noopener noreferrer'
-        target='_blank'
-      >
-        <Icons.github className='size-5' />
-      </a>
       <ul className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
@@ -275,7 +263,7 @@ const HeaderNavigationMenu = ({
         id='nd-nav'
         {...props}
         className={cn(
-          'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors',
+          'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors max-md:hidden',
           props.className
         )}
       >

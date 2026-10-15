@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import type React from 'react'
+import { GuestbookCue } from '@/components/guestbook-cue'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { Button } from '@/components/ui/button'
@@ -46,6 +47,13 @@ export default function CTA(): React.ReactElement {
               </Button>
             </ViewAnimation>
           </div>
+          <ViewAnimation
+            delay={0.25}
+            initial={{ opacity: 0, translateY: -6 }}
+            whileInView={{ opacity: 1, translateY: 0 }}
+          >
+            <GuestbookCue before='Not ready to write? Just say hi in the' />
+          </ViewAnimation>
         </div>
       </div>
     </Section>

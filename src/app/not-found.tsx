@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { GuestbookCue } from '@/components/guestbook-cue'
 import { Icons } from '@/components/icons/icons'
 import { buttonVariants } from '@/components/ui/button'
 import { createMetadata } from '@/lib/metadata'
@@ -26,6 +27,10 @@ export default function NotFound() {
             Go Home
             <Icons.arrowRight className='icon-arrow-button size-4' />
           </Link>
+          <GuestbookCue
+            before='Or tell me what you were looking for in the'
+            className='text-center'
+          />
         </div>
       </div>
     </main>
