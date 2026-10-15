@@ -50,7 +50,6 @@ export default function Posts({
                 author={post.data.author}
                 date={date}
                 description={post.data.description ?? ''}
-                slugs={post.slugs}
                 title={post.data.title}
                 url={post.url}
               />

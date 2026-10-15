@@ -1,13 +1,11 @@
 import Link from 'next/link'
 import type React from 'react'
-import { ViewTransition } from 'react'
 import { Icons } from '@/components/icons/icons'
 
 interface PostCardProps {
   author: string
   date: string
   description: string
-  slugs: string[]
   title: string
   url: string
 }
@@ -19,7 +17,6 @@ export const PostCard: React.FC<PostCardProps> = ({
   url,
   date,
   author,
-  slugs,
 }) => (
   <Link
     className='group flex items-start gap-4 px-4 py-6 transition-colors hover:bg-card'
@@ -27,11 +24,9 @@ export const PostCard: React.FC<PostCardProps> = ({
     href={url}
   >
     <div className='flex min-w-0 flex-1 flex-col gap-1.5'>
-      <ViewTransition name={`blog/${slugs.join('/')}-title`} share='via-blur'>
-        <h2 className='text-balance font-medium font-sans text-base tracking-tight transition-colors group-hover:text-primary'>
-          {title}
-        </h2>
-      </ViewTransition>
+      <h2 className='text-balance font-medium font-sans text-base tracking-tight transition-colors group-hover:text-primary'>
+        {title}
+      </h2>
       <p className='line-clamp-2 text-pretty text-muted-foreground text-sm'>
         {description}
       </p>

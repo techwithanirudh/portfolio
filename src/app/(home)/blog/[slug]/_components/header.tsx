@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { type ReactNode, ViewTransition } from 'react'
+import type { ReactNode } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
@@ -44,14 +44,9 @@ export const Header = ({ page, tags, actions }: HeaderProps) => {
         )}
       </div>
 
-      <ViewTransition
-        name={`blog/${page.slugs.join('/')}-title`}
-        share='via-blur'
-      >
-        <h1 className='screen-line-top screen-line-bottom text-balance px-4 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
-          {page.data.title ?? 'Untitled'}
-        </h1>
-      </ViewTransition>
+      <h1 className='screen-line-top screen-line-bottom text-balance px-4 font-heading font-medium text-3xl tracking-tight sm:text-4xl'>
+        {page.data.title ?? 'Untitled'}
+      </h1>
 
       {page.data.description && (
         <p className='screen-line-bottom text-balance p-4 text-muted-foreground'>

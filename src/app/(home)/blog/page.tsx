@@ -2,6 +2,7 @@ import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound, redirect } from 'next/navigation'
 import Posts from '@/app/(home)/_components/posts'
 import { CollectionPageJsonLd } from '@/components/json-ld'
+import { PageFill } from '@/components/layout/page-fill'
 import { Section } from '@/components/layout/sections'
 import { Wrapper } from '@/components/layout/wrapper'
 import { NumberedPagination } from '@/components/numbered-pagination'
@@ -70,6 +71,8 @@ export default async function Page(props: {
       </Section>
       <Posts posts={posts} />
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
+      {/* Short lists leave the gap above the newsletter, not below it */}
+      <PageFill />
       <NewsletterSection />
       <CollectionPageJsonLd
         description='Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'

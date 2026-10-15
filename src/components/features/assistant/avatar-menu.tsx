@@ -51,7 +51,12 @@ export function AvatarMenu() {
           {/* Base UI requires group labels to live inside a group */}
           <DropdownMenuLabel>Choose an avatar</DropdownMenuLabel>
           {avatarNames.map((name) => (
-            <DropdownMenuRadioItem className='gap-3' key={name} value={name}>
+            <DropdownMenuRadioItem
+              className='gap-3'
+              closeOnClick
+              key={name}
+              value={name}
+            >
               <AvatarIcon avatar={name} size={32} />
               <span className='flex flex-col'>
                 <span className='font-medium'>{avatarMeta[name].label}</span>

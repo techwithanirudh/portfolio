@@ -1,6 +1,7 @@
 'use client'
 
 import { Icons } from '@/components/icons/icons'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { GuestbookEntryCard } from './entry-card'
 
@@ -19,7 +20,7 @@ export const GuestbookEntries = ({
 }: GuestbookEntriesProps) => {
   if (entries.length === 0) {
     return (
-      <div className='flex flex-col items-center gap-2 px-6 py-16 text-center'>
+      <div className='flex h-[32rem] flex-col items-center justify-center gap-2 px-6 text-center'>
         <Icons.mail className='size-6 text-muted-foreground' />
         <p className='text-muted-foreground text-sm'>No messages yet.</p>
       </div>
@@ -27,17 +28,18 @@ export const GuestbookEntries = ({
   }
 
   return (
-    // The list flows with the page, so the section grows instead of scrolling
-    <div className='divide-y divide-line'>
-      {entries.map((entry) => (
-        <GuestbookEntryCard
-          currentUserId={currentUserId}
-          entry={entry}
-          isAdmin={isAdmin}
-          isSignedIn={isSignedIn}
-          key={entry.id}
-        />
-      ))}
-    </div>
+    <ScrollArea className='h-[32rem] w-full' data-lenis-prevent>
+      <div className='divide-y divide-line'>
+        {entries.map((entry) => (
+          <GuestbookEntryCard
+            currentUserId={currentUserId}
+            entry={entry}
+            isAdmin={isAdmin}
+            isSignedIn={isSignedIn}
+            key={entry.id}
+          />
+        ))}
+      </div>
+    </ScrollArea>
   )
 }

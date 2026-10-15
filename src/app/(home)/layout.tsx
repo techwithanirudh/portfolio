@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { TextSelectionPopup } from '@/components/features/assistant/text-selection-popup'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
+import { PageFill } from '@/components/layout/page-fill'
 import { SkipLink } from '@/components/layout/skip-link'
 import { linkItems } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
@@ -30,11 +31,7 @@ const Layout = ({ children }: { children: ReactNode }) => (
         tabIndex={-1}
       >
         <TextSelectionPopup>{children}</TextSelectionPopup>
-        {/* Short pages keep their side rules running down to the footer */}
-        <div
-          aria-hidden
-          className='container mx-auto w-full flex-1 border-line border-x'
-        />
+        <PageFill fallback />
         <Footer />
       </div>
     </HomeLayout>

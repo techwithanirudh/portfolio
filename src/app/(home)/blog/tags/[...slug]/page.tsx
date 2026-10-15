@@ -115,7 +115,6 @@ export default async function Page(props: {
                   author={post.data.author ?? 'Unknown'}
                   date={date}
                   description={post.data.description ?? ''}
-                  slugs={post.slugs}
                   title={post.data.title ?? 'Untitled'}
                   url={post.url}
                 />

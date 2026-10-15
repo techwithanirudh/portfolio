@@ -22,7 +22,6 @@ uniform vec2 uPointer;
 uniform float uCell;
 uniform vec3 uViolet;
 uniform vec3 uAzure;
-uniform float uDark;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -91,8 +90,8 @@ void main() {
   float dots = dotMask * smoothstep(0.02, 0.2, radius);
 
   // A faint wash of the gradient under the dots keeps it reading as a glow
-  float wash = glow * glow * mix(0.14, 0.2, uDark);
-  float alpha = max(dots * mix(0.85, 1.0, uDark), wash);
+  float wash = glow * glow * 0.14;
+  float alpha = max(dots * 0.85, wash);
   gl_FragColor = vec4(color * alpha, alpha);
 }
 `
@@ -133,11 +132,11 @@ const createProgram = (gl: WebGLRenderingContext): WebGLProgram | null => {
   return gl.getProgramParameter(program, gl.LINK_STATUS) ? program : null
 }
 
-// Sampled from the old hero's gradient-noise-purple-azure image. Light mode
-// runs a touch deeper so the dots hold up on the pale background.
-const PALETTE: Record<'light' | 'dark', { violet: Rgb; azure: Rgb }> = {
-  dark: { azure: [0.42, 0.83, 0.95], violet: [0.62, 0.5, 0.95] },
-  light: { azure: [0.22, 0.66, 0.9], violet: [0.5, 0.36, 0.88] },
+// Sampled from the old hero's gradient-noise-purple-azure image. One deeper
+// palette for both themes; the brighter dark-mode one read as washed out.
+const PALETTE: { violet: Rgb; azure: Rgb } = {
+  azure: [0.22, 0.66, 0.9],
+  violet: [0.5, 0.36, 0.88],
 }
 
 export function DitherField({ className }: { className?: string }) {
@@ -181,11 +180,9 @@ export function DitherField({ className }: { className?: string }) {
     const uCell = uniform('uCell')
     const uViolet = uniform('uViolet')
     const uAzure = uniform('uAzure')
-    const uDark = uniform('uDark')
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     const pointer = { x: -1, y: -1 }
-    let dark = document.documentElement.classList.contains('dark') ? 1 : 0
     let visible = true
     let frame = 0
     const start = performance.now()
@@ -207,10 +204,8 @@ export function DitherField({ className }: { className?: string }) {
       gl.uniform1f(uTime, reducedMotion.matches ? 24 : (now - start) / 1000)
       gl.uniform2f(uPointer, pointer.x, pointer.y)
       gl.uniform1f(uCell, CELL_PX * dpr)
-      const { violet, azure } = PALETTE[dark ? 'dark' : 'light']
-      gl.uniform3f(uViolet, ...violet)
-      gl.uniform3f(uAzure, ...azure)
-      gl.uniform1f(uDark, dark)
+      gl.uniform3f(uViolet, ...PALETTE.violet)
+      gl.uniform3f(uAzure, ...PALETTE.azure)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
     }
 
@@ -252,15 +247,6 @@ export function DitherField({ className }: { className?: string }) {
     })
     intersection.observe(host)
 
-    const themeObserver = new MutationObserver(() => {
-      dark = document.documentElement.classList.contains('dark') ? 1 : 0
-      draw(performance.now())
-    })
-    themeObserver.observe(document.documentElement, {
-      attributeFilter: ['class'],
-      attributes: true,
-    })
-
     const onMotionChange = () => {
       kick()
       draw(performance.now())
@@ -275,7 +261,6 @@ export function DitherField({ className }: { className?: string }) {
       cancelAnimationFrame(frame)
       resizeObserver.disconnect()
       intersection.disconnect()
-      themeObserver.disconnect()
       reducedMotion.removeEventListener('change', onMotionChange)
       window.removeEventListener('pointermove', onPointerMove)
       gl.deleteBuffer(buffer)
