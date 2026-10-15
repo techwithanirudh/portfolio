@@ -1,11 +1,12 @@
 'use client'
 
+import { useTheme } from 'next-themes'
 import { useEffect, useRef } from 'react'
 import { cn } from '@/lib/utils'
 
-// Halftone field in the old hero's violet-to-azure glow. One dot per cell,
-// sized from a warped blob plus noise, so it reads as a gradient made of dots
-// that breathe. The pointer drops ripples into the field.
+// Square halftone field in two layers: a fine back grid that pans slowly and
+// a coarse front grid whose cells grow from domain-warped fbm. Weighted to the
+// right so the left stays calm behind text. Pointer drops ripples.
 const VERTEX = `
 attribute vec2 aPos;
 void main() {
@@ -15,90 +16,87 @@ void main() {
 
 const FRAGMENT = `
 precision highp float;
-
 uniform vec2 uRes;
 uniform float uTime;
-uniform vec2 uPointer;
 uniform float uCell;
-uniform vec3 uViolet;
-uniform vec3 uAzure;
+uniform vec3 uDeep;
+uniform vec3 uMid;
+uniform vec3 uHi;
+uniform vec2 uPointer;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
   p += dot(p, p + 45.32);
   return fract(p.x * p.y);
 }
-
 float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
+  vec2 i = floor(p); vec2 f = fract(p);
   f = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
-    mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x),
-    f.y
-  );
+  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+float fbm(vec2 p) {
+  float v = 0.0; float a = 0.5;
+  for (int i = 0; i < 5; i++) { v += a * noise(p); p = p * 2.03 + 11.0; a *= 0.5; }
+  return v;
 }
 
-float fbm(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  for (int i = 0; i < 4; i++) {
-    v += a * noise(p);
-    p = p * 2.02 + 17.0;
-    a *= 0.5;
+// Field value at a point in uv space (height-normalised)
+float field(vec2 uv, float t, float aspect) {
+  vec2 q = vec2(fbm(uv * 1.2 + vec2(t, 0.0)), fbm(uv * 1.2 + vec2(3.1, 7.7) - t * 0.7));
+  float f = fbm(uv * 1.8 + 2.4 * q + vec2(-t * 1.4, 0.0));
+  // Weight toward the right, keep the left calm behind text
+  float x = uv.x / aspect;
+  float bias = smoothstep(0.05, 0.95, x);
+  return clamp((f - 0.28) * 1.9, 0.0, 1.0) * (0.35 + 0.65 * bias);
+}
+
+float layer(vec2 frag, float cell, float t, float aspect, out float val) {
+  vec2 id = floor(frag / cell);
+  vec2 local = fract(frag / cell) - 0.5;
+  vec2 c = (id + 0.5) * cell;
+  vec2 uv = c / uRes.y;
+  val = field(uv, t, aspect);
+  // Pointer ripple, as in v1
+  if (uPointer.x >= 0.0) {
+    float d = distance(c / uRes, uPointer) * aspect;
+    val += sin(d * 38.0 - uTime * 4.0) * exp(-d * 5.0) * 0.25 + exp(-d * 9.0) * 0.3;
   }
-  return v;
+  float half_ = clamp(val * 0.46, 0.0, 0.46);
+  vec2 d = abs(local) - half_;
+  float aa = 1.0 / cell;
+  float sq = 1.0 - smoothstep(-aa, aa, max(d.x, d.y));
+  return sq * step(0.06, half_);
 }
 
 void main() {
   vec2 frag = gl_FragCoord.xy;
-  vec2 cellId = floor(frag / uCell);
-  vec2 local = fract(frag / uCell) - 0.5;
-  vec2 center = (cellId + 0.5) * uCell;
-
   float aspect = uRes.x / uRes.y;
-  vec2 st = center / uRes;
-  vec2 uv = center / uRes.y;
-  float t = uTime * 0.12;
+  float t = uTime * 0.05;
 
-  // The old hero's violet-to-azure glow: a warped blob sitting low on the
-  // right, so the left stays calm behind text
-  vec2 warp = vec2(fbm(uv * 1.6 + t), fbm(uv * 1.6 + vec2(5.2, 1.3) - t)) - 0.5;
-  vec2 blobCenter = vec2(0.82 + 0.05 * sin(uTime * 0.21), 0.2 + 0.08 * cos(uTime * 0.17));
-  vec2 offset = (st - blobCenter) * vec2(aspect * 0.42, 1.0) + warp * 0.55;
-  float dist = length(offset);
-  float glow = 1.0 - smoothstep(0.0, 0.62, dist);
+  float v1; float v2;
+  float back = layer(frag + vec2(uTime * 2.0, 0.0), uCell * 0.5, t + 4.0, aspect, v2);
+  float front = layer(frag, uCell, t, aspect, v1);
 
-  // Azure in the core, violet toward the rim, nudged by noise so it shifts
-  float core = 1.0 - smoothstep(0.0, 0.38, dist + (fbm(uv * 3.0 - t) - 0.5) * 0.25);
-  vec3 color = mix(uViolet, uAzure, core);
-
-  float field = glow * (0.75 + 0.5 * fbm(uv * 2.6 + 2.2 * warp + vec2(t * 0.6, 0.0)));
-
-  // Pointer ripple
-  if (uPointer.x >= 0.0) {
-    float d = distance(st, uPointer) * aspect;
-    float ring = sin(d * 38.0 - uTime * 4.0) * exp(-d * 5.0);
-    field += ring * 0.28;
-    field += exp(-d * 9.0) * 0.35;
-  }
-
-  float radius = clamp(field * 0.62 - 0.04, 0.0, 0.5);
-  float aa = 1.5 / uCell;
-  float dotMask = 1.0 - smoothstep(radius - aa, radius + aa, length(local));
-  float dots = dotMask * smoothstep(0.02, 0.2, radius);
-
-  // A faint wash of the gradient under the dots keeps it reading as a glow
-  float wash = glow * glow * 0.14;
-  float alpha = max(dots * 0.85, wash);
-  gl_FragColor = vec4(color * alpha, alpha);
+  vec3 cFront = mix(uMid, uHi, smoothstep(0.35, 0.95, v1));
+  vec3 cBack = mix(uDeep, uMid, v2);
+  vec2 uv = frag / uRes.y;
+  float wash = field(uv, t, aspect);
+  float aBack = back * 0.35;
+  float aFront = front * 0.9;
+  float aWash = wash * wash * 0.12;
+  vec3 col = cBack * aBack;
+  col = col * (1.0 - aFront) + cFront * aFront;
+  float a = aFront + aBack * (1.0 - aFront);
+  col = col + uDeep * aWash * (1.0 - a);
+  a = a + aWash * (1.0 - a);
+  gl_FragColor = vec4(col, a);
 }
 `
 
-const CELL_PX = 9
-// The dots are 9px cells, so 1.5x is already crisp and saves ~45% of the
-// fragments a 2x screen would shade
+const CELL_PX = 10
+// Cells are 10px, so 1.5x is already crisp and saves ~45% of the fragments
+// a 2x screen would shade
 const MAX_DPR = 1.5
 // A slow drift doesn't need 60fps; 30 halves the GPU and main-thread cost
 const FRAME_MS = 1000 / 30
@@ -136,15 +134,24 @@ const createProgram = (gl: WebGLRenderingContext): WebGLProgram | null => {
   return gl.getProgramParameter(program, gl.LINK_STATUS) ? program : null
 }
 
-// Sampled from the old hero's gradient-noise-purple-azure image. One deeper
-// palette for both themes; the brighter dark-mode one read as washed out.
-const PALETTE: { violet: Rgb; azure: Rgb } = {
-  azure: [0.22, 0.66, 0.9],
-  violet: [0.5, 0.36, 0.88],
+// Three-stop ramps tuned to --color-fd-primary in each theme
+const PALETTES: Record<'dark' | 'light', { deep: Rgb; mid: Rgb; hi: Rgb }> = {
+  dark: {
+    deep: [0.2, 0.24, 0.62],
+    hi: [0.66, 0.69, 1.0],
+    mid: [0.4, 0.45, 0.95],
+  },
+  light: {
+    deep: [0.62, 0.68, 0.9],
+    hi: [0.2, 0.32, 0.7],
+    mid: [0.36, 0.45, 0.82],
+  },
 }
 
 export function DitherField({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const { resolvedTheme } = useTheme()
+  const palette = PALETTES[resolvedTheme === 'light' ? 'light' : 'dark']
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -182,8 +189,9 @@ export function DitherField({ className }: { className?: string }) {
     const uTime = uniform('uTime')
     const uPointer = uniform('uPointer')
     const uCell = uniform('uCell')
-    const uViolet = uniform('uViolet')
-    const uAzure = uniform('uAzure')
+    const uDeep = uniform('uDeep')
+    const uMid = uniform('uMid')
+    const uHi = uniform('uHi')
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
     const pointer = { x: -1, y: -1 }
@@ -207,11 +215,15 @@ export function DitherField({ className }: { className?: string }) {
       gl.clear(gl.COLOR_BUFFER_BIT)
       gl.uniform2f(uRes, canvas.width, canvas.height)
       // A still frame for reduced motion still needs a pleasing time offset
-      gl.uniform1f(uTime, reducedMotion.matches ? 24 : (now - start) / 1000)
+      gl.uniform1f(
+        uTime,
+        reducedMotion.matches ? 30 : 30 + (now - start) / 1000
+      )
       gl.uniform2f(uPointer, pointer.x, pointer.y)
       gl.uniform1f(uCell, CELL_PX * dpr)
-      gl.uniform3f(uViolet, ...PALETTE.violet)
-      gl.uniform3f(uAzure, ...PALETTE.azure)
+      gl.uniform3f(uDeep, ...palette.deep)
+      gl.uniform3f(uMid, ...palette.mid)
+      gl.uniform3f(uHi, ...palette.hi)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
       if (!revealed) {
         revealed = true
@@ -295,7 +307,7 @@ export function DitherField({ className }: { className?: string }) {
       gl.deleteBuffer(buffer)
       gl.deleteProgram(program)
     }
-  }, [])
+  }, [palette])
 
   return (
     <canvas
