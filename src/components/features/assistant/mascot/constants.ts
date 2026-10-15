@@ -1,4 +1,4 @@
-import simba from './simba.json'
+import simba from '@/public/assets/mascot/simba/animations.json'
 
 export type AnimationName = keyof typeof simba.animations
 
@@ -8,15 +8,15 @@ export interface Frame {
   y: number
 }
 
-// Simba, a Shih Tzu. The sheet is cut into equal cells with his feet on
-// each cell's floor; simba.json maps every animation to its cells.
+// Simba, a Shih Tzu. The sheet has one row per animation in equal cells,
+// feet on each cell's floor; animations.json maps names to cells.
 export const SIMBA = {
   animations: simba.animations as Record<AnimationName, { frames: Frame[] }>,
   frame: simba.frame as [number, number],
   // Transparent space right of and below him in his resting frame
-  padding: { bottom: 2, right: 0 },
+  padding: { bottom: 0, right: 0 },
   sheet: simba.sheet as [number, number],
-  sprite: '/assets/mascot/simba.webp',
+  sprite: '/assets/mascot/simba/sheet.webp',
 }
 
 interface Animations {
