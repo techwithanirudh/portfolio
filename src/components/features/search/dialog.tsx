@@ -35,6 +35,7 @@ import {
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/mechanical'
 import { signOut, useSession } from '@/lib/auth-client'
+import { cn } from '@/lib/utils'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
@@ -258,7 +259,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       open={open}
     >
       <DialogContent
-        className='top-0 flex max-w-full translate-y-0 flex-col gap-0 rounded-none! border-none bg-muted p-1 shadow-2xl ring-0 sm:top-1/3 sm:max-w-lg sm:rounded-2xl!'
+        className='top-0 flex max-w-full translate-y-0 flex-col gap-0 border border-line bg-background p-0 shadow-2xl ring-0 sm:top-1/4 sm:max-w-xl'
         data-lenis-prevent
         showCloseButton={false}
       >
@@ -267,7 +268,14 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           <DialogDescription>Search or jump to a page</DialogDescription>
         </DialogHeader>
         <Command
-          className='rounded-none bg-transparent'
+          className={cn(
+            'bg-transparent',
+            // Flush, ruled input row instead of a pill inside a card
+            '**:data-[slot=command-input-wrapper]:border-line **:data-[slot=command-input-wrapper]:border-b **:data-[slot=command-input-wrapper]:p-0',
+            '**:data-[slot=input-group]:h-12! **:data-[slot=input-group]:border-0 **:data-[slot=input-group]:bg-transparent **:data-[slot=input-group]:ring-0!',
+            '**:[[cmdk-group-heading]]:font-mono **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:uppercase **:[[cmdk-group-heading]]:tracking-wider',
+            '**:data-[slot=command-item]:data-selected:shadow-[inset_2px_0_0_var(--color-primary)]'
+          )}
           onKeyDown={handleKeyDown}
           shouldFilter={false}
         >
@@ -277,7 +285,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             value={search}
           />
 
-          <div className='rounded-xl bg-background ring-1 ring-border'>
+          <div>
             <CommandList
               className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
               data-lenis-prevent
