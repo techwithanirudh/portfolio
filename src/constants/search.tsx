@@ -19,6 +19,13 @@ export const commands: CommandGroup[] = [
         url: '/about#experience',
       },
       {
+        icon: <Icons.download className='size-4' />,
+        keywords: ['cv', 'pdf'],
+        kind: 'page',
+        title: 'Resume',
+        url: '/resume',
+      },
+      {
         icon: <Icons.mail className='size-4' />,
         kind: 'page',
         title: 'Contact',

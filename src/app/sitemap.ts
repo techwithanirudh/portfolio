@@ -41,6 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { changeFrequency: 'monthly', priority: 0.6, url: url('/about') },
     { changeFrequency: 'monthly', priority: 0.5, url: url('/contact') },
+    { changeFrequency: 'monthly', priority: 0.5, url: url('/resume') },
     { changeFrequency: 'yearly', priority: 0.4, url: url('/uses') },
     { changeFrequency: 'yearly', priority: 0.4, url: url('/colophon') },
     { changeFrequency: 'weekly', priority: 0.4, url: url('/guestbook') },

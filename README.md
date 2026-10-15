@@ -70,7 +70,7 @@ Content lives in `content/` and UI lives in `src/components`. Routes use the Nex
 .
 ├── content/              # Blog posts and work pages written in MDX
 ├── emails/               # React Email templates
-├── public/               # Static images, assets, resume, sitemap, robots
+├── public/               # Static images, assets, sitemap, robots
 ├── scripts/              # Local maintenance and general scripts
 ├── src/app/              # Next.js App Router routes and API endpoints
 ├── src/components/       # Shared UI, layout, MDX, and section components

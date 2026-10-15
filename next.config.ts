@@ -64,6 +64,12 @@ async function createNextConfig(): Promise<NextConfig> {
           permanent: false,
           source: '/login',
         },
+        // The resume is generated from site data now; the old PDF was stale.
+        {
+          destination: '/resume',
+          permanent: true,
+          source: '/resume.pdf',
+        },
         {
           destination: '/projects',
           permanent: true,

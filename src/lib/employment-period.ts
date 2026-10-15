@@ -1,10 +1,7 @@
 import { differenceInMonths, format, parse } from 'date-fns'
 
 /** Parses an `MM.yyyy` or `yyyy` period value; year-only values snap to January or December. */
-export function parsePeriodDate(
-  str: string,
-  fallbackMonth: 'first' | 'last'
-): Date {
+function parsePeriodDate(str: string, fallbackMonth: 'first' | 'last'): Date {
   if (str.includes('.')) {
     return parse(str, 'MM.yyyy', new Date())
   }
