@@ -46,7 +46,6 @@ export default function AboutPage() {
         <Updates posts={posts} />
         <Separator />
         <Feed />
-        <Separator />
         <div className='container mx-auto'>
           <Contact />
         </div>

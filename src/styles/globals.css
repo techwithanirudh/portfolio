@@ -560,9 +560,15 @@ html > body[data-scroll-locked] {
   }
 }
 
-/* Stacked sections share one rule instead of drawing two lines 1px apart */
-[data-slot="section"]
+/* Stacked sections and panels share one rule instead of drawing two lines
+   1px apart, and the first block under the header reuses the header's line */
+:is([data-slot="section"], [data-slot="panel"])
   + [data-slot="section"]
+  > div
+  > [data-slot="section-inner"]::before,
+:is([data-slot="section"], [data-slot="panel"]) + [data-slot="panel"]::before,
+#main-content
+  [data-slot="section"]:first-child
   > div
   > [data-slot="section-inner"]::before {
   content: none;

@@ -23,7 +23,7 @@ const groupByCategory = (items: TechStackItem[]) => {
 }
 
 const featureItemVariants = cva(
-  'group flex flex-col gap-6 p-4 transition-colors hover:bg-card/80',
+  'group flex min-h-44 flex-col justify-between gap-10 p-4 transition-colors hover:bg-card/80',
   {
     defaultVariants: {
       size: 'sm',
@@ -41,12 +41,11 @@ const Skills = () => (
   <Section className='relative w-full' id='stack'>
     <div className='flex flex-col'>
       <SectionHeader
-        className='pb-4'
         description='Focused on building practical projects with modern tools.'
         title='Stack'
       />
 
-      <div className='screen-line-top'>
+      <div>
         <div className='grid grid-cols-1 divide-dashed divide-line text-left sm:grid-cols-3 sm:divide-x [&>*:last-child]:border-b-0 sm:[&>*:nth-last-child(-n+3)]:border-b-0 [&>*]:border-line [&>*]:border-b [&>*]:border-dashed'>
           {skills.map((feature, index) => (
             <ViewAnimation

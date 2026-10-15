@@ -15,9 +15,9 @@ const links = [
 ]
 
 export const Footer = () => (
-  <footer className='px-2 pb-24 sm:pb-16'>
+  <footer className='pb-24 sm:pb-16'>
     <div className='container mx-auto'>
-      <div className='screen-line-top screen-line-bottom border-line border-x'>
+      <div className='screen-line-bottom border-line border-x'>
         <ViewAnimation
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
@@ -72,7 +72,6 @@ export const Footer = () => (
           </div>
         </ViewAnimation>
       </div>
-      <div className='h-8 border-line border-x bg-dashed' />
     </div>
   </footer>
 )

@@ -1,7 +1,8 @@
 'use client'
 
-import { Suspense, use } from 'react'
-
+// Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
+import { format, parseISO } from 'date-fns'
+import { Suspense, use, useEffect, useRef } from 'react'
 import {
   type Activity,
   ContributionGraph,
@@ -18,36 +19,58 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { ViewAnimation } from '@/components/view-animation'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { socials } from '@/constants/navigation'
 import { cn } from '@/lib/utils'
 
 interface ContributionsProps {
   contributions: Promise<Activity[]>
 }
 
+// Blue ramp instead of GitHub green so the graph sits in the site palette
+const LEVELS = cn(
+  'data-[level="0"]:fill-foreground/5',
+  'data-[level="1"]:fill-primary/25',
+  'data-[level="2"]:fill-primary/50',
+  'data-[level="3"]:fill-primary/75',
+  'data-[level="4"]:fill-primary'
+)
+
+const githubUrl = socials.find((social) => social.name === 'GitHub')?.url
+
 const ContributionsGraph = ({ contributions }: ContributionsProps) => {
   const data = use(contributions)
-  const isMobile = useIsMobile()
-  const blockSize = isMobile ? 12 : 23.5
+  const ref = useRef<HTMLDivElement>(null)
+
+  // Narrow screens scroll the year, start on the latest weeks
+  useEffect(() => {
+    const scroller = ref.current?.querySelector('.overflow-x-auto')
+    if (scroller) {
+      scroller.scrollLeft = scroller.scrollWidth
+    }
+  }, [])
+
+  if (data.length === 0) {
+    return null
+  }
+
+  const first = data[0]
+  const last = data.at(-1)
 
   return (
-    <Section className='relative w-full p-6'>
-      <ViewAnimation
-        className='relative w-full'
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-      >
+    <Section>
+      <h2 className='sr-only'>GitHub contributions</h2>
+      <figure ref={ref}>
         <ContributionGraph
           aria-label='GitHub Contributions Graph'
-          blockMargin={isMobile ? 3 : 2}
-          blockSize={blockSize}
-          className='w-full'
+          blockMargin={2}
+          blockRadius={0}
+          blockSize={11}
+          className='mx-auto gap-3 py-4'
           data={data}
         >
           <ContributionGraphCalendar
             aria-hidden
-            className='overflow-x-auto pb-2'
+            className='no-scrollbar px-4 font-mono text-[11px] **:data-[slot=month-labels]:text-muted-foreground'
             title='GitHub Contributions'
           >
             {({ activity, dayIndex, weekIndex }) => (
@@ -55,61 +78,58 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
                 <TooltipTrigger render={<g />}>
                   <ContributionGraphBlock
                     activity={activity}
-                    className={cn(
-                      'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-                      'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-                      'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-                      'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
-                      'cursor-pointer'
-                    )}
+                    className={LEVELS}
                     dayIndex={dayIndex}
                     weekIndex={weekIndex}
                   />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p className='font-semibold'>{activity.date}</p>
-                  <p>
-                    <span className='tabular-nums'>{activity.count}</span>{' '}
-                    {activity.count === 1 ? 'contribution' : 'contributions'}
-                  </p>
+                  {activity.count} contribution{activity.count === 1 ? '' : 's'}{' '}
+                  on {format(parseISO(activity.date), 'd MMM yyyy')}
                 </TooltipContent>
               </Tooltip>
             )}
           </ContributionGraphCalendar>
-          <ContributionGraphFooter>
+
+          <ContributionGraphFooter className='flex-wrap gap-y-2 px-4 font-mono text-xs'>
             <ContributionGraphTotalCount>
               {({ totalCount }) => (
-                <div className='text-muted-foreground'>
-                  {totalCount.toLocaleString('en')} contributions in the past
-                  365 days.
-                </div>
+                <figcaption className='text-pretty text-muted-foreground tabular-nums'>
+                  {totalCount.toLocaleString('en')} contributions
+                  {first && last
+                    ? `, ${format(parseISO(first.date), 'd MMM yyyy')} to ${format(parseISO(last.date), 'd MMM yyyy')}`
+                    : ''}
+                  {githubUrl ? (
+                    <>
+                      {' · '}
+                      <a
+                        className='underline-offset-4 transition-colors hover:text-foreground hover:underline'
+                        href={githubUrl}
+                        rel='noopener noreferrer'
+                        target='_blank'
+                      >
+                        GitHub
+                      </a>
+                    </>
+                  ) : null}
+                </figcaption>
               )}
             </ContributionGraphTotalCount>
-            <ContributionGraphLegend>
+            <ContributionGraphLegend aria-hidden>
               {({ level }) => (
-                <div
-                  className='group relative flex h-3 w-3 items-center justify-center'
-                  data-level={level}
-                >
-                  <div
-                    className={cn(
-                      'h-full w-full rounded-xs border border-border',
-                      level === 0 && 'bg-[#eeeeee] dark:bg-[#262626]',
-                      level === 1 && 'bg-[#9be9a8] dark:bg-[#0e4429]',
-                      level === 2 && 'bg-[#40c463] dark:bg-[#006d32]',
-                      level === 3 && 'bg-[#30a14e] dark:bg-[#26a641]',
-                      level === 4 && 'bg-[#216e39] dark:bg-[#39d353]'
-                    )}
+                <svg height={11} width={11}>
+                  <rect
+                    className={LEVELS}
+                    data-level={level}
+                    height={11}
+                    width={11}
                   />
-                  <span className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'>
-                    Level {level}
-                  </span>
-                </div>
+                </svg>
               )}
             </ContributionGraphLegend>
           </ContributionGraphFooter>
         </ContributionGraph>
-      </ViewAnimation>
+      </figure>
     </Section>
   )
 }
@@ -121,7 +141,7 @@ const Contributions = ({ contributions }: ContributionsProps) => (
 )
 
 export const ContributionsFallback = () => (
-  <Section className='relative flex h-45 w-full items-center justify-center p-6'>
+  <Section className='flex h-45 w-full items-center justify-center'>
     <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
   </Section>
 )
