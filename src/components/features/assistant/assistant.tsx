@@ -2,7 +2,6 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
-import { Presence } from '@radix-ui/react-presence'
 import { useSound } from '@web-kits/audio/react'
 import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
@@ -44,6 +43,7 @@ import {
   ContactFormSkeleton,
 } from '@/components/features/assistant/tools/contact-form'
 import { Icons } from '@/components/icons/icons'
+import { Presence } from '@/components/presence'
 import { useIsMobile } from '@/hooks/use-mobile'
 import {
   deleteSound,

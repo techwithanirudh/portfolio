@@ -1,6 +1,5 @@
 'use client'
 
-import { Presence } from '@radix-ui/react-presence'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -8,6 +7,7 @@ import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
 import { useOiiaMode } from '@/components/oiia'
+import { Presence } from '@/components/presence'
 
 export function MobileNav() {
   const [open, setOpen] = useState(false)

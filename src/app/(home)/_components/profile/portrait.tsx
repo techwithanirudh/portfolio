@@ -75,7 +75,7 @@ export function Portrait() {
     <div className='relative size-full select-none bg-[linear-gradient(160deg,#c3b6fa,#9fccfa_55%,#7fd0f5)] dark:bg-[linear-gradient(160deg,#7f5ce0,#5a7fe0_55%,#38a8e6)]'>
       {/* biome-ignore lint/performance/noImgElement: static SVG, next/image adds nothing here */}
       <img
-        alt='Portrait of an1rudh'
+        alt='Portrait of Anirudh Sriram'
         className='relative size-full object-cover'
         draggable={false}
         fetchPriority='high'

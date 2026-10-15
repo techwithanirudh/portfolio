@@ -42,10 +42,10 @@ export function HeroName() {
       {isOiia ? (
         <>
           <span aria-hidden>OIIA</span>
-          <span className='sr-only'>an1rudh</span>
+          <span className='sr-only'>Anirudh Sriram</span>
         </>
       ) : (
-        'an1rudh'
+        'Anirudh Sriram'
       )}
     </button>
   )

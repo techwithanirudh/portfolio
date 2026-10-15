@@ -42,6 +42,7 @@ export default function Detailed(): React.ReactElement {
                 buttonVariants({ size: 'lg', variant: 'link' }),
                 '!p-0 h-fit'
               )}
+              data-sound-hover
               href='/projects'
             >
               View Work
