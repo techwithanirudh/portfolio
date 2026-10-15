@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import {
   Panel,
-  PanelAction,
+  PanelButton,
   PanelHeader,
   PanelTitle,
 } from '@/components/layout/panel'
@@ -15,15 +15,6 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
     <Panel>
       <PanelHeader>
         <PanelTitle>Work</PanelTitle>
-        <PanelAction>
-          <Link
-            className='transition-colors hover:text-foreground'
-            href='/work'
-          >
-            View all
-            <Icons.arrowRight className='icon-arrow-button ml-1 inline size-3' />
-          </Link>
-        </PanelAction>
       </PanelHeader>
       <ul className='divide-y divide-dashed divide-line'>
         {works.map((work, index) => (
@@ -66,6 +57,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           </ViewAnimation>
         ))}
       </ul>
+      <PanelButton href='/work'>View all work</PanelButton>
     </Panel>
   )
 }

@@ -1,9 +1,7 @@
-import Link from 'next/link'
 import { WorkExperience } from '@/components/features/work'
-import { Icons } from '@/components/icons/icons'
 import {
   Panel,
-  PanelAction,
+  PanelButton,
   PanelHeader,
   PanelTitle,
   PanelTitleSup,
@@ -18,17 +16,9 @@ export default function ExperiencePreview() {
       <PanelHeader>
         <PanelTitle>Experience</PanelTitle>
         <PanelTitleSup>({experiences.length})</PanelTitleSup>
-        <PanelAction>
-          <Link
-            className='transition-colors hover:text-foreground'
-            href='/about#experience'
-          >
-            View all
-            <Icons.arrowRight className='icon-arrow-button ml-1 inline size-3' />
-          </Link>
-        </PanelAction>
       </PanelHeader>
       <WorkExperience experiences={experiences.slice(0, previewCount)} />
+      <PanelButton href='/about#experience'>View all experience</PanelButton>
     </Panel>
   )
 }

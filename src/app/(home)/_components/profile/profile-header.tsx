@@ -30,7 +30,7 @@ export function ProfileHeader() {
           <h1 className='-translate-y-px font-normal text-[2rem]/none tracking-tighter sm:text-[2.5rem]/none'>
             <HeroName />
           </h1>
-          <span className='mr-3 ml-auto hidden items-center gap-1.5 rounded-full border border-line border-dashed px-2 py-0.5 font-mono text-[11px] text-muted-foreground min-[28rem]:inline-flex'>
+          <span className='mr-3 ml-auto hidden items-center gap-1.5 border border-line border-dashed px-2 py-0.5 font-mono text-[11px] text-muted-foreground min-[28rem]:inline-flex'>
             <span aria-hidden className='relative flex size-1.5'>
               <span className='absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-60 motion-reduce:animate-none' />
               <span className='relative inline-flex size-1.5 rounded-full bg-emerald-500' />

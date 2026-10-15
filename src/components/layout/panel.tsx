@@ -1,5 +1,8 @@
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
+import Link from 'next/link'
 import type { ComponentProps } from 'react'
+import { Icons } from '@/components/icons/icons'
+import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export function Panel({ className, ...props }: ComponentProps<'section'>) {
@@ -68,5 +71,27 @@ export function PanelAction({ className, ...props }: ComponentProps<'div'>) {
 export function PanelContent({ className, ...props }: ComponentProps<'div'>) {
   return (
     <div className={cn('p-4', className)} data-slot='panel-body' {...props} />
+  )
+}
+
+// Full-width square button that sits flush on the panel's bottom edge
+export function PanelButton({
+  className,
+  children,
+  ...props
+}: ComponentProps<typeof Link>) {
+  return (
+    <Link
+      className={cn(
+        buttonVariants({ shape: 'square', variant: 'default' }),
+        'h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90',
+        className
+      )}
+      data-slot='panel-button'
+      {...props}
+    >
+      {children}
+      <Icons.arrowRight className='icon-arrow-button size-4' />
+    </Link>
   )
 }

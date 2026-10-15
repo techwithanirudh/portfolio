@@ -1,14 +1,11 @@
-import Link from 'next/link'
-import { Icons } from '@/components/icons/icons'
 import {
   Panel,
+  PanelButton,
   PanelContent,
   PanelHeader,
   PanelTitle,
 } from '@/components/layout/panel'
-import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
-import { cn } from '@/lib/utils'
 
 const Contact = () => (
   <Panel>
@@ -24,26 +21,15 @@ const Contact = () => (
           Got a question, an idea, or a weird project? My inbox is open, and the
           dog is always listening.
         </p>
-        <div className='flex flex-wrap items-center gap-2'>
-          <Link
-            className={cn(
-              buttonVariants({ size: 'lg', variant: 'default' }),
-              'rounded-full'
-            )}
-            href='/contact'
-          >
-            Contact me
-            <Icons.arrowRight className='icon-arrow-button size-4' />
-          </Link>
-          <a
-            className='font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
-            href='mailto:hello@techwithanirudh.com'
-          >
-            hello@techwithanirudh.com
-          </a>
-        </div>
+        <a
+          className='font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+          href='mailto:hello@techwithanirudh.com'
+        >
+          hello@techwithanirudh.com
+        </a>
       </PanelContent>
     </ViewAnimation>
+    <PanelButton href='/contact'>Contact me</PanelButton>
   </Panel>
 )
 

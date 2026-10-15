@@ -20,7 +20,7 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
           <Logo alt={name} className='bg-transparent' logo={logo} size={46} />
         </div>
         {featured && (
-          <div className='absolute -top-1 -right-1 rounded-full bg-primary p-1'>
+          <div className='absolute -top-1 -right-1 bg-primary p-1'>
             <Icons.featured className='size-3 text-primary-foreground' />
           </div>
         )}

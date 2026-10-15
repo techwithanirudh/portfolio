@@ -14,7 +14,7 @@ export const Hero = () => (
       description="Have a question or want to connect? Send me a message and I'll reply within a week."
       title='Contact Me'
     />
-    <div className='mx-4 mt-3 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>
+    <div className='mx-4 mt-3 flex w-min flex-row gap-4 bg-card p-1.5 text-card-foreground'>
       {socials.map((social, index) => (
         <ViewAnimation
           blur={false}
@@ -29,7 +29,7 @@ export const Hero = () => (
               render={
                 <a
                   aria-label={social.name}
-                  className='icon-pop flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
+                  className='icon-pop flex items-center justify-center p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
                   href={social.url}
                   key={social.name}
                   rel='noopener noreferrer'

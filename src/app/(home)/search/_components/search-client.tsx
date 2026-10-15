@@ -22,7 +22,7 @@ import { cn } from '@/lib/utils'
 
 const ItemBadge = ({ label }: { label: string }) => (
   <span className='pointer-events-none absolute inset-y-0 right-5 flex items-center'>
-    <span className='rounded-full border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
+    <span className='border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
       {label}
     </span>
   </span>

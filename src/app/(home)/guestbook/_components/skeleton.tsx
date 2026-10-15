@@ -20,8 +20,8 @@ export function GuestbookEntriesSkeleton() {
           <Skeleton className='h-5 w-4/5' />
           <div className='flex w-full items-end justify-between gap-4'>
             <div className='flex flex-wrap gap-2'>
-              <Skeleton className='h-7 w-16 rounded-full' />
-              <Skeleton className='h-7 w-14 rounded-full' />
+              <Skeleton className='h-7 w-16' />
+              <Skeleton className='h-7 w-14' />
             </div>
             <Skeleton className='h-[63px] w-[140px] rounded border border-border border-dashed' />
           </div>

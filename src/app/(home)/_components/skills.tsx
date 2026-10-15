@@ -98,7 +98,7 @@ const Skills = () => (
                   {items.map(({ label, icon, href }) => (
                     <li className='flex' key={label}>
                       <Badge
-                        className='group/tag gap-1.5 rounded-full px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
+                        className='group/tag gap-1.5 px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
                         render={
                           <a
                             href={href}

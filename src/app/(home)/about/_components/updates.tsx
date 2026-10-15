@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ViewTransition } from 'react'
-import { Icons } from '@/components/icons/icons'
+import { PanelButton } from '@/components/layout/panel'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { ViewAnimation } from '@/components/view-animation'
@@ -50,13 +50,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => (
         </ViewAnimation>
       ))}
     </ul>
-    <Link
-      className='group screen-line-top flex items-center justify-center gap-1.5 py-3 font-mono text-muted-foreground text-xs transition-colors hover:bg-card hover:text-foreground'
-      href='/blog'
-    >
-      All posts
-      <Icons.arrowRight className='size-3.5 transition-transform group-hover:translate-x-0.5' />
-    </Link>
+    <PanelButton href='/blog'>All posts</PanelButton>
   </Section>
 )
 

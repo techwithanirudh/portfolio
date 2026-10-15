@@ -51,9 +51,15 @@
   --color-input: var(--color-fd-border);
   --color-ring: var(--color-fd-ring);
 
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  /* an1rudh is all square: every radius token resolves to 0 */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
 
   /* fonts */
   --font-sans: var(--font-geist-sans);
@@ -77,7 +83,7 @@ html > body[data-scroll-locked] {
 
 @layer base {
   :root {
-    --radius: 0.5rem;
+    --radius: 0px;
     --typography-hero-width: 56rem;
     --typography-title-width: 40rem;
     --typography-body-width: 60ch;

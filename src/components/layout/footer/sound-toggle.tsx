@@ -15,7 +15,7 @@ export function SoundToggle() {
   return (
     <button
       aria-pressed={enabled}
-      className='inline-flex h-7 items-center gap-1.5 rounded-full px-2 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
+      className='inline-flex h-7 items-center gap-1.5 px-2 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
       data-sound='off'
       onClick={() => {
         if (enabled) {
