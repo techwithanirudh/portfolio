@@ -6,8 +6,8 @@ import { description as homeDescription } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
 import Contact from '../_components/contact'
 import Experience from './_components/experience'
+import Feed from './_components/feed'
 import Hero from './_components/hero'
-import More from './_components/more'
 import Story from './_components/story'
 
 export const metadata: Metadata = createMetadata({
@@ -32,8 +32,7 @@ export default function AboutPage() {
         <Separator />
         <Experience />
         <Separator />
-        <More />
-        <Separator />
+        <Feed />
         <Contact />
       </Wrapper>
     </>
