@@ -17,7 +17,7 @@ import {
 } from '@/components/features/search/utils/groups'
 import { Icons } from '@/components/icons/icons'
 import {
-  Command,
+  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -25,13 +25,6 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 import { signOut, useSession } from '@/lib/auth-client'
@@ -248,7 +241,9 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   )
 
   return (
-    <Dialog
+    <CommandDialog
+      commandProps={{ onKeyDown: handleKeyDown, shouldFilter: false }}
+      description='Search or jump to a page'
       onOpenChange={(next) => {
         if (!next) {
           setSearch('')
@@ -256,75 +251,58 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
         onOpenChange(next)
       }}
       open={open}
+      title='Command Palette'
     >
-      <DialogContent
-        className='top-0 flex max-w-full translate-y-0 flex-col gap-0 rounded-none! border-none bg-muted p-1 shadow-2xl ring-0 sm:top-1/3 sm:max-w-lg sm:rounded-2xl!'
-        data-lenis-prevent
-        showCloseButton={false}
-      >
-        <DialogHeader className='sr-only'>
-          <DialogTitle>Command Palette</DialogTitle>
-          <DialogDescription>Search or jump to a page</DialogDescription>
-        </DialogHeader>
-        <Command
-          className='rounded-none bg-transparent'
-          onKeyDown={handleKeyDown}
-          shouldFilter={false}
+      <CommandInput
+        onValueChange={setSearch}
+        placeholder='Type a command or search...'
+        value={search}
+      />
+
+      <div className='rounded-xl bg-background ring-1 ring-border'>
+        <CommandList
+          className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
+          data-lenis-prevent
         >
-          <CommandInput
-            onValueChange={setSearch}
-            placeholder='Type a command or search...'
-            value={search}
-          />
+          {groups.map(({ group, items }, i) => (
+            <Fragment key={group}>
+              {i > 0 && <CommandSeparator />}
+              <CommandGroup heading={group}>
+                {items.map(renderCommandItem)}
+              </CommandGroup>
+            </Fragment>
+          ))}
 
-          <div className='rounded-xl bg-background ring-1 ring-border'>
-            <CommandList
-              className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
-              data-lenis-prevent
-            >
-              {groups.map(({ group, items }, i) => (
-                <Fragment key={group}>
-                  {i > 0 && <CommandSeparator />}
-                  <CommandGroup heading={group}>
-                    {items.map(renderCommandItem)}
-                  </CommandGroup>
-                </Fragment>
-              ))}
+          {!isEmpty && query.isLoading && (
+            <div className='flex items-center justify-center py-6'>
+              <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
+            </div>
+          )}
 
-              {!isEmpty && query.isLoading && (
-                <div className='flex items-center justify-center py-6'>
-                  <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
-                </div>
-              )}
+          {hasNoResults && (
+            <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
+          )}
 
-              {hasNoResults && (
-                <CommandEmpty>
-                  No results for &ldquo;{search}&rdquo;
-                </CommandEmpty>
-              )}
+          {isEmpty ? (
+            <SearchResultsList groups={tagGroups} onSelect={go} />
+          ) : null}
 
-              {isEmpty ? (
-                <SearchResultsList groups={tagGroups} onSelect={go} />
-              ) : null}
+          {afterGroups.map(({ group, items }) => (
+            <Fragment key={group}>
+              <CommandSeparator />
+              <CommandGroup heading={group}>
+                {items.map(renderCommandItem)}
+              </CommandGroup>
+            </Fragment>
+          ))}
 
-              {afterGroups.map(({ group, items }) => (
-                <Fragment key={group}>
-                  <CommandSeparator />
-                  <CommandGroup heading={group}>
-                    {items.map(renderCommandItem)}
-                  </CommandGroup>
-                </Fragment>
-              ))}
+          {isEmpty ? null : (
+            <SearchResultsList groups={tagGroups} onSelect={go} />
+          )}
+        </CommandList>
+      </div>
 
-              {isEmpty ? null : (
-                <SearchResultsList groups={tagGroups} onSelect={go} />
-              )}
-            </CommandList>
-          </div>
-
-          <CommandMenuFooter />
-        </Command>
-      </DialogContent>
-    </Dialog>
+      <CommandMenuFooter />
+    </CommandDialog>
   )
 }

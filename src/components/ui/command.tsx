@@ -1,5 +1,7 @@
 "use client"
 
+// CommandDialog and CommandInput adapted from https://github.com/ncdai/chanhdai.com (MIT, (c) Chánh Đại)
+
 import * as React from "react"
 import { Command as CommandPrimitive } from "cmdk"
 import { cn } from "cn"
@@ -13,10 +15,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import {
-  InputGroup,
-  InputGroupAddon,
-} from "@/components/ui/input-group"
 
 function Command({
   className,
@@ -26,7 +24,7 @@ function Command({
     <CommandPrimitive
       data-slot="command"
       className={cn(
-        "flex size-full flex-col overflow-hidden rounded-xl! bg-popover p-1 text-popover-foreground",
+        "flex size-full flex-col overflow-hidden text-popover-foreground",
         className
       )}
       {...props}
@@ -38,30 +36,40 @@ function CommandDialog({
   title = "Command Palette",
   description = "Search for a command to run...",
   children,
-  className,
-  showCloseButton = false,
+  commandProps,
   ...props
 }: Omit<React.ComponentProps<typeof Dialog>, "children"> & {
   title?: string
   description?: string
-  className?: string
-  showCloseButton?: boolean
+  commandProps?: React.ComponentProps<typeof Command>
   children: React.ReactNode
 }) {
   return (
     <Dialog {...props}>
       <DialogHeader className="sr-only">
-        <DialogTitle>{title}</DialogTitle>
+        <DialogTitle render={<span />}>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
+
       <DialogContent
-        className={cn(
-          "top-1/3 translate-y-0 overflow-hidden rounded-2xl! p-0",
-          className
-        )}
-        showCloseButton={showCloseButton}
+        data-slot="command-dialog-content"
+        className="rounded-2xl bg-surface p-0 shadow-2xl outline-none max-sm:top-16 max-sm:translate-y-0 sm:max-w-lg"
+        showCloseButton={false}
+        showOverlay={false}
       >
-        {children}
+        <Command
+          {...commandProps}
+          className={cn(
+            "px-1 outline-none",
+            "**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-input-wrapper]_svg]:size-5 **:[[cmdk-input]]:h-10",
+            "**:[[cmdk-group]]:px-1",
+            "**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground",
+            "[&_[cmdk-item]_svg]:size-5 **:[[cmdk-item]]:p-2",
+            commandProps?.className
+          )}
+        >
+          {children}
+        </Command>
       </DialogContent>
     </Dialog>
   )
@@ -72,20 +80,19 @@ function CommandInput({
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
-    <div data-slot="command-input-wrapper" className="p-1 pb-0">
-      <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
-        <CommandPrimitive.Input
-          data-slot="command-input"
-          className={cn(
-            "w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
-            className
-          )}
-          {...props}
-        />
-        <InputGroupAddon>
-          <Icons.search strokeWidth={2} className="size-4 shrink-0 opacity-50" />
-        </InputGroupAddon>
-      </InputGroup>
+    <div
+      data-slot="command-input-wrapper"
+      className="flex h-10 items-center gap-2 px-3"
+    >
+      <Icons.search className="size-4 shrink-0 opacity-50" />
+      <CommandPrimitive.Input
+        data-slot="command-input"
+        className={cn(
+          "flex h-10 w-full rounded-lg bg-transparent py-2 text-base outline-hidden placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+          className
+        )}
+        {...props}
+      />
     </div>
   )
 }
