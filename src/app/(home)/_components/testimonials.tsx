@@ -14,14 +14,12 @@ const initials = (name: string) =>
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
   <Section>
     <SectionHeader title='Testimonials' />
-    {/* Side by side cells share one height, so uneven quotes stop reading
-        as a lopsided stack */}
-    <ul className='grid divide-y divide-line md:grid-cols-3 md:divide-x md:divide-y-0'>
+    <ul className='divide-y divide-line'>
       {testimonials.slice(0, 3).map((testimonial, index) => (
         <ViewAnimation
           as='li'
           blur={false}
-          className='group flex flex-col justify-between gap-4 p-4 transition-colors hover:bg-card'
+          className='group flex flex-col gap-3 p-4 transition-colors hover:bg-card'
           delay={0.05 * index}
           initial={{ opacity: 0, translateY: -6 }}
           key={testimonial.author.name}
