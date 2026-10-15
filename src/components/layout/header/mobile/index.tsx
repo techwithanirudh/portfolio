@@ -11,7 +11,7 @@ import { FloatingPill } from '@/components/layout/header/mobile/pill'
 import { useOiiaMode } from '@/components/oiia'
 
 const MENU_OPEN_ATTRIBUTE = 'data-mobile-menu-open'
-const KEEP_OPEN_SELECTOR = '#mobile-navigation-menu, [data-mobile-nav-pill]'
+const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
 
 // Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
 // does not re-read their color when it changes in place, but it re-samples
@@ -66,7 +66,8 @@ export function MobileNav() {
   const pathname = usePathname()
   const previousPathname = useRef(pathname)
   const { setOpenSearch } = useSearchContext()
-  const { setOpen: setOpenAssistant } = useAssistantContext()
+  const { open: assistantOpen, setOpen: setOpenAssistant } =
+    useAssistantContext()
   const { mode } = useOiiaMode()
 
   const closeMenu = useCallback(() => setOpen(false), [])
@@ -75,10 +76,10 @@ export function MobileNav() {
   useMobileMenuScrim(open, closeMenu)
 
   useEffect(() => {
-    if (mode === 'oiia') {
+    if (mode === 'oiia' || assistantOpen) {
       closeMenu()
     }
-  }, [closeMenu, mode])
+  }, [assistantOpen, closeMenu, mode])
 
   useEffect(() => {
     if (previousPathname.current === pathname) {
