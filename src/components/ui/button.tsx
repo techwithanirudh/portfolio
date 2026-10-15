@@ -9,11 +9,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'group relative isolate inline-flex items-center justify-center overflow-hidden bg-primary text-left text-primary-foreground font-medium transition duration-300 ease-[cubic-bezier(0.4,0.36,0,1)] shadow-[0_1px_0_rgb(255_255_255/0.14)_inset,0_1px_2px_rgb(0_0_0/0.1),0_4px_10px_-2px_rgb(0_0_0/0.16)] ring-1 ring-primary before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-gradient-to-b before:from-white/20 before:opacity-50 before:transition-opacity before:duration-300 before:ease-[cubic-bezier(0.4,0.36,0,1)] hover:before:opacity-100 after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:bg-gradient-to-b after:from-white/10 after:from-[46%] after:to-[54%] after:mix-blend-overlay active:after:scale-[1.06]',
+          'group relative isolate inline-flex items-center justify-center overflow-hidden bg-primary text-left text-primary-foreground font-medium transition duration-300 ease-[cubic-bezier(0.4,0.36,0,1)] shadow-xs shadow-[0_1px_theme(colors.white/0.07)_inset,0_1px_3px_theme(colors.gray.900/0.2)] ring-1 ring-primary before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-gradient-to-b before:from-white/20 before:opacity-50 before:transition-opacity before:duration-300 before:ease-[cubic-bezier(0.4,0.36,0,1)] hover:before:opacity-100 after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:bg-gradient-to-b after:from-white/10 after:from-[46%] after:to-[54%] after:mix-blend-overlay active:after:scale-[1.06]',
         outline:
           'inline-flex items-center justify-center border border-transparent bg-background text-foreground shadow ring-1 ring-black/10 whitespace-nowrap font-medium hover:bg-accent data-[hover]:bg-accent data-[disabled]:bg-transparent data-[disabled]:opacity-40 aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30 dark:hover:bg-input/50',
         secondary:
-          'group relative isolate inline-flex items-center justify-center overflow-hidden bg-secondary text-left text-secondary-foreground font-medium transition duration-300 ease-[cubic-bezier(0.4,0.36,0,1)] shadow-[0_1px_0_rgb(255_255_255/0.14)_inset,0_1px_2px_rgb(0_0_0/0.1),0_4px_10px_-2px_rgb(0_0_0/0.16)] ring-1 ring-secondary before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-gradient-to-b before:from-white/20 before:opacity-50 before:transition-opacity before:duration-300 before:ease-[cubic-bezier(0.4,0.36,0,1)] hover:before:opacity-100 after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:bg-gradient-to-b after:from-white/10 after:from-[46%] after:to-[54%] after:mix-blend-overlay active:after:scale-[1.06] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
+          'group relative isolate inline-flex items-center justify-center overflow-hidden bg-secondary text-left text-secondary-foreground font-medium transition duration-300 ease-[cubic-bezier(0.4,0.36,0,1)] shadow-xs shadow-[0_1px_theme(colors.white/0.07)_inset,0_1px_3px_theme(colors.gray.900/0.2)] ring-1 ring-secondary before:pointer-events-none before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:bg-gradient-to-b before:from-white/20 before:opacity-50 before:transition-opacity before:duration-300 before:ease-[cubic-bezier(0.4,0.36,0,1)] hover:before:opacity-100 after:pointer-events-none after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:bg-gradient-to-b after:from-white/10 after:from-[46%] after:to-[54%] after:mix-blend-overlay active:after:scale-[1.06] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground',
         ghost:
           'hover:bg-accent hover:text-accent-foreground aria-expanded:bg-accent aria-expanded:text-accent-foreground dark:hover:bg-accent/50',
         dashed:
@@ -37,8 +37,7 @@ const buttonVariants = cva(
       },
       shape: {
         default: '',
-        square:
-          'rounded-none shadow-none before:rounded-none after:rounded-none',
+        square: 'rounded-none before:rounded-none after:rounded-none',
       },
     },
     defaultVariants: {

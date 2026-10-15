@@ -121,7 +121,7 @@ export const Header = ({
               mode === 'oiia' ? { ...nav, title: OIIA_TITLE } : nav,
               {
                 className:
-                  'inline-flex items-center gap-2.5 rounded-sm font-semibold tracking-[-0.5px] outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                  'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
               }
             )}
           </ViewAnimation>
