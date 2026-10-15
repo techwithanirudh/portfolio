@@ -1,6 +1,7 @@
 'use client'
 
 import { useSound } from '@web-kits/audio/react'
+import { useState } from 'react'
 import { useMascot } from '@/components/features/assistant/mascot'
 import { AvatarIcon } from '@/components/features/assistant/mascot/avatar-icon'
 import {
@@ -23,9 +24,10 @@ import { tap } from '@/lib/audio/minimal'
 export function AvatarMenu() {
   const { avatar, setAvatar } = useMascot()
   const playTap = useSound(tap)
+  const [open, setOpen] = useState(false)
 
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={setOpen} open={open}>
       <DropdownMenuTrigger
         aria-label='Change avatar'
         className='flex h-full min-w-0 flex-1 items-center gap-2 rounded-none bg-fd-card px-3 text-fd-card-foreground transition-colors hover:bg-fd-accent/50 focus-visible:outline-2 focus-visible:outline-fd-ring focus-visible:-outline-offset-2'
@@ -40,6 +42,7 @@ export function AvatarMenu() {
           onValueChange={(value) => {
             playTap()
             setAvatar(value as AvatarName)
+            setOpen(false)
           }}
           value={avatar}
         >
