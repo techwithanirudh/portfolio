@@ -110,6 +110,7 @@ export const GuestbookForm = () => {
         </div>
         <Button
           className={buttonClassName}
+          data-sound-hover
           onClick={() => openSignIn('/guestbook')}
           shape='square'
         >

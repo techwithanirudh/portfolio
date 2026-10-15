@@ -59,6 +59,7 @@ export function SearchRedirectInput({
           }
         }}
         placeholder={placeholder}
+        type='search'
         value={value}
       />
       <InputGroupAddon

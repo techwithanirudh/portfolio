@@ -2,7 +2,7 @@
 
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
 import { format, parseISO } from 'date-fns'
-import { Suspense, use, useEffect, useRef } from 'react'
+import { Suspense, use, useEffect, useRef, useState } from 'react'
 import {
   type Activity,
   ContributionGraph,
@@ -14,11 +14,7 @@ import {
 } from '@/components/features/contributions'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent } from '@/components/ui/tooltip'
 import { socials } from '@/constants/navigation'
 import { cn } from '@/lib/utils'
 
@@ -37,9 +33,44 @@ const LEVELS = cn(
 
 const githubUrl = socials.find((social) => social.name === 'GitHub')?.url
 
+interface HoveredDay {
+  count: number
+  date: string
+  rect: SVGRectElement
+}
+
+// A year is ~370 blocks, so one tooltip follows the pointer instead of
+// mounting a tooltip per block
+const useDayTooltip = () => {
+  const [day, setDay] = useState<HoveredDay | null>(null)
+  const [open, setOpen] = useState(false)
+
+  const onPointerOver = (event: React.PointerEvent) => {
+    const rect = (event.target as Element).closest<SVGRectElement>(
+      'rect[data-date]'
+    )
+    if (!rect?.dataset.date) {
+      return
+    }
+    setDay({
+      count: Number(rect.dataset.count),
+      date: rect.dataset.date,
+      rect,
+    })
+    setOpen(true)
+  }
+
+  return {
+    day,
+    handlers: { onPointerLeave: () => setOpen(false), onPointerOver },
+    open,
+  }
+}
+
 const ContributionsGraph = ({ contributions }: ContributionsProps) => {
   const data = use(contributions)
   const ref = useRef<HTMLDivElement>(null)
+  const tooltip = useDayTooltip()
 
   // Narrow screens scroll the year, start on the latest weeks
   useEffect(() => {
@@ -72,24 +103,24 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
             aria-hidden
             className='no-scrollbar px-4 font-mono text-[11px] **:data-[slot=month-labels]:text-muted-foreground md:[&>svg]:h-auto md:[&>svg]:w-full'
             title='GitHub Contributions'
+            {...tooltip.handlers}
           >
             {({ activity, dayIndex, weekIndex }) => (
-              <Tooltip>
-                <TooltipTrigger render={<g />}>
-                  <ContributionGraphBlock
-                    activity={activity}
-                    className={LEVELS}
-                    dayIndex={dayIndex}
-                    weekIndex={weekIndex}
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  {activity.count} contribution{activity.count === 1 ? '' : 's'}{' '}
-                  on {format(parseISO(activity.date), 'd MMM yyyy')}
-                </TooltipContent>
-              </Tooltip>
+              <ContributionGraphBlock
+                activity={activity}
+                className={LEVELS}
+                dayIndex={dayIndex}
+                weekIndex={weekIndex}
+              />
             )}
           </ContributionGraphCalendar>
+          <Tooltip open={tooltip.open}>
+            <TooltipContent anchor={tooltip.day?.rect}>
+              {tooltip.day
+                ? `${tooltip.day.count} contribution${tooltip.day.count === 1 ? '' : 's'} on ${format(parseISO(tooltip.day.date), 'd MMM yyyy')}`
+                : null}
+            </TooltipContent>
+          </Tooltip>
 
           <ContributionGraphFooter className='flex-wrap gap-y-2 px-4 font-mono text-xs'>
             <ContributionGraphTotalCount>

@@ -97,7 +97,11 @@ void main() {
 `
 
 const CELL_PX = 9
-const MAX_DPR = 2
+// The dots are 9px cells, so 1.5x is already crisp and saves ~45% of the
+// fragments a 2x screen would shade
+const MAX_DPR = 1.5
+// A slow drift doesn't need 60fps; 30 halves the GPU and main-thread cost
+const FRAME_MS = 1000 / 30
 
 type Rgb = [number, number, number]
 
@@ -185,6 +189,7 @@ export function DitherField({ className }: { className?: string }) {
     const pointer = { x: -1, y: -1 }
     let visible = true
     let frame = 0
+    let lastDraw = 0
     const start = performance.now()
     let dpr = 1
     let revealed = false
@@ -221,9 +226,15 @@ export function DitherField({ className }: { className?: string }) {
     }
 
     const loop = (now: number) => {
-      draw(now)
+      // A little slack so rAF jitter on 60Hz screens doesn't drop us to 20fps
+      if (now - lastDraw >= FRAME_MS - 4) {
+        lastDraw = now
+        draw(now)
+      }
       frame =
-        visible && !reducedMotion.matches ? requestAnimationFrame(loop) : 0
+        visible && !document.hidden && !reducedMotion.matches
+          ? requestAnimationFrame(loop)
+          : 0
     }
 
     const kick = () => {
@@ -262,7 +273,13 @@ export function DitherField({ className }: { className?: string }) {
       kick()
       draw(performance.now())
     }
+    const onVisibilityChange = () => {
+      if (!document.hidden) {
+        kick()
+      }
+    }
     reducedMotion.addEventListener('change', onMotionChange)
+    document.addEventListener('visibilitychange', onVisibilityChange)
     window.addEventListener('pointermove', onPointerMove, { passive: true })
 
     resize()
@@ -273,6 +290,7 @@ export function DitherField({ className }: { className?: string }) {
       resizeObserver.disconnect()
       intersection.disconnect()
       reducedMotion.removeEventListener('change', onMotionChange)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
       window.removeEventListener('pointermove', onPointerMove)
       gl.deleteBuffer(buffer)
       gl.deleteProgram(program)

@@ -677,6 +677,11 @@ html > body[data-scroll-locked] {
   }
 }
 
+/* The resume is a sheet of paper, no mascot on it */
+:root:has([data-resume]) [data-mascot] {
+  display: none !important;
+}
+
 /* Focus for flush, ruled text fields: a lifted background and an inset
    accent bar, since an outside ring would collide with the rules */
 @utility field-focus {
