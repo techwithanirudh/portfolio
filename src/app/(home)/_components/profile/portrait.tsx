@@ -3,7 +3,8 @@
 import { useEffect, useRef } from 'react'
 
 // Matches public/images/portrait.svg: the drawing minus the eyes and the sky,
-// which is painted behind it as a CSS gradient
+// which is painted behind it as a CSS gradient (the cover shader's palette in
+// dark mode)
 const VIEW_BOX = '0 0 947 1160'
 // How far (in SVG units) the eyes can drift towards the cursor
 const MAX_OFFSET = 24
@@ -49,7 +50,7 @@ export function Portrait() {
   }, [])
 
   return (
-    <div className='relative size-full select-none bg-[linear-gradient(160deg,#c3b6fa,#9fccfa_55%,#7fd0f5)]'>
+    <div className='relative size-full select-none bg-[linear-gradient(160deg,#c3b6fa,#9fccfa_55%,#7fd0f5)] dark:bg-[linear-gradient(160deg,#7f5ce0,#5a7fe0_55%,#38a8e6)]'>
       {/* biome-ignore lint/performance/noImgElement: static SVG, next/image adds nothing here */}
       <img
         alt='Portrait of an1rudh'

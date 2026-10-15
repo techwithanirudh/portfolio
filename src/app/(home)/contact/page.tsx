@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ContactPageJsonLd } from '@/components/json-ld'
+import Separator from '@/components/layout/sections/separator'
 import {
   SplitSection,
   SplitSectionContent,
@@ -38,6 +39,7 @@ export default function Contact(): React.ReactElement {
           </ViewAnimation>
         </SplitSectionContent>
       </SplitSection>
+      <Separator />
       <FAQ />
       <ContactPageJsonLd
         description='Contact me with questions or feedback.'

@@ -207,6 +207,9 @@ export function DitherField({ className }: { className?: string }) {
       gl.uniform3f(uViolet, ...PALETTE.violet)
       gl.uniform3f(uAzure, ...PALETTE.azure)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
+      // Some browsers paint a blank WebGL canvas white until the first frame,
+      // so it stays hidden until there is something to show
+      canvas.dataset.ready = ''
     }
 
     const loop = (now: number) => {
@@ -271,7 +274,10 @@ export function DitherField({ className }: { className?: string }) {
   return (
     <canvas
       aria-hidden
-      className={cn('pointer-events-none size-full', className)}
+      className={cn(
+        'pointer-events-none size-full opacity-0 transition-opacity duration-700 data-ready:opacity-100',
+        className
+      )}
       ref={canvasRef}
     />
   )

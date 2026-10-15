@@ -17,7 +17,9 @@ const links = [
 export const Footer = () => (
   <footer className='pb-24 md:pb-0'>
     <div className='container mx-auto'>
-      <div className='screen-line-top screen-line-bottom border-line border-x'>
+      {/* The top rule sits 1px up so it lands on the last section's bottom
+          rule instead of doubling it */}
+      <div className='screen-line-top screen-line-bottom border-line border-x before:-top-px'>
         {/* Every page ends on the same hatched band before the footer */}
         <div aria-hidden className='screen-line-bottom h-8 bg-dashed' />
         <ViewAnimation
@@ -42,14 +44,14 @@ export const Footer = () => (
                 <li key={social.name}>
                   <a
                     aria-label={social.name}
-                    className='transition-colors hover:text-foreground'
+                    className='group block transition-colors hover:text-foreground'
                     href={social.url}
                     rel='noopener noreferrer'
                     target={
                       social.url.startsWith('http') ? '_blank' : undefined
                     }
                   >
-                    {social.icon}
+                    <span className='icon-tilt block'>{social.icon}</span>
                   </a>
                 </li>
               ))}

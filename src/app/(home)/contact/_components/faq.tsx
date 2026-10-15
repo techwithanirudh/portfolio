@@ -11,7 +11,6 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { ViewAnimation } from '@/components/view-animation'
-import { InlineLink } from './inline-link'
 
 const faq = [
   {
@@ -41,14 +40,7 @@ export const FAQ = () => (
     <SplitSectionSidebar>
       <SectionHeader
         align='left'
-        description={
-          <>
-            Still have questions?{' '}
-            <InlineLink className='no-underline' href='/contact'>
-              Contact Me
-            </InlineLink>
-          </>
-        }
+        description='The usual questions. Anything else, the form above reaches me.'
         title='Frequently Asked Questions'
       />
     </SplitSectionSidebar>

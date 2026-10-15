@@ -90,8 +90,10 @@ export default async function Page(props: {
             the section's screen-wide line, so the two never double up */}
         <ul className='grid grid-cols-1 md:grid-cols-2'>
           {work.map((entry, index) => (
+            // The column rule is an overlay, not a border, so both cells keep
+            // the same width and their 16:9 covers line up
             <li
-              className='border-line border-b md:odd:border-r'
+              className='relative border-line border-b md:odd:after:absolute md:odd:after:inset-y-0 md:odd:after:right-0 md:odd:after:z-10 md:odd:after:w-px md:odd:after:bg-line'
               key={entry.url}
             >
               <ViewAnimation
