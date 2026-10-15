@@ -1,9 +1,10 @@
+import { Fragment } from 'react'
 import type { PoseName } from '@/components/features/assistant/mascot/constants'
 import { SimbaRig } from '@/components/features/assistant/mascot/rig'
+import { RuledGrid } from '@/components/layout/ruled-grid'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { ViewAnimation } from '@/components/view-animation'
-import { cn } from '@/lib/utils'
 
 const chapters = [
   {
@@ -36,28 +37,26 @@ const chapters = [
   },
 ]
 
-const snapshots: { caption: string; pose: PoseName; tilt: string }[] = [
-  { caption: 'Curious', pose: 'curious', tilt: '-rotate-3' },
-  { caption: 'Treats?', pose: 'pleased', tilt: 'rotate-2' },
-  { caption: 'Full speed', pose: 'playful', tilt: '-rotate-2' },
+const snapshots: { caption: string; pose: PoseName }[] = [
+  { caption: 'Curious', pose: 'curious' },
+  { caption: 'Treats?', pose: 'pleased' },
+  { caption: 'Full speed', pose: 'playful' },
 ]
 
 const Snapshots = () => (
-  <div className='grid grid-cols-3 gap-3 py-2 sm:gap-6'>
-    {snapshots.map(({ caption, pose, tilt }) => (
+  <div className='col-span-full grid grid-cols-3 divide-x divide-line bg-background'>
+    {snapshots.map(({ caption, pose }) => (
       <figure
-        className={cn(
-          'flex flex-col items-center gap-2 border border-line bg-card p-2 pb-3 shadow-sm transition-transform duration-300 hover:rotate-0 hover:scale-[1.03]',
-          tilt
-        )}
+        className='group relative flex h-40 items-end justify-center sm:h-56'
         key={caption}
       >
-        <div className='flex aspect-square w-full items-end justify-center overflow-hidden bg-background'>
-          <SimbaRig className='h-[90%] w-auto' pose={pose} />
-        </div>
-        <figcaption className='font-mono text-muted-foreground text-xs'>
+        <figcaption className='absolute top-3 left-4 font-mono text-muted-foreground text-xs'>
           {caption}
         </figcaption>
+        <SimbaRig
+          className='h-[78%] w-auto transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none'
+          pose={pose}
+        />
       </figure>
     ))}
   </div>
@@ -70,23 +69,26 @@ export default function Story(): React.ReactElement {
         description='A quick intro about me and what I love to do.'
         title='Story'
       />
-      <div className='mx-auto flex max-w-2xl flex-col gap-12 px-4 py-10'>
-        {chapters.map((chapter) => (
-          <ViewAnimation key={chapter.title}>
-            <h3 className='border-line border-b pb-3 font-medium text-foreground text-lg tracking-tight'>
-              {chapter.title}
-            </h3>
-            <div className='mt-4 space-y-4 text-base/7 text-muted-foreground'>
-              {chapter.body.map((paragraph) => (
-                <p className='text-pretty' key={paragraph}>
-                  {paragraph}
-                </p>
-              ))}
-              {chapter.snapshots ? <Snapshots /> : null}
+      <RuledGrid className='grid-cols-1 sm:grid-cols-[13rem_1fr]'>
+        {chapters.map((chapter, index) => (
+          <Fragment key={chapter.title}>
+            <div className='flex gap-3 bg-background px-4 pt-4 pb-2 max-sm:border-b-0! sm:flex-col sm:gap-1 sm:pb-4'>
+              <span className='font-mono text-muted-foreground text-xs tabular-nums'>
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <h3 className='font-medium text-sm tracking-tight'>
+                {chapter.title}
+              </h3>
             </div>
-          </ViewAnimation>
+            <ViewAnimation className='space-y-3 text-pretty bg-background px-4 pt-2 pb-4 text-muted-foreground sm:pt-4'>
+              {chapter.body.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
+            </ViewAnimation>
+            {chapter.snapshots ? <Snapshots /> : null}
+          </Fragment>
         ))}
-      </div>
+      </RuledGrid>
     </Section>
   )
 }
