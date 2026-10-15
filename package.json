@@ -24,7 +24,7 @@
     "generate-previews": "bun run ./scripts/link-previews/generate.ts",
     "fix-previews": "bun run ./scripts/link-previews/fix.ts",
     "check:spelling": "cspell -c .cspell.jsonc --no-progress --no-summary --no-must-find-files --unique --cache",
-    "typegen": "fumadocs-mdx && next typegen",
+    "typegen": "next typegen && fumadocs-mdx",
     "typecheck": "bun run typegen && tsc --noEmit",
     "prepare": "lefthook install"
   },
