@@ -7,7 +7,7 @@ interface SeparatorProps {
 }
 
 const Separator = ({ className, variant = 'dashed' }: SeparatorProps) => (
-  <Section>
+  <Section sectionClassName='max-sm:hidden'>
     <div
       className={cn('h-8', variant === 'dashed' && 'bg-dashed', className)}
     />

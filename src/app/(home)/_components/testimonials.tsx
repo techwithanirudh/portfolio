@@ -1,5 +1,6 @@
 'use client'
 
+import { useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
@@ -52,10 +53,7 @@ const TestimonialCard = ({
         <p className='flex flex-row items-center gap-2 text-sm'>
           <span className='text-muted-foreground'>By</span>
           <Avatar className='h-6 w-6' outlined={false}>
-            <AvatarImage
-              alt={testimonial.author.name}
-              src={testimonial.author.image}
-            />
+            <AvatarImage alt='' src={testimonial.author.image} />
             <AvatarFallback>
               {testimonial.author.name
                 .split(' ')
@@ -74,9 +72,10 @@ const TestimonialCard = ({
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
+  const prefersReducedMotion = useReducedMotion()
 
   useEffect(() => {
-    if (!api) {
+    if (!api || prefersReducedMotion) {
       return
     }
 
@@ -91,7 +90,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
     }, 2500)
 
     return () => clearTimeout(timer)
-  }, [api, current])
+  }, [api, current, prefersReducedMotion])
 
   return (
     <Section className='relative w-full pt-10'>
