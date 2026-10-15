@@ -12,6 +12,8 @@ import {
   useFormState,
 } from 'react-hook-form'
 
+import { Icons } from '@/components/icons/icons'
+import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
@@ -160,6 +162,49 @@ function FormMessage({ className, ...props }: React.ComponentProps<'p'>) {
   )
 }
 
+// Ruled rows for flush forms: each field draws its own bottom rule and its
+// hint sits under a rule of its own
+const flushItemClassName = 'gap-0 border-line border-b'
+const flushHintClassName = 'border-line border-t px-4 py-2 text-xs'
+
+const formStatusVariants = {
+  error: {
+    className:
+      'bg-destructive/15 text-destructive dark:border-destructive dark:bg-destructive dark:text-destructive-foreground',
+    icon: Icons.warning,
+  },
+  success: {
+    className: 'bg-emerald-500/15 text-emerald-500',
+    icon: Icons.success,
+  },
+}
+
+function FormStatus({
+  className,
+  variant,
+  children,
+}: {
+  className?: string
+  variant: keyof typeof formStatusVariants
+  children: React.ReactNode
+}) {
+  const { className: variantClassName, icon: Icon } =
+    formStatusVariants[variant]
+
+  return (
+    <Alert
+      className={cn(
+        'border-0 border-line border-t px-3 py-2 has-[>svg]:gap-x-1.5',
+        variantClassName,
+        className
+      )}
+    >
+      <Icon className='size-4' />
+      <AlertTitle className='mb-0 leading-normal'>{children}</AlertTitle>
+    </Alert>
+  )
+}
+
 export {
   Form,
   FormControl,
@@ -168,5 +213,8 @@ export {
   FormItem,
   FormLabel,
   FormMessage,
+  FormStatus,
+  flushHintClassName,
+  flushItemClassName,
   useFormField,
 }

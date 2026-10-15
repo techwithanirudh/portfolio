@@ -21,6 +21,9 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40',
         link: 'text-primary underline-offset-4 hover:underline',
+        // A flush cell in a ruled header row, like the blog post's actions
+        toolbar:
+          'border-none bg-transparent shadow-none hover:bg-card/80 hover:text-accent-foreground active:scale-none aria-expanded:bg-accent aria-expanded:text-accent-foreground dark:bg-transparent dark:hover:bg-accent/50',
       },
       size: {
         default:
@@ -35,15 +38,12 @@ const buttonVariants = cva(
           'size-8 rounded-[min(var(--radius-md),10px)] in-data-[slot=button-group]:rounded-md',
         'icon-lg': 'size-10',
       },
-      shape: {
-        default: '',
-        square: 'rounded-none before:rounded-none after:rounded-none',
-      },
     },
+    // Toolbar cells fill their row, so the height has to win over size
+    compoundVariants: [{ className: 'h-full', variant: 'toolbar' }],
     defaultVariants: {
       variant: 'default',
       size: 'default',
-      shape: 'default',
     },
   }
 )
@@ -52,13 +52,11 @@ function Button({
   className,
   variant = 'default',
   size = 'default',
-  shape = 'default',
   ...props
 }: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
   return (
     <ButtonPrimitive
-      className={cn(buttonVariants({ variant, size, shape, className }))}
-      data-shape={shape}
+      className={cn(buttonVariants({ variant, size, className }))}
       data-size={size}
       data-slot='button'
       data-variant={variant}
@@ -67,4 +65,8 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+// A bare icon control for headers, docks and menus
+const iconButtonClassName =
+  'flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground'
+
+export { Button, buttonVariants, iconButtonClassName }
