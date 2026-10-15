@@ -66,10 +66,10 @@ function CommandDialog({
           {...commandProps}
           className={cn(
             "px-1 outline-none",
-            "**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-input-wrapper]_svg]:size-5 **:[[cmdk-input]]:h-10",
+            "**:data-[slot=command-input-wrapper]:h-12 [&_[cmdk-input-wrapper]_svg]:size-4 **:[[cmdk-input]]:h-10",
             "**:[[cmdk-group]]:px-1",
             "**:[[cmdk-group-heading]]:px-2 **:[[cmdk-group-heading]]:font-medium **:[[cmdk-group-heading]]:text-muted-foreground",
-            "[&_[cmdk-item]_svg]:size-5 **:[[cmdk-item]]:p-2",
+            "[&_[cmdk-item]_svg]:size-4 **:[[cmdk-item]]:p-2",
             commandProps?.className
           )}
         >

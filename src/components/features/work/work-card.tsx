@@ -64,7 +64,7 @@ export const WorkCard = ({
             blur={false}
             className='relative aspect-video w-full border-line border-b bg-card/50'
             fill
-            imageClassName='object-cover transition-[scale] duration-500 ease-out will-change-transform group-hover:scale-[1.03] motion-reduce:transition-none'
+            imageClassName='object-cover transition-[scale,filter] duration-500 ease-out will-change-transform group-hover:scale-[1.03] group-hover:brightness-100 motion-reduce:transition-none dark:brightness-[0.85]'
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}
           />
