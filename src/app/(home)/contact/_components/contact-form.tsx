@@ -18,8 +18,16 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/lib/toast'
+import { cn } from '@/lib/utils'
 import { ContactSchema } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
+
+// Fields sit flush in the grid: each one is a ruled row, label on top
+const fieldClassName = 'gap-0 border-line border-b'
+const labelClassName = 'px-4 pt-3 pb-2'
+const inputClassName =
+  'h-11 rounded-none border-0 border-line border-t bg-transparent px-4 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
+const hintClassName = 'border-line border-t px-4 py-2 text-xs'
 
 const ContactFormInner = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
@@ -56,25 +64,25 @@ const ContactFormInner = () => {
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-8' onSubmit={handleSubmitWithAction}>
+      <form className='flex flex-col' onSubmit={handleSubmitWithAction}>
         <FormField
           control={form.control}
           name='name'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
+            <FormItem className={fieldClassName}>
+              <FormLabel className={labelClassName}>Name</FormLabel>
               <FormControl>
                 <Input
-                  className='bg-background'
+                  className={inputClassName}
                   placeholder='Jane Smith'
                   {...field}
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
               {form.formState.errors.name ? (
-                <FormMessage />
+                <FormMessage className={hintClassName} />
               ) : (
-                <FormDescription>
+                <FormDescription className={hintClassName}>
                   Your full name, so I know who I'm talking to.
                 </FormDescription>
               )}
@@ -85,20 +93,20 @@ const ContactFormInner = () => {
           control={form.control}
           name='email'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email address</FormLabel>
+            <FormItem className={fieldClassName}>
+              <FormLabel className={labelClassName}>Email address</FormLabel>
               <FormControl>
                 <Input
-                  className='bg-background'
+                  className={inputClassName}
                   placeholder='jane@acme.com'
                   {...field}
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
               {form.formState.errors.email ? (
-                <FormMessage />
+                <FormMessage className={hintClassName} />
               ) : (
-                <FormDescription>
+                <FormDescription className={hintClassName}>
                   I will never share your email with anyone else.
                 </FormDescription>
               )}
@@ -109,20 +117,23 @@ const ContactFormInner = () => {
           control={form.control}
           name='message'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Message</FormLabel>
+            <FormItem className={fieldClassName}>
+              <FormLabel className={labelClassName}>Message</FormLabel>
               <FormControl>
                 <Textarea
-                  className='max-h-[20rem] min-h-[10rem] resize-y bg-background'
+                  className={cn(
+                    inputClassName,
+                    'max-h-[20rem] min-h-[10rem] resize-y py-3'
+                  )}
                   placeholder="Hi there, I'm interested in..."
                   {...field}
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
               {form.formState.errors.message ? (
-                <FormMessage />
+                <FormMessage className={hintClassName} />
               ) : (
-                <FormDescription>
+                <FormDescription className={hintClassName}>
                   Please include at least 30 characters.
                 </FormDescription>
               )}
@@ -130,8 +141,9 @@ const ContactFormInner = () => {
           )}
         />
         <Button
-          className='w-full'
+          className='h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90'
           disabled={action.status === 'executing'}
+          shape='square'
           type='submit'
         >
           <span>Send Message</span>
@@ -148,7 +160,7 @@ const ContactFormInner = () => {
           )}
         </Button>
         {action.status === 'hasSucceeded' && (
-          <Alert className='border-emerald-500/15 bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+          <Alert className='rounded-none border-0 border-emerald-500/15 border-line border-t bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.success && action.result.data?.message
@@ -158,7 +170,7 @@ const ContactFormInner = () => {
           </Alert>
         )}
         {action.result.serverError && (
-          <Alert className='border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+          <Alert className='rounded-none border-0 border-destructive/15 border-line border-t bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
               {typeof action.result.serverError === 'string'

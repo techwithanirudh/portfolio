@@ -60,10 +60,12 @@ export const Footer = () => (
           whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='flex flex-wrap items-center justify-between gap-3 px-4 py-3'>
-            <UserButton />
-            <p className='font-mono text-muted-foreground text-xs'>
-              &copy; {new Date().getFullYear()} {title}
-            </p>
+            <div className='flex items-center gap-3'>
+              <UserButton />
+              <p className='font-mono text-muted-foreground text-xs'>
+                &copy; {new Date().getFullYear()} {title}
+              </p>
+            </div>
             <div className='flex items-center gap-2'>
               <Clock />
               <SoundToggle />

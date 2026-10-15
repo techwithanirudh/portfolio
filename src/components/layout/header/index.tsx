@@ -11,7 +11,6 @@ import { OIIA_TITLE, useOiiaMode } from '@/components/oiia'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 import { SearchToggle } from './search-toggle'
-import { ThemeToggle } from './theme-toggle'
 
 const Divider = ({ className }: { className?: string }) => (
   <span
@@ -98,8 +97,6 @@ export const Header = ({
               </Link>
             ) : null
           )}
-          <Divider className='mx-2' />
-          <ThemeToggle />
         </div>
       </div>
     </header>

@@ -5,27 +5,24 @@ import { Logo } from './logo'
 function AppIcon({ name, url, logo, featured }: SoftwareItem) {
   return (
     <a
-      className='group flex flex-col items-center gap-2 bg-card/50 p-4 text-center no-underline transition-colors hover:bg-card/80 sm:gap-3 sm:p-6'
+      className='group flex h-full flex-col items-center gap-2.5 bg-background px-2 py-5 text-center no-underline transition-colors hover:bg-card'
       href={url}
       rel='noopener noreferrer'
       target='_blank'
     >
-      <div className='relative transition-transform duration-300 will-change-transform group-hover:-translate-y-1 group-hover:scale-105'>
-        <div
-          className='grid size-20 place-items-center rounded-xl border-2 border-foreground/5 bg-muted'
-          style={{
-            boxShadow: '0px 2px 1.5px 0px rgba(165,174,184,0.32) inset',
-          }}
-        >
-          <Logo alt={name} className='bg-transparent' logo={logo} size={46} />
+      <div className='relative transition-[translate,scale] duration-300 ease-out group-hover:-translate-y-0.5 group-hover:scale-110'>
+        <div className='grid size-14 place-items-center border border-line bg-card'>
+          <Logo alt={name} className='bg-transparent' logo={logo} size={32} />
         </div>
         {featured && (
-          <div className='absolute -top-1 -right-1 bg-primary p-1'>
+          <div className='absolute -top-1.5 -right-1.5 bg-primary p-0.5'>
             <Icons.featured className='size-3 text-primary-foreground' />
           </div>
         )}
       </div>
-      <span className='text-muted-foreground text-sm'>{name}</span>
+      <span className='w-full truncate font-mono text-muted-foreground text-xs transition-colors group-hover:text-foreground'>
+        {name}
+      </span>
     </a>
   )
 }
@@ -40,12 +37,14 @@ export function SoftwareGrid({ items }: SoftwareGridProps) {
   )
 
   return (
-    <div className='grid grid-cols-2 gap-px bg-border sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8'>
-      {sortedItems.map((item) => (
-        <div className='bg-card' key={item.name}>
-          <AppIcon {...item} />
-        </div>
-      ))}
+    // Every tile draws its own right and bottom rule, the outer edges get
+    // clipped so the rails and the next section line do the framing
+    <div className='overflow-hidden'>
+      <div className='-mr-px -mb-px grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 [&>*]:border-line [&>*]:border-r [&>*]:border-b'>
+        {sortedItems.map((item) => (
+          <AppIcon key={item.name} {...item} />
+        ))}
+      </div>
     </div>
   )
 }

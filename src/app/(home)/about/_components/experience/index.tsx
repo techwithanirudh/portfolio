@@ -17,27 +17,21 @@ export default function Experience(): React.ReactElement {
     <SplitSection cols='three' id='experience'>
       <SplitSectionSidebar background='dashed'>
         <SplitSectionHeader
-          description='A timeline of the roles I have held.'
-          sticky
-          title='Experience'
-        >
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          action={
             <Button
-              className='w-fit'
               nativeButton={false}
               render={<a href='/resume.pdf' rel='noopener' target='_blank' />}
               size='sm'
               variant='default'
             >
               Resume
-              <Icons.download className='inline-block' />
+              <Icons.download className='transition-transform group-hover/button:translate-y-0.5' />
             </Button>
-          </ViewAnimation>
-        </SplitSectionHeader>
+          }
+          description='A timeline of the roles I have held.'
+          sticky
+          title='Experience'
+        />
       </SplitSectionSidebar>
 
       <SplitSectionContent className='px-0 py-0 lg:col-span-2'>

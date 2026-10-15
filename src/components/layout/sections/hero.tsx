@@ -29,13 +29,7 @@ export const HeroSection = ({
   /** Kept for older call sites. */
   variant?: 'default' | 'compact' | null
 }) => (
-  <Section
-    className={cn(
-      'screen-line-top-none',
-      caption ? 'pt-0' : 'pt-8',
-      sectionClassName
-    )}
-  >
+  <Section className={cn('screen-line-top-none pt-10', sectionClassName)}>
     <div className={cn('flex flex-col', className)}>
       {image && <div className='px-4 pb-4'>{image}</div>}
       {caption && (
@@ -43,7 +37,7 @@ export const HeroSection = ({
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <p className='px-4 py-3 font-heading font-medium text-muted-foreground text-sm/none tracking-wider'>
+          <p className='px-4 pb-3 font-heading font-medium text-muted-foreground text-sm/none tracking-wider'>
             {caption}
           </p>
         </ViewAnimation>
@@ -53,7 +47,7 @@ export const HeroSection = ({
         initial={{ opacity: 0, translateY: -6 }}
         whileInView={{ opacity: 1, translateY: 0 }}
       >
-        <h1 className='screen-line-top screen-line-bottom text-balance px-4 font-heading font-medium text-4xl tracking-tight'>
+        <h1 className='screen-line-bottom text-balance px-4 font-heading font-medium text-4xl tracking-tight'>
           {title}
         </h1>
       </ViewAnimation>

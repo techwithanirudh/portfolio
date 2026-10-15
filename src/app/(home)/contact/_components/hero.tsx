@@ -8,16 +8,17 @@ import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
 
 export const Hero = () => (
-  <div className='flex flex-col gap-2'>
+  <div className='flex flex-col'>
     <SectionHeader
       align='left'
       description="Have a question or want to connect? Send me a message and I'll reply within a week."
       title='Contact Me'
     />
-    <div className='mx-4 mt-3 flex w-min flex-row gap-4 bg-card p-1.5 text-card-foreground'>
+    <div className='screen-line-bottom flex'>
       {socials.map((social, index) => (
         <ViewAnimation
           blur={false}
+          className='border-line border-r'
           delay={0.05 * index}
           duration={0.25}
           initial={{ opacity: 0, translateY: -6 }}
@@ -29,7 +30,7 @@ export const Hero = () => (
               render={
                 <a
                   aria-label={social.name}
-                  className='icon-pop flex items-center justify-center p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
+                  className='icon-pop flex size-12 items-center justify-center text-muted-foreground transition-colors hover:bg-card hover:text-foreground [&_svg]:size-5'
                   href={social.url}
                   key={social.name}
                   rel='noopener noreferrer'

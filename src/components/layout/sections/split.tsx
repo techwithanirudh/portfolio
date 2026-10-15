@@ -21,7 +21,7 @@ const splitSectionVariants = cva('grid', {
   },
 })
 
-const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
+const splitSectionSidebarVariants = cva('flex flex-col', {
   defaultVariants: {
     background: 'default',
     inset: true,
@@ -33,7 +33,7 @@ const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
     },
     inset: {
       false: '',
-      true: 'pb-2',
+      true: '',
     },
   },
 })

@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { WebPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
+import { SectionHeader } from '@/components/layout/sections/header'
+import Separator from '@/components/layout/sections/separator'
 import {
   SplitSection,
   SplitSectionContent,
@@ -55,16 +57,9 @@ export default function GuestbookPage() {
           </ViewAnimation>
         </SplitSectionContent>
       </SplitSection>
-      <Section className='p-6'>
-        <ViewAnimation
-          delay={0.1}
-          initial={{ opacity: 0, translateY: 6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <h2 className='font-medium text-xl'>Recent Entries</h2>
-        </ViewAnimation>
-      </Section>
+      <Separator />
       <Section>
+        <SectionHeader title='Recent entries' />
         <Suspense fallback={<GuestbookEntriesSkeleton />}>
           <GuestbookEntriesSection />
         </Suspense>

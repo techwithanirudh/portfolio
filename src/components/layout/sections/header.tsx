@@ -2,6 +2,8 @@ import { Children, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {
+  /** Sits on the right of the title row, for a single compact control */
+  action?: ReactNode
   /** Kept for older call sites, headers are always left aligned now. */
   align?: 'left' | 'center'
   children?: ReactNode
@@ -14,6 +16,7 @@ export interface SectionHeaderProps {
 }
 
 export const SectionHeader = ({
+  action,
   title,
   description,
   children,
@@ -33,14 +36,17 @@ export const SectionHeader = ({
         className
       )}
     >
-      <h2
-        className={cn(
-          'screen-line-bottom w-full px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
-          titleClassName
-        )}
-      >
-        {title}
-      </h2>
+      <div className='screen-line-bottom flex w-full items-center justify-between gap-4 px-4 py-2'>
+        <h2
+          className={cn(
+            'font-heading font-medium text-2xl tracking-tight sm:text-3xl',
+            titleClassName
+          )}
+        >
+          {title}
+        </h2>
+        {action}
+      </div>
       {description && (
         <p
           className={cn(

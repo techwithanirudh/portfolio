@@ -26,7 +26,7 @@ export default function Contact(): React.ReactElement {
           </ViewAnimation>
         </SplitSectionSidebar>
 
-        <SplitSectionContent className='flex w-full items-center p-4'>
+        <SplitSectionContent className='w-full'>
           <ViewAnimation
             blur={false}
             className='w-full'
