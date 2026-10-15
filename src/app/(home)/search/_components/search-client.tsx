@@ -1,5 +1,6 @@
 'use client'
 
+import { Dialog } from '@base-ui/react/dialog'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import {
   SearchDialog,
@@ -19,6 +20,9 @@ import {
 import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
+
+// The page keeps its own always-open list, apart from the Cmd+K dialog
+const pageDialogHandle = Dialog.createHandle()
 
 const ItemBadge = ({ label }: { label: string }) => (
   <span className='pointer-events-none absolute inset-y-0 right-4 flex items-center'>
@@ -80,6 +84,7 @@ export function SearchClient() {
 
   return (
     <SearchDialog
+      dialogHandle={pageDialogHandle}
       isLoading={query.isLoading}
       onOpenChange={() => null}
       onSearchChange={handleSearchChange}

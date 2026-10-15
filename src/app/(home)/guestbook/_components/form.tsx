@@ -32,10 +32,10 @@ import { createGuestbookEntry } from '../actions/guestbook'
 // Flush, ruled form to match the contact form
 const fieldClassName = 'gap-0 border-line border-b'
 const textareaClassName =
-  'max-h-[20rem] min-h-[10rem] resize-y rounded-none border-0 bg-transparent px-4 py-3 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
+  'max-h-[20rem] min-h-[10rem] resize-y rounded-none border-0 bg-transparent px-4 py-3 shadow-none transition-colors field-focus focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
 const hintClassName = 'border-line border-t px-4 py-2 text-xs'
 const buttonClassName =
-  'h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90'
+  'h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90 focus-visible:-outline-offset-4 focus-visible:outline-primary-foreground'
 
 export const GuestbookForm = () => {
   const router = useRouter()

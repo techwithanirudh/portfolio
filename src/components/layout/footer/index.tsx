@@ -15,7 +15,7 @@ const links = [
 ]
 
 export const Footer = () => (
-  <footer className='pb-24 md:pb-0'>
+  <footer className='relative z-20 bg-background pb-24 md:pb-0'>
     <div className='container mx-auto'>
       {/* The top rule sits 1px up so it lands on the last section's bottom
           rule instead of doubling it */}

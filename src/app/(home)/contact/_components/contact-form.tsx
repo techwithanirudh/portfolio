@@ -26,7 +26,7 @@ import { contact } from '../actions/contact'
 const fieldClassName = 'gap-0 border-line border-b'
 const labelClassName = 'sr-only'
 const inputClassName =
-  'h-12 rounded-none border-0 bg-transparent px-4 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
+  'h-12 rounded-none border-0 bg-transparent px-4 shadow-none transition-colors field-focus focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
 const hintClassName = 'border-line border-t px-4 py-2 text-xs'
 
 const ContactFormInner = () => {
@@ -123,7 +123,7 @@ const ContactFormInner = () => {
           )}
         />
         <Button
-          className='h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90'
+          className='h-auto w-full py-5 ring-0 focus-visible:outline-primary-foreground focus-visible:-outline-offset-4 active:scale-100 active:opacity-90'
           disabled={action.status === 'executing'}
           shape='square'
           type='submit'

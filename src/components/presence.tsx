@@ -21,7 +21,15 @@ export function Presence({
     }
     let cancelled = false
     const frame = requestAnimationFrame(() => {
-      const animations = ref.current?.getAnimations({ subtree: true }) ?? []
+      // Only the exit animation on the top elements counts; anything looping
+      // inside (spinners, typing dots) would otherwise never finish
+      const animations = [...(ref.current?.children ?? [])]
+        .flatMap((child) => child.getAnimations())
+        .filter(
+          (animation) =>
+            animation.effect?.getTiming().iterations !==
+            Number.POSITIVE_INFINITY
+        )
       Promise.allSettled(animations.map((animation) => animation.finished))
         .then(() => {
           if (!cancelled) {

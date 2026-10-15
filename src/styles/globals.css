@@ -101,6 +101,24 @@ html > body[data-scroll-locked] {
     @apply border-border outline-ring/50;
   }
 
+  /* One keyboard focus ring for every control. Zero specificity, so a
+     component's own focus-visible classes still win. Text fields use
+     field-focus instead, and popups (tabindex -1) stay unringed */
+  :where(
+    a[href],
+    button,
+    summary,
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    [role="checkbox"],
+    [role="radio"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
   body {
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
@@ -656,5 +674,15 @@ html > body[data-scroll-locked] {
 @media (width < 64rem) {
   [data-mascot] {
     display: none !important;
+  }
+}
+
+/* Focus for flush, ruled text fields: a lifted background and an inset
+   accent bar, since an outside ring would collide with the rules */
+@utility field-focus {
+  &:focus-visible,
+  &:has(:focus-visible) {
+    background-color: var(--color-card) !important;
+    box-shadow: inset 2px 0 0 var(--color-ring);
   }
 }

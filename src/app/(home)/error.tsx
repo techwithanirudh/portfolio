@@ -45,14 +45,14 @@ export default function ErrorPage({ error, reset }: ErrorPageProps) {
         </details>
         <div className='grid grid-cols-2 divide-x divide-line'>
           <Button
-            className='h-auto py-5 ring-0 active:scale-100 active:opacity-90'
+            className='h-auto py-5 ring-0 focus-visible:outline-primary-foreground focus-visible:-outline-offset-4 active:scale-100 active:opacity-90'
             onClick={reset}
             shape='square'
           >
             Try again
           </Button>
           <Button
-            className='h-auto py-5 ring-0 active:scale-100 active:opacity-90'
+            className='h-auto py-5 ring-0 focus-visible:-outline-offset-4 active:scale-100 active:opacity-90'
             nativeButton={false}
             render={<Link href='/' />}
             shape='square'

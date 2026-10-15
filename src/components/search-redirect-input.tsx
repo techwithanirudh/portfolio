@@ -42,7 +42,7 @@ export function SearchRedirectInput({
   return (
     <InputGroup
       className={cn(
-        '!bg-background focus-within:!bg-card/60 h-12 overflow-hidden rounded-none border-0 pr-2 shadow-none ring-0! transition-colors',
+        '!bg-background field-focus h-12 overflow-hidden rounded-none border-0 pr-2 shadow-none ring-0! transition-colors',
         className
       )}
     >

@@ -11,17 +11,14 @@ import { cn } from '@/lib/utils'
 
 type Theme = 'light' | 'dark' | 'system'
 
-const itemVariants = cva(
-  'size-6.5 p-1.5 text-fd-muted-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-  {
-    variants: {
-      active: {
-        false: 'text-fd-muted-foreground',
-        true: 'bg-fd-accent text-fd-accent-foreground',
-      },
+const itemVariants = cva('size-6.5 p-1.5 text-fd-muted-foreground', {
+  variants: {
+    active: {
+      false: 'text-fd-muted-foreground',
+      true: 'bg-fd-accent text-fd-accent-foreground',
     },
-  }
-)
+  },
+})
 
 const full = [
   ['light', Icons.sun] as const,

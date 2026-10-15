@@ -56,7 +56,7 @@ export const NewsletterForm = () => {
                   <FormControl className='h-full group-has-[p]:pt-3'>
                     <Input
                       {...field}
-                      className='h-full min-h-14 rounded-none border-none bg-transparent px-4 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent'
+                      className='field-focus h-full min-h-14 rounded-none border-none bg-transparent px-4 shadow-none transition-colors focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent'
                       disabled={action.status === 'executing'}
                       placeholder='Email address'
                       type='email'

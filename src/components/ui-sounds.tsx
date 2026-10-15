@@ -24,6 +24,8 @@ const PRESS =
 // links in prose stay quiet
 const HOVER = [
   '[data-sound-hover]',
+  '[data-slot="button"]',
+  '[data-slot="section-button"]',
   'header a[href]',
   'footer a[href]',
   '#main-content a.group[href]',

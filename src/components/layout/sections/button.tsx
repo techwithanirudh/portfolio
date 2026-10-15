@@ -15,7 +15,7 @@ export function SectionButton({
     <Link
       className={cn(
         buttonVariants({ shape: 'square', variant: 'default' }),
-        'h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90',
+        'h-auto w-full py-5 ring-0 focus-visible:outline-primary-foreground focus-visible:-outline-offset-4 active:scale-100 active:opacity-90',
         className
       )}
       data-slot='section-button'
