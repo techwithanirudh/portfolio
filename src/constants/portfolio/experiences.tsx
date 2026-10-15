@@ -3,6 +3,26 @@ import type { ExperienceItemType } from '@/types/experience'
 
 export const experiences: ExperienceItemType[] = [
   {
+    companyLogo: '/images/companies/quiverai.png',
+    companyName: 'QuiverAI',
+    companyWebsite: 'https://quiver.ai',
+    id: 'quiverai',
+    isCurrentEmployer: true,
+    positions: [
+      {
+        description:
+          'Working at QuiverAI, a platform for generating, editing, and animating SVG graphics with AI.',
+        employmentPeriod: { start: '08.2026' },
+        employmentType: 'Internship',
+        icon: <Icons.codeXml />,
+        id: '1',
+        isExpanded: true,
+        skills: ['TypeScript', 'React', 'Next.js', 'Node.js'],
+        title: 'Software Engineering Intern',
+      },
+    ],
+  },
+  {
     companyLogo: '/images/companies/energent.png',
     companyName: 'Energent.ai',
     companyWebsite: 'https://energent.ai',
@@ -65,7 +85,7 @@ export const experiences: ExperienceItemType[] = [
     positions: [
       {
         description:
-          'Built Coolify Tweaks, Shadcn SaaS Landing, and various open-source projects.',
+          'Built Coolify Tweaks, Shadcn SaaS Landing, and other open-source projects.',
         employmentPeriod: { start: '2021' },
         employmentType: 'Part-time',
         icon: <Icons.globe />,
@@ -96,7 +116,7 @@ export const experiences: ExperienceItemType[] = [
       },
       {
         description:
-          'Created robotics experiments including Snake, Vernie, Humanoid Robot, and Gripper using Mindstorms / Lego Boost.',
+          'Created robotics experiments including Snake, Vernie, Humanoid Robot, and Gripper using Mindstorms and Lego Boost.',
         employmentPeriod: { end: '2019', start: '2018' },
         employmentType: 'Part-time',
         icon: <Icons.cpu />,

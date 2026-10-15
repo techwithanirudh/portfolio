@@ -11,7 +11,7 @@ export const Hero = () => (
   <div className='flex flex-col gap-2'>
     <SectionHeader
       align='left'
-      description='Have a question or want to connect? Send a message and expect a response within a week.'
+      description="Have a question or want to connect? Send me a message and I'll reply within a week."
       title='Contact Me'
     />
     <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>

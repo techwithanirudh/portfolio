@@ -92,7 +92,7 @@ function EditNameDialog({ name }: { name: string }) {
       return
     }
 
-    toast.success('Name updated successfully.')
+    toast.success('Name updated.')
     setOpen(false)
     router.refresh()
   }

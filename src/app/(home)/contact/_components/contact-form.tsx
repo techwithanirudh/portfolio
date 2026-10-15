@@ -31,14 +31,14 @@ const ContactFormInner = () => {
           toast.error(
             typeof error.serverError === 'string'
               ? error.serverError
-              : 'An error occurred while sending your message.'
+              : 'Your message failed to send. Please try again.'
           )
         },
         onSuccess: ({ data }) => {
           toast.success(
             data?.success && data.message
               ? data.message
-              : "Your message has been sent! We'll get back to you soon."
+              : "Thanks, I got your message. I'll reply soon."
           )
         },
       },
@@ -153,7 +153,7 @@ const ContactFormInner = () => {
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.success && action.result.data?.message
                 ? action.result.data.message
-                : "Your message has been sent! We'll get back to you soon."}
+                : "Thanks, I got your message. I'll reply soon."}
             </AlertTitle>
           </Alert>
         )}
@@ -163,7 +163,7 @@ const ContactFormInner = () => {
             <AlertTitle className='mb-0 leading-normal'>
               {typeof action.result.serverError === 'string'
                 ? action.result.serverError
-                : 'An error occurred while sending your message.'}
+                : 'Your message failed to send. Please try again.'}
             </AlertTitle>
           </Alert>
         )}

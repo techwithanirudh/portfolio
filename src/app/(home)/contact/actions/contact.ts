@@ -27,7 +27,7 @@ export const contact = actionClient
       }
 
       return {
-        message: "Your message has been sent! We'll get back to you soon.",
+        message: "Thanks, I got your message. I'll reply soon.",
         success: true,
       }
     } catch (error) {

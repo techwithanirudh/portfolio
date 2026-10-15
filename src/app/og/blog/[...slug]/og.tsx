@@ -17,7 +17,7 @@ export function getImageResponseOptions(): ImageResponseOptions {
 
 export function generate({
   title,
-  description = 'Learn more about this post by visiting the website.',
+  description = 'Read the full post on the website.',
   backgroundImage,
 }: GenerateProps): ReactElement {
   return (

@@ -262,7 +262,7 @@ export const banGuestbookUser = protectedGuestbookAction
       }
 
       if (targetUser.role === 'admin') {
-        throw new ActionError('Admin accounts cannot be banned from here.')
+        throw new ActionError("You can't ban admin accounts here.")
       }
 
       if (parsedInput.action === 'ban') {

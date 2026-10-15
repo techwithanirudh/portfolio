@@ -11,12 +11,12 @@ AI Tutor is a study app. Ask a question, get an explanation, and turn the same t
 
 ## How it works
 
-The chat workspace sits alongside editable, versioned documents. You can get suggestions on a document, then create a quiz or flashcards from the same topic without leaving the conversation. Voice sessions let you study out loud, with the transcript keeping track of the session.
+Next to the chat are editable documents with version history. You can get suggestions on a document, then create a quiz or flashcards from the same topic without leaving the conversation. In a voice session you study out loud, and a transcript records what was said.
 
-NextAuth handles sign-in, and study history is saved so you can come back later. A model registry lets the app switch between different AI providers.
+NextAuth handles sign-in, and the app saves your study history so you can pick up where you left off. A model registry lets the app switch between AI providers.
 
 ## Stack
 
 - Next.js 16 App Router, Tailwind, Radix UI.
-- Drizzle ORM + Neon, NextAuth, React Email.
+- Drizzle ORM and Neon, NextAuth, React Email.
 - AI SDK providers with a typed model registry.

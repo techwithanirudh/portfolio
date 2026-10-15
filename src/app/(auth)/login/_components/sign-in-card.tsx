@@ -58,7 +58,7 @@ export function SignInCard({ redirectTo }: SignInCardProps) {
           <CardHeader>
             <CardTitle className='text-lg md:text-xl'>Sign In</CardTitle>
             <CardDescription className='text-xs md:text-sm'>
-              Sign in with your account
+              Use your Google or GitHub account.
             </CardDescription>
           </CardHeader>
           <CardContent>

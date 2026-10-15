@@ -17,9 +17,8 @@ export const Design = () => (
   <div className='flex flex-col divide-y divide-dashed divide-border text-left'>
     <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
       <p>
-        A measured layout with generous spacing, sharp rules, and a quiet sense
-        of depth. Geist Sans handles headings and body copy while Geist Mono
-        keeps code and labels crisp.
+        A layout with wide spacing and dashed borders. Geist Sans sets headings
+        and body text, and Geist Mono sets code and labels.
       </p>
     </div>
     <div className='bg-card/50 p-6'>
@@ -41,8 +40,7 @@ export const Design = () => (
           ))}
         </div>
         <p className='text-muted-foreground text-sm'>
-          The palette stays neutral with a primary blue accent for focus and
-          links.
+          The palette is neutral, with a blue accent for focus rings and links.
         </p>
       </div>
     </div>

@@ -15,8 +15,7 @@ import { Setup } from './_components/setup'
 import { SoftwareGrid } from './_components/software'
 
 const title = 'Uses'
-const description =
-  'The hardware, software, and tools that power my daily workflow.'
+const description = 'The hardware and software I use every day.'
 
 export function generateMetadata(): Metadata {
   return createMetadata({

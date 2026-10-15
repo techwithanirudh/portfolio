@@ -44,7 +44,7 @@ export default function Page() {
         </div>
       </SectionBody>
       <CollectionPageJsonLd
-        description='Browse all blog tags to explore posts by topic.'
+        description='Browse blog posts by topic.'
         path='/blog/tags'
         title='Tags'
       />
@@ -56,7 +56,7 @@ export async function generateMetadata(props: {
   params: Promise<{ slug?: string[] }>
 }): Promise<Metadata> {
   const _params = await props.params
-  const description = `Browse all blog tags on ${homeTitle} to explore posts by topic.`
+  const description = `Browse blog posts on ${homeTitle} by topic.`
 
   return createMetadata({
     alternates: {

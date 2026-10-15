@@ -99,7 +99,7 @@ export default async function Page(props: {
       </Section>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <CollectionPageJsonLd
-        description='Selected work showcasing projects, collaborations, and outcomes.'
+        description="Projects and collaborations I've worked on."
         path={canonicalUrl}
         title={jsonLdTitle}
       />
@@ -131,8 +131,7 @@ export async function generateMetadata(
     alternates: {
       canonical: canonicalUrl,
     },
-    description:
-      'Selected work showcasing projects, collaborations, and outcomes.',
+    description: "Projects and collaborations I've worked on.",
     openGraph: {
       url: canonicalUrl,
     },

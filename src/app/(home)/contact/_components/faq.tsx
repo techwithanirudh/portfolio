@@ -26,12 +26,12 @@ const faq = [
   },
   {
     answer:
-      'The best way to reach me is through the contact form on this website or via email at hello@techwithanirudh.com. You can also connect with me on GitHub or LinkedIn.',
+      'Use the contact form on this website or email me at hello@techwithanirudh.com. You can also connect with me on GitHub or LinkedIn.',
     question: 'How can I get in touch with you?',
   },
   {
     answer:
-      "I try to keep things simple, readable, and easy to maintain. I focus on user experience, write clear code, and document what matters. I'm always learning and like shipping small improvements often.",
+      'I keep code simple and easy to maintain. I care about the user experience, write clear code, and document the parts that need it. I like shipping small improvements often.',
     question: "What's your development approach?",
   },
 ]

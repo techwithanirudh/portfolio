@@ -106,7 +106,7 @@ export const GuestbookForm = () => {
             </p>
           </div>
           <p className='text-muted-foreground text-sm'>
-            Posting requires auth.
+            You need an account to post.
           </p>
         </div>
         <Button asChild className='w-full'>

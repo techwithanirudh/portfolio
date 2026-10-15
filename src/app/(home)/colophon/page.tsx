@@ -14,8 +14,7 @@ import { Technology } from './_components/technology'
 import { Typography } from './_components/typography'
 
 const title = 'Colophon'
-const description =
-  'The tools, technologies, and inspirations behind this website.'
+const description = 'The tools, fonts, and people behind this website.'
 
 export default function ColophonPage() {
   const sections: Array<{ title?: string | null; content: ReactNode }> = [

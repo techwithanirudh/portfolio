@@ -53,8 +53,7 @@ function PostCard({
           {title}
         </Link>
         <Text className='text-[16px] text-zinc-500 leading-[24px]'>
-          {description ||
-            'Click on the blog post to learn more about this topic.'}
+          {description || 'Open the post to read more about this topic.'}
         </Text>
       </Section>
     </Section>
@@ -89,9 +88,7 @@ export default function NewsletterWelcomeEmail({
           }}
         />
       </Head>
-      <Preview>
-        Thanks for joining my newsletter! This email is to welcome you.
-      </Preview>
+      <Preview>Thanks for joining my newsletter!</Preview>
       <Tailwind>
         <Body className='bg-white font-sans'>
           <Container className='mx-auto w-full max-w-[600px] p-8'>
@@ -106,8 +103,8 @@ export default function NewsletterWelcomeEmail({
               <Text className='text-lg leading-8'>
                 Thanks for subscribing to my newsletter! I&apos;m excited to
                 share my thoughts and ideas with you. You can expect an email
-                every few weeks, and I might occasionally share newsletter-only
-                content as well—so stay tuned!
+                every few weeks. I might also send newsletter-only content now
+                and then, so stay tuned!
               </Text>
               <Text className='text-lg leading-8'>
                 Here are a few popular posts from the past few months that you
@@ -155,7 +152,7 @@ NewsletterWelcomeEmail.PreviewProps = {
       author: 'You',
       date: new Date('2025-03-21'),
       description:
-        'Dive into the details of Next.js Pages with examples, dynamic routing, pre-rendering strategies like Static Generation and SSR, and pro tips for building fast, SEO-friendly web apps. Packed with insights and tricks from my latest project!',
+        'A look at Next.js Pages, with examples, dynamic routing, pre-rendering strategies like Static Generation and SSR, and tips for building fast, SEO-friendly web apps. Includes tricks from my latest project!',
       image: `${baseUrl}/images/blog/pages.png`,
       tags: ['Next.js', 'Pages', 'Routing'],
       title: 'Next.js Pages',
@@ -165,7 +162,7 @@ NewsletterWelcomeEmail.PreviewProps = {
       author: 'You',
       date: new Date('2025-03-22'),
       description:
-        'Learn to use Markdown for clean, structured formatting in blogs, docs, and notes. Explore examples, pro tips, and practical use cases to level up your writing and make your content easier to read, share, and maintain across platforms.',
+        'Learn to use Markdown to format blogs, docs, and notes. This post has examples, tips, and practical use cases for writing content that is easier to read, share, and maintain.',
       image: `${baseUrl}/images/blog/markdown-examples.png`,
       tags: ['Markdown', 'Docs', 'Writing'],
       title: 'Markdown Examples',
@@ -175,7 +172,7 @@ NewsletterWelcomeEmail.PreviewProps = {
       author: 'You',
       date: new Date('2025-03-23'),
       description:
-        'Learn MDX in Next.js to mix Markdown with React. This guide shows setup with @next/mdx, usage tips, and examples to embed JSX in posts—ideal for blogs, docs, and interactive tutorials.',
+        'Learn MDX in Next.js to mix Markdown with React. This guide shows setup with @next/mdx, usage tips, and examples to embed JSX in posts. It works well for blogs, docs, and interactive tutorials.',
       image: `${baseUrl}/images/blog/using-mdx.png`,
       tags: ['MDX', 'Next.js', 'React'],
       title: 'Using MDX',

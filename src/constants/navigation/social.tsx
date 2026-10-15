@@ -21,7 +21,7 @@ export const socials: Social[] = [
     url: 'https://linkedin.com/in/anirudhsriramb',
   },
   {
-    description: 'Subscribe for tech tutorials and project showcases',
+    description: 'Subscribe for tech tutorials and project demos',
     icon: <Icons.youtube />,
     name: 'YouTube',
     url: 'https://www.youtube.com/@techwithanirudh',

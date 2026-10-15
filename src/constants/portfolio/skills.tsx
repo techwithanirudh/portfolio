@@ -8,26 +8,26 @@ const t = (light: string, dark: string) => ({ dark: s(dark), light: s(light) })
 export const skills: Skill[] = [
   {
     description:
-      'Building modern web apps with Next.js, React, TypeScript, and UI frameworks.',
+      'Building web apps with Next.js, React, TypeScript, and UI frameworks.',
     Icon: Icons.globe,
     id: 1,
     size: 'sm',
-    title: 'Web Development',
+    title: 'Web development',
   },
   {
     description: 'Exploring AI features with Python, OpenCV, and LLMs.',
     Icon: Icons.ai,
     id: 2,
     size: 'sm',
-    title: 'AI & Machine Learning',
+    title: 'AI and machine learning',
   },
   {
     description:
-      'Creating end-to-end solutions with Node.js, TypeScript, databases, and cloud technologies.',
+      'Building full-stack apps with Node.js, TypeScript, databases, and cloud services.',
     Icon: Icons.layers,
     id: 3,
     size: 'sm',
-    title: 'Full Stack Development',
+    title: 'Full-stack development',
   },
 ]
 

@@ -8,9 +8,9 @@ import {
 export const Attribution = () => (
   <div className={colophonGridClassName}>
     <div className='flex h-full flex-col gap-2 border-border border-b border-dashed bg-card/50 p-6 text-muted-foreground text-sm sm:col-span-2 lg:col-span-3'>
-      <p>Borrowed code and design cues from these thoughtful creators.</p>
+      <p>I borrowed code and design ideas from these people.</p>
       <p>
-        Design Inspiration also comes from{' '}
+        Some design ideas also come from{' '}
         <a
           className='underline decoration-border underline-offset-4'
           href='https://godly.website/'

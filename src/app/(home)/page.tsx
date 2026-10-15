@@ -10,6 +10,7 @@ import { getSortedWork } from '@/lib/source'
 import About from './_components/about'
 import Contributions from './_components/contributions'
 import CTA from './_components/cta'
+import ExperiencePreview from './_components/experience'
 import Hero from './_components/hero'
 import Skills from './_components/skills'
 import Testimonials from './_components/testimonials'
@@ -38,6 +39,8 @@ export default async function Home() {
         <Skills />
         <Separator />
         <WorkPreview works={works} />
+        <Separator />
+        <ExperiencePreview />
         <Testimonials testimonials={testimonials} />
         <Separator />
         <Contributions contributions={contributions} />

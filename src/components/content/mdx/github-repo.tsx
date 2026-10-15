@@ -128,7 +128,7 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
                   <Icons.arrowUpRight className='size-3.5 shrink-0 text-muted-foreground transition-transform will-change-transform group-hover/github-repo:scale-125' />
                 </a>
                 <p className='mt-1 line-clamp-2 text-pretty text-muted-foreground text-xs leading-5'>
-                  {details.description ?? 'No repository description provided.'}
+                  {details.description ?? 'This repo has no description.'}
                 </p>
               </div>
             </div>

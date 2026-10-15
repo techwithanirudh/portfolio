@@ -43,7 +43,7 @@ const Skills = () => (
       <SectionHeader
         align='left'
         className='px-6'
-        description='Focused on building practical projects with modern tools'
+        description='The languages and tools I build with'
         title='My Expertise'
       />
 

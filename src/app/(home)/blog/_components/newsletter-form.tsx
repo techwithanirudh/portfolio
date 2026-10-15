@@ -31,7 +31,7 @@ export const NewsletterForm = () => {
           )
         },
         onSuccess: ({ data }) => {
-          toast.success(data?.message ?? 'Subscribed successfully.')
+          toast.success(data?.message ?? "You're subscribed.")
         },
       },
       errorMapProps: {},

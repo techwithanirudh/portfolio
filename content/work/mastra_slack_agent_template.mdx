@@ -8,13 +8,13 @@ image: /images/projects/mastra_slack_agent_template/cover.png
 tags: ['TypeScript', 'Mastra', 'Bun', 'Slack', 'E2B', 'PostgreSQL']
 ---
 
-A starting point for building a Slack agent. It handles mentions, DMs, threads, files, workspace search, and streamed replies.
+This is a starting point for building a Slack agent. It handles mentions, DMs, threads, files, workspace search, and streamed replies.
 
 ## How it works
 
-Each thread gets its own E2B sandbox with files, shell access, and a browser. The agent can run commands without touching the host machine. Larger requests can be split between several smaller agents.
+Each thread gets its own E2B sandbox with files, shell access, and a browser. The agent can run commands without touching the host machine. The agent can split a larger request across several smaller agents.
 
-It also includes web research through Exa, image generation, scheduled tasks, and optional GitHub and AgentMail accounts. New features can be added as skills or MCP servers.
+It also includes web research through Exa, image generation, scheduled tasks, and optional GitHub and AgentMail accounts. You can add new features as skills or MCP servers.
 
 OpenRouter handles model access, and PostgreSQL stores memory and state. The [configuration guide](https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md) explains how to set up the services and Slack app.
 

@@ -20,7 +20,7 @@ const ErrorPage = ({ error }: { error: Error }) => {
           </h1>
           <p className='text-muted-foreground'>
             <span className='font-medium text-foreground'>Whoops!</span>{' '}
-            Unfortunately an unexpected error occurred.
+            Something on this page broke.
           </p>
           <p className='-mt-2 text-muted-foreground'>
             Please{' '}
@@ -32,7 +32,7 @@ const ErrorPage = ({ error }: { error: Error }) => {
             >
               share the details
             </Link>{' '}
-            of this issue, so I can fix it for you.
+            of this issue so I can fix it.
           </p>
           <details className='rounded-md border border-border'>
             <summary className='select-none px-3 py-2 font-medium'>

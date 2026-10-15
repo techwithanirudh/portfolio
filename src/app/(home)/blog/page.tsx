@@ -84,7 +84,7 @@ export default async function Page(props: {
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <NewsletterSection />
       <CollectionPageJsonLd
-        description='Notes on design engineering, full-stack development, AI experiments, and the systems behind recent projects.'
+        description='Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
         path='/blog'
         title='Blog'
       />
@@ -112,7 +112,7 @@ export async function generateMetadata(
   const pageTitle = isFirstPage ? 'Posts' : `Posts - Page ${pageIndex}`
   const canonicalUrl = isFirstPage ? '/blog' : `/blog?page=${pageIndex}`
   const description = isFirstPage
-    ? 'Notes on design engineering, full-stack development, AI experiments, and the systems behind recent projects.'
+    ? 'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
     : `Browse page ${pageIndex} of blog posts.`
 
   return createMetadata({
