@@ -122,15 +122,10 @@ function Header() {
   const playNewChat = useSound(toggleOn)
 
   return (
-    <div className='sticky top-0 flex h-10 items-start'>
-      <div className='flex min-h-full flex-1 items-center justify-between rounded-none bg-fd-card px-3 py-2 text-fd-card-foreground'>
-        <div className='flex items-center gap-2'>
-          <AvatarMenu />
-          <p className='font-medium text-sm'>Ask Simba</p>
-        </div>
-      </div>
+    <div className='sticky top-0 flex h-10 items-stretch'>
+      <AvatarMenu />
 
-      <div className='flex min-h-full'>
+      <div className='flex'>
         <button
           className={cn(
             buttonVariants({

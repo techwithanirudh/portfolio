@@ -62,8 +62,8 @@ export const avatarMeta: Record<
   {
     description: string
     frame: readonly [number, number]
-    // Transparent padding right/below the dog in its idle frame
-    padding: { bottom: number; right: number }
+    // Transparent padding around the dog in its idle frame
+    padding: { bottom: number; right: number; top: number }
     label: string
     sheet: readonly [number, number]
     sprite: string
@@ -73,7 +73,7 @@ export const avatarMeta: Record<
     description: 'Laid-back tech dog with a taste for wizardry.',
     frame: [124, 93],
     label: 'Rocky',
-    padding: { bottom: 0, right: 32 },
+    padding: { bottom: 0, right: 32, top: 15 },
     sheet: [3472, 3348],
     sprite: '/assets/clippy/rocky/rocky.png',
   },
@@ -81,7 +81,7 @@ export const avatarMeta: Record<
     description: 'The classic search pup. Loyal, a little goofy.',
     frame: [80, 80],
     label: 'Rover',
-    padding: { bottom: 6, right: 11 },
+    padding: { bottom: 6, right: 11, top: 6 },
     sheet: [2160, 2160],
     sprite: '/assets/clippy/rover.png',
   },
