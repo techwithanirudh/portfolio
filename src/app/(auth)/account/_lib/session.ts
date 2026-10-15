@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { cache } from 'react'
-import { getLoginUrl } from '@/lib/auth-url'
+import { getSignInUrl } from '@/lib/auth-url'
 import { getSession } from '@/server/auth'
 
 export const getSessionCached = cache(getSession)
@@ -11,7 +11,7 @@ export async function requireSession(): Promise<Session> {
   const session = await getSessionCached()
 
   if (!session?.user) {
-    redirect(getLoginUrl('/account'))
+    redirect(getSignInUrl('/account'))
   }
 
   return session

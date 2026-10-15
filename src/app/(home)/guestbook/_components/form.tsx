@@ -2,9 +2,9 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Activity, useRef, useState } from 'react'
+import { useSignInModal } from '@/components/features/auth'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -24,7 +24,7 @@ import {
 } from '@/components/ui/signature-pad'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
-import { getLoginUrl, useSession } from '@/lib/auth-client'
+import { useSession } from '@/lib/auth-client'
 import { toast } from '@/lib/toast'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
@@ -32,6 +32,7 @@ import { createGuestbookEntry } from '../actions/guestbook'
 export const GuestbookForm = () => {
   const router = useRouter()
   const { data: session, isPending } = useSession()
+  const signInModal = useSignInModal()
   const user = session?.user
   const [step, setStep] = useState<1 | 2>(1)
   const [formKey, setFormKey] = useState(0)
@@ -109,14 +110,12 @@ export const GuestbookForm = () => {
             You need an account to post.
           </p>
         </div>
-        <Button asChild className='w-full'>
-          <Link href={getLoginUrl('/guestbook')}>
-            <span>Sign in to post</span>
-            <Icons.arrowRight
-              className='icon-arrow-button size-4'
-              data-icon='inline-end'
-            />
-          </Link>
+        <Button className='w-full' onClick={() => signInModal.open()}>
+          <span>Sign in to post</span>
+          <Icons.arrowRight
+            className='icon-arrow-button size-4'
+            data-icon='inline-end'
+          />
         </Button>
       </div>
     )

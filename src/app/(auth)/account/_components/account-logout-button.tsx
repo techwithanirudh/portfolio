@@ -10,7 +10,7 @@ export function AccountLogoutButton() {
 
   return (
     <Button
-      className='self-start'
+      className='self-start lg:self-center'
       onClick={async () => {
         await signOut()
         router.push('/')

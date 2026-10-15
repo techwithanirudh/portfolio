@@ -13,6 +13,7 @@ import { systemPrompt } from '@/lib/ai/prompts/chat'
 import { provider } from '@/lib/ai/providers'
 import type { MyUIMessage } from './types'
 import { getLLMsTxt } from './utils/llms'
+import { animateMascotTool } from './utils/tools/animate-mascot'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
@@ -83,6 +84,7 @@ export async function POST(request: Request) {
           stopWhen: isStepCount(10),
           toolChoice: 'auto',
           tools: {
+            animateMascot: animateMascotTool,
             getPageContent,
             searchDocs: createSearchDocsTool(writer),
             showContactForm: showContactFormTool,

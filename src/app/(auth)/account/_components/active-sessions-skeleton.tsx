@@ -1,13 +1,12 @@
-import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
   const items = Array.from({ length: count }, (_, index) => index + 1)
 
   return (
-    <div className='space-y-4'>
+    <div className='divide-y divide-dashed divide-border'>
       {items.map((item) => (
-        <Card key={item} variant='flat'>
+        <div key={item}>
           <div className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
             <div className='flex gap-4'>
               <Skeleton className='size-10 shrink-0 rounded-md' />
@@ -25,7 +24,7 @@ export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
             </div>
             <Skeleton className='h-8 w-full rounded-none sm:w-18' />
           </div>
-        </Card>
+        </div>
       ))}
     </div>
   )

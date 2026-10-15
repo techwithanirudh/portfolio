@@ -24,6 +24,7 @@ import {
 import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { contextDataSchema } from '@/app/api/chat/types'
+import type { MascotAvatarName } from '@/app/api/chat/utils/tools/animate-mascot'
 import {
   getToolsRequiringConfirmation,
   type ToolName,
@@ -32,10 +33,12 @@ import {
   MascotProvider,
   useMascot,
 } from '@/components/features/assistant/mascot'
+import { Rocky } from '@/components/features/assistant/mascot/agents/rocky'
 import { Rover } from '@/components/features/assistant/mascot/agents/rover'
 import {
   playSubmitAnimation,
   useMascotPanel,
+  useMascotTool,
 } from '@/components/features/assistant/mascot/hooks'
 import {
   ContactForm,
@@ -55,7 +58,11 @@ import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 import { MessageMetadata } from './message-metadata'
 
+const avatars = { rocky: Rocky, rover: Rover }
+
 const AssistantContext = createContext<{
+  avatar: MascotAvatarName
+  setAvatar: Dispatch<SetStateAction<MascotAvatarName>>
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   chat: UseChatHelpers<MyUIMessage>
@@ -75,6 +82,7 @@ export function Assistant({ children }: { children: ReactNode }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
+  const [avatar, setAvatar] = useState<MascotAvatarName>('rover')
   const playError = useSound(errorSound)
   const playSuccess = useSound(success)
   const playDelete = useSound(deleteSound)
@@ -96,17 +104,19 @@ export function Assistant({ children }: { children: ReactNode }) {
   })
   const value = useMemo(
     () => ({
+      avatar,
       chat,
       context,
       open,
+      setAvatar,
       setContext,
       setOpen,
     }),
-    [chat, context, open]
+    [avatar, chat, context, open]
   )
 
   return (
-    <MascotProvider agent={isMobile ? undefined : Rover}>
+    <MascotProvider agent={isMobile ? undefined : avatars[avatar]}>
       <AssistantContext value={value}>
         {children}
         <AssistantPanel />
@@ -567,7 +577,7 @@ const Message = memo(function Message({
 })
 
 function AssistantPanel() {
-  const { chat, open, setOpen } = useAssistantContext()
+  const { avatar, chat, open, setAvatar, setOpen } = useAssistantContext()
   const { agent } = useMascot()
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
@@ -585,6 +595,13 @@ function AssistantPanel() {
     window.addEventListener('keydown', onKeyPress)
     return () => window.removeEventListener('keydown', onKeyPress)
   }, [])
+
+  useMascotTool({
+    agent,
+    avatar,
+    messages: chat.messages,
+    setAvatar,
+  })
 
   useMascotPanel({
     agent,

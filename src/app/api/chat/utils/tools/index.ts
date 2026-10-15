@@ -1,5 +1,6 @@
 import { type ToolSet, tool } from 'ai'
 import { z } from 'zod'
+import { animateMascotTool } from './animate-mascot'
 import { getPageContent } from './get-page-content'
 import { showContactFormTool } from './show-contact-form'
 
@@ -15,6 +16,7 @@ const searchDocsToolType = tool({
 })
 
 export const tools = {
+  animateMascot: animateMascotTool,
   getPageContent,
   searchDocs: searchDocsToolType,
   showContactForm: showContactFormTool,
