@@ -38,7 +38,7 @@ export const HeroSection = ({
         </ViewAnimation>
       )}
       {/* The title is usually the LCP, so it paints straight away */}
-      <h1 className='screen-line-bottom text-balance px-4 pb-2 font-heading font-medium text-4xl tracking-tight'>
+      <h1 className='screen-line-bottom text-balance px-4 pb-3 font-heading font-medium text-4xl tracking-tight'>
         {title}
       </h1>
       {description && (
