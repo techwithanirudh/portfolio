@@ -27,7 +27,7 @@ export function TagsRow({ tags }: TagsRowProps) {
         href='/blog/tags'
       >
         All tags
-        <Icons.arrowRight className='size-3 transition-transform group-hover:translate-x-0.5' />
+        <Icons.arrowRight className='icon-arrow size-3' />
       </Link>
     </div>
   )

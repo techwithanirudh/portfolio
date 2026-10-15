@@ -21,34 +21,39 @@ export const SectionHeader = ({
   titleClassName,
   descriptionClassName,
   sticky = false,
-}: SectionHeaderProps) => (
-  <div
-    className={cn(
-      'flex flex-col items-start text-left',
-      sticky && 'lg:sticky lg:top-16',
-      className
-    )}
-  >
-    <h2
+}: SectionHeaderProps) => {
+  const hasChildren = Children.toArray(children).length > 0
+  return (
+    <div
       className={cn(
-        'screen-line-bottom w-full px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
-        titleClassName
+        'flex flex-col items-start text-left',
+        // The intro block gets its own rule so the content below never runs into it
+        (description || hasChildren) && 'screen-line-bottom pb-3',
+        sticky && 'lg:sticky lg:top-16',
+        className
       )}
     >
-      {title}
-    </h2>
-    {description && (
-      <p
+      <h2
         className={cn(
-          'text-pretty px-4 pt-3 text-muted-foreground text-sm',
-          descriptionClassName
+          'screen-line-bottom w-full px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
+          titleClassName
         )}
       >
-        {description}
-      </p>
-    )}
-    {Children.toArray(children).length > 0 && (
-      <div className='flex flex-wrap gap-2 px-4 pt-3'>{children}</div>
-    )}
-  </div>
-)
+        {title}
+      </h2>
+      {description && (
+        <p
+          className={cn(
+            'text-pretty px-4 pt-3 text-muted-foreground text-sm',
+            descriptionClassName
+          )}
+        >
+          {description}
+        </p>
+      )}
+      {hasChildren && (
+        <div className='flex flex-wrap gap-2 px-4 pt-3'>{children}</div>
+      )}
+    </div>
+  )
+}
