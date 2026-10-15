@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07T18:29:26.784Z",
+  "generated": "2026-10-15T06:46:10.115Z",
   "previews": {
     "ac8bc5b8d08d": {
       "generatedAt": "2026-05-13T07:45:44.634Z",
@@ -429,6 +429,311 @@
       "screenshotPath": "/previews/71ccdb1bc2a5.jpeg",
       "status": "success",
       "url": "https://depensa.techwithanirudh.com/",
+      "width": 1200
+    },
+    "a535b12c4b69": {
+      "generatedAt": "2026-10-15T06:38:10.603Z",
+      "height": 630,
+      "screenshotPath": "/previews/a535b12c4b69.jpeg",
+      "status": "success",
+      "url": "https://www.meetingbaas.com/en",
+      "width": 1200
+    },
+    "8364eb1ce10d": {
+      "generatedAt": "2026-10-15T06:38:11.555Z",
+      "height": 630,
+      "screenshotPath": "/previews/8364eb1ce10d.jpeg",
+      "status": "success",
+      "url": "https://energent.ai",
+      "width": 1200
+    },
+    "4f846901f9ff": {
+      "generatedAt": "2026-10-15T06:38:30.328Z",
+      "height": 630,
+      "screenshotPath": "/previews/4f846901f9ff.jpeg",
+      "status": "success",
+      "url": "https://www.typescriptlang.org",
+      "width": 1200
+    },
+    "638ef918d2a7": {
+      "generatedAt": "2026-10-15T06:38:31.799Z",
+      "height": 630,
+      "screenshotPath": "/previews/638ef918d2a7.jpeg",
+      "status": "success",
+      "url": "https://nextjs.org",
+      "width": 1200
+    },
+    "c1b67562504b": {
+      "generatedAt": "2026-10-15T06:38:36.208Z",
+      "height": 630,
+      "screenshotPath": "/previews/c1b67562504b.jpeg",
+      "status": "success",
+      "url": "https://www.bosch-softwaretechnologies.com/en/",
+      "width": 1200
+    },
+    "bf2905db04af": {
+      "generatedAt": "2026-10-15T06:38:54.647Z",
+      "height": 630,
+      "screenshotPath": "/previews/bf2905db04af.jpeg",
+      "status": "success",
+      "url": "https://tailwindcss.com",
+      "width": 1200
+    },
+    "02b81b60008c": {
+      "generatedAt": "2026-10-15T06:39:04.557Z",
+      "height": 630,
+      "screenshotPath": "/previews/02b81b60008c.jpeg",
+      "status": "success",
+      "url": "https://fumadocs.dev",
+      "width": 1200
+    },
+    "affc29967a7c": {
+      "generatedAt": "2026-10-15T06:39:04.618Z",
+      "height": 630,
+      "screenshotPath": "/previews/affc29967a7c.jpeg",
+      "status": "success",
+      "url": "https://ui.shadcn.com",
+      "width": 1200
+    },
+    "1ca5b14a8203": {
+      "generatedAt": "2026-10-15T06:39:20.724Z",
+      "height": 630,
+      "screenshotPath": "/previews/1ca5b14a8203.jpeg",
+      "status": "success",
+      "url": "https://www.postgresql.org",
+      "width": 1200
+    },
+    "374543d4f72b": {
+      "generatedAt": "2026-10-15T06:39:21.727Z",
+      "height": 630,
+      "screenshotPath": "/previews/374543d4f72b.jpeg",
+      "status": "success",
+      "url": "https://motion.dev",
+      "width": 1200
+    },
+    "768db728288f": {
+      "generatedAt": "2026-10-15T06:39:30.446Z",
+      "height": 630,
+      "screenshotPath": "/previews/768db728288f.jpeg",
+      "status": "success",
+      "url": "https://orm.drizzle.team",
+      "width": 1200
+    },
+    "4233e360f956": {
+      "generatedAt": "2026-10-15T06:39:47.007Z",
+      "height": 630,
+      "screenshotPath": "/previews/4233e360f956.jpeg",
+      "status": "success",
+      "url": "https://www.braydoncoyer.dev",
+      "width": 1200
+    },
+    "3b1a46da764e": {
+      "generatedAt": "2026-10-15T06:39:47.245Z",
+      "height": 630,
+      "screenshotPath": "/previews/3b1a46da764e.jpeg",
+      "status": "success",
+      "url": "https://bun.sh",
+      "width": 1200
+    },
+    "7cc1786bad5d": {
+      "generatedAt": "2026-10-15T06:39:50.022Z",
+      "height": 630,
+      "screenshotPath": "/previews/7cc1786bad5d.jpeg",
+      "status": "success",
+      "url": "https://nelsonlai.dev",
+      "width": 1200
+    },
+    "dd6fa0274e3f": {
+      "generatedAt": "2026-10-15T06:40:08.154Z",
+      "height": 630,
+      "screenshotPath": "/previews/dd6fa0274e3f.jpeg",
+      "status": "success",
+      "url": "https://chanhdai.com",
+      "width": 1200
+    },
+    "37a261499fe2": {
+      "generatedAt": "2026-10-15T06:40:21.261Z",
+      "height": 630,
+      "screenshotPath": "/previews/37a261499fe2.jpeg",
+      "status": "success",
+      "url": "https://tiptap.dev",
+      "width": 1200
+    },
+    "c0cd34ee1475": {
+      "errorMessage": "HTTP 404",
+      "generatedAt": "2026-10-15T06:40:22.261Z",
+      "height": 630,
+      "screenshotPath": "/previews/c0cd34ee1475.jpeg",
+      "status": "failed",
+      "url": "https://www.eververse.ai",
+      "width": 1200
+    },
+    "f42d89f4c74b": {
+      "generatedAt": "2026-10-15T06:40:35.939Z",
+      "height": 630,
+      "screenshotPath": "/previews/f42d89f4c74b.jpeg",
+      "status": "success",
+      "url": "https://ingo.au",
+      "width": 1200
+    },
+    "5349002575e0": {
+      "generatedAt": "2026-10-15T06:40:36.294Z",
+      "height": 630,
+      "screenshotPath": "/previews/5349002575e0.jpeg",
+      "status": "success",
+      "url": "https://www.joshwcomeau.com",
+      "width": 1200
+    },
+    "a77d0c7acd29": {
+      "generatedAt": "2026-10-15T06:40:49.758Z",
+      "height": 630,
+      "screenshotPath": "/previews/a77d0c7acd29.jpeg",
+      "status": "success",
+      "url": "https://shud.in",
+      "width": 1200
+    },
+    "faccdc39f046": {
+      "generatedAt": "2026-10-15T06:40:49.809Z",
+      "height": 630,
+      "screenshotPath": "/previews/faccdc39f046.jpeg",
+      "status": "success",
+      "url": "https://emilkowal.ski",
+      "width": 1200
+    },
+    "9a53de76076b": {
+      "generatedAt": "2026-10-15T06:40:51.994Z",
+      "height": 630,
+      "screenshotPath": "/previews/9a53de76076b.jpeg",
+      "status": "success",
+      "url": "https://iamsteve.me",
+      "width": 1200
+    },
+    "70d228d51006": {
+      "generatedAt": "2026-10-15T06:41:06.968Z",
+      "height": 630,
+      "screenshotPath": "/previews/70d228d51006.jpeg",
+      "status": "success",
+      "url": "https://ephraimduncan.com/",
+      "width": 1200
+    },
+    "48bbc8af035c": {
+      "generatedAt": "2026-10-15T06:41:07.355Z",
+      "height": 630,
+      "screenshotPath": "/previews/48bbc8af035c.jpeg",
+      "status": "success",
+      "url": "https://www.surajgaud.com/",
+      "width": 1200
+    },
+    "1d2b22cd0b9e": {
+      "generatedAt": "2026-10-15T06:41:12.459Z",
+      "height": 630,
+      "screenshotPath": "/previews/1d2b22cd0b9e.jpeg",
+      "status": "success",
+      "url": "https://visitors.now",
+      "width": 1200
+    },
+    "b06dee31e793": {
+      "generatedAt": "2026-10-15T06:41:26.204Z",
+      "height": 630,
+      "screenshotPath": "/previews/b06dee31e793.jpeg",
+      "status": "success",
+      "url": "https://kinfish.farmui.com/",
+      "width": 1200
+    },
+    "687657a80d5d": {
+      "generatedAt": "2026-10-15T06:41:26.456Z",
+      "height": 630,
+      "screenshotPath": "/previews/687657a80d5d.jpeg",
+      "status": "success",
+      "url": "https://leanrada.com/",
+      "width": 1200
+    },
+    "07a507c3272d": {
+      "generatedAt": "2026-10-15T06:41:27.695Z",
+      "height": 630,
+      "screenshotPath": "/previews/07a507c3272d.jpeg",
+      "status": "success",
+      "url": "https://enscribe.dev/",
+      "width": 1200
+    },
+    "4f78db4d07cf": {
+      "generatedAt": "2026-10-15T06:41:41.152Z",
+      "height": 630,
+      "screenshotPath": "/previews/4f78db4d07cf.jpeg",
+      "status": "success",
+      "url": "https://noahdunnagan.com/",
+      "width": 1200
+    },
+    "9c83989c98dc": {
+      "generatedAt": "2026-10-15T06:41:42.357Z",
+      "height": 630,
+      "screenshotPath": "/previews/9c83989c98dc.jpeg",
+      "status": "success",
+      "url": "https://victoreke.com/",
+      "width": 1200
+    },
+    "14f2faea348e": {
+      "generatedAt": "2026-10-15T06:41:43.270Z",
+      "height": 630,
+      "screenshotPath": "/previews/14f2faea348e.jpeg",
+      "status": "success",
+      "url": "https://github.com/techwithanirudh",
+      "width": 1200
+    },
+    "8f56a6c0fdfc": {
+      "generatedAt": "2026-10-15T06:41:59.917Z",
+      "height": 630,
+      "screenshotPath": "/previews/8f56a6c0fdfc.jpeg",
+      "status": "success",
+      "url": "https://www.jetbrains.com/lp/mono/",
+      "width": 1200
+    },
+    "7ad90401a8ac": {
+      "generatedAt": "2026-10-15T06:42:00.010Z",
+      "height": 630,
+      "screenshotPath": "/previews/7ad90401a8ac.jpeg",
+      "status": "success",
+      "url": "https://code.visualstudio.com",
+      "width": 1200
+    },
+    "0df5b545aa81": {
+      "generatedAt": "2026-10-15T06:42:02.111Z",
+      "height": 630,
+      "screenshotPath": "/previews/0df5b545aa81.jpeg",
+      "status": "success",
+      "url": "https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json",
+      "width": 1200
+    },
+    "935cdb2492cc": {
+      "generatedAt": "2026-10-15T06:43:17.019Z",
+      "height": 630,
+      "screenshotPath": "/previews/935cdb2492cc.jpeg",
+      "status": "success",
+      "url": "https://godly.website/",
+      "width": 1200
+    },
+    "9918d213cb0f": {
+      "generatedAt": "2026-10-15T06:44:44.758Z",
+      "height": 630,
+      "screenshotPath": "/previews/9918d213cb0f.jpeg",
+      "status": "success",
+      "url": "https://osf.io/preprints/osf/mtfpy_v1",
+      "width": 1200
+    },
+    "74ae6e3ceca7": {
+      "generatedAt": "2026-10-15T06:45:53.636Z",
+      "height": 630,
+      "screenshotPath": "/previews/74ae6e3ceca7.jpeg",
+      "status": "success",
+      "url": "https://quiver.ai",
+      "width": 1200
+    },
+    "f73b6aacb515": {
+      "generatedAt": "2026-10-15T06:46:10.039Z",
+      "height": 630,
+      "screenshotPath": "/previews/f73b6aacb515.jpeg",
+      "status": "success",
+      "url": "https://hexaa.sh",
       "width": 1200
     }
   }

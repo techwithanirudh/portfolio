@@ -1,11 +1,10 @@
-import { readFiles } from 'next-validate-link'
 import { chromium } from 'playwright'
 import { hashUrl, type LinkPreviewEntry } from '@/lib/link-preview.shared'
-import { concurrency, content, maxScreenshotAgeMs } from './config'
+import { concurrency, maxScreenshotAgeMs } from './config'
 import {
   captureScreenshot,
+  collectUrls,
   createEntry,
-  extractUrls,
   loadManifest,
   previewsForUrls,
   removeOrphans,
@@ -49,10 +48,9 @@ async function main() {
 
   const manifest = await loadManifest()
   const existingPreviews = manifest?.previews ?? {}
-  const files = await readFiles(content)
-  const urls = [...new Set(files.flatMap((f) => extractUrls(f)))]
+  const { fileCount, urls } = await collectUrls()
 
-  console.log(`Read ${files.length} content files, ${urls.length} URLs`)
+  console.log(`Read ${fileCount} files, ${urls.length} URLs`)
 
   const currentPreviews = previewsForUrls(existingPreviews, urls)
   const pending = urls.filter((url) => {

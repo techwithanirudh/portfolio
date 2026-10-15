@@ -1,3 +1,4 @@
+import { PreviewLink } from '@/components/preview-link'
 import { attributions } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
@@ -11,33 +12,29 @@ export const Attribution = () => (
       <p>I borrowed code and design ideas from these people.</p>
       <p>
         Some design ideas also come from{' '}
-        <a
+        <PreviewLink
           className='underline decoration-border underline-offset-4'
           href='https://godly.website/'
-          rel='noopener noreferrer'
-          target='_blank'
         >
           Godly
-        </a>
+        </PreviewLink>
         .
       </p>
     </div>
     {attributions.map((creator, index) => (
-      <a
+      <PreviewLink
         className={cn(
           'flex items-center gap-2 bg-card/50 p-6 text-muted-foreground text-sm transition-colors hover:bg-card/80 hover:text-foreground',
           colophonCardBorderClasses(index)
         )}
         href={creator.url}
         key={creator.name}
-        rel='noopener noreferrer'
-        target='_blank'
       >
         <span className='size-2 rotate-45 border border-border bg-accent' />
         <span className='underline decoration-border underline-offset-4'>
           {creator.name}
         </span>
-      </a>
+      </PreviewLink>
     ))}
   </div>
 )

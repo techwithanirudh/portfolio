@@ -2,6 +2,7 @@ import { resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/layout/footer/active-link'
+import { PreviewLink } from '@/components/preview-link'
 import { ViewAnimation } from '@/components/view-animation'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
@@ -99,13 +100,16 @@ export const Links = () => {
           <ul className='flex flex-col gap-2 sm:gap-3'>
             {list.items.map((item) => (
               <li key={item.href}>
-                <ActiveLink
-                  href={item.href}
-                  rel={item.external ? 'noopener noreferrer' : undefined}
-                  target={item.external ? '_blank' : undefined}
-                >
-                  {item.children}
-                </ActiveLink>
+                {item.external ? (
+                  <PreviewLink
+                    className='text-muted-foreground text-sm transition-colors hover:text-foreground'
+                    href={item.href}
+                  >
+                    {item.children}
+                  </PreviewLink>
+                ) : (
+                  <ActiveLink href={item.href}>{item.children}</ActiveLink>
+                )}
               </li>
             ))}
           </ul>

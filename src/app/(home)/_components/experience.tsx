@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
+import { PreviewLink } from '@/components/preview-link'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
@@ -93,14 +94,12 @@ function ExperienceCard({ experience }: { experience: ExperienceItemType }) {
       <div className='flex flex-col gap-1'>
         <h3 className='text-balance text-xl tracking-tight lg:text-2xl'>
           {experience.companyWebsite ? (
-            <a
+            <PreviewLink
               className='transition-colors hover:text-muted-foreground'
               href={experience.companyWebsite}
-              rel='noopener noreferrer'
-              target='_blank'
             >
               {experience.companyName}
-            </a>
+            </PreviewLink>
           ) : (
             experience.companyName
           )}
