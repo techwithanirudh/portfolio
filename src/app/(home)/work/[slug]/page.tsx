@@ -76,23 +76,21 @@ function Header(props: { page: MDXPage }) {
         </p>
       </ViewTransition>
       {page.data.image && (
-        <div className='p-2'>
-          <ViewTransition
-            name={`${page.slugs.join('/')}-image`}
-            share={transition}
-          >
-            <BlurImage
-              alt={page.data.title ?? 'Work cover image'}
-              blur={false}
-              className='relative aspect-video w-full overflow-hidden rounded-xl border border-line bg-card/50'
-              fill
-              imageClassName='object-cover'
-              lazy={false}
-              sizes={WORK_COVER_SIZES}
-              src={page.data.image}
-            />
-          </ViewTransition>
-        </div>
+        <ViewTransition
+          name={`${page.slugs.join('/')}-image`}
+          share={transition}
+        >
+          <BlurImage
+            alt={page.data.title ?? 'Work cover image'}
+            blur={false}
+            className='relative aspect-video w-full border-line border-b bg-card/50'
+            fill
+            imageClassName='object-cover'
+            lazy={false}
+            sizes={WORK_COVER_SIZES}
+            src={page.data.image}
+          />
+        </ViewTransition>
       )}
     </Section>
   )

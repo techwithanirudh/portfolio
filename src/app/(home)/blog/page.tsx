@@ -33,7 +33,7 @@ const Pagination = ({ pageIndex }: { pageIndex: number }) => {
   }
 
   return (
-    <Section className='py-2'>
+    <Section>
       <NumberedPagination
         currentPage={pageIndex + 1}
         onPageChange={handlePageChange}

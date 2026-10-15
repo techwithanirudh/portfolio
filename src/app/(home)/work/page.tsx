@@ -10,13 +10,24 @@ import { ViewAnimation } from '@/components/view-animation'
 import { worksPerPage } from '@/constants/config'
 import { createMetadata } from '@/lib/metadata'
 import { parsePageParam } from '@/lib/pagination'
-import { getSortedWork } from '@/lib/source'
+import { getSortedWork, type WorkPage } from '@/lib/source'
 import { Hero } from './_components/hero'
 
 export const dynamicParams = false
 
 const totalWorks = getSortedWork().length
 const pageCount = Math.ceil(totalWorks / worksPerPage)
+
+const getWorkMeta = (entry: WorkPage) => {
+  const meta = [String(new Date(entry.data.date).getFullYear())]
+  if (entry.data.website) {
+    meta.push('Live')
+  }
+  if (entry.data.github) {
+    meta.push('Source')
+  }
+  return meta
+}
 
 const Pagination = ({ pageIndex }: { pageIndex: number }) => {
   const handlePageChange = async (page: number) => {
@@ -25,7 +36,7 @@ const Pagination = ({ pageIndex }: { pageIndex: number }) => {
   }
 
   return (
-    <Section className='bg-dashed'>
+    <Section>
       <NumberedPagination
         currentPage={pageIndex + 1}
         onPageChange={handlePageChange}
@@ -61,10 +72,7 @@ export default async function Page(props: {
         startIndex={startIndex}
         totalWorks={totalWorks}
       />
-      <Section
-        className='flex flex-col divide-y divide-dashed divide-border'
-        sectionClassName='flex flex-1'
-      >
+      <Section>
         <ViewAnimation
           delay={0.05}
           initial={{ opacity: 0, translateY: -6 }}
@@ -76,26 +84,36 @@ export default async function Page(props: {
             tag='projects'
           />
         </ViewAnimation>
-        <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x'>
+      </Section>
+      <Section>
+        {/* Every cell draws its own bottom rule; the last row's lands exactly on
+            the section's screen-wide line, so the two never double up */}
+        <ul className='grid grid-cols-1 md:grid-cols-2'>
           {work.map((entry, index) => (
-            <ViewAnimation
-              blur={false}
-              delay={0.05 * index}
-              duration={0.25}
-              initial={{ opacity: 0, translateY: -6 }}
+            <li
+              className='border-line border-b md:odd:border-r'
               key={entry.url}
-              whileInView={{ opacity: 1, translateY: 0 }}
             >
-              <WorkCard
-                description={entry.data.description ?? ''}
-                image={entry.data.image ?? null}
-                slugs={entry.slugs}
-                title={entry.data.title ?? 'Untitled'}
-                url={entry.url}
-              />
-            </ViewAnimation>
+              <ViewAnimation
+                blur={false}
+                className='h-full'
+                delay={0.05 * index}
+                duration={0.25}
+                initial={{ opacity: 0, translateY: -6 }}
+                whileInView={{ opacity: 1, translateY: 0 }}
+              >
+                <WorkCard
+                  description={entry.data.description ?? ''}
+                  image={entry.data.image ?? null}
+                  meta={getWorkMeta(entry)}
+                  slugs={entry.slugs}
+                  title={entry.data.title ?? 'Untitled'}
+                  url={entry.url}
+                />
+              </ViewAnimation>
+            </li>
           ))}
-        </div>
+        </ul>
       </Section>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <CollectionPageJsonLd

@@ -33,6 +33,7 @@ export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
             render={
               <Link href={href} rel='noopener noreferrer' target='_blank' />
             }
+            shape='square'
             size='sm'
             variant='secondary'
           />
@@ -42,7 +43,7 @@ export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
         {label}
       </HoverCardTrigger>
       {preview && (
-        <HoverCardContent className='not-prose w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden border-dashed bg-card p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
+        <HoverCardContent className='not-prose w-[20rem] max-w-[calc(100vw-2rem)] overflow-hidden rounded-none border-line bg-card p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
           <a
             className='group block'
             href={href}
@@ -57,7 +58,7 @@ export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
               src={preview.screenshotPath}
               width={preview.width}
             />
-            <div className='flex items-center gap-2 border-border border-t border-dashed px-3 py-2.5 text-muted-foreground text-xs'>
+            <div className='flex items-center gap-2 border-line border-t px-3 py-2.5 text-muted-foreground text-xs'>
               <Image
                 alt=''
                 className='size-4 shrink-0 rounded-sm object-contain'
