@@ -481,32 +481,3 @@ html > body[data-scroll-locked] {
     @slot;
   }
 }
-
-@keyframes mobile-menu-dim-in {
-  from {
-    opacity: 0;
-  }
-}
-
-@media (max-width: 767.98px) {
-  html[data-mobile-menu-open] {
-    --white-wash-50: invert(1) brightness(0.5) invert(1);
-    --darken-50: brightness(0.5);
-    --mobile-menu-dim: var(--white-wash-50);
-  }
-
-  html.dark[data-mobile-menu-open] {
-    --mobile-menu-dim: var(--darken-50);
-  }
-
-  html[data-mobile-menu-open]::after {
-    position: fixed;
-    inset: 0;
-    z-index: 31;
-    pointer-events: none;
-    content: "";
-    -webkit-backdrop-filter: blur(4px) var(--mobile-menu-dim);
-    backdrop-filter: blur(4px) var(--mobile-menu-dim);
-    animation: mobile-menu-dim-in 150ms ease-out;
-  }
-}

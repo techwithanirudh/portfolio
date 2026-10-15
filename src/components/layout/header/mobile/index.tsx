@@ -10,7 +10,6 @@ import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
 import { useOiiaMode } from '@/components/oiia'
 
-const MENU_OPEN_ATTRIBUTE = 'data-mobile-menu-open'
 const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
 const DESKTOP_QUERY = '(min-width: 768px)'
 
@@ -33,13 +32,11 @@ function useRemountAfterThemeApplied() {
   return generation
 }
 
-function useMobileMenuScrim(open: boolean, closeMenu: () => void) {
+function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
   useEffect(() => {
     if (!open) {
       return
     }
-
-    document.documentElement.setAttribute(MENU_OPEN_ATTRIBUTE, '')
 
     const closeOnOutsideClick = (event: MouseEvent) => {
       if (
@@ -64,7 +61,6 @@ function useMobileMenuScrim(open: boolean, closeMenu: () => void) {
     document.addEventListener('click', closeOnOutsideClick, true)
     desktop.addEventListener('change', closeOnDesktop)
     return () => {
-      document.documentElement.removeAttribute(MENU_OPEN_ATTRIBUTE)
       document.removeEventListener('click', closeOnOutsideClick, true)
       desktop.removeEventListener('change', closeOnDesktop)
     }
@@ -83,7 +79,7 @@ export function MobileNav() {
   const closeMenu = useCallback(() => setOpen(false), [])
 
   const tintGeneration = useRemountAfterThemeApplied()
-  useMobileMenuScrim(open, closeMenu)
+  useCloseMenuOnOutsideClick(open, closeMenu)
 
   useEffect(() => {
     if (mode === 'oiia' || assistantOpen) {
