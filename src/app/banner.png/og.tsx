@@ -1,5 +1,5 @@
-import type { ImageResponseOptions } from '@takumi-rs/image-response'
 import type { ReactElement } from 'react'
+import { OgGrid } from '@/app/og/_lib/template'
 
 interface GenerateProps {
   subtitle?: string
@@ -25,14 +25,6 @@ function CodeIcon({ ...props }): ReactElement {
   )
 }
 
-export function getImageResponseOptions(): ImageResponseOptions {
-  return {
-    format: 'png',
-    height: 630,
-    width: 1200,
-  }
-}
-
 function getTitleSize(title?: string): number {
   const length = title?.length ?? 0
   if (length > 80) {
@@ -55,10 +47,7 @@ export function generate({
       style={{ fontFamily: 'Geist Sans' }}
       tw='flex h-full w-full bg-black text-white'
     >
-      <div tw='flex border absolute border-stone-900 border-dashed inset-y-0 left-16 w-[1px]' />
-      <div tw='flex border absolute border-stone-900 border-dashed inset-y-0 right-16 w-[1px]' />
-      <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] top-16' />
-      <div tw='flex border absolute border-stone-900 inset-x-0 h-[1px] bottom-16' />
+      <OgGrid border='border-stone-900' />
       <CodeIcon tw='absolute top-22 right-23' />
       <div tw='flex flex-col absolute w-[896px] justify-end inset-24 items-start'>
         <div

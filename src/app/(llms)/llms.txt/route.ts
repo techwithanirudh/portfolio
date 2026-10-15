@@ -29,6 +29,7 @@ ${allPosts.map((item) => `- [${item.data.title}](${url(['blog.mdx', ...item.slug
 `
 
 export const dynamic = 'force-static'
+export const revalidate = false
 
 export function GET() {
   return new Response(content, {

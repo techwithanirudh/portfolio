@@ -1,5 +1,6 @@
 import { ImageResponse } from '@takumi-rs/image-response'
-import { generate, getImageResponseOptions } from '@/app/banner.png/og'
+import { generate } from '@/app/banner.png/og'
+import { ogImageSize } from '@/app/og/_lib/template'
 
 export const GET = (): ImageResponse =>
   new ImageResponse(
@@ -7,5 +8,5 @@ export const GET = (): ImageResponse =>
       subtitle: 'Building web apps and AI experiments',
       title: 'Anirudh',
     }),
-    getImageResponseOptions()
+    { format: 'png', ...ogImageSize }
   )
