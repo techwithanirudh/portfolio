@@ -1,6 +1,6 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import type { FileObject } from 'next-validate-link'
+import { type FileObject, readFiles } from 'next-validate-link'
 import type { Browser } from 'playwright'
 import { remark } from 'remark'
 import remarkGfm from 'remark-gfm'
@@ -11,7 +11,7 @@ import {
   type LinkPreviewEntry,
   type LinkPreviewManifest,
 } from '@/lib/link-preview.shared'
-import { detection, exclusions, screenshot } from './config'
+import { content, detection, exclusions, screenshot, sources } from './config'
 import type { CaptureScreenshotResult } from './types'
 
 const mdProcessor = remark().use(remarkGfm)
@@ -103,6 +103,29 @@ export function extractUrls(file: FileObject): string[] {
   )
 
   return [...urls]
+}
+
+const sourceUrlPattern = /(?:['"`]|\]\()(https?:\/\/[^'"`\s$)]+)(?=['"`)])/g
+
+/** Extract external URLs from string literals and markdown links in a source file */
+export function extractSourceUrls(source: string): string[] {
+  return [...source.matchAll(sourceUrlPattern)]
+    .map(([, url]) => url)
+    .filter((url): url is string => Boolean(url && shouldGeneratePreview(url)))
+}
+
+/** Collect every previewable URL from content files and site source files */
+export async function collectUrls() {
+  const files = await readFiles(content)
+  const sourceTexts = await Promise.all(
+    sources.map((file) => fs.readFile(file, 'utf8'))
+  )
+  const urls = new Set([
+    ...files.flatMap((f) => extractUrls(f)),
+    ...sourceTexts.flatMap((text) => extractSourceUrls(text)),
+  ])
+
+  return { fileCount: files.length + sources.length, urls: [...urls] }
 }
 
 /** Keep only preview entries whose URL hashes are present in the given URL list */

@@ -27,12 +27,16 @@ export function Overview() {
             </IntroItemIcon>
             <IntroItemContent>
               {currentRole} @{' '}
-              <IntroItemLink
-                className='font-medium'
-                href={current.companyWebsite}
-              >
-                {current.companyName}
-              </IntroItemLink>
+              {current.companyWebsite ? (
+                <IntroItemLink
+                  className='font-medium'
+                  href={current.companyWebsite}
+                >
+                  {current.companyName}
+                </IntroItemLink>
+              ) : (
+                <span className='font-medium'>{current.companyName}</span>
+              )}
             </IntroItemContent>
           </IntroItem>
         )}

@@ -1,4 +1,5 @@
 import { BlurImage } from '@/components/blur-image'
+import { PreviewLink } from '@/components/preview-link'
 
 export function Coding() {
   return (
@@ -6,50 +7,40 @@ export function Coding() {
       <div className='border-border border-b border-dashed p-6'>
         <p className='text-muted-foreground'>
           I use{' '}
-          <a
+          <PreviewLink
             className='font-medium text-primary hover:underline'
             href='https://code.visualstudio.com'
-            rel='noopener noreferrer'
-            target='_blank'
           >
             Visual Studio Code
-          </a>{' '}
+          </PreviewLink>{' '}
           as my primary editor with the{' '}
-          <a
+          <PreviewLink
             className='font-medium text-primary hover:underline'
             href='https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme'
-            rel='noopener noreferrer'
-            target='_blank'
           >
             Cursor theme
-          </a>{' '}
+          </PreviewLink>{' '}
           ,{' '}
-          <a
+          <PreviewLink
             className='font-medium text-primary hover:underline'
             href='https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style'
-            rel='noopener noreferrer'
-            target='_blank'
           >
             Custom UI Style
-          </a>{' '}
+          </PreviewLink>{' '}
           tweaks, and the{' '}
-          <a
+          <PreviewLink
             className='font-medium text-primary hover:underline'
             href='https://www.jetbrains.com/lp/mono/'
-            rel='noopener noreferrer'
-            target='_blank'
           >
             JetBrains Mono
-          </a>{' '}
+          </PreviewLink>{' '}
           font with ligatures enabled. If you want the config, it lives in{' '}
-          <a
+          <PreviewLink
             className='font-medium text-primary hover:underline'
             href='https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json'
-            rel='noopener noreferrer'
-            target='_blank'
           >
             my dotfiles
-          </a>
+          </PreviewLink>
           .
         </p>
       </div>

@@ -11,6 +11,7 @@ import {
 
 export type {
   LinkPreviewEntry,
+  LinkPreviewImage,
   LinkPreviewManifest,
 } from './link-preview.shared'
 export { hashUrl } from './link-preview.shared'

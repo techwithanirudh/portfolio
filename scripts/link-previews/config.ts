@@ -9,6 +9,14 @@ export const content = [
   'content/work/**/*.{md,mdx}',
 ]
 
+export const sources = [
+  'src/constants/portfolio/experiences.tsx',
+  'src/constants/portfolio/colophon.ts',
+  'src/app/(home)/_components/profile/overview/index.tsx',
+  'src/app/(home)/uses/_components/coding.tsx',
+  'src/app/(home)/colophon/_components/attribution.tsx',
+]
+
 export const concurrency = 3
 
 export const maxScreenshotAgeMs = 6 * 30 * 24 * 60 * 60 * 1000
@@ -53,7 +61,7 @@ export const exclusions: ExclusionsConfig = {
     '.exe',
     '.pkg',
   ],
-  hostnames: ['localhost'],
+  hostnames: ['localhost', 'www.w3.org'],
 }
 
 export const detection: DetectionConfig = {

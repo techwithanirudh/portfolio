@@ -1,5 +1,6 @@
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
 import type { ComponentProps } from 'react'
+import { PreviewLink } from '@/components/preview-link'
 import { IconTile } from '@/components/ui/icon-tile'
 import { cn } from '@/lib/utils'
 
@@ -34,13 +35,9 @@ export function IntroItemContent({ className, ...props }: ComponentProps<'p'>) {
   return <p className={cn('text-balance', className)} {...props} />
 }
 
-export function IntroItemLink({ className, ...props }: ComponentProps<'a'>) {
-  return (
-    <a
-      className={cn('link-underline', className)}
-      rel='noopener noreferrer'
-      target='_blank'
-      {...props}
-    />
-  )
+export function IntroItemLink({
+  className,
+  ...props
+}: ComponentProps<typeof PreviewLink>) {
+  return <PreviewLink className={cn('link-underline', className)} {...props} />
 }
