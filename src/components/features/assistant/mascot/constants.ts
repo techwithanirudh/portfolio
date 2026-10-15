@@ -94,7 +94,7 @@ export const avatarMeta: Record<
     frame: [104, 100],
     label: 'Simba',
     padding: { bottom: 2, right: 0 },
-    sheet: [1040, 500],
+    sheet: [2496, 1000],
     sprite: '/assets/clippy/simba/simba.webp',
   },
 }

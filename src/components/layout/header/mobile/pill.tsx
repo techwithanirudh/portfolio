@@ -30,19 +30,19 @@ export function FloatingPill({
   ]
 
   return (
-    <div className='fixed inset-x-4 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex md:hidden'>
-      <div className='flex w-full items-center gap-0.5 bg-popover/90 py-1 pr-1 pl-2.5 shadow-md ring ring-foreground/10 backdrop-blur-md dark:ring-foreground/20'>
+    // A compact dock centered over the page, not a full width bar
+    <div className='pointer-events-none fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
+      <div className='pointer-events-auto flex items-center gap-0.5 bg-popover/90 p-1 shadow-md ring ring-foreground/10 backdrop-blur-md dark:ring-foreground/20'>
         <button
           aria-label='Search'
-          className='flex h-8 min-w-20 flex-1 items-center gap-2 text-muted-foreground text-sm transition-[color,scale] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-95'
+          className='flex size-8 items-center justify-center text-muted-foreground transition-[color,scale] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-90'
           onClick={onSearchOpen}
           type='button'
         >
           <Icons.search className='size-4' />
-          Search
         </button>
 
-        <div className='mr-1 ml-2.5 h-5 w-px bg-line' />
+        <div className='mx-1 h-5 w-px bg-line' />
 
         {primaryLinks.map((link) => (
           <NavItem

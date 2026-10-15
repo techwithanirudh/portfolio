@@ -1,5 +1,4 @@
 import { Children, type ReactNode } from 'react'
-import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import { Section } from './index'
 
@@ -28,29 +27,19 @@ export const HeroSection = ({
     <div className={cn('flex flex-col', className)}>
       {image && <div className='px-4 pb-4'>{image}</div>}
       {caption && (
-        <ViewAnimation
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <p className='px-4 pb-3 font-heading font-medium text-muted-foreground text-sm/none tracking-wider'>
-            {caption}
-          </p>
-        </ViewAnimation>
+        <p className='px-4 pb-3 font-heading font-medium text-muted-foreground text-sm/none tracking-wider'>
+          {caption}
+        </p>
       )}
-      {/* The title is usually the LCP, so it paints straight away */}
+      {/* Headers paint as one piece: animating some lines and not others
+          reads as jank, and the title is usually the LCP anyway */}
       <h1 className='screen-line-bottom text-balance px-4 pb-3 font-heading font-medium text-4xl tracking-tight'>
         {title}
       </h1>
       {description && (
-        <ViewAnimation
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <p className='text-balance p-4 text-base text-muted-foreground'>
-            {description}
-          </p>
-        </ViewAnimation>
+        <p className='text-balance p-4 text-base text-muted-foreground'>
+          {description}
+        </p>
       )}
       {Children.count(children) > 0 && (
         <div className='flex flex-wrap items-center gap-2 px-4 pb-4'>

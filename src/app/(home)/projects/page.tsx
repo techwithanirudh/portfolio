@@ -79,17 +79,11 @@ export default async function Page(props: {
         totalWorks={totalWorks}
       />
       <Section>
-        <ViewAnimation
-          delay={0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          <SearchRedirectInput
-            className='min-w-full'
-            placeholder='Search projects...'
-            tag='projects'
-          />
-        </ViewAnimation>
+        <SearchRedirectInput
+          className='min-w-full'
+          placeholder='Search projects...'
+          tag='projects'
+        />
       </Section>
       <Section>
         {/* Every cell draws its own bottom rule; the last row's lands exactly on
