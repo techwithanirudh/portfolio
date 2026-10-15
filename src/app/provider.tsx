@@ -13,7 +13,15 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { UiSounds } from '@/components/ui-sounds'
+import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { useSoundEnabled } from '@/lib/audio/preferences'
+
+// Mounted once here so the `d` shortcut fires once, no matter how many
+// theme toggles are on the page. Lives inside SoundProvider so it respects mute.
+function ThemeShortcut() {
+  useThemeShortcut()
+  return null
+}
 
 export function Provider({
   children,
@@ -25,6 +33,7 @@ export function Provider({
   return (
     <SoundProvider enabled={soundEnabled}>
       <UiSounds />
+      <ThemeShortcut />
       <FaviconEyes />
       <OiiaProvider>
         <Assistant>
@@ -36,7 +45,6 @@ export function Provider({
               showSpinner: false,
             }}
             shallowRouting
-            startOnLoad
             stopDelay={200}
           >
             <TooltipProvider>

@@ -8,10 +8,10 @@ export interface Frame {
   y: number
 }
 
-// Painted in-betweens run at their own timing; the key poses hold a little
-// longer than the original sheet so he doesn't feel hurried
+// Painted in-betweens run at their own timing; the key poses hold a touch
+// shorter than the original sheet so he stays lively
 const TWEEN_MS = 100
-const POSE_PACE = 1.35
+const POSE_PACE = 0.85
 
 const pace = ({ duration, ...frame }: Frame): Frame => ({
   ...frame,

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { unstable_rethrow } from 'next/navigation'
 import { Suspense } from 'react'
 import { WebPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
@@ -30,6 +31,8 @@ const loadEntries = async () => {
 async function GuestbookEntriesSection() {
   // A database hiccup shouldn't take the heading and form down with it
   const result = await loadEntries().catch((error: unknown) => {
+    // Let Next's own signals (dynamic rendering, redirects) through
+    unstable_rethrow(error)
     console.error('Failed to load guestbook entries', error)
     return null
   })

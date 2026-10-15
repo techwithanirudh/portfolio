@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useSyncExternalStore } from 'react'
 
 // A small easter egg: the favicon is the portrait, and its eyes follow the
 // pointer around the page, blink now and then, and shut while you're in
@@ -19,6 +19,17 @@ const EYES = [
 const EYE = { angle: (16 * Math.PI) / 180, length: 77, width: 29 }
 // How far the eyes can wander from rest, in icon pixels
 const REACH = { x: 12, y: 10 }
+// Gaze snaps to this many steps each way, so tiny pointer moves don't
+// re-encode the icon, and redraws are capped at about 15 a second
+const STEPS = 4
+const MIN_FRAME_MS = 1000 / 15
+const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
+
+const subscribeReducedMotion = (onChange: () => void) => {
+  const query = window.matchMedia(REDUCED_MOTION)
+  query.addEventListener('change', onChange)
+  return () => query.removeEventListener('change', onChange)
+}
 
 const capsule = (
   context: CanvasRenderingContext2D,
@@ -36,8 +47,15 @@ const capsule = (
 }
 
 export function FaviconEyes() {
+  // Reduced motion keeps the plain static favicon: no tracking, no blinking
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    () => window.matchMedia(REDUCED_MOTION).matches,
+    () => true
+  )
+
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (reducedMotion) {
       return
     }
     const links = [
@@ -59,12 +77,24 @@ export function FaviconEyes() {
     const image = new Image()
     let look = { x: 0, y: 0 }
     let closed = document.hidden ? 1 : 0
-    let frame = 0
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let lastDraw = 0
+    let drawnState = ''
     let lastUrl = ''
+    // Stray timers (blink reopen, late image load) mustn't redraw after cleanup
+    let disposed = false
     let blinkTimer: ReturnType<typeof setTimeout> | undefined
 
+    const state = () => `${look.x},${look.y},${closed}`
+
     const draw = () => {
-      frame = 0
+      if (disposed) {
+        return
+      }
+      clearTimeout(timer)
+      timer = undefined
+      lastDraw = performance.now()
+      drawnState = state()
       context.setTransform(1, 0, 0, 1, 0, 0)
       context.clearRect(0, 0, WORK, WORK)
       context.drawImage(image, 0, 0, WORK, WORK)
@@ -79,7 +109,10 @@ export function FaviconEyes() {
         context.restore()
 
         context.save()
-        context.translate(eye.x + look.x * REACH.x, eye.y + look.y * REACH.y)
+        context.translate(
+          eye.x + (look.x / STEPS) * REACH.x,
+          eye.y + (look.y / STEPS) * REACH.y
+        )
         context.rotate(EYE.angle)
         context.fillStyle = INK
         context.scale(1, 1 - closed * 0.85)
@@ -97,9 +130,11 @@ export function FaviconEyes() {
       }
     }
     const schedule = () => {
-      if (!(frame || !image.complete)) {
-        frame = requestAnimationFrame(draw)
+      if (timer || !image.complete || state() === drawnState) {
+        return
       }
+      const wait = Math.max(0, lastDraw + MIN_FRAME_MS - performance.now())
+      timer = setTimeout(draw, wait)
     }
 
     const blink = () => {
@@ -113,10 +148,11 @@ export function FaviconEyes() {
     }
 
     const onPointerMove = (event: PointerEvent) => {
-      const clamp = (value: number) => Math.max(-1, Math.min(1, value))
+      const step = (value: number) =>
+        Math.round(Math.max(-1, Math.min(1, value)) * STEPS)
       look = {
-        x: clamp((event.clientX / window.innerWidth) * 2 - 1),
-        y: clamp((event.clientY / window.innerHeight) * 2 - 1),
+        x: step((event.clientX / window.innerWidth) * 2 - 1),
+        y: step((event.clientY / window.innerHeight) * 2 - 1),
       }
       schedule()
     }
@@ -126,11 +162,14 @@ export function FaviconEyes() {
     }
     const onVisibility = () => {
       closed = document.hidden ? 1 : 0
-      // Background tabs don't paint frames, so draw right away
+      // Background tabs throttle timers, so draw right away
       draw()
     }
 
     image.onload = () => {
+      if (disposed) {
+        return
+      }
       draw()
       blinkTimer = setTimeout(blink, 2000)
     }
@@ -141,7 +180,8 @@ export function FaviconEyes() {
     document.addEventListener('visibilitychange', onVisibility)
 
     return () => {
-      cancelAnimationFrame(frame)
+      disposed = true
+      clearTimeout(timer)
       clearTimeout(blinkTimer)
       window.removeEventListener('pointermove', onPointerMove)
       document.documentElement.removeEventListener('pointerleave', onLeave)
@@ -150,7 +190,7 @@ export function FaviconEyes() {
         link.href = originals[index] ?? link.href
       })
     }
-  }, [])
+  }, [reducedMotion])
 
   return null
 }

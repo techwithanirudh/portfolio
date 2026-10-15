@@ -40,7 +40,7 @@ const ResumeSection = ({
   title: string
 }) => (
   <section className='break-inside-avoid-page'>
-    <h2 className='mb-3 border-neutral-300 border-b pb-1 font-mono text-[11px] text-neutral-500 uppercase tracking-widest'>
+    <h2 className='mb-3 border-neutral-300 border-b pb-1 font-mono text-[11px] text-neutral-600 uppercase tracking-widest'>
       {title}
     </h2>
     {children}
@@ -59,7 +59,7 @@ export default function ResumePage() {
     >
       <div className='mx-auto mb-4 flex max-w-[210mm] items-center justify-between print:hidden'>
         <Link
-          className='group inline-flex items-center gap-1.5 font-mono text-neutral-500 text-xs transition-colors hover:text-neutral-900'
+          className='group inline-flex items-center gap-1.5 font-mono text-neutral-600 text-xs transition-colors hover:text-neutral-900'
           href='/about'
         >
           <Icons.arrowLeft className='size-3.5' />
@@ -74,7 +74,7 @@ export default function ResumePage() {
             <h1 className='font-heading font-medium text-3xl tracking-tight'>
               {owner}
             </h1>
-            <span className='font-mono text-neutral-500 text-xs'>
+            <span className='font-mono text-neutral-600 text-xs'>
               {profile.location} · {profile.pronouns}
             </span>
           </div>
@@ -110,7 +110,7 @@ export default function ResumePage() {
                         experience.companyName
                       )}
                     </h3>
-                    <span className='font-mono text-[11px] text-neutral-500 tabular-nums'>
+                    <span className='font-mono text-[11px] text-neutral-600 tabular-nums'>
                       {[
                         position.employmentType,
                         formatPeriod(position.employmentPeriod),
@@ -125,7 +125,7 @@ export default function ResumePage() {
                     </p>
                   )}
                   {position.skills?.length ? (
-                    <p className='font-mono text-[11px] text-neutral-500'>
+                    <p className='font-mono text-[11px] text-neutral-600'>
                       {position.skills.join(' · ')}
                     </p>
                   ) : null}
@@ -145,7 +145,7 @@ export default function ResumePage() {
                       {project.data.title}
                     </a>
                   </h3>
-                  <span className='font-mono text-[11px] text-neutral-500 tabular-nums'>
+                  <span className='font-mono text-[11px] text-neutral-600 tabular-nums'>
                     {new Date(project.data.date).getFullYear()}
                   </span>
                 </div>
@@ -154,7 +154,7 @@ export default function ResumePage() {
                   {project.data.description}
                 </p>
                 {project.data.tags?.length ? (
-                  <p className='truncate font-mono text-[11px] text-neutral-500'>
+                  <p className='truncate font-mono text-[11px] text-neutral-600'>
                     {project.data.tags.join(' · ')}
                   </p>
                 ) : null}
@@ -167,7 +167,7 @@ export default function ResumePage() {
           <dl className='grid grid-cols-[auto_1fr] gap-x-4 gap-y-1'>
             {stack.map(({ category, labels }) => (
               <div className='contents' key={category}>
-                <dt className='font-mono text-[11px] text-neutral-500 leading-relaxed'>
+                <dt className='font-mono text-[11px] text-neutral-600 leading-relaxed'>
                   {category}
                 </dt>
                 <dd className='text-neutral-700'>{labels.join(', ')}</dd>

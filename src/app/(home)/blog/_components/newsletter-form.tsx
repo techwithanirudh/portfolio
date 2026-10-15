@@ -11,6 +11,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -53,6 +54,7 @@ export const NewsletterForm = () => {
               name='email'
               render={({ field }) => (
                 <FormItem className='group h-full'>
+                  <FormLabel className='sr-only'>Email address</FormLabel>
                   <FormControl className='h-full group-has-[p]:pt-3'>
                     <Input
                       {...field}
