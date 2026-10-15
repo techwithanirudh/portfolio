@@ -1,47 +1,56 @@
+import { palette, principles } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 
-const palette = [
-  { className: 'bg-background', label: 'Background' },
-  { className: 'bg-card', label: 'Card' },
-  { className: 'bg-muted', label: 'Muted' },
-  { className: 'bg-muted-foreground', label: 'Muted F.G' },
-  { className: 'bg-border', label: 'Border' },
-  { className: 'bg-foreground', label: 'Foreground' },
-  { className: 'bg-primary', label: 'Primary' },
-  { className: 'bg-primary/30', label: 'Primary Soft' },
-  { className: 'bg-accent', label: 'Accent' },
-  { className: 'bg-accent-foreground', label: 'Accent F.G' },
-]
-
 export const Design = () => (
-  <div className='flex flex-col divide-y divide-line text-left'>
-    <div className='space-y-4 bg-card/50 p-4 text-muted-foreground text-sm'>
-      <p>
-        A ruled grid with square corners, screen-wide rules and hatched bands.
-        Geist Mono sets headings and labels, Geist Sans sets body text.
-      </p>
+  <div>
+    <ol className='grid border-line border-b sm:grid-cols-2 [&>*:not(:last-child)]:border-b sm:[&>*:nth-child(odd)]:border-r sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-line'>
+      {principles.map((principle, index) => (
+        <li
+          className='group flex gap-3 p-4 transition-colors hover:bg-card'
+          key={principle.title}
+        >
+          <span
+            aria-hidden
+            className='grid size-6 shrink-0 select-none place-items-center border border-line bg-card font-mono text-[0.6875rem] text-muted-foreground transition-[rotate,color] duration-300 group-hover:rotate-12 group-hover:text-primary'
+          >
+            {(index + 1).toString().padStart(2, '0')}
+          </span>
+          <div className='flex flex-col gap-0.5'>
+            <h3 className='font-heading font-medium text-foreground text-sm tracking-tight'>
+              {principle.title}
+            </h3>
+            <p className='text-pretty text-muted-foreground text-sm'>
+              {principle.description}
+            </p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <div className='border-line border-b px-4 py-3 font-mono text-muted-foreground text-xs'>
+      Palette
     </div>
-    <div className='bg-card/50 p-4'>
-      <div className='pb-3 font-medium text-foreground text-sm'>Palette</div>
-      <div className='grid gap-3'>
-        <div className='grid grid-cols-5 border border-line sm:grid-cols-10'>
-          {palette.map((tone) => (
-            <div
-              className={cn(
-                'relative flex flex-1 items-center justify-center px-3 py-3',
-                tone.className
-              )}
-              key={tone.label}
-            >
-              <span className='hidden h-6 items-center justify-center truncate border bg-white/80 px-2 font-medium text-[11px] text-black lg:inline-flex dark:bg-black/80 dark:text-white'>
+    <div className='overflow-hidden'>
+      <div className='-mr-px -mb-px grid grid-cols-3 bg-dashed sm:grid-cols-5 [&>*]:border-line [&>*]:border-r [&>*]:border-b'>
+        {palette.map((tone) => (
+          <div className='group flex flex-col bg-background' key={tone.token}>
+            <div className='overflow-hidden border-line border-b'>
+              <div
+                className={cn(
+                  'h-16 transition-[scale] duration-300 group-hover:scale-110',
+                  tone.className
+                )}
+              />
+            </div>
+            <div className='flex flex-col gap-0.5 px-3 py-2'>
+              <span className='font-medium text-foreground text-xs'>
                 {tone.label}
               </span>
+              <span className='truncate font-mono text-[0.6875rem] text-muted-foreground'>
+                {tone.token}
+              </span>
             </div>
-          ))}
-        </div>
-        <p className='text-muted-foreground text-sm'>
-          The palette is neutral, with a blue accent for focus rings and links.
-        </p>
+          </div>
+        ))}
       </div>
     </div>
   </div>

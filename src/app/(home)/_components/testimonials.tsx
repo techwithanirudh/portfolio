@@ -93,11 +93,26 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
     autoplay,
   ])
 
+  // Autoplay needs a way to stop it for good (WCAG 2.2.2); reduced motion
+  // starts it paused
+  const [paused, setPaused] = useState(false)
+
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      autoplay.stop()
+      setPaused(true)
     }
-  }, [autoplay])
+  }, [])
+
+  useEffect(() => {
+    if (!api) {
+      return
+    }
+    if (paused) {
+      autoplay.stop()
+    } else {
+      autoplay.play()
+    }
+  }, [api, autoplay, paused])
 
   const arrow =
     'flex w-12 items-center justify-center border-line border-l text-muted-foreground transition-colors hover:bg-card hover:text-foreground'
@@ -108,6 +123,18 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
         action={
           testimonials.length > 1 ? (
             <>
+              <button
+                aria-label={paused ? 'Play testimonials' : 'Pause testimonials'}
+                className={arrow}
+                onClick={() => setPaused((value) => !value)}
+                type='button'
+              >
+                {paused ? (
+                  <Icons.play className='size-3.5' />
+                ) : (
+                  <Icons.pause className='size-3.5' />
+                )}
+              </button>
               <button
                 aria-label='Previous testimonial'
                 className={arrow}

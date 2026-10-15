@@ -59,6 +59,15 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
                   </p>
                 </ViewTransition>
               </div>
+              {/* Year and stack in mono, so a row scans like the resume */}
+              <div className='hidden shrink-0 flex-col items-end gap-1 font-mono text-muted-foreground text-xs sm:flex'>
+                <span className='text-foreground/80 tabular-nums'>
+                  {new Date(work.data.date).getFullYear()}
+                </span>
+                {work.data.tags?.length ? (
+                  <span>{work.data.tags.slice(0, 2).join(' · ')}</span>
+                ) : null}
+              </div>
               <Icons.arrowRight className='size-4 shrink-0 text-muted-foreground transition-[rotate,translate,scale,color] duration-300 group-hover:-rotate-45 group-hover:text-foreground' />
             </Link>
           </ViewAnimation>

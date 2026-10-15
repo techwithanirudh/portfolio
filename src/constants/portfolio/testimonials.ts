@@ -3,7 +3,7 @@ import type { Testimonial } from '@/types'
 export const testimonials: Testimonial[] = [
   {
     author: {
-      image: '/images/testimonials/1.jpg',
+      image: '/images/testimonials/1.webp',
       name: 'Lazare Rossilion',
     },
     description:
@@ -12,7 +12,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     author: {
-      image: '/images/testimonials/2.jpg',
+      image: '/images/testimonials/2.webp',
       name: 'Vivek Ganesan',
     },
     description:
@@ -21,7 +21,7 @@ export const testimonials: Testimonial[] = [
   },
   {
     author: {
-      image: '/images/testimonials/3.jpg',
+      image: '/images/testimonials/3.webp',
       name: 'Karuppiah N',
     },
     description:

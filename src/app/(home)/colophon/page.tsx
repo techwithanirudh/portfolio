@@ -3,37 +3,69 @@ import type { ReactNode } from 'react'
 import { Fragment } from 'react'
 import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
-import { SectionHeader } from '@/components/layout/sections/header'
+import {
+  SectionHeader,
+  SectionTitleSup,
+} from '@/components/layout/sections/header'
 import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
+import { attributions, technology } from '@/constants/portfolio/colophon'
 import { createMetadata } from '@/lib/metadata'
 import { Attribution } from './_components/attribution'
 import { Design } from './_components/design'
+import { Facts } from './_components/facts'
 import Hero from './_components/hero'
 import { Technology } from './_components/technology'
 import { Typography } from './_components/typography'
 
 const title = 'Colophon'
-const description = 'The tools, fonts, and people behind this website.'
+const description =
+  'How this site is built, what it is set in, and who I borrowed from.'
+
+interface ColophonSection {
+  content: ReactNode
+  description?: string
+  id: string
+  title?: ReactNode
+}
 
 export default function ColophonPage() {
-  const sections: Array<{ title?: string | null; content: ReactNode }> = [
+  const sections: ColophonSection[] = [
+    { content: <Facts />, id: 'facts' },
     {
       content: <Technology />,
-      title: 'Technology',
+      description: 'The stack, grouped by what it does here.',
+      id: 'technology',
+      title: (
+        <>
+          Technology<SectionTitleSup>({technology.length})</SectionTitleSup>
+        </>
+      ),
     },
     {
       content: <Typography />,
+      description:
+        'Set entirely in Geist, the sans for reading and the mono for everything else.',
+      id: 'typography',
       title: 'Typography',
     },
     {
       content: <Design />,
-      title: 'Design & Colors',
+      description: 'A handful of rules the whole site sticks to.',
+      id: 'design',
+      title: 'Design',
     },
     {
       content: <Attribution />,
-      title: 'Attribution',
+      description: 'People and projects this site owes a lot to.',
+      id: 'attribution',
+      title: (
+        <>
+          Attribution
+          <SectionTitleSup>({attributions.length})</SectionTitleSup>
+        </>
+      ),
     },
   ]
 
@@ -46,9 +78,14 @@ export default function ColophonPage() {
         const contentDelay = section.title ? baseDelay + 0.05 : 0
 
         return (
-          <Fragment key={section.title ?? `colophon-section-${index}`}>
-            <Section>
-              {section.title && <SectionHeader title={section.title} />}
+          <Fragment key={section.id}>
+            <Section id={section.id}>
+              {section.title && (
+                <SectionHeader
+                  description={section.description}
+                  title={section.title}
+                />
+              )}
               <ViewAnimation delay={contentDelay}>
                 {section.content}
               </ViewAnimation>
