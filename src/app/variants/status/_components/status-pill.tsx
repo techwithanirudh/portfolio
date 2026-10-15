@@ -6,7 +6,7 @@ const pills = {
   completed: { icon: Check, label: 'Completed', tone: 'var(--muted)' },
   current: { icon: null, label: 'Current', tone: 'var(--ok)' },
   idle: { icon: Moon, label: 'Idle', tone: 'var(--warn)' },
-  maintained: { icon: Wrench, label: 'Maintained', tone: 'var(--maint)' },
+  maintained: { icon: Wrench, label: 'Maintained', tone: 'var(--maintained)' },
   operational: { icon: null, label: 'Operational', tone: 'var(--ok)' },
 } as const
 
@@ -18,7 +18,7 @@ interface StatusPillProps {
   label?: string
 }
 
-/** A status label that never relies on colour alone: icon or dot plus text. */
+/** A status label that never relies on color alone: icon or dot plus text. */
 export function StatusPill({ className, kind, label }: StatusPillProps) {
   const { icon: Icon, label: fallback, tone } = pills[kind]
   return (

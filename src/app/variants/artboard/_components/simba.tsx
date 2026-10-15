@@ -43,6 +43,7 @@ const SIMBA_PATHS = {
 const EYES = [circle(64, 62, 4.5), circle(96, 62, 4.5)]
 
 const NUMBER_SEP = /[\s,]+/
+// cspell:ignore MLCZ
 const COMMANDS = /[MLCZ][^MLCZ]*/g
 
 /** Endpoints of every segment: the anchor points a pen tool would show. */

@@ -74,7 +74,7 @@ function useTypography(el: HTMLElement | undefined, enabled: boolean) {
     null
   )
 
-  // Re-read when the theme flips: the text colour changes with it.
+  // Re-read when the theme flips: the text color changes with it.
   // biome-ignore lint/correctness/useExhaustiveDependencies: resolvedTheme is the trigger
   useEffect(() => {
     if (!(el && enabled)) {

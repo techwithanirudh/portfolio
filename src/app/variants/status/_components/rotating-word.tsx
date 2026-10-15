@@ -11,7 +11,7 @@ interface RotatingWordProps {
 }
 
 /**
- * Nelson's rotating hero word, re-coloured to one accent and with
+ * Nelson's rotating hero word, re-colored to one accent and with
  * `useReducedMotion`: under reduced motion it stays on the first word.
  * All words are listed for screen readers, once.
  */

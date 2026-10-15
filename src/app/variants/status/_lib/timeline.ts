@@ -1,6 +1,6 @@
 /**
  * Everything the Status variant derives from the real data: career months
- * coloured by kind, project status and month segments, incident history.
+ * colored by kind, project status and month segments, incident history.
  * Nothing here is typed in by hand; each rule is written next to the code so
  * the page can say "derived" and mean it.
  */
@@ -17,7 +17,7 @@ import {
 
 export const START_YEAR = 2018
 
-/** One bar in an uptime row. `tone` is a CSS colour (a variant token). */
+/** One bar in an uptime row. `tone` is a CSS color (a variant token). */
 export interface Segment {
   detail?: string
   key: string
@@ -206,7 +206,7 @@ export const projectStatuses: {
     label: 'Maintained',
     rule: 'has a repo and is from 2025 or later',
     status: 'maintained',
-    tone: 'var(--maint)',
+    tone: 'var(--maintained)',
   },
   {
     label: 'Archived',

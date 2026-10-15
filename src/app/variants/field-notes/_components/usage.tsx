@@ -26,7 +26,7 @@ function Favicon({ logo, url }: { logo?: SoftwareItem['logo']; url?: string }) {
     'mr-2 inline-block size-[17px] shrink-0 rounded-[3px] object-contain'
   if (typeof logo === 'string') {
     return (
-      // biome-ignore lint/performance/noImgElement: tiny static icon, no optimisation needed
+      // biome-ignore lint/performance/noImgElement: tiny static icon, no optimization needed
       <img
         alt=''
         className={cls}

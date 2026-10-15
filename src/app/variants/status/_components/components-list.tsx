@@ -16,7 +16,7 @@ const LABELS: Record<(typeof FILTERS)[number], string> = {
 
 const TONES: Record<ProjectStatus, string> = {
   archived: 'var(--archived)',
-  maintained: 'var(--maint)',
+  maintained: 'var(--maintained)',
   operational: 'var(--ok)',
 }
 

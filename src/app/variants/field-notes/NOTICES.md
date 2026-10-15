@@ -7,7 +7,7 @@ no code, markup or SVG paths from that repository are used.
 
 ## Sources
 
-| File in this variant | Source | Licence |
+| File in this variant | Source | License |
 | --- | --- | --- |
 | `about/page.tsx` | victoreke.com `app/about/page.tsx` (bio left, sticky aside with photo, "View Résumé" + download button, email) | MIT, © 2023 Victor Eke |
 | `about/page.tsx` ("Let's connect!" block) | jahir.dev `src/app/about/page.tsx` | MIT, © 2022 Jahir Fiquitiva |
@@ -16,14 +16,14 @@ no code, markup or SVG paths from that repository are used.
 | `_components/now-card.tsx` | jahir.dev `src/components/ui/about/activity/index.tsx`, `book.tsx`, `activity.styles.ts` (activity card structure: state label, title, detail) | MIT, © 2022 Jahir Fiquitiva |
 | `_components/local-time.tsx` | jahir.dev `src/components/molecules/footer/now-playing/time.tsx` (hour clock icon paths, "It's currently…" line) and `doing.tsx` | MIT, © 2022 Jahir Fiquitiva |
 
-Ideas only, rebuilt from scratch (braydoncoyer.dev, no licence):
+Ideas only, rebuilt from scratch (braydoncoyer.dev, no license):
 `_components/journey-path.tsx` (alternating chapters joined by a path with a
 dot that follows scroll; here the path is computed from measured photo
 positions and dashed) and the tilted photos in `_components/taped-photo.tsx`.
 
 Everything else in this folder is original to this variant.
 
-## victoreke.com licence
+## victoreke.com license
 
 ```
 MIT License
@@ -49,7 +49,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## jahir.dev licence
+## jahir.dev license
 
 ```
 MIT License

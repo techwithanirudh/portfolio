@@ -21,7 +21,7 @@
   --down: #d93a3f;
   --accent: #3454b4;
   --accent-ink: #ffffff;
-  --maint: #3454b4;
+  --maintained: #3454b4;
   --archived: #8a93a3;
   --idle: #e3e6ec;
 
@@ -66,7 +66,7 @@
   --down: #f2555a;
   --accent: #a8b4ff;
   --accent-ink: #0a0b0e;
-  --maint: #a8b4ff;
+  --maintained: #a8b4ff;
   --archived: #5f6878;
   --idle: #22262f;
 
@@ -93,7 +93,7 @@
 
 /*
  * Rules live in the components layer so Tailwind utilities on the same
- * element still win, which lets markup override a card's padding or colour.
+ * element still win, which lets markup override a card's padding or color.
  */
 @layer components {
   .v-status {

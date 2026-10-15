@@ -5,7 +5,7 @@ import { getCareerMonths, START_YEAR, yearsBuilding } from '../_lib/timeline'
 import { KindLegend } from './kind-legend'
 import { UptimeBar } from './uptime-bar'
 
-/** Every month since 2018 as one bar, coloured by the kind of work. */
+/** Every month since 2018 as one bar, colored by the kind of work. */
 export function CareerStrip() {
   const months = getCareerMonths()
   const covered = months.filter((m) => m.state === 'active').length
@@ -39,7 +39,7 @@ export function CareerStrip() {
         <UptimeBar
           gap={2}
           height={44}
-          label={`Career by month since ${START_YEAR}, coloured by kind of work`}
+          label={`Career by month since ${START_YEAR}, colored by kind of work`}
           segments={months}
         />
         <div className='vs-num relative mt-2 h-4 text-[11px] text-[var(--muted)]'>

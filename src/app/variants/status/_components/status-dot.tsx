@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 interface StatusDotProps {
   className?: string
   pulse?: boolean
-  /** Any CSS colour, usually a variant token like `var(--ok)`. */
+  /** Any CSS color, usually a variant token like `var(--ok)`. */
   tone?: string
 }
 

@@ -1,4 +1,4 @@
-/** Small colour helpers for the Properties panel's swatches and readouts. */
+/** Small color helpers for the Properties panel's swatches and readouts. */
 
 const toHex = (n: number) =>
   Math.round(Math.min(255, Math.max(0, n)))
@@ -32,8 +32,8 @@ function hslToHex(h: number, s: number, l: number) {
 }
 
 /**
- * A stable swatch for a stack tag, so "Next.js" is always the same colour.
- * Decorative: the colours carry no meaning beyond telling tags apart.
+ * A stable swatch for a stack tag, so "Next.js" is always the same color.
+ * Decorative: the colors carry no meaning beyond telling tags apart.
  */
 export function tagSwatch(tag: string) {
   let hash = 0

@@ -5,7 +5,7 @@ import type { Incident, IncidentStage } from '../_lib/timeline'
 const stageTone: Record<IncidentStage, string> = {
   Identified: 'var(--text)',
   Investigating: 'var(--text)',
-  Monitoring: 'var(--maint)',
+  Monitoring: 'var(--maintained)',
   Resolved: 'var(--ok)',
   Update: 'var(--text)',
 }
@@ -39,8 +39,8 @@ export function IncidentHistory({ incidents }: { incidents: Incident[] }) {
               <span
                 className='inline-flex h-6 items-center gap-1.5 rounded-full px-2.5 font-medium text-[12px]'
                 style={{
-                  background: `color-mix(in srgb, ${incident.ongoing ? 'var(--maint)' : 'var(--ok)'} 13%, transparent)`,
-                  color: `color-mix(in srgb, ${incident.ongoing ? 'var(--maint)' : 'var(--ok)'} 82%, var(--text))`,
+                  background: `color-mix(in srgb, ${incident.ongoing ? 'var(--maintained)' : 'var(--ok)'} 13%, transparent)`,
+                  color: `color-mix(in srgb, ${incident.ongoing ? 'var(--maintained)' : 'var(--ok)'} 82%, var(--text))`,
                 }}
               >
                 {incident.ongoing ? (

@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Small square chip that frames a leading icon in list rows. Squared off and
- * drawn with the sheet's own line colour instead of the original's ring, so it
+ * drawn with the sheet's own line color instead of the original's ring, so it
  * reads as a symbol box on a drawing.
  */
 export function IconTile({ className, ...props }: React.ComponentProps<'div'>) {
