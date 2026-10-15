@@ -129,13 +129,12 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
         }
         title='Testimonials'
       />
-      <div
+      <section
         aria-label='Testimonials'
         aria-roledescription='carousel'
         // pb-px keeps the hover fill off the section's bottom rule
         className='overflow-hidden pb-px'
         ref={viewportRef}
-        role='region'
       >
         <ul className='flex'>
           {testimonials.map((testimonial, index) => (
@@ -150,7 +149,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
             </li>
           ))}
         </ul>
-      </div>
+      </section>
     </Section>
   )
 }
