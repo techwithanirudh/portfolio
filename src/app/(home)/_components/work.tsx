@@ -29,14 +29,14 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
               {work.data.image ? (
                 <Image
                   alt=''
-                  className='h-14 w-24 shrink-0 border border-line object-cover shadow-xs transition-[rotate,scale,box-shadow] duration-300 ease-out will-change-transform group-hover:-rotate-3 group-hover:scale-[1.06] group-hover:shadow-md motion-reduce:transition-none'
+                  className='h-14 w-24 shrink-0 rounded-[8px] border border-line object-cover shadow-xs transition-[rotate,scale,box-shadow] duration-300 ease-out will-change-transform group-hover:-rotate-3 group-hover:scale-[1.06] group-hover:shadow-md motion-reduce:transition-none'
                   height={56}
                   sizes='96px'
                   src={work.data.image}
                   width={96}
                 />
               ) : (
-                <span className='h-14 w-24 shrink-0 bg-muted' />
+                <span className='h-14 w-24 shrink-0 rounded-[8px] bg-muted' />
               )}
               <div className='min-w-0 flex-1'>
                 <h3 className='font-medium text-base tracking-tight transition-colors group-hover:text-primary'>

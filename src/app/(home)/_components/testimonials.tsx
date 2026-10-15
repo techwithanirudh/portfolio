@@ -36,7 +36,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
           </blockquote>
           <p className='flex items-center gap-2 font-mono text-xs'>
             <Avatar
-              className='size-5 transition-transform duration-300 group-hover:scale-125'
+              className='size-5 rounded-full transition-transform duration-300 *:rounded-full group-hover:scale-125'
               outlined={false}
             >
               <AvatarImage alt='' src={testimonial.author.image} />

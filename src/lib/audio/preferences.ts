@@ -7,6 +7,7 @@ import {
 import { useSyncExternalStore } from 'react'
 
 const STORAGE_KEY = 'sound-enabled'
+const UNLOCK_EVENTS = ['pointerdown', 'keydown', 'touchend'] as const
 const listeners = new Set<() => void>()
 const players = new WeakMap<SoundDefinition, (opts?: PlayOptions) => unknown>()
 
@@ -20,6 +21,25 @@ const read = () => {
 
 let enabled = true
 let hydrated = false
+
+// Browsers keep audio locked until the first click, tap or key press, and no
+// hover or scroll counts. Sounds asked for before then are dropped rather
+// than queued, so the unlocking click doesn't set off a burst of old hovers.
+let unlocked = false
+if (typeof window !== 'undefined') {
+  const unlock = () => {
+    unlocked = true
+    ensureReady().catch(() => {
+      // Another gesture will try again
+    })
+    for (const type of UNLOCK_EVENTS) {
+      window.removeEventListener(type, unlock, true)
+    }
+  }
+  for (const type of UNLOCK_EVENTS) {
+    window.addEventListener(type, unlock, { capture: true, passive: true })
+  }
+}
 
 const hydrate = () => {
   if (!hydrated && typeof window !== 'undefined') {
@@ -60,7 +80,7 @@ export const useSoundEnabled = () =>
 // useSound. It honors the same mute switch and reduced motion setting.
 export const playSound = (definition: SoundDefinition, opts?: PlayOptions) => {
   if (
-    !getSoundEnabled() ||
+    !(unlocked && getSoundEnabled()) ||
     window.matchMedia('(prefers-reduced-motion: reduce)').matches
   ) {
     return
