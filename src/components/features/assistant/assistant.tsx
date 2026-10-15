@@ -157,7 +157,7 @@ function Header() {
           aria-label='New chat'
           className={cn(
             buttonVariants({
-              className: 'size-10 rounded-none border-none [&_svg]:size-4',
+              className: 'size-10 border-none [&_svg]:size-4',
               color: 'secondary',
               size: 'icon-sm',
             })
@@ -175,7 +175,7 @@ function Header() {
           aria-label='Close'
           className={cn(
             buttonVariants({
-              className: 'size-10 rounded-none border-none [&_svg]:size-4',
+              className: 'size-10 border-none [&_svg]:size-4',
               color: 'primary',
               size: 'icon-sm',
             })
@@ -585,7 +585,7 @@ function AssistantPanel() {
           <div className='flex h-full flex-col divide-y divide-dashed divide-border'>
             <Header />
             <MessageList messages={chat.messages} status={chat.status} />
-            <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
+            <div className='border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
               <AssistantInput />
             </div>
           </div>

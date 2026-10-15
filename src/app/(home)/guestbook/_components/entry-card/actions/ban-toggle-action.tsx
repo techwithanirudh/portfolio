@@ -25,7 +25,6 @@ export const BanToggleActionButton = ({
           className='text-destructive'
           disabled={disabled}
           onClick={onClick}
-          shape='square'
           size='icon'
           variant='ghost'
         />

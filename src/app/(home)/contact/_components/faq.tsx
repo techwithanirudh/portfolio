@@ -53,7 +53,7 @@ export const FAQ = () => (
             key={item.question}
           >
             <AccordionItem value={`index-${index}`}>
-              <AccordionTrigger className='rounded-none border-0 border-line px-4 transition-colors hover:bg-card/80 hover:no-underline focus-visible:bg-card/80 focus-visible:ring-0 aria-expanded:border-b aria-expanded:bg-card/80'>
+              <AccordionTrigger className='border-0 border-line px-4 transition-colors hover:bg-card/80 hover:no-underline focus-visible:bg-card/80 focus-visible:ring-0 aria-expanded:border-b aria-expanded:bg-card/80'>
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className='!h-auto p-4 text-muted-foreground'>

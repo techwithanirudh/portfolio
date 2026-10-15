@@ -12,7 +12,7 @@ export interface UserAvatarClassNames {
   image?: string
 }
 
-export interface UserAvatarProps {
+interface UserAvatarProps {
   classNames?: UserAvatarClassNames
   user?: User | null
 }

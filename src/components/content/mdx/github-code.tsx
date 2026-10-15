@@ -87,5 +87,3 @@ export async function GitHubCode({
     )
   }
 }
-
-export { GitHubCode as GitHubSourceCode }

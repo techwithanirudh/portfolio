@@ -2,19 +2,16 @@
 
 import type { HTMLMotionProps, Variants } from 'motion/react'
 import { AnimatePresence, motion } from 'motion/react'
-import type { ComponentProps } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Button } from '@/components/ui/button'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 
-export const motionIconVariants: Variants = {
+const motionIconVariants: Variants = {
   animate: { filter: 'blur(0px)', opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.8 },
   initial: { filter: 'blur(2px)', opacity: 0, scale: 0.8 },
 }
 
-export const motionIconProps: HTMLMotionProps<'span'> = {
+const motionIconProps: HTMLMotionProps<'span'> = {
   animate: 'animate',
   exit: 'exit',
   initial: 'initial',
@@ -22,7 +19,7 @@ export const motionIconProps: HTMLMotionProps<'span'> = {
   variants: motionIconVariants,
 }
 
-export interface CopyStateIconProps {
+interface CopyStateIconProps {
   /** Custom icon for done state. */
   doneIcon?: React.ReactNode
   /** Custom icon for error state. */
@@ -50,54 +47,5 @@ export function CopyStateIcon({
         {iconByState[state]}
       </motion.span>
     </AnimatePresence>
-  )
-}
-
-export type CopyButtonProps = ComponentProps<typeof Button> & {
-  /** The text to copy, or a function that returns the text. */
-  text: string | (() => string)
-  /** Called with the copied text on successful copy. */
-  onCopySuccess?: (text: string) => void
-  /** Called with the error if the copy operation fails. */
-  onCopyError?: (error: Error) => void
-} & Omit<CopyStateIconProps, 'state'>
-
-export function CopyButton({
-  size = 'icon',
-  children,
-  text,
-  idleIcon,
-  doneIcon,
-  errorIcon,
-  onClick,
-  onCopySuccess,
-  onCopyError,
-  ...props
-}: CopyButtonProps) {
-  const { state, copy } = useCopyToClipboard({
-    onCopyError,
-    onCopySuccess,
-  })
-
-  return (
-    <Button
-      aria-label='Copy'
-      className='will-change-transform'
-      data-sound-press='off'
-      onClick={(e) => {
-        copy(text)
-        onClick?.(e)
-      }}
-      size={size}
-      {...props}
-    >
-      <CopyStateIcon
-        doneIcon={doneIcon}
-        errorIcon={errorIcon}
-        idleIcon={idleIcon}
-        state={state}
-      />
-      {children}
-    </Button>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 import { type AnimationName, SIMBA } from './constants'
 
@@ -20,7 +21,7 @@ export function SimbaLoop({
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (prefersReducedMotion()) {
       return
     }
     const last = index === frames.length - 1

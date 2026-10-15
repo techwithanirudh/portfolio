@@ -10,13 +10,7 @@ const Layout = ({ children }: { children: ReactNode }) => (
     className='pt-0'
     links={linkItems}
     nav={{
-      component: (
-        <Header
-          links={linkItems}
-          {...baseOptions}
-          themeSwitch={{ enabled: false }}
-        />
-      ),
+      component: <Header links={linkItems} {...baseOptions} />,
     }}
   >
     <main className='relative flex flex-1 flex-col overflow-x-clip px-2'>

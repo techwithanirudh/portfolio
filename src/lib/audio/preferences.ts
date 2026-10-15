@@ -5,6 +5,7 @@ import {
   type SoundDefinition,
 } from '@web-kits/audio'
 import { useSyncExternalStore } from 'react'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 
 const STORAGE_KEY = 'sound-enabled'
 const UNLOCK_EVENTS = ['pointerdown', 'keydown', 'touchend'] as const
@@ -66,7 +67,7 @@ export const setSoundEnabled = (next: boolean) => {
   }
 }
 
-export const getSoundEnabled = () => {
+const getSoundEnabled = () => {
   hydrate()
   return enabled
 }
@@ -79,10 +80,7 @@ export const useSoundEnabled = () =>
 // For code outside React (toasts, physics, global listeners) that cannot use
 // useSound. It honors the same mute switch and reduced motion setting.
 export const playSound = (definition: SoundDefinition, opts?: PlayOptions) => {
-  if (
-    !(unlocked && getSoundEnabled()) ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  ) {
+  if (!(unlocked && getSoundEnabled()) || prefersReducedMotion()) {
     return
   }
   let play = players.get(definition)

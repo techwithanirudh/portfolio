@@ -94,7 +94,7 @@ export function SearchClient() {
       <Section className='flex flex-1 flex-col' sectionClassName='h-full'>
         <div className='flex flex-col'>
           <ViewAnimation>
-            <InputGroup className='!bg-background h-12 rounded-none border-0 border-line border-b shadow-none'>
+            <InputGroup className='!bg-background h-12 border-0 border-line border-b shadow-none'>
               <InputGroupAddon className='border-0 pl-4 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
@@ -155,7 +155,7 @@ export function SearchClient() {
           Item={({ item, onClick }) => (
             <div className='relative'>
               <SearchDialogListItem
-                className='rounded-none border-line border-b px-4 py-3'
+                className='border-line border-b px-4 py-3'
                 item={item}
                 onClick={onClick}
               />

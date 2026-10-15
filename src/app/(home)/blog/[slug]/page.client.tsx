@@ -34,14 +34,7 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={
-          <Button
-            aria-label='Share'
-            className='h-full rounded-none border-none bg-transparent px-3 shadow-none hover:bg-card/80 active:scale-none dark:bg-transparent'
-            size='sm'
-            variant='ghost'
-          />
-        }
+        render={<Button aria-label='Share' size='sm' variant='toolbar' />}
       >
         <Icons.share className='text-muted-foreground' />
         Share

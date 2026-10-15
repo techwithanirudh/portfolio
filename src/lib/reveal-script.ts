@@ -9,7 +9,9 @@ const reveal = () => {
     return
   }
   root.dataset.reveal = ''
-  const selector = ':is([data-slot="section-inner"] > *, [data-reveal-item])'
+  // The first section is above the fold and holds the LCP, so it never hides
+  const selector =
+    ':is([data-slot="section-inner"] > *, [data-reveal-item]):not(#main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *)'
   const still = window.matchMedia('(prefers-reduced-motion: reduce)')
   const seen = new WeakSet<Element>()
   const observer = new IntersectionObserver(

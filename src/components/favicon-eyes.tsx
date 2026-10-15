@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useSyncExternalStore } from 'react'
+import { useEffect } from 'react'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 // A small easter egg: the favicon is the portrait, and its eyes follow the
 // pointer around the page, blink now and then, and shut while you're in
@@ -23,14 +24,6 @@ const REACH = { x: 12, y: 10 }
 // re-encode the icon, and redraws are capped at about 15 a second
 const STEPS = 4
 const MIN_FRAME_MS = 1000 / 15
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
-
-const subscribeReducedMotion = (onChange: () => void) => {
-  const query = window.matchMedia(REDUCED_MOTION)
-  query.addEventListener('change', onChange)
-  return () => query.removeEventListener('change', onChange)
-}
-
 const capsule = (
   context: CanvasRenderingContext2D,
   length: number,
@@ -48,11 +41,7 @@ const capsule = (
 
 export function FaviconEyes() {
   // Reduced motion keeps the plain static favicon: no tracking, no blinking
-  const reducedMotion = useSyncExternalStore(
-    subscribeReducedMotion,
-    () => window.matchMedia(REDUCED_MOTION).matches,
-    () => true
-  )
+  const reducedMotion = useReducedMotion()
 
   useEffect(() => {
     if (reducedMotion) {

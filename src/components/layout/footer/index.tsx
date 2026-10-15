@@ -77,7 +77,7 @@ export const Footer = () => (
             <div className='flex items-center gap-2'>
               <Clock />
               <SoundToggle />
-              <ThemeToggle mode='light-dark-system' />
+              <ThemeToggle />
             </div>
           </div>
         </ViewAnimation>

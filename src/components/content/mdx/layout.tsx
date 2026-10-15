@@ -1,15 +1,6 @@
 import type { ReactNode } from 'react'
 import { PostComments } from '@/app/(home)/blog/[slug]/page.client'
-import { Section } from '@/components/layout/sections'
-import { SectionBody } from '@/components/layout/sections/body'
 import { cn } from '@/lib/utils'
-
-interface MdxLayoutProps {
-  children: ReactNode
-  comments?: boolean
-  slug: string
-  title: string
-}
 
 interface MdxContentProps {
   beforeComments?: ReactNode
@@ -43,7 +34,7 @@ export const MdxContent = ({
     {comments && slug ? (
       <PostComments
         className={cn(
-          '[&_form>div]:!rounded-none rounded-none border-0 border-line border-y [&_form]:border-line [&_form]:border-b',
+          'border-0 border-line border-y [&_form]:border-line [&_form]:border-b',
           commentsClassName
         )}
         slug={slug}
@@ -53,28 +44,3 @@ export const MdxContent = ({
     )}
   </div>
 )
-
-export default function MdxLayout({
-  children,
-  title,
-  comments,
-  slug,
-}: MdxLayoutProps): ReactNode {
-  return (
-    <>
-      <Section className='p-4 lg:p-6'>
-        <h1 className='typography-hero mx-auto text-center font-normal text-3xl leading-tight tracking-tighter md:text-5xl'>
-          {title}
-        </h1>
-      </Section>
-
-      <SectionBody>
-        <article className='flex min-h-full flex-col lg:flex-row'>
-          <MdxContent comments={comments} slug={slug}>
-            {children}
-          </MdxContent>
-        </article>
-      </SectionBody>
-    </>
-  )
-}

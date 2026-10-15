@@ -78,7 +78,7 @@ export const moodNames = [
   'search',
   'rest',
 ] as const
-export type MoodName = (typeof moodNames)[number]
+type MoodName = (typeof moodNames)[number]
 
 export const moodAnimations: Record<MoodName, AnimationName> = {
   attention: 'GetAttention',

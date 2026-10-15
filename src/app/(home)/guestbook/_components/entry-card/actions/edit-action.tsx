@@ -22,7 +22,6 @@ export const EditActionButton = ({
           aria-label='Edit entry'
           disabled={disabled}
           onClick={onClick}
-          shape='square'
           size='icon'
           variant='ghost'
         />

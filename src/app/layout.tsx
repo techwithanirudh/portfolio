@@ -12,7 +12,7 @@ import { description as homeDescription, owner, title } from '@/constants/site'
 import { PagesProvider } from '@/contexts/pages'
 import { createMetadata } from '@/lib/metadata'
 import { revealScript } from '@/lib/reveal-script'
-import { getPosts, getWorkPages } from '@/lib/source'
+import { getPageEntries } from '@/lib/source'
 import '@/styles/globals.css'
 import 'fumadocs-ui/components/image-zoom2.css'
 import 'katex/dist/katex.css'
@@ -84,20 +84,7 @@ const jsonLd = {
 }
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
-  const pages = [
-    ...getPosts().map((page) => ({
-      description: page.data.description,
-      tag: 'blog' as const,
-      title: page.data.title ?? 'Untitled',
-      url: page.url,
-    })),
-    ...getWorkPages().map((page) => ({
-      description: page.data.description,
-      tag: 'projects' as const,
-      title: page.data.title ?? 'Untitled',
-      url: page.url,
-    })),
-  ]
+  const pages = getPageEntries()
 
   return (
     <html

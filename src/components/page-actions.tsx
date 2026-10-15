@@ -65,7 +65,7 @@ function useMarkdownCopy(markdownUrl: string) {
   return { handleCopy, isCopying, state }
 }
 
-export function LLMCopyButton({
+function LLMCopyButton({
   state,
   isCopying,
   onClick,
@@ -77,13 +77,12 @@ export function LLMCopyButton({
   return (
     <Button
       aria-busy={isCopying}
-      className='h-full rounded-none border-none bg-transparent px-3 shadow-none hover:bg-card/80 active:scale-none dark:bg-transparent'
       data-sound-press='off'
       disabled={isCopying}
       onClick={onClick}
       size='sm'
       type='button'
-      variant='ghost'
+      variant='toolbar'
     >
       <CopyStateIcon
         doneIcon={<Icons.check className='text-muted-foreground' />}
@@ -96,7 +95,7 @@ export function LLMCopyButton({
   )
 }
 
-export function ViewOptions({
+function ViewOptions({
   markdownUrl,
   githubUrl,
   disabled = false,
@@ -142,10 +141,10 @@ export function ViewOptions({
         render={
           <Button
             aria-label='View Options'
-            className='h-full w-10 rounded-none border-none bg-transparent shadow-none hover:bg-card/80 active:scale-none dark:bg-transparent'
+            className='w-10'
             disabled={disabled}
             size='icon-sm'
-            variant='ghost'
+            variant='toolbar'
           />
         }
       >

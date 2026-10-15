@@ -25,13 +25,7 @@ const full = [
   ['system', Icons.desktop] as const,
 ]
 
-export function ThemeToggle({
-  className,
-  mode = 'light-dark',
-}: {
-  className?: string
-  mode?: 'light-dark' | 'light-dark-system'
-}) {
+export function ThemeToggle({ className }: { className?: string }) {
   const { resolvedTheme, setTheme, theme } = useTheme()
   const [mounted, setMounted] = useState(false)
   const playToggle = useSound(toggleOn)
@@ -67,37 +61,6 @@ export function ThemeToggle({
     'inline-flex items-center border p-1 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2',
     className
   )
-
-  if (mode === 'light-dark') {
-    const value = mounted ? resolvedTheme : null
-
-    return (
-      <button
-        aria-label={'Toggle Theme'}
-        className={container}
-        data-sound-press='off'
-        data-theme-toggle=''
-        onClick={() =>
-          handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
-        }
-        type='button'
-      >
-        {full.map(([key, Icon]) => {
-          if (key === 'system') {
-            return null
-          }
-
-          return (
-            <Icon
-              className={itemVariants({ active: value === key })}
-              fill='currentColor'
-              key={key}
-            />
-          )
-        })}
-      </button>
-    )
-  }
 
   const value = mounted ? theme : null
 

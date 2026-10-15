@@ -50,7 +50,7 @@ export function WorkExperience({
   )
 }
 
-export function ExperienceItem({ experience }: ExperienceItemProps) {
+function ExperienceItem({ experience }: ExperienceItemProps) {
   return (
     <div className='group/exp space-y-4 p-4'>
       <div className='not-prose flex items-center gap-3'>
@@ -99,9 +99,7 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
   )
 }
 
-export function ExperiencePositionItem({
-  position,
-}: ExperiencePositionItemProps) {
+function ExperiencePositionItem({ position }: ExperiencePositionItemProps) {
   const { start, end } = position.employmentPeriod
   const isOngoing = !end
   const duration = formatDuration(start, end)

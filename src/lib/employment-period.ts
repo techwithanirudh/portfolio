@@ -1,10 +1,7 @@
-import { differenceInMonths, format, parse } from 'date-fns'
+import { differenceInMonths, parse } from 'date-fns'
 
 /** Parses an `MM.yyyy` or `yyyy` period value; year-only values snap to January or December. */
-export function parsePeriodDate(
-  str: string,
-  fallbackMonth: 'first' | 'last'
-): Date {
+function parsePeriodDate(str: string, fallbackMonth: 'first' | 'last'): Date {
   if (str.includes('.')) {
     return parse(str, 'MM.yyyy', new Date())
   }
@@ -48,14 +45,4 @@ export function formatDuration(start: string, end?: string): string {
     return `${years}y`
   }
   return `${years}y ${months}m`
-}
-
-/** Human-readable range like `Aug 2026 – Present` or `2019 – 2020`. */
-export function formatPeriod(start: string, end?: string): string {
-  const label = (value: string) =>
-    value.includes('.')
-      ? format(parsePeriodDate(value, 'first'), 'MMM yyyy')
-      : value
-
-  return `${label(start)} – ${end ? label(end) : 'Present'}`
 }

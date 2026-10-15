@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
+import { iconButtonClassName } from '@/components/ui/button'
 import { linkItems, socials } from '@/constants/navigation'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
@@ -87,7 +88,7 @@ export function MenuPanel({
           {socials.map((social) => (
             <a
               aria-label={social.name}
-              className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+              className={cn(iconButtonClassName, '[&_svg]:size-3.5')}
               href={social.url}
               key={social.name}
               rel='noopener noreferrer'
@@ -100,13 +101,13 @@ export function MenuPanel({
         <div className='flex items-center gap-1'>
           <button
             aria-label='Open assistant'
-            className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+            className={cn(iconButtonClassName, '[&_svg]:size-3.5')}
             onClick={onAssistantOpen}
             type='button'
           >
             <Icons.aiChat />
           </button>
-          <ThemeToggle mode='light-dark-system' />
+          <ThemeToggle />
         </div>
       </div>
     </div>

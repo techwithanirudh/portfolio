@@ -1,3 +1,4 @@
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { type AnimationName, animations, type Frame, SIMBA } from './constants'
 
 const pick = <T>(items: readonly T[]) =>
@@ -25,7 +26,7 @@ export class SimbaController {
   private timer: ReturnType<typeof setTimeout> | undefined
 
   start() {
-    this.still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    this.still = prefersReducedMotion()
     this.next()
   }
 

@@ -231,10 +231,6 @@ html > body[data-scroll-locked] {
   @apply underline decoration-primary/60 decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
-@utility code-inline {
-  @apply rounded-md border bg-muted/50 px-1 py-px font-mono text-[0.8125rem] font-normal whitespace-pre-wrap;
-}
-
 @utility step {
   counter-increment: step;
   @apply max-md:pl-10;
@@ -252,26 +248,6 @@ html > body[data-scroll-locked] {
   @apply prose-strong:font-medium;
   @apply prose-hr:border-border;
   @apply prose-blockquote:border-l prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:border-border prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
-}
-
-@utility prose-no-margin {
-  & > :first-child {
-    @apply mt-0;
-  }
-
-  & > :last-child {
-    @apply mb-0;
-  }
-
-  :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-    @apply mt-3 mb-3;
-  }
-}
-
-@utility extend-touch-target {
-  @media (pointer: coarse) {
-    @apply relative touch-manipulation after:absolute after:-inset-2;
-  }
 }
 
 @utility no-scrollbar {
@@ -364,67 +340,6 @@ html > body[data-scroll-locked] {
   }
 }
 
-@layer components {
-  .footer {
-    --footer-text-size: clamp(3rem, 14rem, 14vw);
-    position: relative;
-
-    display: flex;
-    justify-content: center;
-    min-height: var(--footer-text-size);
-    overflow: clip;
-    color: var(--color-muted-foreground);
-  }
-
-  .footer-text {
-    position: absolute;
-    bottom: calc(-1 * var(--footer-text-size) / 1.6);
-    font-size: var(--footer-text-size);
-    font-weight: 900;
-    letter-spacing: 0;
-    opacity: 0.3;
-    text-rendering: geometricPrecision;
-  }
-
-  .footer-grid {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    flex: none;
-    overflow: visible;
-    background-color: transparent;
-    background-image: radial-gradient(transparent 1px, rgb(255, 255, 255) 1px);
-    background-size: 4px 4px;
-    opacity: 1;
-    backdrop-filter: blur(3px);
-    mask: linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgb(255, 255, 255, 0.6) 100%
-    );
-  }
-
-  .footer-gradient {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 0% 50%,
-      rgba(255, 255, 255, 0.5) 100%
-    );
-  }
-
-  .dark .footer-gradient {
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0) 0% 50%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
-  }
-
-  .dark .footer-grid {
-    background-image: radial-gradient(transparent 1px, rgb(0, 0, 0) 1px);
-    mask: linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0, 0.6) 100%);
-  }
-}
-
 ::selection {
   color: var(--color-foreground);
   background-color: var(--color-accent);
@@ -462,24 +377,6 @@ html > body[data-scroll-locked] {
     to {
       clip-path: inset(0 0 0 0);
     }
-  }
-
-  @keyframes reveal {
-    0% {
-      scale: 0.8;
-      opacity: 0;
-      translate: 0 4lh;
-      filter: blur(20px);
-    }
-  }
-
-  ::view-transition-new(.page-enter):only-child {
-    animation-name: reveal;
-  }
-
-  ::view-transition-old(.page-exit):only-child {
-    animation-name: reveal;
-    animation-direction: reverse;
   }
 
   /* util for faster than default (250ms) transitions. Typically used to make exits faster so they don't visually overlap with enters */
@@ -520,36 +417,12 @@ html > body[data-scroll-locked] {
   }
 }
 
-@keyframes ask-ai-open {
-  from {
-    width: 0px;
-  }
-  to {
-    width: var(--ai-chat-width);
-  }
-}
-
-@keyframes ask-ai-close {
-  from {
-    width: var(--ai-chat-width);
-  }
-  to {
-    width: 0px;
-  }
-}
-
 /* Prevent iOS Safari auto-zoom on input focus (triggers when font-size < 16px) */
 @media screen and (max-width: 768px) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   select,
   textarea {
     font-size: max(16px, 1em);
-  }
-}
-
-@custom-variant retina {
-  @media (min-resolution: 2dppx) {
-    @slot;
   }
 }
 
@@ -584,20 +457,6 @@ html > body[data-scroll-locked] {
   }
 }
 
-@utility screen-dashed-line-top {
-  @apply screen-line-top;
-  &:before {
-    @apply bg-transparent bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
-  }
-}
-
-@utility screen-dashed-line-bottom {
-  @apply screen-line-bottom;
-  &:after {
-    @apply bg-transparent bg-[linear-gradient(to_right,var(--line)_4px,transparent_2px)] bg-size-[6px_1px] bg-repeat-x;
-  }
-}
-
 /* Stacked sections share one rule instead of drawing two lines 1px apart,
    and the first section under the header reuses the header's line */
 [data-slot="section"]
@@ -613,10 +472,6 @@ html > body[data-scroll-locked] {
 
 @utility screen-line-top-none {
   @apply before:content-none;
-}
-
-@utility screen-line-bottom-none {
-  @apply after:content-none;
 }
 
 @keyframes wave {
@@ -664,8 +519,12 @@ html > body[data-scroll-locked] {
  * [data-reveal-item] fades and rises in the first time it scrolls into view.
  * Hidden only while the inline reveal script has flagged <html>, so no JS
  * means nothing is hidden; the script's Web Animation then holds them visible.
+ * The first section is above the fold and carries the LCP, so it never hides.
  */
-:root[data-reveal] :is([data-slot="section-inner"] > *, [data-reveal-item]) {
+:root[data-reveal]
+:is([data-slot="section-inner"] > *, [data-reveal-item]):not(
+  #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
+) {
   opacity: 0;
 }
 

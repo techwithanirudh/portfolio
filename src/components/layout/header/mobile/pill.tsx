@@ -2,6 +2,7 @@
 
 import { Icons } from '@/components/icons/icons'
 import { NavItem } from '@/components/layout/header/mobile/item'
+import { iconButtonClassName } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export function FloatingPill({
@@ -35,7 +36,10 @@ export function FloatingPill({
       <div className='pointer-events-auto flex items-center gap-0.5 bg-popover/90 p-1 shadow-md ring ring-foreground/10 backdrop-blur-md dark:ring-foreground/20'>
         <button
           aria-label='Search'
-          className='flex size-8 items-center justify-center text-muted-foreground transition-[color,scale] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-90'
+          className={cn(
+            iconButtonClassName,
+            'transition-[color,scale] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-90'
+          )}
           onClick={onSearchOpen}
           type='button'
         >

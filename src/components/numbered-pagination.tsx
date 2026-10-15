@@ -50,7 +50,6 @@ function NumberedPagination({
             className={cellClassName}
             disabled={currentPage <= 1}
             onClick={handlePageChange(currentPage - 1)}
-            shape='square'
             size='icon'
             variant='ghost'
           >
@@ -74,7 +73,6 @@ function NumberedPagination({
                   aria-current={page === currentPage ? 'page' : undefined}
                   className={cn(cellClassName, 'font-mono tabular-nums')}
                   onClick={handlePageChange(page)}
-                  shape='square'
                   size='icon'
                   variant={page === currentPage ? 'default' : 'ghost'}
                 >
@@ -99,7 +97,6 @@ function NumberedPagination({
             className={cellClassName}
             disabled={currentPage >= totalPages}
             onClick={handlePageChange(currentPage + 1)}
-            shape='square'
             size='icon'
             variant='ghost'
           >

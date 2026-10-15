@@ -90,7 +90,6 @@ export const ConversationScrollButton = ({
         className
       )}
       onClick={() => scrollToBottom()}
-      shape='square'
       size='icon-sm'
       type='button'
       variant='dashed'

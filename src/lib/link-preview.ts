@@ -14,7 +14,6 @@ export type {
   LinkPreviewImage,
   LinkPreviewManifest,
 } from './link-preview.shared'
-export { hashUrl } from './link-preview.shared'
 
 const manifestPath = path.join(
   process.cwd(),
@@ -23,7 +22,7 @@ const manifestPath = path.join(
   'manifest.json'
 )
 
-export const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
+const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
   if (!fs.existsSync(manifestPath)) {
     return null
   }

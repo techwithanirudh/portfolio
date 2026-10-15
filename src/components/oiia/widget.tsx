@@ -2,6 +2,8 @@
 
 import { AnimatePresence, motion } from 'motion/react'
 import { Icons } from '@/components/icons/icons'
+import { iconButtonClassName } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import { useOiiaMode } from './provider'
 
 export function OiiaWidget() {
@@ -34,7 +36,10 @@ export function OiiaWidget() {
 
             <button
               aria-label='Clear all OIIA cats'
-              className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+              className={cn(
+                iconButtonClassName,
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+              )}
               onClick={clearAll}
               type='button'
             >
@@ -45,7 +50,10 @@ export function OiiaWidget() {
 
             <button
               aria-label='Disable OIIA mode'
-              className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+              className={cn(
+                iconButtonClassName,
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+              )}
               onClick={disable}
               type='button'
             >

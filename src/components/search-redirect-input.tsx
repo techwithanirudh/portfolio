@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { flushFieldClassName } from '@/components/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
@@ -42,7 +43,8 @@ export function SearchRedirectInput({
   return (
     <InputGroup
       className={cn(
-        '!bg-background field-focus h-12 overflow-hidden rounded-none border-0 pr-2 shadow-none ring-0! transition-colors',
+        flushFieldClassName,
+        '!bg-background h-12 overflow-hidden pr-2 ring-0!',
         className
       )}
     >
@@ -74,7 +76,6 @@ export function SearchRedirectInput({
         <InputGroupButton
           aria-label='Submit search'
           onClick={() => handleSubmit(value)}
-          shape='square'
           size='icon-sm'
           variant={'default'}
         >

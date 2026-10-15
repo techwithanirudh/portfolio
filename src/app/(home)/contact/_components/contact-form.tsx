@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { Suspense } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -13,21 +12,18 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormStatus,
+  flushHintClassName,
+  flushItemClassName,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/lib/toast'
-import { cn } from '@/lib/utils'
 import { ContactSchema } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
-// Fields sit flush in the grid as ruled rows. Placeholders carry the meaning,
-// so labels are screen-reader only and the only hint row is an error
-const fieldClassName = 'gap-0 border-line border-b'
-const labelClassName = 'sr-only'
-const inputClassName =
-  'h-12 rounded-none border-0 bg-transparent px-4 shadow-none transition-colors field-focus focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
-const hintClassName = 'border-line border-t px-4 py-2 text-xs'
+// Placeholders carry the meaning, so labels are screen-reader only and the
+// only hint row is an error
 
 const ContactFormInner = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
@@ -69,18 +65,18 @@ const ContactFormInner = () => {
           control={form.control}
           name='name'
           render={({ field }) => (
-            <FormItem className={fieldClassName}>
-              <FormLabel className={labelClassName}>Name</FormLabel>
+            <FormItem className={flushItemClassName}>
+              <FormLabel className='sr-only'>Name</FormLabel>
               <FormControl>
                 <Input
                   autoComplete='name'
-                  className={inputClassName}
                   placeholder='Jane Smith'
+                  variant='flush'
                   {...field}
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
-              <FormMessage className={hintClassName} />
+              <FormMessage className={flushHintClassName} />
             </FormItem>
           )}
         />
@@ -88,19 +84,19 @@ const ContactFormInner = () => {
           control={form.control}
           name='email'
           render={({ field }) => (
-            <FormItem className={fieldClassName}>
-              <FormLabel className={labelClassName}>Email address</FormLabel>
+            <FormItem className={flushItemClassName}>
+              <FormLabel className='sr-only'>Email address</FormLabel>
               <FormControl>
                 <Input
                   autoComplete='email'
-                  className={inputClassName}
                   placeholder='jane@acme.com'
                   type='email'
+                  variant='flush'
                   {...field}
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
-              <FormMessage className={hintClassName} />
+              <FormMessage className={flushHintClassName} />
             </FormItem>
           )}
         />
@@ -108,27 +104,23 @@ const ContactFormInner = () => {
           control={form.control}
           name='message'
           render={({ field }) => (
-            <FormItem className={fieldClassName}>
-              <FormLabel className={labelClassName}>Message</FormLabel>
+            <FormItem className={flushItemClassName}>
+              <FormLabel className='sr-only'>Message</FormLabel>
               <FormControl>
                 <Textarea
-                  className={cn(
-                    inputClassName,
-                    'max-h-[20rem] min-h-[10rem] resize-y py-3'
-                  )}
                   placeholder="Hi there, I'm interested in..."
+                  variant='flush'
                   {...field}
                   disabled={action.status === 'executing'}
                 />
               </FormControl>
-              <FormMessage className={hintClassName} />
+              <FormMessage className={flushHintClassName} />
             </FormItem>
           )}
         />
         <Button
           className='h-auto w-full py-5 ring-0 focus-visible:outline-primary-foreground focus-visible:-outline-offset-4 active:scale-100 active:opacity-90'
           disabled={action.status === 'executing'}
-          shape='square'
           type='submit'
         >
           <span>Send Message</span>
@@ -145,24 +137,18 @@ const ContactFormInner = () => {
           )}
         </Button>
         {action.status === 'hasSucceeded' && (
-          <Alert className='rounded-none border-0 border-emerald-500/15 border-line border-t bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
-            <Icons.success size={16} />
-            <AlertTitle className='mb-0 leading-normal'>
-              {action.result.data?.success && action.result.data?.message
-                ? action.result.data.message
-                : "Thanks, I got your message. I'll reply soon."}
-            </AlertTitle>
-          </Alert>
+          <FormStatus variant='success'>
+            {action.result.data?.success && action.result.data?.message
+              ? action.result.data.message
+              : "Thanks, I got your message. I'll reply soon."}
+          </FormStatus>
         )}
         {action.result.serverError && (
-          <Alert className='rounded-none border-0 border-destructive/15 border-line border-t bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
-            <Icons.warning className='size-4' />
-            <AlertTitle className='mb-0 leading-normal'>
-              {typeof action.result.serverError === 'string'
-                ? action.result.serverError
-                : 'Your message failed to send. Please try again.'}
-            </AlertTitle>
-          </Alert>
+          <FormStatus variant='error'>
+            {typeof action.result.serverError === 'string'
+              ? action.result.serverError
+              : 'Your message failed to send. Please try again.'}
+          </FormStatus>
         )}
       </form>
     </Form>

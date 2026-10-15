@@ -7,6 +7,7 @@ import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import type { Testimonial } from '@/types'
 
 const initials = (name: string) =>
@@ -98,7 +99,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
   const [paused, setPaused] = useState(false)
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (prefersReducedMotion()) {
       setPaused(true)
     }
   }, [])

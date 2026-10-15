@@ -6,12 +6,7 @@ import { cn } from '@/lib/utils'
 
 type LinkProps = ComponentProps<'a'>
 
-export function LinkPreview({
-  children,
-  className,
-  href,
-  ...props
-}: LinkProps) {
+function LinkPreview({ children, className, href, ...props }: LinkProps) {
   if (href?.startsWith('/')) {
     return (
       <Link className={className} href={href} {...props}>

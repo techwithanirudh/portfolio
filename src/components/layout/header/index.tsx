@@ -8,6 +8,7 @@ import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
 import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import { type ReactNode, useMemo } from 'react'
 import { OIIA_TITLE, useOiiaMode } from '@/components/oiia'
+import { iconButtonClassName } from '@/components/ui/button'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 import { SearchToggle } from './search-toggle'
@@ -91,7 +92,7 @@ export const Header = ({
             'url' in item ? (
               <Link
                 aria-label={item.label ?? item.text?.toString()}
-                className='inline-flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-4'
+                className={cn(iconButtonClassName, '[&_svg]:size-4')}
                 external={item.external}
                 href={item.url}
                 key={item.url}

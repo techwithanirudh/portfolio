@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { Activity, useRef, useState } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
-import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -16,6 +15,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormStatus,
+  flushHintClassName,
+  flushItemClassName,
 } from '@/components/ui/form'
 import {
   SignaturePad,
@@ -29,11 +31,6 @@ import { cn } from '@/lib/utils'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
-// Flush, ruled form to match the contact form
-const fieldClassName = 'gap-0 border-line border-b'
-const textareaClassName =
-  'max-h-[20rem] min-h-[10rem] resize-y rounded-none border-0 bg-transparent px-4 py-3 shadow-none transition-colors field-focus focus-visible:ring-0 aria-invalid:ring-0 dark:bg-transparent'
-const hintClassName = 'border-line border-t px-4 py-2 text-xs'
 const buttonClassName =
   'h-auto w-full py-5 ring-0 active:scale-100 active:opacity-90 focus-visible:-outline-offset-4 focus-visible:outline-primary-foreground'
 
@@ -94,8 +91,8 @@ export const GuestbookForm = () => {
   if (isPending) {
     return (
       <div className='flex w-full flex-col'>
-        <Skeleton className='h-40 w-full rounded-none' />
-        <Skeleton className='h-15 w-full rounded-none border-line border-t' />
+        <Skeleton className='h-40 w-full' />
+        <Skeleton className='h-15 w-full border-line border-t' />
       </div>
     )
   }
@@ -112,7 +109,6 @@ export const GuestbookForm = () => {
           className={buttonClassName}
           data-sound-hover
           onClick={() => openSignIn('/guestbook')}
-          shape='square'
         >
           <span>Sign in to post</span>
           <Icons.arrowRight
@@ -140,20 +136,20 @@ export const GuestbookForm = () => {
                 control={form.control}
                 name='message'
                 render={({ field }) => (
-                  <FormItem className={fieldClassName}>
+                  <FormItem className={flushItemClassName}>
                     <FormLabel className='sr-only'>Message</FormLabel>
                     <FormControl>
                       <Textarea
-                        className={textareaClassName}
                         disabled={isExecuting}
                         placeholder='Say hello...'
+                        variant='flush'
                         {...field}
                       />
                     </FormControl>
                     {form.formState.errors.message ? (
-                      <FormMessage className={hintClassName} />
+                      <FormMessage className={flushHintClassName} />
                     ) : (
-                      <FormDescription className={hintClassName}>
+                      <FormDescription className={flushHintClassName}>
                         Posting as {user?.name ?? 'Guest'}.
                       </FormDescription>
                     )}
@@ -164,7 +160,6 @@ export const GuestbookForm = () => {
                 className={buttonClassName}
                 disabled={isExecuting}
                 onClick={goToNextStep}
-                shape='square'
                 type='button'
               >
                 <span>Next</span>
@@ -177,10 +172,10 @@ export const GuestbookForm = () => {
           </Activity>
           <Activity mode={step === 2 ? 'visible' : 'hidden'}>
             <div className='flex flex-col'>
-              <FormItem className={fieldClassName}>
+              <FormItem className={flushItemClassName}>
                 <FormLabel className='sr-only'>Signature</FormLabel>
                 <SignaturePad
-                  className='[&>canvas]:rounded-none [&>canvas]:border-0 [&>canvas]:bg-transparent [&>canvas]:shadow-none'
+                  className='[&>canvas]:border-0 [&>canvas]:bg-transparent [&>canvas]:shadow-none'
                   disabled={isExecuting}
                   onChange={(dataUrl) => form.setValue('signature', dataUrl)}
                   onClear={() => form.setValue('signature', undefined)}
@@ -192,7 +187,6 @@ export const GuestbookForm = () => {
                   className={cn(buttonClassName, 'flex-1 border-line border-r')}
                   disabled={isExecuting}
                   onClick={() => setStep(1)}
-                  shape='square'
                   type='button'
                   variant='secondary'
                 >
@@ -202,7 +196,6 @@ export const GuestbookForm = () => {
                 <Button
                   className={cn(buttonClassName, 'flex-1')}
                   disabled={isExecuting}
-                  shape='square'
                   type='submit'
                 >
                   {isExecuting ? (
@@ -214,20 +207,16 @@ export const GuestbookForm = () => {
             </div>
           </Activity>
           {action.status === 'hasSucceeded' && (
-            <Alert className='rounded-none border-0 border-emerald-500/15 border-t bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
-              <Icons.success size={16} />
-              <AlertTitle className='mb-0 leading-normal'>
-                Thanks for signing the guestbook!
-              </AlertTitle>
-            </Alert>
+            <FormStatus variant='success'>
+              Thanks for signing the guestbook!
+            </FormStatus>
           )}
           {action.result.serverError && (
-            <Alert className='rounded-none border-0 border-destructive/15 border-t bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
-              <Icons.warning className='size-4' />
-              <AlertTitle className='mb-0 leading-normal'>
-                {action.result.serverError}
-              </AlertTitle>
-            </Alert>
+            <FormStatus variant='error'>
+              {typeof action.result.serverError === 'string'
+                ? action.result.serverError
+                : 'Failed to post guestbook entry.'}
+            </FormStatus>
           )}
         </form>
       </Form>

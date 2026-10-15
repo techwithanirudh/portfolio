@@ -21,7 +21,6 @@ export default function Experience(): React.ReactElement {
               className='h-full px-5 ring-0 active:scale-100 active:opacity-90'
               nativeButton={false}
               render={<Link href='/resume' />}
-              shape='square'
             >
               Resume
               <Icons.download className='transition-transform will-change-transform group-hover/button:-rotate-12 group-hover/button:scale-125' />

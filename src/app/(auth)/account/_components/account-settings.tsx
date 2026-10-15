@@ -38,7 +38,7 @@ interface AccountSettingsProps {
 
 export function AccountSettings({ user }: AccountSettingsProps) {
   return (
-    <Card className='dashed-stack rounded-none border-0' variant='flat'>
+    <Card className='dashed-stack border-0' variant='flat'>
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Avatar</span>
@@ -107,12 +107,10 @@ function EditNameDialog({ name }: { name: string }) {
       }}
       open={open}
     >
-      <AlertDialogTrigger
-        render={<Button shape='square' size='sm' variant='secondary' />}
-      >
+      <AlertDialogTrigger render={<Button size='sm' variant='secondary' />}>
         Edit
       </AlertDialogTrigger>
-      <AlertDialogContent className='dashed-frame rounded-none shadow-none ring-0'>
+      <AlertDialogContent className='dashed-frame shadow-none ring-0'>
         <AlertDialogHeader>
           <AlertDialogTitle>Edit Name</AlertDialogTitle>
           <AlertDialogDescription>
@@ -133,7 +131,6 @@ function EditNameDialog({ name }: { name: string }) {
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      className='rounded-none'
                       maxLength={32}
                       placeholder='Your name'
                       {...field}
@@ -149,7 +146,6 @@ function EditNameDialog({ name }: { name: string }) {
         <AlertDialogFooter>
           <AlertDialogCancel
             disabled={form.formState.isSubmitting}
-            shape='square'
             variant='secondary'
           >
             Cancel
@@ -157,7 +153,6 @@ function EditNameDialog({ name }: { name: string }) {
           <Button
             disabled={form.formState.isSubmitting}
             form='edit-name-form'
-            shape='square'
             type='submit'
           >
             {form.formState.isSubmitting && (

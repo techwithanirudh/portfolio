@@ -30,7 +30,6 @@ export function RevokeSessionButton(props: { token: string }) {
       onClick={() => {
         execute({ token })
       }}
-      shape='square'
       size='sm'
       variant='destructive'
     >

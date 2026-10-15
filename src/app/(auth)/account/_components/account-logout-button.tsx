@@ -16,7 +16,6 @@ export function AccountLogoutButton() {
         router.push('/')
         router.refresh()
       }}
-      shape='square'
       variant='destructive'
     >
       <span>Log Out</span>

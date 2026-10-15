@@ -4,30 +4,19 @@ import type { LenisOptions } from 'lenis'
 import 'lenis/dist/lenis.css'
 import type { LenisRef, LenisProps as ReactLenisProps } from 'lenis/react'
 import { ReactLenis } from 'lenis/react'
-import { useRef, useSyncExternalStore } from 'react'
+import { useRef } from 'react'
 import { useTempus } from 'tempus/react'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
   options: LenisOptions
   root: boolean
 }
 
-const REDUCED_MOTION = '(prefers-reduced-motion: reduce)'
-
-const subscribeReducedMotion = (onChange: () => void) => {
-  const query = window.matchMedia(REDUCED_MOTION)
-  query.addEventListener('change', onChange)
-  return () => query.removeEventListener('change', onChange)
-}
-
 // Native scrolling is the reduced motion experience, so skip Lenis (and its
 // Tempus loop) entirely, and pick it back up if the setting flips
 export function Lenis(props: LenisProps) {
-  const reducedMotion = useSyncExternalStore(
-    subscribeReducedMotion,
-    () => window.matchMedia(REDUCED_MOTION).matches,
-    () => true
-  )
+  const reducedMotion = useReducedMotion()
 
   return reducedMotion ? null : <SmoothScroll {...props} />
 }

@@ -73,7 +73,7 @@ export async function ActiveSessions(props: { currentToken: string }) {
     sessions = await listSessions()
   } catch {
     return (
-      <Card className='rounded-none border-0' variant='flat'>
+      <Card className='border-0' variant='flat'>
         <div className='p-4 text-muted-foreground text-sm sm:p-6'>
           Could not load sessions.
         </div>
@@ -118,7 +118,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
   const lastActive = format(new Date(session.updatedAt), 'MMM d, yyyy, h:mm a')
 
   return (
-    <Card className='rounded-none border-0' variant='flat'>
+    <Card className='border-0' variant='flat'>
       <div className='flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6'>
         <div className='flex gap-4'>
           <div className='flex size-10 shrink-0 items-center justify-center bg-secondary'>
@@ -128,9 +128,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
             <div className='flex items-center gap-2 font-medium text-sm'>
               <span>{parsed.os}</span>
               {isCurrent ? (
-                <Badge className='rounded-none' variant='secondary'>
-                  This device
-                </Badge>
+                <Badge variant='secondary'>This device</Badge>
               ) : null}
             </div>
             <div className='space-y-0.5 text-muted-foreground text-xs'>

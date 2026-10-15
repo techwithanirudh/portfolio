@@ -14,8 +14,8 @@ export default function Page() {
       <Suspense
         fallback={
           <div className='flex flex-1 flex-col'>
-            <Skeleton className='h-12 w-full rounded-none' />
-            <Skeleton className='h-10 w-full rounded-none border-line border-t' />
+            <Skeleton className='h-12 w-full' />
+            <Skeleton className='h-10 w-full border-line border-t' />
           </div>
         }
       >

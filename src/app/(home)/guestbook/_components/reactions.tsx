@@ -111,7 +111,6 @@ export const GuestbookReactions = ({
             disabled={!canReact || status === 'executing'}
             key={`${entryId}-${reaction.emoji}`}
             onClick={() => handleReaction(reaction.emoji)}
-            shape='square'
             size='sm'
             type='button'
             variant='dashed'
@@ -126,7 +125,6 @@ export const GuestbookReactions = ({
               <Button
                 className='gap-2 px-3 text-xs'
                 disabled={!canReact || status === 'executing'}
-                shape='square'
                 size='sm'
                 type='button'
                 variant='dashed'

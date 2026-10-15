@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { preload } from 'react-dom'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 
 // Matches public/images/portrait.svg: the drawing minus the eyes and the sky,
 // which is painted behind it as a CSS gradient (the cover shader's palette in
@@ -39,10 +40,7 @@ export function Portrait() {
 
   useEffect(() => {
     const eyes = eyesRef.current
-    if (
-      !eyes ||
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
+    if (!eyes || prefersReducedMotion()) {
       return
     }
 

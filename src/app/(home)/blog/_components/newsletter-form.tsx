@@ -4,7 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { subscribe } from '@/app/(home)/blog/actions/newsletter'
 import { Icons } from '@/components/icons/icons'
-import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -13,6 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormStatus,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/lib/toast'
@@ -58,10 +58,11 @@ export const NewsletterForm = () => {
                   <FormControl className='h-full group-has-[p]:pt-3'>
                     <Input
                       {...field}
-                      className='field-focus h-full min-h-14 rounded-none border-none bg-transparent px-4 shadow-none transition-colors focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent'
+                      className='h-full min-h-14'
                       disabled={action.status === 'executing'}
                       placeholder='Email address'
                       type='email'
+                      variant='flush'
                     />
                   </FormControl>
                   <FormMessage className='ml-4 pb-2 text-xs' />
@@ -74,7 +75,6 @@ export const NewsletterForm = () => {
             aria-label='Subscribe'
             className='h-auto w-16 shrink-0 px-0 ring-0 active:scale-100 active:opacity-90'
             disabled={action.status === 'executing'}
-            shape='square'
             type='submit'
           >
             {action.status === 'executing' ? (
@@ -86,21 +86,16 @@ export const NewsletterForm = () => {
         </div>
 
         {action.status === 'hasSucceeded' && (
-          <Alert className='rounded-none border-0 border-emerald-500/15 border-line border-t bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
-            <Icons.success size={16} />
-            <AlertTitle className='mb-0 leading-normal'>
-              {action.result.data?.message ??
-                "Hmm... Our server didn't respond."}
-            </AlertTitle>
-          </Alert>
+          <FormStatus variant='success'>
+            {action.result.data?.message ?? "Hmm... Our server didn't respond."}
+          </FormStatus>
         )}
         {action.result.serverError && (
-          <Alert className='rounded-none border-0 border-destructive/15 border-line border-t bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
-            <Icons.warning className='size-4' />
-            <AlertTitle className='mb-0 leading-normal'>
-              {action.result.serverError}
-            </AlertTitle>
-          </Alert>
+          <FormStatus variant='error'>
+            {typeof action.result.serverError === 'string'
+              ? action.result.serverError
+              : 'Failed to subscribe.'}
+          </FormStatus>
         )}
       </form>
     </Form>

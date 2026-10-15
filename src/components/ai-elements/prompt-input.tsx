@@ -45,7 +45,7 @@ export const PromptInput = ({
     }}
     {...props}
   >
-    <InputGroup className='h-auto flex-col items-stretch rounded-none border-0 shadow-none has-[[data-slot=input-group-control]:focus-visible]:ring-0 dark:bg-transparent'>
+    <InputGroup className='h-auto flex-col items-stretch border-0 shadow-none has-[[data-slot=input-group-control]:focus-visible]:ring-0 dark:bg-transparent'>
       {children}
     </InputGroup>
   </form>
@@ -177,7 +177,6 @@ export const PromptInputButton = ({
 }: PromptInputButtonProps) => (
   <Button
     className={cn('[&_svg]:size-4', className)}
-    shape='square'
     size={size}
     type='button'
     variant={variant}

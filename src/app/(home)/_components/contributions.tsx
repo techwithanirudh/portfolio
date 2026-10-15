@@ -171,7 +171,7 @@ const Contributions = ({ contributions }: ContributionsProps) => (
   </Suspense>
 )
 
-export const ContributionsFallback = () => (
+const ContributionsFallback = () => (
   <Section className='flex h-45 w-full items-center justify-center'>
     <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
   </Section>

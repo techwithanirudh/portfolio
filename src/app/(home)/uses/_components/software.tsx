@@ -1,4 +1,5 @@
 import { Icons } from '@/components/icons/icons'
+import { RuledGrid } from '@/components/layout/ruled-grid'
 import type { SoftwareItem } from '@/types'
 import { Logo } from './logo'
 
@@ -37,16 +38,10 @@ export function SoftwareGrid({ items }: SoftwareGridProps) {
   )
 
   return (
-    // Every tile draws its own right and bottom rule, the outer edges get
-    // clipped so the rails and the next section line do the framing
-    <div className='overflow-hidden'>
-      {/* Tiles are opaque, so the hatch only shows in the empty cells that
-          close out the last row */}
-      <div className='-mr-px -mb-px grid grid-cols-3 bg-dashed sm:grid-cols-4 md:grid-cols-6 [&>*]:border-line [&>*]:border-r [&>*]:border-b'>
-        {sortedItems.map((item) => (
-          <AppIcon key={item.name} {...item} />
-        ))}
-      </div>
-    </div>
+    <RuledGrid className='grid-cols-3 sm:grid-cols-4 md:grid-cols-6'>
+      {sortedItems.map((item) => (
+        <AppIcon key={item.name} {...item} />
+      ))}
+    </RuledGrid>
   )
 }

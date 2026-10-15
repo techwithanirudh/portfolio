@@ -1,3 +1,4 @@
+import { RuledGrid } from '@/components/layout/ruled-grid'
 import { palette, principles } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 
@@ -29,29 +30,27 @@ export const Design = () => (
     <div className='border-line border-b px-4 py-3 font-mono text-muted-foreground text-xs'>
       Palette
     </div>
-    <div className='overflow-hidden'>
-      <div className='-mr-px -mb-px grid grid-cols-3 bg-dashed sm:grid-cols-5 [&>*]:border-line [&>*]:border-r [&>*]:border-b'>
-        {palette.map((tone) => (
-          <div className='group flex flex-col bg-background' key={tone.token}>
-            <div className='overflow-hidden border-line border-b'>
-              <div
-                className={cn(
-                  'h-16 transition-[scale] duration-300 group-hover:scale-110',
-                  tone.className
-                )}
-              />
-            </div>
-            <div className='flex flex-col gap-0.5 px-3 py-2'>
-              <span className='font-medium text-foreground text-xs'>
-                {tone.label}
-              </span>
-              <span className='truncate font-mono text-[0.6875rem] text-muted-foreground'>
-                {tone.token}
-              </span>
-            </div>
+    <RuledGrid className='grid-cols-3 sm:grid-cols-5'>
+      {palette.map((tone) => (
+        <div className='group flex flex-col bg-background' key={tone.token}>
+          <div className='overflow-hidden border-line border-b'>
+            <div
+              className={cn(
+                'h-16 transition-[scale] duration-300 group-hover:scale-110',
+                tone.className
+              )}
+            />
           </div>
-        ))}
-      </div>
-    </div>
+          <div className='flex flex-col gap-0.5 px-3 py-2'>
+            <span className='font-medium text-foreground text-xs'>
+              {tone.label}
+            </span>
+            <span className='truncate font-mono text-[0.6875rem] text-muted-foreground'>
+              {tone.token}
+            </span>
+          </div>
+        </div>
+      ))}
+    </RuledGrid>
   </div>
 )

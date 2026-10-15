@@ -1,4 +1,5 @@
 import { Icons } from '@/components/icons/icons'
+import { RuledGrid } from '@/components/layout/ruled-grid'
 import { PreviewLink } from '@/components/preview-link'
 import { technologyGroups } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
@@ -55,15 +56,11 @@ export const Technology = () => (
           </span>
           {group.label}
         </div>
-        {/* Tiles draw their own right and bottom rules and the outer edges
-            get clipped, so a short last row closes out in hatch */}
-        <div className='overflow-hidden'>
-          <div className='-mr-px -mb-px grid bg-dashed sm:grid-cols-2 [&>*]:border-line [&>*]:border-r [&>*]:border-b'>
-            {group.items.map((item) => (
-              <TechnologyTile key={item.name} {...item} />
-            ))}
-          </div>
-        </div>
+        <RuledGrid className='sm:grid-cols-2'>
+          {group.items.map((item) => (
+            <TechnologyTile key={item.name} {...item} />
+          ))}
+        </RuledGrid>
       </div>
     ))}
   </div>

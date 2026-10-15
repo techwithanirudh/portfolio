@@ -30,6 +30,7 @@ import {
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 import { signOut, useSession } from '@/lib/auth-client'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
@@ -158,9 +159,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     const hashIndex = url.indexOf('#')
     const hash = hashIndex === -1 ? null : url.slice(hashIndex)
     const sameRouteTarget = hash ? document.querySelector(hash) : null
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
 
     router.push(url)
 
@@ -169,7 +167,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (sameRouteTarget) {
-      scrollToHashTarget(sameRouteTarget, prefersReducedMotion)
+      scrollToHashTarget(sameRouteTarget, prefersReducedMotion())
     }
   }
 

@@ -18,13 +18,7 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
       className='pt-0'
       links={linkItems}
       nav={{
-        component: (
-          <Header
-            links={linkItems}
-            {...baseOptions}
-            themeSwitch={{ enabled: false }}
-          />
-        ),
+        component: <Header links={linkItems} {...baseOptions} />,
       }}
     >
       <div

@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useRef } from 'react'
+import { reducedMotionQuery } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 
 // Square halftone field in two layers: a fine back grid that pans slowly and
@@ -193,7 +194,7 @@ export function DitherField({ className }: { className?: string }) {
     const uMid = uniform('uMid')
     const uHi = uniform('uHi')
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const reducedMotion = reducedMotionQuery()
     const pointer = { x: -1, y: -1 }
     let visible = true
     let frame = 0
