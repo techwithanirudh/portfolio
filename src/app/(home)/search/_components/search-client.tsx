@@ -88,10 +88,7 @@ export function SearchClient() {
     >
       <Section className='flex flex-1 flex-col' sectionClassName='h-full'>
         <div className='flex flex-col'>
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation>
             <InputGroup className='!bg-background h-12 rounded-none border-0 border-line border-b shadow-none'>
               <InputGroupAddon className='border-0 pl-4 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
@@ -114,11 +111,7 @@ export function SearchClient() {
               )}
             </InputGroup>
           </ViewAnimation>
-          <ViewAnimation
-            delay={0.05}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.05}>
             <div className='flex w-full divide-x divide-line border-line border-b'>
               {tags.map((scopeOption) => {
                 const value = scopeOption.value ?? 'all'
@@ -146,11 +139,7 @@ export function SearchClient() {
           </ViewAnimation>
         </div>
         {!hasQuery && (
-          <ViewAnimation
-            delay={0.1}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.1}>
             <div className='py-16 text-center font-mono text-muted-foreground text-xs'>
               {'// start typing to search posts and projects'}
             </div>

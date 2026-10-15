@@ -17,13 +17,9 @@ export const Hero = () => (
     <div className='screen-line-bottom flex'>
       {socials.map((social, index) => (
         <ViewAnimation
-          blur={false}
           className='border-line border-r'
           delay={0.05 * index}
-          duration={0.25}
-          initial={{ opacity: 0, translateY: -6 }}
           key={social.url}
-          whileInView={{ opacity: 1, translateY: 0 }}
         >
           <Tooltip>
             <TooltipTrigger

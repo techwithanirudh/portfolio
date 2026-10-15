@@ -42,12 +42,7 @@ export function WorkExperience({
   return (
     <div className={cn('divide-y divide-line', className)}>
       {experiences.map((experience, index) => (
-        <ViewAnimation
-          delay={0.05 * index}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={experience.id}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.05 * index} key={experience.id}>
           <ExperienceItem experience={experience} />
         </ViewAnimation>
       ))}
@@ -119,7 +114,7 @@ export function ExperiencePositionItem({
       <CollapsibleTrigger
         className={cn(
           'group/experience-position not-prose block w-full select-none text-left',
-          'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 hover:before:bg-muted/40',
+          'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 hover:before:bg-card',
           'data-disabled:before:content-none'
         )}
       >

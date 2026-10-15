@@ -17,14 +17,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
       <SectionHeader title='Projects' />
       <ul className='divide-y divide-line'>
         {works.map((work, index) => (
-          <ViewAnimation
-            as='li'
-            blur={false}
-            delay={0.05 * index}
-            initial={{ opacity: 0, translateY: -6 }}
-            key={work.url}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation as='li' delay={0.05 * index} key={work.url}>
             <Link
               className='group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-card'
               data-sound-hover

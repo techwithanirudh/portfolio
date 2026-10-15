@@ -51,9 +51,7 @@ const Skills = () => (
                 size: feature.size as 'sm' | 'lg',
               })}
               delay={0.05 * index}
-              initial={{ opacity: 0 }}
               key={feature.id}
-              whileInView={{ opacity: 1 }}
             >
               <feature.Icon
                 className='size-6 text-muted-foreground transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-125 group-hover:text-primary'
@@ -77,9 +75,7 @@ const Skills = () => (
               <ViewAnimation
                 className='grid items-center gap-y-2 border-line border-b py-3 last:border-none sm:grid-cols-[9rem_1fr]'
                 delay={0.05 * index}
-                initial={{ opacity: 0, translateY: -6 }}
                 key={category}
-                whileInView={{ opacity: 1, translateY: 0 }}
               >
                 <div className='px-4 font-mono text-muted-foreground text-xs sm:pr-0'>
                   <span

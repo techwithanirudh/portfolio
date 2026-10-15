@@ -22,10 +22,7 @@ export const Footer = () => (
       <div className='screen-line-top screen-line-bottom border-line border-x before:-top-px'>
         {/* Every page ends on the same hatched band before the footer */}
         <div aria-hidden className='screen-line-bottom h-8 bg-dashed' />
-        <ViewAnimation
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation>
           <div className='screen-line-bottom flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3 font-mono text-muted-foreground text-xs'>
             <ul className='flex flex-wrap items-center gap-x-4 gap-y-2'>
               {links.map((link) => (
@@ -58,11 +55,7 @@ export const Footer = () => (
             </ul>
           </div>
         </ViewAnimation>
-        <ViewAnimation
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.1}>
           <div className='flex flex-wrap items-center justify-between gap-3 px-4 py-3'>
             <div className='flex items-center gap-3'>
               <UserButton />

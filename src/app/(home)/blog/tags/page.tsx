@@ -19,12 +19,7 @@ export default function Page() {
       <Section>
         <div className='flex flex-wrap gap-2 p-4'>
           {tags.map((tag, index) => (
-            <ViewAnimation
-              delay={0.03 * index}
-              initial={{ opacity: 0, translateY: -4 }}
-              key={tag}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
+            <ViewAnimation delay={0.03 * index} key={tag}>
               <Link
                 className='group inline-flex items-center gap-2 border border-line bg-card/40 px-3 py-1.5 font-mono text-sm transition-[color,border-color,scale] hover:border-primary/40 hover:text-primary active:scale-95'
                 data-sound-hover

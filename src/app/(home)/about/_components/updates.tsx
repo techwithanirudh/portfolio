@@ -19,13 +19,7 @@ const Updates = ({ posts }: { posts: BlogPage[] }) => (
     <SectionHeader title='Blog' />
     <ul className='divide-y divide-line'>
       {posts.slice(0, 5).map((post, index) => (
-        <ViewAnimation
-          as='li'
-          delay={0.05 * index}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={post.url}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation as='li' delay={0.05 * index} key={post.url}>
           <Link
             className='group flex items-baseline gap-4 px-4 py-3 transition-colors hover:bg-card'
             data-sound-hover

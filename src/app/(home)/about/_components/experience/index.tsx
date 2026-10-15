@@ -34,10 +34,7 @@ export default function Experience(): React.ReactElement {
       </SplitSectionSidebar>
 
       <SplitSectionContent>
-        <ViewAnimation
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation>
           <WorkExperience experiences={experiences} />
         </ViewAnimation>
       </SplitSectionContent>

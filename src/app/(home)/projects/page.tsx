@@ -96,14 +96,7 @@ export default async function Page(props: {
               className='relative border-line border-b md:odd:after:absolute md:odd:after:inset-y-0 md:odd:after:right-0 md:odd:after:z-10 md:odd:after:w-px md:odd:after:bg-line'
               key={entry.url}
             >
-              <ViewAnimation
-                blur={false}
-                className='h-full'
-                delay={0.05 * index}
-                duration={0.25}
-                initial={{ opacity: 0, translateY: -6 }}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
+              <ViewAnimation className='h-full' delay={0.05 * index}>
                 <WorkCard
                   description={entry.data.description ?? ''}
                   image={entry.data.image ?? null}

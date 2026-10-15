@@ -18,11 +18,7 @@ export default function Posts({
       {...props}
       className={cn('flex flex-col divide-y divide-line', className)}
     >
-      <ViewAnimation
-        delay={0.1}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
+      <ViewAnimation delay={0.1}>
         <SearchRedirectInput
           className='min-w-full'
           placeholder='Search posts...'
@@ -37,12 +33,7 @@ export default function Posts({
             year: 'numeric',
           })
           return (
-            <ViewAnimation
-              delay={0.05 * index}
-              initial={{ opacity: 0, translateY: -6 }}
-              key={post.url}
-              whileInView={{ opacity: 1, translateY: 0 }}
-            >
+            <ViewAnimation delay={0.05 * index} key={post.url}>
               <PostCard
                 author={post.data.author}
                 date={date}

@@ -49,11 +49,7 @@ export default function ColophonPage() {
           <Fragment key={section.title ?? `colophon-section-${index}`}>
             <Section>
               {section.title && <SectionHeader title={section.title} />}
-              <ViewAnimation
-                delay={contentDelay}
-                initial={{ opacity: 0, translateY: -6 }}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
+              <ViewAnimation delay={contentDelay}>
                 {section.content}
               </ViewAnimation>
             </Section>

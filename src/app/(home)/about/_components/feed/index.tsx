@@ -30,9 +30,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
                 as='li'
                 className='group min-w-0 px-4 py-2 transition-colors hover:bg-card hover:text-foreground'
                 delay={0.03 * index}
-                initial={{ opacity: 0, translateY: -4 }}
                 key={item.event.id}
-                whileInView={{ opacity: 1, translateY: 0 }}
               >
                 <GitHubEventComponent
                   commits={item.commits}

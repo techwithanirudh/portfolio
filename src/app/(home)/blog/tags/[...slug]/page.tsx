@@ -101,12 +101,7 @@ export default async function Page(props: {
               year: 'numeric',
             })
             return (
-              <ViewAnimation
-                delay={0.05 * index}
-                initial={{ opacity: 0, translateY: -6 }}
-                key={post.url}
-                whileInView={{ opacity: 1, translateY: 0 }}
-              >
+              <ViewAnimation delay={0.05 * index} key={post.url}>
                 <PostCard
                   author={post.data.author ?? 'Unknown'}
                   date={date}

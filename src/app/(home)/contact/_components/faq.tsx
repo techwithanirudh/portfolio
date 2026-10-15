@@ -48,13 +48,9 @@ export const FAQ = () => (
       <Accordion className='w-full'>
         {faq.map((item, index) => (
           <ViewAnimation
-            blur={false}
             className='border-line border-b last:border-b-0'
             delay={0.05 * index}
-            duration={0.25}
-            initial={{ opacity: 0, translateY: -6 }}
             key={item.question}
-            whileInView={{ opacity: 1, translateY: 0 }}
           >
             <AccordionItem value={`index-${index}`}>
               <AccordionTrigger className='rounded-none border-0 border-line px-4 transition-colors hover:bg-card/80 hover:no-underline focus-visible:bg-card/80 focus-visible:ring-0 aria-expanded:border-b aria-expanded:bg-card/80'>

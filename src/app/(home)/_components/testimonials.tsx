@@ -18,12 +18,9 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => (
       {testimonials.slice(0, 3).map((testimonial, index) => (
         <ViewAnimation
           as='li'
-          blur={false}
           className='group flex flex-col gap-3 p-4 transition-colors hover:bg-card'
           delay={0.05 * index}
-          initial={{ opacity: 0, translateY: -6 }}
           key={testimonial.author.name}
-          whileInView={{ opacity: 1, translateY: 0 }}
         >
           <blockquote className='text-pretty text-muted-foreground text-sm leading-relaxed'>
             <span aria-hidden className='text-primary'>

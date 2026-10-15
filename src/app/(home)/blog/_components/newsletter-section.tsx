@@ -17,12 +17,7 @@ export function NewsletterSection() {
         />
       </SplitSectionSidebar>
       <SplitSectionContent>
-        <ViewAnimation
-          className='flex size-full items-center'
-          delay={0.15}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation className='flex size-full items-center' delay={0.15}>
           <NewsletterForm />
         </ViewAnimation>
       </SplitSectionContent>

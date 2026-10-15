@@ -640,3 +640,13 @@ html > body[data-scroll-locked] {
     display: none !important;
   }
 }
+
+/*
+ * One entrance for the whole site: every section block and every
+ * [data-reveal-item] fades and rises in the first time it scrolls into view.
+ * Hidden only while the inline reveal script has flagged <html>, so no JS
+ * means nothing is hidden; the script's Web Animation then holds them visible.
+ */
+:root[data-reveal] :is([data-slot="section-inner"] > *, [data-reveal-item]) {
+  opacity: 0;
+}

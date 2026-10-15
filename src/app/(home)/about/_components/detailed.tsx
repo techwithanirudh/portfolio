@@ -21,12 +21,7 @@ export default function Detailed(): React.ReactElement {
         />
       </SplitSectionSidebar>
       <SplitSectionContent className='p-4'>
-        <ViewAnimation
-          className='h-full'
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation className='h-full' delay={0.1}>
           <div className='space-y-6 text-lg text-muted-foreground'>
             <p>
               Hi, I'm Anirudh. I'm a self-taught software engineer and a student
