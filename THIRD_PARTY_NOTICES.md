@@ -86,6 +86,6 @@ SOFTWARE.
 
 ## braydoncoyer.dev
 
-https://github.com/braydoncoyer/braydoncoyer.dev has no license file, so no code
-is copied from it. Its About timeline and home layout are design inspiration only
-and are reimplemented from scratch here.
+https://github.com/braydoncoyer/braydoncoyer.dev. About timeline, home layout and related
+components are adapted from this repo. The repo has no licence file, so this is used with
+the site owner's decision and credit, not under MIT. Each adapted file names its source.
