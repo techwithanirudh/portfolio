@@ -80,7 +80,7 @@ export function ContactForm({
 
   if (isSubmitted && submittedData) {
     return (
-      <div className='flex flex-col gap-2 border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
+      <div className='flex flex-col gap-2 bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
         <div className='flex items-center gap-2'>
           <Icons.success className='size-4 shrink-0' />
           <p>message sent! anirudh will get back to you soon.</p>
@@ -101,7 +101,7 @@ export function ContactForm({
 
   if (isSubmitted && !submittedData) {
     return (
-      <div className='flex flex-col gap-2 border border-muted-foreground/30 border-dashed bg-muted/40 p-3 text-muted-foreground text-sm'>
+      <div className='flex flex-col gap-2 bg-muted/40 p-3 text-muted-foreground text-sm'>
         <div className='flex items-center gap-2'>
           <Icons.success className='size-4 shrink-0' />
           <p>message canceled. you can keep chatting.</p>
@@ -125,7 +125,7 @@ export function ContactForm({
   return (
     <Form {...form}>
       <form
-        className='flex flex-col gap-3 border border-dashed p-3'
+        className='flex flex-col gap-3 p-3'
         onSubmit={handleSubmitWithAction}
       >
         <p className='text-fd-muted-foreground text-xs'>
@@ -238,7 +238,7 @@ export function ContactForm({
 
 export function ContactFormSkeleton() {
   return (
-    <div className='flex flex-col gap-3 border border-dashed p-3'>
+    <div className='flex flex-col gap-3 p-3'>
       <Skeleton className='h-3 w-48' />
       <div className='space-y-2'>
         <Skeleton className='h-3 w-12' />

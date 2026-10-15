@@ -6,18 +6,15 @@ import { useSound } from '@web-kits/audio/react'
 import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import {
-  type ComponentProps,
   createContext,
   type Dispatch,
   memo,
   type ReactNode,
   type SetStateAction,
-  type SyntheticEvent,
   use,
   useEffect,
   useEffectEvent,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
@@ -27,6 +24,29 @@ import {
   getToolsRequiringConfirmation,
   type ToolName,
 } from '@/app/api/chat/utils/tools/confirmation'
+import {
+  Conversation,
+  ConversationContent,
+  ConversationEmptyState,
+  ConversationScrollButton,
+} from '@/components/ai-elements/conversation'
+import {
+  Message,
+  MessageContent,
+  MessageHeader,
+  MessageResponse,
+} from '@/components/ai-elements/message'
+import {
+  PromptInput,
+  PromptInputBody,
+  PromptInputButton,
+  PromptInputFooter,
+  PromptInputHeader,
+  PromptInputSubmit,
+  PromptInputTextarea,
+  PromptInputTools,
+} from '@/components/ai-elements/prompt-input'
+import { Tool, ToolContent, ToolHeader } from '@/components/ai-elements/tool'
 import {
   MascotProvider,
   useMascot,
@@ -53,8 +73,7 @@ import {
   toggleOn,
 } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
-import { Markdown } from './markdown'
-import { MessageMetadata } from './message-metadata'
+import { MessageMetadata, MessagePending } from './message-metadata'
 
 const AssistantContext = createContext<{
   open: boolean
@@ -116,6 +135,8 @@ export function Assistant({ children }: { children: ReactNode }) {
   )
 }
 
+const assistantTitleId = 'assistant-panel-title'
+
 function Header() {
   const { setOpen, chat, setContext } = useAssistantContext()
   const playNewChat = useSound(toggleOn)
@@ -125,12 +146,15 @@ function Header() {
       <div className='flex h-full flex-1 items-center justify-between overflow-hidden bg-fd-card px-3 text-fd-card-foreground'>
         <span className='flex items-center gap-2'>
           <AvatarIcon size={24} />
-          <span className='font-medium text-sm'>Ask Simba</span>
+          <span className='font-medium text-sm' id={assistantTitleId}>
+            Ask Simba
+          </span>
         </span>
       </div>
 
       <div className='flex h-full'>
         <button
+          aria-label='New chat'
           className={cn(
             buttonVariants({
               className: 'size-10 rounded-none border-none [&_svg]:size-4',
@@ -157,7 +181,6 @@ function Header() {
             })
           )}
           onClick={() => setOpen(false)}
-          tabIndex={-1}
           type='button'
         >
           <Icons.close className='icon-turn-button' />
@@ -167,7 +190,7 @@ function Header() {
   )
 }
 
-function AssistantActions() {
+function RegenerateButton() {
   const { chat } = useAssistantContext()
   const { messages, status, regenerate } = chat
   const isLoading = status === 'streaming'
@@ -176,15 +199,11 @@ function AssistantActions() {
   const playRegenerate = useSound(tap)
 
   return (
-    <button
+    <PromptInputButton
       aria-hidden={!canShow}
+      aria-label='Regenerate response'
       className={cn(
-        buttonVariants({
-          className:
-            'gap-1.5 rounded-none border border-dashed transition-opacity duration-200 [&_svg]:size-4',
-          color: 'secondary',
-          size: 'icon-sm',
-        }),
+        'transition-opacity duration-200',
         canShow ? 'opacity-100' : 'pointer-events-none opacity-0'
       )}
       disabled={!canShow}
@@ -193,17 +212,16 @@ function AssistantActions() {
         regenerate()
       }}
       tabIndex={canShow ? 0 : -1}
-      type='button'
     >
-      <Icons.refresh />
-    </button>
+      <Icons.refresh className='icon-turn-button' />
+    </PromptInputButton>
   )
 }
 
 const assistantInputStorageKey = '__ai_search_input'
 const MaxSourcePreviewChars = 120
 
-function AssistantInput(props: ComponentProps<'form'>) {
+function AssistantInput() {
   const { chat, setContext, context } = useAssistantContext()
   const { status, sendMessage, stop, messages } = chat
   const mascot = useMascot()
@@ -221,16 +239,15 @@ function AssistantInput(props: ComponentProps<'form'>) {
       return toolsRequiringConfirmation.includes(toolName)
     })
   )
-  const isLoading =
-    status === 'streaming' || status === 'submitted' || hasPendingToolInput
+  const isStreaming = status === 'streaming' || status === 'submitted'
+  const isLoading = isStreaming || hasPendingToolInput
   const saveInput = useDebounceCallback(
     (value: string) => localStorage.setItem(assistantInputStorageKey, value),
     300
   )
 
-  const onStart = async (event?: SyntheticEvent) => {
-    event?.preventDefault()
-    if (hasPendingToolInput) {
+  const onStart = async () => {
+    if (isLoading) {
       return
     }
     const trimmedInput = input.trim()
@@ -247,6 +264,7 @@ function AssistantInput(props: ComponentProps<'form'>) {
 
     setInput('')
     setContext(null)
+    saveInput.cancel()
     localStorage.removeItem(assistantInputStorageKey)
 
     await sendMessage({
@@ -280,74 +298,40 @@ function AssistantInput(props: ComponentProps<'form'>) {
     saveInput(value)
   }
 
-  useEffect(() => {
-    if (isLoading) {
-      document.getElementById('nd-ai-input')?.focus()
-    }
-  }, [isLoading])
-
   return (
-    <form
-      {...props}
-      className={cn('flex items-start', props.className)}
-      onSubmit={onStart}
-    >
-      <div className='flex flex-1 flex-col'>
-        <PromptContext context={context} onClear={() => setContext(null)} />
-        <TextInput
+    <PromptInput onSubmit={onStart}>
+      {context ? (
+        <PromptInputHeader>
+          <PromptContext context={context} onClear={() => setContext(null)} />
+        </PromptInputHeader>
+      ) : null}
+      <PromptInputBody>
+        <PromptInputTextarea
+          aria-label='Ask Simba a question'
           autoFocus
-          className={cn('p-3', isLoading && 'text-fd-muted-foreground')}
-          disabled={isLoading}
+          className={cn(isLoading && 'text-muted-foreground')}
+          id='nd-ai-input'
           onChange={(event) => handleInputChange(event.target.value)}
-          onKeyDown={(event) => {
-            if (!event.shiftKey && event.key === 'Enter') {
-              onStart(event)
-            }
-          }}
           placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
           value={input}
         />
-      </div>
-      <div
-        className={cn('flex h-10 items-center justify-center pe-1.5', {
-          'bg-fd-background': context,
-        })}
-      >
-        {isLoading ? (
-          <button
-            className={cn(
-              buttonVariants({
-                className:
-                  'rounded-none border border-dashed transition-all [&_svg]:size-3.5',
-                color: 'secondary',
-                size: 'icon-sm',
-              })
-            )}
-            onClick={stop}
-            type='button'
-          >
-            <Icons.square className='fill-fd-foreground' />
-          </button>
-        ) : (
-          <button
-            className={cn(
-              buttonVariants({
-                className:
-                  'rounded-none border border-dashed transition-all [&_svg]:size-4',
-                color: 'primary',
-                size: 'icon-sm',
-              })
-            )}
+        <div className='flex h-10 shrink-0 items-center pe-1.5'>
+          <PromptInputSubmit
             disabled={
-              (input.trim().length === 0 && !context) || hasPendingToolInput
+              !isStreaming &&
+              ((input.trim().length === 0 && !context) || hasPendingToolInput)
             }
-            type='submit'
-          >
-            <Icons.arrowUp />
-          </button>
-        )}
-      </div>
-    </form>
+            onStop={stop}
+            status={status}
+          />
+        </div>
+      </PromptInputBody>
+      <PromptInputFooter>
+        <PromptInputTools>
+          <RegenerateButton />
+        </PromptInputTools>
+      </PromptInputFooter>
+    </PromptInput>
   )
 }
 
@@ -355,47 +339,27 @@ function PromptContext({
   context,
   onClear,
 }: {
-  context: string | null
+  context: string
   onClear: () => void
 }) {
-  if (!context) {
-    return null
-  }
-
   return (
-    <div className='flex h-10 items-start gap-1.5 bg-fd-background px-2 py-1 text-xs'>
-      <Icons.quote className='mt-0.5 size-3 shrink-0 text-fd-muted-foreground' />
+    <div className='flex w-full items-start gap-1.5 bg-fd-background px-2 py-1.5 font-normal text-foreground text-xs'>
+      <Icons.quote
+        aria-hidden
+        className='mt-0.5 size-3 shrink-0 text-muted-foreground'
+      />
       <span className='line-clamp-2 flex-1 break-words'>
+        <span className='sr-only'>Context: </span>
         {context.slice(0, MaxSourcePreviewChars)}
       </span>
       <button
         aria-label='Remove context'
-        className='inline-flex items-center justify-center text-fd-muted-foreground transition-colors hover:text-fd-foreground'
+        className='inline-flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground'
         onClick={onClear}
         type='button'
       >
         <Icons.close className='size-3.5' />
       </button>
-    </div>
-  )
-}
-
-function TextInput(props: ComponentProps<'textarea'>) {
-  const shared = cn('col-start-1 row-start-1', props.className)
-
-  return (
-    <div className='grid flex-1'>
-      <textarea
-        id='nd-ai-input'
-        {...props}
-        className={cn(
-          'resize-none bg-transparent placeholder:text-fd-muted-foreground focus-visible:outline-none',
-          shared
-        )}
-      />
-      <div className={cn(shared, 'invisible break-all')}>
-        {`${props.value?.toString() ?? ''}\n`}
-      </div>
     </div>
   )
 }
@@ -408,56 +372,29 @@ const roleName: Record<string, string> = {
 function MessageList({
   messages,
   status,
-  className,
-  style,
 }: {
   messages: MyUIMessage[]
-  status: string
-} & ComponentProps<'div'>) {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) {
-      return
-    }
-
-    const scroll = () => {
-      if (!container) {
-        return
-      }
-      const isNearBottom =
-        container.scrollHeight - container.scrollTop - container.clientHeight <
-        100
-      if (isNearBottom) {
-        container.scrollTo({ behavior: 'instant', top: container.scrollHeight })
-      }
-    }
-
-    const observer = new ResizeObserver(scroll)
-    scroll()
-
-    const element = container.firstElementChild
-    if (element) {
-      observer.observe(element)
-    }
-
-    return () => observer.disconnect()
-  }, [])
+  status: UseChatHelpers<MyUIMessage>['status']
+}) {
+  const isBusy = status === 'streaming' || status === 'submitted'
+  // Until the first chunk lands there's no assistant message to hang the
+  // spinner on, so show a placeholder turn
+  const isAwaitingReply =
+    status === 'submitted' && messages.at(-1)?.role === 'user'
 
   return (
-    <div
-      className={cn(
-        'fd-scroll-container supports-timeline-scroll:scroll-fade-effect-y flex min-w-0 flex-col overflow-y-auto',
-        className
-      )}
+    <Conversation
+      aria-busy={isBusy}
+      aria-label='Conversation with Simba'
+      className='min-h-0 flex-1'
       data-lenis-prevent
-      ref={containerRef}
-      style={style}
     >
-      <div className='flex flex-1 flex-col divide-y divide-dashed divide-border'>
+      <ConversationContent
+        className='divide-y divide-dashed divide-border px-3'
+        scrollClassName='fd-scroll-container supports-timeline-scroll:scroll-fade-effect-y'
+      >
         {messages.length === 0 ? (
-          <div className='flex min-h-full flex-1 flex-col items-center justify-center gap-3 text-center text-fd-muted-foreground text-sm'>
+          <ConversationEmptyState>
             <AvatarIcon
               className='transition-transform hover:scale-110'
               size={64}
@@ -466,33 +403,92 @@ function MessageList({
               heya! im simba, anirudh's dog. i can answer questions about him,
               his work, or the site.
             </p>
-          </div>
+          </ConversationEmptyState>
         ) : (
           messages.map((item, idx) => (
-            <Message
-              className='py-4'
-              isInProgress={
-                messages.length - 1 === idx &&
-                (status === 'streaming' || status === 'submitted')
-              }
+            <AssistantMessage
+              isInProgress={messages.length - 1 === idx && isBusy}
               key={item.id}
               message={item}
             />
           ))
         )}
-      </div>
-    </div>
+        {isAwaitingReply ? (
+          <Message className='py-4' from='assistant'>
+            <MessageHeader>{roleName.assistant}</MessageHeader>
+            <MessagePending />
+          </Message>
+        ) : null}
+      </ConversationContent>
+      <ConversationScrollButton />
+    </Conversation>
   )
 }
 
-const Message = memo(function Message({
+const contactFormStatus = (
+  part: Extract<MyUIMessage['parts'][number], { type: 'tool-showContactForm' }>
+) => {
+  if (part.state === 'output-available') {
+    return part.output?.success ? 'sent' : 'canceled'
+  }
+  if (part.state === 'input-available') {
+    return 'waiting on you'
+  }
+  if (part.state === 'input-streaming') {
+    return 'drafting'
+  }
+}
+
+function ContactFormPart({
+  part,
+}: {
+  part: Extract<MyUIMessage['parts'][number], { type: 'tool-showContactForm' }>
+}) {
+  const isSubmitted = part.state === 'output-available'
+  const submittedData =
+    isSubmitted &&
+    part.output?.success &&
+    part.output.name &&
+    part.output.email &&
+    part.output.message
+      ? {
+          email: part.output.email,
+          message: part.output.message,
+          name: part.output.name,
+        }
+      : undefined
+
+  return (
+    <Tool defaultOpen>
+      <ToolHeader
+        icon={<Icons.mail />}
+        state={part.state}
+        status={contactFormStatus(part)}
+        title='contact form'
+      />
+      <ToolContent>
+        {!isSubmitted && part.state !== 'input-available' ? (
+          <ContactFormSkeleton />
+        ) : (
+          <ContactForm
+            isSubmitted={isSubmitted}
+            prefill={part.input?.prefill ?? undefined}
+            submittedData={submittedData}
+            toolCallId={part.toolCallId}
+          />
+        )}
+      </ToolContent>
+    </Tool>
+  )
+}
+
+const AssistantMessage = memo(function AssistantMessage({
   message,
   isInProgress,
-  ...props
 }: {
   message: MyUIMessage
   isInProgress: boolean
-} & ComponentProps<'div'>) {
+}) {
   const parts = (message.parts ?? []) as MyUIMessage['parts']
   const context = (() => {
     const contextPart = parts.find((part) => part.type === 'data-context')
@@ -503,19 +499,12 @@ const Message = memo(function Message({
   })()
 
   return (
-    <div {...props}>
-      <p
-        className={cn(
-          'mb-1 font-medium text-fd-muted-foreground text-sm',
-          message.role === 'assistant' && 'text-fd-primary'
-        )}
-      >
-        {roleName[message.role] ?? 'unknown'}
-      </p>
-      <div className='flex flex-col gap-2'>
+    <Message className='py-4' from={message.role}>
+      <MessageHeader>{roleName[message.role] ?? 'unknown'}</MessageHeader>
+      <MessageContent>
         {message.role === 'user' && context ? (
           <div className='not-prose border border-border border-dashed bg-fd-muted/40 p-2 text-xs'>
-            <p className='mb-1 font-medium text-[11px] text-fd-muted-foreground uppercase tracking-wide'>
+            <p className='mb-1 font-medium font-mono text-[11px] text-muted-foreground uppercase tracking-wide'>
               Context
             </p>
             <p className='line-clamp-3 break-words'>{context}</p>
@@ -525,48 +514,21 @@ const Message = memo(function Message({
         {parts.map((part, index) => {
           if (part.type === 'text') {
             return (
-              <div
-                className='prose text-sm'
+              <MessageResponse
                 // biome-ignore lint/suspicious/noArrayIndexKey: message parts are rendered in source order and don't expose a stable id
                 key={`${message.id}-text-${index}`}
               >
-                <Markdown text={part.text} />
-              </div>
+                {part.text}
+              </MessageResponse>
             )
           }
           if (part.type === 'tool-showContactForm') {
-            const isSubmitted = part.state === 'output-available'
-            const submittedData =
-              isSubmitted &&
-              part.output?.success &&
-              part.output.name &&
-              part.output.email &&
-              part.output.message
-                ? {
-                    email: part.output.email,
-                    message: part.output.message,
-                    name: part.output.name,
-                  }
-                : undefined
-
-            if (!isSubmitted && part.state !== 'input-available') {
-              return <ContactFormSkeleton key={part.toolCallId} />
-            }
-
-            return (
-              <ContactForm
-                isSubmitted={isSubmitted}
-                key={part.toolCallId}
-                prefill={part.input?.prefill ?? undefined}
-                submittedData={submittedData}
-                toolCallId={part.toolCallId}
-              />
-            )
+            return <ContactFormPart key={part.toolCallId} part={part} />
           }
           return null
         })}
-      </div>
-    </div>
+      </MessageContent>
+    </Message>
   )
 })
 
@@ -611,25 +573,20 @@ function AssistantPanel() {
       </Presence>
       <Presence present={open}>
         <div
+          aria-labelledby={assistantTitleId}
           className={cn(
             'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]',
             open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
           )}
           // The panel plays its own send, error and action sounds
           data-sound-press='off'
+          role='dialog'
         >
           <div className='flex h-full flex-col divide-y divide-dashed divide-border'>
             <Header />
-            <MessageList
-              className='min-h-0 flex-1 overflow-y-auto overscroll-contain px-3'
-              messages={chat.messages}
-              status={chat.status}
-            />
+            <MessageList messages={chat.messages} status={chat.status} />
             <div className='rounded-none border-t border-dashed bg-fd-card text-fd-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-fd-ring'>
               <AssistantInput />
-              <div className='flex items-center gap-1.5 p-2'>
-                <AssistantActions />
-              </div>
             </div>
           </div>
         </div>
