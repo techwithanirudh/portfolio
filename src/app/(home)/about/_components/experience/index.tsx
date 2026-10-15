@@ -19,9 +19,10 @@ export default function Experience(): React.ReactElement {
         <SplitSectionHeader
           action={
             <Button
+              className='h-full px-5 ring-0 active:scale-100 active:opacity-90'
               nativeButton={false}
               render={<a href='/resume.pdf' rel='noopener' target='_blank' />}
-              size='sm'
+              shape='square'
               variant='default'
             >
               Resume
@@ -34,7 +35,7 @@ export default function Experience(): React.ReactElement {
         />
       </SplitSectionSidebar>
 
-      <SplitSectionContent className='px-0 py-0 lg:col-span-2'>
+      <SplitSectionContent>
         <ViewAnimation
           initial={{ opacity: 0, translateY: -6 }}
           whileInView={{ opacity: 1, translateY: 0 }}

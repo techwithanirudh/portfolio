@@ -36,16 +36,16 @@ export const SectionHeader = ({
         className
       )}
     >
-      <div className='screen-line-bottom flex w-full items-center justify-between gap-4 px-4 py-2'>
+      <div className='screen-line-bottom flex w-full items-stretch justify-between gap-4'>
         <h2
           className={cn(
-            'font-heading font-medium text-2xl tracking-tight sm:text-3xl',
+            'px-4 py-2 font-heading font-medium text-2xl tracking-tight sm:text-3xl',
             titleClassName
           )}
         >
           {title}
         </h2>
-        {action}
+        {action && <div className='flex shrink-0'>{action}</div>}
       </div>
       {description && (
         <p

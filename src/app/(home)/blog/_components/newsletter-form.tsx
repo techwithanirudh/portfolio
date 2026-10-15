@@ -45,8 +45,8 @@ export const NewsletterForm = () => {
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-4' onSubmit={handleSubmitWithAction}>
-        <div className='flex h-full min-h-10 overflow-hidden rounded-md border bg-muted p-0'>
+      <form className='flex-1' onSubmit={handleSubmitWithAction}>
+        <div className='flex min-h-14'>
           <div className='flex-1'>
             <FormField
               control={form.control}
@@ -56,7 +56,7 @@ export const NewsletterForm = () => {
                   <FormControl className='h-full group-has-[p]:pt-3'>
                     <Input
                       {...field}
-                      className='h-full rounded-md rounded-r-none border-none px-4 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
+                      className='h-full min-h-14 rounded-none border-none bg-transparent px-4 shadow-none transition-colors focus-visible:bg-card/80 focus-visible:ring-0 focus-visible:ring-offset-0 dark:bg-transparent'
                       disabled={action.status === 'executing'}
                       placeholder='Email address'
                       type='email'
@@ -69,9 +69,9 @@ export const NewsletterForm = () => {
           </div>
 
           <Button
-            className='size-auto w-15 rounded-md rounded-l-none px-3'
+            className='h-auto w-16 shrink-0 ring-0 active:scale-100 active:opacity-90'
             disabled={action.status === 'executing'}
-            size='icon'
+            shape='square'
             type='submit'
           >
             {action.status === 'executing' ? (
@@ -83,7 +83,7 @@ export const NewsletterForm = () => {
         </div>
 
         {action.status === 'hasSucceeded' && (
-          <Alert className='border-emerald-500/15 bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+          <Alert className='rounded-none border-0 border-emerald-500/15 border-line border-t bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.message ??
@@ -92,7 +92,7 @@ export const NewsletterForm = () => {
           </Alert>
         )}
         {action.result.serverError && (
-          <Alert className='border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+          <Alert className='rounded-none border-0 border-destructive/15 border-line border-t bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.serverError}

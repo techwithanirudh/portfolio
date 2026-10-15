@@ -23,7 +23,7 @@ const groupByCategory = (items: TechStackItem[]) => {
 }
 
 const featureItemVariants = cva(
-  'group flex min-h-44 flex-col justify-between gap-10 p-4 transition-colors hover:bg-card/80',
+  'group flex min-h-60 flex-col justify-between gap-10 p-4 transition-colors hover:bg-card/80',
   {
     defaultVariants: {
       size: 'sm',

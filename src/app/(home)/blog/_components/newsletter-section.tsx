@@ -16,7 +16,7 @@ export function NewsletterSection() {
           title='Newsletter'
         />
       </SplitSectionSidebar>
-      <SplitSectionContent inset>
+      <SplitSectionContent>
         <ViewAnimation
           className='flex size-full items-center'
           delay={0.15}

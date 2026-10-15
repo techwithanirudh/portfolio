@@ -1,8 +1,6 @@
 'use client'
 
 // Adapted from chanhdai.com (MIT, (c) Chanh Dai): https://github.com/ncdai/chanhdai.com
-// The "likely doing" line is after jahir.dev (MIT, (c) Jahir Fiquitiva):
-// https://github.com/jahirfiquitiva/jahir.dev
 import { useEffect, useId, useState } from 'react'
 import { InlineScript } from '@/components/inline-script'
 import { IntroItem, IntroItemContent, IntroItemIcon } from './intro-item'
@@ -27,36 +25,16 @@ function computeClock(timeZone: string) {
     hourCycle: 'h23',
     minute: '2-digit',
     timeZone,
-    weekday: 'short',
   }).formatToParts(now)
   const get = (type: string) => parts.find((p) => p.type === type)?.value ?? ''
   const hour = Number.parseInt(get('hour'), 10)
   const minute = Number.parseInt(get('minute'), 10)
-  const weekend = get('weekday') === 'Sat' || get('weekday') === 'Sun'
-
-  let doing = 'probably around'
-  if (hour < 7) {
-    doing = 'likely asleep'
-  } else if (hour < 9) {
-    doing = 'likely having chai'
-  } else if (hour < 13) {
-    doing = weekend ? 'likely tinkering' : 'likely at work'
-  } else if (hour < 14) {
-    doing = 'likely having lunch'
-  } else if (hour < 19) {
-    doing = weekend ? 'likely tinkering' : 'likely shipping'
-  } else if (hour < 21) {
-    doing = 'likely walking the dog'
-  } else {
-    doing = 'likely coding late'
-  }
 
   const time = `${get('hour')}:${get('minute')}`
-  return { doing, hour, minute, time }
+  return { hour, minute, time }
 }
 
 interface ClockIds {
-  doing: string
   hands: string
   time: string
 }
@@ -68,14 +46,10 @@ function runClockScript(
   handsPath: typeof clockHandsPath
 ) {
   try {
-    const { time, doing, hour, minute } = compute(timeZone)
+    const { time, hour, minute } = compute(timeZone)
     const t = document.getElementById(ids.time)
     if (t) {
       t.textContent = time
-    }
-    const d = document.getElementById(ids.doing)
-    if (d) {
-      d.textContent = ` // ${doing}`
     }
     const p = document.getElementById(ids.hands)
     if (p) {
@@ -92,7 +66,6 @@ const inlineScript = (timeZone: string, ids: ClockIds) =>
 export function LocalTimeItem({ timeZone }: { timeZone: string }) {
   const uid = useId()
   const ids: ClockIds = {
-    doing: `lt-doing-${uid}`,
     hands: `lt-hands-${uid}`,
     time: `lt-time-${uid}`,
   }
@@ -133,13 +106,6 @@ export function LocalTimeItem({ timeZone }: { timeZone: string }) {
           {clock?.time ?? ''}
         </span>
         <span className='text-muted-foreground'> IST</span>
-        <span
-          className='text-muted-foreground'
-          id={ids.doing}
-          suppressHydrationWarning
-        >
-          {clock ? ` // ${clock.doing}` : ''}
-        </span>
       </IntroItemContent>
       <InlineScript html={inlineScript(timeZone, ids)} />
     </IntroItem>

@@ -65,12 +65,12 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
           blockMargin={2}
           blockRadius={0}
           blockSize={11}
-          className='mx-auto gap-3 py-4'
+          className='w-full gap-3 py-4'
           data={data}
         >
           <ContributionGraphCalendar
             aria-hidden
-            className='no-scrollbar px-4 font-mono text-[11px] **:data-[slot=month-labels]:text-muted-foreground'
+            className='no-scrollbar px-4 font-mono text-[11px] **:data-[slot=month-labels]:text-muted-foreground md:[&>svg]:h-auto md:[&>svg]:w-full'
             title='GitHub Contributions'
           >
             {({ activity, dayIndex, weekIndex }) => (
