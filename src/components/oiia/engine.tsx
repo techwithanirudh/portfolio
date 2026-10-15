@@ -93,6 +93,10 @@ export function OiiaEngine() {
     })
   }, [clearAllRequest, setCatCount])
 
+  if (mode !== 'oiia') {
+    return null
+  }
+
   return (
     <div
       aria-hidden='true'
