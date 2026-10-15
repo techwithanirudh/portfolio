@@ -29,6 +29,9 @@ const full = [
   ['system', Icons.desktop] as const,
 ]
 
+const viewTransitionStopsBrowserTint = () =>
+  window.matchMedia('(pointer: coarse)').matches
+
 export function ThemeToggle({
   className,
   mode = 'light-dark',
@@ -53,11 +56,11 @@ export function ThemeToggle({
       setTheme(next)
     }
 
-    // Touch devices skip the view transition: its fixed snapshot overlay
-    // appears to stop Safari 26 from re-sampling <body> for the browser UI tint.
-    const isTouch = window.matchMedia('(pointer: coarse)').matches
-
-    if (document.startViewTransition && next !== resolvedTheme && !isTouch) {
+    if (
+      document.startViewTransition &&
+      next !== resolvedTheme &&
+      !viewTransitionStopsBrowserTint()
+    ) {
       document.documentElement.style.viewTransitionName = 'theme-transition'
       try {
         await document.startViewTransition(update).finished

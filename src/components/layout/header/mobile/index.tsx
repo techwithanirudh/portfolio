@@ -10,6 +10,59 @@ import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
 import { useOiiaMode } from '@/components/oiia'
 
+const MENU_OPEN_ATTRIBUTE = 'data-mobile-menu-open'
+const KEEP_OPEN_SELECTOR = '#mobile-navigation-menu, [data-mobile-nav-pill]'
+
+// Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
+// does not re-read their color when it changes in place, but it re-samples
+// elements that are added. Keying them on this value re-mounts them.
+function useRemountAfterThemeApplied() {
+  const { resolvedTheme } = useTheme()
+  const [generation, setGeneration] = useState(0)
+
+  useEffect(() => {
+    if (!resolvedTheme) {
+      return
+    }
+
+    const frame = requestAnimationFrame(() => setGeneration((n) => n + 1))
+    return () => cancelAnimationFrame(frame)
+  }, [resolvedTheme])
+
+  return generation
+}
+
+// The dim behind the open menu is an `html[data-mobile-menu-open]::after`
+// rule in globals.css, not an element, so taps outside the menu are caught here.
+function useMobileMenuScrim(open: boolean, closeMenu: () => void) {
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    document.documentElement.setAttribute(MENU_OPEN_ATTRIBUTE, '')
+
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (
+        event.target instanceof Element &&
+        event.target.closest(KEEP_OPEN_SELECTOR)
+      ) {
+        return
+      }
+
+      event.preventDefault()
+      event.stopPropagation()
+      closeMenu()
+    }
+
+    document.addEventListener('click', closeOnOutsideClick, true)
+    return () => {
+      document.documentElement.removeAttribute(MENU_OPEN_ATTRIBUTE)
+      document.removeEventListener('click', closeOnOutsideClick, true)
+    }
+  }, [closeMenu, open])
+}
+
 export function MobileNav() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
@@ -20,22 +73,8 @@ export function MobileNav() {
 
   const closeMenu = useCallback(() => setOpen(false), [])
 
-  // Safari 26 tints its bottom bar from the fixed elements at the bottom edge
-  // (the fade and the pill) and does not re-read their color when it changes
-  // in place. It does re-sample when they are added, so they are re-mounted
-  // after every theme change. Hiding them made the tint follow the theme.
-  const { resolvedTheme } = useTheme()
-  const [tintGeneration, setTintGeneration] = useState(0)
-
-  useEffect(() => {
-    if (!resolvedTheme) {
-      return
-    }
-
-    // Wait a frame so the new theme class is applied before re-mounting.
-    const frame = requestAnimationFrame(() => setTintGeneration((n) => n + 1))
-    return () => cancelAnimationFrame(frame)
-  }, [resolvedTheme])
+  const tintGeneration = useRemountAfterThemeApplied()
+  useMobileMenuScrim(open, closeMenu)
 
   useEffect(() => {
     if (mode === 'oiia') {
@@ -65,37 +104,6 @@ export function MobileNav() {
 
     document.addEventListener('keydown', closeOnEscape)
     return () => document.removeEventListener('keydown', closeOnEscape)
-  }, [closeMenu, open])
-
-  // There is no overlay element while the menu is open (Safari 26 sampled it
-  // for the browser-UI tint). The dim is a pseudo-element on <html> driven by
-  // this attribute, and taps outside the menu are caught here instead. The tap
-  // only closes the menu and does not reach the page underneath.
-  useEffect(() => {
-    if (!open) {
-      return
-    }
-
-    document.documentElement.setAttribute('data-mobile-menu-open', '')
-
-    const closeOnOutsideClick = (event: MouseEvent) => {
-      if (
-        event.target instanceof Element &&
-        event.target.closest('#mobile-navigation-menu, [data-mobile-nav-pill]')
-      ) {
-        return
-      }
-
-      event.preventDefault()
-      event.stopPropagation()
-      closeMenu()
-    }
-
-    document.addEventListener('click', closeOnOutsideClick, true)
-    return () => {
-      document.documentElement.removeAttribute('data-mobile-menu-open')
-      document.removeEventListener('click', closeOnOutsideClick, true)
-    }
   }, [closeMenu, open])
 
   if (mode === 'oiia') {
