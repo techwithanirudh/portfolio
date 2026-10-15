@@ -187,6 +187,38 @@ html > body[data-scroll-locked] {
   }
 }
 
+@utility texture-popup {
+  background-image: linear-gradient(
+    to bottom,
+    oklch(1 0 0 / 0.07),
+    transparent 45%
+  );
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 0.08) inset,
+    0 10px 30px -12px oklch(0 0 0 / 0.35),
+    0 1px 3px oklch(0 0 0 / 0.18);
+}
+
+@utility texture-item {
+  transition:
+    background-color 150ms,
+    box-shadow 150ms;
+
+  &:focus,
+  &[data-highlighted],
+  &[data-selected="true"],
+  &[aria-selected="true"] {
+    background-image: linear-gradient(
+      to bottom,
+      oklch(1 0 0 / 0.12),
+      oklch(1 0 0 / 0.02)
+    );
+    box-shadow:
+      0 1px 0 0 oklch(1 0 0 / 0.1) inset,
+      0 1px 2px oklch(0 0 0 / 0.12);
+  }
+}
+
 @utility extend-touch-target {
   @media (pointer: coarse) {
     @apply relative touch-manipulation after:absolute after:-inset-2;
