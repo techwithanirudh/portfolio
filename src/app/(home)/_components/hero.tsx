@@ -3,13 +3,13 @@ import * as motion from 'motion/react-client'
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
+import { DitherField } from '@/components/shader/dither-field'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { linkItems } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 import { cn } from '@/lib/utils'
 import { HeroName } from './hero-name'
-import { PixelHover } from './pixel-hover'
 
 const Hero = () => {
   const links = resolveLinkItems({
@@ -33,7 +33,7 @@ const Hero = () => {
         viewport={{ once: true }}
         whileInView={{ opacity: 1 }}
       >
-        <PixelHover />
+        <DitherField className='absolute inset-0' />
       </motion.div>
       <ViewAnimation
         delay={0.1}
