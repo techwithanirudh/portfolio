@@ -8,7 +8,7 @@ import { SectionHeader } from '@/components/layout/sections/header'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
-import { formatPeriod } from '@/lib/employment-period'
+import { formatDuration, formatPeriod } from '@/lib/employment-period'
 import type { ExperienceItemType } from '@/types/experience'
 
 const previewCount = 3
@@ -27,7 +27,7 @@ export default function ExperiencePreview() {
         />
 
         <div className='divider-top-dashed'>
-          <div className='divide-y divide-dashed divide-border'>
+          <div className='grid divide-y divide-dashed divide-border lg:grid-cols-3 lg:divide-x lg:divide-y-0'>
             {recent.map((experience, index) => (
               <ViewAnimation
                 delay={0.05 * index}
@@ -35,7 +35,7 @@ export default function ExperiencePreview() {
                 key={experience.id}
                 whileInView={{ opacity: 1, translateY: 0 }}
               >
-                <ExperienceRow experience={experience} />
+                <ExperienceCard experience={experience} />
               </ViewAnimation>
             ))}
           </div>
@@ -64,29 +64,34 @@ export default function ExperiencePreview() {
   )
 }
 
-function ExperienceRow({ experience }: { experience: ExperienceItemType }) {
+function ExperienceCard({ experience }: { experience: ExperienceItemType }) {
   const [position] = experience.positions
   if (!position) {
     return null
   }
 
   const { start, end } = position.employmentPeriod
+  const duration = formatDuration(start, end)
 
   return (
-    <article className='flex items-center gap-4 p-4 transition-colors duration-300 hover:bg-card sm:px-6'>
-      {experience.companyLogo ? (
-        <Image
-          alt=''
-          className='size-10 shrink-0 rounded-lg'
-          height={40}
-          src={experience.companyLogo}
-          width={40}
-        />
-      ) : (
-        <span className='size-10 shrink-0 rounded-lg bg-muted' />
-      )}
-      <div className='min-w-0 flex-1'>
-        <h3 className='flex flex-wrap items-center gap-x-2 text-base tracking-tight'>
+    <article className='flex h-full flex-col justify-between gap-28 p-6 transition-colors duration-300 hover:bg-card sm:gap-34 md:gap-40 lg:gap-46'>
+      <div className='flex items-start justify-between gap-2'>
+        {experience.companyLogo ? (
+          <Image
+            alt=''
+            className='icon-tilt size-12 rounded-lg'
+            height={48}
+            src={experience.companyLogo}
+            width={48}
+          />
+        ) : (
+          <span className='icon-tilt size-12 rounded-lg bg-muted' />
+        )}
+        {experience.isCurrentEmployer && <NowBadge />}
+      </div>
+
+      <div className='flex flex-col gap-1'>
+        <h3 className='text-balance text-xl tracking-tight lg:text-2xl'>
           {experience.companyWebsite ? (
             <a
               className='transition-colors hover:text-muted-foreground'
@@ -99,15 +104,13 @@ function ExperienceRow({ experience }: { experience: ExperienceItemType }) {
           ) : (
             experience.companyName
           )}
-          {experience.isCurrentEmployer && <NowBadge />}
         </h3>
-        <p className='truncate text-muted-foreground text-sm'>
-          {position.title}
+        <p className='text-muted-foreground'>{position.title}</p>
+        <p className='mt-2 font-mono text-muted-foreground text-xs tabular-nums'>
+          {formatPeriod(start, end)}
+          {duration && ` · ${duration}`}
         </p>
       </div>
-      <p className='hidden font-mono text-muted-foreground text-xs tabular-nums sm:block'>
-        {formatPeriod(start, end)}
-      </p>
     </article>
   )
 }
