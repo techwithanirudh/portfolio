@@ -33,8 +33,8 @@ export const commands: CommandGroup[] = [
       {
         icon: <Icons.work className='size-4' />,
         kind: 'page',
-        title: 'Work',
-        url: '/work',
+        title: 'Projects',
+        url: '/projects',
       },
       {
         icon: <Icons.blog className='size-4' />,

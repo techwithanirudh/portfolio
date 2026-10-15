@@ -32,7 +32,7 @@ const getWorkMeta = (entry: WorkPage) => {
 const Pagination = ({ pageIndex }: { pageIndex: number }) => {
   const handlePageChange = async (page: number) => {
     'use server'
-    redirect(`/work?page=${page}`)
+    redirect(`/projects?page=${page}`)
   }
 
   return (
@@ -62,8 +62,12 @@ export default async function Page(props: {
   const work = getSortedWork().slice(startIndex, endIndex)
   const currentPage = pageIndex + 1
   const isFirstPage = currentPage === 1
-  const canonicalUrl = isFirstPage ? '/work' : `/work?page=${currentPage}`
-  const jsonLdTitle = isFirstPage ? 'Work' : `Work - Page ${currentPage}`
+  const canonicalUrl = isFirstPage
+    ? '/projects'
+    : `/projects?page=${currentPage}`
+  const jsonLdTitle = isFirstPage
+    ? 'Projects'
+    : `Projects - Page ${currentPage}`
 
   return (
     <Wrapper>
@@ -80,7 +84,7 @@ export default async function Page(props: {
         >
           <SearchRedirectInput
             className='min-w-full'
-            placeholder='Search work...'
+            placeholder='Search projects...'
             tag='projects'
           />
         </ViewAnimation>
@@ -144,8 +148,8 @@ export async function generateMetadata(
   }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
-  const pageTitle = isFirstPage ? 'Work' : `Work - Page ${pageIndex}`
-  const canonicalUrl = isFirstPage ? '/work' : `/work?page=${pageIndex}`
+  const pageTitle = isFirstPage ? 'Projects' : `Projects - Page ${pageIndex}`
+  const canonicalUrl = isFirstPage ? '/projects' : `/projects?page=${pageIndex}`
 
   return createMetadata({
     alternates: {

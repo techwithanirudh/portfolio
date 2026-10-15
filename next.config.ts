@@ -70,6 +70,17 @@ async function createNextConfig(): Promise<NextConfig> {
           permanent: true,
           source: '/resume.pdf',
         },
+        // Work was renamed to Projects
+        {
+          destination: '/projects',
+          permanent: true,
+          source: '/work',
+        },
+        {
+          destination: '/projects/:path*',
+          permanent: true,
+          source: '/work/:path*',
+        },
       ]
     },
     async rewrites() {
@@ -80,7 +91,7 @@ async function createNextConfig(): Promise<NextConfig> {
         },
         {
           destination: '/work.mdx/:path*',
-          source: '/work/:path*.mdx',
+          source: '/projects/:path*.mdx',
         },
         {
           destination: '/blog/rss.xml',

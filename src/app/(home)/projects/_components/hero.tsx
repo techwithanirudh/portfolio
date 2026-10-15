@@ -25,7 +25,7 @@ export const Hero = ({
         </span>
       }
       description='A snapshot of recent projects and collaborations.'
-      title='Work'
+      title='Projects'
     />
   )
 }

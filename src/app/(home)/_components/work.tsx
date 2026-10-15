@@ -14,7 +14,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
   return (
     <Panel>
       <PanelHeader>
-        <PanelTitle>Work</PanelTitle>
+        <PanelTitle>Projects</PanelTitle>
       </PanelHeader>
       <ul className='divide-y divide-dashed divide-line'>
         {works.map((work, index) => (
@@ -57,7 +57,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
           </ViewAnimation>
         ))}
       </ul>
-      <PanelButton href='/work'>View all work</PanelButton>
+      <PanelButton href='/projects'>View all projects</PanelButton>
     </Panel>
   )
 }

@@ -9,7 +9,7 @@ function tagFromUrl(url: string): string {
   if (url === '/blog' || url.startsWith('/blog/')) {
     return 'blog'
   }
-  if (url === '/work' || url.startsWith('/work/')) {
+  if (url === '/projects' || url.startsWith('/projects/')) {
     return 'projects'
   }
   return 'other'

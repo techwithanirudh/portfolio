@@ -5,4 +5,4 @@ export interface PagePreview {
 }
 
 // Internal pages that have a hover preview (a single post or project)
-export const pagePreviewPattern = /^\/(blog|work)\/[^/?#]+$/
+export const pagePreviewPattern = /^\/(blog|projects)\/[^/?#]+$/

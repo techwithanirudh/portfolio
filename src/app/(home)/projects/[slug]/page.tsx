@@ -44,7 +44,7 @@ function Header(props: { page: MDXPage }) {
       <div className='flex flex-wrap items-center justify-between gap-2 px-4 py-2.5'>
         <Link
           className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
-          href='/work'
+          href='/projects'
         >
           <Icons.arrowLeft className='size-3.5 transition-transform group-hover:-translate-x-0.5' />
           Work
@@ -151,7 +151,7 @@ export async function generateMetadata(props: {
         : new Date(page.data.date).toISOString(),
       publishedTime: new Date(page.data.date).toISOString(),
       type: 'article',
-      url: `/work/${page.slugs.join('/')}`,
+      url: `/projects/${page.slugs.join('/')}`,
     },
     title,
     twitter: {

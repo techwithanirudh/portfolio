@@ -22,7 +22,11 @@ export function FloatingPill({
       icon: <Icons.user className='size-4' />,
       label: 'About',
     },
-    { href: '/work', icon: <Icons.work className='size-4' />, label: 'Work' },
+    {
+      href: '/projects',
+      icon: <Icons.work className='size-4' />,
+      label: 'Projects',
+    },
   ]
 
   return (

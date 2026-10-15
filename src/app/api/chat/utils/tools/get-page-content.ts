@@ -13,7 +13,8 @@ const resolvePage = (path: string) => {
     return post.getPage(slugs)
   }
 
-  if (section === 'work') {
+  // 'work/' is the old name, kept so older answers still resolve
+  if (section === 'projects' || section === 'work') {
     return workSource.getPage(slugs)
   }
 

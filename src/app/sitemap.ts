@@ -37,7 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       lastModified: newest(work),
       priority: 0.8,
-      url: url('/work'),
+      url: url('/projects'),
     },
     { changeFrequency: 'monthly', priority: 0.6, url: url('/about') },
     { changeFrequency: 'monthly', priority: 0.5, url: url('/contact') },

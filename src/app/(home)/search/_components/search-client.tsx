@@ -29,8 +29,8 @@ const ItemBadge = ({ label }: { label: string }) => (
 )
 
 const getItemTag = (url: string) => {
-  if (url.startsWith('/work')) {
-    return 'work'
+  if (url.startsWith('/projects')) {
+    return 'project'
   }
   if (url.startsWith('/blog')) {
     return 'blog'
@@ -101,7 +101,7 @@ export function SearchClient() {
                 onChange={(event) => {
                   handleSearchChange(event.target.value)
                 }}
-                placeholder='Search posts and work...'
+                placeholder='Search posts and projects...'
                 value={search}
               />
               {search.length > 0 && (
@@ -152,7 +152,7 @@ export function SearchClient() {
             whileInView={{ opacity: 1, translateY: 0 }}
           >
             <div className='py-16 text-center font-mono text-muted-foreground text-xs'>
-              {'// start typing to search posts and work'}
+              {'// start typing to search posts and projects'}
             </div>
           </ViewAnimation>
         )}
