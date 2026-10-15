@@ -166,7 +166,7 @@ export function ViewOptions({
               <Icon className='size-4' />
             </span>
             <span className='truncate'>{title}</span>
-            <Icons.arrowUpRight className='ml-auto size-3.5 -translate-x-1 text-muted-foreground opacity-0 transition-[opacity,transform] duration-150 group-focus/item:translate-x-0 group-focus/item:opacity-100' />
+            <Icons.arrowUpRight className='ml-auto size-3.5 -translate-x-1 text-muted-foreground opacity-0 transition-[opacity,translate] duration-150 group-focus/item:translate-x-0 group-focus/item:opacity-100' />
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

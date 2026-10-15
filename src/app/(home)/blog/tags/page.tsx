@@ -26,7 +26,7 @@ export default function Page() {
               whileInView={{ opacity: 1, translateY: 0 }}
             >
               <Link
-                className='group inline-flex items-center gap-2 rounded-lg border border-line bg-card/40 px-3 py-1.5 font-mono text-sm transition-[color,border-color,transform] hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary active:scale-95'
+                className='group inline-flex items-center gap-2 rounded-lg border border-line bg-card/40 px-3 py-1.5 font-mono text-sm transition-[color,border-color,translate,scale] hover:-translate-y-0.5 hover:border-primary/40 hover:text-primary active:scale-95'
                 data-sound-hover
                 href={`/blog/tags/${tag}`}
               >

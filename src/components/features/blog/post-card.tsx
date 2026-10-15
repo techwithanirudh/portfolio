@@ -39,6 +39,6 @@ export const PostCard: React.FC<PostCardProps> = ({
         {date} <span aria-hidden>·</span> {author}
       </p>
     </div>
-    <Icons.arrowRight className='mt-1 size-4 shrink-0 text-muted-foreground transition-[transform,color] duration-300 group-hover:-rotate-45 group-hover:text-foreground' />
+    <Icons.arrowRight className='mt-1 size-4 shrink-0 text-muted-foreground transition-[rotate,translate,scale,color] duration-300 group-hover:-rotate-45 group-hover:text-foreground' />
   </Link>
 )

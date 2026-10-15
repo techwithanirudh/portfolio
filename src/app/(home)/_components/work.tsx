@@ -43,7 +43,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
                 {work.data.image ? (
                   <Image
                     alt=''
-                    className='h-14 w-24 shrink-0 rounded-md border border-line object-cover shadow-xs transition-[transform,box-shadow] duration-300 ease-out will-change-transform group-hover:-rotate-3 group-hover:scale-[1.06] group-hover:shadow-md motion-reduce:transition-none'
+                    className='h-14 w-24 shrink-0 rounded-md border border-line object-cover shadow-xs transition-[rotate,scale,box-shadow] duration-300 ease-out will-change-transform group-hover:-rotate-3 group-hover:scale-[1.06] group-hover:shadow-md motion-reduce:transition-none'
                     height={56}
                     sizes='96px'
                     src={work.data.image}
@@ -60,7 +60,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
                     {work.data.description}
                   </p>
                 </div>
-                <Icons.arrowRight className='size-4 shrink-0 text-muted-foreground transition-[transform,color] duration-300 group-hover:-rotate-45 group-hover:text-foreground' />
+                <Icons.arrowRight className='size-4 shrink-0 text-muted-foreground transition-[rotate,translate,scale,color] duration-300 group-hover:-rotate-45 group-hover:text-foreground' />
               </Link>
             </li>
           </ViewAnimation>
