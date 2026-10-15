@@ -42,6 +42,10 @@ export const animations: Animations = {
     'Thinking',
     'Travel',
     'Writing',
+    // Simba's own
+    'Butterfly',
+    'Flower',
+    'Play',
   ],
   open: ['ClickedOn', 'Pleased'],
   // Played in a loop between idle actions, whichever the avatar has
@@ -51,10 +55,10 @@ export const animations: Animations = {
   tool: 'Searching',
 }
 
-export const avatarNames = ['rover', 'rocky'] as const
+export const avatarNames = ['simba', 'rover', 'rocky'] as const
 export type AvatarName = (typeof avatarNames)[number]
 
-export const defaultAvatar: AvatarName = 'rover'
+export const defaultAvatar: AvatarName = 'simba'
 
 // Sprite sheet details let the UI show an avatar's first frame as an icon
 export const avatarMeta: Record<
@@ -85,6 +89,14 @@ export const avatarMeta: Record<
     sheet: [2160, 2160],
     sprite: '/assets/clippy/rover.png',
   },
+  simba: {
+    description: 'The real one. Fluffy, curious, easily distracted.',
+    frame: [104, 100],
+    label: 'Simba',
+    padding: { bottom: 2, right: 0 },
+    sheet: [1040, 500],
+    sprite: '/assets/clippy/simba/simba.webp',
+  },
 }
 
 export const moodNames = [
@@ -112,6 +124,16 @@ export const moodAnimations: Record<AvatarName, Record<MoodName, string>> = {
     write: 'Writing',
   },
   rover: {
+    attention: 'GetAttention',
+    celebrate: 'Congratulate',
+    greet: 'Greet',
+    rest: 'RestPose',
+    search: 'Searching',
+    surprised: 'Surprised',
+    think: 'Thinking',
+    write: 'Writing',
+  },
+  simba: {
     attention: 'GetAttention',
     celebrate: 'Congratulate',
     greet: 'Greet',
