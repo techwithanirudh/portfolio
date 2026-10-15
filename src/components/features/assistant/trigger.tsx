@@ -1,8 +1,7 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
-import { useAssistantContext } from '@/components/features/assistant/assistant'
+import { useAssistantContext } from '@/components/features/assistant/context'
 import { useMascot } from '@/components/features/assistant/mascot'
 import {
   type AvatarName,
@@ -25,7 +24,7 @@ const getPosition = (avatar: AvatarName) => {
   }
 }
 
-function InnerTrigger() {
+export function AssistantTrigger() {
   const { setOpen } = useAssistantContext()
   const { agent, avatar } = useMascot()
 
@@ -81,7 +80,3 @@ function InnerTrigger() {
 
   return null
 }
-
-export const AssistantTrigger = dynamic(() => Promise.resolve(InnerTrigger), {
-  ssr: false,
-})

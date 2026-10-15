@@ -6,18 +6,7 @@ import { Presence } from '@radix-ui/react-presence'
 import { useSound } from '@web-kits/audio/react'
 import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import {
-  createContext,
-  type Dispatch,
-  memo,
-  type ReactNode,
-  type SetStateAction,
-  use,
-  useEffect,
-  useEffectEvent,
-  useMemo,
-  useState,
-} from 'react'
+import { createContext, memo, use, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { contextDataSchema } from '@/app/api/chat/types'
@@ -49,6 +38,7 @@ import {
 } from '@/components/ai-elements/prompt-input'
 import { Tool, ToolContent, ToolHeader } from '@/components/ai-elements/tool'
 import { AvatarMenu } from '@/components/features/assistant/avatar-menu'
+import { useAssistantContext } from '@/components/features/assistant/context'
 import {
   MascotProvider,
   useMascot,
@@ -63,6 +53,7 @@ import {
   ContactForm,
   ContactFormSkeleton,
 } from '@/components/features/assistant/tools/contact-form'
+import { AssistantTrigger } from '@/components/features/assistant/trigger'
 import { Icons } from '@/components/icons/icons'
 import { useIsMobile } from '@/hooks/use-mobile'
 import {
@@ -76,26 +67,20 @@ import {
 import { cn } from '@/lib/utils'
 import { MessageMetadata, MessagePending } from './message-metadata'
 
-const AssistantContext = createContext<{
-  open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
-  chat: UseChatHelpers<MyUIMessage>
-  context: string | null
-  setContext: Dispatch<SetStateAction<string | null>>
-} | null>(null)
+const ChatContext = createContext<UseChatHelpers<MyUIMessage> | null>(null)
 
-export function useAssistantContext() {
-  const ctx = use(AssistantContext)
+export function useChatContext() {
+  const ctx = use(ChatContext)
   if (!ctx) {
-    throw new Error('useAssistantContext must be used within Assistant')
+    throw new Error('useChatContext must be used within Assistant')
   }
   return ctx
 }
 
-export function Assistant({ children }: { children: ReactNode }) {
+// Code-split out of the main bundle by the app provider, so it reads the
+// open state and selected context from AssistantProvider
+export function Assistant() {
   const isMobile = useIsMobile()
-  const [open, setOpen] = useState(false)
-  const [context, setContext] = useState<string | null>(null)
   const playError = useSound(errorSound)
   const playSuccess = useSound(success)
   const playDelete = useSound(deleteSound)
@@ -115,29 +100,20 @@ export function Assistant({ children }: { children: ReactNode }) {
       api: '/api/chat',
     }),
   })
-  const value = useMemo(
-    () => ({
-      chat,
-      context,
-      open,
-      setContext,
-      setOpen,
-    }),
-    [chat, context, open]
-  )
 
   return (
     <MascotProvider disabled={isMobile}>
-      <AssistantContext value={value}>
-        {children}
+      <ChatContext value={chat}>
         <AssistantPanel />
-      </AssistantContext>
+        <AssistantTrigger />
+      </ChatContext>
     </MascotProvider>
   )
 }
 
 function Header() {
-  const { setOpen, chat, setContext } = useAssistantContext()
+  const { setOpen, setContext } = useAssistantContext()
+  const chat = useChatContext()
   const playNewChat = useSound(toggleOn)
 
   return (
@@ -183,8 +159,7 @@ function Header() {
 }
 
 function RegenerateButton() {
-  const { chat } = useAssistantContext()
-  const { messages, status, regenerate } = chat
+  const { messages, status, regenerate } = useChatContext()
   const isLoading = status === 'streaming'
   const canShow =
     !isLoading && messages.length > 0 && messages.at(-1)?.role === 'assistant'
@@ -214,8 +189,8 @@ const assistantInputStorageKey = '__ai_search_input'
 const MaxSourcePreviewChars = 120
 
 function AssistantInput() {
-  const { chat, setContext, context } = useAssistantContext()
-  const { status, sendMessage, stop, messages } = chat
+  const { setContext, context } = useAssistantContext()
+  const { status, sendMessage, stop, messages } = useChatContext()
   const { agent } = useMascot()
   const playSend = useSound(send)
   const toolsRequiringConfirmation = getToolsRequiringConfirmation()
@@ -526,24 +501,9 @@ const AssistantMessage = memo(function AssistantMessage({
 })
 
 function AssistantPanel() {
-  const { chat, open, setOpen } = useAssistantContext()
+  const { open, setOpen } = useAssistantContext()
+  const chat = useChatContext()
   const { agent } = useMascot()
-
-  const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
-    if (event.key === 'Escape' && open) {
-      setOpen(false)
-      event.preventDefault()
-    }
-    if (event.key === '/' && (event.metaKey || event.ctrlKey) && !open) {
-      setOpen(true)
-      event.preventDefault()
-    }
-  })
-
-  useEffect(() => {
-    window.addEventListener('keydown', onKeyPress)
-    return () => window.removeEventListener('keydown', onKeyPress)
-  }, [])
 
   useMascotPanel({
     agent,
