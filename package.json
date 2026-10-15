@@ -63,6 +63,8 @@
     "cn": "^0.4.0",
     "date-fns": "^4.4.0",
     "drizzle-orm": "^0.45.4",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "feed": "6.0.0",
     "flexsearch": "^0.8.212",
     "frimousse": "^0.4.0",

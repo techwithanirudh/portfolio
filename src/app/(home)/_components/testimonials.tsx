@@ -1,11 +1,12 @@
 'use client'
 
+import Autoplay from 'embla-carousel-autoplay'
+import useEmblaCarousel from 'embla-carousel-react'
 import { useEffect, useRef, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { ViewAnimation } from '@/components/view-animation'
 import type { Testimonial } from '@/types'
 
 const initials = (name: string) =>
@@ -78,42 +79,28 @@ const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => {
 }
 
 const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
-  const trackRef = useRef<HTMLUListElement>(null)
-  const [edges, setEdges] = useState({ end: false, start: true })
+  // Drifts on its own, but holds still while someone hovers or tabs into
+  // it, and never moves for reduced motion
+  const [autoplay] = useState(() =>
+    Autoplay({
+      delay: 6000,
+      stopOnFocusIn: true,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
+    })
+  )
+  const [viewportRef, api] = useEmblaCarousel({ align: 'start', loop: true }, [
+    autoplay,
+  ])
 
   useEffect(() => {
-    const track = trackRef.current
-    if (!track) {
-      return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      autoplay.stop()
     }
-    const update = () =>
-      setEdges({
-        end: track.scrollLeft + track.clientWidth >= track.scrollWidth - 1,
-        start: track.scrollLeft <= 1,
-      })
-    update()
-    track.addEventListener('scroll', update, { passive: true })
-    const observer = new ResizeObserver(update)
-    observer.observe(track)
-    return () => {
-      track.removeEventListener('scroll', update)
-      observer.disconnect()
-    }
-  }, [])
-
-  const step = (direction: 1 | -1) => {
-    const track = trackRef.current
-    const card = track?.firstElementChild
-    if (track && card) {
-      track.scrollBy({
-        behavior: 'smooth',
-        left: direction * card.getBoundingClientRect().width,
-      })
-    }
-  }
+  }, [autoplay])
 
   const arrow =
-    'flex w-12 items-center justify-center border-line border-l text-muted-foreground transition-colors hover:bg-card hover:text-foreground disabled:pointer-events-none disabled:opacity-30'
+    'flex w-12 items-center justify-center border-line border-l text-muted-foreground transition-colors hover:bg-card hover:text-foreground'
 
   return (
     <Section>
@@ -124,9 +111,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
               <button
                 aria-label='Previous testimonial'
                 className={arrow}
-                data-sound-hover
-                disabled={edges.start}
-                onClick={() => step(-1)}
+                onClick={() => api?.scrollPrev()}
                 type='button'
               >
                 <Icons.chevronLeft className='size-4' />
@@ -134,9 +119,7 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
               <button
                 aria-label='Next testimonial'
                 className={arrow}
-                data-sound-hover
-                disabled={edges.end}
-                onClick={() => step(1)}
+                onClick={() => api?.scrollNext()}
                 type='button'
               >
                 <Icons.chevronRight className='size-4' />
@@ -146,21 +129,28 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
         }
         title='Testimonials'
       />
-      <ul
+      <div
         aria-label='Testimonials'
-        className='no-scrollbar flex snap-x snap-mandatory divide-x divide-line overflow-x-auto overscroll-x-contain'
-        ref={trackRef}
+        aria-roledescription='carousel'
+        // pb-px keeps the hover fill off the section's bottom rule
+        className='overflow-hidden pb-px'
+        ref={viewportRef}
+        role='region'
       >
-        {testimonials.map((testimonial) => (
-          <ViewAnimation
-            as='li'
-            className='w-[85%] shrink-0 snap-start sm:w-1/2'
-            key={testimonial.author.name}
-          >
-            <TestimonialCard testimonial={testimonial} />
-          </ViewAnimation>
-        ))}
-      </ul>
+        <ul className='flex'>
+          {testimonials.map((testimonial, index) => (
+            <li
+              aria-label={`${index + 1} of ${testimonials.length}`}
+              aria-roledescription='slide'
+              className='w-[85%] shrink-0 border-line border-r sm:w-1/2'
+              data-reveal-item
+              key={testimonial.author.name}
+            >
+              <TestimonialCard testimonial={testimonial} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </Section>
   )
 }
