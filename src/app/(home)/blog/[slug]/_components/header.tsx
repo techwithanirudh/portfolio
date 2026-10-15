@@ -26,13 +26,13 @@ export const Header = ({ page, tags }: HeaderProps) => {
     <Section>
       <FrameDecoration />
       <div className='relative h-[280px] overflow-clip md:h-[420px] lg:h-[600px]'>
-        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl bg-primary/80 shadow-xl'>
+        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image && (
             <BlurImage
               alt={page.data.title ?? 'Blog cover image'}
-              className='absolute inset-0 h-full w-full rounded-2xl'
+              className='absolute inset-0 h-full w-full'
               fill
-              imageClassName='object-cover rounded-2xl'
+              imageClassName='object-cover'
               sizes='(min-width: 1024px) 800px, 100vw'
               src={image}
             />
@@ -84,17 +84,17 @@ export const Header = ({ page, tags }: HeaderProps) => {
 
 const FrameDecoration = () => (
   <>
-    <span className='absolute top-6 z-4 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12' />
-    <span className='absolute bottom-6 z-4 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12' />
-    <span className='absolute left-6 z-4 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12' />
-    <span className='absolute right-6 z-4 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12' />
-    <span className='absolute top-12 left-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute top-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute top-12 right-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute top-[44.5px] right-[48px] z-5 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute bottom-12 left-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute bottom-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute right-[44.5px] bottom-12 z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute right-[48px] bottom-[44.5px] z-5 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute top-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:top-12 dark:bg-white/15' />
+    <span className='absolute bottom-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:bottom-12 dark:bg-white/15' />
+    <span className='absolute left-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:left-12 dark:bg-white/15' />
+    <span className='absolute right-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:right-12 dark:bg-white/15' />
+    <span className='absolute top-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute top-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute top-12 right-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute top-[44.5px] right-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute bottom-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute bottom-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute right-[44.5px] bottom-12 z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute right-[48px] bottom-[44.5px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
   </>
 )
