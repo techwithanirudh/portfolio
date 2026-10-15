@@ -1,4 +1,4 @@
-import { getActivityItems } from '@/app/(home)/about/_components/feed/actions'
+import { getActivityItems } from '@/app/(home)/about/_components/feed/data'
 
 export const getCommitHistoryText = async () => {
   try {

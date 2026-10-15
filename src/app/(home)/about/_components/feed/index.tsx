@@ -2,7 +2,7 @@ import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import Separator from '@/components/layout/sections/separator'
 import { ViewAnimation } from '@/components/view-animation'
-import { getActivityItems } from './actions'
+import { getActivityItems } from './data'
 import { GitHubEvent as GitHubEventComponent, getEventUrl } from './event'
 
 const MAX_ITEMS = 12

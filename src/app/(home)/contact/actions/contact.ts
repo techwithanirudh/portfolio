@@ -1,24 +1,31 @@
 'use server'
 
-import { Resend } from 'resend'
 import { env } from '@/env'
+import { resend } from '@/lib/resend'
 import { ActionError, actionClient } from '@/lib/safe-action/client'
 import { botIdMiddleware } from '@/lib/safe-action/middleware'
 import { ContactSchema } from '@/lib/validators/contact'
-
-const resend = new Resend(env.RESEND_API_KEY)
 
 export const contact = actionClient
   .use(botIdMiddleware)
   .inputSchema(ContactSchema)
   .action(async ({ parsedInput: { name, email, message } }) => {
+    const from = env.EMAIL_FROM
+    const to = env.EMAIL_TO
+
+    if (!(resend && from && to)) {
+      throw new ActionError(
+        'The contact form is unavailable right now. Please try again later.'
+      )
+    }
+
     try {
       const { error } = await resend.emails.send({
-        from: env.EMAIL_FROM,
+        from,
         replyTo: email,
         subject: `New contact form submission from ${name}`,
         text: message,
-        to: env.EMAIL_TO,
+        to,
       })
 
       if (error) {

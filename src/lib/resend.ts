@@ -5,7 +5,15 @@ import { retryWithBackoff } from '@/lib/retry'
 import NewsletterWelcomeEmail from '../../emails/newsletter-welcome'
 import type { getPosts } from './source'
 
-const resend = new Resend(env.RESEND_API_KEY)
+export const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null
+
+const requireResend = () => {
+  if (!resend) {
+    throw new Error('RESEND_API_KEY is not set.')
+  }
+
+  return resend
+}
 
 export async function updateContact({
   email,
@@ -15,7 +23,7 @@ export async function updateContact({
   email: string
   audienceId: string
 } & Omit<UpdateContactOptions, 'email' | 'audienceId' | 'id'>) {
-  const { data, error } = await resend.contacts.update({
+  const { data, error } = await requireResend().contacts.update({
     audienceId,
     email,
     ...props,
@@ -38,16 +46,19 @@ export async function getContact({
   email: string
   audienceId: string
 }) {
-  const { data: contacts, error } = await resend.contacts.list({ audienceId })
+  const { data, error } = await requireResend().contacts.get({
+    audienceId,
+    email,
+  })
 
-  if (error || !contacts) {
-    throw new Error(
-      `Failed to list contacts: ${error?.message || 'Unknown error'}`
-    )
+  if (error) {
+    if (error.name === 'not_found') {
+      return null
+    }
+    throw new Error(`Failed to get contact: ${error.message}`)
   }
 
-  const contact = contacts.data.find((contact) => contact.email === email)
-  return contact || null
+  return data
 }
 
 export async function sendWelcomeEmail({
@@ -59,11 +70,13 @@ export async function sendWelcomeEmail({
   firstName: string
   to: string
 }) {
-  const EMAIL_FROM = env.EMAIL_FROM
+  const from = env.EMAIL_FROM
 
-  if (!(firstName && to)) {
+  if (!(from && firstName && to)) {
     throw new Error('Missing required email fields')
   }
+
+  const client = requireResend()
 
   const formattedPosts = posts.map((post) => ({
     ...post.data,
@@ -74,8 +87,8 @@ export async function sendWelcomeEmail({
   try {
     await retryWithBackoff(
       async () => {
-        const { error } = await resend.emails.send({
-          from: EMAIL_FROM,
+        const { error } = await client.emails.send({
+          from,
           react: NewsletterWelcomeEmail({ firstName, posts: formattedPosts }),
           subject: 'Welcome to my newsletter!',
           to,
