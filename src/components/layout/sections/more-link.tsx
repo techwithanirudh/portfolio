@@ -17,8 +17,7 @@ export const SectionMoreLink = ({
   <ViewAnimation delay={delay}>
     <Link
       className={buttonVariants({
-        className:
-          'w-full border-border border-t border-dashed py-6 active:scale-none active:opacity-80',
+        className: 'w-full py-6 active:scale-none active:opacity-80',
         shape: 'square',
       })}
       href={href}

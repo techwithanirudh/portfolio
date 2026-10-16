@@ -280,7 +280,7 @@ function AssistantInput() {
         <PromptInputTextarea
           aria-label='Ask Simba a question'
           autoFocus
-          className={cn(isLoading && 'text-muted-foreground')}
+          className={cn('min-h-16', isLoading && 'text-muted-foreground')}
           id='nd-ai-input'
           onChange={(event) => handleInputChange(event.target.value)}
           placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}

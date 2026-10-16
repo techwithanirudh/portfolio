@@ -23,7 +23,7 @@ const Hero = () => (
   <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-16 pb-14 sm:px-12 sm:pt-20 sm:pb-16'>
     <GrainBackdrop className='-z-10' />
     <ViewAnimation delay={0.05}>
-      <div className='mb-7 size-16 overflow-hidden rounded-2xl border border-foreground/15 shadow-sm sm:mb-8 sm:size-[4.75rem] sm:rounded-[1.25rem]'>
+      <div className='mb-7 size-16 overflow-hidden rounded-lg border border-foreground/10 sm:mb-8 sm:size-[4.75rem] sm:rounded-xl'>
         <Portrait />
       </div>
     </ViewAnimation>
