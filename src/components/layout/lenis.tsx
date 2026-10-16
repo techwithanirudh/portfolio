@@ -6,13 +6,21 @@ import type { LenisRef, LenisProps as ReactLenisProps } from 'lenis/react'
 import { ReactLenis } from 'lenis/react'
 import { useRef } from 'react'
 import { useTempus } from 'tempus/react'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
   options: LenisOptions
   root: boolean
 }
 
-export function Lenis({ root, options }: LenisProps) {
+// Reduced motion gets native scrolling, with no Lenis or Tempus loop at all
+export function Lenis(props: LenisProps) {
+  const reducedMotion = useReducedMotion()
+
+  return reducedMotion ? null : <SmoothScroll {...props} />
+}
+
+function SmoothScroll({ root, options }: LenisProps) {
   const lenisRef = useRef<LenisRef>(null)
 
   useTempus(({ time }) => {
