@@ -5,13 +5,14 @@ import { Wrapper } from '@/components/layout/wrapper'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
-import { getSortedWork } from '@/lib/source'
+import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
 import About from './_components/about'
 import CTA from './_components/cta'
 import ExperiencePreview from './_components/experience'
 import Hero from './_components/hero'
 import Testimonials from './_components/testimonials'
 import WorkPreview from './_components/work'
+import Writing from './_components/writing'
 
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: '/' },
@@ -23,6 +24,7 @@ export const metadata: Metadata = createMetadata({
 
 export default async function Home() {
   const works = getSortedWork().slice(0, 4)
+  const posts = getSortedByDatePosts().slice(0, 3)
 
   return (
     <>
@@ -35,6 +37,8 @@ export default async function Home() {
         <ExperiencePreview />
         <Separator />
         <WorkPreview works={works} />
+        <Separator />
+        <Writing posts={posts} />
         <Separator />
         <Testimonials testimonials={testimonials} />
         <Separator />

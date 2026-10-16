@@ -1,9 +1,7 @@
-import Link from 'next/link'
 import { WorkCard } from '@/components/features/work'
-import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
-import { buttonVariants } from '@/components/ui/button'
+import { SectionMoreLink } from '@/components/layout/sections/more-link'
 import { ViewAnimation } from '@/components/view-animation'
 import type { WorkPage } from '@/lib/source'
 
@@ -31,20 +29,9 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
               </ViewAnimation>
             ))}
           </div>
-
-          <ViewAnimation delay={0.05 * works.length}>
-            <Link
-              className={buttonVariants({
-                className: 'w-full py-8 active:scale-none active:opacity-80',
-                shape: 'square',
-                variant: 'default',
-              })}
-              href='/projects'
-            >
-              View More
-              <Icons.arrowRight className='icon-arrow-button size-5' />
-            </Link>
-          </ViewAnimation>
+          <SectionMoreLink delay={0.05 * works.length} href='/projects'>
+            View all projects
+          </SectionMoreLink>
         </div>
       </div>
     </Section>

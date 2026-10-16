@@ -1,18 +1,31 @@
-'use client'
-
 import Image from 'next/image'
-import Link from 'next/link'
-import { Icons } from '@/components/icons/icons'
+import ReactMarkdown, { type Components } from 'react-markdown'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
+import { SectionMoreLink } from '@/components/layout/sections/more-link'
 import { PreviewLink } from '@/components/preview-link'
-import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 import { formatDuration, formatPeriod } from '@/lib/employment-period'
 import type { ExperienceItemType } from '@/types/experience'
 
 const previewCount = 3
+
+// Descriptions are markdown, kept inline so the card stays one paragraph
+const markdownComponents: Components = {
+  a: ({ children, href }) =>
+    href ? (
+      <PreviewLink
+        className='text-foreground underline decoration-dashed underline-offset-4 transition-colors hover:text-primary'
+        href={href}
+      >
+        {children}
+      </PreviewLink>
+    ) : (
+      children
+    ),
+  p: ({ children }) => children,
+}
 
 export default function ExperiencePreview() {
   const recent = experiences.slice(0, previewCount)
@@ -27,28 +40,20 @@ export default function ExperiencePreview() {
           title='Experience'
         />
 
-        <div className='divider-top-dashed'>
-          <div className='grid divide-y divide-dashed divide-border lg:grid-cols-3 lg:divide-x lg:divide-y-0'>
+        <div>
+          <div className='divide-y divide-dashed divide-border border-border border-t border-dashed'>
             {recent.map((experience, index) => (
               <ViewAnimation delay={0.05 * index} key={experience.id}>
                 <ExperienceCard experience={experience} />
               </ViewAnimation>
             ))}
           </div>
-
-          <ViewAnimation delay={0.05 * recent.length}>
-            <Link
-              className={buttonVariants({
-                className: 'w-full py-8 active:scale-none active:opacity-80',
-                shape: 'square',
-                variant: 'secondary',
-              })}
-              href='/about#experience'
-            >
-              View Full Experience
-              <Icons.arrowRight className='icon-arrow-button size-5' />
-            </Link>
-          </ViewAnimation>
+          <SectionMoreLink
+            delay={0.05 * recent.length}
+            href='/about#experience'
+          >
+            View full timeline
+          </SectionMoreLink>
         </div>
       </div>
     </Section>
@@ -62,56 +67,77 @@ function ExperienceCard({ experience }: { experience: ExperienceItemType }) {
   }
 
   const { start, end } = position.employmentPeriod
-  const duration = formatDuration(start, end)
 
   return (
-    <article className='flex h-full flex-col justify-between gap-28 p-6 transition-colors duration-300 hover:bg-card sm:gap-34 md:gap-40 lg:gap-46'>
-      <div className='flex items-start justify-between gap-2'>
-        {experience.companyLogo ? (
-          <Image
-            alt=''
-            className='icon-tilt size-12 rounded-lg'
-            height={48}
-            src={experience.companyLogo}
-            width={48}
-          />
-        ) : (
-          <span className='icon-tilt size-12 rounded-lg bg-muted' />
+    <article className='grid gap-4 px-6 py-8 sm:grid-cols-[auto_1fr_auto] sm:gap-6'>
+      {experience.companyLogo ? (
+        <Image
+          alt=''
+          className='size-11 shrink-0 rounded-lg border border-border bg-background object-contain p-1'
+          height={44}
+          src={experience.companyLogo}
+          width={44}
+        />
+      ) : (
+        <span className='size-11 shrink-0 rounded-lg bg-muted' />
+      )}
+
+      <div className='flex min-w-0 flex-col gap-3'>
+        <div>
+          <h3 className='flex items-center gap-2 font-medium text-lg'>
+            {experience.companyWebsite ? (
+              <PreviewLink
+                className='transition-colors hover:text-muted-foreground'
+                href={experience.companyWebsite}
+              >
+                {experience.companyName}
+              </PreviewLink>
+            ) : (
+              experience.companyName
+            )}
+            {experience.isCurrentEmployer && <NowBadge />}
+          </h3>
+          <p className='text-muted-foreground'>{position.title}</p>
+        </div>
+
+        {position.description && (
+          <p className='max-w-2xl text-pretty text-muted-foreground leading-relaxed'>
+            <ReactMarkdown components={markdownComponents}>
+              {position.description}
+            </ReactMarkdown>
+          </p>
         )}
-        {experience.isCurrentEmployer && <NowBadge />}
+
+        {position.skills && position.skills.length > 0 && (
+          <ul className='flex flex-wrap gap-1.5'>
+            {position.skills.map((skill) => (
+              <li
+                className='rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[0.7rem] text-muted-foreground'
+                key={skill}
+              >
+                {skill}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
-      <div className='flex flex-col gap-1'>
-        <h3 className='text-balance text-xl tracking-tight lg:text-2xl'>
-          {experience.companyWebsite ? (
-            <PreviewLink
-              className='transition-colors hover:text-muted-foreground'
-              href={experience.companyWebsite}
-            >
-              {experience.companyName}
-            </PreviewLink>
-          ) : (
-            experience.companyName
-          )}
-        </h3>
-        <p className='text-muted-foreground'>{position.title}</p>
-        <p className='mt-2 font-mono text-muted-foreground text-xs tabular-nums'>
-          {formatPeriod(start, end)}
-          {duration && ` · ${duration}`}
-        </p>
-      </div>
+      <p className='font-mono text-muted-foreground text-xs tabular-nums sm:text-right'>
+        {formatPeriod(start, end)}
+        <span className='block opacity-70'>{formatDuration(start, end)}</span>
+      </p>
     </article>
   )
 }
 
 function NowBadge() {
   return (
-    <span className='inline-flex items-center gap-1.5 font-medium text-muted-foreground text-xs'>
+    <span className='inline-flex items-center gap-1.5 font-mono font-normal text-emerald-600 text-xs dark:text-emerald-400'>
       <span aria-hidden className='relative flex size-1.5'>
         <span className='absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-60 motion-reduce:animate-none' />
         <span className='relative inline-flex size-1.5 rounded-full bg-emerald-500' />
       </span>
-      Now
+      now
     </span>
   )
 }
