@@ -53,7 +53,7 @@ Content lives in `content/` and UI lives in `src/components`. Routes use the Nex
 ## Stack
 
 - **Framework**: Next.js 16, React 19, TypeScript
-- **Styling**: Tailwind CSS v4, shadcn/ui, Radix UI, Motion
+- **Styling**: Tailwind CSS v4, shadcn/ui, Base UI, Motion
 - **Content**: Fumadocs MDX, Shiki, KaTeX, Mermaid
 - **Data**: Drizzle ORM, Neon Postgres, Better Auth
 - **Email**: React Email, Resend

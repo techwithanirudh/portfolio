@@ -1,6 +1,6 @@
 'use client'
 
-import { Presence } from '@radix-ui/react-presence'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -11,8 +11,6 @@ import { FloatingPill } from '@/components/layout/header/mobile/pill'
 const MENU_ID = 'mobile-navigation-menu'
 const FOCUSABLE = 'a[href], button:not([disabled])'
 
-// The menu is modal: focus moves in on open, Tab cycles between the menu and
-// its toggle, and closing from inside hands focus back to the toggle
 const getToggle = () =>
   document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`)
 const getFocusable = () => [
@@ -30,10 +28,6 @@ export function MobileNav() {
   const { setOpen: setOpenAssistant } = useAssistantContext()
 
   const closeMenu = useCallback(() => setOpen(false), [])
-  const dismissMenu = useCallback(() => {
-    setOpen(false)
-    getToggle()?.focus()
-  }, [])
 
   useEffect(() => {
     if (previousPathname.current === pathname) {
@@ -44,18 +38,15 @@ export function MobileNav() {
     setOpen(false)
   }, [pathname])
 
+  // Base UI moves focus in on open, closes on Escape and hands focus back on
+  // close. It's non-modal so the floating pill stays usable as the toggle, so
+  // Tab is cycled by hand between the menu and that toggle
   useEffect(() => {
     if (!open) {
       return
     }
 
-    const frame = requestAnimationFrame(() => getFocusable()[0]?.focus())
-
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        dismissMenu()
-        return
-      }
       if (event.key !== 'Tab') {
         return
       }
@@ -67,36 +58,32 @@ export function MobileNav() {
     }
 
     document.addEventListener('keydown', onKeyDown)
-    return () => {
-      cancelAnimationFrame(frame)
-      document.removeEventListener('keydown', onKeyDown)
-    }
-  }, [dismissMenu, open])
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [open])
 
   return (
     <>
-      <Presence present={open}>
-        <button
-          aria-label='Close menu'
-          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in md:hidden'
-          data-state={open ? 'open' : 'closed'}
-          onClick={dismissMenu}
-          tabIndex={-1}
-          type='button'
-        />
-      </Presence>
-
-      <Presence present={open}>
-        <MenuPanel
-          menuId={MENU_ID}
-          onAssistantOpen={() => {
-            closeMenu()
-            setOpenAssistant(true)
-          }}
-          onClose={closeMenu}
-          open={open}
-        />
-      </Presence>
+      <DialogPrimitive.Root
+        disablePointerDismissal
+        modal={false}
+        onOpenChange={setOpen}
+        open={open}
+      >
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Backdrop
+            className='fixed inset-0 z-[31] bg-background/50 data-closed:animate-fd-fade-out data-open:animate-fd-fade-in md:hidden'
+            onClick={closeMenu}
+          />
+          <MenuPanel
+            menuId={MENU_ID}
+            onAssistantOpen={() => {
+              closeMenu()
+              setOpenAssistant(true)
+            }}
+            onClose={closeMenu}
+          />
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
 
       <FloatingPill
         menuId={MENU_ID}

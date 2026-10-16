@@ -43,10 +43,7 @@ export const HeroSection = ({
   sectionClassName,
   variant,
   align,
-}: HeroProps &
-  VariantProps<typeof heroVariants> & {
-    asChild?: boolean
-  }) => (
+}: HeroProps & VariantProps<typeof heroVariants>) => (
   <Section className={cn('px-6 sm:p-4', sectionClassName)}>
     <div className={cn(heroVariants({ align, className, variant }))}>
       {image && <ViewAnimation>{image}</ViewAnimation>}

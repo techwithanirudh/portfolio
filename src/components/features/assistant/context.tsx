@@ -34,12 +34,9 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
   const [context, setContext] = useState<string | null>(null)
 
   // Lives here rather than in the panel so the shortcut works before its
-  // chunk has loaded
+  // chunk has loaded. Escape is handled by the panel's Base UI dialog, which
+  // also lets a nested menu close first
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
-    if (event.key === 'Escape' && open) {
-      setOpen(false)
-      event.preventDefault()
-    }
     if (event.key === '/' && (event.metaKey || event.ctrlKey) && !open) {
       setOpen(true)
       event.preventDefault()

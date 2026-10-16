@@ -134,7 +134,11 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    event.stopPropagation()
+    // Keep typing away from page shortcuts, but let Escape through: Base UI
+    // dismisses on a bubbling document listener (Radix listened in capture)
+    if (event.key !== 'Escape') {
+      event.stopPropagation()
+    }
 
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       playNavigationSound()
