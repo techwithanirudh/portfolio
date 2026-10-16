@@ -259,7 +259,7 @@ const HeaderNavigationMenu = ({
           id='nd-nav'
           {...props}
           className={cn(
-            'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 transition-colors max-md:hidden',
+            'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 backdrop-blur-lg transition-colors max-md:hidden',
             props.className
           )}
           ref={headerRef}
@@ -269,7 +269,7 @@ const HeaderNavigationMenu = ({
       <NavigationMenu.Root
         className={(state) =>
           cn(
-            'backdrop-blur-lg transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
+            'transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
             'container border-border border-dashed sm:border-x',
             (!isTransparent || menuOpen || state.open) && 'bg-fd-background/80'
           )

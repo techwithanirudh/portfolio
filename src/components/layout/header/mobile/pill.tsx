@@ -30,61 +30,55 @@ export function FloatingPill({
   ]
 
   return (
-    <>
-      <div
-        aria-hidden
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-[30] md:hidden'
-      >
-        <div className='mask-linear-[to_top,var(--background)_25%,transparent] h-24 bg-linear-to-b from-transparent to-background backdrop-blur-[1px]' />
-        <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
+    <div
+      className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'
+      data-mobile-nav-pill=''
+    >
+      <div className='flex items-center gap-0.5 rounded-full border bg-background px-1.5 py-1.5 shadow-lg'>
+        <button
+          aria-label='Search'
+          className='flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+          onClick={onSearchOpen}
+          type='button'
+        >
+          <Icons.search className='size-4' />
+        </button>
+
+        <div className='mx-1 h-4 w-px bg-border' />
+
+        {primaryLinks.map((link) => (
+          <NavItem
+            href={link.href}
+            icon={link.icon}
+            key={link.href}
+            label={link.label}
+            nested={link.href !== '/'}
+          />
+        ))}
+
+        <div className='mx-1 h-4 w-px bg-border' />
+
+        <button
+          aria-controls={menuId}
+          aria-expanded={open}
+          aria-label='Toggle menu'
+          className={cn(
+            'relative flex size-8 items-center justify-center rounded-full transition-colors',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
+            open
+              ? 'bg-primary/10 text-primary'
+              : 'text-muted-foreground hover:text-foreground'
+          )}
+          onClick={onMenuToggle}
+          type='button'
+        >
+          {open ? (
+            <Icons.close className='size-4' />
+          ) : (
+            <Icons.menu className='size-4' />
+          )}
+        </button>
       </div>
-      <div className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'>
-        <div className='flex items-center gap-0.5 rounded-full border bg-background/80 px-1.5 py-1.5 shadow-lg backdrop-blur-md'>
-          <button
-            aria-label='Search'
-            className='flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
-            onClick={onSearchOpen}
-            type='button'
-          >
-            <Icons.search className='size-4' />
-          </button>
-
-          <div className='mx-1 h-4 w-px bg-border' />
-
-          {primaryLinks.map((link) => (
-            <NavItem
-              href={link.href}
-              icon={link.icon}
-              key={link.href}
-              label={link.label}
-              nested={link.href !== '/'}
-            />
-          ))}
-
-          <div className='mx-1 h-4 w-px bg-border' />
-
-          <button
-            aria-controls={menuId}
-            aria-expanded={open}
-            aria-label='Toggle menu'
-            className={cn(
-              'relative flex size-8 items-center justify-center rounded-full transition-colors',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
-              open
-                ? 'bg-primary/10 text-primary'
-                : 'text-muted-foreground hover:text-foreground'
-            )}
-            onClick={onMenuToggle}
-            type='button'
-          >
-            {open ? (
-              <Icons.close className='size-4' />
-            ) : (
-              <Icons.menu className='size-4' />
-            )}
-          </button>
-        </div>
-      </div>
-    </>
+    </div>
   )
 }
