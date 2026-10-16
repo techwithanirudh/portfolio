@@ -30,7 +30,7 @@ const stack = Object.entries(
 }))
 
 const linkClass =
-  'underline-offset-2 hover:underline print:text-primary print:no-underline'
+  'text-primary underline-offset-2 hover:underline print:no-underline'
 
 const ResumeSection = ({
   children,

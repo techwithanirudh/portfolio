@@ -122,7 +122,7 @@ function Header() {
   return (
     <div className='sticky top-0 flex h-10 items-stretch'>
       <div className='flex min-w-0 flex-1 items-center gap-2 bg-fd-card px-3 text-fd-card-foreground'>
-        <AvatarIcon size={24} />
+        <Icons.pawPrint className='size-4 text-fd-primary transition-transform duration-200 ease-out hover:-rotate-45 motion-reduce:transition-none' />
         <span className='font-medium text-sm'>Ask Simba</span>
       </div>
 
@@ -132,7 +132,7 @@ function Header() {
           className={cn(
             buttonVariants({
               className:
-                'group/button size-10 rounded-none border-none [&_svg]:size-4',
+                'group/button aspect-square h-full w-auto rounded-none border-none [&_svg]:size-4',
               color: 'secondary',
               size: 'icon-sm',
             })
@@ -153,7 +153,7 @@ function Header() {
           className={cn(
             buttonVariants({
               className:
-                'group/button size-10 rounded-none border-none [&_svg]:size-4',
+                'group/button aspect-square h-full w-auto rounded-none border-none [&_svg]:size-4',
               color: 'primary',
               size: 'icon-sm',
             })

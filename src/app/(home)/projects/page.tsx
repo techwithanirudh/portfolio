@@ -89,6 +89,9 @@ export default async function Page(props: {
               />
             </ViewAnimation>
           ))}
+          {work.length % 2 === 1 && (
+            <div aria-hidden className='hidden bg-dashed md:block' />
+          )}
         </div>
       </Section>
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}

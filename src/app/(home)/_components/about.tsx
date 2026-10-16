@@ -30,20 +30,26 @@ export default function About(): React.ReactElement {
               </p>
               <p className='text-lg'>
                 My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
-                Python was part of my early experiments. I build open-source
-                projects like{' '}
+                Python was part of my early experiments. I build products like{' '}
                 <PreviewLink
                   className='whitespace-nowrap'
-                  href='/projects/ai_tutor'
+                  href='/projects/depensa'
                 >
-                  AI Tutor
-                </PreviewLink>{' '}
-                and{' '}
+                  Depensa
+                </PreviewLink>
+                ,{' '}
                 <PreviewLink
                   className='whitespace-nowrap'
                   href='/projects/coolify_tweaks'
                 >
                   Coolify Tweaks
+                </PreviewLink>
+                , and{' '}
+                <PreviewLink
+                  className='whitespace-nowrap'
+                  href='/projects/shadcn_portfolio'
+                >
+                  Shadcn Portfolio
                 </PreviewLink>
                 .
               </p>

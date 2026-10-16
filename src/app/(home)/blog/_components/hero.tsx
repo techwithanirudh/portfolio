@@ -15,11 +15,14 @@ export const Hero = ({
     action={
       <a
         aria-label='RSS feed'
-        className={buttonVariants({ size: 'sm', variant: 'outline' })}
+        className={buttonVariants({
+          className: 'text-muted-foreground hover:text-foreground',
+          size: 'icon',
+          variant: 'ghost',
+        })}
         href='/blog/rss.xml'
       >
-        <Icons.rss />
-        RSS
+        <Icons.rss className='size-5' />
       </a>
     }
     caption={pageIndex > 0 ? `Page ${pageIndex + 1} of ${pageCount}` : null}

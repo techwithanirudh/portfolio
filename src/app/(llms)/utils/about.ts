@@ -44,7 +44,7 @@ ${description}
 
 ${tagline} I design websites and write the code behind them. Right now that means AI products with Next.js, React and TypeScript, as a software engineering intern at QuiverAI.
 
-I'm Anirudh, a full-stack developer who builds practical web apps. I started tinkering with Lego Mindstorms and kept building from there. My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL. Python was part of my early experiments. I build open-source projects like [AI Tutor](${url('/projects/ai_tutor')}) and [Coolify Tweaks](${url('/projects/coolify_tweaks')}).
+I'm Anirudh, a full-stack developer who builds practical web apps. I started tinkering with Lego Mindstorms and kept building from there. My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL. Python was part of my early experiments. I build products like [Depensa](${url('/projects/depensa')}), [Coolify Tweaks](${url('/projects/coolify_tweaks')}), and [Shadcn Portfolio](${url('/projects/shadcn_portfolio')}).
 
 ## Story
 Route: ${url('/about#story')}
