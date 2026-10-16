@@ -10,7 +10,7 @@ import { Links } from './links'
 
 export const Footer = () => (
   <>
-    <GuestbookBand before='Since you scrolled all the way down here, leave a little proof you were here in the' />
+    <GuestbookBand before='since you read all the way down here, leave a proof you were here in the' />
     <footer
       className={cn(
         'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',

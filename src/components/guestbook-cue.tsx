@@ -4,46 +4,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { Section } from '@/components/layout/sections'
 import { cn } from '@/lib/utils'
 
 const GUESTBOOK_PATH = '/guestbook'
-
-const GuestbookLink = ({ children }: { children?: ReactNode }) => (
-  <Link
-    className='group/guestbook inline-flex items-center gap-1 font-medium text-foreground underline decoration-muted-foreground/60 decoration-dashed underline-offset-4 transition-colors hover:decoration-primary'
-    href={GUESTBOOK_PATH}
-  >
-    {children ?? 'guestbook'}
-    <Icons.arrowRight className='icon-arrow-button size-3.5' />
-  </Link>
-)
-
-export function GuestbookCue({
-  before,
-  className,
-  children,
-}: {
-  before: ReactNode
-  className?: string
-  children?: ReactNode
-}) {
-  const pathname = usePathname()
-
-  if (pathname.startsWith(GUESTBOOK_PATH)) {
-    return null
-  }
-
-  return (
-    <p
-      className={cn(
-        'text-pretty text-muted-foreground text-sm leading-relaxed',
-        className
-      )}
-    >
-      {before} <GuestbookLink>{children}</GuestbookLink>
-    </p>
-  )
-}
 
 export function GuestbookBand({
   before,
@@ -59,13 +23,32 @@ export function GuestbookBand({
   }
 
   return (
-    <div
+    <Section
       className={cn(
-        'flex justify-center border-border border-b border-dashed px-4 py-10 text-center sm:py-14',
+        'flex justify-center bg-dashed px-4 py-6 text-center sm:py-8',
         className
       )}
+      sectionClassName='border-border border-b border-dashed'
     >
-      <GuestbookCue before={before} className='max-w-md text-base sm:text-lg' />
-    </div>
+      <p className='flex -rotate-1 items-center gap-3 text-balance bg-background px-4 py-1 font-hand text-foreground/75 text-xl leading-snug sm:text-2xl'>
+        <Icons.pawPrint
+          aria-hidden
+          className='size-5 shrink-0 text-primary max-sm:hidden'
+        />
+        <span>
+          {before}{' '}
+          <Link
+            className='text-primary underline decoration-2 decoration-wavy underline-offset-6 transition-colors hover:text-foreground'
+            href={GUESTBOOK_PATH}
+          >
+            guestbook
+          </Link>
+        </span>
+        <Icons.pawPrint
+          aria-hidden
+          className='size-5 shrink-0 text-primary max-sm:hidden'
+        />
+      </p>
+    </Section>
   )
 }
