@@ -65,6 +65,7 @@ const ContactFormInner = () => {
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='name'
                   className='bg-background'
                   placeholder='Jane Smith'
                   {...field}
@@ -89,10 +90,12 @@ const ContactFormInner = () => {
               <FormLabel>Email address</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='email'
                   className='bg-background'
                   placeholder='jane@acme.com'
                   {...field}
                   disabled={action.status === 'executing'}
+                  type='email'
                 />
               </FormControl>
               {form.formState.errors.email ? (
