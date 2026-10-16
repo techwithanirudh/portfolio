@@ -1,6 +1,6 @@
 'use client'
 
-import { Presence } from '@radix-ui/react-presence'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -26,44 +26,31 @@ export function MobileNav() {
     setOpen(false)
   }, [pathname])
 
-  useEffect(() => {
-    if (!open) {
-      return
-    }
-
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeMenu()
-      }
-    }
-
-    document.addEventListener('keydown', closeOnEscape)
-    return () => document.removeEventListener('keydown', closeOnEscape)
-  }, [closeMenu, open])
-
+  // Non-modal so the floating pill stays usable as the toggle. Base UI closes
+  // on Escape and keeps the panel mounted until its exit animation ends
   return (
     <>
-      <Presence present={open}>
-        <button
-          aria-label='Close menu'
-          className='fixed inset-0 z-[31] bg-background/50 data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in md:hidden'
-          data-state={open ? 'open' : 'closed'}
-          onClick={closeMenu}
-          type='button'
-        />
-      </Presence>
-
-      <Presence present={open}>
-        <MenuPanel
-          menuId='mobile-navigation-menu'
-          onAssistantOpen={() => {
-            closeMenu()
-            setOpenAssistant(true)
-          }}
-          onClose={closeMenu}
-          open={open}
-        />
-      </Presence>
+      <DialogPrimitive.Root
+        disablePointerDismissal
+        modal={false}
+        onOpenChange={setOpen}
+        open={open}
+      >
+        <DialogPrimitive.Portal>
+          <DialogPrimitive.Backdrop
+            className='fixed inset-0 z-[31] bg-background/50 data-closed:animate-fd-fade-out data-open:animate-fd-fade-in md:hidden'
+            onClick={closeMenu}
+          />
+          <MenuPanel
+            menuId='mobile-navigation-menu'
+            onAssistantOpen={() => {
+              closeMenu()
+              setOpenAssistant(true)
+            }}
+            onClose={closeMenu}
+          />
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
 
       <FloatingPill
         menuId='mobile-navigation-menu'

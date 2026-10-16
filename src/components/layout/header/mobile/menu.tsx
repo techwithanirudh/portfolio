@@ -1,5 +1,6 @@
 'use client'
 
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
@@ -9,12 +10,10 @@ import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
 export function MenuPanel({
-  open,
   menuId,
   onAssistantOpen,
   onClose,
 }: {
-  open: boolean
   menuId: string
   onAssistantOpen: () => void
   onClose: () => void
@@ -39,15 +38,10 @@ export function MenuPanel({
   )
 
   return (
-    <div
+    <DialogPrimitive.Popup
       aria-label='Mobile navigation'
-      aria-modal='true'
-      className={cn(
-        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background md:hidden',
-        open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
-      )}
+      className='fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background outline-none data-closed:animate-fd-dialog-out data-open:animate-fd-dialog-in md:hidden'
       id={menuId}
-      role='dialog'
     >
       <nav className='flex flex-col divide-y divide-dashed divide-border'>
         {menuRows.map((row) => (
@@ -110,6 +104,6 @@ export function MenuPanel({
           <ThemeToggle />
         </div>
       </div>
-    </div>
+    </DialogPrimitive.Popup>
   )
 }
