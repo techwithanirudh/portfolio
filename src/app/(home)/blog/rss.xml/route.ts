@@ -32,7 +32,7 @@ function createFeed(): Feed {
   const feed = new Feed({
     copyright: `All rights reserved ${new Date().getFullYear()}, ${owner}`,
     description,
-    favicon: new URL('/favicon.ico', baseUrl).href,
+    favicon: new URL('/icon.png', baseUrl).href,
     feed: new URL('/blog/rss.xml', baseUrl).href,
     feedLinks: { rss: new URL('/blog/rss.xml', baseUrl).href },
     id: baseUrl.href,

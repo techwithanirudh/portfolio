@@ -1,7 +1,7 @@
 'use client'
 
-import { Comments } from '@fuma-comment/react'
-import { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { useEffect, useRef, useState } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -98,6 +98,37 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
   )
 }
 
+// Comments pull in an editor and their own UI kit, so they only load as the
+// reader nears the end of the post
+const Comments = dynamic(
+  () => import('@fuma-comment/react').then((mod) => mod.Comments),
+  { ssr: false }
+)
+
+const useNearViewport = () => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [near, setNear] = useState(false)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node || near) {
+      return
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setNear(true)
+        }
+      },
+      { rootMargin: '600px 0px' }
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [near])
+
+  return { near, ref }
+}
+
 export function PostComments({
   slug,
   className,
@@ -106,6 +137,11 @@ export function PostComments({
   className?: string
 }) {
   const { openSignIn } = useSignInModal()
+  const { near, ref } = useNearViewport()
+
+  if (!near) {
+    return <div className={cn('min-h-40 w-full', className)} ref={ref} />
+  }
 
   return (
     <Comments
