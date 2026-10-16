@@ -20,6 +20,7 @@
     "email:dev": "email dev -p 3001",
     "email:export": "email export",
     "fix-previews": "bun run ./scripts/link-previews/fix.ts",
+    "generate-portrait": "bun run ./scripts/generate-portrait.ts && biome format --write \"src/app/(home)/_components/portrait-face.tsx\"",
     "generate-previews": "bun run ./scripts/link-previews/generate.ts",
     "postinstall": "fumadocs-mdx",
     "prepare": "lefthook install",

@@ -189,7 +189,8 @@ export function StoryTrack({
     const follow = (value: number) =>
       setReached(thresholds.filter((threshold) => threshold <= value).length)
     follow(progress.get())
-    return progress.on('change', follow)
+    const unsubscribe = progress.on('change', follow)
+    return () => unsubscribe()
   }, [progress, track])
 
   const grooveId = `${id}-groove`

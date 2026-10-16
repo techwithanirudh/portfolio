@@ -1,18 +1,15 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { preload } from 'react-dom'
 import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
+import { PortraitFace } from './portrait-face'
 
 const VIEW_BOX = '0 0 947 1160'
 const MAX_OFFSET_SVG = 24
 const REACH_PX = 320
 
-const SRC = '/images/portrait.svg'
-
 export function Portrait() {
-  preload(SRC, { as: 'image', fetchPriority: 'high' })
   const eyesRef = useRef<SVGGElement>(null)
 
   useEffect(() => {
@@ -48,22 +45,14 @@ export function Portrait() {
 
   return (
     <div className='relative size-full select-none bg-[linear-gradient(160deg,#c3b6fa,#9fccfa_55%,#7fd0f5)] dark:bg-[linear-gradient(160deg,#7f5ce0,#5a7fe0_55%,#38a8e6)]'>
-      {/* biome-ignore lint/performance/noImgElement: static SVG, next/image adds nothing here */}
-      <img
-        alt='Portrait of Anirudh Sriram'
-        className='relative size-full object-cover'
-        draggable={false}
-        fetchPriority='high'
-        height={1160}
-        src={SRC}
-        width={947}
-      />
       <svg
-        aria-hidden
-        className='pointer-events-none absolute inset-0 size-full'
+        aria-label='Portrait of Anirudh Sriram'
+        className='pointer-events-none relative size-full'
         preserveAspectRatio='xMidYMid slice'
+        role='img'
         viewBox={VIEW_BOX}
       >
+        <PortraitFace />
         <g
           className='transition-[translate] duration-300 ease-out'
           fill={PORTRAIT_EYE_FILL}
