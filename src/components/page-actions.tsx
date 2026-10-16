@@ -163,7 +163,7 @@ export function ViewOptions({
             key={href}
             render={<a href={href} rel='noopener' target='_blank' />}
           >
-            <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border transition-colors group-focus/item:bg-background'>
+            <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border'>
               <Icon className='size-4' />
             </span>
             <span className='truncate'>{title}</span>
