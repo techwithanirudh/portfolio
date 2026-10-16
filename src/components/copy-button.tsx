@@ -38,11 +38,15 @@ export function CopyStateIcon({
     idle: idleIcon ?? <Icons.copy data-slot='idle-icon' />,
   }
 
+  // Outgoing and incoming icons share one grid cell, so the swap never
+  // changes the box size and nothing around it shifts
   return (
-    <AnimatePresence initial={false} mode='popLayout'>
-      <motion.span key={state} {...motionIconProps}>
-        {iconByState[state]}
-      </motion.span>
-    </AnimatePresence>
+    <span className='inline-grid shrink-0 place-items-center align-middle *:[grid-area:1/1]'>
+      <AnimatePresence initial={false}>
+        <motion.span className='inline-flex' key={state} {...motionIconProps}>
+          {iconByState[state]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
   )
 }

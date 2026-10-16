@@ -46,7 +46,7 @@ export function EmailItem({ emailB64 }: { emailB64: string }) {
           </span>
           <span
             aria-hidden
-            className='shrink-0 text-muted-foreground opacity-0 pointer-coarse:opacity-100 transition-opacity group-hover/copy:opacity-100 group-focus-visible/copy:opacity-100 data-[state=done]:opacity-100 data-[state=error]:opacity-100 [&_svg]:size-3.5'
+            className='flex shrink-0 text-muted-foreground opacity-0 pointer-coarse:opacity-100 transition-opacity group-hover/copy:opacity-100 group-focus-visible/copy:opacity-100 data-[state=done]:opacity-100 data-[state=error]:opacity-100 [&_svg]:size-3.5'
             data-state={state}
           >
             <CopyStateIcon state={state} />
