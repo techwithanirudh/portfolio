@@ -3,13 +3,20 @@
 import { useEffect, useRef } from 'react'
 import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
+import { cn } from '@/lib/utils'
 import { PortraitFace } from './portrait-face'
 
-const VIEW_BOX = '0 0 947 1160'
 const MAX_OFFSET_SVG = 24
 const REACH_PX = 320
 
-export function Portrait() {
+export function Portrait({
+  className,
+  viewBox = '0 0 947 1160',
+}: {
+  className?: string
+  /** Crop into the 947x1160 artwork, e.g. just the head */
+  viewBox?: string
+}) {
   const eyesRef = useRef<SVGGElement>(null)
 
   useEffect(() => {
@@ -44,13 +51,13 @@ export function Portrait() {
   }, [])
 
   return (
-    <div className='relative size-full select-none bg-primary'>
+    <span className={cn('relative block size-full select-none', className)}>
       <svg
         aria-label='Portrait of Anirudh Sriram'
         className='pointer-events-none relative size-full'
         preserveAspectRatio='xMidYMid slice'
         role='img'
-        viewBox={VIEW_BOX}
+        viewBox={viewBox}
       >
         <PortraitFace />
         <g
@@ -65,6 +72,6 @@ export function Portrait() {
           </g>
         </g>
       </svg>
-    </div>
+    </span>
   )
 }

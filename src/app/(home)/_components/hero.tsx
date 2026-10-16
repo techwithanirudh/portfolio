@@ -20,14 +20,13 @@ const Hero = () => (
       src={heroGradient}
     />
     <ViewAnimation delay={0.05}>
-      <div className='mb-5 flex items-center gap-4 sm:mb-6 sm:gap-5'>
-        <div className='size-14 shrink-0 overflow-hidden rounded-lg sm:size-[4.25rem] sm:rounded-xl'>
-          <Portrait />
-        </div>
-        <h1 className='text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:text-[3.4rem]'>
-          Anirudh Sriram<span className='text-primary'>.</span>
-        </h1>
-      </div>
+      <h1 className='mb-5 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'>
+        Anirudh{' '}
+        <span className='mx-[0.04em] inline-block size-[0.8em] translate-y-[0.08em] overflow-hidden rounded-full bg-muted ring-1 ring-border ring-inset'>
+          <Portrait viewBox='110 60 730 730' />
+        </span>{' '}
+        Sriram<span className='text-primary'>.</span>
+      </h1>
     </ViewAnimation>
     <ViewAnimation delay={0.1}>
       <p className='max-w-[52ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>
