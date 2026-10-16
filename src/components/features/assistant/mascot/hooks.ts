@@ -5,7 +5,7 @@ import { isToolUIPart } from 'ai'
 import { useEffect, useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
-import { animations, type MoodName, moodAnimations } from './constants'
+import { animations, moodAnimations } from './constants'
 import { type MascotAgent, useMascot } from './provider'
 import { playAnimation } from './utils'
 
@@ -72,11 +72,13 @@ export function useMascotPanel({
 }
 
 export function useMascotTools(messages: MyUIMessage[]) {
-  const { agent, avatar, setAvatar } = useMascot()
+  const { agent } = useMascot()
   const handled = useRef(new Set<string>())
-  const pendingMood = useRef<MoodName | null>(null)
 
   useEffect(() => {
+    if (!agent) {
+      return
+    }
     const part = (messages.at(-1)?.parts ?? []).find(
       (item) => item.type === 'tool-animate'
     )
@@ -88,28 +90,9 @@ export function useMascotTools(messages: MyUIMessage[]) {
     }
     handled.current.add(part.toolCallId)
 
-    const { avatar: nextAvatar, mood } = part.input ?? {}
-    if (nextAvatar && nextAvatar !== avatar) {
-      // The new agent isn't loaded yet, so the mood waits for it
-      pendingMood.current = mood ?? null
-      setAvatar(nextAvatar)
-      return
-    }
-    if (!agent) {
-      return
-    }
+    const mood = part.input?.mood
     if (mood) {
-      playAnimation(agent, moodAnimations[avatar][mood], { interrupt: true })
+      playAnimation(agent, moodAnimations[mood], { interrupt: true })
     }
-  }, [messages, agent, avatar, setAvatar])
-
-  useEffect(() => {
-    if (!agent) {
-      return
-    }
-    if (pendingMood.current) {
-      playAnimation(agent, moodAnimations[avatar][pendingMood.current])
-    }
-    pendingMood.current = null
-  }, [agent, avatar])
+  }, [messages, agent])
 }

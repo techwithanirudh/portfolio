@@ -14,14 +14,8 @@ export function playAnimation(
   animation: Animation,
   { interrupt = false }: { interrupt?: boolean } = {}
 ) {
-  const name = pickAnimation(animation)
-  // Avatars don't share animation names, so skip ones this avatar lacks
-  // rather than stopping it for nothing
-  if (!agent.hasAnimation(name)) {
-    return
-  }
   if (interrupt) {
     agent.stop()
   }
-  agent.play(name)
+  agent.play(pickAnimation(animation))
 }

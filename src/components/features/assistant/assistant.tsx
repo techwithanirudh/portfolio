@@ -37,7 +37,6 @@ import {
   PromptInputTools,
 } from '@/components/ai-elements/prompt-input'
 import { Tool, ToolContent, ToolHeader } from '@/components/ai-elements/tool'
-import { AvatarMenu } from '@/components/features/assistant/avatar-menu'
 import { useAssistantContext } from '@/components/features/assistant/context'
 import {
   MascotProvider,
@@ -118,7 +117,10 @@ function Header() {
 
   return (
     <div className='sticky top-0 flex h-10 items-stretch'>
-      <AvatarMenu />
+      <div className='flex min-w-0 flex-1 items-center gap-2 bg-fd-card px-3 text-fd-card-foreground'>
+        <AvatarIcon size={24} />
+        <span className='font-medium text-sm'>Ask Simba</span>
+      </div>
 
       <div className='flex h-full'>
         <button
@@ -343,7 +345,6 @@ function MessageList({
   messages: MyUIMessage[]
   status: UseChatHelpers<MyUIMessage>['status']
 }) {
-  const { avatar } = useMascot()
   const isBusy = status === 'streaming' || status === 'submitted'
   // No assistant message exists before the first chunk, so show a placeholder
   const isAwaitingReply =
@@ -363,7 +364,6 @@ function MessageList({
         {messages.length === 0 ? (
           <ConversationEmptyState>
             <AvatarIcon
-              avatar={avatar}
               className='transition-transform hover:scale-110'
               size={64}
             />

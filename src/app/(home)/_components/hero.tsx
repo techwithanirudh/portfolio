@@ -7,7 +7,15 @@ import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
 import { cn } from '@/lib/utils'
+import { CopyEmailButton } from './copy-email-button'
 import { Portrait } from './portrait'
+
+const socialClassName = cn(
+  buttonVariants({ size: 'icon-sm', variant: 'outline' }),
+  // Only the icon moves, so the hit area stays put and hover can't flicker
+  'text-muted-foreground hover:text-foreground dark:bg-background dark:ring-white/10',
+  '[&_svg]:transition-[opacity,filter,scale,rotate] [&_svg]:duration-200 [&_svg]:ease-out hover:[&_svg]:-rotate-8 hover:[&_svg]:scale-115 motion-reduce:[&_svg]:transition-none'
+)
 
 // One column, type first: portrait, name, one line, actions, with the grain
 // blob drifting in from the corner
@@ -58,23 +66,26 @@ const Hero = () => (
         className='flex w-full gap-1.5 max-sm:mt-2 sm:ml-auto sm:w-auto'
         delay={0.3}
       >
-        {socials.map((social) => (
-          <a
-            aria-label={social.name}
-            className={cn(
-              buttonVariants({ size: 'icon-sm', variant: 'outline' }),
-              // Only the icon moves, so the hit area stays put and hover can't flicker
-              'text-muted-foreground hover:text-foreground dark:bg-background dark:ring-white/10',
-              '[&_svg]:transition-transform [&_svg]:duration-200 [&_svg]:ease-out hover:[&_svg]:-rotate-8 hover:[&_svg]:scale-115 motion-reduce:[&_svg]:transition-none'
-            )}
-            href={social.url}
-            key={social.name}
-            rel='noreferrer'
-            target={social.url.startsWith('mailto:') ? undefined : '_blank'}
-          >
-            {social.icon}
-          </a>
-        ))}
+        {socials.map((social) =>
+          social.url.startsWith('mailto:') ? (
+            <CopyEmailButton
+              className={socialClassName}
+              email={social.url.replace('mailto:', '')}
+              key={social.name}
+            />
+          ) : (
+            <a
+              aria-label={social.name}
+              className={socialClassName}
+              href={social.url}
+              key={social.name}
+              rel='noreferrer'
+              target='_blank'
+            >
+              {social.icon}
+            </a>
+          )
+        )}
       </ViewAnimation>
     </div>
   </Section>

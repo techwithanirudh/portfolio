@@ -4,20 +4,18 @@ import { useEffect } from 'react'
 import { useAssistantContext } from '@/components/features/assistant/context'
 import { useMascot } from '@/components/features/assistant/mascot'
 import {
-  type AvatarName,
   animations,
-  avatarMeta,
+  sprite,
 } from '@/components/features/assistant/mascot/constants'
 import { playAnimation } from '@/components/features/assistant/mascot/utils'
 
 // Matches the panel's right-4 inset so the dog lines up with it
 const EDGE_OFFSET = 16
 
-// Avatars differ in frame size and in the empty space around the dog, and the
-// element has no size until it is shown, so anchor the visible dog using the
-// known frame size and padding
-const getPosition = (avatar: AvatarName) => {
-  const { frame, padding } = avatarMeta[avatar]
+// The element has no size until it is shown, so anchor the visible dog using
+// the known frame size and the empty space around it
+const getPosition = () => {
+  const { frame, padding } = sprite
   return {
     x: window.innerWidth - EDGE_OFFSET - frame[0] + padding.right,
     y: window.innerHeight - EDGE_OFFSET - frame[1] + padding.bottom,
@@ -26,7 +24,7 @@ const getPosition = (avatar: AvatarName) => {
 
 export function AssistantTrigger() {
   const { setOpen } = useAssistantContext()
-  const { agent, avatar } = useMascot()
+  const { agent } = useMascot()
 
   useEffect(() => {
     if (!agent) {
@@ -37,25 +35,21 @@ export function AssistantTrigger() {
     const cyclesUntilAction = () => 3 + Math.floor(Math.random() * 4)
     let target = cyclesUntilAction()
 
-    // Avatars name their animations differently, so use what this one has
-    const rest = animations.rest.find((name) => agent.hasAnimation(name))
-    const actions = animations.idle.filter((name) => agent.hasAnimation(name))
-
     const onQueueEmpty = () => {
-      if (idleCycles >= target && actions.length > 0) {
+      if (idleCycles >= target) {
         idleCycles = 0
         target = cyclesUntilAction()
-        playAnimation(agent, actions)
-      } else if (rest) {
+        playAnimation(agent, animations.idle)
+      } else {
         idleCycles++
-        agent.play(rest, 3000)
+        agent.play(animations.rest, 3000)
       }
     }
     agent._onQueueEmpty = onQueueEmpty
     agent._queue._onEmptyCallback = onQueueEmpty
 
     const place = () => {
-      const { x, y } = getPosition(avatar)
+      const { x, y } = getPosition()
       agent._el.style.left = `${x}px`
       agent._el.style.top = `${y}px`
     }
@@ -76,7 +70,7 @@ export function AssistantTrigger() {
       agent._el.removeEventListener('click', handleClick)
       window.removeEventListener('resize', place)
     }
-  }, [agent, avatar, setOpen])
+  }, [agent, setOpen])
 
   return null
 }
