@@ -86,7 +86,8 @@ export default defineConfig({
         inline: 'tailing-curly-colon',
         themes: {
           dark: 'catppuccin-mocha',
-          light: 'catppuccin-latte',
+          // Latte's greens and yellows fail contrast on white
+          light: 'github-light',
         },
         transformers: [
           ...(rehypeCodeDefaultOptions.transformers ?? []),
