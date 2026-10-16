@@ -65,6 +65,9 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* react-remove-scroll (used by the Radix overlays inside fumadocs-ui and
+   fuma-comment) pads the body for the scrollbar, which scrollbar-gutter
+   already reserves. Base UI overlays lock scroll without this attribute */
 html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
   margin-right: 0px !important;
