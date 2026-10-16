@@ -38,7 +38,7 @@ const Hero = () => (
         the code behind them, lately AI products with Next.js, React and
         TypeScript, as a Software Engineering Intern at{' '}
         <a
-          className='underline decoration-foreground/30 decoration-dashed underline-offset-4 transition-colors hover:text-primary hover:decoration-primary'
+          className='link-underline'
           href='https://quiver.ai'
           rel='noreferrer'
           target='_blank'

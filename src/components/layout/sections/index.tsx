@@ -1,5 +1,4 @@
 import type { HTMLAttributes } from 'react'
-import { Icons } from '@/components/icons/icons'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
@@ -7,9 +6,16 @@ type SectionProps = {
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
-const Cross = () => (
-  <ViewAnimation className='flex h-6 w-6 items-center justify-center'>
-    <Icons.add className='size-5 text-border/70 dark:text-border' />
+// 15px box whose 1px arms land exactly on the 1px grid lines it marks
+const Cross = ({ className }: { className?: string }) => (
+  <ViewAnimation
+    className={cn(
+      'pointer-events-none absolute -bottom-2 z-10 hidden size-[15px] sm:block',
+      className
+    )}
+  >
+    <span className='absolute top-0 left-[7px] h-full w-px bg-border' />
+    <span className='absolute top-[7px] left-0 h-px w-full bg-border' />
   </ViewAnimation>
 )
 
@@ -24,12 +30,8 @@ export const Section = ({
       <div className={cn('border-border border-dashed sm:border-x', className)}>
         {children}
       </div>
-      <div className='absolute -bottom-3 -left-3 z-10 hidden h-6 sm:block'>
-        <Cross />
-      </div>
-      <div className='absolute -right-3 -bottom-3 z-10 hidden h-6 -translate-x-px sm:block'>
-        <Cross />
-      </div>
+      <Cross className='-left-[7px]' />
+      <Cross className='-right-[7px]' />
     </div>
   </section>
 )

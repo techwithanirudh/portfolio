@@ -4,7 +4,9 @@ import { Icons } from '@/components/icons/icons'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 
-// The full width bar that closes a home section and leads to its full page
+// The full width bar that closes a home section and leads to its full page.
+// The dashed line sits on the wrapper and the ring is inset, so neither paints
+// over the other.
 export const SectionMoreLink = ({
   children,
   delay,
@@ -14,10 +16,10 @@ export const SectionMoreLink = ({
   delay?: number
   href: string
 }) => (
-  <ViewAnimation delay={delay}>
+  <ViewAnimation className='border-border border-t border-dashed' delay={delay}>
     <Link
       className={buttonVariants({
-        className: 'w-full py-6 active:scale-none active:opacity-80',
+        className: 'w-full py-6 ring-inset active:scale-none active:opacity-80',
         shape: 'square',
       })}
       href={href}
