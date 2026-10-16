@@ -77,7 +77,6 @@ const renderNavTitle = (
 export const Header = ({
   nav = {},
   links,
-  githubUrl,
   themeSwitch = {},
   searchToggle = {},
   className,
@@ -86,7 +85,7 @@ export const Header = ({
     const navItems: LinkItemType[] = []
     const menuItems: LinkItemType[] = []
 
-    for (const item of resolveLinkItems({ githubUrl, links })) {
+    for (const item of resolveLinkItems({ links })) {
       switch (item.on ?? 'all') {
         case 'menu':
           menuItems.push(item)
@@ -101,7 +100,7 @@ export const Header = ({
     }
 
     return { menuItems, navItems }
-  }, [links, githubUrl])
+  }, [links])
 
   return (
     <HeaderNavigationMenu
