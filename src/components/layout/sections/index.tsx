@@ -27,6 +27,7 @@ export const Section = ({
 }: SectionProps) => (
   <section
     className={cn(
+      'overflow-x-clip',
       fill && 'flex min-h-[28rem] flex-1 basis-0 flex-col',
       sectionClassName
     )}

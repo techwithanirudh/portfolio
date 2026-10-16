@@ -139,6 +139,8 @@ function Header() {
           )}
           onClick={() => {
             playNewChat()
+            chat.stop()
+            chat.clearError()
             chat.setMessages([])
             setContext(null)
           }}

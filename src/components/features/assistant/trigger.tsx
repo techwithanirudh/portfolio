@@ -13,8 +13,8 @@ import { prefersReducedMotion } from '@/lib/reduced-motion'
 
 const EDGE_OFFSET = 16
 const REST_MS = 3000
-const IDLE_MIN_MS = 15_000
-const IDLE_MAX_MS = 30_000
+const IDLE_MIN_MS = 9000
+const IDLE_MAX_MS = 18_000
 
 // The element has no size until it is shown, so anchor the visible dog using
 // the known frame size and the empty space around it

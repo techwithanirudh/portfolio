@@ -73,9 +73,16 @@ export function useMascotPanel({
   const activity = activityFor(status, messages)
 
   useOn(activity, () => {
+    const previous = mascotActivity.current
     mascotActivity.current = prefersReducedMotion() ? null : activity
-    if (agent && mascotActivity.current) {
+    if (!agent) {
+      return
+    }
+    if (mascotActivity.current) {
       playAnimation(agent, mascotActivity.current, { interrupt: true })
+    } else if (previous) {
+      // Wind down the last activity loop once the reply ends or fails
+      agent.stopCurrent()
     }
   })
 }

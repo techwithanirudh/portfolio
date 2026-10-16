@@ -60,7 +60,11 @@ const ContactFormInner = () => {
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-8' onSubmit={handleSubmitWithAction}>
+      <form
+        className='flex-1 space-y-8'
+        noValidate
+        onSubmit={handleSubmitWithAction}
+      >
         <FormField
           control={form.control}
           name='name'

@@ -122,7 +122,7 @@ export default async function Page(props: {
         <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col'>
           <TOCPopover items={toc} />
-          <Prose className={cn('min-w-0 flex-1 px-6 py-4', proseMeasure)}>
+          <Prose className={cn('min-w-0 flex-1 p-4', proseMeasure)}>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </Prose>
         </article>

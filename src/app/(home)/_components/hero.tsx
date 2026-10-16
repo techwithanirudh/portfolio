@@ -12,13 +12,13 @@ import { CopyEmailButton } from './copy-email-button'
 import { Portrait } from './portrait'
 
 const socialClassName = cn(
-  buttonVariants({ size: 'icon-sm', variant: 'outline' }),
+  buttonVariants({ size: 'icon-lg', variant: 'outline' }),
   'text-muted-foreground hover:text-foreground dark:bg-background dark:ring-white/10 dark:hover:bg-muted',
   '[&_svg]:transition-[opacity,filter,scale,rotate] [&_svg]:duration-200 [&_svg]:ease-out hover:[&_svg]:-rotate-8 hover:[&_svg]:scale-115 motion-reduce:[&_svg]:transition-none'
 )
 
 const Hero = () => (
-  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-16 pb-14 sm:pt-20 sm:pb-16'>
+  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-16 pb-14 sm:px-12 sm:pt-20 sm:pb-16'>
     <GrainBackdrop className='-z-10' />
     <ViewAnimation delay={0.05}>
       <div className='mb-7 size-16 overflow-hidden rounded-lg border border-foreground/10 sm:mb-8 sm:size-[4.75rem] sm:rounded-xl'>
@@ -48,7 +48,7 @@ const Hero = () => (
     </ViewAnimation>
 
     <div className='mt-7 flex flex-wrap items-center gap-2.5 sm:mt-9'>
-      <ViewAnimation delay={0.2}>
+      <ViewAnimation className='flex' delay={0.2}>
         <Link
           className={buttonVariants({ size: 'lg', variant: 'default' })}
           href='/projects'
@@ -57,7 +57,7 @@ const Hero = () => (
           <Icons.arrowRight className='icon-arrow-button size-4' />
         </Link>
       </ViewAnimation>
-      <ViewAnimation delay={0.25}>
+      <ViewAnimation className='flex' delay={0.25}>
         <AskSimbaButton />
       </ViewAnimation>
       <ViewAnimation

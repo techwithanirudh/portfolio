@@ -13,9 +13,9 @@ export const Footer = () => (
     <GuestbookBand before='since you read all the way down here, leave proof you were here in the' />
     <footer
       className={cn(
-        'container mx-auto flex flex-col gap-6 px-6 py-6 pb-24',
+        'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
         'border-border border-b border-dashed',
-        'sm:gap-16 sm:py-16'
+        'sm:gap-16 sm:px-8 sm:pt-16 sm:pb-24 md:pb-16'
       )}
     >
       <Links />

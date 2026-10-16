@@ -131,7 +131,7 @@ export const Header = ({
     <HeaderNavigationMenu
       className={className}
       menu={
-        <div className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end'>
+        <div className='flex flex-col p-4 sm:flex-row sm:items-center sm:justify-end sm:gap-6'>
           {menuItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (

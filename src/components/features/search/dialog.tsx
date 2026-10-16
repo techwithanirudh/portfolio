@@ -272,7 +272,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
       <div className='rounded-xl bg-background ring-1 ring-border'>
         <CommandList
-          className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
+          className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-[min(20rem,50dvh)] [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-[min(20rem,60dvh)]'
           data-lenis-prevent
         >
           {groups.map(({ group, items }, i) => (

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { preload } from 'react-dom'
 import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
@@ -14,22 +14,6 @@ const SRC = '/images/portrait.svg'
 export function Portrait() {
   preload(SRC, { as: 'image', fetchPriority: 'high' })
   const eyesRef = useRef<SVGGElement>(null)
-  const imageRef = useRef<HTMLImageElement>(null)
-  const [faceLoaded, setFaceLoaded] = useState(false)
-
-  useEffect(() => {
-    const image = imageRef.current
-    if (!image) {
-      return
-    }
-    if (image.complete) {
-      setFaceLoaded(true)
-      return
-    }
-    const onLoad = () => setFaceLoaded(true)
-    image.addEventListener('load', onLoad)
-    return () => image.removeEventListener('load', onLoad)
-  }, [])
 
   useEffect(() => {
     const eyes = eyesRef.current
@@ -71,14 +55,12 @@ export function Portrait() {
         draggable={false}
         fetchPriority='high'
         height={1160}
-        ref={imageRef}
         src={SRC}
         width={947}
       />
       <svg
         aria-hidden
-        className='pointer-events-none absolute inset-0 size-full opacity-0 data-loaded:opacity-100'
-        data-loaded={faceLoaded ? '' : undefined}
+        className='pointer-events-none absolute inset-0 size-full'
         preserveAspectRatio='xMidYMid slice'
         viewBox={VIEW_BOX}
       >

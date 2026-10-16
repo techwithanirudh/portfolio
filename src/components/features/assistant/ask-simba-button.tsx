@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useAssistantContext } from '@/components/features/assistant'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import simba from '@/public/images/simba.jpg'
 
 export const AskSimbaButton = ({ className }: { className?: string }) => {
   const { setOpen } = useAssistantContext()
@@ -11,7 +12,7 @@ export const AskSimbaButton = ({ className }: { className?: string }) => {
   return (
     <Button
       className={cn(
-        'pr-4 pl-1.5 dark:bg-background dark:ring-white/10 dark:hover:bg-accent',
+        'pr-3 pl-1.5 dark:bg-background dark:ring-white/10 dark:hover:bg-accent',
         className
       )}
       onClick={() => setOpen(true)}
@@ -20,10 +21,10 @@ export const AskSimbaButton = ({ className }: { className?: string }) => {
     >
       <Image
         alt=''
-        className='size-7 rounded-full ring-1 ring-border'
-        height={28}
-        src='/images/simba.jpg'
-        width={28}
+        className='size-7 rounded-[max(2px,calc(var(--radius-md)-6px))] ring-1 ring-border'
+        placeholder='blur'
+        sizes='28px'
+        src={simba}
       />
       Ask Simba
     </Button>

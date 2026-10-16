@@ -112,7 +112,8 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
 
   if (!output) {
     return (
-      <p className='text-muted-foreground text-sm'>
+      <p className='flex items-center gap-2 text-muted-foreground text-sm'>
+        <Icons.compass aria-hidden className='size-4 shrink-0' />
         <Shimmer>{`taking you to ${part.input?.path ?? 'the page'}...`}</Shimmer>
       </p>
     )
@@ -128,11 +129,17 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
   }
 
   return (
-    <p className='text-sm'>
-      took you to{' '}
-      <Link className='link-underline' href={output.href}>
-        {output.section ? `${output.title}, ${output.section}` : output.title}
-      </Link>
+    <p className='flex items-center gap-2 text-sm'>
+      <Icons.compass
+        aria-hidden
+        className='size-4 shrink-0 text-muted-foreground'
+      />
+      <span>
+        took you to{' '}
+        <Link className='link-underline' href={output.href}>
+          {output.section ? `${output.title}, ${output.section}` : output.title}
+        </Link>
+      </span>
     </p>
   )
 }
