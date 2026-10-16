@@ -15,7 +15,7 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
           <Image
             alt={name}
             className={cn(
-              'max-h-14 w-auto object-contain drop-shadow-md transition-transform',
+              'h-auto max-h-14 w-auto object-contain drop-shadow-md transition-transform',
               url && 'group-hover/item:scale-105'
             )}
             height={56}
