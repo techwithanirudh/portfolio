@@ -31,7 +31,7 @@ import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
-import { LargeSearchToggle, SearchToggle } from './search-toggle'
+import { SearchToggle } from './search-toggle'
 import { ThemeToggle } from './theme-toggle'
 
 const navItemVariants = cva('[&_svg]:size-4', {
@@ -129,14 +129,9 @@ export const Header = ({
             ))}
         </ul>
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
-          <ViewAnimation className='w-60 flex-none' delay={0.15}>
+          <ViewAnimation delay={0.15}>
             {searchToggle.enabled !== false &&
-              (searchToggle.components?.lg ?? (
-                <LargeSearchToggle
-                  className='w-full rounded-full ps-2.5'
-                  hideIfDisabled
-                />
-              ))}
+              (searchToggle.components?.lg ?? <SearchToggle hideIfDisabled />)}
           </ViewAnimation>
           <ViewAnimation delay={0.15}>
             {themeSwitch.enabled !== false &&
