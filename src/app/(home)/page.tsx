@@ -6,6 +6,7 @@ import { testimonials } from '@/constants/portfolio/testimonials'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
 import { getSortedWork } from '@/lib/source'
+import About from './_components/about'
 import CTA from './_components/cta'
 import ExperiencePreview from './_components/experience'
 import Hero from './_components/hero'
@@ -28,6 +29,8 @@ export default async function Home() {
       <ProfilePageJsonLd description={homeDescription} path='/' title='Home' />
       <Wrapper>
         <Hero />
+        <Separator />
+        <About />
         <Separator />
         <ExperiencePreview />
         <Separator />
