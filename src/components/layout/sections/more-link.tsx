@@ -16,13 +16,13 @@ export const SectionMoreLink = ({
   <ViewAnimation className='border-border border-t border-dashed' delay={delay}>
     <Link
       className={buttonVariants({
-        className: 'w-full py-6 ring-inset active:scale-none active:opacity-80',
+        className: 'w-full py-8 ring-inset active:scale-none active:opacity-80',
         shape: 'square',
       })}
       href={href}
     >
       {children}
-      <Icons.arrowRight className='icon-arrow-button size-4' />
+      <Icons.arrowRight className='icon-arrow-button size-5' />
     </Link>
   </ViewAnimation>
 )

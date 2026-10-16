@@ -44,7 +44,7 @@ export function Portrait() {
   }, [])
 
   return (
-    <div className='relative size-full select-none bg-[linear-gradient(160deg,#c3b6fa,#9fccfa_55%,#7fd0f5)] dark:bg-[linear-gradient(160deg,#7f5ce0,#5a7fe0_55%,#38a8e6)]'>
+    <div className='relative size-full select-none bg-primary'>
       <svg
         aria-label='Portrait of Anirudh Sriram'
         className='pointer-events-none relative size-full'

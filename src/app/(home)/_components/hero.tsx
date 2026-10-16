@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { AskSimbaButton } from '@/components/features/assistant/ask-simba-button'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { buttonVariants } from '@/components/ui/button'
@@ -22,7 +21,7 @@ const Hero = () => (
     />
     <ViewAnimation delay={0.05}>
       <div className='mb-5 flex items-center gap-4 sm:mb-6 sm:gap-5'>
-        <div className='size-14 shrink-0 overflow-hidden rounded-lg border border-foreground/10 sm:size-[4.25rem] sm:rounded-xl'>
+        <div className='size-14 shrink-0 overflow-hidden rounded-lg sm:size-[4.25rem] sm:rounded-xl'>
           <Portrait />
         </div>
         <h1 className='text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:text-[3.4rem]'>
@@ -53,14 +52,11 @@ const Hero = () => (
           className={buttonVariants({ size: 'lg', variant: 'default' })}
           href='/projects'
         >
-          Projects
+          Browse Projects
           <Icons.arrowRight className='icon-arrow-button size-4' />
         </Link>
       </ViewAnimation>
       <ViewAnimation className='flex' delay={0.2}>
-        <AskSimbaButton />
-      </ViewAnimation>
-      <ViewAnimation className='flex' delay={0.25}>
         <a
           aria-label='GitHub'
           className={buttonVariants({
