@@ -36,18 +36,19 @@ export function ExperienceRow({
       {experience.companyLogo ? (
         <Image
           alt=''
-          className='size-11 shrink-0 rounded-lg border border-border bg-background object-contain p-1'
-          height={44}
+          // As tall as the name and role beside it (28px and 24px lines)
+          className='size-13 shrink-0 rounded-lg border border-border bg-background object-contain p-1.5'
+          height={52}
           src={experience.companyLogo}
-          width={44}
+          width={52}
         />
       ) : (
-        <span className='size-11 shrink-0 rounded-lg bg-muted' />
+        <span className='size-13 shrink-0 rounded-lg bg-muted' />
       )}
 
       <div className='flex min-w-0 flex-col gap-3'>
         <div>
-          <h3 className='flex items-center gap-2 font-medium text-lg'>
+          <h3 className='flex items-center gap-3 font-medium text-lg'>
             {experience.companyWebsite ? (
               <PreviewLink
                 className='transition-colors hover:text-muted-foreground'
@@ -95,12 +96,13 @@ export function ExperienceRow({
 
 function NowBadge() {
   return (
-    <span className='inline-flex items-center gap-1.5 font-mono font-normal text-emerald-600 text-xs dark:text-emerald-400'>
-      <span aria-hidden className='relative flex size-1.5'>
-        <span className='absolute inline-flex size-full animate-ping rounded-full bg-emerald-500 opacity-60 motion-reduce:animate-none' />
-        <span className='relative inline-flex size-1.5 rounded-full bg-emerald-500' />
-      </span>
-      now
+    <span
+      aria-label='Current role'
+      className='relative flex items-center justify-center'
+      role='img'
+    >
+      <span className='absolute inline-flex size-3 animate-ping rounded-full bg-primary opacity-40 motion-reduce:animate-none' />
+      <span className='relative inline-flex size-2 rounded-full bg-primary' />
     </span>
   )
 }

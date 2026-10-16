@@ -196,12 +196,16 @@ export const PromptInputSubmit = ({
   ...props
 }: PromptInputSubmitProps) => {
   const isBusy = status === 'submitted' || status === 'streaming'
+  // Stop takes the send button's place in the same filled style, so it reads
+  // as the main action and not as another outlined tool
+  const filled =
+    'border-primary bg-primary text-primary-foreground hover:bg-primary/80 data-[disabled]:bg-primary data-[disabled]:opacity-50'
 
   if (isBusy && onStop) {
     return (
       <PromptInputButton
         aria-label='Stop generating'
-        className={cn('[&_svg]:size-3.5', className)}
+        className={cn(filled, '[&_svg]:size-3', className)}
         onClick={onStop}
         {...props}
       >
@@ -213,10 +217,7 @@ export const PromptInputSubmit = ({
   return (
     <PromptInputButton
       aria-label='Send message'
-      className={cn(
-        'border-primary bg-primary text-primary-foreground hover:bg-primary/80 data-[disabled]:bg-primary data-[disabled]:opacity-50',
-        className
-      )}
+      className={cn(filled, className)}
       type='submit'
       {...props}
     >

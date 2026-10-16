@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { ContactPageJsonLd } from '@/components/json-ld'
+import { SectionHeader } from '@/components/layout/sections/header'
 import {
   SplitSection,
   SplitSectionContent,
@@ -15,15 +16,30 @@ import { Hero } from './_components/hero'
 export default function Contact(): React.ReactElement {
   return (
     <Wrapper>
+      <Hero />
       <SplitSection>
-        <SplitSectionSidebar className='px-6 py-14'>
-          <ViewAnimation>
-            <Hero />
-          </ViewAnimation>
+        <SplitSectionSidebar>
+          <SectionHeader
+            align='left'
+            description={
+              <>
+                Or email{' '}
+                <a
+                  className='link-underline'
+                  href='mailto:hello@techwithanirudh.com'
+                >
+                  hello@techwithanirudh.com
+                </a>
+                .
+              </>
+            }
+            sticky
+            title='Message'
+          />
         </SplitSectionSidebar>
 
-        <SplitSectionContent className='flex w-full items-center px-6 py-14'>
-          <ViewAnimation className='w-full' delay={0.1}>
+        <SplitSectionContent className='px-6 py-8'>
+          <ViewAnimation delay={0.1}>
             <ContactForm />
           </ViewAnimation>
         </SplitSectionContent>

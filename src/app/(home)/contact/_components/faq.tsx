@@ -46,7 +46,8 @@ export const FAQ = () => (
             Still curious? <AskSimbaLink />, he's read everything on this site.
           </>
         }
-        title='Frequently Asked Questions'
+        sticky
+        title='FAQ'
       />
     </SplitSectionSidebar>
 
