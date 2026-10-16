@@ -30,7 +30,7 @@ export function GuestbookBand({
       )}
       sectionClassName='border-border border-b border-dashed'
     >
-      <p className='flex -rotate-1 items-center gap-3 text-balance bg-background px-4 py-1 font-hand text-foreground/75 text-xl leading-snug sm:text-2xl'>
+      <p className='flex -rotate-1 items-center gap-3 text-balance font-hand text-foreground/75 text-xl leading-snug sm:text-2xl'>
         <Icons.pawPrint
           aria-hidden
           className='size-5 shrink-0 text-primary max-sm:hidden'
@@ -46,7 +46,7 @@ export function GuestbookBand({
         </span>
         <Icons.pawPrint
           aria-hidden
-          className='size-5 shrink-0 text-primary max-sm:hidden'
+          className='size-5 shrink-0 -scale-x-100 text-primary max-sm:hidden'
         />
       </p>
     </Section>

@@ -63,7 +63,9 @@ const Hero = () => (
             aria-label={social.name}
             className={cn(
               buttonVariants({ size: 'icon-sm', variant: 'outline' }),
-              'text-muted-foreground hover:-translate-y-0.5 hover:text-foreground dark:bg-background dark:ring-white/10'
+              // Only the icon moves, so the hit area stays put and hover can't flicker
+              'text-muted-foreground hover:text-foreground dark:bg-background dark:ring-white/10',
+              '[&_svg]:transition-transform [&_svg]:duration-200 [&_svg]:ease-out hover:[&_svg]:-rotate-8 hover:[&_svg]:scale-115 motion-reduce:[&_svg]:transition-none'
             )}
             href={social.url}
             key={social.name}
