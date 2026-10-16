@@ -47,9 +47,11 @@ const BlurImage = (props: ImageProps) => {
           isLoading && 'scale-[1.02] blur-xl grayscale',
           imageClassName
         )}
-        loading={lazy ? 'lazy' : undefined}
+        // `priority` is deprecated; eager plus high fetch priority covers
+        // above the fold images without preloading every LCP candidate
+        fetchPriority={lazy ? undefined : 'high'}
+        loading={lazy ? 'lazy' : 'eager'}
         onLoad={() => setLoaded(true)}
-        priority={!lazy}
         quality={IMAGE_QUALITY}
         ref={imageRef}
         src={src}
