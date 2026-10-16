@@ -54,7 +54,10 @@ export default function Story(): React.ReactElement {
                 </h3>
               </div>
             </div>
-            <ViewAnimation className='space-y-3 text-pretty bg-background px-4 pt-2 pb-4 text-muted-foreground sm:pt-4'>
+            <ViewAnimation
+              className='space-y-3 text-pretty bg-background px-4 pt-2 pb-4 text-muted-foreground sm:pt-4'
+              delay={0.05 * index}
+            >
               {chapter.body.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
