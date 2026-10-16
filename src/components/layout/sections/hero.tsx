@@ -1,27 +1,7 @@
-import { cva, type VariantProps } from 'class-variance-authority'
 import { Children, type ReactNode } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import { Section } from './index'
-
-const heroVariants = cva('flex flex-col', {
-  defaultVariants: {
-    align: 'center',
-    variant: 'default',
-  },
-  variants: {
-    align: {
-      center: 'items-start justify-center sm:items-center',
-      end: 'items-start justify-center sm:items-end',
-      start: 'items-start justify-center sm:items-start',
-    },
-    variant: {
-      compact: 'gap-4 py-6 lg:py-12 lg:px-2',
-      default:
-        'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
-    },
-  },
-})
 
 interface HeroProps {
   caption?: string | ReactNode | null
@@ -33,6 +13,11 @@ interface HeroProps {
   title: string | ReactNode
 }
 
+// The blue full stop that ends page titles, like the home hero's name
+export const TitleDot = () => <span className='text-primary'>.</span>
+
+// The one page header: a plain left aligned title with the description under
+// it. Plain string titles get the blue full stop on their own.
 export const HeroSection = ({
   image,
   caption,
@@ -41,13 +26,16 @@ export const HeroSection = ({
   children,
   className,
   sectionClassName,
-  variant,
-  align,
-}: HeroProps & VariantProps<typeof heroVariants>) => (
+}: HeroProps) => (
   <Section className={cn('px-6 sm:p-4', sectionClassName)}>
-    <div className={cn(heroVariants({ align, className, variant }))}>
+    <div
+      className={cn(
+        'flex flex-col items-start justify-center gap-4 py-6 lg:px-2 lg:py-12',
+        className
+      )}
+    >
       {image && <ViewAnimation>{image}</ViewAnimation>}
-      <div className='flex flex-col gap-4 sm:items-center'>
+      <div className='flex w-full flex-col gap-4'>
         {caption && (
           <ViewAnimation>
             <small className='block text-balance text-muted-foreground text-sm sm:text-base'>
@@ -56,26 +44,14 @@ export const HeroSection = ({
           </ViewAnimation>
         )}
         <ViewAnimation delay={0.1}>
-          <h1
-            className={cn(
-              'typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter',
-              'sm:text-center sm:text-4xl sm:leading-tight',
-              'md:text-5xl md:leading-tight',
-              variant === 'compact' && 'text-left sm:text-left'
-            )}
-          >
+          <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight'>
             {title}
+            {typeof title === 'string' && <TitleDot />}
           </h1>
         </ViewAnimation>
         {description && (
           <ViewAnimation delay={0.15}>
-            <p
-              className={cn(
-                'text-pretty text-muted-foreground text-sm sm:text-base',
-                variant === 'compact' &&
-                  'text-left text-lg leading-relaxed tracking-tight'
-              )}
-            >
+            <p className='text-pretty text-lg text-muted-foreground leading-relaxed tracking-tight'>
               {description}
             </p>
           </ViewAnimation>

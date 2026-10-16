@@ -1,8 +1,11 @@
 import { ImageResponse } from '@takumi-rs/image-response'
-import { generate } from '@/app/banner.png/og'
+import { ogCoverSize, ogImageSize, PageImage } from '@/app/og/_lib/template'
 import { clampOgParams } from '@/lib/metadata'
+import { getCoverDataUrl, getOgFonts } from '@/lib/og'
 
-export const GET = (request: Request): ImageResponse | Response => {
+export const GET = async (
+  request: Request
+): Promise<ImageResponse | Response> => {
   const { searchParams } = new URL(request.url)
   const rawTitle = searchParams.get('title')
 
@@ -15,12 +18,19 @@ export const GET = (request: Request): ImageResponse | Response => {
     searchParams.get('description') ?? undefined
   )
 
-  return new ImageResponse(generate({ subtitle: description, title }), {
-    format: 'webp',
-    headers: {
-      'Cache-Control': 'public, max-age=86400, s-maxage=31536000, immutable',
-    },
-    height: 630,
-    width: 1200,
-  })
+  return new ImageResponse(
+    <PageImage
+      coverSrc={getCoverDataUrl(title, ogCoverSize)}
+      description={description}
+      title={title}
+    />,
+    {
+      fonts: await getOgFonts(),
+      format: 'webp',
+      headers: {
+        'Cache-Control': 'public, max-age=86400, s-maxage=31536000, immutable',
+      },
+      ...ogImageSize,
+    }
+  )
 }

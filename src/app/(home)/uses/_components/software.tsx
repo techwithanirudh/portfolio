@@ -1,13 +1,14 @@
 import { Icons } from '@/components/icons/icons'
-import { PreviewLink } from '@/components/preview-link'
 import type { SoftwareItem } from '@/types'
 import { Logo } from './logo'
 
 function AppIcon({ name, url, logo, featured }: SoftwareItem) {
   return (
-    <PreviewLink
+    <a
       className='group flex flex-col items-center gap-2 bg-card/50 p-4 text-center no-underline transition-colors hover:bg-card/80 sm:gap-3 sm:p-6'
       href={url}
+      rel='noopener noreferrer'
+      target='_blank'
     >
       <div className='relative transition-transform duration-300 will-change-transform group-hover:-translate-y-1 group-hover:scale-105'>
         <div
@@ -25,7 +26,7 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
         )}
       </div>
       <span className='text-muted-foreground text-sm'>{name}</span>
-    </PreviewLink>
+    </a>
   )
 }
 

@@ -36,26 +36,3 @@ export const sprite = {
   sheet: [2160, 2160],
   src: '/assets/clippy/rover.png',
 } as const
-
-export const moodNames = [
-  'greet',
-  'celebrate',
-  'think',
-  'surprised',
-  'attention',
-  'write',
-  'search',
-  'rest',
-] as const
-export type MoodName = (typeof moodNames)[number]
-
-export const moodAnimations: Record<MoodName, string> = {
-  attention: 'GetAttention',
-  celebrate: 'Congratulate',
-  greet: 'Greet',
-  rest: 'RestPose',
-  search: 'Searching',
-  surprised: 'Surprised',
-  think: 'Thinking',
-  write: 'Writing',
-}

@@ -8,35 +8,35 @@ export function Coding() {
         <p className='text-muted-foreground'>
           I use{' '}
           <PreviewLink
-            className='font-medium text-primary hover:underline'
+            className='link-underline'
             href='https://code.visualstudio.com'
           >
             Visual Studio Code
           </PreviewLink>{' '}
           as my primary editor with the{' '}
           <PreviewLink
-            className='font-medium text-primary hover:underline'
+            className='link-underline'
             href='https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme'
           >
             Cursor theme
-          </PreviewLink>{' '}
+          </PreviewLink>
           ,{' '}
           <PreviewLink
-            className='font-medium text-primary hover:underline'
+            className='link-underline'
             href='https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style'
           >
             Custom UI Style
           </PreviewLink>{' '}
           tweaks, and the{' '}
           <PreviewLink
-            className='font-medium text-primary hover:underline'
+            className='link-underline'
             href='https://www.jetbrains.com/lp/mono/'
           >
             JetBrains Mono
           </PreviewLink>{' '}
           font with ligatures enabled. If you want the config, it lives in{' '}
           <PreviewLink
-            className='font-medium text-primary hover:underline'
+            className='link-underline'
             href='https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json'
           >
             my dotfiles

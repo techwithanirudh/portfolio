@@ -2,11 +2,11 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { isToolUIPart } from 'ai'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
-import { animations, moodAnimations } from './constants'
-import { type MascotAgent, useMascot } from './provider'
+import { animations } from './constants'
+import type { MascotAgent } from './provider'
 import { playAnimation } from './utils'
 
 export const playSubmitAnimation = (agent: MascotAgent | undefined) => {
@@ -59,40 +59,10 @@ export function useMascotPanel({
       return
     }
     const toolPart = (messages.at(-1)?.parts ?? []).find(isToolUIPart)
-    if (
-      !toolPart ||
-      toolPart.type === 'tool-animate' ||
-      lastTool.current === toolPart.type
-    ) {
+    if (!toolPart || lastTool.current === toolPart.type) {
       return
     }
     lastTool.current = toolPart.type
     playAnimation(agent, animations.tool, { interrupt: true })
   })
-}
-
-export function useMascotTools(messages: MyUIMessage[]) {
-  const { agent } = useMascot()
-  const handled = useRef(new Set<string>())
-
-  useEffect(() => {
-    if (!agent) {
-      return
-    }
-    const part = (messages.at(-1)?.parts ?? []).find(
-      (item) => item.type === 'tool-animate'
-    )
-    if (part?.state !== 'output-available') {
-      return
-    }
-    if (handled.current.has(part.toolCallId)) {
-      return
-    }
-    handled.current.add(part.toolCallId)
-
-    const mood = part.input?.mood
-    if (mood) {
-      playAnimation(agent, moodAnimations[mood], { interrupt: true })
-    }
-  }, [messages, agent])
 }

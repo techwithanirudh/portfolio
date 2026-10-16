@@ -23,7 +23,10 @@ export const Header = ({ page, tags }: HeaderProps) => {
   const formattedDate = formatPostDate(page.data.date)
 
   return (
-    <Section>
+    // `isolate` keeps the card's z-indexed, blended and composited layers in
+    // one stacking context of its own, so none of them can rise past the
+    // sticky site header in the page's root stacking context
+    <Section className='isolate'>
       <FrameDecoration />
       <div className='relative h-[280px] overflow-clip md:h-[420px] lg:h-[600px]'>
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>

@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import { PreviewLink } from '@/components/preview-link'
 import { cn } from '@/lib/utils'
 import type { HardwareItem } from '@/types'
 
@@ -40,9 +39,14 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
   )
 
   return url ? (
-    <PreviewLink className={className} href={url}>
+    <a
+      className={className}
+      href={url}
+      rel='noopener noreferrer'
+      target='_blank'
+    >
       {content}
-    </PreviewLink>
+    </a>
   ) : (
     <div className={className}>{content}</div>
   )

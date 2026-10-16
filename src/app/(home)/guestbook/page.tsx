@@ -3,6 +3,7 @@ import { unstable_rethrow } from 'next/navigation'
 import { Suspense } from 'react'
 import { WebPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
+import { TitleDot } from '@/components/layout/sections/hero'
 import {
   SplitSection,
   SplitSectionContent,
@@ -57,7 +58,12 @@ export default function GuestbookPage() {
           <SplitSectionHeader
             as='h1'
             description='Share a quick hello, a thought about the work, or a suggestion.'
-            title='Guestbook'
+            title={
+              <>
+                Guestbook
+                <TitleDot />
+              </>
+            }
           />
         </SplitSectionSidebar>
 
@@ -75,7 +81,8 @@ export default function GuestbookPage() {
           <h2 className='font-medium text-xl'>Recent Entries</h2>
         </ViewAnimation>
       </Section>
-      <Section>
+      {/* Takes the rest of the screen and the entries scroll inside it */}
+      <Section fill>
         <Suspense fallback={<GuestbookEntriesSkeleton />}>
           <GuestbookEntriesSection />
         </Suspense>

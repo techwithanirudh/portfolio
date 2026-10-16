@@ -1,4 +1,5 @@
 import { SectionHeader } from '@/components/layout/sections/header'
+import { TitleDot } from '@/components/layout/sections/hero'
 import {
   Tooltip,
   TooltipContent,
@@ -13,7 +14,12 @@ export const Hero = () => (
       align='left'
       as='h1'
       description="Have a question or want to connect? Send me a message and I'll reply within a week."
-      title='Contact Me'
+      title={
+        <>
+          Contact Me
+          <TitleDot />
+        </>
+      }
     />
     <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>
       {socials.map((social, index) => (

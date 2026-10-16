@@ -116,3 +116,20 @@ SOFTWARE.
 https://github.com/braydoncoyer/braydoncoyer.dev. About timeline, home layout and related
 components are adapted from this repo. The repo has no license file, so this is used with
 the site owner's decision and credit, not under MIT. Each adapted file names its source.
+
+Copyright (c) Braydon Coyer
+
+- About page journey timeline: the scroll driven track and glowing dot from
+  `app/components/AboutTrackPattern.tsx`, the photo slot from `app/components/ShadowBox.tsx`
+  and the alternating chapter layout from `app/about/page.tsx` (master branch), ported to
+  `src/app/(home)/about/_components/story-track.tsx`, `shadow-box.tsx` and `story.tsx`.
+
+## Geist
+
+https://github.com/vercel/geist-font. The Geist latin and latin-ext
+subsets in `src/app/og/_fonts/`, used to set type in the OG images.
+
+Copyright 2024 The Geist Project Authors (https://github.com/vercel/geist-font.git)
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+The full license text is available at https://openfontlicense.org.

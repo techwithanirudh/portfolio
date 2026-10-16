@@ -22,6 +22,16 @@ interface ContributionsProps {
   contributions: Promise<Activity[]>
 }
 
+// Steps of the primary color instead of GitHub green, so the graph follows the
+// site palette in both themes; the legend uses the same ramp
+const LEVELS = cn(
+  'data-[level="0"]:fill-foreground/5',
+  'data-[level="1"]:fill-primary/25',
+  'data-[level="2"]:fill-primary/50',
+  'data-[level="3"]:fill-primary/75',
+  'data-[level="4"]:fill-primary'
+)
+
 interface HoveredDay {
   count: number
   date: string
@@ -81,13 +91,7 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
             {({ activity, dayIndex, weekIndex }) => (
               <ContributionGraphBlock
                 activity={activity}
-                className={cn(
-                  'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-                  'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-                  'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-                  'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
-                  'cursor-pointer'
-                )}
+                className={cn(LEVELS, 'cursor-pointer')}
                 dayIndex={dayIndex}
                 weekIndex={weekIndex}
               />
@@ -124,16 +128,15 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
                   className='group relative flex h-3 w-3 items-center justify-center'
                   data-level={level}
                 >
-                  <div
-                    className={cn(
-                      'h-full w-full rounded-xs border border-border',
-                      level === 0 && 'bg-[#eeeeee] dark:bg-[#262626]',
-                      level === 1 && 'bg-[#9be9a8] dark:bg-[#0e4429]',
-                      level === 2 && 'bg-[#40c463] dark:bg-[#006d32]',
-                      level === 3 && 'bg-[#30a14e] dark:bg-[#26a641]',
-                      level === 4 && 'bg-[#216e39] dark:bg-[#39d353]'
-                    )}
-                  />
+                  <svg aria-hidden className='size-full' viewBox='0 0 12 12'>
+                    <rect
+                      className={LEVELS}
+                      data-level={level}
+                      height={12}
+                      rx={2}
+                      width={12}
+                    />
+                  </svg>
                   <span className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'>
                     Level {level}
                   </span>

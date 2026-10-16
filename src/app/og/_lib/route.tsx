@@ -1,29 +1,23 @@
 import { ImageResponse } from '@takumi-rs/image-response'
-import { ogImageSize, PageImage } from '@/app/og/_lib/template'
+import { ogCoverSize, ogImageSize, PostImage } from '@/app/og/_lib/template'
 import { getPageImage, type OgCollection } from '@/lib/metadata'
-import { getLocalImageDataUrl } from '@/lib/og'
+import { getCoverDataUrl, getOgFonts, getPortraitDataUrl } from '@/lib/og'
 
 interface OgPage {
-  data: { description?: string; image?: string; title?: string }
+  data: { date?: Date; title?: string }
   slugs: string[]
 }
 
 interface OgRouteOptions<Page extends OgPage> {
   collection: OgCollection
-  defaultDescription: string
   getPage: (slugs: string[]) => Page | undefined
   getPages: () => Page[]
-  label: string
-  withBackgroundImage?: boolean
 }
 
 export function createOgRoute<Page extends OgPage>({
   collection,
-  defaultDescription,
   getPage,
   getPages,
-  label,
-  withBackgroundImage = false,
 }: OgRouteOptions<Page>) {
   const GET = async (
     _request: Request,
@@ -36,18 +30,20 @@ export function createOgRoute<Page extends OgPage>({
       return new Response('Not Found', { status: 404 })
     }
 
-    const backgroundImage = withBackgroundImage
-      ? await getLocalImageDataUrl(page.data.image)
-      : null
+    const [fonts, portraitSrc] = await Promise.all([
+      getOgFonts(),
+      getPortraitDataUrl(),
+    ])
 
     return new ImageResponse(
-      <PageImage
-        backgroundImage={backgroundImage}
-        description={page.data.description || defaultDescription}
-        label={label}
+      <PostImage
+        // Seeded by the slug, so the card shares the post's cover
+        coverSrc={getCoverDataUrl(page.slugs.join('/'), ogCoverSize)}
+        date={page.data.date}
+        portraitSrc={portraitSrc}
         title={page.data.title || 'Untitled'}
       />,
-      { format: 'webp', ...ogImageSize }
+      { fonts, format: 'webp', ...ogImageSize }
     )
   }
 

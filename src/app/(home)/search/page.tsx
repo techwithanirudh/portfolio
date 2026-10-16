@@ -11,7 +11,7 @@ import { SearchClient } from './_components/search-client'
 export default function Page() {
   return (
     <Wrapper>
-      <HeroSection align='center' title='Search'>
+      <HeroSection title='Search'>
         <BackButton />
       </HeroSection>
       <Suspense

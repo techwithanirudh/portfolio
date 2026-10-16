@@ -170,7 +170,7 @@ html > body[data-scroll-locked] {
 
 @layer base {
   a {
-    @apply [overflow-wrap:anywhere] decoration-wavy;
+    @apply [overflow-wrap:anywhere];
   }
 
   button:not(:disabled),
@@ -186,8 +186,9 @@ html > body[data-scroll-locked] {
   @apply 2xl:max-w-[1400px];
 }
 
+/* The one style for links inside running text (prose, sentences, markdown) */
 @utility link-underline {
-  @apply underline decoration-primary/60 decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
+  @apply text-foreground underline decoration-primary/60 decoration-solid decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
 @utility step {
@@ -202,7 +203,7 @@ html > body[data-scroll-locked] {
 
 @utility prose-content {
   @apply prose-headings:font-medium prose-headings:tracking-tight prose-headings:text-pretty md:prose-headings:text-balance prose-h2:text-xl prose-h3:text-lg;
-  @apply prose-a:font-normal prose-a:text-foreground prose-a:link-underline;
+  @apply prose-a:font-normal prose-a:link-underline;
   @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-1 prose-code:py-px prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
   @apply prose-strong:font-medium;
   @apply prose-hr:border-border;

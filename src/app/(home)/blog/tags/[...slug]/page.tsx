@@ -50,7 +50,6 @@ const Header = ({
   endIndex: number
 }) => (
   <HeroSection
-    align='start'
     title={
       <div className='flex items-center justify-between gap-4'>
         <span className='flex items-center gap-2'>
@@ -64,7 +63,6 @@ const Header = ({
         </span>
       </div>
     }
-    variant='compact'
   />
 )
 

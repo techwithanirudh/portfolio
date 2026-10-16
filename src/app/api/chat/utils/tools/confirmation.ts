@@ -1,5 +1,4 @@
 export const toolConfirmationMap = {
-  animate: false,
   getPageContent: false,
   searchDocs: false,
   showContactForm: true,

@@ -29,6 +29,8 @@ const stack = Object.entries(
   labels: (items ?? []).map((item) => item.label),
 }))
 
+const linkClass = 'underline-offset-2 hover:underline print:no-underline'
+
 const ResumeSection = ({
   children,
   title,
@@ -50,21 +52,26 @@ export default function ResumePage() {
 
   return (
     <main
-      className='min-h-dvh bg-neutral-100 px-4 pt-8 pb-28 text-neutral-900 [color-scheme:light] md:pb-8 print:bg-white print:p-0'
+      className='min-h-dvh bg-neutral-100 pb-28 text-neutral-900 [color-scheme:light] md:pb-8 print:min-h-0 print:bg-white print:p-[0.55in]'
       data-resume
     >
-      <div className='mx-auto mb-4 flex max-w-[210mm] items-center justify-between print:hidden'>
-        <Link
-          className='group inline-flex items-center gap-1.5 font-mono text-neutral-600 text-xs transition-colors hover:text-neutral-900'
-          href='/about'
-        >
-          <Icons.arrowLeft className='size-3.5' />
-          Back to site
-        </Link>
-        <PrintButton />
+      <div
+        className='sticky top-0 z-10 mb-4 border-transparent border-b bg-neutral-100/95 px-4 py-3 backdrop-blur-md print:hidden'
+        data-resume-bar
+      >
+        <div className='mx-auto flex max-w-[210mm] items-center justify-between'>
+          <Link
+            className='group inline-flex items-center gap-1.5 font-mono text-neutral-600 text-xs transition-colors hover:text-neutral-900'
+            href='/about'
+          >
+            <Icons.arrowLeft className='size-3.5' />
+            Back to site
+          </Link>
+          <PrintButton />
+        </div>
       </div>
 
-      <article className='mx-auto flex max-w-[210mm] flex-col gap-6 bg-white p-6 text-[13px] leading-relaxed shadow-sm sm:p-[14mm] print:max-w-none print:p-0 print:shadow-none'>
+      <article className='mx-auto flex w-[calc(100%-2rem)] max-w-[210mm] flex-col gap-6 bg-white p-6 text-[13px] leading-relaxed shadow-sm sm:p-[14mm] print:w-full print:max-w-none print:border-0 print:p-0 print:shadow-none'>
         <header className='flex flex-col gap-2'>
           <div className='flex flex-wrap items-baseline justify-between gap-x-4'>
             <h1 className='font-heading font-medium text-3xl tracking-tight'>
@@ -77,11 +84,15 @@ export default function ResumePage() {
           <p className='text-neutral-700'>{description}</p>
           <ul className='flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-neutral-600'>
             <li>
-              <a href={baseUrl.toString()}>{prettyUrl(baseUrl.toString())}</a>
+              <a className={linkClass} href={baseUrl.toString()}>
+                {prettyUrl(baseUrl.toString())}
+              </a>
             </li>
             {links.map((social) => (
               <li key={social.name}>
-                <a href={social.url}>{prettyUrl(social.url)}</a>
+                <a className={linkClass} href={social.url}>
+                  {prettyUrl(social.url)}
+                </a>
               </li>
             ))}
           </ul>
@@ -99,7 +110,10 @@ export default function ResumePage() {
                     <h3 className='font-medium'>
                       {position.title} ·{' '}
                       {experience.companyWebsite ? (
-                        <a href={experience.companyWebsite}>
+                        <a
+                          className={linkClass}
+                          href={experience.companyWebsite}
+                        >
                           {experience.companyName}
                         </a>
                       ) : (
@@ -136,23 +150,30 @@ export default function ResumePage() {
 
         <ResumeSection title='Selected projects'>
           <ol className='grid gap-x-6 gap-y-3 sm:grid-cols-2 print:grid-cols-2'>
-            {projects.map((project) => (
-              <li className='min-w-0 break-inside-avoid' key={project.url}>
-                <div className='flex items-baseline justify-between gap-2'>
-                  <h3 className='font-medium'>
-                    <a href={new URL(project.url, baseUrl).toString()}>
-                      {project.data.title}
-                    </a>
-                  </h3>
-                  <span className='font-mono text-[11px] text-neutral-600 tabular-nums'>
-                    {new Date(project.data.date).getFullYear()}
-                  </span>
-                </div>
-                <p className='line-clamp-2 min-h-[2lh] text-neutral-700'>
-                  {project.data.description}
-                </p>
-              </li>
-            ))}
+            {projects.map((project) => {
+              const href = project.data.website ?? project.data.github
+              return (
+                <li className='min-w-0 break-inside-avoid' key={project.url}>
+                  <div className='flex items-baseline justify-between gap-2'>
+                    <h3 className='font-medium'>
+                      {href ? (
+                        <a className={linkClass} href={href}>
+                          {project.data.title}
+                        </a>
+                      ) : (
+                        project.data.title
+                      )}
+                    </h3>
+                    <span className='font-mono text-[11px] text-neutral-600 tabular-nums'>
+                      {new Date(project.data.date).getFullYear()}
+                    </span>
+                  </div>
+                  <p className='line-clamp-2 min-h-[2lh] text-neutral-700'>
+                    {project.data.description}
+                  </p>
+                </li>
+              )
+            })}
           </ol>
         </ResumeSection>
 

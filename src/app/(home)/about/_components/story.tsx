@@ -1,22 +1,31 @@
+// Journey timeline adapted from braydoncoyer.dev by Braydon Coyer (no license,
+// used with attribution): https://github.com/braydoncoyer/braydoncoyer.dev/blob/master/app/about/page.tsx
 import Image from 'next/image'
-import type { CSSProperties, ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { PreviewLink } from '@/components/preview-link'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
+import { ShadowBox } from './shadow-box'
+import { StoryTrack } from './story-track'
+
 interface Photo {
   alt: string
   caption: string
   /** Logos sit on white with some breathing room instead of filling the frame */
   contain?: boolean
+  /** Background behind a wide image shown whole instead of cropped */
+  letterbox?: string
   src: string
-  tilt: number
 }
 
 interface Chapter {
   body: ReactNode
+  /** Shown in the empty slot when there is no photo */
+  icon?: keyof typeof Icons
   id: string
   photo?: Photo
   title: string
@@ -38,12 +47,14 @@ const InlineLink = ({
 const chapters: Chapter[] = [
   {
     body: 'It started with Lego sets as a kid: building, breaking and rebuilding whatever I could think of. Nobody taught me, which is still how I learn most things.',
+    icon: 'wrench',
     id: 'tinkering',
     title: 'Tinkering first',
     when: 'the beginning',
   },
   {
     body: 'The bricks turned into code. Python and some early AI experiments first, then websites and apps, and plenty of bugs that taught me more than any tutorial did.',
+    icon: 'codeXml',
     id: 'code',
     title: 'Then code',
     when: 'python, then the web',
@@ -64,7 +75,6 @@ const chapters: Chapter[] = [
       caption: 'the paper',
       contain: true,
       src: '/images/companies/bosch.png',
-      tilt: -2,
     },
     title: 'A paper with Bosch',
     when: '2022',
@@ -89,8 +99,8 @@ const chapters: Chapter[] = [
     photo: {
       alt: 'Transcript Seeker',
       caption: 'transcript seeker',
+      letterbox: 'bg-[#2b2b2b]',
       src: '/images/projects/transcript_seeker/cover.png',
-      tilt: 3,
     },
     title: 'Shipping for others',
     when: '2024 to 2025',
@@ -110,7 +120,6 @@ const chapters: Chapter[] = [
       caption: 'quiver',
       contain: true,
       src: '/images/companies/quiverai.png',
-      tilt: -2,
     },
     title: 'These days',
     when: 'now',
@@ -122,7 +131,6 @@ const chapters: Chapter[] = [
       alt: 'Simba the dog',
       caption: 'simba',
       src: '/images/profile.png',
-      tilt: 3,
     },
     title: 'Off the keyboard',
     when: 'always',
@@ -140,71 +148,106 @@ export default function Story(): React.ReactElement {
           title='Story'
         />
 
-        <div className='divide-y divide-dashed divide-border border-border border-t border-dashed'>
-          {chapters.map((chapter, index) => (
-            <ViewAnimation delay={0.05 * index} key={chapter.id}>
-              <ChapterRow chapter={chapter} />
-            </ViewAnimation>
-          ))}
-        </div>
+        <StoryTrack className='border-border border-t border-dashed px-6 sm:px-10'>
+          <ol>
+            {chapters.map((chapter, index) => (
+              <ChapterRow chapter={chapter} index={index} key={chapter.id} />
+            ))}
+          </ol>
+        </StoryTrack>
       </div>
     </Section>
   )
 }
 
-// Name and when on the left, the story in the middle, a polaroid on the right
-function ChapterRow({ chapter }: { chapter: Chapter }) {
+// The original alternates photo and text across two columns with the track
+// running between them on the photo side. On phones the track hugs the left
+// edge and the photo sits above the text
+function ChapterRow({ chapter, index }: { chapter: Chapter; index: number }) {
+  const photoLeft = index % 2 === 0
+
   return (
-    <article className='group/chapter grid md:grid-cols-[16rem_1fr_13rem] md:divide-x md:divide-dashed md:divide-border'>
-      <div className='px-6 pt-8 md:py-10'>
-        <h3 className='font-medium text-lg'>{chapter.title}</h3>
-        <p className='mt-1.5 font-mono text-muted-foreground text-xs'>
+    <li className='relative grid grid-cols-1 gap-10 py-14 pl-10 sm:pl-14 lg:grid-cols-2 lg:items-center lg:gap-0 lg:py-20 lg:pl-0'>
+      <span
+        aria-hidden
+        className={cn(
+          'absolute inset-y-0 left-1.5 sm:left-2.5',
+          photoLeft
+            ? 'lg:left-[calc(50%-5.5rem)]'
+            : 'lg:left-[calc(50%+5.5rem)]'
+        )}
+        data-track-lane
+      />
+
+      <ViewAnimation
+        className={cn(
+          'lg:flex lg:justify-center',
+          photoLeft ? 'lg:order-1' : 'lg:order-2',
+          !chapter.photo && 'max-lg:hidden'
+        )}
+      >
+        <Snapshot chapter={chapter} tilt={photoLeft ? -8 : 8} />
+      </ViewAnimation>
+
+      <ViewAnimation
+        className={cn(
+          'flex max-w-[60ch] flex-col',
+          photoLeft ? 'lg:order-2 lg:pl-8' : 'lg:order-1 lg:ml-auto lg:pr-8'
+        )}
+        delay={0.1}
+      >
+        <p className='mb-3 font-medium text-primary text-sm' data-track-marker>
           {chapter.when}
         </p>
-      </div>
-
-      <p className='text-pretty px-6 py-4 text-muted-foreground leading-relaxed sm:text-[1.05rem] md:py-10'>
-        {chapter.body}
-      </p>
-
-      {chapter.photo ? (
-        <div className='flex px-6 pb-10 md:items-center md:justify-center md:py-10'>
-          <Polaroid photo={chapter.photo} />
-        </div>
-      ) : (
-        <div aria-hidden className='bg-dashed max-md:hidden' />
-      )}
-    </article>
+        <h3 className='mb-5 text-balance font-medium text-2xl leading-tight tracking-tighter sm:text-3xl'>
+          {chapter.title}
+        </h3>
+        <p className='text-pretty text-base text-muted-foreground leading-8'>
+          {chapter.body}
+        </p>
+      </ViewAnimation>
+    </li>
   )
 }
 
-function Polaroid({ photo }: { photo: Photo }) {
+// A tilted photo resting in its slot, or the empty slot with an icon
+function Snapshot({ chapter, tilt }: { chapter: Chapter; tilt: number }) {
+  const { photo } = chapter
+
+  if (!photo) {
+    const Icon = chapter.icon ? Icons[chapter.icon] : null
+    return (
+      <ShadowBox height={278} width={188}>
+        {Icon ? <Icon className='size-8 text-muted-foreground/60' /> : null}
+      </ShadowBox>
+    )
+  }
+
   return (
-    <figure
-      className={cn(
-        'relative w-32 rotate-(--tilt) rounded-xs border border-border bg-card p-1.5 pb-6 shadow-black/10 shadow-lg',
-        'transition-transform duration-300 ease-out group-hover/chapter:translate-y-[-2px] group-hover/chapter:rotate-0',
-        'motion-reduce:transition-none dark:shadow-black/40'
-      )}
-      style={{ '--tilt': `${photo.tilt}deg` } as CSSProperties}
-    >
+    <div className='relative w-fit'>
+      <ShadowBox height={278} label={photo.caption} width={188} />
       <div
         className={cn(
-          'relative aspect-square overflow-hidden',
-          photo.contain && 'bg-white'
+          'absolute top-0 left-0 h-[270px] w-[180px] overflow-hidden rounded-lg shadow-black/15 shadow-lg dark:shadow-black/50',
+          'transition-transform duration-300 ease-out hover:rotate-0 motion-reduce:transition-none',
+          tilt < 0 ? '-rotate-8' : 'rotate-8',
+          photo.contain && 'bg-white',
+          photo.letterbox
         )}
       >
         <Image
           alt={photo.alt}
-          className={photo.contain ? 'object-contain p-6' : 'object-cover'}
+          className={cn(
+            photo.contain || photo.letterbox
+              ? 'object-contain'
+              : 'object-cover',
+            photo.contain && 'p-8'
+          )}
           fill
-          sizes='128px'
+          sizes='180px'
           src={photo.src}
         />
       </div>
-      <figcaption className='absolute inset-x-0 bottom-1 text-center font-hand text-base text-muted-foreground leading-none'>
-        {photo.caption}
-      </figcaption>
-    </figure>
+    </div>
   )
 }

@@ -8,7 +8,7 @@ import type { ExperienceItemType } from '@/types/experience'
 const markdownComponents: Components = {
   a: ({ children, href }) =>
     href ? (
-      <PreviewLink className='link-underline text-foreground' href={href}>
+      <PreviewLink className='link-underline' href={href}>
         {children}
       </PreviewLink>
     ) : (

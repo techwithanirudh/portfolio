@@ -56,7 +56,7 @@ export const MessageResponse = memo(
   ({ className, children, ...props }: MessageResponseProps) => (
     <div
       className={cn(
-        'prose min-w-0 text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
+        'prose prose-a:link-underline min-w-0 prose-a:font-normal text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0',
         className
       )}
       {...props}

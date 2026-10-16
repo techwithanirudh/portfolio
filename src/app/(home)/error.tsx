@@ -31,7 +31,7 @@ const ErrorPage = ({ error, retry }: ErrorPageProps) => {
           <p className='-mt-2 text-muted-foreground'>
             Please{' '}
             <Link
-              className='text-primary underline-offset-4 hover:underline'
+              className='link-underline'
               href={ISSUE_URL}
               rel='noopener noreferrer'
               target='_blank'

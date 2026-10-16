@@ -74,7 +74,7 @@ function GithubRepoFallback({
   return (
     <a
       className={cn(
-        'not-prose inline-flex items-center gap-1.5 text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         className
       )}
       href={href}
@@ -105,7 +105,7 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
           render={
             <a
               className={cn(
-                'not-prose inline-flex items-center gap-1.5 text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                 className
               )}
               href={details.url}

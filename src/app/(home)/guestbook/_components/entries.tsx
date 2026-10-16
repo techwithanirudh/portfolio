@@ -20,34 +20,35 @@ export const GuestbookEntries = ({
 }: GuestbookEntriesProps) => {
   if (entries.length === 0) {
     return (
-      <ScrollArea className='h-[32rem] w-full' data-lenis-prevent>
-        <div className='flex flex-col items-center gap-2 px-6 py-10 text-center'>
-          <Icons.mail className='size-6 text-muted-foreground' />
-          <p className='text-muted-foreground text-sm'>No messages yet.</p>
-        </div>
-      </ScrollArea>
+      <div className='flex min-h-0 flex-1 flex-col items-center justify-center gap-2 px-6 text-center'>
+        <Icons.mail className='size-6 text-muted-foreground' />
+        <p className='text-muted-foreground text-sm'>No messages yet.</p>
+      </div>
     )
   }
 
+  // Scrolls within the leftover screen height the fill section gives it
   return (
-    <ScrollArea className='h-[32rem] w-full' data-lenis-prevent>
-      <div className='divide-y divide-dashed divide-border'>
-        {entries.map((entry) => (
-          <GuestbookEntryCard
-            currentUserId={currentUserId}
-            entry={entry}
-            isAdmin={isAdmin}
-            isSignedIn={isSignedIn}
-            key={entry.id}
-          />
-        ))}
-      </div>
-    </ScrollArea>
+    <div className='min-h-0 flex-1'>
+      <ScrollArea className='h-full w-full' data-lenis-prevent>
+        <div className='divide-y divide-dashed divide-border'>
+          {entries.map((entry) => (
+            <GuestbookEntryCard
+              currentUserId={currentUserId}
+              entry={entry}
+              isAdmin={isAdmin}
+              isSignedIn={isSignedIn}
+              key={entry.id}
+            />
+          ))}
+        </div>
+      </ScrollArea>
+    </div>
   )
 }
 
 export const GuestbookEntriesError = () => (
-  <div className='flex h-[32rem] w-full flex-col items-center justify-center gap-2 px-6 text-center'>
+  <div className='flex min-h-0 flex-1 flex-col items-center justify-center gap-2 px-6 text-center'>
     <Icons.mail className='size-6 text-muted-foreground' />
     <p className='text-muted-foreground text-sm'>
       Couldn't load the entries right now. Try again in a bit.

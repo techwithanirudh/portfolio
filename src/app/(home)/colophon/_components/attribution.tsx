@@ -12,10 +12,7 @@ export const Attribution = () => (
       <p>I borrowed code and design ideas from these people.</p>
       <p>
         Some design ideas also come from{' '}
-        <PreviewLink
-          className='underline decoration-border underline-offset-4'
-          href='https://godly.website/'
-        >
+        <PreviewLink className='link-underline' href='https://godly.website/'>
           Godly
         </PreviewLink>
         .

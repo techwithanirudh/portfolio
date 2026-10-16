@@ -7,7 +7,7 @@ export const AskSimbaLink = () => {
 
   return (
     <button
-      className='cursor-pointer text-fd-primary transition-colors duration-300 hover:text-fd-primary/70'
+      className='link-underline cursor-pointer'
       onClick={() => setOpen(true)}
       type='button'
     >

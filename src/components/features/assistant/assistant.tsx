@@ -46,7 +46,6 @@ import { AvatarIcon } from '@/components/features/assistant/mascot/avatar-icon'
 import {
   playSubmitAnimation,
   useMascotPanel,
-  useMascotTools,
 } from '@/components/features/assistant/mascot/hooks'
 import {
   ContactForm,
@@ -511,7 +510,6 @@ function AssistantPanel() {
     open,
     status: chat.status,
   })
-  useMascotTools(chat.messages)
 
   // Non-modal so the page stays usable beside the panel on desktop. Pointer
   // dismissal is off because the backdrop (below lg) and the close button
