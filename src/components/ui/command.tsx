@@ -48,7 +48,7 @@ function CommandDialog({
     <Dialog {...props}>
       <DialogContent
         data-slot="command-dialog-content"
-        className="rounded-2xl bg-surface p-0 shadow-2xl outline-none animate-none! max-sm:top-16 max-sm:translate-y-0 sm:max-w-lg"
+        className="rounded-2xl bg-popover p-0 shadow-2xl outline-none animate-none! max-sm:top-16 max-sm:translate-y-0 sm:max-w-lg"
         showCloseButton={false}
         showOverlay={false}
       >

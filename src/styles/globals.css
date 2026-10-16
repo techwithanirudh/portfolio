@@ -46,8 +46,6 @@
   --color-destructive: hsl(0 84.2% 60.2%);
   --color-destructive-foreground: hsl(0 0% 98%);
 
-  --color-surface: var(--surface);
-  --color-surface-foreground: var(--surface-foreground);
   --color-border: var(--color-fd-border);
   --color-input: var(--color-fd-border);
   --color-ring: var(--color-fd-ring);
@@ -159,7 +157,6 @@ html > body[data-scroll-locked] {
 @theme static {
   --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 /* Fumadocs' light muted text sits at 4.35:1 on the background; a touch darker
@@ -168,14 +165,7 @@ html > body[data-scroll-locked] {
   --color-fd-muted-foreground: hsl(0, 0%, 40%);
 }
 
-:root {
-  --surface: oklch(0.985 0 0);
-  --surface-foreground: oklch(0.141 0.005 285.823);
-}
-
 .dark {
-  --surface: oklch(0.21 0.006 285.885);
-  --surface-foreground: oklch(0.985 0 0);
   --color-fd-ring: hsl(234, 100%, 83%);
   --color-fd-primary: hsl(234, 100%, 83%);
   --color-fd-primary-foreground: hsl(240, 7%, 11%);
@@ -367,67 +357,6 @@ html > body[data-scroll-locked] {
 
   .typography-body {
     max-width: var(--typography-body-width);
-  }
-}
-
-@layer components {
-  .footer {
-    --footer-text-size: clamp(3rem, 14rem, 14vw);
-    position: relative;
-
-    display: flex;
-    justify-content: center;
-    min-height: var(--footer-text-size);
-    overflow: clip;
-    color: var(--color-muted-foreground);
-  }
-
-  .footer-text {
-    position: absolute;
-    bottom: calc(-1 * var(--footer-text-size) / 1.6);
-    font-size: var(--footer-text-size);
-    font-weight: 900;
-    letter-spacing: 0;
-    opacity: 0.3;
-    text-rendering: geometricPrecision;
-  }
-
-  .footer-grid {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    flex: none;
-    overflow: visible;
-    background-color: transparent;
-    background-image: radial-gradient(transparent 1px, rgb(255, 255, 255) 1px);
-    background-size: 4px 4px;
-    opacity: 1;
-    backdrop-filter: blur(3px);
-    mask: linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgb(255, 255, 255, 0.6) 100%
-    );
-  }
-
-  .footer-gradient {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 0% 50%,
-      rgba(255, 255, 255, 0.5) 100%
-    );
-  }
-
-  .dark .footer-gradient {
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0) 0% 50%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
-  }
-
-  .dark .footer-grid {
-    background-image: radial-gradient(transparent 1px, rgb(0, 0, 0) 1px);
-    mask: linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0, 0.6) 100%);
   }
 }
 

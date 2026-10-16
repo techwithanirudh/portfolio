@@ -104,6 +104,7 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
           delay={120}
           render={
             <a
+              aria-label={linkLabel}
               className={cn(
                 'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                 className

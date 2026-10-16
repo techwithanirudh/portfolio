@@ -24,7 +24,9 @@ export const animations = {
   rest: 'RestPose',
   show: 'Show',
   submit: 'Books',
+  thinking: 'Thinking',
   tool: 'Searching',
+  writing: 'Writing',
 } as const
 
 export const sprite = {

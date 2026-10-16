@@ -25,7 +25,7 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
       }}
     >
       <div
-        className='relative flex flex-1 flex-col border-border border-dashed sm:border-b lg:after:pointer-events-none lg:after:sticky lg:after:bottom-0 lg:after:z-10 lg:after:mt-[-3rem] lg:after:h-24 lg:after:select-none lg:after:bg-linear-to-t lg:after:from-background lg:after:to-transparent lg:after:backdrop-blur-sm lg:after:[mask:linear-gradient(to_top,_rgba(0,_0,_0,_1)_0%,_rgba(0,_0,_0,_0)_100%)]'
+        className='relative flex flex-1 flex-col border-border border-dashed sm:border-b lg:after:pointer-events-none lg:after:sticky lg:after:bottom-0 lg:after:z-10 lg:after:mt-[-3rem] lg:after:h-24 lg:after:select-none lg:after:bg-linear-to-t lg:after:from-background lg:after:to-transparent lg:after:[mask:linear-gradient(to_top,_rgba(0,_0,_0,_1)_0%,_rgba(0,_0,_0,_0)_100%)]'
         id='main-content'
         tabIndex={-1}
       >

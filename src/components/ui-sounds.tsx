@@ -9,7 +9,6 @@ import {
   collapse,
   error,
   expand,
-  keyPress,
   pageEnter,
   send,
   tabSwitch,
@@ -21,27 +20,12 @@ import { playSound } from '@/lib/audio/preferences'
 
 const PRESS =
   'a[href], button:not([type="submit"]), [role="tab"], [role="switch"], [role="checkbox"], [aria-expanded]'
-const OPT_OUT = '[data-sound="off"]'
 const PRESS_OPT_OUT = '[data-sound="off"], [data-sound-press="off"]'
 const VALIDATION_DELAY = 120
 
 const jitter = (detune: number, volume: number): PlayOptions => ({
   jitter: { detune, volume },
 })
-
-const isTextField = (el: EventTarget | null): el is HTMLElement => {
-  if (!(el instanceof HTMLElement)) {
-    return false
-  }
-  return (
-    el.isContentEditable ||
-    el instanceof HTMLTextAreaElement ||
-    (el instanceof HTMLInputElement &&
-      ['text', 'search', 'email', 'url', 'tel', 'password', 'number'].includes(
-        el.type
-      ))
-  )
-}
 
 const playPress = (el: Element) => {
   // aria-expanded flips after the click handlers ran, so read it a tick later
@@ -141,32 +125,12 @@ export function UiSounds() {
       }
     }
 
-    const onKeyDown = (event: KeyboardEvent) => {
+    const onKeyDown = () => {
       onGesture()
-      if (
-        event.repeat ||
-        event.metaKey ||
-        event.ctrlKey ||
-        event.altKey ||
-        !isTextField(event.target) ||
-        event.target.closest(OPT_OUT)
-      ) {
-        return
-      }
-      if (event.key.length === 1 || event.key === 'Backspace') {
-        playSound(keyPress, jitter(120, 0.15))
-      } else if (
-        event.key === 'Enter' &&
-        !event.target.closest(PRESS_OPT_OUT)
-      ) {
-        playSound(click, jitter(40, 0.1))
-      }
     }
 
     document.addEventListener('pointerdown', onPointerDown, { passive: true })
     document.addEventListener('click', onClick, { passive: true })
-    // Captured so fields whose widgets stop propagation, like the command
-    // menu input, still click
     document.addEventListener('keydown', onKeyDown, {
       capture: true,
       passive: true,

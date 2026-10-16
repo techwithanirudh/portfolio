@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useEffectEvent, useRef } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
+import { Shimmer } from '@/components/ai-elements/shimmer'
 import { useAssistantContext } from '@/components/features/assistant/context'
 import { Icons } from '@/components/icons/icons'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
@@ -111,9 +112,8 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
 
   if (!output) {
     return (
-      <p className='flex items-center gap-2 text-muted-foreground text-xs'>
-        <Icons.pawPrint aria-hidden className='size-3.5' />
-        heading there...
+      <p className='text-muted-foreground text-sm'>
+        <Shimmer>{`taking you to ${part.input?.path ?? 'the page'}...`}</Shimmer>
       </p>
     )
   }
@@ -128,14 +128,11 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
   }
 
   return (
-    <p className='flex items-center gap-2 text-muted-foreground text-xs'>
-      <Icons.arrowUpRight aria-hidden className='size-3.5 text-primary' />
-      <span>
-        took you to{' '}
-        <Link className='link-underline text-foreground' href={output.href}>
-          {output.section ? `${output.title}, ${output.section}` : output.title}
-        </Link>
-      </span>
+    <p className='text-sm'>
+      took you to{' '}
+      <Link className='link-underline' href={output.href}>
+        {output.section ? `${output.title}, ${output.section}` : output.title}
+      </Link>
     </p>
   )
 }

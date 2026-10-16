@@ -24,6 +24,9 @@ export const MessagePending = () => (
   </div>
 )
 
+// These tools render their own progress row in the message body
+const toolsWithOwnStatus = new Set<keyof ChatTools>(['navigate'])
+
 const toolStatus = (toolName: keyof ChatTools) => {
   switch (toolName) {
     case 'searchDocs':
@@ -32,8 +35,6 @@ const toolStatus = (toolName: keyof ChatTools) => {
       return { Icon: Icons.link, label: 'Fetching a page' }
     case 'showContactForm':
       return { Icon: Icons.mail, label: 'Fetching contact form' }
-    case 'navigate':
-      return { Icon: Icons.arrowUpRight, label: 'Fetching the leash' }
     default:
       return {
         Icon: Icons.wrench,
@@ -97,7 +98,12 @@ export const MessageMetadata = ({
     )
   }
 
-  if (tool && inProgress && isStaticToolUIPart<ChatTools>(tool)) {
+  if (
+    tool &&
+    inProgress &&
+    isStaticToolUIPart<ChatTools>(tool) &&
+    !toolsWithOwnStatus.has(getStaticToolName(tool))
+  ) {
     const { Icon, label } = toolStatus(getStaticToolName(tool))
 
     return (

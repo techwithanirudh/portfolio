@@ -6,6 +6,7 @@ import {
   SplitSectionContent,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split'
+import { PreviewLink } from '@/components/preview-link'
 import { Prose } from '@/components/prose'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
@@ -31,16 +32,19 @@ export default function About(): React.ReactElement {
                 My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
                 Python was part of my early experiments. I build open-source
                 projects like{' '}
-                <Link className='whitespace-nowrap' href='/projects/ai_tutor'>
+                <PreviewLink
+                  className='whitespace-nowrap'
+                  href='/projects/ai_tutor'
+                >
                   AI Tutor
-                </Link>{' '}
+                </PreviewLink>{' '}
                 and{' '}
-                <Link
+                <PreviewLink
                   className='whitespace-nowrap'
                   href='/projects/coolify_tweaks'
                 >
                   Coolify Tweaks
-                </Link>
+                </PreviewLink>
                 .
               </p>
             </Prose>

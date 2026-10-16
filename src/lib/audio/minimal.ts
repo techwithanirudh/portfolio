@@ -41,12 +41,6 @@ export const deleteSound: SoundDefinition = {
   source: { frequency: { end: 250, start: 500 }, type: 'sine' },
 }
 
-export const deselect: SoundDefinition = {
-  envelope: { attack: 0, decay: 0.018, release: 0.005, sustain: 0 },
-  gain: 0.06,
-  source: { frequency: 900, type: 'sine' },
-}
-
 export const error: SoundDefinition = {
   layers: [
     {
@@ -67,12 +61,6 @@ export const expand: SoundDefinition = {
   envelope: { attack: 0, decay: 0.04, release: 0.012, sustain: 0 },
   gain: 0.06,
   source: { frequency: { end: 1000, start: 800 }, type: 'sine' },
-}
-
-export const info: SoundDefinition = {
-  envelope: { attack: 0, decay: 0.04, release: 0.015, sustain: 0 },
-  gain: 0.08,
-  source: { frequency: 880, type: 'sine' },
 }
 
 export const keyPress: SoundDefinition = {
@@ -103,34 +91,16 @@ export const pageEnter: SoundDefinition = {
   source: { frequency: { end: 900, start: 700 }, type: 'sine' },
 }
 
-export const pageExit: SoundDefinition = {
-  envelope: { attack: 0, decay: 0.04, release: 0.015, sustain: 0 },
-  gain: 0.04,
-  source: { frequency: { end: 700, start: 900 }, type: 'sine' },
-}
-
 export const pop: SoundDefinition = {
   envelope: { attack: 0, decay: 0.04, release: 0.012, sustain: 0 },
   gain: 0.1,
   source: { frequency: { end: 200, start: 400 }, type: 'sine' },
 }
 
-export const select: SoundDefinition = {
-  envelope: { attack: 0, decay: 0.02, release: 0.006, sustain: 0 },
-  gain: 0.08,
-  source: { frequency: 1100, type: 'sine' },
-}
-
 export const send: SoundDefinition = {
   envelope: { attack: 0, decay: 0.04, release: 0.012, sustain: 0 },
   gain: 0.08,
   source: { frequency: { end: 1000, start: 600 }, type: 'sine' },
-}
-
-export const slide: SoundDefinition = {
-  envelope: { attack: 0.003, decay: 0.035, release: 0.012, sustain: 0 },
-  gain: 0.05,
-  source: { frequency: { end: 1100, start: 800 }, type: 'sine' },
 }
 
 export const success: SoundDefinition = {
@@ -147,12 +117,6 @@ export const success: SoundDefinition = {
       source: { frequency: 784, type: 'sine' },
     },
   ],
-}
-
-export const swoosh: SoundDefinition = {
-  envelope: { attack: 0.005, decay: 0.04, release: 0.015, sustain: 0 },
-  gain: 0.05,
-  source: { frequency: { end: 1400, start: 600 }, type: 'sine' },
 }
 
 export const tabSwitch: SoundDefinition = {
@@ -197,12 +161,6 @@ export const toggleOn: SoundDefinition = {
       source: { frequency: 1320, type: 'sine' },
     },
   ],
-}
-
-export const undo: SoundDefinition = {
-  envelope: { attack: 0, decay: 0.035, release: 0.01, sustain: 0 },
-  gain: 0.07,
-  source: { frequency: { end: 600, start: 800 }, type: 'sine' },
 }
 
 export const warning: SoundDefinition = {

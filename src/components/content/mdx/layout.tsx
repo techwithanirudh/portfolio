@@ -34,7 +34,7 @@ export const MdxContent = ({
   <div className={cn('flex min-w-0 flex-1 flex-col gap-4', className)}>
     <Prose
       className={cn(
-        'min-w-0 flex-1 px-6 text-fd-foreground/90',
+        'min-w-0 flex-1 px-4 text-fd-foreground/90',
         proseMeasure,
         proseClassName
       )}

@@ -1,7 +1,11 @@
 'use client'
 
-import { GrainGradient } from '@paper-design/shaders-react'
+import {
+  GrainGradient,
+  type PaperShaderElement,
+} from '@paper-design/shaders-react'
 import { useTheme } from 'next-themes'
+import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { cn } from '@/lib/utils'
 
@@ -9,6 +13,8 @@ const PALETTES = {
   dark: ['#6d4cff', '#a78bfa', '#38bdf8', '#2563eb'],
   light: ['#8b5cf6', '#c4b5fd', '#7dd3fc', '#60a5fa'],
 }
+
+const MAX_PIXEL_RATIO = 1.5
 
 const FADES = {
   bottom:
@@ -27,6 +33,25 @@ export function GrainBackdrop({
   const { resolvedTheme } = useTheme()
   const colors = PALETTES[resolvedTheme === 'light' ? 'light' : 'dark']
   const reduceMotion = useReducedMotion()
+  const ref = useRef<PaperShaderElement>(null)
+  const [maxPixelCount, setMaxPixelCount] = useState<number>()
+
+  useEffect(() => {
+    const element = ref.current
+    if (!element) {
+      return
+    }
+    const observer = new ResizeObserver(([entry]) => {
+      const size = entry?.borderBoxSize[0]
+      if (size) {
+        setMaxPixelCount(
+          Math.max(1, size.inlineSize * size.blockSize * MAX_PIXEL_RATIO ** 2)
+        )
+      }
+    })
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <GrainGradient
@@ -42,7 +67,10 @@ export function GrainBackdrop({
       colorBack='#00000000'
       colors={colors}
       intensity={0.5}
+      maxPixelCount={maxPixelCount}
+      minPixelRatio={1}
       noise={0.35}
+      ref={ref}
       shape='wave'
       softness={1}
       speed={reduceMotion ? 0 : 0.3}

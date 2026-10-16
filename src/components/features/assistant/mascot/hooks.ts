@@ -2,7 +2,6 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { isToolUIPart } from 'ai'
-import { useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
@@ -10,10 +9,36 @@ import { animations } from './constants'
 import type { MascotAgent } from './provider'
 import { playAnimation } from './utils'
 
+// What the dog acts out while Simba works; the trigger loops it until cleared
+export const mascotActivity: { current: string | null } = { current: null }
+
+type ChatStatus = UseChatHelpers<MyUIMessage>['status']
+
+const activityFor = (
+  status: ChatStatus,
+  messages: MyUIMessage[]
+): string | null => {
+  if (status === 'submitted') {
+    return animations.submit
+  }
+  if (status !== 'streaming') {
+    return null
+  }
+  const lastPart = messages.at(-1)?.parts.at(-1)
+  if (!lastPart || lastPart.type === 'reasoning') {
+    return animations.thinking
+  }
+  if (isToolUIPart(lastPart)) {
+    return animations.tool
+  }
+  return animations.writing
+}
+
 export const playSubmitAnimation = (agent: MascotAgent | undefined) => {
   if (!agent || prefersReducedMotion()) {
     return
   }
+  mascotActivity.current = animations.submit
   playAnimation(agent, animations.submit, { interrupt: true })
 }
 
@@ -26,10 +51,8 @@ export function useMascotPanel({
   agent: MascotAgent | undefined
   messages: MyUIMessage[]
   open: boolean
-  status: UseChatHelpers<MyUIMessage>['status']
+  status: ChatStatus
 }) {
-  const lastTool = useRef<string | null>(null)
-
   useOn(open, () => {
     if (!agent) {
       return
@@ -47,27 +70,12 @@ export function useMascotPanel({
     agent.play(animations.show)
   })
 
-  useOn(status, () => {
-    if (!agent) {
-      return
-    }
-    if (status === 'streaming') {
-      agent.stopCurrent()
-    }
-    if (status === 'ready') {
-      lastTool.current = null
-    }
-  })
+  const activity = activityFor(status, messages)
 
-  useOn(messages, () => {
-    if (!agent || status !== 'streaming' || prefersReducedMotion()) {
-      return
+  useOn(activity, () => {
+    mascotActivity.current = prefersReducedMotion() ? null : activity
+    if (agent && mascotActivity.current) {
+      playAnimation(agent, mascotActivity.current, { interrupt: true })
     }
-    const toolPart = (messages.at(-1)?.parts ?? []).find(isToolUIPart)
-    if (!toolPart || lastTool.current === toolPart.type) {
-      return
-    }
-    lastTool.current = toolPart.type
-    playAnimation(agent, animations.tool, { interrupt: true })
   })
 }

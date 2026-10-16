@@ -5,7 +5,6 @@
 import { motion, useReducedMotion, useScroll, useSpring } from 'motion/react'
 import {
   type ReactNode,
-  useCallback,
   useEffect,
   useId,
   useLayoutEffect,
@@ -118,7 +117,31 @@ const traceTrack = (container: HTMLElement): Track | null => {
   }
 }
 
+const markerProgress = (path: SVGPathElement, markers: Point[]) => {
+  const length = path.getTotalLength()
+  const end = path.getPointAtLength(length).y
+  return markers.map(({ y }) => {
+    if (end < y) {
+      return Number.POSITIVE_INFINITY
+    }
+    let low = 0
+    let high = length
+    while (high - low > 0.5) {
+      const mid = (low + high) / 2
+      if (path.getPointAtLength(mid).y < y) {
+        low = mid
+      } else {
+        high = mid
+      }
+    }
+    return high / length
+  })
+}
+
 const spring = { damping: 20, mass: 0.5, stiffness: 100 }
+
+const svgClassName =
+  'pointer-events-none absolute inset-0 select-none overflow-visible'
 
 export function StoryTrack({
   children,
@@ -153,25 +176,17 @@ export function StoryTrack({
     return () => observer.disconnect()
   }, [])
 
-  const follow = useCallback(
-    (value: number) => {
-      const path = pathRef.current
-      if (!(path && track)) {
-        return
-      }
-      const length = path.getTotalLength()
-      const point = path.getPointAtLength(
-        length * Math.max(0, Math.min(value, 1))
-      )
-      setReached(track.markers.filter((marker) => marker.y <= point.y).length)
-    },
-    [track]
-  )
-
   useEffect(() => {
+    const path = pathRef.current
+    if (!(path && track)) {
+      return
+    }
+    const thresholds = markerProgress(path, track.markers)
+    const follow = (value: number) =>
+      setReached(thresholds.filter((threshold) => threshold <= value).length)
     follow(progress.get())
     return progress.on('change', follow)
-  }, [follow, progress])
+  }, [progress, track])
 
   const grooveId = `${id}-groove`
 
@@ -180,7 +195,7 @@ export function StoryTrack({
       {track ? (
         <svg
           aria-hidden
-          className='pointer-events-none absolute inset-0 select-none overflow-visible'
+          className={svgClassName}
           fill='none'
           height={track.height}
           viewBox={`0 0 ${track.width} ${track.height}`}
@@ -235,7 +250,19 @@ export function StoryTrack({
               strokeWidth='8'
             />
           </g>
-
+        </svg>
+      ) : null}
+      {track ? (
+        // Its own layer, so redrawing the line each frame does not re-raster
+        // the groove filter and the content beneath it
+        <svg
+          aria-hidden
+          className={cn(svgClassName, 'will-change-transform')}
+          fill='none'
+          height={track.height}
+          viewBox={`0 0 ${track.width} ${track.height}`}
+          width={track.width}
+        >
           <motion.path
             className='stroke-primary'
             d={track.d}

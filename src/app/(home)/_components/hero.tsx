@@ -13,7 +13,7 @@ import { Portrait } from './portrait'
 
 const socialClassName = cn(
   buttonVariants({ size: 'icon-sm', variant: 'outline' }),
-  'text-muted-foreground hover:text-foreground dark:bg-background dark:ring-white/10',
+  'text-muted-foreground hover:text-foreground dark:bg-background dark:ring-white/10 dark:hover:bg-muted',
   '[&_svg]:transition-[opacity,filter,scale,rotate] [&_svg]:duration-200 [&_svg]:ease-out hover:[&_svg]:-rotate-8 hover:[&_svg]:scale-115 motion-reduce:[&_svg]:transition-none'
 )
 

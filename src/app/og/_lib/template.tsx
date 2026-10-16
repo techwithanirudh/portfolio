@@ -1,5 +1,6 @@
 import type { ReactElement, ReactNode } from 'react'
 import { owner } from '@/constants/site'
+import { formatDate } from '@/lib/format-date'
 
 export const ogImageSize = { height: 630, width: 1200 }
 
@@ -24,14 +25,6 @@ export const ogCoverSize = {
   height: rail.bottom - rail.top,
   width: rail.right - rail.left,
 }
-
-const dateFormat = new Intl.DateTimeFormat('en-US', {
-  day: 'numeric',
-  month: 'short',
-  // Frontmatter dates are bare days, parsed as UTC midnight
-  timeZone: 'UTC',
-  year: 'numeric',
-})
 
 function Cross({ x, y }: { x: number; y: number }): ReactElement {
   return (
@@ -322,7 +315,7 @@ export function PostImage({
         </span>
         {date && (
           <span style={{ color: colors.muted, fontSize: 26 }}>
-            {`· ${dateFormat.format(date)}`}
+            {`· ${formatDate(date)}`}
           </span>
         )}
       </div>

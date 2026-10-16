@@ -4,7 +4,6 @@ import Image from 'next/image'
 import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import { SectionHeader } from '@/components/layout/sections/header'
 import { PreviewLink } from '@/components/preview-link'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
@@ -138,23 +137,14 @@ const chapters: Chapter[] = [
 
 export default function Story(): React.ReactElement {
   return (
-    <Section className='relative w-full pt-10' id='story'>
-      <div className='flex flex-col gap-10'>
-        <SectionHeader
-          align='left'
-          className='px-6'
-          description='How I got here.'
-          title='Story'
-        />
-
-        <StoryTrack className='border-border border-t border-dashed px-6 sm:px-10'>
-          <ol>
-            {chapters.map((chapter, index) => (
-              <ChapterRow chapter={chapter} index={index} key={chapter.id} />
-            ))}
-          </ol>
-        </StoryTrack>
-      </div>
+    <Section className='relative w-full' id='story'>
+      <StoryTrack className='px-6 sm:px-10'>
+        <ol>
+          {chapters.map((chapter, index) => (
+            <ChapterRow chapter={chapter} index={index} key={chapter.id} />
+          ))}
+        </ol>
+      </StoryTrack>
     </Section>
   )
 }

@@ -16,7 +16,7 @@ import { isBotRequest } from '@/server/botid'
 import type { MyUIMessage } from './types'
 import { getLLMsTxt } from './utils/llms'
 import { getPageContent } from './utils/tools/get-page-content'
-import { navigateTool } from './utils/tools/navigate'
+import { navigateOutputSchema, navigateTool } from './utils/tools/navigate'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
 
@@ -71,6 +71,12 @@ const parseMessages = async (request: Request) => {
     return null
   }
 }
+
+const toolsAfterNavigation = [
+  'getPageContent',
+  'searchDocs',
+  'showContactForm',
+] as const
 
 export async function POST(request: Request) {
   try {
@@ -127,6 +133,17 @@ export async function POST(request: Request) {
           }),
           messages: modelMessages,
           model: provider.languageModel('chat-model'),
+          // One navigation per reply, so the browser never hops between pages
+          prepareStep: ({ steps }) =>
+            steps.some((step) =>
+              step.toolResults.some(
+                (result) =>
+                  result.toolName === 'navigate' &&
+                  navigateOutputSchema.safeParse(result.output).data?.success
+              )
+            )
+              ? { activeTools: toolsAfterNavigation }
+              : undefined,
           providerOptions: {
             openai: {
               reasoningEffort: 'low',

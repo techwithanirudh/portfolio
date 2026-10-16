@@ -42,7 +42,6 @@ export function SmoothCursor({
   const lastUpdateTime = useRef(0)
   const movingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // Much more responsive cursor tracking - minimal lag
   const cursorX = useSpring(0, {
     damping: disableSmooth ? 100 : 80,
     mass: disableSmooth ? 0.1 : 0.3,
@@ -104,12 +103,10 @@ export function SmoothCursor({
         setHasMoved(true)
         setIsMoving(true)
 
-        // Clear previous timeout if it exists
         if (movingTimeoutRef.current) {
           clearTimeout(movingTimeoutRef.current)
         }
 
-        // Set new timeout to mark as not moving
         movingTimeoutRef.current = setTimeout(() => {
           setIsMoving(false)
           movingTimeoutRef.current = null
@@ -139,7 +136,6 @@ export function SmoothCursor({
       if (rafId) {
         cancelAnimationFrame(rafId)
       }
-      // Clean up moving timeout on unmount
       if (movingTimeoutRef.current) {
         clearTimeout(movingTimeoutRef.current)
       }
