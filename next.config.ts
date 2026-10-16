@@ -58,13 +58,11 @@ async function createNextConfig(): Promise<NextConfig> {
     reactStrictMode: true,
     async redirects() {
       return [
-        // The sign-in page is now a modal; keep old links working.
         {
           destination: '/?signin=%2F',
           permanent: false,
           source: '/login',
         },
-        // The resume is generated from site data now; the old PDF was stale.
         {
           destination: '/resume',
           permanent: true,

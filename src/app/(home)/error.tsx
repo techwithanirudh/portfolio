@@ -7,15 +7,24 @@ import { cn } from '@/lib/utils'
 
 const ISSUE_URL = `https://github.com/${owner}/${repo}/issues/new`
 
+const withOccurrenceKeys = (lines: string[]) => {
+  const seen = new Map<string, number>()
+  return lines.map((line) => {
+    const occurrence = (seen.get(line) ?? 0) + 1
+    seen.set(line, occurrence)
+    return { key: `${line}#${occurrence}`, line }
+  })
+}
+
 interface ErrorPageProps {
   error: Error & { digest?: string }
   retry: () => void
 }
 
-// Renders inside the site layout, so the header and footer stay put
 const ErrorPage = ({ error, retry }: ErrorPageProps) => {
   // biome-ignore lint/performance/useTopLevelRegex: small stack parsing on render
-  const errorStack = error.stack?.split(/\r?\n/).slice(1) ?? []
+  const stackLines = error.stack?.split(/\r?\n/).slice(1) ?? []
+  const errorStack = withOccurrenceKeys(stackLines)
 
   return (
     <div className='flex flex-1'>
@@ -59,9 +68,8 @@ const ErrorPage = ({ error, retry }: ErrorPageProps) => {
                 {error.digest ? (
                   <span className='pl-3'>digest: {error.digest}</span>
                 ) : null}
-                {errorStack.map((line, index) => (
-                  // biome-ignore lint/suspicious/noArrayIndexKey: stack order is stable
-                  <span className='pl-3' key={`${line}-${index}`}>
+                {errorStack.map(({ key, line }) => (
+                  <span className='pl-3' key={key}>
                     {line}
                   </span>
                 ))}

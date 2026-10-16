@@ -27,7 +27,6 @@ export const GuestbookEntries = ({
     )
   }
 
-  // Scrolls within the leftover screen height the fill section gives it
   return (
     <div className='min-h-0 flex-1'>
       <ScrollArea className='h-full w-full' data-lenis-prevent>

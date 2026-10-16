@@ -27,15 +27,10 @@ export function useAssistantContext() {
   return ctx
 }
 
-// Holds only the open state and selected context so anything can open the
-// panel without pulling the chat, mascot and markdown into the main bundle
 export function AssistantProvider({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
   const [context, setContext] = useState<string | null>(null)
 
-  // Lives here rather than in the panel so the shortcut works before its
-  // chunk has loaded. Escape is handled by the panel's Base UI dialog, which
-  // also lets a nested menu close first
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
     if (event.key === '/' && (event.metaKey || event.ctrlKey) && !open) {
       setOpen(true)

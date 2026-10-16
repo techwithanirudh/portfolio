@@ -107,9 +107,6 @@ export function MobileNav() {
     setOpen(false)
   }, [pathname])
 
-  // Base UI moves focus in on open, closes on Escape and hands focus back on
-  // close. It's non-modal so the floating pill stays usable as the toggle, so
-  // Tab is cycled by hand between the menu and that toggle
   useEffect(() => {
     if (!open) {
       return

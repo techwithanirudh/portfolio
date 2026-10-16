@@ -87,7 +87,6 @@ export function SmoothCursor({
     const checkIfOverElement = (e: MouseEvent) => {
       const element = document.elementFromPoint(e.clientX, e.clientY)
       if (element) {
-        // Elements like the mascot opt out so the native cursor shows instead
         setIsOverNative(element.closest('[data-native-cursor]') !== null)
         const isPointerElement =
           element.closest('a, button') !== null ||

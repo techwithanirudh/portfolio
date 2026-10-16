@@ -37,7 +37,6 @@ export function createOgRoute<Page extends OgPage>({
 
     return new ImageResponse(
       <PostImage
-        // Seeded by the slug, so the card shares the post's cover
         coverSrc={getCoverDataUrl(page.slugs.join('/'), ogCoverSize)}
         date={page.data.date}
         portraitSrc={portraitSrc}

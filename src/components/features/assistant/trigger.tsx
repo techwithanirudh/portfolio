@@ -9,7 +9,6 @@ import {
 } from '@/components/features/assistant/mascot/constants'
 import { playAnimation } from '@/components/features/assistant/mascot/utils'
 
-// Matches the panel's right-4 inset so the dog lines up with it
 const EDGE_OFFSET = 16
 
 // The element has no size until it is shown, so anchor the visible dog using

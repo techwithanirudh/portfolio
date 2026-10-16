@@ -9,7 +9,6 @@ const PALETTES = {
   light: ['#8b5cf6', '#c4b5fd', '#7dd3fc', '#60a5fa'],
 }
 
-// Where the blob sits; the mask fades everything else back to the page bg.
 const FADES = {
   bottom:
     '[mask-image:radial-gradient(ellipse_70%_90%_at_50%_100%,black_20%,transparent_75%)]',
@@ -17,10 +16,6 @@ const FADES = {
     '[mask-image:radial-gradient(ellipse_75%_105%_at_100%_100%,black_25%,transparent_80%)]',
 }
 
-/**
- * Soft purple/azure grain blob, animated with Paper Shaders. Purely
- * decorative: it drifts on its own and ignores the pointer.
- */
 export function GrainBackdrop({
   className,
   fade = 'corner',

@@ -29,7 +29,8 @@ const stack = Object.entries(
   labels: (items ?? []).map((item) => item.label),
 }))
 
-const linkClass = 'underline-offset-2 hover:underline print:no-underline'
+const linkClass =
+  'underline-offset-2 hover:underline print:text-primary print:no-underline'
 
 const ResumeSection = ({
   children,

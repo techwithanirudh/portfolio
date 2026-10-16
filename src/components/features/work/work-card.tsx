@@ -19,8 +19,6 @@ interface WorkCardProps {
 
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
 
-// The case study cover is requested at a larger size than the card's, so warm
-// the exact srcset it will use and the shared-element morph lands on a loaded image.
 const preloadCover = (src: string, alt: string) => {
   const { props } = getImageProps({
     alt,

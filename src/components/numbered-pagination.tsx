@@ -59,7 +59,6 @@ function NumberedPagination({
           <ul className='inline-flex items-center gap-1 -space-x-px rtl:space-x-reverse'>
             {showLeftEllipsis && (
               <PaginationItem>
-                {/* Not a control, so it stays out of the tab order */}
                 <span aria-hidden='true' className={ellipsisClassName}>
                   ...
                 </span>
@@ -83,7 +82,6 @@ function NumberedPagination({
 
             {showRightEllipsis && (
               <PaginationItem>
-                {/* Not a control, so it stays out of the tab order */}
                 <span aria-hidden='true' className={ellipsisClassName}>
                   ...
                 </span>

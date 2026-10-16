@@ -9,8 +9,7 @@ export const content = [
   'content/work/**/*.{md,mdx}',
 ]
 
-// Non-MDX files whose links render through PreviewLink.
-export const sources = [
+export const previewLinkSourceFiles = [
   'src/constants/navigation/social.tsx',
   'src/constants/portfolio/colophon.ts',
   'src/constants/portfolio/experiences.tsx',

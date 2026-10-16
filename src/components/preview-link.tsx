@@ -17,7 +17,6 @@ type Preview = LinkPreviewImage | null
 
 const previewRequests = new Map<string, Promise<unknown>>()
 
-// Deduped per URL so repeated hovers and sibling links share one request.
 function fetchJson<T>(url: string): Promise<T | null> {
   let request = previewRequests.get(url)
   if (!request) {
@@ -47,15 +46,9 @@ const externalLinkProps = { rel: 'noopener noreferrer', target: '_blank' }
 
 interface PreviewLinkProps extends Omit<ComponentProps<'a'>, 'href'> {
   href: string
-  /** Skips the lazy lookup when the preview is already known; null disables the card. */
   preview?: Preview
 }
 
-/**
- * Link that shows a hover card on mouse hover and keyboard focus (Base UI
- * never opens it on touch). Blog posts and project pages preview the page,
- * external URLs preview a stored screenshot, and anything else stays a plain link.
- */
 export function PreviewLink({ href, preview, ...props }: PreviewLinkProps) {
   const pagePath = getPagePreviewPath(href)
   const external = externalHrefPattern.test(href)

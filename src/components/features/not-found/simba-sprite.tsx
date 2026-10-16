@@ -1,5 +1,7 @@
-// Rover's idle pose: frame [0, 0] of the 80x80 clippy sprite sheet.
-const FRAME = 80
+import { sprite } from '@/components/features/assistant/mascot/constants'
+
+const [FRAME] = sprite.frame
+const [SHEET_WIDTH] = sprite.sheet
 const SCALE = 2
 
 export const SimbaSprite = () => (
@@ -7,10 +9,9 @@ export const SimbaSprite = () => (
     aria-hidden
     className='shrink-0 bg-no-repeat [image-rendering:pixelated]'
     style={{
-      backgroundImage: 'url(/assets/clippy/rover.png)',
+      backgroundImage: `url(${sprite.src})`,
       backgroundPosition: '0 0',
-      // sheet is 2160px wide, scale it with the frame
-      backgroundSize: `${2160 * SCALE}px auto`,
+      backgroundSize: `${SHEET_WIDTH * SCALE}px auto`,
       height: FRAME * SCALE,
       width: FRAME * SCALE,
     }}

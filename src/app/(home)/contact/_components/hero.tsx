@@ -6,7 +6,6 @@ import {
 } from '@/components/ui/tooltip'
 import { socials } from '@/constants/navigation'
 
-// The standard page header with the socials under it
 export const Hero = () => (
   <HeroSection
     description="Have a question or want to work together? Send a message and I'll reply within a week."

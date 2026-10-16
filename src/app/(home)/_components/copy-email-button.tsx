@@ -5,8 +5,6 @@ import { CopyStateIcon } from '@/components/copy-button'
 import { morphIcons } from '@/components/icons/morph-icon'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 
-// Copies the address instead of opening a mail app; the hook already plays
-// the success sound, so the toast comes straight from sonner to avoid a second
 export function CopyEmailButton({
   className,
   email,

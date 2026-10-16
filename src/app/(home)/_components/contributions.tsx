@@ -22,8 +22,6 @@ interface ContributionsProps {
   contributions: Promise<Activity[]>
 }
 
-// Steps of the primary color instead of GitHub green, so the graph follows the
-// site palette in both themes; the legend uses the same ramp
 const LEVELS = cn(
   'data-[level="0"]:fill-foreground/5',
   'data-[level="1"]:fill-primary/25',
@@ -38,8 +36,6 @@ interface HoveredDay {
   rect: SVGRectElement
 }
 
-// A year is ~370 blocks, so one tooltip follows the pointer instead of
-// mounting a tooltip per block
 const useDayTooltip = () => {
   const [day, setDay] = useState<HoveredDay | null>(null)
   const [open, setOpen] = useState(false)

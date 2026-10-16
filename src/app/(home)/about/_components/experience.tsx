@@ -8,7 +8,6 @@ import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 import type { ExperienceItemType } from '@/types/experience'
 
-// Roles are grouped by kind; anything without an employment type is research
 const kinds = [
   { label: 'Work', type: 'Internship' },
   { label: 'Freelance', type: 'Freelance' },

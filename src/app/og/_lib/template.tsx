@@ -9,7 +9,6 @@ const colors = {
   border: '#d9d9d9',
   cross: '#a3a3a3',
   foreground: '#0a0a0a',
-  // muted-foreground, a step darker so it holds up on the white card
   muted: '#4d4d4d',
   page: '#f4f4f4',
   primary: 'hsl(226, 55%, 45%)',
@@ -19,10 +18,8 @@ const colors = {
 // anything it doesn't
 const fontFamily = "Geist, 'Geist Sans'"
 
-// The dashed rails. The card fills the box between them.
 const rail = { bottom: 566, left: 64, right: 1136, top: 64 }
 
-/** The card's size, for drawing its cover to fit. */
 export const ogCoverSize = {
   height: rail.bottom - rail.top,
   width: rail.right - rail.left,
@@ -121,7 +118,6 @@ function PortraitTile({
   return (
     <div
       style={{
-        // The portrait over the hero tile's gradient, as one background
         backgroundImage: `url(${src}), linear-gradient(160deg, #c3b6fa, #9fccfa 55%, #7fd0f5)`,
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -138,19 +134,11 @@ function PortraitTile({
 }
 
 interface OgFrameProps {
-  /** Content, stacked on the bottom of the card. */
   children: ReactNode
-  /** The card's generated cover, from getCoverDataUrl. */
   coverSrc: string
-  /** Space between the stacked content. */
   gap: number
 }
 
-/**
- * The page as the site draws it, light grey with dashed rails and `+` marks
- * where they cross, holding a white card under a generated grain cover like
- * the blog's, with the content on its bottom edge.
- */
 function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
   return (
     <div
@@ -191,6 +179,7 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
   )
 }
 
+const BALANCE_MIN_TITLE_SIZE = 68
 const closingMarks = new Set(['.', '!', '?', '…'])
 
 interface TitleProps {
@@ -199,11 +188,6 @@ interface TitleProps {
   title: string
 }
 
-/**
- * The title as the hero sets the name: medium weight, tight tracking and a
- * blue full stop. A title that already ends in a stop, `?`, `!` or `…` keeps
- * its own mark, in blue.
- */
 function Title({ maxWidth, size, title }: TitleProps): ReactElement {
   const text = title.trimEnd()
   const last = text.at(-1) ?? ''
@@ -221,8 +205,7 @@ function Title({ maxWidth, size, title }: TitleProps): ReactElement {
         lineClamp: 4,
         lineHeight: 1.02,
         maxWidth,
-        // Balancing narrows the lines, which long titles can't spare
-        textWrap: size >= 68 ? 'balance' : 'pretty',
+        textWrap: size >= BALANCE_MIN_TITLE_SIZE ? 'balance' : 'pretty',
       }}
     >
       {body}
@@ -251,27 +234,32 @@ function Description({ children }: { children: string }): ReactElement {
   )
 }
 
-// Each step keeps four lines of title inside the card, above two lines of
-// description (pages) or the byline (posts)
-const pageTitleSizes = [
-  [20, 96],
-  [40, 72],
-  [80, 56],
-  [120, 48],
-] as const
-const postTitleSizes = [
-  [40, 72],
-  [70, 64],
-  [110, 54],
-  [140, 48],
-] as const
+interface TitleSizeStep {
+  maxChars: number
+  size: number
+}
+
+const pageTitleSizes: readonly TitleSizeStep[] = [
+  { maxChars: 20, size: 96 },
+  { maxChars: 40, size: 72 },
+  { maxChars: 80, size: 56 },
+  { maxChars: 120, size: 48 },
+]
+const postTitleSizes: readonly TitleSizeStep[] = [
+  { maxChars: 40, size: 72 },
+  { maxChars: 70, size: 64 },
+  { maxChars: 110, size: 54 },
+  { maxChars: 140, size: 48 },
+]
 
 function getTitleSize(
   title: string,
-  steps: typeof pageTitleSizes | typeof postTitleSizes,
+  steps: readonly TitleSizeStep[],
   smallest: number
 ): number {
-  return steps.find(([chars]) => title.length <= chars)?.[1] ?? smallest
+  return (
+    steps.find(({ maxChars }) => title.length <= maxChars)?.size ?? smallest
+  )
 }
 
 interface PageImageProps {
@@ -280,7 +268,6 @@ interface PageImageProps {
   title: string
 }
 
-/** OG card for a page: title and one or two lines of description. */
 export function PageImage({
   coverSrc,
   description,
@@ -306,7 +293,6 @@ interface PostImageProps {
   title: string
 }
 
-/** OG card for a blog post or a project: title, byline and date. */
 export function PostImage({
   coverSrc,
   date,
@@ -351,7 +337,6 @@ interface BannerImageProps {
   title: string
 }
 
-/** The site-wide card: the hero's portrait, name and blue full stop. */
 export function BannerImage({
   coverSrc,
   description,

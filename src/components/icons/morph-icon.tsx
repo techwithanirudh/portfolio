@@ -13,7 +13,6 @@ export const morphIcons = {
   volumeOn: Volume2,
 } as const
 
-// Every swapping icon (copy, done, error...) morphs through this one component
 export const MorphIcon = (props: MorphIconProps) => (
   <Morph reducedMotion='user' spring='snappy' {...props} />
 )

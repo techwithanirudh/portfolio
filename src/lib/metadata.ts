@@ -26,7 +26,6 @@ const MAX_OG_DESCRIPTION = 320
 const clamp = (value: string, max: number) =>
   value.length > max ? `${value.slice(0, max - 1).trimEnd()}…` : value
 
-/** Keeps `/og` params bounded so arbitrary query strings can't blow up renders. */
 export function clampOgParams(title: string, description?: string) {
   return {
     description: description

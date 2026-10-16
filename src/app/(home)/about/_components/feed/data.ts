@@ -6,6 +6,8 @@ import { type GitHubEvent, isSupportedEvent, type PushCommit } from './event'
 
 const { limit } = activity
 
+const OVER_FETCH_FACTOR = 3
+
 interface PushEventPayload {
   before?: string
   head?: string
@@ -60,9 +62,8 @@ const getCachedActivityItems = unstable_cache(
     }
 
     try {
-      // Fetch extra since some event types have no row and get dropped
       const activity = await octokit.rest.activity.listPublicEventsForUser({
-        per_page: limit * 3,
+        per_page: limit * OVER_FETCH_FACTOR,
         username: owner,
       })
 

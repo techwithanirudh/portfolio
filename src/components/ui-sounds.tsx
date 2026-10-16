@@ -22,12 +22,9 @@ import { playSound } from '@/lib/audio/preferences'
 const PRESS =
   'a[href], button:not([type="submit"]), [role="tab"], [role="switch"], [role="checkbox"], [aria-expanded]'
 const OPT_OUT = '[data-sound="off"]'
-// For components that already play their own sound on press or submit
 const PRESS_OPT_OUT = '[data-sound="off"], [data-sound-press="off"]'
-// Long enough for a client side validator to flag its fields
 const VALIDATION_DELAY = 120
 
-// Repeated plays of one sound should not feel like a sample loop
 const jitter = (detune: number, volume: number): PlayOptions => ({
   jitter: { detune, volume },
 })
@@ -83,7 +80,6 @@ const playPress = (el: Element) => {
   playSound(click, jitter(60, 0.1))
 }
 
-// Server results are voiced by the toast that follows
 const playSubmit = (form: HTMLFormElement) => {
   setTimeout(() => {
     const invalid = form.querySelector('[aria-invalid="true"]')
@@ -94,8 +90,6 @@ const playSubmit = (form: HTMLFormElement) => {
 export function UiSounds() {
   const pathname = usePathname()
   const previousPathname = useRef(pathname)
-  // Links and the command menu already sound when pressed, so only
-  // back and forward navigation gets the page change cue
   const historyNavigation = useRef(false)
 
   useEffect(() => {

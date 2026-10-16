@@ -75,8 +75,6 @@ export function useChatContext() {
   return ctx
 }
 
-// Code-split out of the main bundle by the app provider, so it reads the
-// open state and selected context from AssistantProvider
 export function Assistant() {
   const isMobile = useIsMobile()
   const playError = useSound(errorSound)
@@ -511,9 +509,6 @@ function AssistantPanel() {
     status: chat.status,
   })
 
-  // Non-modal so the page stays usable beside the panel on desktop. Pointer
-  // dismissal is off because the backdrop (below lg) and the close button
-  // own closing, and Base UI keeps both mounted until their exit animations end
   return (
     <DialogPrimitive.Root
       disablePointerDismissal
@@ -529,7 +524,6 @@ function AssistantPanel() {
         <DialogPrimitive.Popup
           aria-label='Ask Simba'
           className='fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg outline-none data-closed:animate-fd-dialog-out data-open:animate-fd-dialog-in sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]'
-          // The panel plays its own send, error and action sounds
           data-sound-press='off'
         >
           <div className='flex h-full flex-col divide-y divide-dashed divide-border'>

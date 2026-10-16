@@ -10,10 +10,9 @@ import { cn } from '@/lib/utils'
 
 interface LinkEntry {
   children: ReactNode
-  /** Route handlers, not pages, so they need a full document load */
-  document?: boolean
   external?: boolean
   href: string
+  routeHandler?: boolean
 }
 
 interface ListItem {
@@ -35,7 +34,7 @@ const FooterLink = ({ item }: { item: LinkEntry }) => {
     )
   }
 
-  if (item.document) {
+  if (item.routeHandler) {
     return (
       <a className={plainLinkClassName} href={item.href}>
         {item.children}
@@ -84,8 +83,8 @@ export const Links = () => {
           external: true,
           href: 'https://v1.techwithanirudh.com/',
         },
-        { children: 'RSS feed', document: true, href: '/rss.xml' },
-        { children: 'Sitemap', document: true, href: '/sitemap.xml' },
+        { children: 'RSS feed', href: '/rss.xml', routeHandler: true },
+        { children: 'Sitemap', href: '/sitemap.xml', routeHandler: true },
       ],
       title: 'More',
     },

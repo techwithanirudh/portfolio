@@ -3,12 +3,10 @@ import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 type SectionProps = {
-  /** Takes the leftover screen height in place of the shell's PageFill */
   fill?: boolean
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
-// 15px box whose 1px arms land exactly on the 1px grid lines it marks
 export const Cross = ({ className }: { className?: string }) => (
   <ViewAnimation
     className={cn(

@@ -35,14 +35,12 @@ export const env = createEnv({
     BOTID_DEV_BYPASS: z.enum(['BAD-BOT', 'GOOD-BOT', 'HUMAN']).optional(),
     // Database
     DATABASE_URL: z.url(),
-    // Contact form and newsletter, both disabled when unset
     EMAIL_FROM: z.email().optional(),
     EMAIL_TO: z.email().optional(),
     // Github
     GITHUB_CLIENT_ID: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
     GITHUB_CONTRIBUTIONS_API_URL: z.url().optional(),
-    // Optional: GitHub API calls fall back to unauthenticated rate limits
     GITHUB_TOKEN: z.string().min(1).startsWith('github_pat_').optional(),
     // Google
     GOOGLE_CLIENT_ID: z.string().min(1),

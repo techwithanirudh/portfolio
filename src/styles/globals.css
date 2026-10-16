@@ -88,9 +88,6 @@ html > body[data-scroll-locked] {
     @apply border-border outline-ring/50;
   }
 
-  /* One keyboard focus ring for every control. Zero specificity, so a
-     component's own focus-visible classes still win, and popups
-     (tabindex -1) keep no ring */
   :where(
     a[href],
     button,
@@ -186,7 +183,6 @@ html > body[data-scroll-locked] {
   @apply 2xl:max-w-[1400px];
 }
 
-/* The one style for links inside running text (prose, sentences, markdown) */
 @utility link-underline {
   @apply text-foreground underline decoration-primary/60 decoration-solid decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
@@ -210,8 +206,6 @@ html > body[data-scroll-locked] {
   @apply prose-blockquote:border-l prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:border-border prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
 }
 
-/* Popups wear the same material as the secondary button: a lit top edge
-   over the secondary fill, with highlighted items raised like a key */
 @utility texture-popup {
   background-color: var(--color-secondary);
   background-image: linear-gradient(
@@ -576,11 +570,9 @@ html > body[data-scroll-locked] {
   }
 }
 
-/* Hidden only while the reveal script flags <html>, so without JS nothing
-   hides. The first section carries the LCP, so it never hides */
 :root[data-reveal]
-[data-reveal-item]:not(
-  #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
-) {
+  [data-reveal-item]:not(
+    #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
+  ) {
   opacity: 0;
 }

@@ -15,10 +15,6 @@ import { UiSounds } from '@/components/ui-sounds'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { useSoundEnabled } from '@/lib/audio/preferences'
 
-// Client-only extras with no server HTML (the chat panel and mascot, and the
-// custom cursor), split into their own chunks to keep them off the critical
-// path. The panel reads its open state from AssistantProvider, so opening it
-// before the chunk arrives still shows it once loaded
 const Assistant = dynamic(
   () =>
     import('@/components/features/assistant/assistant').then(
@@ -31,14 +27,11 @@ const SmoothCursor = dynamic(
   { ssr: false }
 )
 
-// Mounted once so `d` fires once however many theme toggles render, and
-// inside SoundProvider so it respects mute
 function ThemeShortcut() {
   useThemeShortcut()
   return null
 }
 
-// Sits above RootProvider so the search dialog it renders respects mute too
 export function SoundsProvider({
   children,
 }: {

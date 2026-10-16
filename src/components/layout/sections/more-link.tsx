@@ -4,9 +4,6 @@ import { Icons } from '@/components/icons/icons'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 
-// The full width bar that closes a home section and leads to its full page.
-// The dashed line sits on the wrapper and the ring is inset, so neither paints
-// over the other.
 export const SectionMoreLink = ({
   children,
   delay,

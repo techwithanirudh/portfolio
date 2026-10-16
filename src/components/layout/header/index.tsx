@@ -47,7 +47,6 @@ const navItemVariants = cva('[&_svg]:size-4', {
         color: 'ghost',
         size: 'icon',
       }),
-      // The active page is underlined; hover only lifts the text color
       main: 'relative inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors after:absolute after:inset-x-2 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-fd-primary after:transition-transform hover:text-fd-foreground data-[active=true]:text-fd-foreground data-[active=true]:after:scale-x-100',
     },
   },
@@ -156,7 +155,12 @@ export const Header = ({
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
           <ViewAnimation delay={0.15}>
             {searchToggle.enabled !== false &&
-              (searchToggle.components?.lg ?? <SearchToggle hideIfDisabled />)}
+              (searchToggle.components?.lg ?? (
+                <SearchToggle
+                  className='text-fd-muted-foreground hover:text-fd-foreground'
+                  hideIfDisabled
+                />
+              ))}
           </ViewAnimation>
           <ViewAnimation delay={0.15}>
             {themeSwitch.enabled !== false &&
@@ -206,9 +210,6 @@ export const Header = ({
   )
 }
 
-// The tablet menu is a collapsible that pushes the page down under the sticky
-// header, while dropdown items (`type: 'menu'`) use Base UI's navigation menu
-// popup anchored to the bar
 const HeaderNavigationMenu = ({
   transparentMode = 'none',
   menu,
@@ -286,7 +287,6 @@ const HeaderNavigationMenu = ({
         </NavigationMenu.List>
         <CollapsibleContent
           className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-300 ease-out data-ending-style:h-0 data-starting-style:h-0 lg:hidden'
-          // Following a link closes the menu
           onClick={(event) => {
             if ((event.target as Element).closest('a')) {
               setMenuOpen(false)

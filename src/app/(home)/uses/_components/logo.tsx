@@ -9,7 +9,6 @@ interface LogoProps {
   size?: number
 }
 
-// Purely decorative: the name is always shown right next to it
 export function Logo({ alt, logo, size = 44, className }: LogoProps) {
   const wrapper = cn('flex items-center justify-center bg-muted', className)
 

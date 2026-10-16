@@ -49,6 +49,11 @@ const chapters: Chapter[] = [
     body: 'It started with Lego sets as a kid: building, breaking and rebuilding whatever I could think of. Nobody taught me, which is still how I learn most things.',
     icon: 'wrench',
     id: 'tinkering',
+    photo: {
+      alt: 'A Mario clone, one of the first games I built',
+      caption: 'a mario clone',
+      src: '/images/projects/animariogame/cover.jpg',
+    },
     title: 'Tinkering first',
     when: 'the beginning',
   },
@@ -56,6 +61,11 @@ const chapters: Chapter[] = [
     body: 'The bricks turned into code. Python and some early AI experiments first, then websites and apps, and plenty of bugs that taught me more than any tutorial did.',
     icon: 'codeXml',
     id: 'code',
+    photo: {
+      alt: 'Maskio, a pixel art platformer',
+      caption: 'maskio',
+      src: '/images/projects/maskio/cover.jpg',
+    },
     title: 'Then code',
     when: 'python, then the web',
   },
@@ -123,17 +133,6 @@ const chapters: Chapter[] = [
     },
     title: 'These days',
     when: 'now',
-  },
-  {
-    body: 'Simba, a shih tzu and a very good dog, is the face of the assistant in the corner of this site. He has read everything here, so you can ask him anything about me.',
-    id: 'simba',
-    photo: {
-      alt: 'Simba the dog',
-      caption: 'simba',
-      src: '/images/profile.png',
-    },
-    title: 'Off the keyboard',
-    when: 'always',
   },
 ]
 

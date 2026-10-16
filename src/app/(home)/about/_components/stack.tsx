@@ -2,7 +2,6 @@ import Image from 'next/image'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { SectionMoreLink } from '@/components/layout/sections/more-link'
-import { PreviewLink } from '@/components/preview-link'
 import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
 import { technologies } from '@/constants/portfolio/skills'
@@ -67,7 +66,7 @@ function TechBadge({ item: { href, icon, label } }: { item: TechStackItem }) {
   return (
     <Badge
       className='group/tag gap-1.5 rounded-full px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
-      render={<PreviewLink href={href} />}
+      render={<a href={href} rel='noreferrer' target='_blank' />}
       variant='outline'
     >
       {typeof icon === 'string' ? (

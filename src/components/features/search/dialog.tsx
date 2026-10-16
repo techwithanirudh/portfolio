@@ -263,7 +263,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
       title='Command palette'
     >
       <CommandInput
-        // Enter selects an item, which plays its own confirm sound
         data-sound-press='off'
         onValueChange={setSearch}
         placeholder='Type a command or search...'

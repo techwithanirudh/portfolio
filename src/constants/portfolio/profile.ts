@@ -1,6 +1,4 @@
 export const profile = {
-  // Base64 so scrapers never see the address
-  emailB64: 'aGVsbG9AdGVjaHdpdGhhbmlydWRoLmNvbQ==',
   flipSentences: [
     'design engineer',
     'full-stack developer',
@@ -17,6 +15,7 @@ export const profile = {
   ],
   handle: 'an1rudh',
   location: 'India',
+  obfuscatedEmail: 'aGVsbG9AdGVjaHdpdGhhbmlydWRoLmNvbQ==',
   pronouns: 'he/him',
   timeZone: 'Asia/Kolkata',
 } as const

@@ -7,6 +7,5 @@ const subscribe = (onChange: () => void) => {
   return () => query.removeEventListener('change', onChange)
 }
 
-// Server renders assume reduced motion, so nothing animates before hydration
 export const useReducedMotion = () =>
   useSyncExternalStore(subscribe, prefersReducedMotion, () => true)

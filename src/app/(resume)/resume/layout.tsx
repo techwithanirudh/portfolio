@@ -1,15 +1,7 @@
 import type { ReactNode } from 'react'
 
-/**
- * Route-scoped CSS for the resume. Rendered inline so it mounts and unmounts
- * with this segment and never leaks into the rest of the site.
- *
- * - `@page { margin: 0 }` leaves Chrome no margin box to draw its own
- *   header and footer (date, title, URL, page number) in. The page padding is
- *   added back on the content itself, see `print:p-[...]` in `page.tsx`.
- * - The sticky bar's bottom border fades in as the page scrolls, where scroll
- *   driven animations are supported. Elsewhere it stays transparent.
- */
+// `@page { margin: 0 }` leaves Chrome no margin box to draw its own
+// header and footer (date, title, URL, page number) in.
 const resumeCss = `
 @page { margin: 0; }
 

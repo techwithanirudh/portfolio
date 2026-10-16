@@ -9,7 +9,6 @@ export type MessageProps = ComponentProps<'div'> & {
   from: UIMessage['role']
 }
 
-// No bubbles, so `from` only sets data hooks for styling
 export const Message = ({ className, from, ...props }: MessageProps) => (
   <div
     className={cn(
@@ -51,7 +50,6 @@ export type MessageResponseProps = Omit<ComponentProps<'div'>, 'children'> & {
   children: string
 }
 
-// The site's own renderer, so replies match the docs
 export const MessageResponse = memo(
   ({ className, children, ...props }: MessageResponseProps) => (
     <div

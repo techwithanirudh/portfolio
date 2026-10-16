@@ -1,8 +1,3 @@
-// The generated post covers: a few soft blobs per post, laid out from a seed
-// so a slug always lands on the same art. The blog cards draw them as SVG in
-// the page and the OG images draw the same layout server side.
-
-/** Purple/azure swatches, named so each renderer picks its own tones. */
 export const coverSwatches = [
   'violet',
   'lavender',
@@ -24,8 +19,8 @@ export interface CoverBlob {
 }
 
 const MODULUS = 2_147_483_647
+const WARMUP_DRAWS = 4
 
-// A plain polynomial hash, so a slug always lands on the same cover
 const hash = (value: string) => {
   let h = 7
   for (const char of value) {
@@ -34,36 +29,28 @@ const hash = (value: string) => {
   return h
 }
 
-// Park-Miller, a tiny seeded PRNG for the blob layout. The first few draws
-// track the seed too closely, so they get thrown away.
 const random = (seed: number) => {
   let state = (seed % (MODULUS - 1)) + 1
   const next = () => {
     state = (state * 16_807) % MODULUS
     return (state - 1) / (MODULUS - 1)
   }
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < WARMUP_DRAWS; i++) {
     next()
   }
   return next
 }
 
-/**
- * The cover for a slug: its seed and two or three blobs, in a 100 by 100
- * box that the renderer stretches over the frame.
- */
 export const createCover = (
   slug: string
 ): { blobs: CoverBlob[]; seed: number } => {
   const seed = hash(slug)
   const next = random(seed)
-  // Shuffle the swatches so every blob gets its own color
   const swatches = coverSwatches
     .map((swatch) => ({ order: next(), swatch }))
     .toSorted((a, b) => a.order - b.order)
     .map(({ swatch }) => swatch)
   const count = next() > 0.4 ? 3 : 2
-  // Blobs hug the edges, spread around the frame, so the middle stays airy
   const start = next() * Math.PI * 2
   const blobs = Array.from({ length: count }, (_, i) => {
     const angle = start + (i * Math.PI * 2) / count + (next() - 0.5) * 0.9

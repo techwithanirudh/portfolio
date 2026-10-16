@@ -1,11 +1,9 @@
-// Runs inline in <head> so content never waits on React
 const reveal = () => {
   const root = document.documentElement
   if (!('IntersectionObserver' in window && 'animate' in root)) {
     return
   }
   root.dataset.reveal = ''
-  // The first section is above the fold and holds the LCP, so it never hides
   const selector =
     '[data-reveal-item]:not(#main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *)'
   const still = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -50,7 +48,6 @@ const reveal = () => {
       }
     }
   }
-  // Client side route changes swap the page in, so keep watching for new blocks
   new MutationObserver(() => {
     if (!queued) {
       queued = true

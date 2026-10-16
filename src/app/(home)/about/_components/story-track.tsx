@@ -2,17 +2,7 @@
 
 // Adapted from braydoncoyer.dev by Braydon Coyer (no license, used with
 // attribution): https://github.com/braydoncoyer/braydoncoyer.dev/blob/master/app/components/AboutTrackPattern.tsx
-// The original path is drawn by hand around four fixed sections. This one is
-// traced from a lane marker in every chapter, so it follows the copy at any
-// width: snaking past the photos on wide screens and running straight down
-// the left edge on phones.
-import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-} from 'motion/react'
+import { motion, useReducedMotion, useScroll, useSpring } from 'motion/react'
 import {
   type ReactNode,
   useCallback,
@@ -41,9 +31,7 @@ const CORNER_RADIUS = 16
 const LANE_SELECTOR = '[data-track-lane]'
 const MARKER_SELECTOR = '[data-track-marker]'
 
-// Offset of an element inside the container, ignoring transforms so the
-// scroll reveal does not move the track while it plays
-const offsetWithin = (element: HTMLElement, container: HTMLElement) => {
+const layoutOffsetWithin = (element: HTMLElement, container: HTMLElement) => {
   let x = 0
   let y = 0
   let node: HTMLElement | null = element
@@ -55,7 +43,6 @@ const offsetWithin = (element: HTMLElement, container: HTMLElement) => {
   return { x, y }
 }
 
-// Right angled polyline with rounded corners, like the hand drawn original
 const roundedPath = (points: Point[]) => {
   const [first, ...rest] = points
   if (!first) {
@@ -89,8 +76,6 @@ const roundedPath = (points: Point[]) => {
   return d
 }
 
-// Down each lane, across in the gap between chapters, from the top rule of
-// the section to the bottom one
 const traceTrack = (container: HTMLElement): Track | null => {
   const lanes = [...container.querySelectorAll<HTMLElement>(LANE_SELECTOR)]
   if (lanes.length === 0) {
@@ -99,12 +84,11 @@ const traceTrack = (container: HTMLElement): Track | null => {
 
   const height = container.offsetHeight
   const segments = lanes.map((lane) => {
-    const { x, y } = offsetWithin(lane, container)
-    // Each chapter marks the track beside its label, or halfway down
+    const { x, y } = layoutOffsetWithin(lane, container)
     const label =
       lane.parentElement?.querySelector<HTMLElement>(MARKER_SELECTOR)
     const marker = label
-      ? offsetWithin(label, container).y + label.offsetHeight / 2
+      ? layoutOffsetWithin(label, container).y + label.offsetHeight / 2
       : y + lane.offsetHeight / 2
     return { bottom: y + lane.offsetHeight, marker, top: y, x }
   })
@@ -148,17 +132,14 @@ export function StoryTrack({
   const pathRef = useRef<SVGPathElement>(null)
   const [track, setTrack] = useState<Track | null>(null)
   const [reached, setReached] = useState(0)
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const dotX = useSpring(x, spring)
-  const dotY = useSpring(y, spring)
   const reduceMotion = useReducedMotion()
-  const placed = useRef(false)
 
   const { scrollYProgress } = useScroll({
     offset: ['start center', 'end center'],
     target: containerRef,
   })
+  const smoothProgress = useSpring(scrollYProgress, spring)
+  const progress = reduceMotion ? scrollYProgress : smoothProgress
 
   useLayoutEffect(() => {
     const container = containerRef.current
@@ -173,35 +154,25 @@ export function StoryTrack({
   }, [])
 
   const follow = useCallback(
-    (progress: number) => {
+    (value: number) => {
       const path = pathRef.current
       if (!(path && track)) {
         return
       }
       const length = path.getTotalLength()
       const point = path.getPointAtLength(
-        length * Math.max(0, Math.min(progress, 1))
+        length * Math.max(0, Math.min(value, 1))
       )
-      x.set(point.x)
-      y.set(point.y)
-      // Land on the track at once on load, then glide like the original
-      if (!placed.current || reduceMotion) {
-        dotX.jump(point.x)
-        dotY.jump(point.y)
-        placed.current = true
-      }
       setReached(track.markers.filter((marker) => marker.y <= point.y).length)
     },
-    [dotX, dotY, reduceMotion, track, x, y]
+    [track]
   )
 
   useEffect(() => {
-    follow(scrollYProgress.get())
-    return scrollYProgress.on('change', follow)
-  }, [follow, scrollYProgress])
+    follow(progress.get())
+    return progress.on('change', follow)
+  }, [follow, progress])
 
-  const maskId = `${id}-mask`
-  const glowId = `${id}-glow`
   const grooveId = `${id}-groove`
 
   return (
@@ -216,19 +187,6 @@ export function StoryTrack({
           width={track.width}
         >
           <defs>
-            <filter height='300%' id={glowId} width='300%' x='-100%' y='-100%'>
-              <feGaussianBlur stdDeviation='15' />
-            </filter>
-
-            <mask id={maskId}>
-              <path
-                d={track.d}
-                stroke='white'
-                strokeLinejoin='round'
-                strokeWidth='8'
-              />
-            </mask>
-
             {/* In user space, a straight track has no width to filter by */}
             <filter
               colorInterpolationFilters='sRGB'
@@ -268,18 +226,6 @@ export function StoryTrack({
             </filter>
           </defs>
 
-          {/* The glow only shows inside the track */}
-          <g mask={`url(#${maskId})`}>
-            <motion.circle
-              className='fill-primary'
-              cx={dotX}
-              cy={dotY}
-              filter={`url(#${glowId})`}
-              opacity='0.5'
-              r='120'
-            />
-          </g>
-
           <g filter={`url(#${grooveId})`}>
             <path
               className='stroke-foreground/8'
@@ -289,6 +235,14 @@ export function StoryTrack({
               strokeWidth='8'
             />
           </g>
+
+          <motion.path
+            className='stroke-primary'
+            d={track.d}
+            strokeLinejoin='round'
+            strokeWidth='4'
+            style={{ pathLength: progress }}
+          />
 
           {track.markers.map((marker, index) => (
             <circle
@@ -304,13 +258,6 @@ export function StoryTrack({
               r='5'
             />
           ))}
-
-          <motion.circle
-            className='fill-primary stroke-2 stroke-background'
-            cx={dotX}
-            cy={dotY}
-            r='10'
-          />
         </svg>
       ) : null}
       {children}

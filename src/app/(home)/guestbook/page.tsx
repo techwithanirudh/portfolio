@@ -28,7 +28,6 @@ const loadEntries = async () => {
 }
 
 async function GuestbookEntriesSection() {
-  // A database hiccup shouldn't take the heading and form down with it
   const result = await loadEntries().catch((error: unknown) => {
     // Let Next's own signals (dynamic rendering, redirects) through
     unstable_rethrow(error)
@@ -81,7 +80,6 @@ export default function GuestbookPage() {
           <h2 className='font-medium text-xl'>Recent entries</h2>
         </ViewAnimation>
       </Section>
-      {/* Takes the rest of the screen and the entries scroll inside it */}
       <Section fill>
         <Suspense fallback={<GuestbookEntriesSkeleton />}>
           <GuestbookEntriesSection />

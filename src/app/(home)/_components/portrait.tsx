@@ -2,26 +2,20 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { preload } from 'react-dom'
+import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 
-// Ported from the an1rudh prototype (PR #108)
-
-// Matches public/images/portrait.svg
 const VIEW_BOX = '0 0 947 1160'
-// How far (in SVG units) the eyes can drift towards the cursor
-const MAX_OFFSET = 24
-// Cursor distance (in px) at which the eyes reach MAX_OFFSET
-const REACH = 320
+const MAX_OFFSET_SVG = 24
+const REACH_PX = 320
 
 const SRC = '/images/portrait.svg'
 
 export function Portrait() {
-  // Start fetching the drawing with the HTML, it's above the fold
   preload(SRC, { as: 'image', fetchPriority: 'high' })
   const eyesRef = useRef<SVGGElement>(null)
   const imageRef = useRef<HTMLImageElement>(null)
-  // The eyes are inline, so they'd show before the face loads without this
-  const [loaded, setLoaded] = useState(false)
+  const [faceLoaded, setFaceLoaded] = useState(false)
 
   useEffect(() => {
     const image = imageRef.current
@@ -29,10 +23,10 @@ export function Portrait() {
       return
     }
     if (image.complete) {
-      setLoaded(true)
+      setFaceLoaded(true)
       return
     }
-    const onLoad = () => setLoaded(true)
+    const onLoad = () => setFaceLoaded(true)
     image.addEventListener('load', onLoad)
     return () => image.removeEventListener('load', onLoad)
   }, [])
@@ -51,7 +45,7 @@ export function Portrait() {
         const dx = event.clientX - (rect.left + rect.width / 2)
         const dy = event.clientY - (rect.top + rect.height / 2)
         const distance = Math.hypot(dx, dy) || 1
-        const reach = Math.min(distance / REACH, 1) * MAX_OFFSET
+        const reach = Math.min(distance / REACH_PX, 1) * MAX_OFFSET_SVG
         eyes.style.translate = `${(dx / distance) * reach}px ${(dy / distance) * reach}px`
       })
     }
@@ -84,18 +78,19 @@ export function Portrait() {
       <svg
         aria-hidden
         className='pointer-events-none absolute inset-0 size-full opacity-0 data-loaded:opacity-100'
-        data-loaded={loaded ? '' : undefined}
+        data-loaded={faceLoaded ? '' : undefined}
         preserveAspectRatio='xMidYMid slice'
         viewBox={VIEW_BOX}
       >
         <g
           className='transition-[translate] duration-300 ease-out'
-          fill='#292929'
+          fill={PORTRAIT_EYE_FILL}
           ref={eyesRef}
         >
           <g className='[&>path]:origin-center [&>path]:animate-blink [&>path]:[transform-box:fill-box] motion-reduce:[&>path]:animate-none'>
-            <path d='m291 487c5-14 16-23 27-22 16 0 27 15 23 32-4 19-16 57-23 79-4 14-16 22-29 19-14-3-23-15-19-31 5-22 15-56 21-77z' />
-            <path d='m570 564c4-15 16-25 28-24 15-1 25 11 23 28-1 10-6 24-10 38l-12 39c-4 14-16 24-28 22-15-2-24-13-22-28 3-13 7-27 11-40z' />
+            {PORTRAIT_EYE_PATHS.map((d) => (
+              <path d={d} key={d} />
+            ))}
           </g>
         </g>
       </svg>

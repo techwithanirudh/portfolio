@@ -11,7 +11,13 @@ import {
   type LinkPreviewEntry,
   type LinkPreviewManifest,
 } from '@/lib/link-preview.shared'
-import { content, detection, exclusions, screenshot, sources } from './config'
+import {
+  content,
+  detection,
+  exclusions,
+  previewLinkSourceFiles,
+  screenshot,
+} from './config'
 import type { CaptureScreenshotResult } from './types'
 
 const mdProcessor = remark().use(remarkGfm)
@@ -114,14 +120,17 @@ export function extractSourceUrls(source: string): string[] {
 export async function collectUrls() {
   const files = await readFiles(content)
   const sourceTexts = await Promise.all(
-    sources.map((file) => fs.readFile(file, 'utf8'))
+    previewLinkSourceFiles.map((file) => fs.readFile(file, 'utf8'))
   )
   const urls = new Set([
     ...files.flatMap((f) => extractUrls(f)),
     ...sourceTexts.flatMap((text) => extractSourceUrls(text)),
   ])
 
-  return { fileCount: files.length + sources.length, urls: [...urls] }
+  return {
+    fileCount: files.length + previewLinkSourceFiles.length,
+    urls: [...urls],
+  }
 }
 
 export function previewsForUrls(

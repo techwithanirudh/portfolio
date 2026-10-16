@@ -196,8 +196,6 @@ export const PromptInputSubmit = ({
   ...props
 }: PromptInputSubmitProps) => {
   const isBusy = status === 'submitted' || status === 'streaming'
-  // Stop takes the send button's place in the same filled style, so it reads
-  // as the main action and not as another outlined tool
   const filled =
     'border-primary bg-primary text-primary-foreground hover:bg-primary/80 data-[disabled]:bg-primary data-[disabled]:opacity-50'
 

@@ -46,7 +46,6 @@ function getLinkPreview(url: string): LinkPreviewEntry | null {
   return preview
 }
 
-/** Only the fields the client card renders, so manifest bookkeeping stays on the server. */
 export function getLinkPreviewImage(url: string): LinkPreviewImage | null {
   const preview = getLinkPreview(url)
   if (!preview) {

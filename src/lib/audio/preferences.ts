@@ -24,8 +24,6 @@ const read = () => {
 let enabled = true
 let hydrated = false
 
-// Audio stays locked until the first click, tap or key press. Earlier sounds
-// are dropped, not queued, so unlocking doesn't fire a burst of old hovers
 let unlocked = false
 if (typeof window !== 'undefined') {
   const unlock = () => {
@@ -72,11 +70,9 @@ const getSoundEnabled = () => {
   return enabled
 }
 
-// The server snapshot is on so the first client render matches the markup
 export const useSoundEnabled = () =>
   useSyncExternalStore(subscribe, getSoundEnabled, () => true)
 
-// For code outside React that can't use useSound
 export const playSound = (definition: SoundDefinition, opts?: PlayOptions) => {
   if (!(unlocked && getSoundEnabled()) || prefersReducedMotion()) {
     return
@@ -94,7 +90,6 @@ export const playSound = (definition: SoundDefinition, opts?: PlayOptions) => {
     })
 }
 
-// The off cue plays first and the on cue after, so each one is audible
 export const toggleSound = () => {
   if (getSoundEnabled()) {
     playSound(toggleOff)

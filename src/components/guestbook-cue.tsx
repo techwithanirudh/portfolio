@@ -18,7 +18,6 @@ export function GuestbookBand({
 }) {
   const pathname = usePathname()
 
-  // Only the home page ends with the nudge
   if (pathname !== '/') {
     return null
   }

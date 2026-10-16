@@ -11,7 +11,6 @@ import type { ElementContent } from 'hast'
 import type { ShikiTransformer } from 'shiki'
 import { z } from 'zod'
 
-// Rejects strings that parse to an Invalid Date instead of passing them on
 const dateSchema = z.union([z.string(), z.date()]).pipe(z.coerce.date())
 
 export const blog = defineCollections({

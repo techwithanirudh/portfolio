@@ -4,7 +4,6 @@ import { PreviewLink } from '@/components/preview-link'
 import { formatDuration, formatPeriod } from '@/lib/employment-period'
 import type { ExperienceItemType } from '@/types/experience'
 
-// Descriptions are markdown, kept inline so the row stays one paragraph
 const markdownComponents: Components = {
   a: ({ children, href }) =>
     href ? (
@@ -17,8 +16,6 @@ const markdownComponents: Components = {
   p: ({ children }) => children,
 }
 
-// Logo, the role and its details, and the period on the right. Shared by the
-// home preview and the full list on About so both stay in step.
 export function ExperienceRow({
   experience,
 }: {
@@ -36,7 +33,6 @@ export function ExperienceRow({
       {experience.companyLogo ? (
         <Image
           alt=''
-          // As tall as the name and role beside it (28px and 24px lines)
           className='size-13 shrink-0 rounded-lg border border-border bg-background object-contain p-1.5'
           height={52}
           src={experience.companyLogo}

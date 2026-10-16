@@ -9,7 +9,6 @@ export interface PushCommit {
   sha: string
 }
 
-// Only these get a row, anything else GitHub sends is skipped
 const eventTypes = [
   'CreateEvent',
   'DeleteEvent',

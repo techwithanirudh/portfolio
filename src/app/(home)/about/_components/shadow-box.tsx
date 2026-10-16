@@ -11,7 +11,6 @@ interface ShadowBoxProps {
   width: number
 }
 
-// An inset slot a photo sits in, or that holds an icon when there is no photo
 export function ShadowBox({
   children,
   className,

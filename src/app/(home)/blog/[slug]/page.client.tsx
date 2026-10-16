@@ -114,8 +114,6 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
   )
 }
 
-// Comments pull in an editor and their own UI kit, so they only load as the
-// reader nears the end of the post
 const Comments = dynamic(
   () => import('@fuma-comment/react').then((mod) => mod.Comments),
   { ssr: false }

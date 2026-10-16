@@ -15,6 +15,8 @@ import { Hero } from './_components/hero'
 
 export const dynamicParams = false
 
+const PRIORITY_ROWS = 2
+
 const totalWorks = getSortedWork().length
 const pageCount = Math.ceil(totalWorks / worksPerPage)
 
@@ -80,8 +82,7 @@ export default async function Page(props: {
               <WorkCard
                 description={entry.data.description ?? ''}
                 image={entry.data.image ?? null}
-                // The first row is the LCP on both layouts
-                priority={index < 2}
+                priority={index < PRIORITY_ROWS}
                 slugs={entry.slugs}
                 title={entry.data.title ?? 'Untitled'}
                 url={entry.url}

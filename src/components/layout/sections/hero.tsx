@@ -13,11 +13,8 @@ interface HeroProps {
   title: string | ReactNode
 }
 
-// The blue full stop that ends page titles, like the home hero's name
 export const TitleDot = () => <span className='text-primary'>.</span>
 
-// The one page header: a plain left aligned title with the description under
-// it. Plain string titles get the blue full stop on their own.
 export const HeroSection = ({
   image,
   caption,

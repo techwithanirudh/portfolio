@@ -1,14 +1,11 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { type CoverSwatch, createCover } from '@/lib/cover'
+import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
 
 const PORTRAIT_PATH = path.join(process.cwd(), 'public/images/portrait.svg')
 
-// The site draws the eyes as a separate animated layer over the portrait (see
-// src/app/(home)/_components/portrait.tsx), so the file alone has none. These
-// are the same paths, at rest.
-const EYES =
-  '<g fill="#292929"><path d="m291 487c5-14 16-23 27-22 16 0 27 15 23 32-4 19-16 57-23 79-4 14-16 22-29 19-14-3-23-15-19-31 5-22 15-56 21-77z"/><path d="m570 564c4-15 16-25 28-24 15-1 25 11 23 28-1 10-6 24-10 38l-12 39c-4 14-16 24-28 22-15-2-24-13-22-28 3-13 7-27 11-40z"/></g>'
+const EYES = `<g fill="${PORTRAIT_EYE_FILL}">${PORTRAIT_EYE_PATHS.map((d) => `<path d="${d}"/>`).join('')}</g>`
 
 const loadPortrait = async (): Promise<string | null> => {
   try {
@@ -22,16 +19,12 @@ const loadPortrait = async (): Promise<string | null> => {
 
 let portrait: Promise<string | null> | undefined
 
-/** The hero portrait, eyes included, as a data URL. Read once per process. */
 export const getPortraitDataUrl = (): Promise<string | null> => {
   portrait ??= loadPortrait()
   return portrait
 }
 
-// The Geist subsets next/font/google serves the site (variable weight, OFL),
-// kept beside the OG routes so the cards set type in the site's own face
-// without a font package or a network fetch. Each path is spelled
-// out in full so output file tracing picks the file up.
+// Each path is spelled out in full so output file tracing picks the file up.
 
 // The subsets' `unicode-range`s, as Google Fonts declares them
 const LATIN: [number, number][] = [
@@ -94,8 +87,6 @@ export interface OgFont {
   unicodeRange: [number, number][]
 }
 
-// A face that fails to load is left out, and its text falls back to the
-// renderer's bundled Geist Sans
 const loadFonts = async (): Promise<OgFont[]> => {
   const fonts = await Promise.all(
     FONT_FILES.map(async ({ file, ...font }) => {
@@ -111,16 +102,11 @@ const loadFonts = async (): Promise<OgFont[]> => {
 
 let fonts: Promise<OgFont[]> | undefined
 
-/**
- * Geist for the OG renderer. Read once per process, and the
- * same buffers every time, so the renderer registers each face only once.
- */
 export const getOgFonts = (): Promise<OgFont[]> => {
   fonts ??= loadFonts()
   return fonts
 }
 
-// The covers' light-mode tones (post-cover.tsx), for the white OG card
 const SWATCH_HEX: Record<CoverSwatch, string> = {
   azure: '#60a5fa',
   blue: '#93c5fd',
@@ -130,11 +116,9 @@ const SWATCH_HEX: Record<CoverSwatch, string> = {
   violet: '#a78bfa',
 }
 
-/**
- * The generated cover for `seed` as an SVG data URL, sized in pixels so the
- * grain comes out as fine as on the site. Same blobs and grain filter as the
- * blog cards, with the 100 by 100 layout scaled to the frame.
- */
+const BLOB_SPREAD_FACTOR = 1.1
+const BLOB_RADIUS_FACTOR = 0.9
+
 export const getCoverDataUrl = (
   seed: string,
   { height, width }: { height: number; width: number }
@@ -146,13 +130,11 @@ export const getCoverDataUrl = (
         `<radialGradient id="g${i}"><stop offset="0" stop-color="${SWATCH_HEX[swatch]}"/><stop offset=".45" stop-color="${SWATCH_HEX[swatch]}" stop-opacity=".75"/><stop offset="1" stop-color="${SWATCH_HEX[swatch]}" stop-opacity="0"/></radialGradient>`
     )
     .join('')
-  // The card is wider than a cover and carries text, so the blobs move out
-  // toward the edges and shrink a little to keep the middle clear
   const blobs = cover.blobs
     .map(({ rotate, ...blob }, i) => {
-      const cx = 50 + (blob.cx - 50) * 1.1
-      const cy = 50 + (blob.cy - 50) * 1.1
-      return `<ellipse cx="${cx}" cy="${cy}" rx="${blob.rx * 0.9}" ry="${blob.ry * 0.9}" fill="url(#g${i})" transform="rotate(${rotate} ${cx} ${cy})"/>`
+      const cx = 50 + (blob.cx - 50) * BLOB_SPREAD_FACTOR
+      const cy = 50 + (blob.cy - 50) * BLOB_SPREAD_FACTOR
+      return `<ellipse cx="${cx}" cy="${cy}" rx="${blob.rx * BLOB_RADIUS_FACTOR}" ry="${blob.ry * BLOB_RADIUS_FACTOR}" fill="url(#g${i})" transform="rotate(${rotate} ${cx} ${cy})"/>`
     })
     .join('')
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".55" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><filter id="grain" x="0" y="0" width="${width}" height="${height}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="${cover.seed % 1000}"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -0.8"/><feComposite in="SourceAlpha" operator="arithmetic" k2="1" k3="-1" k4="0.5"/><feComponentTransfer result="mask"><feFuncA type="linear" slope="3" intercept="-1"/></feComponentTransfer><feComponentTransfer in="SourceGraphic"><feFuncA type="linear" slope="24"/></feComponentTransfer><feComposite in2="mask" operator="in"/></filter></defs><rect width="${width}" height="${height}" fill="#fff"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`

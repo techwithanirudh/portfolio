@@ -6,19 +6,17 @@ import { GrainBackdrop } from '@/components/shader/grain-backdrop'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
+import { tagline } from '@/constants/site'
 import { cn } from '@/lib/utils'
 import { CopyEmailButton } from './copy-email-button'
 import { Portrait } from './portrait'
 
 const socialClassName = cn(
   buttonVariants({ size: 'icon-sm', variant: 'outline' }),
-  // Only the icon moves, so the hit area stays put and hover can't flicker
   'text-muted-foreground hover:text-foreground dark:bg-background dark:ring-white/10',
   '[&_svg]:transition-[opacity,filter,scale,rotate] [&_svg]:duration-200 [&_svg]:ease-out hover:[&_svg]:-rotate-8 hover:[&_svg]:scale-115 motion-reduce:[&_svg]:transition-none'
 )
 
-// One column, type first: portrait, name, one line, actions, with the grain
-// blob drifting in from the corner
 const Hero = () => (
   <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-16 pb-14 sm:px-12 sm:pt-20 sm:pb-16'>
     <GrainBackdrop className='-z-10' />
@@ -34,9 +32,9 @@ const Hero = () => (
     </ViewAnimation>
     <ViewAnimation delay={0.15}>
       <p className='max-w-[58ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>
-        Design engineer and full-stack developer. I design websites and write
-        the code behind them. Right now that means AI products with Next.js,
-        React and TypeScript, as a software engineering intern at{' '}
+        {tagline} I design websites and write the code behind them. Right now
+        that means AI products with Next.js, React and TypeScript, as a software
+        engineering intern at{' '}
         <a
           className='link-underline'
           href='https://quiver.ai'

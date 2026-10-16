@@ -16,7 +16,6 @@
     "db:studio": "drizzle-kit studio",
     "dev": "next dev",
     "doctor": "react-doctor",
-    "doctor": "react-doctor",
     "email:build": "email build",
     "email:dev": "email dev -p 3001",
     "email:export": "email export",

@@ -29,9 +29,6 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
         id='main-content'
         tabIndex={-1}
       >
-        {/* Short pages still fill the screen, so the footer always starts
-            below the fold. Pages close themselves with a rule under their
-            last section, and the fill takes the leftover height */}
         <div className='flex min-h-[calc(100dvh-3.5rem)] flex-col'>
           {children}
           <PageFill />
