@@ -3,10 +3,14 @@ import 'server-only'
 import { unstable_cache } from 'next/cache'
 import type { Activity } from '@/components/features/contributions'
 import { baseOptions } from '@/constants/site'
+import { env } from '@/env'
 
 interface ContributionResponse {
   contributions: Activity[]
 }
+
+const DEFAULT_CONTRIBUTIONS_API_URL =
+  'https://github-contributions-api.jogruber.de'
 
 const githubUsername = baseOptions.githubUrl?.split('/').filter(Boolean).at(-1)
 
@@ -18,8 +22,7 @@ export const getGitHubContributions = unstable_cache(
 
     const url = new URL(
       `/v4/${githubUsername}?y=last`,
-      process.env.GITHUB_CONTRIBUTIONS_API_URL ||
-        'https://github-contributions-api.jogruber.de'
+      env.GITHUB_CONTRIBUTIONS_API_URL || DEFAULT_CONTRIBUTIONS_API_URL
     )
     try {
       const response = await fetch(url)

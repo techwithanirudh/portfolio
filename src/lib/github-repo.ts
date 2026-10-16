@@ -1,11 +1,7 @@
-import { Octokit } from '@octokit/rest'
 import { unstable_cache } from 'next/cache'
+import { octokit } from '@/lib/github'
 
 const DEFAULT_REVALIDATE_SECONDS = 60 * 60
-
-const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN ?? process.env.GITHUB_ACCESS_TOKEN,
-})
 
 export interface GitHubRepoInput {
   branch?: string
