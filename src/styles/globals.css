@@ -45,10 +45,12 @@
   --color-destructive-foreground: var(--color-fd-destructive-foreground); */
   --color-destructive: hsl(0 84.2% 60.2%);
   --color-destructive-foreground: hsl(0 0% 98%);
+  --color-success: var(--color-emerald-500);
 
   --color-border: var(--color-fd-border);
   --color-input: var(--color-fd-border);
   --color-ring: var(--color-fd-ring);
+  --color-overlay: var(--color-fd-overlay);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -193,6 +195,31 @@ html > body[data-scroll-locked] {
   @apply text-foreground underline decoration-primary/60 decoration-solid decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
+/*
+  Dashed rules between grid cells: under every cell but the last, and, from
+  the breakpoint `dashed-grid-2` is applied at, between the two columns with
+  none under the last row. The section's own border frames the outside.
+*/
+@utility dashed-grid {
+  & > * {
+    @apply border-dashed border-border/70 dark:border-border;
+  }
+
+  & > :not(:last-child) {
+    @apply border-b;
+  }
+}
+
+@utility dashed-grid-2 {
+  & > :nth-child(odd) {
+    @apply border-r;
+  }
+
+  & > :nth-child(odd):nth-last-child(2) {
+    @apply border-b-0;
+  }
+}
+
 @utility step {
   counter-increment: step;
   @apply max-md:pl-10;
@@ -308,7 +335,7 @@ html > body[data-scroll-locked] {
   }
 
   .dashed-stack {
-    @apply divide-y divide-dashed divide-border;
+    @apply divide-y divide-dashed divide-border/70 dark:divide-border;
   }
 
   .divider-top-dashed {

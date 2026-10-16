@@ -48,7 +48,6 @@
     "@openrouter/ai-sdk-provider": "^3.1.0",
     "@paper-design/shaders-react": "^0.0.81",
     "@react-email/components": "^1.0.12",
-    "@shikijs/transformers": "4.5.0",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@takumi-rs/image-response": "^2.16.2",
     "@vercel/blob": "^2.8.2",

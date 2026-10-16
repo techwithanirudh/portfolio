@@ -7,8 +7,8 @@ const FONT_IMPORT = /@import url\([^)]*\);/g
 export function Mermaid({ chart }: { chart: string }) {
   try {
     const svg = renderMermaidSVG(chart.replaceAll('\\n', '\n'), {
-      bg: 'var(--color-fd-background)',
-      fg: 'var(--color-fd-foreground)',
+      bg: 'var(--color-background)',
+      fg: 'var(--color-foreground)',
       interactive: true,
       transparent: true,
     }).replace(FONT_IMPORT, '')

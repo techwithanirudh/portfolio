@@ -61,13 +61,13 @@ function TOCPopoverContent({ className }: { className?: string }) {
       <header
         className={cn(
           'border-b backdrop-blur-sm transition-colors',
-          open && 'bg-fd-background/80 shadow-lg'
+          open && 'bg-background/80 shadow-lg'
         )}
         ref={ref}
       >
-        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-fd-muted-foreground text-sm focus-visible:bg-muted md:px-6 [&_svg]:size-4'>
+        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-muted-foreground text-sm focus-visible:bg-muted md:px-6 [&_svg]:size-4'>
           <ProgressCircle
-            className={cn('shrink-0', open && 'text-fd-primary')}
+            className={cn('shrink-0', open && 'text-primary')}
             value={
               (items.findLastIndex((item) => item.active) + 1) /
               Math.max(1, items.length)
@@ -77,7 +77,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
             <span
               className={cn(
                 'truncate transition-[opacity,translate,color]',
-                open && 'text-fd-foreground',
+                open && 'text-foreground',
                 showSelectedItem &&
                   'pointer-events-none -translate-y-full opacity-0'
               )}

@@ -2,12 +2,10 @@
 
 import { env } from '@/env'
 import { resend } from '@/lib/resend'
-import { ActionError, actionClient } from '@/lib/safe-action/client'
-import { botIdMiddleware } from '@/lib/safe-action/middleware'
+import { ActionError, publicActionClient } from '@/lib/safe-action'
 import { ContactSchema } from '@/lib/validators/contact'
 
-export const contact = actionClient
-  .use(botIdMiddleware)
+export const contact = publicActionClient
   .inputSchema(ContactSchema)
   .action(async ({ parsedInput: { name, email, message } }) => {
     const from = env.EMAIL_FROM
@@ -19,31 +17,27 @@ export const contact = actionClient
       )
     }
 
-    try {
-      const { error } = await resend.emails.send({
+    // Resend returns API failures and throws on network ones. Either way the
+    // detail is logged once and the visitor gets a generic message
+    const { error } = await resend.emails
+      .send({
         from,
         replyTo: email,
         subject: `New contact form submission from ${name}`,
         text: message,
         to,
       })
+      .catch((cause: unknown) => ({ error: cause }))
 
-      if (error) {
-        console.error('Error sending contact email:', error)
-        throw new ActionError(`Failed to send contact email: ${error.message}`)
-      }
-
-      return {
-        message: "Thanks, I got your message. I'll reply soon.",
-        success: true,
-      }
-    } catch (error) {
-      console.error('Contact form error:', error)
-      if (error instanceof ActionError) {
-        throw error
-      }
+    if (error) {
+      console.error('Failed to send contact email:', error)
       throw new ActionError(
         'Failed to send your message. Please try again later.'
       )
+    }
+
+    return {
+      message: "Thanks, I got your message. I'll reply soon.",
+      success: true,
     }
   })

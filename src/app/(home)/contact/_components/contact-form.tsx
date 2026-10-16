@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import {
   CONTACT_MESSAGE_MAX_LENGTH,
@@ -25,6 +26,8 @@ import {
 } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
+const sendFailedMessage = 'Your message failed to send. Please try again.'
+
 const ContactFormInner = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
@@ -32,11 +35,7 @@ const ContactFormInner = () => {
     {
       actionProps: {
         onError: ({ error }) => {
-          toast.error(
-            typeof error.serverError === 'string'
-              ? error.serverError
-              : 'Your message failed to send. Please try again.'
-          )
+          toast.error(getActionErrorMessage(error, sendFailedMessage))
         },
         onSuccess: ({ data }) => {
           toast.success(
@@ -161,7 +160,7 @@ const ContactFormInner = () => {
           )}
         </Button>
         {action.status === 'hasSucceeded' && (
-          <Alert className='border-emerald-500/15 bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+          <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.success && action.result.data?.message
@@ -171,12 +170,10 @@ const ContactFormInner = () => {
           </Alert>
         )}
         {action.result.serverError && (
-          <Alert className='border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+          <Alert variant='destructive-soft'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
-              {typeof action.result.serverError === 'string'
-                ? action.result.serverError
-                : 'Your message failed to send. Please try again.'}
+              {getActionErrorMessage(action.result, sendFailedMessage)}
             </AlertTitle>
           </Alert>
         )}

@@ -7,6 +7,7 @@ import {
 } from '@/components/layout/sections/split'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
 import { ContactForm } from './_components/contact-form'
 import { FAQ } from './_components/faq'
@@ -30,28 +31,17 @@ export default function Contact(): React.ReactElement {
       </SplitSection>
       <FAQ />
       <ContactPageJsonLd
-        description='Contact me with questions or feedback.'
-        path='/contact'
-        title='Contact'
+        description={pages.contact.description}
+        path={pages.contact.path}
+        title={pages.contact.title}
       />
     </Wrapper>
   )
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>
-}): Promise<Metadata> {
-  const _params = await props.params
-  const description = 'Contact me with questions or feedback.'
-
-  return createMetadata({
-    alternates: {
-      canonical: '/contact',
-    },
-    description,
-    openGraph: {
-      url: '/contact',
-    },
-    title: 'Contact',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: pages.contact.path },
+  description: pages.contact.description,
+  openGraph: { url: pages.contact.path },
+  title: pages.contact.title,
+})

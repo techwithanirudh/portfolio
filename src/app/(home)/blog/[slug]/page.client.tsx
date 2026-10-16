@@ -1,30 +1,19 @@
 'use client'
 
 import { Comments } from '@fuma-comment/react'
-import { type ComponentType, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuIconItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
-
-const itemClassName = 'gap-2.5 rounded-lg p-1.5 pr-2 font-medium'
-
-const ShareIcon = ({
-  icon: Icon,
-}: {
-  icon: ComponentType<{ className?: string }>
-}) => (
-  <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border'>
-    <Icon className='size-4' />
-  </span>
-)
 
 export function ShareMenu({ title, url }: { title: string; url: string }) {
   const [canShare, setCanShare] = useState(false)
@@ -34,14 +23,10 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
     setCanShare('share' in navigator)
   }, [])
 
-  const copyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(url)
-      toast.success('Link copied')
-    } catch {
-      toast.error('Unable to copy link')
-    }
-  }
+  const { copy } = useCopyToClipboard({
+    onCopyError: () => toast.error('Unable to copy link'),
+    onCopySuccess: () => toast.success('Link copied'),
+  })
 
   return (
     <DropdownMenu>
@@ -64,12 +49,11 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
         collisionPadding={8}
         finalFocus={false}
       >
-        <DropdownMenuItem className={itemClassName} onClick={copyLink}>
-          <ShareIcon icon={Icons.link} />
+        <DropdownMenuIconItem icon={Icons.link} onClick={() => copy(url)}>
           Copy link
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className={itemClassName}
+        </DropdownMenuIconItem>
+        <DropdownMenuIconItem
+          icon={Icons.x}
           render={
             <a
               aria-label='Share on X'
@@ -79,11 +63,10 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
             />
           }
         >
-          <ShareIcon icon={Icons.x} />
           Share on X
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          className={itemClassName}
+        </DropdownMenuIconItem>
+        <DropdownMenuIconItem
+          icon={Icons.linkedin}
           render={
             <a
               aria-label='Share on LinkedIn'
@@ -93,12 +76,11 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
             />
           }
         >
-          <ShareIcon icon={Icons.linkedin} />
           Share on LinkedIn
-        </DropdownMenuItem>
+        </DropdownMenuIconItem>
         {canShare && (
-          <DropdownMenuItem
-            className={itemClassName}
+          <DropdownMenuIconItem
+            icon={Icons.moreHorizontal}
             onClick={() => {
               navigator.share({ title, url }).catch((error) => {
                 if (process.env.NODE_ENV !== 'production') {
@@ -107,9 +89,8 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
               })
             }}
           >
-            <ShareIcon icon={Icons.moreHorizontal} />
             More
-          </DropdownMenuItem>
+          </DropdownMenuIconItem>
         )}
       </DropdownMenuContent>
     </DropdownMenu>

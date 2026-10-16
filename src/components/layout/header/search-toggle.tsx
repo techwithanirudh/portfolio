@@ -1,25 +1,19 @@
 'use client'
 
-import {
-  type ButtonProps,
-  buttonVariants,
-} from 'fumadocs-ui/components/ui/button'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import type { ComponentProps } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 interface SearchToggleProps
-  extends Omit<ComponentProps<'button'>, 'color'>,
-    ButtonProps {
+  extends Pick<ComponentProps<typeof Button>, 'className' | 'size'> {
   hideIfDisabled?: boolean
 }
 
 export const SearchToggle = ({
+  className,
   hideIfDisabled,
   size = 'icon-sm',
-  color = 'ghost',
-  ...props
 }: SearchToggleProps) => {
   const { setOpenSearch, enabled } = useSearchContext()
 
@@ -28,21 +22,16 @@ export const SearchToggle = ({
   }
 
   return (
-    <button
+    <Button
       aria-label='Open search'
-      className={cn(
-        buttonVariants({
-          color,
-          size,
-        }),
-        props.className
-      )}
+      className={className}
       data-search=''
       data-sound-press='off'
       onClick={() => setOpenSearch(true)}
-      type='button'
+      size={size}
+      variant='ghost'
     >
-      <Icons.search />
-    </button>
+      <Icons.search className='size-4.5' />
+    </Button>
   )
 }

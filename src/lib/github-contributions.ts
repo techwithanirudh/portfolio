@@ -1,27 +1,24 @@
 import 'server-only'
 
 import { unstable_cache } from 'next/cache'
+import { z } from 'zod'
 import type { Activity } from '@/components/features/contributions'
-import { baseOptions } from '@/constants/site'
+import { githubUser } from '@/constants/config'
 import { env } from '@/env'
 
-interface ContributionResponse {
-  contributions: Activity[]
-}
+const contributionResponseSchema = z.object({
+  contributions: z.array(
+    z.object({ count: z.number(), date: z.string(), level: z.number() })
+  ),
+}) satisfies z.ZodType<{ contributions: Activity[] }>
 
 const DEFAULT_CONTRIBUTIONS_API_URL =
   'https://github-contributions-api.jogruber.de'
 
-const githubUsername = baseOptions.githubUrl?.split('/').filter(Boolean).at(-1)
-
 export const getGitHubContributions = unstable_cache(
   async () => {
-    if (!githubUsername) {
-      return []
-    }
-
     const url = new URL(
-      `/v4/${githubUsername}?y=last`,
+      `/v4/${githubUser}?y=last`,
       env.GITHUB_CONTRIBUTIONS_API_URL || DEFAULT_CONTRIBUTIONS_API_URL
     )
     try {
@@ -31,13 +28,13 @@ export const getGitHubContributions = unstable_cache(
         return []
       }
 
-      const data = (await response.json()) as ContributionResponse
+      const parsed = contributionResponseSchema.safeParse(await response.json())
 
-      return Array.isArray(data.contributions) ? data.contributions : []
+      return parsed.success ? parsed.data.contributions : []
     } catch {
       return []
     }
   },
-  ['github-contributions', githubUsername ?? 'unknown'],
+  ['github-contributions', githubUser],
   { revalidate: 60 * 60 * 24 }
 )

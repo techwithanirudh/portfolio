@@ -5,10 +5,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useEffectEvent, useRef } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
-import type { MyUIMessage } from '@/app/api/chat/types'
 import { Shimmer } from '@/components/ai-elements/shimmer'
 import { useAssistantContext } from '@/components/features/assistant/context'
 import { Icons } from '@/components/icons/icons'
+import type { MyUIMessage } from '@/lib/ai/chat/types'
+import { MEDIA } from '@/lib/media'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 
 type NavigateToolPart = Extract<
@@ -35,7 +36,7 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
   const lenisRef = useRef(lenis)
   const mountedRef = useRef(false)
   const { setOpen } = useAssistantContext()
-  const isDocked = useMediaQuery('(min-width: 64rem)')
+  const isDocked = useMediaQuery(MEDIA.docked)
   const output = part.state === 'output-available' ? part.output : null
   const href = output?.success ? output.href : null
 

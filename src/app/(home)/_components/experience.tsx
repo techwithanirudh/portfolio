@@ -1,8 +1,7 @@
-import { ExperienceRow } from '@/components/features/work'
+import { ExperienceTimeline } from '@/components/features/work'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { SectionMoreLink } from '@/components/layout/sections/more-link'
-import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
 
 const previewCount = 3
@@ -21,13 +20,7 @@ export default function ExperiencePreview() {
         />
 
         <div>
-          <div className='divide-y divide-dashed divide-border border-border border-t border-dashed'>
-            {recent.map((experience, index) => (
-              <ViewAnimation delay={0.05 * index} key={experience.id}>
-                <ExperienceRow experience={experience} />
-              </ViewAnimation>
-            ))}
-          </div>
+          <ExperienceTimeline experiences={recent} />
           <SectionMoreLink
             delay={0.05 * recent.length}
             href='/about#experience'

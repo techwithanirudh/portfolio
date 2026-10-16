@@ -1,10 +1,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
+import { InlineMarkdown } from '@/components/inline-markdown'
 import { Section } from '@/components/layout/sections'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
-import { baseOptions, tagline } from '@/constants/site'
+import { heroIntro } from '@/constants/portfolio/intro'
+import { baseOptions } from '@/constants/site'
 import heroGradient from '@/public/images/hero-gradient.png'
 import { Portrait } from './portrait'
 
@@ -30,18 +32,11 @@ const Hero = () => (
     </ViewAnimation>
     <ViewAnimation delay={0.1}>
       <p className='max-w-[52ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>
-        {tagline} I design websites and write the code behind them. Right now
-        that means AI products with Next.js, React and TypeScript, as a software
-        engineering intern at{' '}
-        <a
-          className='link-underline'
-          href='https://quiver.ai'
-          rel='noreferrer'
-          target='_blank'
-        >
-          QuiverAI
-        </a>
-        .
+        <InlineMarkdown
+          linkClassName='link-underline'
+          previews={false}
+          text={heroIntro}
+        />
       </p>
     </ViewAnimation>
 

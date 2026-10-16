@@ -1,5 +1,5 @@
 import type { TOCItemType } from 'fumadocs-core/toc'
-import { title as siteTitle } from '@/constants/site'
+import { type PageInfo, pages } from '@/constants/pages'
 import { getSortedByDatePosts, getSortedWork, getTags } from '@/lib/source'
 
 export interface SiteSection {
@@ -14,80 +14,36 @@ export interface SitePage {
   title: string
 }
 
-export const staticPages: SitePage[] = [
-  {
-    description:
-      'Intro, current role, recent experience, projects, writing and testimonials.',
-    path: '/',
-    sections: [{ id: 'experience', title: 'Experience preview' }],
-    title: 'Home',
-  },
-  {
-    description: 'A bit about who I am and what I do.',
-    path: '/about',
-    sections: [
-      { id: 'story', title: 'Story' },
-      { id: 'experience', title: 'Experience' },
-      { id: 'stack', title: 'Stack' },
-    ],
-    title: 'About',
-  },
-  {
-    description: 'Recent projects and collaborations.',
-    path: '/projects',
-    sections: [],
-    title: 'Projects',
-  },
-  {
-    description:
-      'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.',
-    path: '/blog',
-    sections: [],
-    title: 'Blog',
-  },
-  {
-    description: 'Browse blog posts by topic.',
-    path: '/blog/tags',
-    sections: [],
-    title: 'Blog tags',
-  },
-  {
-    description: 'The hardware and software I use every day.',
-    path: '/uses',
-    sections: [],
-    title: 'Uses',
-  },
-  {
-    description: 'The tools, fonts, and people behind this website.',
-    path: '/colophon',
-    sections: [],
-    title: 'Colophon',
-  },
-  {
-    description: 'Contact form, social links and FAQ.',
-    path: '/contact',
-    sections: [],
-    title: 'Contact',
-  },
-  {
-    description: 'Leave a note and react to messages from other visitors.',
-    path: '/guestbook',
-    sections: [],
-    title: 'Guestbook',
-  },
-  {
-    description: 'A printable one-page resume.',
-    path: '/resume',
-    sections: [],
-    title: 'Resume',
-  },
-  {
-    description: `Search posts and projects on ${siteTitle}.`,
-    path: '/search',
-    sections: [],
-    title: 'Search',
-  },
+const sectionsByPath: Record<string, SiteSection[]> = {
+  '/': [{ id: 'experience', title: 'Experience preview' }],
+  '/about': [
+    { id: 'story', title: 'Story' },
+    { id: 'experience', title: 'Experience' },
+    { id: 'stack', title: 'Stack' },
+    { id: 'activity', title: 'Activity' },
+  ],
+}
+
+const pageOrder: PageInfo[] = [
+  pages.home,
+  pages.about,
+  pages.projects,
+  pages.blog,
+  pages.blogTags,
+  pages.uses,
+  pages.colophon,
+  pages.contact,
+  pages.guestbook,
+  pages.resume,
+  pages.search,
 ]
+
+export const staticPages: SitePage[] = pageOrder.map((page) => ({
+  description: page.summary ?? page.description,
+  path: page.path,
+  sections: sectionsByPath[page.path] ?? [],
+  title: page.title,
+}))
 
 const LEADING_HASH = /^#/
 

@@ -2,7 +2,7 @@
 
 // Adapted from braydoncoyer.dev by Braydon Coyer (no license, used with
 // attribution): https://github.com/braydoncoyer/braydoncoyer.dev/blob/master/app/components/AboutTrackPattern.tsx
-import { motion, useReducedMotion, useScroll, useSpring } from 'motion/react'
+import { motion, useScroll, useSpring } from 'motion/react'
 import {
   type ReactNode,
   useEffect,
@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { cn } from '@/lib/utils'
 
 interface Point {

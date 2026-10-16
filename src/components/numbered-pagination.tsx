@@ -1,19 +1,20 @@
-'use client'
 import { Icons } from '@/components/icons/icons'
-import { Button } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
+  PaginationLink,
 } from '@/components/ui/pagination'
-import { usePagination } from '@/hooks/use-pagination'
+import { getPaginationRange } from '@/lib/pagination'
 
 const ellipsisClassName =
   'flex size-9 items-center justify-center text-muted-foreground text-sm'
 
+const linkClassName = 'shadow-none hover:z-10 focus-visible:z-10'
+
 interface NumberedPaginationProps {
   currentPage: number
-  onPageChange: (page: number) => void
+  getHref: (page: number) => string
   paginationItemsToDisplay?: number
   totalPages: number
 }
@@ -22,36 +23,28 @@ function NumberedPagination({
   currentPage,
   totalPages,
   paginationItemsToDisplay = 5,
-  onPageChange,
+  getHref,
 }: NumberedPaginationProps) {
-  const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
+  const { pages, showLeftEllipsis, showRightEllipsis } = getPaginationRange({
     currentPage,
-    paginationItemsToDisplay,
+    itemsToDisplay: paginationItemsToDisplay,
     totalPages,
   })
-
-  const handlePageChange = (page: number) => (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (page >= 1 && page <= totalPages) {
-      onPageChange(page)
-    }
-  }
 
   return (
     <Pagination>
       <PaginationContent className='grid w-full grid-cols-[1fr_auto_1fr] items-center gap-0'>
         <PaginationItem className='flex'>
           {currentPage > 1 && (
-            <Button
+            <PaginationLink
               aria-label='Go to previous page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage - 1)}
+              className={linkClassName}
+              href={getHref(currentPage - 1)}
               shape='square'
-              size='icon'
               variant='ghost'
             >
               <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
-            </Button>
+            </PaginationLink>
           )}
         </PaginationItem>
 
@@ -67,16 +60,15 @@ function NumberedPagination({
 
             {pages.map((page) => (
               <PaginationItem className='w-max' key={page}>
-                <Button
-                  aria-current={page === currentPage ? 'page' : undefined}
-                  className='shadow-none hover:z-10 focus-visible:z-10'
-                  onClick={handlePageChange(page)}
+                <PaginationLink
+                  className={linkClassName}
+                  href={getHref(page)}
+                  isActive={page === currentPage}
                   shape='square'
-                  size='icon'
                   variant={page === currentPage ? 'default' : 'ghost'}
                 >
                   {page}
-                </Button>
+                </PaginationLink>
               </PaginationItem>
             ))}
 
@@ -92,12 +84,11 @@ function NumberedPagination({
 
         <PaginationItem className='flex justify-end'>
           {currentPage < totalPages && (
-            <Button
+            <PaginationLink
               aria-label='Go to next page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage + 1)}
+              className={linkClassName}
+              href={getHref(currentPage + 1)}
               shape='square'
-              size='icon'
               variant='ghost'
             >
               <Icons.chevronRight
@@ -105,7 +96,7 @@ function NumberedPagination({
                 size={16}
                 strokeWidth={2}
               />
-            </Button>
+            </PaginationLink>
           )}
         </PaginationItem>
       </PaginationContent>

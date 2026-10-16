@@ -1,20 +1,23 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
-import { PostCard } from '@/components/features/blog'
+import { notFound } from 'next/navigation'
+import { PostList } from '@/components/features/blog/post-list'
 import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { SectionBody } from '@/components/layout/sections/body'
 import { HeroSection } from '@/components/layout/sections/hero'
 import { NumberedPagination } from '@/components/numbered-pagination'
-import { ViewAnimation } from '@/components/view-animation'
 import { postsPerPage } from '@/constants/config'
-import { formatDate } from '@/lib/format-date'
 import { createMetadata } from '@/lib/metadata'
-import { parsePageParam } from '@/lib/pagination'
+import { getPageHref, parsePageParam } from '@/lib/pagination'
 import { getPostsByTag, getTags } from '@/lib/source'
 
 export const dynamicParams = false
+
+interface Props {
+  params: Promise<{ tag: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
 
 const totalPosts = (title: string) => getPostsByTag(title).length
 const pageCount = (title: string) => Math.ceil(totalPosts(title) / postsPerPage)
@@ -67,35 +70,9 @@ const Header = ({
   />
 )
 
-const Pagination = ({ pageIndex, tag }: { pageIndex: number; tag: string }) => {
-  const handlePageChange = async (page: number) => {
-    'use server'
-    redirect(`/blog/tags/${tag}?page=${page}`)
-  }
-
-  return (
-    <Section className='bg-dashed'>
-      <NumberedPagination
-        currentPage={pageIndex + 1}
-        onPageChange={handlePageChange}
-        paginationItemsToDisplay={5}
-        totalPages={pageCount(tag)}
-      />
-    </Section>
-  )
-}
-
-export default async function Page(props: {
-  params: Promise<{ slug: string[] }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) {
-  const params = await props.params
+export default async function Page(props: Props) {
+  const { tag } = await props.params
   const searchParams = await props.searchParams
-
-  const tag = params.slug[0]
-  if (!tag) {
-    return notFound()
-  }
 
   const pageIndex = parsePageParam(searchParams.page) - 1
 
@@ -111,24 +88,17 @@ export default async function Page(props: {
     <>
       <Header endIndex={endIndex} startIndex={startIndex} tag={tag} />
       <SectionBody>
-        <div className='grid divide-y divide-dashed divide-border text-left'>
-          {posts.map((post, index) => {
-            const date = formatDate(post.data.date)
-            return (
-              <ViewAnimation delay={0.05 * index} key={post.url}>
-                <PostCard
-                  author={post.data.author ?? 'Unknown'}
-                  date={date}
-                  description={post.data.description ?? ''}
-                  title={post.data.title ?? 'Untitled'}
-                  url={post.url}
-                />
-              </ViewAnimation>
-            )
-          })}
-        </div>
+        <PostList posts={posts} />
       </SectionBody>
-      {pageCount(tag) > 1 && <Pagination pageIndex={pageIndex} tag={tag} />}
+      {pageCount(tag) > 1 && (
+        <Section className='bg-dashed'>
+          <NumberedPagination
+            currentPage={pageIndex + 1}
+            getHref={(page) => getPageHref(`/blog/tags/${tag}`, page)}
+            totalPages={pageCount(tag)}
+          />
+        </Section>
+      )}
       <TagJsonLd tag={tag} />
     </>
   )
@@ -136,25 +106,16 @@ export default async function Page(props: {
 
 export const generateStaticParams = () => {
   const tags = getTags()
-  return tags.map((tag) => ({ slug: [tag] }))
-}
-
-interface Props {
-  params: Promise<{ slug: string[] }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  return tags.map((tag) => ({ tag }))
 }
 
 export async function generateMetadata(
   props: Props,
   _parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const params = await props.params
+  const { tag } = await props.params
   const searchParams = await props.searchParams
 
-  const tag = params.slug[0]
-  if (!tag) {
-    notFound()
-  }
   const pageIndex = parsePageParam(searchParams.page)
 
   if (pageIndex < 1 || pageIndex > pageCount(tag)) {
@@ -165,9 +126,10 @@ export async function generateMetadata(
   const pageTitle = isFirstPage
     ? `${tag} posts`
     : `${tag} posts, page ${pageIndex}`
-  const canonicalUrl = isFirstPage
-    ? `/blog/tags/${tag}`
-    : `/blog/tags/${tag}?page=${pageIndex}`
+  const canonicalUrl = getPageHref(
+    `/blog/tags/${tag}`,
+    isFirstPage ? 1 : pageIndex
+  )
   const description = isFirstPage
     ? `Browse blog posts tagged with ${tag}.`
     : `Browse page ${pageIndex} of blog posts tagged with ${tag}.`

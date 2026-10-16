@@ -1,5 +1,5 @@
 import { Accordion as AccordionPrimitive } from "@base-ui/react/accordion"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import { Icons } from "@/components/icons/icons"
 

@@ -12,6 +12,7 @@ import {
 } from '@/components/layout/sections/split'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
 import { getSession } from '@/server/auth'
 import { getGuestbookEntries } from '@/server/db/queries/guestbook'
@@ -86,23 +87,17 @@ export default function GuestbookPage() {
         </Suspense>
       </Section>
       <WebPageJsonLd
-        description='Leave a note and react to messages from other visitors.'
-        path='/guestbook'
-        title='Guestbook'
+        description={pages.guestbook.description}
+        path={pages.guestbook.path}
+        title={pages.guestbook.title}
       />
     </Wrapper>
   )
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  return createMetadata({
-    alternates: {
-      canonical: '/guestbook',
-    },
-    description: 'Leave a note and react to messages from other visitors.',
-    openGraph: {
-      url: '/guestbook',
-    },
-    title: 'Guestbook',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: pages.guestbook.path },
+  description: pages.guestbook.description,
+  openGraph: { url: pages.guestbook.path },
+  title: pages.guestbook.title,
+})

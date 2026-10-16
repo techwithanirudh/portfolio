@@ -21,15 +21,23 @@ export function IframeEmbed({
   )
 }
 
+export type FramedImageProps = Omit<
+  ImageProps,
+  'alt' | 'height' | 'src' | 'width'
+> &
+  Partial<Pick<ImageProps, 'alt' | 'height' | 'src' | 'width'>> & {
+    canZoom?: boolean
+  }
+
 export function FramedImage({
   canZoom = true,
   alt = '',
   src,
   className,
-  height,
-  width,
+  height = 630,
+  width = 1200,
   ...props
-}: ComponentProps<'img'> & { canZoom?: boolean }) {
+}: FramedImageProps) {
   if (!src) {
     return null
   }
@@ -40,18 +48,18 @@ export function FramedImage({
         <ImageZoom
           alt={alt}
           className={className}
-          height={(height as ImageProps['height']) ?? 630}
-          src={src as string}
-          width={(width as ImageProps['width']) ?? 1200}
-          {...(props as object)}
+          height={height}
+          src={src}
+          width={width}
+          {...props}
         />
       ) : (
         <Image
           alt={alt}
           className={className}
-          height={(height as ImageProps['height']) ?? 630}
-          src={src as ImageProps['src']}
-          width={(width as ImageProps['width']) ?? 1200}
+          height={height}
+          src={src}
+          width={width}
           {...props}
         />
       )}

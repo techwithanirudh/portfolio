@@ -14,7 +14,7 @@ const palette = [
 ]
 
 export const Design = () => (
-  <div className='flex flex-col divide-y divide-dashed divide-border text-left'>
+  <div className='dashed-stack flex flex-col text-left'>
     <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
       <p>
         A layout with wide spacing and dashed borders. Geist Sans sets headings

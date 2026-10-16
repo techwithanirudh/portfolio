@@ -1,10 +1,7 @@
 import { description, title } from '@/constants/site'
-import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
 import { url } from '@/lib/url'
+import { getContentIndexText } from '../utils/content-index'
 import { staticPages } from '../utils/site-pages'
-
-const allPosts = getSortedByDatePosts()
-const allWork = getSortedWork()
 
 const content = `# ${title}
 > ${description}
@@ -25,14 +22,10 @@ const content = `# ${title}
 
 ${staticPages.map((page) => `- [${page.title}](${url(page.path)}): ${page.description}`).join('\n')}
 
-## Work
-
-${allWork.map((item) => `- [${item.data.title}](${url(['work.mdx', ...item.slugs])}): ${item.data.description ?? 'Project showcase'}`).join('\n')}
-
-## Blog
-
-${allPosts.map((item) => `- [${item.data.title}](${url(['blog.mdx', ...item.slugs])}): ${item.data.description ?? ''}`).join('\n')}
-`
+${getContentIndexText({
+  blog: (item) => url(['blog.mdx', ...item.slugs]),
+  work: (item) => url(['work.mdx', ...item.slugs]),
+})}`
 
 export const dynamic = 'force-static'
 export const revalidate = false

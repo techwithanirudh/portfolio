@@ -3,9 +3,10 @@ import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
+import { pages } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
 import { profile } from '@/constants/portfolio/profile'
-import { technologies } from '@/constants/portfolio/skills'
+import { groupTechnologies } from '@/constants/portfolio/skills'
 import { description, owner } from '@/constants/site'
 import { formatPeriod } from '@/lib/employment-period'
 import { createMetadata } from '@/lib/metadata'
@@ -22,11 +23,9 @@ const trailingSlash = /\/$/
 const prettyUrl = (url: string) =>
   url.replace(urlPrefix, '').replace(trailingSlash, '')
 
-const stack = Object.entries(
-  Object.groupBy(technologies, (item) => item.categories[0] ?? 'Other')
-).map(([category, items]) => ({
+const stack = groupTechnologies().map(([category, items]) => ({
   category,
-  labels: (items ?? []).map((item) => item.label),
+  labels: items.map((item) => item.label),
 }))
 
 const linkClass =
@@ -194,9 +193,9 @@ export default function ResumePage() {
 
 export function generateMetadata(): Metadata {
   return createMetadata({
-    alternates: { canonical: '/resume' },
-    description: `Resume of ${owner}: experience, selected projects and stack.`,
-    openGraph: { url: '/resume' },
-    title: 'Resume',
+    alternates: { canonical: pages.resume.path },
+    description: pages.resume.description,
+    openGraph: { url: pages.resume.path },
+    title: pages.resume.title,
   })
 }

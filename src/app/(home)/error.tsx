@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { owner, repo } from '@/constants/config'
+import { githubRepoUrl } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
 const LINE_BREAK = /\r?\n/
 
-const ISSUE_URL = `https://github.com/${owner}/${repo}/issues/new`
+const ISSUE_URL = `${githubRepoUrl}/issues/new`
 
 const withOccurrenceKeys = (lines: string[]) => {
   const seen = new Map<string, number>()

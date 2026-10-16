@@ -30,7 +30,17 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
         tabIndex={-1}
       >
         <div className='flex min-h-[calc(100dvh-3.5rem)] flex-col'>
-          {children}
+          {/*
+            `contents` keeps this wrapper out of the layout, but it is still a
+            DOM child, so a `divide-y` on the column would see one child and
+            draw nothing, and a `contents` box cannot paint a border anyway.
+            Dividing here puts the separators on the sections themselves.
+            `divide-y` skips the last child, so the rule above the footer is
+            restored explicitly.
+          */}
+          <div className='dashed-stack contents [&>:last-child]:border-border [&>:last-child]:border-b [&>:last-child]:border-dashed'>
+            {children}
+          </div>
           <PageFill />
         </div>
         <Footer />

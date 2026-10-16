@@ -1,4 +1,5 @@
 import { Icons } from '@/components/icons/icons'
+import { githubUrl } from '@/constants/config'
 import type { Social } from '@/types'
 
 export const socials: Social[] = [
@@ -6,7 +7,7 @@ export const socials: Social[] = [
     description: 'Check out my open source projects and contributions',
     icon: <Icons.github />,
     name: 'GitHub',
-    url: 'https://github.com/techwithanirudh',
+    url: githubUrl,
   },
   {
     description: 'Follow me for tech updates and project announcements',

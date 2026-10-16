@@ -37,7 +37,6 @@ function SmoothScroll({ root, options }: LenisProps) {
         lerp: options?.lerp ?? 0.18,
         prevent: (node: Element | null) =>
           node?.nodeName === 'VERCEL-LIVE-FEEDBACK' ||
-          node?.id === 'theatrejs-studio-root' ||
           Boolean(node?.closest?.('[data-lenis-prevent]')),
       }}
       ref={lenisRef}

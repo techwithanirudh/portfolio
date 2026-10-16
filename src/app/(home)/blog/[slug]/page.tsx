@@ -10,8 +10,8 @@ import { PostJsonLd } from '@/components/json-ld'
 import { SectionBody } from '@/components/layout/sections/body'
 import { LLMCopyButtonWithViewOptions } from '@/components/page-actions'
 import { baseUrl } from '@/constants'
-import { owner, repo } from '@/constants/config/github'
-import { description as homeDescription } from '@/constants/site'
+import { githubRepoUrl } from '@/constants/config'
+import { description as homeDescription, owner } from '@/constants/site'
 import { formatDate } from '@/lib/format-date'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
@@ -47,7 +47,7 @@ export default async function Page(props: {
       )}
       <div className='flex flex-col gap-2'>
         <LLMCopyButtonWithViewOptions
-          githubUrl={`https://github.com/${owner}/${repo}/blob/main/content/blog/${params.slug}.mdx`}
+          githubUrl={`${githubRepoUrl}/blob/main/content/blog/${params.slug}.mdx`}
           markdownUrl={new URL(`/blog.mdx/${params.slug}`, baseUrl).toString()}
         />
         <ShareMenu

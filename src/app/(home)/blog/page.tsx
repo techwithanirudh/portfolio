@@ -1,5 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Posts from '@/app/(home)/_components/posts'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
@@ -7,17 +7,13 @@ import { SectionBody } from '@/components/layout/sections/body'
 import { Wrapper } from '@/components/layout/wrapper'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { postsPerPage } from '@/constants/config'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
-import { parsePageParam } from '@/lib/pagination'
+import { getPageHref, parsePageParam } from '@/lib/pagination'
 import { getPostsByTag, getSortedByDatePosts, getTags } from '@/lib/source'
 import { Hero } from './_components/hero'
 import { NewsletterSection } from './_components/newsletter-section'
 import { TagsAccordion, TagsSidebar } from './_components/tags-sidebar'
-
-export const dynamicParams = false
-
-const description =
-  'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
 
 const totalPosts = getSortedByDatePosts().length
 const pageCount = Math.ceil(totalPosts / postsPerPage)
@@ -28,24 +24,6 @@ const getTagsWithCount = () => {
     count: getPostsByTag(name).length,
     name,
   }))
-}
-
-const Pagination = ({ pageIndex }: { pageIndex: number }) => {
-  const handlePageChange = async (page: number) => {
-    'use server'
-    redirect(`/blog?page=${page}`)
-  }
-
-  return (
-    <Section className='bg-dashed'>
-      <NumberedPagination
-        currentPage={pageIndex + 1}
-        onPageChange={handlePageChange}
-        paginationItemsToDisplay={5}
-        totalPages={pageCount}
-      />
-    </Section>
-  )
 }
 
 export default async function Page(props: {
@@ -64,14 +42,10 @@ export default async function Page(props: {
 
   return (
     <Wrapper>
-      <Hero
-        description={description}
-        pageCount={pageCount}
-        pageIndex={pageIndex}
-      />
+      <Hero pageCount={pageCount} pageIndex={pageIndex} />
       <SectionBody>
         <div className='grid h-full lg:grid-cols-[1fr_280px]'>
-          <div className='min-w-0 divide-y divide-dashed divide-border lg:border-border lg:border-r lg:border-dashed'>
+          <div className='dashed-stack min-w-0 lg:border-border lg:border-r lg:border-dashed'>
             <TagsAccordion tags={tags} />
             <Posts
               className='h-full border-none'
@@ -84,12 +58,20 @@ export default async function Page(props: {
           </aside>
         </div>
       </SectionBody>
-      {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
+      {pageCount > 1 && (
+        <Section className='bg-dashed'>
+          <NumberedPagination
+            currentPage={pageIndex + 1}
+            getHref={(page) => getPageHref(pages.blog.path, page)}
+            totalPages={pageCount}
+          />
+        </Section>
+      )}
       <NewsletterSection />
       <CollectionPageJsonLd
-        description={description}
-        path='/blog'
-        title='Blog'
+        description={pages.blog.description}
+        path={pages.blog.path}
+        title={pages.blog.title}
       />
     </Wrapper>
   )
@@ -113,9 +95,9 @@ export async function generateMetadata(
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
   const pageTitle = isFirstPage ? 'Posts' : `Posts, page ${pageIndex}`
-  const canonicalUrl = isFirstPage ? '/blog' : `/blog?page=${pageIndex}`
+  const canonicalUrl = getPageHref(pages.blog.path, isFirstPage ? 1 : pageIndex)
   const pageDescription = isFirstPage
-    ? description
+    ? pages.blog.description
     : `Browse page ${pageIndex} of blog posts.`
 
   return createMetadata({

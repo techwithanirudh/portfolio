@@ -1,5 +1,4 @@
 export * from './claude'
-export * from './cursor'
 export * from './github'
 export * from './google'
 export * from './linkedin'

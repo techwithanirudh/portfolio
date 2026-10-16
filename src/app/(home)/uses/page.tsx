@@ -3,25 +3,25 @@ import type { ReactNode } from 'react'
 import { Fragment } from 'react'
 import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
+import { HeroSection } from '@/components/layout/sections/hero'
 import Separator from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 import { hardware, software } from '@/constants/portfolio/uses'
 import { createMetadata } from '@/lib/metadata'
 import { Coding } from './_components/coding'
 import { HardwareGrid } from './_components/hardware'
-import Hero from './_components/hero'
 import { Setup } from './_components/setup'
 import { SoftwareGrid } from './_components/software'
 
-const title = 'Uses'
-const description = 'The hardware and software I use every day.'
+const { description, path, title } = pages.uses
 
 export function generateMetadata(): Metadata {
   return createMetadata({
-    alternates: { canonical: '/uses' },
+    alternates: { canonical: path },
     description,
-    openGraph: { url: '/uses' },
+    openGraph: { url: path },
     title,
   })
 }
@@ -47,7 +47,7 @@ export default function UsesPage() {
 
   return (
     <Wrapper>
-      <Hero description={description} title={title} />
+      <HeroSection description={description} title={title} />
       <Separator />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
@@ -74,7 +74,7 @@ export default function UsesPage() {
           </Fragment>
         )
       })}
-      <AboutPageJsonLd description={description} path='/uses' title={title} />
+      <AboutPageJsonLd description={description} path={path} title={title} />
     </Wrapper>
   )
 }

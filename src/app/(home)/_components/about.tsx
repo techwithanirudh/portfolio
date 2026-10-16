@@ -1,15 +1,16 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
+import { InlineMarkdown } from '@/components/inline-markdown'
 import { SectionHeader } from '@/components/layout/sections/header'
 import {
   SplitSection,
   SplitSectionContent,
   SplitSectionSidebar,
 } from '@/components/layout/sections/split'
-import { PreviewLink } from '@/components/preview-link'
 import { Prose } from '@/components/prose'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { aboutIntro } from '@/constants/portfolio/intro'
 import { cn } from '@/lib/utils'
 
 export default function About(): React.ReactElement {
@@ -23,36 +24,14 @@ export default function About(): React.ReactElement {
         <ViewAnimation className='relative' delay={0.1}>
           <div className='space-y-4'>
             <Prose className='typography-body w-full space-y-4'>
-              <p className='text-lg'>
-                I'm Anirudh, a full-stack developer who builds practical web
-                apps. I started tinkering with Lego Mindstorms and kept building
-                from there.
-              </p>
-              <p className='text-lg'>
-                My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
-                Python was part of my early experiments. I build products like{' '}
-                <PreviewLink
-                  className='whitespace-nowrap'
-                  href='/projects/depensa'
-                >
-                  Depensa
-                </PreviewLink>
-                ,{' '}
-                <PreviewLink
-                  className='whitespace-nowrap'
-                  href='/projects/coolify_tweaks'
-                >
-                  Coolify Tweaks
-                </PreviewLink>
-                , and{' '}
-                <PreviewLink
-                  className='whitespace-nowrap'
-                  href='/projects/shadcn_portfolio'
-                >
-                  Shadcn Portfolio
-                </PreviewLink>
-                .
-              </p>
+              {aboutIntro.map((paragraph) => (
+                <p className='text-lg' key={paragraph}>
+                  <InlineMarkdown
+                    linkClassName='whitespace-nowrap'
+                    text={paragraph}
+                  />
+                </p>
+              ))}
             </Prose>
             <Link
               className={cn(

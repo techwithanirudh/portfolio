@@ -1,11 +1,6 @@
 import { owner, title } from '@/constants/site'
 import { getBlogLLMText, getWorkLLMText } from '@/lib/get-llm-text'
-import {
-  getSortedByDatePosts,
-  getSortedWork,
-  post,
-  workSource,
-} from '@/lib/source'
+import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
 import { getProfileFactsText, getProfileText, getSiteMapText } from '../utils'
 
 async function getFullText() {
@@ -14,16 +9,10 @@ async function getFullText() {
 
   const [workContent, blogContent, profileText] = await Promise.all([
     Promise.all(
-      allWork.map((item) => {
-        const page = workSource.getPage(item.slugs)
-        return page ? getWorkLLMText(page, { level: 'section' }) : ''
-      })
+      allWork.map((item) => getWorkLLMText(item, { level: 'section' }))
     ),
     Promise.all(
-      allPosts.map((item) => {
-        const page = post.getPage(item.slugs)
-        return page ? getBlogLLMText(page, { level: 'section' }) : ''
-      })
+      allPosts.map((item) => getBlogLLMText(item, { level: 'section' }))
     ),
     getProfileText(),
   ])
@@ -37,11 +26,11 @@ ${profileText}
 ${getSiteMapText()}
 ## Work
 
-${workContent.filter(Boolean).join('\n\n')}
+${workContent.join('\n\n')}
 
 ## Blog
 
-${blogContent.filter(Boolean).join('\n\n')}`
+${blogContent.join('\n\n')}`
 }
 
 export const dynamic = 'force-dynamic'

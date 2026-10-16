@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Menu as MenuPrimitive } from "@base-ui/react/menu"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import { Icons } from "@/components/icons/icons"
 
@@ -21,6 +21,7 @@ function DropdownMenuTrigger({ ...props }: MenuPrimitive.Trigger.Props) {
 function DropdownMenuContent({
   align = "start",
   alignOffset = 0,
+  anchor,
   side = "bottom",
   sideOffset = 4,
   collisionPadding,
@@ -29,7 +30,12 @@ function DropdownMenuContent({
 }: MenuPrimitive.Popup.Props &
   Pick<
     MenuPrimitive.Positioner.Props,
-    "align" | "alignOffset" | "collisionPadding" | "side" | "sideOffset"
+    | "align"
+    | "alignOffset"
+    | "anchor"
+    | "collisionPadding"
+    | "side"
+    | "sideOffset"
   >) {
   return (
     <MenuPrimitive.Portal>
@@ -37,6 +43,7 @@ function DropdownMenuContent({
         className="isolate z-50 outline-none"
         align={align}
         alignOffset={alignOffset}
+        anchor={anchor}
         collisionPadding={collisionPadding}
         side={side}
         sideOffset={sideOffset}
@@ -96,6 +103,28 @@ function DropdownMenuItem({
       )}
       {...props}
     />
+  )
+}
+
+// An item led by its icon in a small chip
+function DropdownMenuIconItem({
+  children,
+  className,
+  icon: Icon,
+  ...props
+}: React.ComponentProps<typeof DropdownMenuItem> & {
+  icon: React.ComponentType<{ className?: string }>
+}) {
+  return (
+    <DropdownMenuItem
+      className={cn("gap-2.5 rounded-lg p-1.5 pr-2 font-medium", className)}
+      {...props}
+    >
+      <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border">
+        <Icon className="size-4" />
+      </span>
+      {children}
+    </DropdownMenuItem>
   )
 }
 
@@ -259,6 +288,7 @@ export {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuItem,
+  DropdownMenuIconItem,
   DropdownMenuCheckboxItem,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,

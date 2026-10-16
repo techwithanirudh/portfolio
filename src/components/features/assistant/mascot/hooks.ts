@@ -2,8 +2,8 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { isToolUIPart } from 'ai'
-import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
+import type { MyUIMessage } from '@/lib/ai/chat/types'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { animations } from './constants'
 import type { MascotAgent } from './provider'

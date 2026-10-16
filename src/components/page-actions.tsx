@@ -1,7 +1,7 @@
 'use client'
 
 import { useSound } from '@web-kits/audio/react'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { type RefObject, useMemo, useRef, useState } from 'react'
 import { CopyStateIcon } from '@/components/copy-button'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -9,11 +9,12 @@ import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuIconItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
 import { copy as copySound } from '@/lib/audio/minimal'
+import { cn } from '@/lib/utils'
 
 const cache = new Map<string, string>()
 
@@ -92,15 +93,16 @@ export function LLMCopyButton({
 }
 
 export function ViewOptions({
+  anchor,
   markdownUrl,
   githubUrl,
   disabled = false,
-  menuWidth,
 }: {
+  /** Element the menu lines up with and takes its width from */
+  anchor?: RefObject<HTMLElement | null>
   markdownUrl: string
   githubUrl: string
   disabled?: boolean
-  menuWidth?: number
 }) {
   const items = useMemo(() => {
     const fullMarkdownUrl = markdownUrl
@@ -148,13 +150,17 @@ export function ViewOptions({
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
-        className='max-w-none gap-0.5 rounded-xl p-1.5'
+        anchor={anchor}
+        className={cn(
+          'max-w-none gap-0.5 rounded-xl p-1.5',
+          anchor && 'w-(--anchor-width)'
+        )}
         finalFocus={false}
-        style={menuWidth ? { width: menuWidth } : undefined}
       >
-        {items.map(({ title, href, icon: Icon }) => (
-          <DropdownMenuItem
-            className='group/item gap-2.5 rounded-lg p-1.5 pr-2 font-medium'
+        {items.map(({ title, href, icon }) => (
+          <DropdownMenuIconItem
+            className='group/item'
+            icon={icon}
             key={href}
             render={
               <a
@@ -165,12 +171,9 @@ export function ViewOptions({
               />
             }
           >
-            <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border'>
-              <Icon className='size-4' />
-            </span>
             <span className='truncate'>{title}</span>
             <Icons.arrowUpRight className='group-focus/item:translate-0 motion-reduce:translate-0 ml-auto size-3.5 -translate-x-0.5 translate-y-0.5 text-muted-foreground opacity-0 transition-[opacity,transform] duration-200 ease-out group-focus/item:opacity-100' />
-          </DropdownMenuItem>
+          </DropdownMenuIconItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
@@ -186,29 +189,16 @@ export function LLMCopyButtonWithViewOptions({
 }) {
   const { state, isCopying, handleCopy } = useMarkdownCopy(markdownUrl)
   const groupRef = useRef<HTMLDivElement>(null)
-  const [menuWidth, setMenuWidth] = useState<number>()
-
-  useEffect(() => {
-    const group = groupRef.current
-    if (!group) {
-      return
-    }
-    const observer = new ResizeObserver(([entry]) =>
-      setMenuWidth(entry?.borderBoxSize[0]?.inlineSize)
-    )
-    observer.observe(group)
-    return () => observer.disconnect()
-  }, [])
 
   return (
     <ButtonGroup className='w-full min-w-0' ref={groupRef}>
       <LLMCopyButton isCopying={isCopying} onClick={handleCopy} state={state} />
       <ButtonGroupSeparator className='border-secondary border-y-4 data-vertical:my-0 dark:bg-white/20' />
       <ViewOptions
+        anchor={groupRef}
         disabled={isCopying}
         githubUrl={githubUrl}
         markdownUrl={markdownUrl}
-        menuWidth={menuWidth}
       />
     </ButtonGroup>
   )

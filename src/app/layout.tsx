@@ -18,7 +18,6 @@ import { themeColor } from '@/lib/theme-color'
 import '@/styles/globals.css'
 import 'fumadocs-ui/components/image-zoom2.css'
 import 'katex/dist/katex.css'
-import { Body } from './layout.client'
 import { Provider, SoundsProvider } from './provider'
 
 const geistSans = Geist({
@@ -125,7 +124,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
           ]}
         />
       </head>
-      <Body>
+      <body className='relative flex min-h-svh flex-col overflow-x-hidden'>
         <PagesProvider pages={pages}>
           <ThemeProvider
             attribute='class'
@@ -150,7 +149,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             </SoundsProvider>
           </ThemeProvider>
         </PagesProvider>
-      </Body>
+      </body>
     </html>
   )
 }

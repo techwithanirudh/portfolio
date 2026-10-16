@@ -167,8 +167,6 @@ export async function generateMetadata(props: {
   })
 }
 
-export function generateStaticParams(): { slug: string | undefined }[] {
-  return getWorkPages().map((page) => ({
-    slug: page.slugs[0],
-  }))
+export function generateStaticParams(): { slug: string }[] {
+  return getWorkPages().flatMap(({ slugs: [slug] }) => (slug ? [{ slug }] : []))
 }

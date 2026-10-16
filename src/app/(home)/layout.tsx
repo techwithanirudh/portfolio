@@ -4,7 +4,8 @@ import { SiteShell } from '@/components/layout/site-shell'
 
 const Layout = ({ children }: { children: ReactNode }) => (
   <SiteShell>
-    <TextSelectionPopup>{children}</TextSelectionPopup>
+    {children}
+    <TextSelectionPopup />
   </SiteShell>
 )
 

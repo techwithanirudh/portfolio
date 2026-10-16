@@ -2,7 +2,7 @@ import { differenceInMonths, format, parse } from 'date-fns'
 import { socials } from '@/constants/navigation'
 import { experiences } from '@/constants/portfolio/experiences'
 import { profile } from '@/constants/portfolio/profile'
-import { technologies } from '@/constants/portfolio/skills'
+import { groupTechnologies } from '@/constants/portfolio/skills'
 import { owner, tagline } from '@/constants/site'
 import { formatPeriod } from '@/lib/employment-period'
 import { url } from '@/lib/url'
@@ -34,15 +34,10 @@ const formatMonths = (total: number) => {
 export const toPlainPeriod = (start: string, end?: string) =>
   formatPeriod(start, end).replace(' – ', ' to ')
 
-export const groupStack = () => {
-  const grouped = new Map<string, string[]>()
-  for (const item of technologies) {
-    for (const category of item.categories) {
-      grouped.set(category, [...(grouped.get(category) ?? []), item.label])
-    }
-  }
-  return [...grouped]
-}
+export const groupStack = () =>
+  groupTechnologies().map(
+    ([category, items]) => [category, items.map((item) => item.label)] as const
+  )
 
 const getRoles = (now: Date) =>
   experiences.flatMap((experience) =>

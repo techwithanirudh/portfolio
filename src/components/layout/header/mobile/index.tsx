@@ -4,15 +4,15 @@ import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
+import { MEDIA } from '@/lib/media'
 
 const MENU_ID = 'mobile-navigation-menu'
 const FOCUSABLE = 'a[href], button:not([disabled])'
 const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
-const DESKTOP_QUERY = '(min-width: 768px)'
 
 const getToggle = () =>
   document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`)
@@ -63,7 +63,7 @@ function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
       closeMenu()
     }
 
-    const desktop = window.matchMedia(DESKTOP_QUERY)
+    const desktop = window.matchMedia(MEDIA.desktopNav)
     const closeOnDesktop = (event: MediaQueryListEvent) => {
       if (event.matches) {
         closeMenu()
@@ -80,32 +80,24 @@ function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
 }
 
 export function MobileNav() {
-  const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const previousPathname = useRef(pathname)
+  // The path the menu was opened on, or null while it is closed
+  const [openPath, setOpenPath] = useState<string | null>(null)
   const { setOpenSearch } = useSearchContext()
   const { open: assistantOpen, setOpen: setOpenAssistant } =
     useAssistantContext()
 
-  const closeMenu = useCallback(() => setOpen(false), [])
+  // Navigating or opening the assistant closes the menu. Adjusting state
+  // while rendering saves the extra commit a syncing effect would cost
+  if (openPath !== null && (openPath !== pathname || assistantOpen)) {
+    setOpenPath(null)
+  }
+  const open = openPath !== null
+
+  const closeMenu = useCallback(() => setOpenPath(null), [])
 
   const tintGeneration = useRemountAfterThemeApplied()
   useCloseMenuOnOutsideClick(open, closeMenu)
-
-  useEffect(() => {
-    if (assistantOpen) {
-      closeMenu()
-    }
-  }, [assistantOpen, closeMenu])
-
-  useEffect(() => {
-    if (previousPathname.current === pathname) {
-      return
-    }
-
-    previousPathname.current = pathname
-    setOpen(false)
-  }, [pathname])
 
   useEffect(() => {
     if (!open) {
@@ -141,7 +133,7 @@ export function MobileNav() {
       <DialogPrimitive.Root
         disablePointerDismissal
         modal={false}
-        onOpenChange={setOpen}
+        onOpenChange={(next) => setOpenPath(next ? pathname : null)}
         open={open}
       >
         <DialogPrimitive.Portal>
@@ -159,7 +151,9 @@ export function MobileNav() {
       <FloatingPill
         key={`pill-${tintGeneration}`}
         menuId={MENU_ID}
-        onMenuToggle={() => setOpen((value) => !value)}
+        onMenuToggle={() =>
+          setOpenPath((current) => (current === null ? pathname : null))
+        }
         onSearchOpen={() => {
           closeMenu()
           setOpenSearch(true)

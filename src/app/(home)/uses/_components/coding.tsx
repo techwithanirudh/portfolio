@@ -1,47 +1,13 @@
 import { BlurImage } from '@/components/blur-image'
-import { PreviewLink } from '@/components/preview-link'
+import { InlineMarkdown } from '@/components/inline-markdown'
+import { codingSetup } from '@/constants/portfolio/uses'
 
 export function Coding() {
   return (
     <div>
       <div className='border-border border-b border-dashed p-6'>
         <p className='text-muted-foreground'>
-          I use{' '}
-          <PreviewLink
-            className='link-underline'
-            href='https://code.visualstudio.com'
-          >
-            Visual Studio Code
-          </PreviewLink>{' '}
-          as my main editor with the{' '}
-          <PreviewLink
-            className='link-underline'
-            href='https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme'
-          >
-            Cursor theme
-          </PreviewLink>
-          ,{' '}
-          <PreviewLink
-            className='link-underline'
-            href='https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style'
-          >
-            Custom UI Style
-          </PreviewLink>{' '}
-          tweaks, and the{' '}
-          <PreviewLink
-            className='link-underline'
-            href='https://www.jetbrains.com/lp/mono/'
-          >
-            JetBrains Mono
-          </PreviewLink>{' '}
-          font with ligatures enabled. If you want the config, it lives in{' '}
-          <PreviewLink
-            className='link-underline'
-            href='https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json'
-          >
-            my dotfiles
-          </PreviewLink>
-          .
+          <InlineMarkdown linkClassName='link-underline' text={codingSetup} />
         </p>
       </div>
 

@@ -138,7 +138,7 @@ export function SearchClient() {
         {!hasQuery && (
           <ViewAnimation delay={0.1}>
             <div className='flex max-h-[460px] w-full flex-col overflow-y-auto p-1'>
-              <div className='py-12 text-center text-fd-muted-foreground text-sm'>
+              <div className='py-12 text-center text-muted-foreground text-sm'>
                 Start typing to search.
               </div>
             </div>

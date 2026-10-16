@@ -58,7 +58,7 @@ interface HardwareGridProps {
 
 export function HardwareGrid({ items }: HardwareGridProps) {
   return (
-    <div className='grid divide-x divide-dashed divide-border sm:grid-cols-2 sm:[&>*:nth-child(odd):nth-last-child(-n+2)]:border-b-0 [&>*:nth-last-child(-n+1)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
+    <div className='dashed-grid sm:dashed-grid-2 grid sm:grid-cols-2'>
       {items.map((item) => (
         <HardwareCard key={item.name} {...item} />
       ))}

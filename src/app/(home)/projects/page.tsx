@@ -1,42 +1,23 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
-import { WorkCard } from '@/components/features/work'
+import { notFound } from 'next/navigation'
+import { WorkGrid } from '@/components/features/work/work-grid'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
+import { HeroSection } from '@/components/layout/sections/hero'
 import { Wrapper } from '@/components/layout/wrapper'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { ViewAnimation } from '@/components/view-animation'
 import { worksPerPage } from '@/constants/config'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
-import { parsePageParam } from '@/lib/pagination'
+import { getPageHref, parsePageParam } from '@/lib/pagination'
 import { getSortedWork } from '@/lib/source'
-import { Hero } from './_components/hero'
 
-export const dynamicParams = false
-
-const PRIORITY_ROWS = 2
+const EAGER_COVERS = 2
 
 const totalWorks = getSortedWork().length
 const pageCount = Math.ceil(totalWorks / worksPerPage)
-
-const Pagination = ({ pageIndex }: { pageIndex: number }) => {
-  const handlePageChange = async (page: number) => {
-    'use server'
-    redirect(`/projects?page=${page}`)
-  }
-
-  return (
-    <Section className='bg-dashed'>
-      <NumberedPagination
-        currentPage={pageIndex + 1}
-        onPageChange={handlePageChange}
-        paginationItemsToDisplay={5}
-        totalPages={pageCount}
-      />
-    </Section>
-  )
-}
 
 export default async function Page(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -53,20 +34,19 @@ export default async function Page(props: {
   const work = getSortedWork().slice(startIndex, endIndex)
   const currentPage = pageIndex + 1
   const isFirstPage = currentPage === 1
-  const canonicalUrl = isFirstPage
-    ? '/projects'
-    : `/projects?page=${currentPage}`
-  const jsonLdTitle = isFirstPage ? 'Projects' : `Projects, page ${currentPage}`
+  const canonicalUrl = getPageHref(pages.projects.path, currentPage)
+  const jsonLdTitle = isFirstPage
+    ? pages.projects.title
+    : `${pages.projects.title}, page ${currentPage}`
 
   return (
     <Wrapper>
-      <Hero
-        endIndex={endIndex}
-        startIndex={startIndex}
-        totalWorks={totalWorks}
+      <HeroSection
+        description={pages.projects.description}
+        title={pages.projects.title}
       />
       <Section
-        className='flex flex-col divide-y divide-dashed divide-border'
+        className='dashed-stack flex flex-col'
         sectionClassName='flex flex-1'
       >
         <ViewAnimation delay={0.05}>
@@ -76,27 +56,19 @@ export default async function Page(props: {
             tag='projects'
           />
         </ViewAnimation>
-        <div className='grid grid-cols-1 divide-y divide-dashed divide-border md:grid-cols-2 md:divide-x'>
-          {work.map((entry, index) => (
-            <ViewAnimation delay={0.05 * index} key={entry.url}>
-              <WorkCard
-                description={entry.data.description ?? ''}
-                image={entry.data.image ?? null}
-                priority={index < PRIORITY_ROWS}
-                slugs={entry.slugs}
-                title={entry.data.title ?? 'Untitled'}
-                url={entry.url}
-              />
-            </ViewAnimation>
-          ))}
-          {work.length % 2 === 1 && (
-            <div aria-hidden className='hidden bg-dashed md:block' />
-          )}
-        </div>
+        <WorkGrid columnsFrom='md' eagerCount={EAGER_COVERS} works={work} />
       </Section>
-      {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
+      {pageCount > 1 && (
+        <Section className='bg-dashed'>
+          <NumberedPagination
+            currentPage={currentPage}
+            getHref={(page) => getPageHref(pages.projects.path, page)}
+            totalPages={pageCount}
+          />
+        </Section>
+      )}
       <CollectionPageJsonLd
-        description="Projects and collaborations I've worked on."
+        description={pages.projects.description}
         path={canonicalUrl}
         title={jsonLdTitle}
       />
@@ -121,14 +93,19 @@ export async function generateMetadata(
   }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
-  const pageTitle = isFirstPage ? 'Projects' : `Projects, page ${pageIndex}`
-  const canonicalUrl = isFirstPage ? '/projects' : `/projects?page=${pageIndex}`
+  const pageTitle = isFirstPage
+    ? pages.projects.title
+    : `${pages.projects.title}, page ${pageIndex}`
+  const canonicalUrl = getPageHref(
+    pages.projects.path,
+    isFirstPage ? 1 : pageIndex
+  )
 
   return createMetadata({
     alternates: {
       canonical: canonicalUrl,
     },
-    description: "Projects and collaborations I've worked on.",
+    description: pages.projects.description,
     openGraph: {
       url: canonicalUrl,
     },

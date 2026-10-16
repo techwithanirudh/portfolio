@@ -43,7 +43,7 @@ export function MenuPanel({
       className='fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] origin-bottom overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 md:hidden'
       id={menuId}
     >
-      <nav className='flex flex-col divide-y divide-dashed divide-border'>
+      <nav className='dashed-stack flex flex-col'>
         {menuRows.map((row) => (
           <div
             className='grid grid-cols-2 divide-x divide-dashed divide-border'

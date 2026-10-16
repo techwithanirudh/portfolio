@@ -9,8 +9,9 @@ export {
   userMiddleware,
 } from './middleware'
 
-export const userActionClient = actionClient
-  .use(botIdMiddleware)
-  .use(userMiddleware)
+// Anyone may call these, but bots are turned away
+export const publicActionClient = actionClient.use(botIdMiddleware)
+
+export const userActionClient = publicActionClient.use(userMiddleware)
 
 export const adminActionClient = userActionClient.use(adminMiddleware)

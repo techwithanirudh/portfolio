@@ -1,7 +1,7 @@
 import { tool, type UIMessageStreamWriter } from 'ai'
 import { Document } from 'flexsearch'
 import { z } from 'zod'
-import type { CustomDocument } from '@/app/api/chat/types'
+import type { CustomDocument } from '@/lib/ai/chat/types'
 import { post as blogSource, workSource } from '@/lib/source'
 
 const searchServer = createSearchServer()

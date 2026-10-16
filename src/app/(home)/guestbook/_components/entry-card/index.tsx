@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 import {
@@ -21,8 +22,7 @@ import {
 } from '../../actions/guestbook'
 import { GuestbookReactions } from '../reactions'
 import { EntryCardActions } from './actions'
-import { BanUserModal } from './ban-user-modal'
-import { DeleteEntryModal } from './delete-entry-modal'
+import { ConfirmDialog } from './confirm-dialog'
 
 interface GuestbookEntryCardProps {
   currentUserId: string | null
@@ -45,11 +45,7 @@ export const GuestbookEntryCard = ({
 
   const editAction = useAction(editGuestbookEntry, {
     onError: ({ error }) => {
-      toast.error(
-        typeof error.serverError === 'string'
-          ? error.serverError
-          : 'Failed to update message.'
-      )
+      toast.error(getActionErrorMessage(error, 'Failed to update message.'))
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -59,11 +55,7 @@ export const GuestbookEntryCard = ({
   })
   const deleteAction = useAction(removeGuestbookEntry, {
     onError: ({ error }) => {
-      toast.error(
-        typeof error.serverError === 'string'
-          ? error.serverError
-          : 'Failed to delete message.'
-      )
+      toast.error(getActionErrorMessage(error, 'Failed to delete message.'))
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -74,11 +66,7 @@ export const GuestbookEntryCard = ({
   })
   const banAction = useAction(banGuestbookUser, {
     onError: ({ error }) => {
-      toast.error(
-        typeof error.serverError === 'string'
-          ? error.serverError
-          : 'Failed to update ban status.'
-      )
+      toast.error(getActionErrorMessage(error, 'Failed to update ban status.'))
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -215,11 +203,6 @@ export const GuestbookEntryCard = ({
               Cancel
             </Button>
           </div>
-          {editAction.result.serverError ? (
-            <p className='text-destructive text-xs'>
-              {editAction.result.serverError}
-            </p>
-          ) : null}
         </div>
       ) : (
         <p className='wrap-anywhere text-muted-foreground text-sm'>
@@ -247,30 +230,30 @@ export const GuestbookEntryCard = ({
           </div>
         ) : null}
       </div>
-      {deleteAction.result.serverError ? (
-        <p className='text-destructive text-xs'>
-          {deleteAction.result.serverError}
-        </p>
-      ) : null}
-      {banAction.result.serverError ? (
-        <p className='text-destructive text-xs'>
-          {banAction.result.serverError}
-        </p>
-      ) : null}
-      <BanUserModal
-        isBanned={entry.banned}
+      <ConfirmDialog
+        busyLabel={entry.banned ? 'Unbanning...' : 'Banning...'}
+        confirmLabel={entry.banned ? 'Unban user' : 'Ban user'}
+        description={
+          entry.banned
+            ? `This will allow ${entry.name} to sign in again.`
+            : `This will sign ${entry.name} out and block future sign-ins.`
+        }
         isBusy={isBusy}
         isOpen={isBanModalOpen}
-        name={entry.name}
         onConfirm={banUser}
         onOpenChange={setIsBanModalOpen}
+        title={entry.banned ? 'Unban user?' : 'Ban user?'}
+        variant={entry.banned ? 'outline' : 'destructive'}
       />
-      <DeleteEntryModal
+      <ConfirmDialog
+        busyLabel='Deleting...'
+        confirmLabel='Delete entry'
+        description={`This will remove ${entry.name}'s guestbook entry permanently.`}
         isBusy={isBusy}
         isOpen={isDeleteModalOpen}
-        name={entry.name}
         onConfirm={deleteEntry}
         onOpenChange={setIsDeleteModalOpen}
+        title='Delete entry?'
       />
     </div>
   )

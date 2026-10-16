@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import { NewsletterSchema } from '@/lib/validators'
 
@@ -25,11 +26,7 @@ export const NewsletterForm = () => {
     {
       actionProps: {
         onError: ({ error }) => {
-          toast.error(
-            typeof error.serverError === 'string'
-              ? error.serverError
-              : 'Failed to subscribe.'
-          )
+          toast.error(getActionErrorMessage(error, 'Failed to subscribe.'))
         },
         onSuccess: ({ data }) => {
           toast.success(data?.message ?? "You're subscribed.")
@@ -81,13 +78,14 @@ export const NewsletterForm = () => {
             {action.status === 'executing' ? (
               <Icons.spinner className='size-4 animate-spin' />
             ) : (
-              <Icons.send className='size-4 rotate-45 transition-transform group-hover/button:rotate-0' />
+              // Turned 45deg the plane's ink sits right of its box, so pull it back to look centered
+              <Icons.send className='size-4 -translate-x-[3px] rotate-45 transition-transform group-hover/button:rotate-0' />
             )}
           </Button>
         </div>
 
         {action.status === 'hasSucceeded' && (
-          <Alert className='border-emerald-500/15 bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+          <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.message ??
@@ -96,7 +94,7 @@ export const NewsletterForm = () => {
           </Alert>
         )}
         {action.result.serverError && (
-          <Alert className='border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+          <Alert variant='destructive-soft'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.serverError}

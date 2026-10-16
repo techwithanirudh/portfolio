@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 import { TagCard } from '@/components/features/blog'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { SectionBody } from '@/components/layout/sections/body'
+import { HeroSection } from '@/components/layout/sections/hero'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
-import { title as homeTitle } from '@/constants/site'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
 import { getTags } from '@/lib/source'
 import { cn } from '@/lib/utils'
-import { Hero } from './_components/hero'
 
 export default function Page() {
   const tags = getTags()
@@ -21,9 +21,9 @@ export default function Page() {
 
   return (
     <Wrapper>
-      <Hero />
+      <HeroSection title={pages.blogTags.title} />
       <SectionBody>
-        <div className='grid grid-cols-1 divide-y divide-dashed divide-border sm:grid-cols-2 lg:grid-cols-4'>
+        <div className='dashed-stack grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4'>
           {tags.map((tag, index) => (
             <ViewAnimation className='size-full' delay={0.05 * index} key={tag}>
               <TagCard
@@ -49,28 +49,17 @@ export default function Page() {
         </div>
       </SectionBody>
       <CollectionPageJsonLd
-        description='Browse blog posts by topic.'
-        path='/blog/tags'
-        title='Tags'
+        description={pages.blogTags.description}
+        path={pages.blogTags.path}
+        title={pages.blogTags.title}
       />
     </Wrapper>
   )
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>
-}): Promise<Metadata> {
-  const _params = await props.params
-  const description = `Browse blog posts on ${homeTitle} by topic.`
-
-  return createMetadata({
-    alternates: {
-      canonical: '/blog/tags',
-    },
-    description,
-    openGraph: {
-      url: '/blog/tags',
-    },
-    title: 'Tags',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: pages.blogTags.path },
+  description: pages.blogTags.description,
+  openGraph: { url: pages.blogTags.path },
+  title: pages.blogTags.title,
+})

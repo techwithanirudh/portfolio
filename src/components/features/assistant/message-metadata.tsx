@@ -1,5 +1,4 @@
 import { getStaticToolName, isStaticToolUIPart, isToolUIPart } from 'ai'
-import type { ChatTools, MyUIMessage } from '@/app/api/chat/types'
 import { Shimmer } from '@/components/ai-elements/shimmer'
 import {
   Source,
@@ -8,6 +7,7 @@ import {
   SourcesTrigger,
 } from '@/components/ai-elements/sources'
 import { Icons } from '@/components/icons/icons'
+import type { ChatTools, MyUIMessage } from '@/lib/ai/chat/types'
 
 interface MessageMetadataProps {
   inProgress: boolean

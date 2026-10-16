@@ -26,7 +26,9 @@ const eventTypes = [
 
 type EventType = (typeof eventTypes)[number]
 
-export const isSupportedEvent = (event: GitHubEvent) =>
+export const isSupportedEvent = (
+  event: GitHubEvent
+): event is GitHubEvent & { type: EventType } =>
   (eventTypes as readonly (string | null)[]).includes(event.type)
 
 interface IssuesPayload {
@@ -287,9 +289,7 @@ export const GitHubEvent = ({
     return null
   }
 
-  const type = event.type as EventType
-
-  switch (type) {
+  switch (event.type) {
     case 'PushEvent':
       return <PushEvent commits={commits} event={event} />
     case 'PullRequestEvent':

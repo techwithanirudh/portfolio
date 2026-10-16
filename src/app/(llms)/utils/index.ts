@@ -1,6 +1,7 @@
 export { getAboutText } from './about'
 export { getColophonText } from './colophon'
 export { getContactText } from './contact'
+export { getContentIndexText } from './content-index'
 export { getExperienceText } from './experience'
 export { getCommitHistoryText } from './github-commits'
 export { getProfileFactsText } from './profile'

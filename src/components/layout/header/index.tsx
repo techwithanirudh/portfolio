@@ -3,7 +3,6 @@
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { cva } from 'class-variance-authority'
 import Link from 'fumadocs-core/link'
-import { buttonVariants } from 'fumadocs-ui/components/ui/button'
 import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
 import {
   type LinkItemType,
@@ -23,6 +22,7 @@ import {
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Collapsible,
   CollapsibleContent,
@@ -42,13 +42,13 @@ const navItemVariants = cva('[&_svg]:size-4', {
     variant: {
       button: buttonVariants({
         className: 'gap-1.5',
-        color: 'secondary',
+        variant: 'secondary',
       }),
       icon: buttonVariants({
-        color: 'ghost',
         size: 'icon',
+        variant: 'ghost',
       }),
-      main: 'relative inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors after:absolute after:inset-x-2 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-fd-primary after:transition-transform hover:text-fd-foreground data-[active=true]:text-fd-foreground data-[active=true]:after:scale-x-100',
+      main: 'relative inline-flex items-center gap-1 whitespace-nowrap p-2 text-muted-foreground transition-colors after:absolute after:inset-x-2 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform hover:text-foreground data-[active=true]:text-foreground data-[active=true]:after:scale-x-100',
     },
   },
 })
@@ -184,7 +184,7 @@ export const Header = ({
             {searchToggle.enabled !== false &&
               (searchToggle.components?.lg ?? (
                 <SearchToggle
-                  className='-mx-1.5 text-fd-muted-foreground hover:text-fd-foreground'
+                  className='-mx-1.5 text-muted-foreground hover:text-foreground'
                   hideIfDisabled
                 />
               ))}
@@ -214,22 +214,20 @@ export const Header = ({
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
             <div>
-              <SearchToggle className='p-2' hideIfDisabled />
+              <SearchToggle hideIfDisabled size='icon' />
             </div>
           ))}
         <div>
           <CollapsibleTrigger
             aria-label='Toggle menu'
-            className={cn(
-              buttonVariants({
-                className: 'group [&_svg]:size-5.5',
-                color: 'ghost',
-                size: 'icon',
-              })
-            )}
+            className={buttonVariants({
+              className: 'group',
+              size: 'icon',
+              variant: 'ghost',
+            })}
           >
-            <Icons.menu className='group-data-panel-open:hidden' />
-            <Icons.close className='hidden group-data-panel-open:block' />
+            <Icons.menu className='size-5.5 group-data-panel-open:hidden' />
+            <Icons.close className='hidden size-5.5 group-data-panel-open:block' />
           </CollapsibleTrigger>
         </div>
       </div>
@@ -288,7 +286,7 @@ const HeaderNavigationMenu = ({
           id='nd-nav'
           {...props}
           className={cn(
-            'sticky top-0 z-30 box-content w-full border-b border-dashed bg-fd-background/80 backdrop-blur-sm transition-colors max-md:hidden',
+            'sticky top-0 z-30 box-content w-full border-b border-dashed bg-background/80 backdrop-blur-sm transition-colors max-md:hidden',
             props.className
           )}
           ref={headerRef}
@@ -300,7 +298,7 @@ const HeaderNavigationMenu = ({
           cn(
             'transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
             'container border-border border-dashed sm:border-x',
-            (!isTransparent || menuOpen || state.open) && 'bg-fd-background/80'
+            (!isTransparent || menuOpen || state.open) && 'bg-background/80'
           )
         }
         render={<div />}
@@ -329,7 +327,7 @@ const HeaderNavigationMenu = ({
             collisionPadding={{ bottom: 5, top: 5 }}
             side='bottom'
           >
-            <NavigationMenu.Popup className='relative h-(--popup-height) w-full rounded-b-xl border border-dashed bg-fd-popover/80 text-fd-popover-foreground shadow-lg backdrop-blur-md transition-[opacity,height] duration-300 ease-out data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150'>
+            <NavigationMenu.Popup className='relative h-(--popup-height) w-full rounded-b-xl border border-dashed bg-popover/80 text-popover-foreground shadow-lg backdrop-blur-md transition-[opacity,height] duration-300 ease-out data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150'>
               <NavigationMenu.Viewport className='relative size-full overflow-hidden' />
             </NavigationMenu.Popup>
           </NavigationMenu.Positioner>
@@ -364,7 +362,7 @@ const NavigationMenuLinkItem = ({
 
       const {
         banner = child.icon ? (
-          <div className='w-fit rounded-md border bg-fd-muted p-1 [&_svg]:size-4'>
+          <div className='w-fit rounded-md border bg-muted p-1 [&_svg]:size-4'>
             {child.icon}
           </div>
         ) : null,
@@ -380,7 +378,7 @@ const NavigationMenuLinkItem = ({
               href={child.url}
               {...rest}
               className={cn(
-                'flex flex-col gap-2 rounded-lg border border-border bg-fd-card p-3 transition-colors hover:bg-fd-accent/80 hover:text-fd-accent-foreground',
+                'flex flex-col gap-2 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent/80 hover:text-accent-foreground',
                 rest.className
               )}
             >
@@ -388,7 +386,7 @@ const NavigationMenuLinkItem = ({
                 <>
                   {banner}
                   <p className='font-medium text-base'>{child.text}</p>
-                  <p className='text-fd-muted-foreground text-sm empty:hidden'>
+                  <p className='text-muted-foreground text-sm empty:hidden'>
                     {child.description}
                   </p>
                 </>
@@ -407,7 +405,7 @@ const NavigationMenuLinkItem = ({
         <NavigationMenu.Trigger
           className={cn(
             navItemVariants(),
-            'rounded-md data-popup-open:bg-fd-accent/50'
+            'rounded-md data-popup-open:bg-accent/50'
           )}
         >
           {item.url ? (
@@ -466,7 +464,7 @@ const MobileNavigationMenuLinkItem = ({
 
     return (
       <div className={cn('mb-4 flex flex-col', props.className)}>
-        <p className='mb-1 text-fd-muted-foreground text-sm'>
+        <p className='mb-1 text-muted-foreground text-sm'>
           {item.url ? (
             <Link external={item.external} href={item.url}>
               {header}
@@ -492,13 +490,13 @@ const MobileNavigationMenuLinkItem = ({
         {
           button: buttonVariants({
             className: 'gap-1.5 [&_svg]:size-4',
-            color: 'secondary',
+            variant: 'secondary',
           }),
           icon: buttonVariants({
-            color: 'ghost',
             size: 'icon',
+            variant: 'ghost',
           }),
-          main: 'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-fd-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-fd-primary [&_svg]:size-4',
+          main: 'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-primary [&_svg]:size-4',
         }[item.type ?? 'main'],
         props.className
       )}

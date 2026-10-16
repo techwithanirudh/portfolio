@@ -1,10 +1,8 @@
 'use client'
 
-import { useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/layout/sections'
-import { SectionHeader } from '@/components/layout/sections/header'
+import { ListSection } from '@/components/layout/sections/list-section'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Carousel,
@@ -13,6 +11,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel'
 import { ViewAnimation } from '@/components/view-animation'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 interface Testimonial {
   author: {
@@ -86,42 +85,36 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
   }, [api, paused, prefersReducedMotion])
 
   return (
-    <Section className='relative w-full pt-10'>
-      <div className='flex flex-col gap-10'>
-        <SectionHeader
-          align='left'
-          className='px-6'
-          description="I've worked with some great people. Here's what they say about working with me."
-          title='What others are saying'
-        />
-
-        <ViewAnimation>
-          <Carousel
-            className='divider-top-dashed'
-            onBlur={(event) => {
-              if (!event.currentTarget.contains(event.relatedTarget)) {
-                setFocused(false)
-              }
-            }}
-            onFocus={() => setFocused(true)}
-            onPointerEnter={() => setHovered(true)}
-            onPointerLeave={() => setHovered(false)}
-            setApi={setApi}
-          >
-            <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
-              {testimonials.map((item, index) => (
-                <CarouselItem
-                  className='pl-0 md:basis-1/2'
-                  key={`${item.title}-${item.author.name}`}
-                >
-                  <TestimonialCard index={index} testimonial={item} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </ViewAnimation>
-      </div>
-    </Section>
+    <ListSection
+      description="I've worked with some great people. Here's what they say about working with me."
+      title='What others are saying'
+    >
+      <ViewAnimation>
+        <Carousel
+          className='divider-top-dashed'
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+              setFocused(false)
+            }
+          }}
+          onFocus={() => setFocused(true)}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+          setApi={setApi}
+        >
+          <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
+            {testimonials.map((item, index) => (
+              <CarouselItem
+                className='pl-0 md:basis-1/2'
+                key={`${item.title}-${item.author.name}`}
+              >
+                <TestimonialCard index={index} testimonial={item} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </ViewAnimation>
+    </ListSection>
   )
 }
 

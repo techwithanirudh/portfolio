@@ -1,5 +1,6 @@
+import Link from "next/link"
 import * as React from "react"
-import { cn } from "cn"
+import { cn } from "@/lib/utils"
 
 import { Icons } from "@/components/icons/icons"
 
@@ -35,23 +36,26 @@ function PaginationItem({ ...props }: React.ComponentProps<"li">) {
 
 type PaginationLinkProps = {
   isActive?: boolean
-} & Pick<React.ComponentProps<typeof Button>, "size"> &
-  React.ComponentProps<"a">
+} & Pick<React.ComponentProps<typeof Button>, "shape" | "size" | "variant"> &
+  React.ComponentProps<typeof Link>
 
 function PaginationLink({
   className,
   isActive,
+  shape,
   size = "icon",
+  variant,
   ...props
 }: PaginationLinkProps) {
   return (
     <Button
-      variant={isActive ? "outline" : "ghost"}
+      variant={variant ?? (isActive ? "outline" : "ghost")}
       size={size}
+      shape={shape}
       className={cn(className)}
       nativeButton={false}
       render={
-        <a
+        <Link
           aria-current={isActive ? "page" : undefined}
           data-slot="pagination-link"
           data-active={isActive}

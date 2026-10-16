@@ -1,11 +1,16 @@
 import { format } from 'date-fns'
-import { owner, repo } from '@/constants/config'
+import { githubRepo, githubUser } from '@/constants/config'
 import type { BlogPage, WorkPage } from '@/lib/source'
 
 type ContentPage = BlogPage | WorkPage
 type ContentType = 'blog' | 'work'
 interface LLMTextOptions {
   level?: 'page' | 'section' | 'subsection'
+}
+
+interface ContentMeta {
+  tags?: string[]
+  type: ContentType
 }
 
 function getHeadingPrefix(level: 'page' | 'section' | 'subsection') {
@@ -27,21 +32,19 @@ function getHeadingPrefix(level: 'page' | 'section' | 'subsection') {
 
 async function getLLMText(
   page: ContentPage,
-  contentType: ContentType,
+  meta: ContentMeta,
   options: LLMTextOptions = {}
 ) {
   const level = options.level ?? 'page'
   const processed = await page.data.getText('processed')
-  const path = `content/${contentType}/${page.path}`
+  const path = `content/${meta.type}/${page.path}`
 
   const tagsLine =
-    contentType === 'blog'
-      ? `Tags: ${(page as BlogPage).data.tags?.join(', ') ?? ''}\n`
-      : ''
+    meta.type === 'blog' ? `Tags: ${meta.tags?.join(', ') ?? ''}\n` : ''
 
   return `${getHeadingPrefix(level)} ${page.data.title}
 URL: ${page.url}
-Source: https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/main/${path}
+Source: https://raw.githubusercontent.com/${githubUser}/${githubRepo}/refs/heads/main/${path}
 ${tagsLine}
 ${page.data.description ?? ''}
 
@@ -54,12 +57,12 @@ export async function getBlogLLMText(
   page: BlogPage,
   options: LLMTextOptions = {}
 ) {
-  return await getLLMText(page, 'blog', options)
+  return await getLLMText(page, { tags: page.data.tags, type: 'blog' }, options)
 }
 
 export async function getWorkLLMText(
   page: WorkPage,
   options: LLMTextOptions = {}
 ) {
-  return await getLLMText(page, 'work', options)
+  return await getLLMText(page, { type: 'work' }, options)
 }

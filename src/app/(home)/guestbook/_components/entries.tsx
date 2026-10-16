@@ -30,7 +30,7 @@ export const GuestbookEntries = ({
   return (
     <div className='min-h-0 flex-1'>
       <ScrollArea className='h-full w-full' data-lenis-prevent>
-        <div className='divide-y divide-dashed divide-border'>
+        <div className='dashed-stack'>
           {entries.map((entry) => (
             <GuestbookEntryCard
               currentUserId={currentUserId}

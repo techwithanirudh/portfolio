@@ -1,27 +1,11 @@
 import Link from 'next/link'
-import { ExperienceRow } from '@/components/features/work'
+import { ExperienceTimeline } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { experiences } from '@/constants/portfolio/experiences'
-import type { ExperienceItemType } from '@/types/experience'
-
-const kinds = ['Work', 'Freelance', 'Research'] as const
-
-type Kind = (typeof kinds)[number]
-
-const kindOf = (experience: ExperienceItemType): Kind => {
-  const type = experience.positions[0]?.employmentType
-  if (type === 'Freelance') {
-    return 'Freelance'
-  }
-  if (type === undefined) {
-    return 'Research'
-  }
-  return 'Work'
-}
 
 export default function Experience(): React.ReactElement {
   return (
@@ -46,34 +30,7 @@ export default function Experience(): React.ReactElement {
           </ViewAnimation>
         </div>
 
-        <div className='divide-y divide-dashed divide-border border-border border-t border-dashed'>
-          {kinds.map((kind) => {
-            const rows = experiences.filter(
-              (experience) => kindOf(experience) === kind
-            )
-            if (rows.length === 0) {
-              return null
-            }
-
-            return (
-              <div key={kind}>
-                <ViewAnimation className='flex items-center justify-between bg-muted/40 px-6 py-2 font-mono text-muted-foreground text-xs'>
-                  <h3>{kind}</h3>
-                  <span>
-                    {rows.length} {rows.length === 1 ? 'role' : 'roles'}
-                  </span>
-                </ViewAnimation>
-                <div className='divide-y divide-dashed divide-border border-border border-t border-dashed'>
-                  {rows.map((experience, index) => (
-                    <ViewAnimation delay={0.05 * index} key={experience.id}>
-                      <ExperienceRow experience={experience} />
-                    </ViewAnimation>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
-        </div>
+        <ExperienceTimeline experiences={experiences} variant='full' />
       </div>
     </Section>
   )

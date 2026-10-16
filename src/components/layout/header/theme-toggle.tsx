@@ -6,23 +6,24 @@ import { useTheme } from 'next-themes'
 import { useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { toggleOn } from '@/lib/audio/minimal'
+import { MEDIA } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 type Theme = 'light' | 'dark' | 'system'
 
-const itemVariants = cva('size-6.5 rounded-sm p-1.5 text-fd-muted-foreground', {
+const itemVariants = cva('size-6.5 rounded-sm p-1.5 text-muted-foreground', {
   variants: {
     active: {
-      false: 'text-fd-muted-foreground',
-      true: 'bg-fd-accent text-fd-accent-foreground',
+      false: 'text-muted-foreground',
+      true: 'bg-accent text-accent-foreground',
     },
   },
 })
 
 const lightDarkActive = {
-  dark: 'dark:bg-fd-accent dark:text-fd-accent-foreground',
+  dark: 'dark:bg-accent dark:text-accent-foreground',
   light:
-    'bg-fd-accent text-fd-accent-foreground dark:bg-transparent dark:text-fd-muted-foreground',
+    'bg-accent text-accent-foreground dark:bg-transparent dark:text-muted-foreground',
 } as const
 
 const subscribeNoop = () => () => undefined
@@ -34,7 +35,7 @@ const full = [
 ]
 
 const shouldSkipViewTransitionForBrowserTint = () =>
-  window.matchMedia('(pointer: coarse)').matches
+  window.matchMedia(MEDIA.coarsePointer).matches
 
 export function ThemeToggle({
   className,

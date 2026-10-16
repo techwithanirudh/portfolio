@@ -1,13 +1,12 @@
 import { Icons } from '@/components/icons/icons'
 import { HeroSection } from '@/components/layout/sections/hero'
 import { buttonVariants } from '@/components/ui/button'
+import { pages } from '@/constants/pages'
 
 export const Hero = ({
-  description,
   pageCount,
   pageIndex,
 }: {
-  description: string
   pageCount: number
   pageIndex: number
 }) => (
@@ -26,7 +25,7 @@ export const Hero = ({
       </a>
     }
     caption={pageIndex > 0 ? `Page ${pageIndex + 1} of ${pageCount}` : null}
-    description={description}
-    title='Blog'
+    description={pages.blog.description}
+    title={pages.blog.title}
   />
 )

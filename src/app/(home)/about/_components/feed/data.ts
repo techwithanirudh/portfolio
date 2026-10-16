@@ -1,5 +1,5 @@
 import { unstable_cache } from 'next/cache'
-import { activity, owner } from '@/constants/config'
+import { activity, githubUser } from '@/constants/config'
 import { env } from '@/env'
 import { octokit } from '@/lib/github'
 import { type GitHubEvent, isSupportedEvent, type PushCommit } from './event'
@@ -64,7 +64,7 @@ const getCachedActivityItems = unstable_cache(
     try {
       const activity = await octokit.rest.activity.listPublicEventsForUser({
         per_page: limit * OVER_FETCH_FACTOR,
-        username: owner,
+        username: githubUser,
       })
 
       const events = activity.data.filter(isSupportedEvent).slice(0, limit)
@@ -83,7 +83,7 @@ const getCachedActivityItems = unstable_cache(
       return []
     }
   },
-  ['github-activity', owner],
+  ['github-activity', githubUser],
   { revalidate: 5 * 60 }
 )
 
