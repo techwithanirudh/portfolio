@@ -1,6 +1,6 @@
-import { MarkGithubIcon } from '@primer/octicons-react'
 import type { CodeBlockProps } from 'fumadocs-ui/components/codeblock'
 import { ServerCodeBlock } from 'fumadocs-ui/components/codeblock.rsc'
+import { Icons } from '@/components/icons/icons'
 import {
   getCodeTitle,
   getGitHubFileContent,
@@ -30,7 +30,7 @@ function GitHubSourceLink({ sourceUrl }: { sourceUrl: string }) {
         rel='noopener noreferrer'
         target='_blank'
       >
-        <MarkGithubIcon className='size-4' />
+        <Icons.githubMark className='size-4' />
       </a>
     </div>
   )
@@ -87,5 +87,3 @@ export async function GitHubCode({
     )
   }
 }
-
-export { GitHubCode as GitHubSourceCode }

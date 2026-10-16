@@ -1,12 +1,11 @@
 'use client'
 
-import { Briefcase01Icon, Infinity01Icon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
 import Image from 'next/image'
 import { type ComponentProps, useCallback, useRef } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevrons-up-down'
 import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
+import { Icons } from '@/components/icons/icons'
 import { PreviewLink } from '@/components/preview-link'
 import { Prose } from '@/components/prose'
 import {
@@ -154,9 +153,7 @@ export function ExperiencePositionItem({
               "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0"
             )}
           >
-            {position.icon ?? (
-              <HugeiconsIcon icon={Briefcase01Icon} strokeWidth={2} />
-            )}
+            {position.icon ?? <Icons.experience />}
           </div>
 
           <h4 className='flex-1 text-balance font-medium text-base text-foreground'>
@@ -189,11 +186,9 @@ export function ExperiencePositionItem({
               <span>{start}</span>
               <span className='font-mono'>–</span>
               {isOngoing ? (
-                <HugeiconsIcon
+                <Icons.infinity
                   aria-label='Present'
                   className='size-4.5 translate-y-[0.5px]'
-                  icon={Infinity01Icon}
-                  strokeWidth={2}
                 />
               ) : (
                 <span>{end}</span>
