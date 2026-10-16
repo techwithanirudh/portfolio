@@ -121,26 +121,3 @@ export const animations: Animations = {
   submit: 'Books',
   tool: 'Searching',
 }
-
-export const moodNames = [
-  'greet',
-  'celebrate',
-  'think',
-  'surprised',
-  'attention',
-  'write',
-  'search',
-  'rest',
-] as const
-type MoodName = (typeof moodNames)[number]
-
-export const moodAnimations: Record<MoodName, AnimationName> = {
-  attention: 'GetAttention',
-  celebrate: 'Congratulate',
-  greet: 'Greet',
-  rest: 'RestPose',
-  search: 'Searching',
-  surprised: 'Surprised',
-  think: 'Thinking',
-  write: 'Writing',
-}

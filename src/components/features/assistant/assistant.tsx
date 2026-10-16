@@ -55,7 +55,6 @@ import { AvatarIcon } from '@/components/features/assistant/mascot/avatar-icon'
 import {
   playSubmitAnimation,
   useMascotPanel,
-  useMascotTools,
 } from '@/components/features/assistant/mascot/hooks'
 import {
   ContactForm,
@@ -557,7 +556,6 @@ function AssistantPanel() {
     open,
     status: chat.status,
   })
-  useMascotTools(chat.messages)
 
   return (
     <>

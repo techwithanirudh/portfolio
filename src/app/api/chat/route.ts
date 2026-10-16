@@ -14,7 +14,6 @@ import { provider } from '@/lib/ai/providers'
 import { isBotRequest } from '@/server/botid'
 import type { MyUIMessage } from './types'
 import { getLLMsTxt } from './utils/llms'
-import { animateTool } from './utils/tools/animate'
 import { getPageContent } from './utils/tools/get-page-content'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
@@ -138,7 +137,6 @@ export async function POST(request: Request) {
           stopWhen: isStepCount(10),
           toolChoice: 'auto',
           tools: {
-            animate: animateTool,
             getPageContent,
             searchDocs: createSearchDocsTool(writer),
             showContactForm: showContactFormTool,

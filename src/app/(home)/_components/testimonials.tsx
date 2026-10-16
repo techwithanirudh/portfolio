@@ -110,8 +110,9 @@ const Testimonials = ({ testimonials }: { testimonials: Testimonial[] }) => {
     }
   }, [api, autoplay, paused])
 
+  // Transparent top and bottom borders keep the hover fill off the rules
   const arrow =
-    'flex w-12 items-center justify-center border-line border-l text-muted-foreground transition-colors hover:bg-card hover:text-foreground'
+    'flex w-12 items-center justify-center border-y border-y-transparent border-l border-l-line bg-clip-padding text-muted-foreground transition-colors hover:bg-card hover:text-foreground'
 
   return (
     <Section>

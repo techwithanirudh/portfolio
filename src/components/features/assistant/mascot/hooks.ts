@@ -2,12 +2,11 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { isToolUIPart } from 'ai'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
-import { animations, moodAnimations } from './constants'
+import { animations } from './constants'
 import type { SimbaController } from './controller'
-import { useMascot } from './provider'
 
 export const playSubmitAnimation = (mascot: SimbaController | undefined) => {
   mascot?.play(animations.submit, { interrupt: true })
@@ -56,11 +55,7 @@ export function useMascotPanel({
       return
     }
     const toolPart = (messages.at(-1)?.parts ?? []).find(isToolUIPart)
-    if (
-      !toolPart ||
-      toolPart.type === 'tool-animate' ||
-      lastTool.current === toolPart.type
-    ) {
+    if (!toolPart || lastTool.current === toolPart.type) {
       return
     }
     lastTool.current = toolPart.type
@@ -71,26 +66,3 @@ export function useMascotPanel({
 const pickOpen = () =>
   animations.open[Math.floor(Math.random() * animations.open.length)] ??
   animations.show
-
-export function useMascotTools(messages: MyUIMessage[]) {
-  const mascot = useMascot()
-  const handled = useRef(new Set<string>())
-
-  useEffect(() => {
-    const part = (messages.at(-1)?.parts ?? []).find(
-      (item) => item.type === 'tool-animate'
-    )
-    if (part?.state !== 'output-available') {
-      return
-    }
-    if (handled.current.has(part.toolCallId)) {
-      return
-    }
-    handled.current.add(part.toolCallId)
-
-    const mood = part.input?.mood
-    if (mascot && mood) {
-      mascot.play(moodAnimations[mood], { interrupt: true })
-    }
-  }, [messages, mascot])
-}

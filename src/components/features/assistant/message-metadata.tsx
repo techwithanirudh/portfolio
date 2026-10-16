@@ -32,8 +32,6 @@ const toolStatus = (toolName: keyof ChatTools) => {
       return { Icon: Icons.link, label: 'Fetching a page' }
     case 'showContactForm':
       return { Icon: Icons.mail, label: 'Fetching contact form' }
-    case 'animate':
-      return { Icon: Icons.pawPrint, label: 'Doing a trick' }
     default:
       return {
         Icon: Icons.wrench,
