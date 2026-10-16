@@ -84,6 +84,24 @@ html > body[data-scroll-locked] {
     @apply border-border outline-ring/50;
   }
 
+  /* One keyboard focus ring for every control. Zero specificity, so a
+     component's own focus-visible classes still win, and popups
+     (tabindex -1) keep no ring */
+  :where(
+    a[href],
+    button,
+    summary,
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    [role="checkbox"],
+    [role="radio"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+
   body {
     font-synthesis-weight: none;
     text-wrap: pretty;
@@ -150,10 +168,6 @@ html > body[data-scroll-locked] {
   @apply underline decoration-primary/60 decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
-@utility code-inline {
-  @apply rounded-md border bg-muted/50 px-1 py-px font-mono text-[0.8125rem] font-normal whitespace-pre-wrap;
-}
-
 @utility step {
   counter-increment: step;
   @apply max-md:pl-10;
@@ -171,20 +185,6 @@ html > body[data-scroll-locked] {
   @apply prose-strong:font-medium;
   @apply prose-hr:border-border;
   @apply prose-blockquote:border-l prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:border-border prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
-}
-
-@utility prose-no-margin {
-  & > :first-child {
-    @apply mt-0;
-  }
-
-  & > :last-child {
-    @apply mb-0;
-  }
-
-  :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-    @apply mt-3 mb-3;
-  }
 }
 
 @utility texture-popup {
@@ -216,12 +216,6 @@ html > body[data-scroll-locked] {
     box-shadow:
       0 1px 0 0 oklch(1 0 0 / 0.1) inset,
       0 1px 2px oklch(0 0 0 / 0.12);
-  }
-}
-
-@utility extend-touch-target {
-  @media (pointer: coarse) {
-    @apply relative touch-manipulation after:absolute after:-inset-2;
   }
 }
 
@@ -494,12 +488,6 @@ html > body[data-scroll-locked] {
   select,
   textarea {
     font-size: max(16px, 1em);
-  }
-}
-
-@custom-variant retina {
-  @media (min-resolution: 2dppx) {
-    @slot;
   }
 }
 
