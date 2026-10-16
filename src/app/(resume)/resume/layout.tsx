@@ -1,20 +1,25 @@
 import type { ReactNode } from 'react'
 
 // `@page { margin: 0 }` leaves Chrome no margin box to draw its own
-// header and footer (date, title, URL, page number) in.
+// header and footer (date, title, URL, page number) in. On paper the resume
+// is always light, whatever theme the site is in.
 const resumeCss = `
 @page { margin: 0; }
 
-@supports (animation-timeline: scroll()) {
-  @keyframes resume-bar-stuck {
-    from { border-bottom-color: transparent; }
-    to { border-bottom-color: var(--color-neutral-200); }
+@media print {
+  html,
+  body {
+    background: #fff;
   }
 
-  [data-resume-bar] {
-    animation: resume-bar-stuck linear both;
-    animation-timeline: scroll();
-    animation-range: 0 24px;
+  [data-resume] {
+    color-scheme: light;
+    --color-background: #fff;
+    --color-foreground: var(--color-neutral-900);
+    --color-muted-foreground: var(--color-neutral-600);
+    --color-border: var(--color-neutral-300);
+    /* The light theme's primary, so links stay readable on white */
+    --color-primary: hsl(226, 55%, 45%);
   }
 }
 `

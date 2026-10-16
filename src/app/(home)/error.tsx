@@ -32,7 +32,11 @@ const ErrorPage = ({ error, retry }: ErrorPageProps) => {
   const errorStack = withOccurrenceKeys(stackLines)
 
   return (
-    <section className='flex flex-1 flex-col border-border border-b border-dashed'>
+    <section
+      className='flex flex-1 flex-col border-border border-b border-dashed'
+      data-fill
+      data-slot='section'
+    >
       <div className='container relative mx-auto flex min-h-[28rem] flex-1 items-center justify-center border-border border-x border-dashed px-4 py-16'>
         <div className='flex w-full max-w-xl flex-col items-center gap-4 text-center'>
           <p className='font-mono text-muted-foreground text-xs uppercase tracking-widest'>

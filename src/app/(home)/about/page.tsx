@@ -33,7 +33,6 @@ export default function AboutPage() {
       />
       <Wrapper>
         <Hero />
-        <Separator />
         <Story />
         <Separator />
         <Experience />

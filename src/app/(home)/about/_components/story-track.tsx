@@ -75,6 +75,10 @@ const roundedPath = (points: Point[]) => {
   return d
 }
 
+// Starts above the box so the groove's lit end cap falls outside the mask,
+// leaving the track flush with the rule above
+const TRACK_START_Y = -4
+
 const traceTrack = (container: HTMLElement): Track | null => {
   const lanes = [...container.querySelectorAll<HTMLElement>(LANE_SELECTOR)]
   if (lanes.length === 0) {
@@ -96,7 +100,7 @@ const traceTrack = (container: HTMLElement): Track | null => {
   segments.forEach((segment, index) => {
     const previous = segments[index - 1]
     if (!previous) {
-      points.push({ x: segment.x, y: 0 })
+      points.push({ x: segment.x, y: TRACK_START_Y })
       return
     }
     if (previous.x !== segment.x) {
@@ -141,7 +145,7 @@ const markerProgress = (path: SVGPathElement, markers: Point[]) => {
 const spring = { damping: 20, mass: 0.5, stiffness: 100 }
 
 const svgClassName =
-  'pointer-events-none absolute inset-0 select-none overflow-visible'
+  'pointer-events-none absolute inset-0 select-none overflow-visible [mask-image:linear-gradient(black,black)]'
 
 export function StoryTrack({
   children,

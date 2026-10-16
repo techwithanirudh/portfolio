@@ -40,7 +40,7 @@ const ResumeSection = ({
   title: string
 }) => (
   <section className='break-inside-avoid-page'>
-    <h2 className='mb-3 border-neutral-300 border-b pb-1 font-mono text-[0.6875rem] text-neutral-600 uppercase tracking-widest'>
+    <h2 className='mb-3 border-border border-b border-dashed pb-1 font-mono text-[0.6875rem] text-muted-foreground uppercase tracking-widest'>
       {title}
     </h2>
     {children}
@@ -53,16 +53,13 @@ export default function ResumePage() {
 
   return (
     <main
-      className='min-h-dvh bg-neutral-100 pb-28 text-neutral-900 [color-scheme:light] md:pb-8 print:min-h-0 print:bg-white print:p-[0.55in]'
+      className='flex min-h-dvh flex-col bg-background text-foreground print:block print:min-h-0 print:p-[0.55in]'
       data-resume
     >
-      <div
-        className='sticky top-0 z-10 mb-4 border-transparent border-b bg-neutral-100/95 px-4 py-3 backdrop-blur-md print:hidden'
-        data-resume-bar
-      >
-        <div className='mx-auto flex max-w-[210mm] items-center justify-between'>
+      <div className='sticky top-0 z-10 border-border border-b border-dashed bg-background/80 backdrop-blur-sm print:hidden'>
+        <div className='mx-auto flex h-14 max-w-[calc(210mm+2px)] items-center justify-between border-border border-dashed px-6 sm:border-x'>
           <Link
-            className='group inline-flex items-center gap-1.5 font-mono text-neutral-600 text-xs transition-colors hover:text-neutral-900'
+            className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
             href='/about'
           >
             <Icons.arrowLeft className='size-3.5' />
@@ -72,18 +69,18 @@ export default function ResumePage() {
         </div>
       </div>
 
-      <article className='mx-auto flex w-[calc(100%-2rem)] max-w-[210mm] flex-col gap-6 bg-white p-6 text-[0.8125rem] leading-relaxed shadow-sm sm:p-[14mm] print:w-full print:max-w-none print:border-0 print:p-0 print:shadow-none'>
+      <article className='mx-auto flex w-full max-w-[calc(210mm+2px)] flex-1 flex-col gap-6 border-border border-dashed p-6 pb-28 text-[0.8125rem] leading-relaxed sm:border-x sm:p-[14mm] md:pb-[14mm] print:max-w-none print:border-0 print:p-0'>
         <header className='flex flex-col gap-2'>
           <div className='flex flex-wrap items-baseline justify-between gap-x-4'>
             <h1 className='font-heading font-medium text-3xl tracking-tight'>
               {owner}
             </h1>
-            <span className='font-mono text-neutral-600 text-xs'>
+            <span className='font-mono text-muted-foreground text-xs'>
               {profile.location} · {profile.pronouns}
             </span>
           </div>
-          <p className='text-neutral-700'>{description}</p>
-          <ul className='flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.6875rem] text-neutral-600'>
+          <p className='text-foreground/80'>{description}</p>
+          <ul className='flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.6875rem] text-muted-foreground'>
             <li>
               <a className={linkClass} href={baseUrl.toString()}>
                 {prettyUrl(baseUrl.toString())}
@@ -121,7 +118,7 @@ export default function ResumePage() {
                         experience.companyName
                       )}
                     </h3>
-                    <span className='font-mono text-[0.6875rem] text-neutral-600 tabular-nums'>
+                    <span className='font-mono text-[0.6875rem] text-muted-foreground tabular-nums'>
                       {[
                         position.employmentType,
                         formatPeriod(
@@ -134,12 +131,12 @@ export default function ResumePage() {
                     </span>
                   </div>
                   {position.description && (
-                    <p className='text-neutral-700'>
+                    <p className='text-foreground/80'>
                       {plainText(position.description)}
                     </p>
                   )}
                   {position.skills?.length ? (
-                    <p className='font-mono text-[0.6875rem] text-neutral-600'>
+                    <p className='font-mono text-[0.6875rem] text-muted-foreground'>
                       {position.skills.join('\u00a0· ')}
                     </p>
                   ) : null}
@@ -165,11 +162,11 @@ export default function ResumePage() {
                         project.data.title
                       )}
                     </h3>
-                    <span className='font-mono text-[0.6875rem] text-neutral-600 tabular-nums'>
+                    <span className='font-mono text-[0.6875rem] text-muted-foreground tabular-nums'>
                       {new Date(project.data.date).getFullYear()}
                     </span>
                   </div>
-                  <p className='line-clamp-2 min-h-[2lh] text-neutral-700'>
+                  <p className='line-clamp-2 min-h-[2lh] text-foreground/80'>
                     {project.data.description}
                   </p>
                 </li>
@@ -182,10 +179,10 @@ export default function ResumePage() {
           <dl className='grid grid-cols-[auto_1fr] gap-x-4 gap-y-1'>
             {stack.map(({ category, labels }) => (
               <div className='contents' key={category}>
-                <dt className='font-mono text-[0.6875rem] text-neutral-600 leading-relaxed'>
+                <dt className='font-mono text-[0.6875rem] text-muted-foreground leading-relaxed'>
                   {category}
                 </dt>
-                <dd className='text-neutral-700'>{labels.join(', ')}</dd>
+                <dd className='text-foreground/80'>{labels.join(', ')}</dd>
               </div>
             ))}
           </dl>

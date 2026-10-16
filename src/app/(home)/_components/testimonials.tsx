@@ -45,7 +45,6 @@ const TestimonialCard = ({
           </p>
         </div>
         <p className='flex flex-row items-center gap-2 text-sm'>
-          <span className='text-muted-foreground'>By</span>
           <Avatar className='size-6' outlined={false}>
             <AvatarImage alt='' src={testimonial.author.image} />
             <AvatarFallback>

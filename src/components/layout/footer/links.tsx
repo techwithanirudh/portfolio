@@ -84,7 +84,6 @@ export const Links = () => {
           href: 'https://v1.techwithanirudh.com/',
         },
         { children: 'RSS feed', href: '/rss.xml', routeHandler: true },
-        { children: 'Sitemap', href: '/sitemap.xml', routeHandler: true },
       ],
       title: 'More',
     },

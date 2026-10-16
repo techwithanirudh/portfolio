@@ -10,7 +10,11 @@ import { createMetadata } from '@/lib/metadata'
 export default function NotFound() {
   return (
     <SiteShell>
-      <section className='flex flex-1 flex-col border-border border-b border-dashed'>
+      <section
+        className='flex flex-1 flex-col border-border border-b border-dashed'
+        data-fill
+        data-slot='section'
+      >
         <div className='container relative mx-auto flex min-h-[28rem] flex-1 items-center justify-center overflow-hidden border-border border-x border-dashed px-4 pb-32 md:pb-0'>
           <div className='flex flex-col items-center gap-4 text-center'>
             <p className='font-mono text-muted-foreground text-xs uppercase tracking-widest'>
