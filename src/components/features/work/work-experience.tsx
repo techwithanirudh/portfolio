@@ -1,15 +1,14 @@
-'use client'
-
 import Image from 'next/image'
-import { type ComponentProps, useCallback, useRef } from 'react'
+import type { ComponentProps } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
-import type { ChevronsUpDownIconHandle } from '@/components/icons/animated/chevrons-up-down'
-import { ChevronsUpDownIcon } from '@/components/icons/animated/chevrons-up-down'
+import {
+  ExperiencePositionChevron,
+  ExperiencePositionCollapsible,
+} from '@/components/features/work/experience-position-collapsible'
 import { Icons } from '@/components/icons/icons'
 import { PreviewLink } from '@/components/preview-link'
 import { Prose } from '@/components/prose'
 import {
-  Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
@@ -32,14 +31,8 @@ export type {
 } from '@/types/experience'
 
 const markdownComponents: Components = {
-  a: ({ children, href, node: _node, ...props }) =>
-    href ? (
-      <PreviewLink href={href} {...props}>
-        {children}
-      </PreviewLink>
-    ) : (
-      children
-    ),
+  a: ({ children, href }) =>
+    href ? <PreviewLink href={href}>{children}</PreviewLink> : children,
 }
 
 export function WorkExperience({
@@ -57,7 +50,7 @@ export function WorkExperience({
   )
 }
 
-export function ExperienceItem({ experience }: ExperienceItemProps) {
+function ExperienceItem({ experience }: ExperienceItemProps) {
   return (
     <div className='space-y-4 p-4'>
       <div className='not-prose flex items-center gap-3'>
@@ -106,83 +99,64 @@ export function ExperienceItem({ experience }: ExperienceItemProps) {
   )
 }
 
-export function ExperiencePositionItem({
-  position,
-}: ExperiencePositionItemProps) {
-  const chevronsIconRef = useRef<ChevronsUpDownIconHandle>(null)
-
-  const handleOpenChange = useCallback((open: boolean) => {
-    const controls = chevronsIconRef.current
-    if (!controls) {
-      return
-    }
-
-    if (open) {
-      controls.startAnimation()
-    } else {
-      controls.stopAnimation()
-    }
-  }, [])
-
+function ExperiencePositionItem({ position }: ExperiencePositionItemProps) {
   const { start, end } = position.employmentPeriod
   const isOngoing = !end
   const duration = formatDuration(start, end)
 
   return (
-    <Collapsible
+    <ExperiencePositionCollapsible
       defaultOpen={position.isExpanded}
       disabled={!position.description}
-      onOpenChange={handleOpenChange}
-      render={
-        <div className='relative last:before:absolute last:before:h-full last:before:w-4 last:before:bg-background' />
-      }
     >
-      <CollapsibleTrigger
-        className={cn(
-          'group/experience-position not-prose block w-full select-none text-left',
-          'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:rounded hover:before:bg-muted/40',
-          'data-disabled:before:content-none'
-        )}
-      >
-        <div className='relative z-1 mb-1 flex items-center gap-3'>
-          <div
-            className={cn(
-              'flex size-6 shrink-0 items-center justify-center',
-              'bg-muted text-muted-foreground',
-              'border border-border',
-              "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0"
-            )}
-          >
-            {position.icon ?? <Icons.experience />}
-          </div>
-
-          <h4 className='flex-1 text-balance font-medium text-base text-foreground'>
-            {position.title}
-          </h4>
-
-          <div className='shrink-0 text-muted-foreground group-disabled/experience-position:hidden [&_svg]:size-4'>
-            <ChevronsUpDownIcon duration={0.15} ref={chevronsIconRef} />
-          </div>
-        </div>
-
-        <div className='relative z-1 flex items-center gap-2 pl-9 text-muted-foreground text-sm'>
-          {position.employmentType && (
-            <>
-              <dl>
-                <dt className='sr-only'>Employment Type</dt>
-                <dd>{position.employmentType}</dd>
-              </dl>
-
-              <Separator
-                className='data-vertical:h-4 data-vertical:self-center'
-                orientation='vertical'
-              />
-            </>
+      {/* The heading wraps the trigger since buttons only take phrasing content */}
+      <h4 className='not-prose'>
+        <CollapsibleTrigger
+          className={cn(
+            'group/experience-position not-prose block w-full select-none text-left',
+            'relative before:absolute before:-top-1 before:-right-1 before:-bottom-1.5 before:left-7 before:rounded hover:before:bg-muted/40',
+            'data-disabled:before:content-none'
           )}
+        >
+          <span className='relative z-1 mb-1 flex items-center gap-3'>
+            <span
+              className={cn(
+                'flex size-6 shrink-0 items-center justify-center',
+                'bg-muted text-muted-foreground',
+                'border border-border',
+                "[&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0"
+              )}
+            >
+              {position.icon ?? <Icons.experience />}
+            </span>
 
-          <dl>
-            <dt className='sr-only'>Employment Period</dt>
-            <dd className='flex items-center gap-0.5 tabular-nums'>
+            <span className='flex-1 text-balance font-medium text-base text-foreground'>
+              {position.title}
+            </span>
+
+            <span className='shrink-0 text-muted-foreground group-disabled/experience-position:hidden [&_svg]:size-4'>
+              <ExperiencePositionChevron />
+            </span>
+          </span>
+
+          <span className='relative z-1 flex items-center gap-2 pl-9 text-muted-foreground text-sm'>
+            {position.employmentType && (
+              <>
+                <span>
+                  <span className='sr-only'>Employment Type: </span>
+                  {position.employmentType}
+                </span>
+
+                <Separator
+                  className='data-vertical:h-4 data-vertical:self-center'
+                  orientation='vertical'
+                  render={<span />}
+                />
+              </>
+            )}
+
+            <span className='flex items-center gap-0.5 tabular-nums'>
+              <span className='sr-only'>Employment Period: </span>
               <span>{start}</span>
               <span className='font-mono'>–</span>
               {isOngoing ? (
@@ -193,23 +167,24 @@ export function ExperiencePositionItem({
               ) : (
                 <span>{end}</span>
               )}
-            </dd>
-          </dl>
+            </span>
 
-          {duration && (
-            <>
-              <Separator
-                className='data-vertical:h-4 data-vertical:self-center'
-                orientation='vertical'
-              />
-              <dl>
-                <dt className='sr-only'>Duration</dt>
-                <dd className='tabular-nums'>{duration}</dd>
-              </dl>
-            </>
-          )}
-        </div>
-      </CollapsibleTrigger>
+            {duration && (
+              <>
+                <Separator
+                  className='data-vertical:h-4 data-vertical:self-center'
+                  orientation='vertical'
+                  render={<span />}
+                />
+                <span className='tabular-nums'>
+                  <span className='sr-only'>Duration: </span>
+                  {duration}
+                </span>
+              </>
+            )}
+          </span>
+        </CollapsibleTrigger>
+      </h4>
 
       <CollapsibleContent className='overflow-hidden'>
         {position.description && (
@@ -230,7 +205,7 @@ export function ExperiencePositionItem({
           ))}
         </ul>
       )}
-    </Collapsible>
+    </ExperiencePositionCollapsible>
   )
 }
 
