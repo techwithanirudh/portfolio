@@ -39,6 +39,8 @@ const splitSectionSidebarVariants = cva('flex flex-col gap-4', {
 interface SplitSectionProps extends VariantProps<typeof splitSectionVariants> {
   children: ReactNode
   className?: string
+  /** Stretch to the bottom of the page instead of leaving a filler below */
+  fill?: boolean
   id?: string
 }
 
@@ -46,10 +48,17 @@ export const SplitSection = ({
   children,
   cols,
   className,
+  fill,
   id,
 }: SplitSectionProps) => (
-  <Section id={id}>
-    <div className={cn(splitSectionVariants({ cols }), className)}>
+  <Section fill={fill} id={id}>
+    <div
+      className={cn(
+        splitSectionVariants({ cols }),
+        fill && 'flex-1',
+        className
+      )}
+    >
       {children}
     </div>
   </Section>

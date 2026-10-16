@@ -184,7 +184,7 @@ export const Header = ({
             {searchToggle.enabled !== false &&
               (searchToggle.components?.lg ?? (
                 <SearchToggle
-                  className='text-fd-muted-foreground hover:text-fd-foreground'
+                  className='-mx-1.5 text-fd-muted-foreground hover:text-fd-foreground'
                   hideIfDisabled
                 />
               ))}

@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import { Section } from '@/components/layout/sections'
-import { cn } from '@/lib/utils'
 
 interface SectionBodyProps {
   children: ReactNode
@@ -13,10 +12,7 @@ export const SectionBody = ({
   className,
   sectionClassName,
 }: SectionBodyProps) => (
-  <Section
-    className={cn('h-full', className)}
-    sectionClassName={cn('flex flex-1', sectionClassName)}
-  >
+  <Section className={className} fill sectionClassName={sectionClassName}>
     {children}
   </Section>
 )

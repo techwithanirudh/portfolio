@@ -15,7 +15,7 @@ import { faq } from '@/constants/portfolio/faq'
 import { AskSimbaLink } from './ask-simba-link'
 
 export const FAQ = () => (
-  <SplitSection>
+  <SplitSection fill>
     <SplitSectionSidebar>
       <SectionHeader
         align='left'
@@ -25,7 +25,7 @@ export const FAQ = () => (
           </>
         }
         sticky
-        title='FAQ'
+        title='Frequently asked questions'
       />
     </SplitSectionSidebar>
 
