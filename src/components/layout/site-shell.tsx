@@ -28,7 +28,10 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
         id='main-content'
         tabIndex={-1}
       >
-        {children}
+        {/* Short pages still fill the screen, so the footer always starts below the fold */}
+        <div className='flex min-h-[calc(100dvh-3.5rem)] flex-col divide-y divide-dashed divide-border'>
+          {children}
+        </div>
         <Footer />
       </div>
     </HomeLayout>

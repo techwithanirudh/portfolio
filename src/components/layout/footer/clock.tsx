@@ -72,13 +72,13 @@ export function Clock({ className }: ClockProps) {
     return (
       <Button
         aria-label={accessibleLabel}
-        className='rounded-full'
+        className='rounded-md'
         size='icon'
         variant='ghost'
       >
         <div
           className={cn(
-            'relative block size-8 rotate-180 rounded-full border border-border',
+            'relative block size-9 rotate-180 rounded-md border border-border bg-background',
             className
           )}
         >
@@ -94,7 +94,7 @@ export function Clock({ className }: ClockProps) {
         render={
           <Button
             aria-label={accessibleLabel}
-            className='rounded-full'
+            className='rounded-md'
             size='icon'
             variant='ghost'
           />
@@ -102,7 +102,7 @@ export function Clock({ className }: ClockProps) {
       >
         <time
           className={cn(
-            'relative block size-8 rotate-180 rounded-full border border-border',
+            'relative block size-9 rotate-180 rounded-md border border-border bg-background',
             className
           )}
           dateTime={time.toISOString()}

@@ -47,7 +47,8 @@ const navItemVariants = cva('[&_svg]:size-4', {
         color: 'ghost',
         size: 'icon',
       }),
-      main: 'inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground data-[active=true]:text-fd-primary',
+      // The active page is underlined; hover only lifts the text color
+      main: 'relative inline-flex items-center gap-1 whitespace-nowrap p-2 text-fd-muted-foreground transition-colors after:absolute after:inset-x-2 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-fd-primary after:transition-transform hover:text-fd-foreground data-[active=true]:text-fd-foreground data-[active=true]:after:scale-x-100',
     },
   },
 })

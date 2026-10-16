@@ -50,13 +50,12 @@ export function UserButton({ className, classNames }: UserButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className={cn('rounded-md bg-transparent')}
+        className='rounded-md'
         render={
           <Button
             aria-label={'User Menu'}
             className={cn(
-              'size-auto rounded-md border-none p-0',
-              'bg-secondary hover:bg-secondary/80',
+              'size-auto rounded-md border border-border bg-background p-0 hover:bg-accent',
               classNames?.trigger?.base
             )}
             disabled={isPending}

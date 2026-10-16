@@ -18,7 +18,8 @@ export function GuestbookBand({
 }) {
   const pathname = usePathname()
 
-  if (pathname.startsWith(GUESTBOOK_PATH)) {
+  // Only the home page ends with the nudge
+  if (pathname !== '/') {
     return null
   }
 
@@ -30,7 +31,7 @@ export function GuestbookBand({
       )}
       sectionClassName='border-border border-b border-dashed'
     >
-      <p className='flex -rotate-1 items-center gap-3 text-balance font-hand text-foreground/75 text-xl leading-snug sm:text-2xl'>
+      <p className='flex items-center gap-3 text-balance font-hand text-foreground/75 text-xl leading-snug sm:text-2xl'>
         <Icons.pawPrint
           aria-hidden
           className='size-5 shrink-0 text-primary max-sm:hidden'

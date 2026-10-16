@@ -21,7 +21,7 @@ export const Footer = () => (
       <Links />
       <div className='grid items-center gap-4 sm:grid-cols-3'>
         <ViewAnimation className='hidden w-min sm:flex' delay={0.1}>
-          <UserButton />
+          <UserButton className='size-9' />
         </ViewAnimation>
         <div className='flex items-center justify-center'>
           <ViewAnimation delay={0.15}>
@@ -40,7 +40,7 @@ export const Footer = () => (
         </ViewAnimation>
         <div className='flex items-center justify-between sm:hidden'>
           <ViewAnimation className='w-min' delay={0.1}>
-            <UserButton />
+            <UserButton className='size-9' />
           </ViewAnimation>
           <ViewAnimation className='flex items-center gap-2' delay={0.2}>
             <Clock />
