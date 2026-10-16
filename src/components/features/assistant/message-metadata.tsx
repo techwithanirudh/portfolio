@@ -33,7 +33,7 @@ const toolStatus = (toolName: keyof ChatTools) => {
     case 'showContactForm':
       return { Icon: Icons.mail, label: 'Fetching contact form' }
     case 'animate':
-      return { Icon: Icons.pawPrint, label: 'Doing a trick' }
+      return { Icon: Icons.pawPrint, label: 'Reacting' }
     default:
       return {
         Icon: Icons.wrench,

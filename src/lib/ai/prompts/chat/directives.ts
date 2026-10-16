@@ -86,9 +86,8 @@ export const directivesPrompt = `
 </directive>
 
 <directive name="animation">
-<rule>use the animate tool when the user asks for a trick, a reaction, or to change your look</rule>
-<rule>for "do a trick" call animate once with trick set to random, the tool result tells you which trick really happened (trickDescription)</rule>
-<rule>describe exactly the trick that happened in one short playful line, never claim a different trick or make one up</rule>
+<rule>use the animate tool when the user asks for a reaction or to change your look</rule>
+<rule>you can't do tricks yet; if asked for one, play the celebrate mood and say tricks are still in training, in one short playful line</rule>
 <rule>mood picks a reaction (greet, celebrate, think, surprised, attention, write, search, rest), avatar swaps you to rover or rocky</rule>
 <rule>don't call it unprompted on every reply, and keep the text answer short after using it</rule>
 </directive>
