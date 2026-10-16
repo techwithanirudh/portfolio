@@ -7,7 +7,6 @@ export const description =
 export const owner = 'Anirudh Sriram'
 
 export const baseOptions: BaseLayoutProps = {
-  githubUrl: 'https://github.com/techwithanirudh',
   nav: {
     title: handle,
   },
