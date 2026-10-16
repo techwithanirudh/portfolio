@@ -9,24 +9,26 @@ export interface PushCommit {
   sha: string
 }
 
-type EventType =
-  | 'CommitCommentEvent'
-  | 'CreateEvent'
-  | 'DeleteEvent'
-  | 'ForkEvent'
-  | 'GollumEvent'
-  | 'IssueCommentEvent'
-  | 'IssuesEvent'
-  | 'MemberEvent'
-  | 'PublicEvent'
-  | 'PullRequestEvent'
-  | 'PullRequestReviewEvent'
-  | 'PullRequestReviewCommentEvent'
-  | 'PullRequestReviewThreadEvent'
-  | 'PushEvent'
-  | 'ReleaseEvent'
-  | 'SponsorshipEvent'
-  | 'WatchEvent'
+// Only these get a row, anything else GitHub sends is skipped
+const eventTypes = [
+  'CreateEvent',
+  'DeleteEvent',
+  'ForkEvent',
+  'IssueCommentEvent',
+  'IssuesEvent',
+  'PublicEvent',
+  'PullRequestEvent',
+  'PullRequestReviewEvent',
+  'PullRequestReviewCommentEvent',
+  'PullRequestReviewThreadEvent',
+  'PushEvent',
+  'WatchEvent',
+] as const
+
+type EventType = (typeof eventTypes)[number]
+
+export const isSupportedEvent = (event: GitHubEvent) =>
+  (eventTypes as readonly (string | null)[]).includes(event.type)
 
 interface IssuesPayload {
   action?:
@@ -286,7 +288,7 @@ export const GitHubEvent = ({
   event: GitHubEvent
   commits?: PushCommit[]
 }) => {
-  if (!event.type) {
+  if (!isSupportedEvent(event)) {
     return null
   }
 

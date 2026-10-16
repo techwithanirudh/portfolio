@@ -1,11 +1,5 @@
-import {
-  SplitSection,
-  SplitSectionContent,
-  SplitSectionHeader,
-  SplitSectionSidebar,
-} from '@/components/layout/sections/split'
+import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
-import { cn } from '@/lib/utils'
 import { getActivityItems } from './data'
 import { GitHubEvent as GitHubEventComponent } from './event'
 
@@ -18,31 +12,20 @@ export default async function Feed(): Promise<React.ReactElement | null> {
     }
 
     return (
-      <SplitSection cols='three'>
-        <SplitSectionSidebar background='dashed'>
-          <SplitSectionHeader
-            description='Recent activity from my GitHub.'
-            sticky
-            title='Live Activity'
-          />
-        </SplitSectionSidebar>
-        <SplitSectionContent
-          className={cn(
-            'lg:col-span-2',
-            'relative flex max-w-full flex-col gap-2 overflow-x-auto font-mono text-muted-foreground text-xs',
-            'lg:overflow-visible lg:text-sm',
-            'lg:px-8'
-          )}
-          inset
-        >
+      <Section>
+        <ViewAnimation className='border-border border-b border-dashed bg-muted/40 px-6 py-2 font-mono text-muted-foreground text-xs'>
+          <h3>Latest activity</h3>
+        </ViewAnimation>
+        {/* The list fades out at the bottom instead of ending on a hard row */}
+        <div className='relative flex max-h-96 flex-col gap-2 overflow-hidden px-6 py-6 font-mono text-muted-foreground text-xs sm:text-sm'>
           {items.map((item, index) => (
-            <ViewAnimation delay={0.05 * index} key={item.event.id}>
+            <ViewAnimation delay={0.03 * index} key={item.event.id}>
               <GitHubEventComponent commits={item.commits} event={item.event} />
             </ViewAnimation>
           ))}
-          <div className='absolute right-0 bottom-6 left-0 z-10 h-40 bg-gradient-to-b from-transparent to-background' />
-        </SplitSectionContent>
-      </SplitSection>
+          <div className='pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-b from-transparent to-background' />
+        </div>
+      </Section>
     )
   } catch {
     return null

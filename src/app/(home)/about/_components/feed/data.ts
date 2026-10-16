@@ -2,7 +2,7 @@ import { unstable_cache } from 'next/cache'
 import { activity, owner } from '@/constants/config'
 import { env } from '@/env'
 import { octokit } from '@/lib/github'
-import type { GitHubEvent, PushCommit } from './event'
+import { type GitHubEvent, isSupportedEvent, type PushCommit } from './event'
 
 const { limit } = activity
 
@@ -60,12 +60,13 @@ const getCachedActivityItems = unstable_cache(
     }
 
     try {
+      // Fetch extra since some event types have no row and get dropped
       const activity = await octokit.rest.activity.listPublicEventsForUser({
-        per_page: limit,
+        per_page: limit * 3,
         username: owner,
       })
 
-      const events = activity.data.slice(0, limit)
+      const events = activity.data.filter(isSupportedEvent).slice(0, limit)
       const items = await Promise.all(
         events.map(async (event) => ({
           commits:

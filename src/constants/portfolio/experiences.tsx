@@ -1,4 +1,3 @@
-import { Icons } from '@/components/icons/icons'
 import type { ExperienceItemType } from '@/types/experience'
 
 export const experiences: ExperienceItemType[] = [
@@ -14,9 +13,7 @@ export const experiences: ExperienceItemType[] = [
           'Working at QuiverAI, a platform for generating, editing, and animating SVG graphics with AI.',
         employmentPeriod: { start: '08.2026' },
         employmentType: 'Internship',
-        icon: <Icons.codeXml />,
         id: '1',
-        isExpanded: true,
         skills: ['TypeScript', 'React', 'Next.js', 'Node.js'],
         title: 'Software Engineering Intern',
       },
@@ -33,9 +30,7 @@ export const experiences: ExperienceItemType[] = [
           "Worked on the frontend and microservices of Energent.ai's AI data analysis platform.",
         employmentPeriod: { end: '12.2025', start: '09.2025' },
         employmentType: 'Internship',
-        icon: <Icons.codeXml />,
         id: '1',
-        isExpanded: true,
         skills: ['TypeScript', 'React', 'Next.js', 'Node.js'],
         title: 'Software Engineering Intern',
       },
@@ -52,9 +47,7 @@ export const experiences: ExperienceItemType[] = [
           'Built [Transcript Seeker](/projects/transcript_seeker) and [Speaking Meeting Bot](/projects/speaking_meeting_bot), plus the AI chat and MCP tooling around the MeetingBaaS meeting APIs.',
         employmentPeriod: { end: '05.2025', start: '10.2024' },
         employmentType: 'Freelance',
-        icon: <Icons.codeXml />,
         id: '1',
-        isExpanded: true,
         skills: ['TypeScript', 'React', 'Next.js', 'Python', 'Drizzle', 'MCP'],
         title: 'Full Stack Developer',
       },
@@ -70,9 +63,7 @@ export const experiences: ExperienceItemType[] = [
         description:
           'Co-authored a research paper on [privacy challenges for autonomous vehicles](https://osf.io/preprints/osf/mtfpy_v1).',
         employmentPeriod: { end: '05.2022', start: '04.2022' },
-        icon: <Icons.flask />,
         id: '1',
-        isExpanded: true,
         skills: ['Research', 'Autonomous Vehicles', 'Privacy Engineering'],
         title: 'Research Collaboration',
       },
