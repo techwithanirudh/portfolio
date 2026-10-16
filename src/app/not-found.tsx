@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { AskSimbaButton } from '@/components/features/not-found/ask-simba-button'
 import { SimbaSprite } from '@/components/features/not-found/simba-sprite'
-import { GuestbookCue } from '@/components/guestbook-cue'
 import { Icons } from '@/components/icons/icons'
 import { SiteShell } from '@/components/layout/site-shell'
 import { buttonVariants } from '@/components/ui/button'
@@ -26,10 +25,6 @@ export default function NotFound() {
             </Link>
             <AskSimbaButton />
           </div>
-          <GuestbookCue
-            before='Or tell me what you were looking for in the'
-            className='text-center'
-          />
         </div>
         {/* Rover lives in the corner on md+; on mobile the mascot doesn't load, so he sits on the bottom edge instead */}
         <div className='absolute -right-[43px] -bottom-3 md:hidden'>

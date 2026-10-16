@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { GuestbookBand } from '@/components/guestbook-cue'
 import { ContactPageJsonLd } from '@/components/json-ld'
 import {
   SplitSection,
@@ -30,7 +29,6 @@ export default function Contact(): React.ReactElement {
         </SplitSectionContent>
       </SplitSection>
       <FAQ />
-      <GuestbookBand before='Rather not write a whole message? Drop a quick note in the' />
       <ContactPageJsonLd
         description='Contact me with questions or feedback.'
         path='/contact'

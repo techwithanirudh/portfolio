@@ -8,7 +8,6 @@ import { GitHubCode } from '@/components/content/mdx/github-code'
 import { TOCMinimap, TOCPopover } from '@/components/features/toc'
 import { WORK_COVER_SIZES } from '@/components/features/work/cover'
 import { PreviewButton } from '@/components/features/work/preview-button'
-import { GuestbookCue } from '@/components/guestbook-cue'
 import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
@@ -125,10 +124,6 @@ export default async function Page(props: {
           <div className='prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 p-4'>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </div>
-          <GuestbookCue
-            before='Liked this one? Leave a note in the'
-            className='border-border border-t border-dashed p-4'
-          />
         </article>
       </SectionBody>
       <WorkJsonLd page={page} />
