@@ -80,11 +80,11 @@ export const Links = () => {
         { children: 'Colophon', href: '/colophon' },
         { children: 'Resume', href: '/resume' },
         {
-          children: 'V1 Portfolio',
+          children: 'V1 portfolio',
           external: true,
           href: 'https://v1.techwithanirudh.com/',
         },
-        { children: 'RSS Feed', document: true, href: '/rss.xml' },
+        { children: 'RSS feed', document: true, href: '/rss.xml' },
         { children: 'Sitemap', document: true, href: '/sitemap.xml' },
       ],
       title: 'More',

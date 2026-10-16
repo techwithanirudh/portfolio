@@ -140,7 +140,7 @@ export const software: SoftwareItem[] = [
     url: 'https://www.anthropic.com/claude-code',
   },
   {
-    description: 'Utility app',
+    description: 'Runs coding agents side by side',
     logo: sw('conductor.png'),
     name: 'Conductor',
     url: 'https://conductor.build',

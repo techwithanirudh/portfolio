@@ -188,7 +188,7 @@ export const Header = ({
           ))}
         <ViewAnimation delay={0.15}>
           <CollapsibleTrigger
-            aria-label='Toggle Menu'
+            aria-label='Toggle menu'
             className={cn(
               buttonVariants({
                 className: 'group [&_svg]:size-5.5',

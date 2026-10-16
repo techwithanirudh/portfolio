@@ -28,7 +28,7 @@ function Header(props: { page: MDXPage }) {
     links.push({
       href: page.data.website,
       icon: <Icons.globe className='size-4' />,
-      label: 'Visit Website',
+      label: 'Visit website',
     })
   }
 
@@ -36,7 +36,7 @@ function Header(props: { page: MDXPage }) {
     links.push({
       href: page.data.github,
       icon: <Icons.github className='size-4' />,
-      label: 'View Source',
+      label: 'View source',
     })
   }
 

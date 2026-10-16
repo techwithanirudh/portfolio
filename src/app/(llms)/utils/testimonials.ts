@@ -12,7 +12,7 @@ ${testimonials
 
 > ${item.description}
 
-— **${item.author.name}**`
+**${item.author.name}**`
   )
   .join('\n\n')}
 `

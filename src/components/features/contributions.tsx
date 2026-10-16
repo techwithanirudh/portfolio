@@ -365,7 +365,7 @@ export interface ContributionGraphCalendarProps
 
 export const ContributionGraphCalendar = ({
   hideMonthLabels = false,
-  title = 'Contribution Graph',
+  title = 'Contribution graph',
   className,
   children,
   ...props

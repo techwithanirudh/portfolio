@@ -76,7 +76,7 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
     <Section className='relative w-full p-6'>
       <ViewAnimation className='relative w-full'>
         <ContributionGraph
-          aria-label='GitHub Contributions Graph'
+          aria-label='GitHub contributions graph'
           blockMargin={isMobile ? 3 : 2}
           blockSize={blockSize}
           className='w-full'
@@ -85,7 +85,7 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
           <ContributionGraphCalendar
             aria-hidden
             className='overflow-x-auto pb-2'
-            title='GitHub Contributions'
+            title='GitHub contributions'
             {...tooltip.handlers}
           >
             {({ activity, dayIndex, weekIndex }) => (

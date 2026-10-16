@@ -44,8 +44,8 @@ const Skills = () => (
       <SectionHeader
         align='left'
         className='px-6'
-        description='Focused on building practical projects with modern tools'
-        title='My Expertise'
+        description='What I build, and the tools I build it with.'
+        title='My expertise'
       />
 
       <div className='divider-top-dashed'>

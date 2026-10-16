@@ -74,7 +74,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               action: 'logout',
               icon: <Icons.logOut className='size-4' />,
               kind: 'account',
-              title: 'Log Out',
+              title: 'Log out',
             },
           ]
         : [
@@ -82,7 +82,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               action: 'signin',
               icon: <Icons.logIn className='size-4' />,
               kind: 'account',
-              title: 'Sign In',
+              title: 'Sign in',
             },
           ],
     [user]
@@ -260,7 +260,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
         onOpenChange(next)
       }}
       open={open}
-      title='Command Palette'
+      title='Command palette'
     >
       <CommandInput
         // Enter selects an item, which plays its own confirm sound

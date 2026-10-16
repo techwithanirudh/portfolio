@@ -53,7 +53,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         className='rounded-md'
         render={
           <Button
-            aria-label={'User Menu'}
+            aria-label={'User menu'}
             className={cn(
               'size-auto rounded-md border border-border bg-background p-0 hover:bg-accent',
               classNames?.trigger?.base
@@ -130,7 +130,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
               }}
             >
               <Icons.logOut className='size-4' />
-              Log Out
+              Log out
             </DropdownMenuItem>
           </>
         ) : (
@@ -139,7 +139,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
             onClick={() => openSignIn()}
           >
             <Icons.logIn className='size-4' />
-            Sign In
+            Sign in
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

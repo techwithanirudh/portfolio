@@ -22,7 +22,7 @@ export default function NotFound() {
             </h1>
             <div className='mt-2 flex flex-wrap justify-center gap-2'>
               <Link className={buttonVariants()} href='/'>
-                Go Home
+                Go home
                 <Icons.arrowRight className='icon-arrow-button size-4' />
               </Link>
               <AskSimbaButton />
@@ -39,7 +39,7 @@ export default function NotFound() {
 }
 
 export const metadata: Metadata = createMetadata({
-  description: 'The page you are looking for could not be found.',
+  description: "This page doesn't exist.",
   robots: { follow: false, index: false },
   title: 'Not Found',
 })

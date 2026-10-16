@@ -35,8 +35,8 @@ const Hero = () => (
     <ViewAnimation delay={0.15}>
       <p className='max-w-[58ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>
         Design engineer and full-stack developer. I design websites and write
-        the code behind them, lately AI products with Next.js, React and
-        TypeScript, as a Software Engineering Intern at{' '}
+        the code behind them. Right now that means AI products with Next.js,
+        React and TypeScript, as a software engineering intern at{' '}
         <a
           className='link-underline'
           href='https://quiver.ai'

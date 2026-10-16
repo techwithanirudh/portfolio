@@ -80,7 +80,7 @@ export function ThemeToggle({
 
     return (
       <button
-        aria-label={'Toggle Theme'}
+        aria-label={'Toggle theme'}
         className={container}
         data-sound-press='off'
         data-theme-toggle=''

@@ -26,7 +26,7 @@ export function TagsAccordion({ tags }: TagsSidebarProps) {
           <AccordionTrigger className='!p-0 hover:no-underline'>
             <span className='flex items-center gap-2 text-muted-foreground'>
               <Icons.tag className='size-4' />
-              Browse by Tag
+              Browse by tag
             </span>
           </AccordionTrigger>
           <AccordionContent className='!h-auto pt-6'>

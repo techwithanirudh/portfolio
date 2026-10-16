@@ -78,7 +78,7 @@ export default function GuestbookPage() {
       </SplitSection>
       <Section className='p-6'>
         <ViewAnimation delay={0.1}>
-          <h2 className='font-medium text-xl'>Recent Entries</h2>
+          <h2 className='font-medium text-xl'>Recent entries</h2>
         </ViewAnimation>
       </Section>
       {/* Takes the rest of the screen and the entries scroll inside it */}

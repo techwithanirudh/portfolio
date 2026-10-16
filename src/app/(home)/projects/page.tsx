@@ -54,9 +54,7 @@ export default async function Page(props: {
   const canonicalUrl = isFirstPage
     ? '/projects'
     : `/projects?page=${currentPage}`
-  const jsonLdTitle = isFirstPage
-    ? 'Projects'
-    : `Projects - Page ${currentPage}`
+  const jsonLdTitle = isFirstPage ? 'Projects' : `Projects, page ${currentPage}`
 
   return (
     <Wrapper>
@@ -119,7 +117,7 @@ export async function generateMetadata(
   }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
-  const pageTitle = isFirstPage ? 'Projects' : `Projects - Page ${pageIndex}`
+  const pageTitle = isFirstPage ? 'Projects' : `Projects, page ${pageIndex}`
   const canonicalUrl = isFirstPage ? '/projects' : `/projects?page=${pageIndex}`
 
   return createMetadata({

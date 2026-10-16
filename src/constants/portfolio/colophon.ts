@@ -11,7 +11,7 @@ export const technology = [
     url: 'https://nextjs.org',
   },
   {
-    description: 'Strict typing for safer, more readable UI code.',
+    description: 'Strict mode across the whole codebase.',
     name: 'TypeScript',
     url: 'https://www.typescriptlang.org',
   },
@@ -26,7 +26,7 @@ export const technology = [
     url: 'https://fumadocs.dev',
   },
   {
-    description: 'Accessible primitives and components I customized.',
+    description: 'Accessible components that I restyled for this site.',
     name: 'Base UI and shadcn/ui',
     url: 'https://ui.shadcn.com',
   },

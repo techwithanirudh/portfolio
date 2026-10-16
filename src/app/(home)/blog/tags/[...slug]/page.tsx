@@ -54,7 +54,7 @@ const Header = ({
       <div className='flex items-center justify-between gap-4'>
         <span className='flex items-center gap-2'>
           <Icons.tag className='icon-tilt text-muted-foreground' size={20} />
-          {tag} <span className='text-muted-foreground'>Posts</span>{' '}
+          {tag} <span className='text-muted-foreground'>posts</span>{' '}
           <CurrentPostsCount
             endIndex={endIndex}
             startIndex={startIndex}
@@ -162,8 +162,8 @@ export async function generateMetadata(
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
   const pageTitle = isFirstPage
-    ? `${tag} Posts`
-    : `${tag} Posts - Page ${pageIndex}`
+    ? `${tag} posts`
+    : `${tag} posts, page ${pageIndex}`
   const canonicalUrl = isFirstPage
     ? `/blog/tags/${tag}`
     : `/blog/tags/${tag}?page=${pageIndex}`

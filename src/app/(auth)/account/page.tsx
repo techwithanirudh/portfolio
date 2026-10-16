@@ -45,7 +45,7 @@ export default function AccountPage() {
         </Suspense>
       </Section>
       <Section className='px-6 pt-6'>
-        <h2 className='font-medium text-lg'>Active Sessions</h2>
+        <h2 className='font-medium text-lg'>Active sessions</h2>
       </Section>
       <Section sectionClassName='flex-1'>
         <Suspense fallback={<ActiveSessionsSkeleton />}>

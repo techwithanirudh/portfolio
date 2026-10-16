@@ -109,7 +109,7 @@ export async function generateMetadata(
   }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
-  const pageTitle = isFirstPage ? 'Posts' : `Posts - Page ${pageIndex}`
+  const pageTitle = isFirstPage ? 'Posts' : `Posts, page ${pageIndex}`
   const canonicalUrl = isFirstPage ? '/blog' : `/blog?page=${pageIndex}`
   const description = isFirstPage
     ? 'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'

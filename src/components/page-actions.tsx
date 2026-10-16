@@ -86,7 +86,7 @@ export function LLMCopyButton({
       variant='secondary'
     >
       <CopyStateIcon className='text-muted-foreground' state={state} />
-      <span>Copy Page</span>
+      <span>Copy page</span>
     </Button>
   )
 }
@@ -136,7 +136,7 @@ export function ViewOptions({
       <DropdownMenuTrigger
         render={
           <Button
-            aria-label='View Options'
+            aria-label='View options'
             className='size-8 border-none shadow-none active:scale-none'
             disabled={disabled}
             size='icon-sm'

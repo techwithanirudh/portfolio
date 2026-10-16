@@ -29,7 +29,7 @@ export const SearchToggle = ({
 
   return (
     <button
-      aria-label='Open Search'
+      aria-label='Open search'
       className={cn(
         buttonVariants({
           color,

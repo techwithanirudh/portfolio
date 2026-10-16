@@ -13,7 +13,7 @@ export function Coding() {
           >
             Visual Studio Code
           </PreviewLink>{' '}
-          as my primary editor with the{' '}
+          as my main editor with the{' '}
           <PreviewLink
             className='link-underline'
             href='https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme'

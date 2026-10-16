@@ -28,7 +28,7 @@ export default function ColophonPage() {
     },
     {
       content: <Design />,
-      title: 'Design & Colors',
+      title: 'Design and colors',
     },
     {
       content: <Attribution />,

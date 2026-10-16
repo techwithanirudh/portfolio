@@ -120,7 +120,7 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
       >
         <DialogContent className='max-sm:data-closed:slide-out-to-bottom max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
           <DialogHeader>
-            <DialogTitle className='text-lg'>Sign In</DialogTitle>
+            <DialogTitle className='text-lg'>Sign in</DialogTitle>
             <DialogDescription>
               Use your Google or GitHub account.
             </DialogDescription>

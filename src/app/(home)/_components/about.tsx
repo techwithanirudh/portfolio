@@ -15,7 +15,7 @@ export default function About(): React.ReactElement {
   return (
     <SplitSection>
       <SplitSectionSidebar>
-        <SectionHeader align='left' title='About Me' />
+        <SectionHeader align='left' title='About me' />
       </SplitSectionSidebar>
 
       <SplitSectionContent inset>
@@ -43,7 +43,7 @@ export default function About(): React.ReactElement {
               )}
               href='/about'
             >
-              Learn More
+              Learn more
               <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>
           </div>

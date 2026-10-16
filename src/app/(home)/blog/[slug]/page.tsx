@@ -35,12 +35,12 @@ export default async function Page(props: {
         <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
       </div>
       <div>
-        <p className='mb-1 text-muted-foreground text-sm'>Created At</p>
+        <p className='mb-1 text-muted-foreground text-sm'>Published</p>
         <p className='font-medium'>{new Date(page.data.date).toDateString()}</p>
       </div>
       {lastUpdate && (
         <div>
-          <p className='mb-1 text-muted-foreground text-sm'>Updated At</p>
+          <p className='mb-1 text-muted-foreground text-sm'>Updated</p>
           <p className='font-medium'>{lastUpdate.toDateString()}</p>
         </div>
       )}

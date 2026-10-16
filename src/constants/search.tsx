@@ -118,7 +118,7 @@ export const commands: CommandGroup[] = [
       {
         icon: <Icons.rss className='size-4' />,
         kind: 'link',
-        title: 'RSS Feed',
+        title: 'RSS feed',
         url: '/rss.xml',
       },
       {

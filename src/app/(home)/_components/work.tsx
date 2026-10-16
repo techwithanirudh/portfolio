@@ -12,7 +12,7 @@ export default function WorkPreview({ works }: { works: WorkPage[] }) {
         <SectionHeader
           align='left'
           className='px-6'
-          description='A snapshot of recent projects and collaborations.'
+          description='Recent projects and collaborations.'
           title='Projects'
         />
         <div className='divider-top-dashed'>

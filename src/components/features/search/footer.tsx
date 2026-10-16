@@ -9,9 +9,9 @@ import { COMMAND_META_MAP } from '@/constants/search'
 import type { CommandKind } from '@/types/search'
 
 const ENTER_LABELS: Record<CommandKind, string> = {
-  command: 'Run Command',
-  link: 'Open Link',
-  page: 'Go to Page',
+  command: 'Run command',
+  link: 'Open link',
+  page: 'Go to page',
 }
 
 export function CommandMenuFooter() {

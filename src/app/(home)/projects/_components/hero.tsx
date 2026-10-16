@@ -6,7 +6,7 @@ export const Hero = (_props: {
   endIndex: number
 }) => (
   <HeroSection
-    description='A snapshot of recent projects and collaborations.'
+    description='Recent projects and collaborations.'
     title='Projects'
   />
 )

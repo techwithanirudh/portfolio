@@ -4,13 +4,13 @@ const palette = [
   { className: 'bg-background', label: 'Background' },
   { className: 'bg-card', label: 'Card' },
   { className: 'bg-muted', label: 'Muted' },
-  { className: 'bg-muted-foreground', label: 'Muted F.G' },
+  { className: 'bg-muted-foreground', label: 'Muted foreground' },
   { className: 'bg-border', label: 'Border' },
   { className: 'bg-foreground', label: 'Foreground' },
   { className: 'bg-primary', label: 'Primary' },
-  { className: 'bg-primary/30', label: 'Primary Soft' },
+  { className: 'bg-primary/30', label: 'Primary soft' },
   { className: 'bg-accent', label: 'Accent' },
-  { className: 'bg-accent-foreground', label: 'Accent F.G' },
+  { className: 'bg-accent-foreground', label: 'Accent foreground' },
 ]
 
 export const Design = () => (
