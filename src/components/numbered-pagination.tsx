@@ -8,6 +8,9 @@ import {
 } from '@/components/ui/pagination'
 import { usePagination } from '@/hooks/use-pagination'
 
+const ellipsisClassName =
+  'flex size-9 items-center justify-center text-muted-foreground text-sm'
+
 interface NumberedPaginationProps {
   currentPage: number
   onPageChange: (page: number) => void
@@ -56,14 +59,10 @@ function NumberedPagination({
           <ul className='inline-flex items-center gap-1 -space-x-px rtl:space-x-reverse'>
             {showLeftEllipsis && (
               <PaginationItem>
-                <Button
-                  className='pointer-events-none shadow-none'
-                  shape='square'
-                  size='icon'
-                  variant='ghost'
-                >
+                {/* Not a control, so it stays out of the tab order */}
+                <span aria-hidden='true' className={ellipsisClassName}>
                   ...
-                </Button>
+                </span>
               </PaginationItem>
             )}
 
@@ -84,14 +83,10 @@ function NumberedPagination({
 
             {showRightEllipsis && (
               <PaginationItem>
-                <Button
-                  className='pointer-events-none shadow-none'
-                  shape='square'
-                  size='icon'
-                  variant='ghost'
-                >
+                {/* Not a control, so it stays out of the tab order */}
+                <span aria-hidden='true' className={ellipsisClassName}>
                   ...
-                </Button>
+                </span>
               </PaginationItem>
             )}
           </ul>

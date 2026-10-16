@@ -48,7 +48,6 @@ export function createMetadata(override: Metadata): Metadata {
   return {
     ...override,
     alternates: {
-      canonical: '/',
       types: {
         'application/rss+xml': '/blog/rss.xml',
       },
@@ -96,18 +95,19 @@ export function createMetadata(override: Metadata): Metadata {
   }
 }
 
-export function getBlogPageImage(page: BlogPage) {
+export type OgCollection = 'blog' | 'work'
+
+export function getPageImage(
+  collection: OgCollection,
+  page: Pick<BlogPage | WorkPage, 'slugs'>
+) {
   const segments = [...page.slugs, 'image.webp']
   return {
     segments,
-    url: `/og/blog/${segments.join('/')}`,
+    url: `/og/${collection}/${segments.join('/')}`,
   }
 }
 
-export function getWorkPageImage(page: WorkPage) {
-  const segments = [...page.slugs, 'image.webp']
-  return {
-    segments,
-    url: `/og/work/${segments.join('/')}`,
-  }
-}
+export const getBlogPageImage = (page: BlogPage) => getPageImage('blog', page)
+
+export const getWorkPageImage = (page: WorkPage) => getPageImage('work', page)

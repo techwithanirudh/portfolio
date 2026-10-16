@@ -16,6 +16,7 @@ export function Setup() {
             height={720}
             imageClassName='h-full w-full object-cover grayscale-75 transition-filter duration-300 hover:grayscale-0'
             lazy={false}
+            sizes='(min-width: 1400px) 1400px, 100vw'
             src='/images/uses/setup.png'
             width={1280}
           />

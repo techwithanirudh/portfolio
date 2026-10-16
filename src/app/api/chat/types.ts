@@ -1,7 +1,7 @@
 import type { InferUITools, UIDataTypes, UIMessage } from 'ai'
 import type { DocumentData } from 'flexsearch'
 import { z } from 'zod'
-import type { PageEntry } from '@/app/actions/pages'
+import type { PageEntry } from '@/lib/source'
 import type { tools } from './utils/tools'
 
 export type ChatTools = InferUITools<typeof tools>

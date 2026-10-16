@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {
   align?: 'left' | 'center'
+  as?: 'h1' | 'h2'
   children?: ReactNode
   className?: string
   description?: string | ReactNode | null
@@ -21,6 +22,7 @@ export const SectionHeader = ({
   titleClassName,
   descriptionClassName,
   align = 'center',
+  as: Heading = 'h2',
   sticky = false,
 }: SectionHeaderProps) => (
   <div
@@ -32,7 +34,7 @@ export const SectionHeader = ({
     )}
   >
     <ViewAnimation>
-      <h2
+      <Heading
         className={cn(
           'typography-title text-balance font-regular text-3xl leading-tight tracking-tighter',
           'md:text-5xl',
@@ -40,7 +42,7 @@ export const SectionHeader = ({
         )}
       >
         {title}
-      </h2>
+      </Heading>
     </ViewAnimation>
     {description && (
       <ViewAnimation delay={0.1}>

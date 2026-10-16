@@ -11,6 +11,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
@@ -53,9 +54,11 @@ export const NewsletterForm = () => {
               name='email'
               render={({ field }) => (
                 <FormItem className='group h-full'>
+                  <FormLabel className='sr-only'>Email address</FormLabel>
                   <FormControl className='h-full group-has-[p]:pt-3'>
                     <Input
                       {...field}
+                      autoComplete='email'
                       className='h-full rounded-md rounded-r-none border-none px-4 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
                       disabled={action.status === 'executing'}
                       placeholder='Email address'
@@ -69,6 +72,7 @@ export const NewsletterForm = () => {
           </div>
 
           <Button
+            aria-label='Subscribe'
             className='size-auto w-15 rounded-md rounded-l-none px-3'
             disabled={action.status === 'executing'}
             size='icon'

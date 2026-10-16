@@ -6,7 +6,7 @@ import {
 } from '@/components/layout/sections/split'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
-import { getActivityItems } from './actions'
+import { getActivityItems } from './data'
 import { GitHubEvent as GitHubEventComponent } from './event'
 
 export default async function Feed(): Promise<React.ReactElement | null> {

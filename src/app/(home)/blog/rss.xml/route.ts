@@ -5,6 +5,7 @@ import { getBlogPageImage } from '@/lib/metadata'
 import { getSortedByDatePosts } from '@/lib/source'
 
 export const dynamic = 'force-static'
+export const revalidate = false
 
 const escapeForXML = (str: string): string =>
   str
@@ -31,7 +32,7 @@ function createFeed(): Feed {
   const feed = new Feed({
     copyright: `All rights reserved ${new Date().getFullYear()}, ${owner}`,
     description,
-    favicon: new URL('/favicon.ico', baseUrl).href,
+    favicon: new URL('/icon.png', baseUrl).href,
     feed: new URL('/blog/rss.xml', baseUrl).href,
     feedLinks: { rss: new URL('/blog/rss.xml', baseUrl).href },
     id: baseUrl.href,

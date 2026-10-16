@@ -1,6 +1,6 @@
-import { Octokit } from '@octokit/rest'
 import { unstable_cache } from 'next/cache'
 import { bundledLanguages, bundledLanguagesAlias } from 'shiki'
+import { octokit } from '@/lib/github'
 
 const DEFAULT_REVALIDATE_SECONDS = 60 * 60
 const SHIKI_LANG_KEYS = new Set([
@@ -8,10 +8,6 @@ const SHIKI_LANG_KEYS = new Set([
   ...Object.keys(bundledLanguagesAlias),
 ])
 const LINE_RANGE_REGEX = /#L(\d+)(?:-L(\d+))?$/
-
-const octokit = new Octokit({
-  auth: process.env.GITHUB_TOKEN ?? process.env.GITHUB_ACCESS_TOKEN,
-})
 
 export interface ParsedGitHubFileUrl {
   lineRange: {

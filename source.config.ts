@@ -11,6 +11,9 @@ import type { ElementContent } from 'hast'
 import type { ShikiTransformer } from 'shiki'
 import { z } from 'zod'
 
+// Rejects strings that parse to an Invalid Date instead of passing them on
+const dateSchema = z.union([z.string(), z.date()]).pipe(z.coerce.date())
+
 export const blog = defineCollections({
   dir: 'content/blog',
   postprocess: {
@@ -19,21 +22,7 @@ export const blog = defineCollections({
   },
   schema: frontmatterSchema.extend({
     author: z.string(),
-    date: z
-      .string()
-      .or(z.date())
-      .transform((value, context) => {
-        try {
-          return new Date(value)
-        } catch {
-          context.issues.push({
-            code: 'custom',
-            input: value,
-            message: 'The value could not be transformed to Date type.',
-          })
-          return z.NEVER
-        }
-      }),
+    date: dateSchema,
     image: z.string().optional(),
     tags: z.array(z.string()).optional(),
   }),
@@ -47,21 +36,7 @@ export const work = defineCollections({
     includeProcessedMarkdown: true,
   },
   schema: frontmatterSchema.extend({
-    date: z
-      .string()
-      .or(z.date())
-      .transform((value, context) => {
-        try {
-          return new Date(value)
-        } catch {
-          context.issues.push({
-            code: 'custom',
-            input: value,
-            message: 'The value could not be transformed to Date type.',
-          })
-          return z.NEVER
-        }
-      }),
+    date: dateSchema,
     github: z.string().optional(),
     image: z.string().optional(),
     /**
@@ -111,7 +86,8 @@ export default defineConfig({
         inline: 'tailing-curly-colon',
         themes: {
           dark: 'catppuccin-mocha',
-          light: 'catppuccin-latte',
+          // Latte's greens and yellows fail contrast on white
+          light: 'github-light',
         },
         transformers: [
           ...(rehypeCodeDefaultOptions.transformers ?? []),

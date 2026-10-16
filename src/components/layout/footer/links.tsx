@@ -8,15 +8,42 @@ import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 import { cn } from '@/lib/utils'
 
+interface LinkEntry {
+  children: ReactNode
+  /** Route handlers, not pages, so they need a full document load */
+  document?: boolean
+  external?: boolean
+  href: string
+}
+
 interface ListItem {
   external?: boolean
   href?: string
-  items: {
-    href: string
-    children: ReactNode
-    external?: boolean
-  }[]
+  items: LinkEntry[]
   title: string
+}
+
+const plainLinkClassName =
+  'text-muted-foreground text-sm transition-colors hover:text-foreground'
+
+const FooterLink = ({ item }: { item: LinkEntry }) => {
+  if (item.external) {
+    return (
+      <PreviewLink className={plainLinkClassName} href={item.href}>
+        {item.children}
+      </PreviewLink>
+    )
+  }
+
+  if (item.document) {
+    return (
+      <a className={plainLinkClassName} href={item.href}>
+        {item.children}
+      </a>
+    )
+  }
+
+  return <ActiveLink href={item.href}>{item.children}</ActiveLink>
 }
 
 export const Links = () => {
@@ -57,8 +84,8 @@ export const Links = () => {
           external: true,
           href: 'https://v1.techwithanirudh.com/',
         },
-        { children: 'RSS Feed', href: '/rss.xml' },
-        { children: 'Sitemap', href: '/sitemap.xml' },
+        { children: 'RSS Feed', document: true, href: '/rss.xml' },
+        { children: 'Sitemap', document: true, href: '/sitemap.xml' },
       ],
       title: 'More',
     },
@@ -98,16 +125,7 @@ export const Links = () => {
           <ul className='flex flex-col gap-2 sm:gap-3'>
             {list.items.map((item) => (
               <li key={item.href}>
-                {item.external ? (
-                  <PreviewLink
-                    className='text-muted-foreground text-sm transition-colors hover:text-foreground'
-                    href={item.href}
-                  >
-                    {item.children}
-                  </PreviewLink>
-                ) : (
-                  <ActiveLink href={item.href}>{item.children}</ActiveLink>
-                )}
+                <FooterLink item={item} />
               </li>
             ))}
           </ul>

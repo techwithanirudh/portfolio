@@ -1,28 +1,30 @@
 import { and, desc, eq, sql } from 'drizzle-orm'
 import { unstable_cache } from 'next/cache'
 
-import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
+import type {
+  GuestbookEntryItem,
+  GuestbookReactionItem,
+} from '@/lib/validators/guestbook'
 import { db } from '@/server/db'
 import { guestbookEntries, guestbookReactions, users } from '@/server/db/schema'
 
-const fetchGuestbookEntries = async (
-  currentUserId?: string | null
-): Promise<GuestbookEntryItem[]> => {
+type SharedGuestbookEntry = Omit<GuestbookEntryItem, 'reactions'> & {
+  reactions: Omit<GuestbookReactionItem, 'reacted'>[]
+}
+
+const fetchSharedGuestbookEntries = async (): Promise<
+  SharedGuestbookEntry[]
+> => {
   const rows = await db
     .select({
       banned: users.banned,
       count: sql<number>`count(${guestbookReactions.emoji})`.mapWith(Number),
       createdAt: guestbookEntries.createdAt,
       editedAt: guestbookEntries.editedAt,
-      // Reactions
       emoji: guestbookReactions.emoji,
-      // Entry info
       id: guestbookEntries.id,
       message: guestbookEntries.message,
       name: guestbookEntries.name,
-      reacted: currentUserId
-        ? sql<boolean>`coalesce(bool_or(${guestbookReactions.userId} = ${currentUserId}), false)`
-        : sql<boolean>`false`,
       role: users.role,
       signature: guestbookEntries.signature,
       userId: guestbookEntries.userId,
@@ -47,14 +49,16 @@ const fetchGuestbookEntries = async (
     )
     .orderBy(desc(guestbookEntries.createdAt))
 
-  const entriesMap = new Map()
+  const entries = new Map<number, SharedGuestbookEntry>()
 
   for (const row of rows) {
-    if (!entriesMap.has(row.id)) {
-      entriesMap.set(row.id, {
+    let entry = entries.get(row.id)
+
+    if (!entry) {
+      entry = {
         banned: row.banned ?? false,
-        createdAt: row.createdAt,
-        editedAt: row.editedAt,
+        createdAt: row.createdAt.toISOString(),
+        editedAt: row.editedAt?.toISOString() ?? null,
         id: row.id,
         message: row.message,
         name: row.name,
@@ -62,33 +66,52 @@ const fetchGuestbookEntries = async (
         role: row.role,
         signature: row.signature ?? null,
         userId: row.userId,
-      })
+      }
+      entries.set(row.id, entry)
     }
 
     if (row.emoji) {
-      entriesMap.get(row.id)!.reactions.push({
-        count: row.count,
-        emoji: row.emoji,
-        reacted: row.reacted,
-      })
+      entry.reactions.push({ count: row.count, emoji: row.emoji })
     }
   }
 
-  return [...entriesMap.values()].map((entry) => ({
-    ...entry,
-    createdAt: entry.createdAt.toISOString(),
-    editedAt: entry.editedAt?.toISOString() ?? null,
-  }))
+  return [...entries.values()]
 }
 
-export const getGuestbookEntries = (currentUserId?: string | null) =>
-  unstable_cache(
-    () => fetchGuestbookEntries(currentUserId),
-    ['guestbook', currentUserId ?? 'anonymous'],
-    {
-      tags: ['guestbook'],
-    }
-  )()
+const getSharedGuestbookEntries = unstable_cache(
+  fetchSharedGuestbookEntries,
+  ['guestbook'],
+  { tags: ['guestbook'] }
+)
+
+const getViewerReactionKeys = async (userId: string) => {
+  const rows = await db
+    .select({
+      emoji: guestbookReactions.emoji,
+      entryId: guestbookReactions.entryId,
+    })
+    .from(guestbookReactions)
+    .where(eq(guestbookReactions.userId, userId))
+
+  return new Set(rows.map((row) => `${row.entryId}:${row.emoji}`))
+}
+
+export const getGuestbookEntries = async (
+  currentUserId?: string | null
+): Promise<GuestbookEntryItem[]> => {
+  const [entries, viewerReactions] = await Promise.all([
+    getSharedGuestbookEntries(),
+    currentUserId ? getViewerReactionKeys(currentUserId) : null,
+  ])
+
+  return entries.map((entry) => ({
+    ...entry,
+    reactions: entry.reactions.map((reaction) => ({
+      ...reaction,
+      reacted: viewerReactions?.has(`${entry.id}:${reaction.emoji}`) ?? false,
+    })),
+  }))
+}
 
 export const deleteGuestbookEntry = async (
   entryId: number,

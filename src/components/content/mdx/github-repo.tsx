@@ -187,15 +187,11 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
       </HoverCard>
     )
   } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      return (
-        <span className='not-prose text-destructive text-sm'>
-          Unable to load GitHub repo:{' '}
-          {error instanceof Error ? error.message : 'Unknown error'}
-        </span>
-      )
-    }
-
+    // Readers get a plain repo link; the reason only matters in the logs
+    console.error(
+      `Failed to load GitHub repo ${getGitHubRepoUrl(parseGitHubRepoInput(repo))}:`,
+      error instanceof Error ? error.message : error
+    )
     return <GithubRepoFallback className={className} repo={repo} />
   }
 }

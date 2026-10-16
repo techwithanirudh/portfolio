@@ -71,7 +71,6 @@ export function Provider({
             showSpinner: false,
           }}
           shallowRouting
-          startOnLoad
           stopDelay={200}
         >
           <TooltipProvider>

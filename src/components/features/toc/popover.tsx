@@ -65,7 +65,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
         )}
         ref={ref}
       >
-        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-fd-muted-foreground text-sm focus-visible:outline-none md:px-6 [&_svg]:size-4'>
+        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-fd-muted-foreground text-sm focus-visible:bg-muted md:px-6 [&_svg]:size-4'>
           <ProgressCircle
             className={cn('shrink-0', open && 'text-fd-primary')}
             value={
