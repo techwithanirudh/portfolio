@@ -16,6 +16,7 @@ import { SectionBody } from '@/components/layout/sections/body'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
 import { getWork, getWorkPages, type WorkPage as MDXPage } from '@/lib/source'
+import { cn } from '@/lib/utils'
 
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
 
@@ -46,9 +47,10 @@ function Header(props: { page: MDXPage }) {
           Projects
         </BackLink>
         {links.length > 0 && (
-          <div className='flex items-stretch divide-x divide-line border-line border-l'>
-            {links.map((link) => (
+          <div className='flex items-stretch border-line border-l'>
+            {links.map((link, index) => (
               <PreviewButton
+                className={cn(index > 0 && 'border-line border-l border-solid')}
                 href={link.href}
                 icon={link.icon}
                 key={link.href}

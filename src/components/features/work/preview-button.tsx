@@ -2,18 +2,25 @@ import type { ReactNode } from 'react'
 import { PreviewLink } from '@/components/preview-link'
 import { buttonVariants } from '@/components/ui/button'
 import { getLinkPreview } from '@/lib/link-preview'
+import { cn } from '@/lib/utils'
 
 interface PreviewButtonProps {
+  className?: string
   href: string
   icon?: ReactNode
   label: string
 }
 
-export function PreviewButton({ href, icon, label }: PreviewButtonProps) {
+export function PreviewButton({
+  className,
+  href,
+  icon,
+  label,
+}: PreviewButtonProps) {
   return (
     <PreviewLink
       className={buttonVariants({
-        className: '[&_svg]:text-muted-foreground',
+        className: cn('[&_svg]:text-muted-foreground', className),
         size: 'sm',
         variant: 'toolbar',
       })}

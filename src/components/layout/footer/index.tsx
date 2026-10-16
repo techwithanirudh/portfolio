@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { UserButton } from '@/components/features/auth'
 import { Clock } from '@/components/layout/footer/clock'
+import { GuestbookNote } from '@/components/layout/footer/guestbook-note'
 import { SoundToggle } from '@/components/layout/footer/sound-toggle'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { ViewAnimation } from '@/components/view-animation'
@@ -9,6 +10,7 @@ import { title } from '@/constants/site'
 
 // Feeds are route handlers, the client router would 404 on them
 const links = [
+  { href: '/guestbook', label: 'guestbook' },
   { href: '/uses', label: 'uses' },
   { href: '/colophon', label: 'colophon' },
   { document: true, href: '/rss.xml', label: 'rss' },
@@ -20,7 +22,7 @@ export const Footer = () => (
     <div className='container mx-auto'>
       {/* 1px up so the top rule lands on the last section's bottom rule */}
       <div className='screen-line-top screen-line-bottom border-line border-x before:-top-px'>
-        <div aria-hidden className='screen-line-bottom h-8 bg-dashed' />
+        <GuestbookNote />
         <ViewAnimation>
           <div className='screen-line-bottom flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-3 font-mono text-muted-foreground text-xs'>
             <ul className='flex flex-wrap items-center gap-x-4 gap-y-2'>

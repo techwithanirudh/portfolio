@@ -21,12 +21,6 @@ export const linkItems: LinkItemType[] = [
     url: '/contact',
   },
   {
-    active: 'url',
-    icon: <Icons.messageSquare />,
-    text: 'Guestbook',
-    url: '/guestbook',
-  },
-  {
     active: 'nested-url',
     icon: <Icons.work />,
     text: 'Projects',

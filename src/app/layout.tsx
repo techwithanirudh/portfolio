@@ -1,7 +1,7 @@
 import { BotIdClient } from 'botid/client'
 import { RootProvider } from 'fumadocs-ui/provider/next'
 import type { Viewport } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Caveat, Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { SignInModalProvider } from '@/components/features/auth/sign-in-modal'
 import CustomSearchDialog from '@/components/features/search'
@@ -27,6 +27,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   subsets: ['latin'],
   variable: '--font-geist-mono',
+})
+
+// Only the footer's guestbook note is handwritten
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-caveat',
+  weight: '600',
 })
 
 export const metadata = createMetadata({
@@ -88,7 +95,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <html
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${caveat.variable} antialiased`}
       data-scroll-behavior='smooth'
       lang='en'
       suppressHydrationWarning

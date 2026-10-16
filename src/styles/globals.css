@@ -61,6 +61,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-geist-mono);
+  --font-hand: var(--font-caveat);
 }
 
 html {
