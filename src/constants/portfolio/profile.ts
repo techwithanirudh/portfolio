@@ -15,7 +15,7 @@ export const profile = {
   ],
   handle: 'an1rudh',
   location: 'India',
-  obfuscatedEmail: 'aGVsbG9AdGVjaHdpdGhhbmlydWRoLmNvbQ==',
+  obfuscatedEmail: 'aGVsbG9AaW1hbmlydWRoLmNvbQ==',
   pronouns: 'he/him',
   timeZone: 'Asia/Kolkata',
 } as const

@@ -66,7 +66,9 @@ function TechBadge({ item: { href, icon, label } }: { item: TechStackItem }) {
   return (
     <Badge
       className='group/tag gap-1.5 rounded-full px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
-      render={<a href={href} rel='noreferrer' target='_blank' />}
+      render={
+        <a aria-label={label} href={href} rel='noreferrer' target='_blank' />
+      }
       variant='outline'
     >
       {typeof icon === 'string' ? (

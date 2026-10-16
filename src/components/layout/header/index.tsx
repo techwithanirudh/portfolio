@@ -11,6 +11,8 @@ import {
   resolveLinkItems,
 } from 'fumadocs-ui/layouts/shared'
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
+import { useLenis } from 'lenis/react'
+import { usePathname } from 'next/navigation'
 import {
   type ComponentProps,
   Fragment,
@@ -26,7 +28,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
@@ -68,9 +69,33 @@ const renderNavTitle = (
   }
 
   return (
-    <Link href={href} {...props}>
+    <NavTitleLink href={href} {...props}>
       {title as ReactNode}
-    </Link>
+    </NavTitleLink>
+  )
+}
+
+function NavTitleLink({ href, onClick, ...props }: ComponentProps<'a'>) {
+  const pathname = usePathname()
+  const lenis = useLenis()
+
+  return (
+    <Link
+      href={href}
+      onClick={(event) => {
+        onClick?.(event)
+        if (event.defaultPrevented || pathname !== href) {
+          return
+        }
+        event.preventDefault()
+        if (lenis) {
+          lenis.scrollTo(0)
+        } else {
+          window.scrollTo({ behavior: 'smooth', top: 0 })
+        }
+      }}
+      {...props}
+    />
   )
 }
 
@@ -113,7 +138,7 @@ export const Header = ({
               <MobileNavigationMenuLinkItem
                 className='lg:hidden'
                 item={item}
-                key={i.toString()}
+                key={getItemKey(item, i)}
               />
             ))}
           <div className='-ms-1.5 flex flex-row items-center gap-2 max-sm:mt-2'>
@@ -121,7 +146,7 @@ export const Header = ({
               <MobileNavigationMenuLinkItem
                 className={cn(item.type === 'icon' && '-mx-1 first:ms-0')}
                 item={item}
-                key={i.toString()}
+                key={getItemKey(item, i)}
               />
             ))}
             {themeSwitch.enabled !== false &&
@@ -135,25 +160,27 @@ export const Header = ({
     >
       <div className='relative flex w-full items-center'>
         <div className='flex items-center gap-2'>
-          <ViewAnimation>
+          <div>
             {renderNavTitle(nav, {
               className:
                 'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
             })}
-          </ViewAnimation>
+          </div>
           {nav.children}
         </div>
         <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-lg:hidden'>
           {navItems
             .filter((item) => !isSecondary(item))
             .map((item, i) => (
-              <ViewAnimation delay={0.05 * i} key={i.toString()}>
-                <NavigationMenuLinkItem className='text-sm' item={item} />
-              </ViewAnimation>
+              <NavigationMenuLinkItem
+                className='text-sm'
+                item={item}
+                key={getItemKey(item, i)}
+              />
             ))}
         </ul>
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
-          <ViewAnimation delay={0.15}>
+          <div>
             {searchToggle.enabled !== false &&
               (searchToggle.components?.lg ?? (
                 <SearchToggle
@@ -161,14 +188,14 @@ export const Header = ({
                   hideIfDisabled
                 />
               ))}
-          </ViewAnimation>
-          <ViewAnimation delay={0.15}>
+          </div>
+          <div>
             {themeSwitch.enabled !== false &&
               (themeSwitch.component ?? (
                 <ThemeToggle mode={themeSwitch?.mode} />
               ))}
-          </ViewAnimation>
-          <ViewAnimation delay={0.15}>
+          </div>
+          <div>
             <ul className='flex flex-row items-center gap-2 empty:hidden'>
               {navItems.filter(isSecondary).map((item, i) => (
                 <NavigationMenuLinkItem
@@ -176,21 +203,21 @@ export const Header = ({
                     item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
                   )}
                   item={item}
-                  key={i.toString()}
+                  key={getItemKey(item, i)}
                 />
               ))}
             </ul>
-          </ViewAnimation>
+          </div>
         </div>
       </div>
       <div className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
         {searchToggle.enabled !== false &&
           (searchToggle.components?.sm ?? (
-            <ViewAnimation delay={0.1}>
+            <div>
               <SearchToggle className='p-2' hideIfDisabled />
-            </ViewAnimation>
+            </div>
           ))}
-        <ViewAnimation delay={0.15}>
+        <div>
           <CollapsibleTrigger
             aria-label='Toggle menu'
             className={cn(
@@ -201,10 +228,10 @@ export const Header = ({
               })
             )}
           >
-            <Icons.menu className='transition-all duration-300 group-data-panel-open:hidden' />
-            <Icons.close className='hidden transition-all duration-300 group-data-panel-open:block' />
+            <Icons.menu className='group-data-panel-open:hidden' />
+            <Icons.close className='hidden group-data-panel-open:block' />
           </CollapsibleTrigger>
-        </ViewAnimation>
+        </div>
       </div>
     </HeaderNavigationMenu>
   )
@@ -311,6 +338,9 @@ const HeaderNavigationMenu = ({
     </Collapsible>
   )
 }
+
+const getItemKey = (item: LinkItemType, index: number): string =>
+  'url' in item && item.url ? item.url : index.toString()
 
 const isSecondary = (item: LinkItemType): boolean =>
   ('secondary' in item && item.secondary === true) || item.type === 'icon'
@@ -446,7 +476,10 @@ const MobileNavigationMenuLinkItem = ({
           )}
         </p>
         {item.items.map((child, i) => (
-          <MobileNavigationMenuLinkItem item={child} key={i.toString()} />
+          <MobileNavigationMenuLinkItem
+            item={child}
+            key={getItemKey(child, i)}
+          />
         ))}
       </div>
     )

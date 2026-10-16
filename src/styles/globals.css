@@ -134,6 +134,8 @@ html > body[data-scroll-locked] {
   --color-fd-ring: hsl(0, 0%, 63.9%);
 
   --animate-blink: blink 4.5s ease-in-out infinite;
+
+  --animate-shimmer: shimmer 2s linear infinite;
   @keyframes blink {
     0%,
     94%,
@@ -144,6 +146,20 @@ html > body[data-scroll-locked] {
       scale: 1 0.1;
     }
   }
+  @keyframes shimmer {
+    from {
+      background-position: 100% center;
+    }
+    to {
+      background-position: 0% center;
+    }
+  }
+}
+
+@theme static {
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
 /* Fumadocs' light muted text sits at 4.35:1 on the background; a touch darker
@@ -232,10 +248,6 @@ html > body[data-scroll-locked] {
 }
 
 @utility texture-item {
-  transition:
-    background-color 150ms,
-    box-shadow 150ms;
-
   &:focus,
   &[data-highlighted],
   &[data-selected="true"],
@@ -458,29 +470,6 @@ html > body[data-scroll-locked] {
     }
   }
 
-  @keyframes reveal {
-    0% {
-      scale: 0.8;
-      opacity: 0;
-      translate: 0 4lh;
-      filter: blur(20px);
-    }
-  }
-
-  ::view-transition-new(.page-enter):only-child {
-    animation-name: reveal;
-  }
-
-  ::view-transition-old(.page-exit):only-child {
-    animation-name: reveal;
-    animation-direction: reverse;
-  }
-
-  /* util for faster than default (250ms) transitions. Typically used to make exits faster so they don't visually overlap with enters */
-  ::view-transition-group(.duration-100) {
-    animation-duration: 100ms;
-  }
-
   @keyframes via-blur {
     30% {
       filter: blur(8px);
@@ -492,18 +481,19 @@ html > body[data-scroll-locked] {
   }
 
   ::view-transition-old(.via-blur) {
-    animation-duration: 180ms;
-    animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    animation-duration: 150ms;
+    animation-timing-function: var(--ease-out-strong);
   }
 
   ::view-transition-new(.via-blur) {
-    animation-duration: 350ms;
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    animation-duration: 300ms;
+    animation-timing-function: var(--ease-out-strong);
     animation-delay: 100ms;
   }
 
   ::view-transition-group(.via-blur) {
-    animation-duration: 450ms;
+    animation-duration: 400ms;
+    animation-timing-function: var(--ease-in-out-strong);
   }
 
   /* Prevent background color flash during transition */
@@ -514,30 +504,20 @@ html > body[data-scroll-locked] {
   }
 }
 
-@keyframes ask-ai-open {
-  from {
-    width: 0px;
-  }
-  to {
-    width: var(--ai-chat-width);
-  }
-}
-
-@keyframes ask-ai-close {
-  from {
-    width: var(--ai-chat-width);
-  }
-  to {
-    width: 0px;
-  }
-}
-
-/* Prevent iOS Safari auto-zoom on input focus (triggers when font-size < 16px) */
-@media screen and (max-width: 768px) {
+/* iOS zooms into any focused field under 16px. Gate on touch, not width, so
+   landscape phones and iPads are covered too */
+@media (pointer: coarse) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   select,
   textarea {
     font-size: max(16px, 1em);
+  }
+}
+
+/* Fumadocs dims prose links on any :hover, which sticks after a tap */
+@media not ((hover: hover) and (pointer: fine)) {
+  .prose a:hover {
+    opacity: 1;
   }
 }
 
@@ -549,6 +529,11 @@ html > body[data-scroll-locked] {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  .animate-spin {
+    animation-duration: 1.5s !important;
+    animation-iteration-count: infinite !important;
   }
 }
 

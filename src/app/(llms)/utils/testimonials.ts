@@ -3,7 +3,7 @@ import { url } from '@/lib/url'
 
 export function getTestimonialsText() {
   return `# Testimonials
-Route: ${url('/about')}
+Route: ${url('/')}
 
 ${testimonials
   .map(

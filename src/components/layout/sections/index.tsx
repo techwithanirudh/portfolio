@@ -1,5 +1,4 @@
 import type { HTMLAttributes } from 'react'
-import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 type SectionProps = {
@@ -8,7 +7,7 @@ type SectionProps = {
 } & HTMLAttributes<HTMLDivElement>
 
 export const Cross = ({ className }: { className?: string }) => (
-  <ViewAnimation
+  <div
     className={cn(
       'pointer-events-none absolute -bottom-2 z-10 hidden size-[15px] sm:block',
       className
@@ -16,7 +15,7 @@ export const Cross = ({ className }: { className?: string }) => (
   >
     <span className='absolute top-0 left-[7px] h-full w-px bg-border' />
     <span className='absolute top-[7px] left-0 h-px w-full bg-border' />
-  </ViewAnimation>
+  </div>
 )
 
 export const Section = ({

@@ -49,6 +49,7 @@ Fight entropy. Leave the codebase better than you found it.
 - Author content in `content/`; generated content lives in `.source/` (never edit by hand).
 - `bun install` runs `fumadocs-mdx` via `postinstall` to sync MDX types.
 - Prefer MDX frontmatter for metadata (title, description, dates).
+- When page content changes, update the llms routes in `src/app/(llms)` (or the constants they read from) in the same change, so `llms.txt`, the `.md` routes and the Simba assistant stay accurate.
 
 ## UI & Styling
 - Tailwind CSS v4 with PostCSS; global tokens live in `src/styles/globals.css`.

@@ -12,6 +12,7 @@ import { LLMCopyButtonWithViewOptions } from '@/components/page-actions'
 import { baseUrl } from '@/constants'
 import { owner, repo } from '@/constants/config/github'
 import { description as homeDescription } from '@/constants/site'
+import { formatDate } from '@/lib/format-date'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
 import { Header } from './_components/header'
@@ -36,12 +37,12 @@ export default async function Page(props: {
       </div>
       <div>
         <p className='mb-1 text-muted-foreground text-sm'>Published</p>
-        <p className='font-medium'>{new Date(page.data.date).toDateString()}</p>
+        <p className='font-medium'>{formatDate(page.data.date)}</p>
       </div>
       {lastUpdate && (
         <div>
           <p className='mb-1 text-muted-foreground text-sm'>Updated</p>
-          <p className='font-medium'>{lastUpdate.toDateString()}</p>
+          <p className='font-medium'>{formatDate(lastUpdate)}</p>
         </div>
       )}
       <div className='flex flex-col gap-2'>
@@ -79,7 +80,7 @@ export default async function Page(props: {
               <Mdx components={{ ...mdxComponents, GitHubCode }} />
             </MdxContent>
           </div>
-          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y hidden flex-col gap-4 p-4 text-sm lg:sticky lg:top-14 lg:flex lg:h-[calc(100vh-3.5rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y hidden flex-col gap-4 p-4 text-sm lg:sticky lg:top-14 lg:flex lg:h-[calc(100dvh-3.5rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
             {pageActions}
           </div>
         </article>

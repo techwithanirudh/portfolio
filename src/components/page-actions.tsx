@@ -156,7 +156,14 @@ export function ViewOptions({
           <DropdownMenuItem
             className='group/item gap-2.5 rounded-lg p-1.5 pr-2 font-medium'
             key={href}
-            render={<a href={href} rel='noopener' target='_blank' />}
+            render={
+              <a
+                aria-label={title}
+                href={href}
+                rel='noopener'
+                target='_blank'
+              />
+            }
           >
             <span className='flex size-7 shrink-0 items-center justify-center rounded-md bg-muted ring-1 ring-border'>
               <Icon className='size-4' />

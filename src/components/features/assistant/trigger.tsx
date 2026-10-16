@@ -8,6 +8,7 @@ import {
   sprite,
 } from '@/components/features/assistant/mascot/constants'
 import { playAnimation } from '@/components/features/assistant/mascot/utils'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 
 const EDGE_OFFSET = 16
 
@@ -35,7 +36,7 @@ export function AssistantTrigger() {
     let target = cyclesUntilAction()
 
     const onQueueEmpty = () => {
-      if (idleCycles >= target) {
+      if (!prefersReducedMotion() && idleCycles >= target) {
         idleCycles = 0
         target = cyclesUntilAction()
         playAnimation(agent, animations.idle)

@@ -9,12 +9,14 @@ import {
   streamText,
 } from 'ai'
 import { z } from 'zod'
+import { getProfileFactsText } from '@/app/(llms)/utils'
 import { systemPrompt } from '@/lib/ai/prompts/chat'
 import { provider } from '@/lib/ai/providers'
 import { isBotRequest } from '@/server/botid'
 import type { MyUIMessage } from './types'
 import { getLLMsTxt } from './utils/llms'
 import { getPageContent } from './utils/tools/get-page-content'
+import { navigateTool } from './utils/tools/navigate'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
 
@@ -99,9 +101,8 @@ export async function POST(request: Request) {
 
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {
-        const modelMessages = await convertToModelMessages<MyUIMessage>(
-          messages,
-          {
+        const [modelMessages, llms] = await Promise.all([
+          convertToModelMessages<MyUIMessage>(messages, {
             convertDataPart(part) {
               if (part.type === 'data-client') {
                 return {
@@ -111,10 +112,9 @@ export async function POST(request: Request) {
               }
             },
             ignoreIncompleteToolCalls: true,
-          }
-        )
-
-        const llms = await getLLMsTxt()
+          }),
+          getLLMsTxt(),
+        ])
 
         const result = streamText({
           experimental_transform: smoothStream({
@@ -122,6 +122,7 @@ export async function POST(request: Request) {
             delayInMs: 20,
           }),
           instructions: systemPrompt({
+            facts: getProfileFactsText(),
             llms,
           }),
           messages: modelMessages,
@@ -138,6 +139,7 @@ export async function POST(request: Request) {
           toolChoice: 'auto',
           tools: {
             getPageContent,
+            navigate: navigateTool,
             searchDocs: createSearchDocsTool(writer),
             showContactForm: showContactFormTool,
           },

@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { PostComments } from '@/app/(home)/blog/[slug]/page.client'
 import { Section } from '@/components/layout/sections'
 import { SectionBody } from '@/components/layout/sections/body'
+import { Prose, proseMeasure } from '@/components/prose'
 import { cn } from '@/lib/utils'
 
 interface MdxLayoutProps {
@@ -31,14 +32,15 @@ export const MdxContent = ({
   commentsClassName,
 }: MdxContentProps) => (
   <div className={cn('flex min-w-0 flex-1 flex-col gap-4', className)}>
-    <div
+    <Prose
       className={cn(
-        'prose prose-zinc dark:prose-invert prose-content min-w-0 flex-1 px-4 text-fd-foreground/90',
+        'min-w-0 flex-1 px-6 text-fd-foreground/90',
+        proseMeasure,
         proseClassName
       )}
     >
       {children}
-    </div>
+    </Prose>
     {beforeComments}
     {comments && slug ? (
       <PostComments

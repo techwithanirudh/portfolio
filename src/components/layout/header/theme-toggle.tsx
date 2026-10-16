@@ -3,7 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { toggleOn } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
@@ -18,6 +18,14 @@ const itemVariants = cva('size-6.5 rounded-sm p-1.5 text-fd-muted-foreground', {
     },
   },
 })
+
+const lightDarkActive = {
+  dark: 'dark:bg-fd-accent dark:text-fd-accent-foreground',
+  light:
+    'bg-fd-accent text-fd-accent-foreground dark:bg-transparent dark:text-fd-muted-foreground',
+} as const
+
+const subscribeNoop = () => () => undefined
 
 const full = [
   ['light', Icons.sun] as const,
@@ -36,12 +44,12 @@ export function ThemeToggle({
   mode?: 'light-dark' | 'light-dark-system'
 }) {
   const { resolvedTheme, setTheme, theme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false
+  )
   const playToggle = useSound(toggleOn)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const handleChangeTheme = async (next: Theme) => {
     playToggle()
@@ -76,8 +84,6 @@ export function ThemeToggle({
   )
 
   if (mode === 'light-dark') {
-    const value = mounted ? resolvedTheme : null
-
     return (
       <button
         aria-label={'Toggle theme'}
@@ -96,7 +102,10 @@ export function ThemeToggle({
 
           return (
             <Icon
-              className={itemVariants({ active: value === key })}
+              className={cn(
+                itemVariants({ active: false }),
+                lightDarkActive[key]
+              )}
               fill='currentColor'
               key={key}
             />

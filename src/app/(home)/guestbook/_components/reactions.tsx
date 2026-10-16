@@ -21,6 +21,10 @@ import { cn } from '@/lib/utils'
 import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 
+const reactionCountFormat = new Intl.NumberFormat('en', {
+  notation: 'compact',
+})
+
 interface GuestbookReactionsProps {
   canReact: boolean
   entryId: number
@@ -117,7 +121,9 @@ export const GuestbookReactions = ({
             variant='dashed'
           >
             <span>{reaction.emoji}</span>
-            <span className='tabular-nums'>{reaction.count}</span>
+            <span className='tabular-nums'>
+              {reactionCountFormat.format(reaction.count)}
+            </span>
           </Button>
         ))}
         <Popover onOpenChange={setIsOpen} open={isOpen}>

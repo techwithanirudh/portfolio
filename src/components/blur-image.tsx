@@ -42,8 +42,8 @@ const BlurImage = (props: ImageProps) => {
       <NextImage
         alt={alt}
         className={cn(
-          'transition-[filter,scale] duration-700 ease-in-out motion-reduce:transition-none',
-          isLoading && 'scale-[1.02] blur-xl grayscale',
+          'transition-[filter,scale] duration-400 ease-out-strong motion-reduce:transition-none',
+          isLoading && 'scale-[1.02] blur-lg grayscale',
           imageClassName
         )}
         // `priority` is deprecated; eager plus high fetch priority covers

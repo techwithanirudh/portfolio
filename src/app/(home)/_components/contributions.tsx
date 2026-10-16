@@ -15,6 +15,7 @@ import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { Tooltip, TooltipContent } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
+import { baseOptions } from '@/constants/site'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
@@ -67,6 +68,18 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
   const isMobile = useIsMobile()
   const tooltip = useDayTooltip()
   const blockSize = isMobile ? 12 : 23.5
+
+  if (data.length === 0) {
+    return (
+      <Section className='p-6 text-muted-foreground text-sm'>
+        The contribution graph is unavailable right now.{' '}
+        <a className='link-underline' href={baseOptions.githubUrl}>
+          See it on GitHub
+        </a>
+        .
+      </Section>
+    )
+  }
 
   return (
     <Section className='relative w-full p-6'>
@@ -121,7 +134,7 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
             <ContributionGraphLegend>
               {({ level }) => (
                 <div
-                  className='group relative flex h-3 w-3 items-center justify-center'
+                  className='group relative flex size-3 items-center justify-center'
                   data-level={level}
                 >
                   <svg aria-hidden className='size-full' viewBox='0 0 12 12'>
@@ -133,7 +146,11 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
                       width={12}
                     />
                   </svg>
-                  <span className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'>
+                  <span className='sr-only'>Level {level}</span>
+                  <span
+                    aria-hidden
+                    className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'
+                  >
                     Level {level}
                   </span>
                 </div>

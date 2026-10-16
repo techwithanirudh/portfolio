@@ -1,31 +1,54 @@
 import { tool } from 'ai'
 import { z } from 'zod'
+import {
+  getAboutText,
+  getColophonText,
+  getContactText,
+  getExperienceText,
+  getProfileFactsText,
+  getSkillsText,
+  getTestimonialsText,
+  getUsesText,
+} from '@/app/(llms)/utils'
 import { post, workSource } from '@/lib/source'
 
-const normalizePath = (path: string) =>
-  path.startsWith('/') ? path.slice(1) : path
+const staticPageText: Record<string, () => string> = {
+  about: () => `${getProfileFactsText()}\n${getAboutText()}`,
+  colophon: getColophonText,
+  contact: getContactText,
+  experience: getExperienceText,
+  stack: getSkillsText,
+  testimonials: getTestimonialsText,
+  uses: getUsesText,
+}
 
-const resolvePage = (path: string) => {
-  const normalized = normalizePath(path)
-  const [section, ...slugs] = normalized.split('/').filter(Boolean)
+const QUERY_OR_HASH = /[?#]/
+
+const getText = async (path: string) => {
+  const [section, ...slugs] = (path.split(QUERY_OR_HASH)[0] ?? '')
+    .split('/')
+    .filter(Boolean)
 
   if (section === 'blog') {
-    return post.getPage(slugs)
+    return await post.getPage(slugs)?.data.getText('processed')
   }
 
   if (section === 'projects' || section === 'work') {
-    return workSource.getPage(slugs)
+    return await workSource.getPage(slugs)?.data.getText('processed')
   }
 
-  return null
+  if (section && slugs.length === 0) {
+    return staticPageText[section]?.()
+  }
 }
 
 export const getPageContent = tool({
-  description: 'Get the content of a specific internal page.',
+  description:
+    'Get the content of a specific internal page: a blog post, a project, or one of about, experience, stack, testimonials, uses, colophon, contact.',
   execute: async ({ path }) => {
-    const page = resolvePage(path)
+    const data = await getText(path)
 
-    if (!page) {
+    if (!data) {
       return {
         data: 'Page not found',
         success: false,
@@ -33,11 +56,15 @@ export const getPageContent = tool({
     }
 
     return {
-      data: await page.data.getText('processed'),
+      data,
       success: true,
     }
   },
   inputSchema: z.object({
-    path: z.string().describe('The path of the page to get the content of.'),
+    path: z
+      .string()
+      .describe(
+        'The page path, like "blog/hello-world", "projects/ai_tutor", "about" or "uses".'
+      ),
   }),
 })

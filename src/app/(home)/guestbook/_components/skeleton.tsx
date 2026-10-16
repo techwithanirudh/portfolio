@@ -6,7 +6,7 @@ export function GuestbookEntriesSkeleton() {
   return (
     <div className='min-h-0 w-full flex-1 divide-y divide-dashed divide-border overflow-hidden'>
       {guestbookSkeletonItems.map((item) => (
-        <div className='relative grid gap-4 bg-card/50 px-6 py-6' key={item}>
+        <div className='relative grid gap-4 bg-card/50 p-6' key={item}>
           <div className='flex items-start justify-between gap-3'>
             <div className='space-y-1'>
               <Skeleton className='h-5 w-24' />

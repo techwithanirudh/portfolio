@@ -16,7 +16,7 @@ export default async function Feed(): Promise<React.ReactElement | null> {
         <ViewAnimation className='border-border border-b border-dashed bg-muted/40 px-6 py-2 font-mono text-muted-foreground text-xs'>
           <h3>Latest activity</h3>
         </ViewAnimation>
-        <div className='relative flex max-h-96 flex-col gap-2 overflow-hidden px-6 py-6 font-mono text-muted-foreground text-xs sm:text-sm'>
+        <div className='relative flex max-h-96 flex-col gap-2 overflow-hidden p-6 font-mono text-muted-foreground text-xs sm:text-sm'>
           {items.map((item, index) => (
             <ViewAnimation delay={0.03 * index} key={item.event.id}>
               <GitHubEventComponent commits={item.commits} event={item.event} />

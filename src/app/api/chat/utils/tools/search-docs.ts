@@ -16,37 +16,38 @@ async function createSearchServer() {
     },
   })
 
-  const blog = await chunkedAll(
-    blogSource.getPages().map(async (page) => {
-      if (!('getText' in page.data)) {
-        return null
-      }
+  const [blog, work] = await Promise.all([
+    Promise.all(
+      blogSource.getPages().map(async (page) => {
+        if (!('getText' in page.data)) {
+          return null
+        }
 
-      return {
-        content: await page.data.getText('processed'),
-        description: page.data.description ?? '',
-        tag: 'blog',
-        title: page.data.title ?? 'Untitled',
-        url: page.url,
-      } as CustomDocument
-    })
-  )
+        return {
+          content: await page.data.getText('processed'),
+          description: page.data.description ?? '',
+          tag: 'blog',
+          title: page.data.title ?? 'Untitled',
+          url: page.url,
+        } as CustomDocument
+      })
+    ),
+    Promise.all(
+      workSource.getPages().map(async (page) => {
+        if (!('getText' in page.data)) {
+          return null
+        }
 
-  const work = await chunkedAll(
-    workSource.getPages().map(async (page) => {
-      if (!('getText' in page.data)) {
-        return null
-      }
-
-      return {
-        content: await page.data.getText('processed'),
-        description: page.data.description ?? '',
-        tag: 'projects',
-        title: page.data.title ?? 'Untitled',
-        url: page.url,
-      } as CustomDocument
-    })
-  )
+        return {
+          content: await page.data.getText('processed'),
+          description: page.data.description ?? '',
+          tag: 'projects',
+          title: page.data.title ?? 'Untitled',
+          url: page.url,
+        } as CustomDocument
+      })
+    ),
+  ])
 
   for (const post of blog) {
     if (post) {
@@ -61,17 +62,6 @@ async function createSearchServer() {
   }
 
   return search
-}
-
-async function chunkedAll<O>(promises: Promise<O>[]): Promise<O[]> {
-  const size = 50
-  const out: O[] = []
-
-  for (let i = 0; i < promises.length; i += size) {
-    out.push(...(await Promise.all(promises.slice(i, i + size))))
-  }
-
-  return out
 }
 
 const Tag = z.union([

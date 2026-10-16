@@ -264,6 +264,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     >
       <CommandInput
         data-sound-press='off'
+        enterKeyHint='search'
         onValueChange={setSearch}
         placeholder='Type a command or search...'
         value={search}

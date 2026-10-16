@@ -79,7 +79,8 @@ function HoverPreviewLink({
   preview: knownPreview,
   ...props
 }: PreviewLinkProps & { pagePath: string | null }) {
-  const [preview, setPreview] = useState(knownPreview)
+  const [fetchedPreview, setFetchedPreview] = useState<Preview>()
+  const preview = knownPreview === undefined ? fetchedPreview : knownPreview
   const [pagePreview, setPagePreview] = useState<PagePreview | null>()
 
   const load = () => {
@@ -88,7 +89,7 @@ function HoverPreviewLink({
         fetchPagePreview(pagePath).then(setPagePreview)
       }
     } else if (preview === undefined) {
-      fetchPreview(href).then(setPreview)
+      fetchPreview(href).then(setFetchedPreview)
     }
   }
 
@@ -154,7 +155,7 @@ function LinkPreviewPopup({
             width={16}
           />
           <span className='min-w-0 flex-1 truncate'>{hostname}</span>
-          <Icons.arrowUpRight className='size-3.5 shrink-0 transition-transform will-change-transform group-hover:scale-125' />
+          <Icons.arrowUpRight className='size-3.5 shrink-0 transition-transform group-hover:scale-125' />
         </div>
       </a>
     </HoverCardContent>

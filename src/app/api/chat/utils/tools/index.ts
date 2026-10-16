@@ -1,6 +1,7 @@
 import { type ToolSet, tool } from 'ai'
 import { z } from 'zod'
 import { getPageContent } from './get-page-content'
+import { navigateTool } from './navigate'
 import { showContactFormTool } from './show-contact-form'
 
 const searchDocsToolType = tool({
@@ -16,6 +17,7 @@ const searchDocsToolType = tool({
 
 export const tools = {
   getPageContent,
+  navigate: navigateTool,
   searchDocs: searchDocsToolType,
   showContactForm: showContactFormTool,
 } satisfies ToolSet

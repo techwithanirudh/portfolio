@@ -13,9 +13,9 @@ export const Footer = () => (
     <GuestbookBand before='since you read all the way down here, leave proof you were here in the' />
     <footer
       className={cn(
-        'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
+        'container mx-auto flex flex-col gap-6 px-6 py-6 pb-24',
         'border-border border-b border-dashed',
-        'sm:gap-16 sm:px-8 sm:py-16'
+        'sm:gap-16 sm:py-16'
       )}
     >
       <Links />
@@ -25,7 +25,7 @@ export const Footer = () => (
         </ViewAnimation>
         <div className='flex items-center justify-center'>
           <ViewAnimation delay={0.15}>
-            <p className='whitespace-nowrap text-muted-foreground text-sm'>
+            <p className='text-balance text-center text-muted-foreground text-sm'>
               &copy; {new Date().getFullYear()} {owner}. All rights reserved.
             </p>
           </ViewAnimation>
@@ -38,11 +38,14 @@ export const Footer = () => (
           <SoundToggle />
           <ThemeToggle mode='light-dark-system' />
         </ViewAnimation>
-        <div className='flex items-center justify-between sm:hidden'>
+        <div className='flex flex-wrap items-center justify-between gap-3 sm:hidden'>
           <ViewAnimation className='w-min' delay={0.1}>
             <UserButton className='size-9' />
           </ViewAnimation>
-          <ViewAnimation className='flex items-center gap-2' delay={0.2}>
+          <ViewAnimation
+            className='flex flex-wrap items-center gap-2'
+            delay={0.2}
+          >
             <Clock />
             <SoundToggle />
             <ThemeToggle mode='light-dark-system' />

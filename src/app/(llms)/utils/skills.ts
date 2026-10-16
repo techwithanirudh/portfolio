@@ -1,23 +1,17 @@
-import { skills, technologies } from '@/constants/portfolio/skills'
 import { url } from '@/lib/url'
+import { groupStack } from './profile'
 
 export function getSkillsText() {
-  return `# Skills
-Route: ${url('/about')}
+  return `# Stack
+Route: ${url('/about#stack')}
 
-## Categories
+The tools I reach for most.
 
-${skills
+${groupStack()
   .map(
-    (item) =>
-      `### ${item.title}
-
-${item.description}`
+    ([category, labels]) =>
+      `## ${category}\n\n${labels.map((label) => `- ${label}`).join('\n')}`
   )
   .join('\n\n')}
-
-## Technologies
-
-${technologies.map((item) => `- ${item.label}`).join('\n')}
 `
 }

@@ -16,6 +16,7 @@ import {
   useState,
 } from 'react'
 import { createPortal } from 'react-dom'
+import { useMediaQuery } from 'usehooks-ts'
 import { cn } from '@/lib/utils'
 import { useAssistantContext } from './context'
 
@@ -27,11 +28,16 @@ export function TextSelectionPopup({ children }: { children: ReactNode }) {
   const { setContext, setOpen } = useAssistantContext()
   const containerRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupState | null>(null)
+  // Touch browsers draw their own Copy/Share callout above a selection, so
+  // sit below it, clear of the selection handles
+  const coarsePointer = useMediaQuery('(pointer: coarse)', {
+    initializeWithValue: false,
+  })
 
   const { refs, floatingStyles } = useFloating({
-    middleware: [offset(8), flip(), shift({ padding: 8 })],
+    middleware: [offset(coarsePointer ? 28 : 8), flip(), shift({ padding: 8 })],
     open: popup !== null,
-    placement: 'top',
+    placement: coarsePointer ? 'bottom' : 'top',
     whileElementsMounted: autoUpdate,
   })
 

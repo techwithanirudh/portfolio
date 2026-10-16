@@ -40,7 +40,7 @@ const ResumeSection = ({
   title: string
 }) => (
   <section className='break-inside-avoid-page'>
-    <h2 className='mb-3 border-neutral-300 border-b pb-1 font-mono text-[11px] text-neutral-600 uppercase tracking-widest'>
+    <h2 className='mb-3 border-neutral-300 border-b pb-1 font-mono text-[0.6875rem] text-neutral-600 uppercase tracking-widest'>
       {title}
     </h2>
     {children}
@@ -72,7 +72,7 @@ export default function ResumePage() {
         </div>
       </div>
 
-      <article className='mx-auto flex w-[calc(100%-2rem)] max-w-[210mm] flex-col gap-6 bg-white p-6 text-[13px] leading-relaxed shadow-sm sm:p-[14mm] print:w-full print:max-w-none print:border-0 print:p-0 print:shadow-none'>
+      <article className='mx-auto flex w-[calc(100%-2rem)] max-w-[210mm] flex-col gap-6 bg-white p-6 text-[0.8125rem] leading-relaxed shadow-sm sm:p-[14mm] print:w-full print:max-w-none print:border-0 print:p-0 print:shadow-none'>
         <header className='flex flex-col gap-2'>
           <div className='flex flex-wrap items-baseline justify-between gap-x-4'>
             <h1 className='font-heading font-medium text-3xl tracking-tight'>
@@ -83,7 +83,7 @@ export default function ResumePage() {
             </span>
           </div>
           <p className='text-neutral-700'>{description}</p>
-          <ul className='flex flex-wrap gap-x-4 gap-y-1 font-mono text-[11px] text-neutral-600'>
+          <ul className='flex flex-wrap gap-x-4 gap-y-1 font-mono text-[0.6875rem] text-neutral-600'>
             <li>
               <a className={linkClass} href={baseUrl.toString()}>
                 {prettyUrl(baseUrl.toString())}
@@ -121,7 +121,7 @@ export default function ResumePage() {
                         experience.companyName
                       )}
                     </h3>
-                    <span className='font-mono text-[11px] text-neutral-600 tabular-nums'>
+                    <span className='font-mono text-[0.6875rem] text-neutral-600 tabular-nums'>
                       {[
                         position.employmentType,
                         formatPeriod(
@@ -130,7 +130,7 @@ export default function ResumePage() {
                         ),
                       ]
                         .filter(Boolean)
-                        .join(' · ')}
+                        .join('\u00a0· ')}
                     </span>
                   </div>
                   {position.description && (
@@ -139,8 +139,8 @@ export default function ResumePage() {
                     </p>
                   )}
                   {position.skills?.length ? (
-                    <p className='font-mono text-[11px] text-neutral-600'>
-                      {position.skills.join(' · ')}
+                    <p className='font-mono text-[0.6875rem] text-neutral-600'>
+                      {position.skills.join('\u00a0· ')}
                     </p>
                   ) : null}
                 </li>
@@ -165,7 +165,7 @@ export default function ResumePage() {
                         project.data.title
                       )}
                     </h3>
-                    <span className='font-mono text-[11px] text-neutral-600 tabular-nums'>
+                    <span className='font-mono text-[0.6875rem] text-neutral-600 tabular-nums'>
                       {new Date(project.data.date).getFullYear()}
                     </span>
                   </div>
@@ -182,7 +182,7 @@ export default function ResumePage() {
           <dl className='grid grid-cols-[auto_1fr] gap-x-4 gap-y-1'>
             {stack.map(({ category, labels }) => (
               <div className='contents' key={category}>
-                <dt className='font-mono text-[11px] text-neutral-600 leading-relaxed'>
+                <dt className='font-mono text-[0.6875rem] text-neutral-600 leading-relaxed'>
                   {category}
                 </dt>
                 <dd className='text-neutral-700'>{labels.join(', ')}</dd>

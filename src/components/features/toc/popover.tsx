@@ -156,7 +156,7 @@ function ProgressCircle({
         strokeWidth={strokeWidth}
       />
       <circle
-        className='transition-all'
+        className='transition-[stroke-dashoffset]'
         cx={size / 2}
         cy={size / 2}
         fill='none'

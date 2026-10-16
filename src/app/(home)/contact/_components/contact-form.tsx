@@ -18,7 +18,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/lib/toast'
-import { ContactSchema } from '@/lib/validators/contact'
+import {
+  CONTACT_MESSAGE_MAX_LENGTH,
+  CONTACT_NAME_MAX_LENGTH,
+  ContactSchema,
+} from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
 const ContactFormInner = () => {
@@ -67,6 +71,7 @@ const ContactFormInner = () => {
                 <Input
                   autoComplete='name'
                   className='bg-background'
+                  maxLength={CONTACT_NAME_MAX_LENGTH}
                   placeholder='Jane Smith'
                   {...field}
                   disabled={action.status === 'executing'}
@@ -117,6 +122,7 @@ const ContactFormInner = () => {
               <FormControl>
                 <Textarea
                   className='max-h-[20rem] min-h-[10rem] resize-y bg-background'
+                  maxLength={CONTACT_MESSAGE_MAX_LENGTH}
                   placeholder="Hi there, I'm interested in..."
                   {...field}
                   disabled={action.status === 'executing'}

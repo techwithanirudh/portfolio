@@ -30,6 +30,6 @@ export const socials: Social[] = [
     description: 'Get in touch via email',
     icon: <Icons.mail />,
     name: 'Email',
-    url: 'mailto:hello@techwithanirudh.com',
+    url: 'mailto:hello@imanirudh.com',
   },
 ]

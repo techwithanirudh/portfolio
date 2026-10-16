@@ -7,7 +7,9 @@ export function sanitizeRedirect(redirectTo?: string | null): string {
 
   const candidate = redirectTo.trim()
 
-  return candidate.startsWith('/') && !candidate.startsWith('//')
+  return candidate.startsWith('/') &&
+    !candidate.startsWith('//') &&
+    !candidate.startsWith('/\\')
     ? candidate
     : '/'
 }

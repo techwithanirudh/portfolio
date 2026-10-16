@@ -4,15 +4,21 @@ import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useSound } from '@web-kits/audio/react'
-import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
+import {
+  DefaultChatTransport,
+  getStaticToolName,
+  isStaticToolUIPart,
+  isToolUIPart,
+} from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import { createContext, memo, use, useState } from 'react'
-import { useDebounceCallback } from 'usehooks-ts'
+import { useLenis } from 'lenis/react'
+import { createContext, memo, use, useEffect, useState } from 'react'
+import { useDebounceCallback, useMediaQuery, useScrollLock } from 'usehooks-ts'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { contextDataSchema } from '@/app/api/chat/types'
 import {
-  getToolsRequiringConfirmation,
   type ToolName,
+  toolConfirmationMap,
 } from '@/app/api/chat/utils/tools/confirmation'
 import {
   Conversation,
@@ -51,6 +57,7 @@ import {
   ContactForm,
   ContactFormSkeleton,
 } from '@/components/features/assistant/tools/contact-form'
+import { NavigatePart } from '@/components/features/assistant/tools/navigate'
 import { AssistantTrigger } from '@/components/features/assistant/trigger'
 import { Icons } from '@/components/icons/icons'
 import { useIsMobile } from '@/hooks/use-mobile'
@@ -189,28 +196,46 @@ function RegenerateButton() {
 const assistantInputStorageKey = '__ai_search_input'
 const MaxSourcePreviewChars = 120
 
+// Storage access throws when site data is blocked (Safari "Block all cookies")
+const readSavedInput = () => {
+  try {
+    return localStorage.getItem(assistantInputStorageKey) ?? ''
+  } catch {
+    return ''
+  }
+}
+
+const writeSavedInput = (value: string | null) => {
+  try {
+    if (value === null) {
+      localStorage.removeItem(assistantInputStorageKey)
+    } else {
+      localStorage.setItem(assistantInputStorageKey, value)
+    }
+  } catch {
+    // Without storage the draft just isn't kept
+  }
+}
+
 function AssistantInput() {
   const { setContext, context } = useAssistantContext()
   const { status, sendMessage, stop, messages } = useChatContext()
   const { agent } = useMascot()
   const playSend = useSound(send)
-  const toolsRequiringConfirmation = getToolsRequiringConfirmation()
-  const [input, setInput] = useState(
-    () => localStorage.getItem(assistantInputStorageKey) ?? ''
-  )
+  const finePointer = useMediaQuery('(pointer: fine)')
+  const [input, setInput] = useState(readSavedInput)
   const hasPendingToolInput = messages.some((message) =>
     message.parts?.some((part) => {
       if (!isStaticToolUIPart(part) || part.state !== 'input-available') {
         return false
       }
-      const toolName = getStaticToolName(part) as ToolName
-      return toolsRequiringConfirmation.includes(toolName)
+      return toolConfirmationMap[getStaticToolName(part) as ToolName]
     })
   )
   const isStreaming = status === 'streaming' || status === 'submitted'
   const isLoading = isStreaming || hasPendingToolInput
   const saveInput = useDebounceCallback(
-    (value: string) => localStorage.setItem(assistantInputStorageKey, value),
+    (value: string) => writeSavedInput(value),
     300
   )
 
@@ -233,7 +258,7 @@ function AssistantInput() {
     setInput('')
     setContext(null)
     saveInput.cancel()
-    localStorage.removeItem(assistantInputStorageKey)
+    writeSavedInput(null)
 
     await sendMessage({
       parts: [
@@ -276,7 +301,7 @@ function AssistantInput() {
       <PromptInputBody>
         <PromptInputTextarea
           aria-label='Ask Simba a question'
-          autoFocus
+          autoFocus={finePointer}
           className={cn('min-h-16', isLoading && 'text-muted-foreground')}
           id='nd-ai-input'
           onChange={(event) => handleInputChange(event.target.value)}
@@ -335,8 +360,35 @@ const roleName: Record<string, string> = {
   user: 'you',
 }
 
+const hasReplyContent = (message: MyUIMessage) =>
+  message.parts.some((part) => part.type === 'text' || isToolUIPart(part))
+
+function ReplyError() {
+  const { regenerate } = useChatContext()
+  const playRetry = useSound(tap)
+
+  return (
+    <Message className='py-4' from='assistant'>
+      <MessageHeader>{roleName.assistant}</MessageHeader>
+      <p className='text-destructive text-sm' role='alert'>
+        Simba lost the scent.{' '}
+        <button
+          className='link-underline'
+          onClick={() => {
+            playRetry()
+            regenerate()
+          }}
+          type='button'
+        >
+          Try again
+        </button>
+      </p>
+    </Message>
+  )
+}
+
 function MessageList({
-  messages,
+  messages: allMessages,
   status,
 }: {
   messages: MyUIMessage[]
@@ -345,7 +397,16 @@ function MessageList({
   const isBusy = status === 'streaming' || status === 'submitted'
   // No assistant message exists before the first chunk, so show a placeholder
   const isAwaitingReply =
-    status === 'submitted' && messages.at(-1)?.role === 'user'
+    status === 'submitted' && allMessages.at(-1)?.role === 'user'
+  const isFailed = status === 'error'
+  const lastMessage = allMessages.at(-1)
+  // A failed call can leave an empty assistant message; the error stands in for it
+  const messages =
+    isFailed &&
+    lastMessage?.role === 'assistant' &&
+    !hasReplyContent(lastMessage)
+      ? allMessages.slice(0, -1)
+      : allMessages
 
   return (
     <Conversation
@@ -358,7 +419,7 @@ function MessageList({
         className='divide-y divide-dashed divide-border px-3'
         scrollClassName='fd-scroll-container supports-timeline-scroll:scroll-fade-effect-y'
       >
-        {messages.length === 0 ? (
+        {messages.length === 0 && !isFailed ? (
           <ConversationEmptyState>
             <AvatarIcon
               className='transition-transform hover:scale-110'
@@ -384,6 +445,7 @@ function MessageList({
             <MessagePending />
           </Message>
         ) : null}
+        {isFailed ? <ReplyError /> : null}
       </ConversationContent>
       <ConversationScrollButton />
     </Conversation>
@@ -490,6 +552,9 @@ const AssistantMessage = memo(function AssistantMessage({
           if (part.type === 'tool-showContactForm') {
             return <ContactFormPart key={part.toolCallId} part={part} />
           }
+          if (part.type === 'tool-navigate') {
+            return <NavigatePart key={part.toolCallId} part={part} />
+          }
           return null
         })}
       </MessageContent>
@@ -497,10 +562,26 @@ const AssistantMessage = memo(function AssistantMessage({
   )
 })
 
+function PageScrollLock() {
+  const lenis = useLenis()
+  useScrollLock()
+
+  useEffect(() => {
+    if (!lenis) {
+      return
+    }
+    lenis.stop()
+    return () => lenis.start()
+  }, [lenis])
+
+  return null
+}
+
 function AssistantPanel() {
   const { open, setOpen } = useAssistantContext()
   const chat = useChatContext()
   const { agent } = useMascot()
+  const isDocked = useMediaQuery('(min-width: 64rem)')
 
   useMascotPanel({
     agent,
@@ -516,14 +597,15 @@ function AssistantPanel() {
       onOpenChange={setOpen}
       open={open}
     >
+      {open && !isDocked ? <PageScrollLock /> : null}
       <DialogPrimitive.Portal>
         <DialogPrimitive.Backdrop
-          className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-closed:animate-fd-fade-out data-open:animate-fd-fade-in lg:hidden'
+          className='fixed inset-0 z-30 touch-none bg-fd-overlay backdrop-blur-xs transition-opacity duration-200 ease-out-strong data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 lg:hidden'
           onClick={() => setOpen(false)}
         />
         <DialogPrimitive.Popup
           aria-label='Ask Simba'
-          className='fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg outline-none data-closed:animate-fd-dialog-out data-open:animate-fd-dialog-in sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]'
+          className='fixed inset-x-4 top-[max(1rem,env(safe-area-inset-top))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-50 flex origin-bottom flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 sm:inset-x-auto sm:top-auto sm:right-[max(1rem,env(safe-area-inset-right))] sm:bottom-28 sm:h-[min(500px,calc(100dvh-8rem))] sm:w-[360px] sm:origin-bottom-right'
           data-sound-press='off'
         >
           <div className='flex h-full flex-col divide-y divide-dashed divide-border'>

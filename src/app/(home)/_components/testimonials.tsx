@@ -35,7 +35,7 @@ const TestimonialCard = ({
   index: number
 }) => (
   <ViewAnimation className='h-full' delay={0.1 + index * 0.05}>
-    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-all duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
+    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-colors duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
       <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>
@@ -46,7 +46,7 @@ const TestimonialCard = ({
         </div>
         <p className='flex flex-row items-center gap-2 text-sm'>
           <span className='text-muted-foreground'>By</span>
-          <Avatar className='h-6 w-6' outlined={false}>
+          <Avatar className='size-6' outlined={false}>
             <AvatarImage alt='' src={testimonial.author.image} />
             <AvatarFallback>
               {testimonial.author.name
@@ -65,26 +65,26 @@ const TestimonialCard = ({
 
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
   const prefersReducedMotion = useReducedMotion()
+  const paused = hovered || focused
 
   useEffect(() => {
-    if (!api || prefersReducedMotion) {
+    if (!api || prefersReducedMotion || paused) {
       return
     }
 
-    const timer = setTimeout(() => {
-      if (api.selectedScrollSnap() + 1 === api.scrollSnapList().length) {
-        setCurrent(0)
-        api.scrollTo(0)
-      } else {
+    const timer = setInterval(() => {
+      if (api.canScrollNext()) {
         api.scrollNext()
-        setCurrent(current + 1)
+      } else {
+        api.scrollTo(0)
       }
-    }, 2500)
+    }, 6000)
 
-    return () => clearTimeout(timer)
-  }, [api, current, prefersReducedMotion])
+    return () => clearInterval(timer)
+  }, [api, paused, prefersReducedMotion])
 
   return (
     <Section className='relative w-full pt-10'>
@@ -97,7 +97,18 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
         />
 
         <ViewAnimation>
-          <Carousel className='divider-top-dashed' setApi={setApi}>
+          <Carousel
+            className='divider-top-dashed'
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget)) {
+                setFocused(false)
+              }
+            }}
+            onFocus={() => setFocused(true)}
+            onPointerEnter={() => setHovered(true)}
+            onPointerLeave={() => setHovered(false)}
+            setApi={setApi}
+          >
             <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
               {testimonials.map((item, index) => (
                 <CarouselItem

@@ -70,15 +70,19 @@ function transformerEscape(): ShikiTransformer {
 
 export default defineConfig({
   mdxOptions: async () => {
-    const { rehypeCodeDefaultOptions } = await import(
-      'fumadocs-core/mdx-plugins/rehype-code'
-    )
-    const { remarkSteps } = await import(
-      'fumadocs-core/mdx-plugins/remark-steps'
-    )
-    const { default: remarkMath } = await import('remark-math')
-    const { default: rehypeKatex } = await import('rehype-katex')
-    const { remarkAutoTypeTable } = await import('fumadocs-typescript')
+    const [
+      { rehypeCodeDefaultOptions },
+      { remarkSteps },
+      { default: remarkMath },
+      { default: rehypeKatex },
+      { remarkAutoTypeTable },
+    ] = await Promise.all([
+      import('fumadocs-core/mdx-plugins/rehype-code'),
+      import('fumadocs-core/mdx-plugins/remark-steps'),
+      import('remark-math'),
+      import('rehype-katex'),
+      import('fumadocs-typescript'),
+    ])
 
     return {
       rehypeCodeOptions: {

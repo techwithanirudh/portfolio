@@ -30,7 +30,18 @@ export default function About(): React.ReactElement {
               <p className='text-lg'>
                 My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
                 Python was part of my early experiments. I build open-source
-                projects like AI Tutor and Coolify Tweaks.
+                projects like{' '}
+                <Link className='whitespace-nowrap' href='/projects/ai_tutor'>
+                  AI Tutor
+                </Link>{' '}
+                and{' '}
+                <Link
+                  className='whitespace-nowrap'
+                  href='/projects/coolify_tweaks'
+                >
+                  Coolify Tweaks
+                </Link>
+                .
               </p>
             </Prose>
             <Link

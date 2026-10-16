@@ -62,7 +62,7 @@ export function TagsSidebar({ tags }: TagsSidebarProps) {
   const hasMoreTags = tags.length > MAX_TAGS
 
   return (
-    <div className='sticky top-14 flex w-full flex-col divide-y divide-dashed divide-border self-start lg:min-h-[calc(100vh-22rem)]'>
+    <div className='sticky top-14 flex w-full flex-col divide-y divide-dashed divide-border self-start lg:min-h-[calc(100svh-22rem)]'>
       <ViewAnimation>
         <div className='flex h-10 items-center gap-2 px-3'>
           <Icons.tag className='icon-pop size-4 text-muted-foreground' />

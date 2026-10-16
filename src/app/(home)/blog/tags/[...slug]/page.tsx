@@ -9,6 +9,7 @@ import { HeroSection } from '@/components/layout/sections/hero'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { ViewAnimation } from '@/components/view-animation'
 import { postsPerPage } from '@/constants/config'
+import { formatDate } from '@/lib/format-date'
 import { createMetadata } from '@/lib/metadata'
 import { parsePageParam } from '@/lib/pagination'
 import { getPostsByTag, getTags } from '@/lib/source'
@@ -112,7 +113,7 @@ export default async function Page(props: {
       <SectionBody>
         <div className='grid divide-y divide-dashed divide-border text-left'>
           {posts.map((post, index) => {
-            const date = new Date(post.data.date).toDateString()
+            const date = formatDate(post.data.date)
             return (
               <ViewAnimation delay={0.05 * index} key={post.url}>
                 <PostCard

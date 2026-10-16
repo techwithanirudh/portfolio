@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { Section } from './index'
 
 interface HeroProps {
+  action?: ReactNode
   caption?: string | ReactNode | null
   children?: ReactNode
   className?: string
@@ -16,6 +17,7 @@ interface HeroProps {
 export const TitleDot = () => <span className='text-primary'>.</span>
 
 export const HeroSection = ({
+  action,
   image,
   caption,
   title,
@@ -40,11 +42,18 @@ export const HeroSection = ({
             </small>
           </ViewAnimation>
         )}
-        <ViewAnimation delay={0.1}>
+        <ViewAnimation
+          className={cn(
+            action &&
+              'flex flex-wrap items-center justify-between gap-x-4 gap-y-3'
+          )}
+          delay={0.1}
+        >
           <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight'>
             {title}
             {typeof title === 'string' && <TitleDot />}
           </h1>
+          {action}
         </ViewAnimation>
         {description && (
           <ViewAnimation delay={0.15}>

@@ -18,7 +18,7 @@ const socialClassName = cn(
 )
 
 const Hero = () => (
-  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-16 pb-14 sm:px-12 sm:pt-20 sm:pb-16'>
+  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-16 pb-14 sm:pt-20 sm:pb-16'>
     <GrainBackdrop className='-z-10' />
     <ViewAnimation delay={0.05}>
       <div className='mb-7 size-16 overflow-hidden rounded-lg border border-foreground/10 sm:mb-8 sm:size-[4.75rem] sm:rounded-xl'>
@@ -61,7 +61,7 @@ const Hero = () => (
         <AskSimbaButton />
       </ViewAnimation>
       <ViewAnimation
-        className='flex w-full gap-1.5 max-sm:mt-2 sm:ml-auto sm:w-auto'
+        className='flex w-full flex-wrap gap-1.5 max-sm:mt-2 sm:ml-auto sm:w-auto'
         delay={0.3}
       >
         {socials.map((social) =>

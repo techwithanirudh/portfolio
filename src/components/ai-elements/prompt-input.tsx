@@ -66,6 +66,7 @@ const supportsFieldSizing = () =>
 
 export const PromptInputTextarea = ({
   className,
+  enterKeyHint = 'send',
   onKeyDown,
   placeholder = 'What would you like to know?',
   value,
@@ -114,6 +115,7 @@ export const PromptInputTextarea = ({
         'field-sizing-content max-h-40 min-h-0 px-3 py-2.5 text-sm md:text-sm',
         className
       )}
+      enterKeyHint={enterKeyHint}
       name='message'
       onKeyDown={handleKeyDown}
       placeholder={placeholder}

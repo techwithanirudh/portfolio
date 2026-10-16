@@ -7,10 +7,17 @@ import { ViewAnimation } from '@/components/view-animation'
 import { title as homeTitle } from '@/constants/site'
 import { createMetadata } from '@/lib/metadata'
 import { getTags } from '@/lib/source'
+import { cn } from '@/lib/utils'
 import { Hero } from './_components/hero'
 
 export default function Page() {
   const tags = getTags()
+  const smFill = tags.length % 2
+  const lgFill = (4 - (tags.length % 4)) % 4
+  const fillers = Array.from(
+    { length: Math.max(smFill, lgFill) },
+    (_, index) => `filler-${index}`
+  )
 
   return (
     <Wrapper>
@@ -26,11 +33,19 @@ export default function Page() {
               />
             </ViewAnimation>
           ))}
-          {tags.length % 2 === 1 && (
-            <ViewAnimation delay={0.05 * tags.length}>
-              <div className='size-full border-border border-dashed bg-dashed sm:border-b' />
+          {fillers.map((filler, index) => (
+            <ViewAnimation
+              className={cn(
+                'hidden border-border border-b border-dashed',
+                index < smFill && 'sm:block',
+                index < lgFill ? 'lg:block' : 'lg:hidden'
+              )}
+              delay={0.05 * (tags.length + index)}
+              key={filler}
+            >
+              <div className='size-full bg-dashed' />
             </ViewAnimation>
-          )}
+          ))}
         </div>
       </SectionBody>
       <CollectionPageJsonLd

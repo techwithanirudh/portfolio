@@ -151,17 +151,17 @@ export const GuestbookEntryCard = ({
   return (
     <div
       className={cn(
-        'relative grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
+        'relative grid grid-cols-[minmax(0,1fr)] gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
       )}
     >
       <div className='flex flex-wrap items-start justify-between gap-3'>
-        <div className='space-y-1'>
-          <h3 className='flex items-center gap-1.5 font-medium text-sm'>
+        <div className='min-w-0 space-y-1'>
+          <h3 className='wrap-anywhere font-medium text-sm'>
             {entry.name}
             {entry.role === 'admin' ? (
               <Icons.verifiedAdmin
                 aria-label='Verified admin'
-                className='icon-pop size-4 text-primary'
+                className='icon-pop ml-1.5 inline size-4 align-[-3px] text-primary'
               />
             ) : null}
           </h3>
@@ -187,7 +187,7 @@ export const GuestbookEntryCard = ({
         <div className='space-y-3'>
           <Textarea
             aria-label='Edit message'
-            className='min-h-[8rem] resize-y bg-background'
+            className='wrap-anywhere min-h-[8rem] resize-y bg-background'
             disabled={isBusy}
             onChange={(event) => setDraftMessage(event.target.value)}
             value={draftMessage}
@@ -222,7 +222,9 @@ export const GuestbookEntryCard = ({
           ) : null}
         </div>
       ) : (
-        <p className='text-muted-foreground text-sm'>{entry.message}</p>
+        <p className='wrap-anywhere text-muted-foreground text-sm'>
+          {entry.message}
+        </p>
       )}
       <div className='flex w-full flex-wrap items-end justify-between gap-4 empty:hidden'>
         {isEditing ? null : (

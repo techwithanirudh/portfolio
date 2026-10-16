@@ -6,63 +6,35 @@ import {
   post,
   workSource,
 } from '@/lib/source'
-import {
-  getAboutText,
-  getColophonText,
-  getExperienceText,
-  getSkillsText,
-  getTestimonialsText,
-  getUsesText,
-} from '../utils'
-import { getCommitHistoryText } from '../utils/github-commits'
+import { getProfileFactsText, getProfileText, getSiteMapText } from '../utils'
 
 async function getFullText() {
   const allPosts = getSortedByDatePosts()
   const allWork = getSortedWork()
 
-  const workContent = await Promise.all(
-    allWork.map(async (item) => {
-      const page = workSource.getPage(item.slugs)
-      if (!page) {
-        return ''
-      }
+  const [workContent, blogContent, profileText] = await Promise.all([
+    Promise.all(
+      allWork.map((item) => {
+        const page = workSource.getPage(item.slugs)
+        return page ? getWorkLLMText(page, { level: 'section' }) : ''
+      })
+    ),
+    Promise.all(
+      allPosts.map((item) => {
+        const page = post.getPage(item.slugs)
+        return page ? getBlogLLMText(page, { level: 'section' }) : ''
+      })
+    ),
+    getProfileText(),
+  ])
 
-      const content = await getWorkLLMText(page, { level: 'section' })
-      return content
-    })
-  )
-
-  const blogContent = await Promise.all(
-    allPosts.map(async (item) => {
-      const page = post.getPage(item.slugs)
-      if (!page) {
-        return ''
-      }
-
-      const content = await getBlogLLMText(page, { level: 'section' })
-      return content
-    })
-  )
-
-  const commitHistory = await getCommitHistoryText()
-
-  return `<SYSTEM>This document contains comprehensive information about ${owner}'s professional profile, portfolio, and blog content. It includes personal details, work experience, technical skills, projects, testimonials, and all published blog posts and work projects. This data is formatted for consumption by Large Language Models (LLMs) to provide accurate and up-to-date information about ${owner}'s background, skills, and expertise.</SYSTEM>
+  return `<SYSTEM>This document contains comprehensive information about ${owner}'s professional profile, portfolio, and blog content. It includes quick facts, background, work experience, stack, projects, testimonials, contact options, a site map, and all published blog posts and work projects. This data is formatted for consumption by Large Language Models (LLMs) to provide accurate and up-to-date information about ${owner}'s background, skills, and expertise.</SYSTEM>
 
 # ${title}
 
-${getAboutText()}
-${commitHistory}
-
-${getExperienceText()}
-
-${getSkillsText()}
-
-${getTestimonialsText()}
-
-${getUsesText()}
-
-${getColophonText()}
-
+${getProfileFactsText()}
+${profileText}
+${getSiteMapText()}
 ## Work
 
 ${workContent.filter(Boolean).join('\n\n')}

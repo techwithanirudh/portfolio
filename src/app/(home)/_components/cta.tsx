@@ -15,7 +15,7 @@ export default function CTA(): React.ReactElement {
       />
       <div className='grid place-items-center gap-4 px-6 py-20 sm:px-16 sm:py-28'>
         <ViewAnimation delay={0.1}>
-          <h2 className='typography-title text-balance text-center font-regular text-3xl tracking-tighter sm:text-5xl'>
+          <h2 className='typography-title text-balance text-center font-normal text-3xl tracking-tighter sm:text-5xl'>
             Let's work together
           </h2>
         </ViewAnimation>

@@ -150,7 +150,7 @@ export function SearchClient() {
           Item={({ item, onClick }) => (
             <div className='relative'>
               <SearchDialogListItem
-                className='rounded-none border-border border-b border-dashed px-3 py-3 last:border-b-0'
+                className='rounded-none border-border border-b border-dashed p-3 last:border-b-0'
                 item={item}
                 onClick={onClick}
               />

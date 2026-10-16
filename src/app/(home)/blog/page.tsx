@@ -16,6 +16,9 @@ import { TagsAccordion, TagsSidebar } from './_components/tags-sidebar'
 
 export const dynamicParams = false
 
+const description =
+  'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
+
 const totalPosts = getSortedByDatePosts().length
 const pageCount = Math.ceil(totalPosts / postsPerPage)
 
@@ -62,9 +65,9 @@ export default async function Page(props: {
   return (
     <Wrapper>
       <Hero
-        endIndex={endIndex}
-        startIndex={startIndex}
-        totalPosts={totalPosts}
+        description={description}
+        pageCount={pageCount}
+        pageIndex={pageIndex}
       />
       <SectionBody>
         <div className='grid h-full lg:grid-cols-[1fr_280px]'>
@@ -84,7 +87,7 @@ export default async function Page(props: {
       {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <NewsletterSection />
       <CollectionPageJsonLd
-        description='Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
+        description={description}
         path='/blog'
         title='Blog'
       />
@@ -111,15 +114,15 @@ export async function generateMetadata(
   const isFirstPage = pageIndex === 1 || !searchParams.page
   const pageTitle = isFirstPage ? 'Posts' : `Posts, page ${pageIndex}`
   const canonicalUrl = isFirstPage ? '/blog' : `/blog?page=${pageIndex}`
-  const description = isFirstPage
-    ? 'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
+  const pageDescription = isFirstPage
+    ? description
     : `Browse page ${pageIndex} of blog posts.`
 
   return createMetadata({
     alternates: {
       canonical: canonicalUrl,
     },
-    description,
+    description: pageDescription,
     openGraph: {
       url: canonicalUrl,
     },

@@ -36,7 +36,7 @@ export const SectionHeader = ({
     <ViewAnimation>
       <Heading
         className={cn(
-          'typography-title text-balance font-regular text-3xl leading-tight tracking-tighter',
+          'typography-title text-balance font-normal text-3xl leading-tight tracking-tighter',
           'md:text-5xl',
           titleClassName
         )}

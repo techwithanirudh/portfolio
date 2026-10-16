@@ -1,8 +1,9 @@
 'use client'
 
-import { motion, useReducedMotion, useSpring } from 'motion/react'
+import { motion, useSpring } from 'motion/react'
 import { type JSX, useEffect, useRef, useState } from 'react'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { useMediaQuery } from 'usehooks-ts'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 interface Position {
   x: number
@@ -28,8 +29,9 @@ export function SmoothCursor({
   disableSmooth = false,
   cursorType = 'default',
 }: SmoothCursorProps) {
-  const isMobile = useIsMobile()
-  const prefersReducedMotion = useReducedMotion()
+  const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
+  const reducedMotion = useReducedMotion()
+  const enabled = finePointer && !reducedMotion
 
   const [hasMoved, setHasMoved] = useState(false)
   const [isMoving, setIsMoving] = useState(false)
@@ -37,9 +39,7 @@ export function SmoothCursor({
   const [isOverNative, setIsOverNative] = useState(false)
   const lastMousePos = useRef<Position>({ x: 0, y: 0 })
   const velocity = useRef<Position>({ x: 0, y: 0 })
-  const lastUpdateTime = useRef(Date.now())
-  const previousAngle = useRef(-45)
-  const accumulatedRotation = useRef(-45)
+  const lastUpdateTime = useRef(0)
   const movingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Much more responsive cursor tracking - minimal lag
@@ -53,19 +53,9 @@ export function SmoothCursor({
     mass: disableSmooth ? 0.1 : 0.3,
     stiffness: disableSmooth ? 10_000 : 1200,
   })
-  const rotation = useSpring(-45, {
-    damping: 60,
-    mass: 0.4,
-    stiffness: 800,
-  })
-  const scale = useSpring(1, {
-    damping: 70,
-    mass: 0.3,
-    stiffness: 1000,
-  })
 
   useEffect(() => {
-    if (isMobile) {
+    if (!enabled) {
       return
     }
 
@@ -84,18 +74,23 @@ export function SmoothCursor({
       lastMousePos.current = currentPos
     }
 
-    const checkIfOverElement = (e: MouseEvent) => {
-      const element = document.elementFromPoint(e.clientX, e.clientY)
-      if (element) {
-        setIsOverNative(element.closest('[data-native-cursor]') !== null)
-        const isPointerElement =
-          element.closest('a, button') !== null ||
-          window.getComputedStyle(element).cursor === 'pointer'
-        setIsOverPointer(isPointerElement)
+    let lastTarget: EventTarget | null = null
+    const checkIfOverElement = (e: PointerEvent) => {
+      if (e.target === lastTarget) {
+        return
       }
+      lastTarget = e.target
+      if (!(e.target instanceof Element)) {
+        return
+      }
+      setIsOverNative(e.target.closest('[data-native-cursor]') !== null)
+      setIsOverPointer(
+        e.target.closest('a, button') !== null ||
+          window.getComputedStyle(e.target).cursor === 'pointer'
+      )
     }
 
-    const smoothMouseMove = (e: MouseEvent) => {
+    const smoothMouseMove = (e: PointerEvent) => {
       const currentPos = { x: e.clientX, y: e.clientY }
       updateVelocity(currentPos)
       checkIfOverElement(e)
@@ -106,26 +101,6 @@ export function SmoothCursor({
       cursorY.set(currentPos.y)
 
       if (speed > 0.1) {
-        if (!(disableRotation || prefersReducedMotion)) {
-          const currentAngle =
-            Math.atan2(velocity.current.y, velocity.current.x) *
-              (180 / Math.PI) +
-            90
-
-          let angleDiff = currentAngle - previousAngle.current
-          if (angleDiff > 180) {
-            angleDiff -= 360
-          }
-          if (angleDiff < -180) {
-            angleDiff += 360
-          }
-          accumulatedRotation.current += angleDiff
-          rotation.set(accumulatedRotation.current)
-          previousAngle.current = currentAngle
-        }
-
-        // Faster scale feedback
-        scale.set(prefersReducedMotion ? 1 : 0.99)
         setHasMoved(true)
         setIsMoving(true)
 
@@ -135,20 +110,17 @@ export function SmoothCursor({
         }
 
         // Set new timeout to mark as not moving
-        movingTimeoutRef.current = setTimeout(
-          () => {
-            scale.set(1)
-            setIsMoving(false)
-            movingTimeoutRef.current = null
-          },
-          prefersReducedMotion ? 0 : 500
-        )
+        movingTimeoutRef.current = setTimeout(() => {
+          setIsMoving(false)
+          movingTimeoutRef.current = null
+        }, 500)
       }
     }
 
     let rafId: number
-    const throttledMouseMove = (e: MouseEvent) => {
-      if (rafId) {
+    // Taps fire compatibility mousemove events; pointer events say who moved
+    const throttledMouseMove = (e: PointerEvent) => {
+      if (rafId || e.pointerType !== 'mouse') {
         return
       }
 
@@ -158,10 +130,12 @@ export function SmoothCursor({
       })
     }
 
-    window.addEventListener('mousemove', throttledMouseMove)
+    window.addEventListener('pointermove', throttledMouseMove, {
+      passive: true,
+    })
 
     return () => {
-      window.removeEventListener('mousemove', throttledMouseMove)
+      window.removeEventListener('pointermove', throttledMouseMove)
       if (rafId) {
         cancelAnimationFrame(rafId)
       }
@@ -170,30 +144,16 @@ export function SmoothCursor({
         clearTimeout(movingTimeoutRef.current)
       }
     }
-  }, [
-    cursorX,
-    cursorY,
-    rotation,
-    scale,
-    disableRotation,
-    isMobile,
-    prefersReducedMotion,
-  ])
+  }, [cursorX, cursorY, enabled])
 
-  if (isMobile || !hasMoved) {
+  if (!(enabled && hasMoved)) {
     return null
   }
 
   return (
     <motion.div
-      className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${(isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
-      style={{
-        backfaceVisibility: 'hidden',
-        left: cursorX,
-        top: cursorY,
-        transform: 'translateZ(0)',
-        willChange: 'transform',
-      }}
+      className={`pointer-events-none fixed top-0 left-0 z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${(isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
+      style={{ willChange: 'transform', x: cursorX, y: cursorY }}
     >
       {Cursor ? (
         <Cursor cursorType={cursorType} isOverPointer={isOverPointer} />
@@ -202,7 +162,7 @@ export function SmoothCursor({
           <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
           <div
             className={
-              'pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-all duration-300 ease-out will-change-transform'
+              'pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-[opacity,scale] duration-300 ease-out'
             }
             style={{
               opacity: cursorType === 'pointer' || isOverPointer ? 1 : 0,
@@ -210,7 +170,7 @@ export function SmoothCursor({
             }}
           />
           <div
-            className={`pointer-events-none absolute top-0 left-0 size-[24px] rounded-full border-2 shadow-sm drop-shadow-sm transition-all duration-300 ease-out will-change-transform dark:border-border ${disableRotation ? '-rotate-45' : ''}`}
+            className={`pointer-events-none absolute top-0 left-0 size-[24px] rounded-full border-2 shadow-sm drop-shadow-sm transition-opacity duration-300 ease-out dark:border-border ${disableRotation ? '-rotate-45' : ''}`}
             style={{
               opacity: isOverPointer ? 0 : 1,
             }}

@@ -9,6 +9,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
@@ -68,11 +69,11 @@ function SignInParamListener({
 export function SignInModalProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
-  const [redirectTo, setRedirectTo] = useState('/')
+  const redirectToRef = useRef('/')
   const [loadingProvider, setLoadingProvider] = useState<Provider | null>(null)
 
   const openWith = useCallback((target: string) => {
-    setRedirectTo(target)
+    redirectToRef.current = target
     setOpen(true)
   }, [])
 
@@ -90,7 +91,7 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
 
     try {
       setLoadingProvider(provider)
-      await signIn.social({ callbackURL: redirectTo, provider })
+      await signIn.social({ callbackURL: redirectToRef.current, provider })
     } catch {
       toast.error('Sign in failed. Please try again.')
       setLoadingProvider(null)

@@ -58,7 +58,7 @@ const Skills = () => (
               delay={0.05 * index}
               key={feature.id}
             >
-              <feature.Icon className='icon-tilt h-8 w-8' strokeWidth={1} />
+              <feature.Icon className='icon-tilt size-8' strokeWidth={1} />
               <div className='flex flex-col'>
                 <h3 className='text-balance text-xl tracking-tight'>
                   {feature.title}

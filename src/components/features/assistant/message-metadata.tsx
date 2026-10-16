@@ -32,6 +32,8 @@ const toolStatus = (toolName: keyof ChatTools) => {
       return { Icon: Icons.link, label: 'Fetching a page' }
     case 'showContactForm':
       return { Icon: Icons.mail, label: 'Fetching contact form' }
+    case 'navigate':
+      return { Icon: Icons.arrowUpRight, label: 'Fetching the leash' }
     default:
       return {
         Icon: Icons.wrench,
@@ -53,6 +55,9 @@ export const MessageMetadata = ({
   const reasoning = parts.at(-1)?.type === 'reasoning'
 
   if (!lastPart) {
+    if (!inProgress) {
+      return null
+    }
     return reasoning ? (
       <div className='flex items-center gap-2 text-muted-foreground'>
         <Icons.brain aria-hidden className='size-4' />

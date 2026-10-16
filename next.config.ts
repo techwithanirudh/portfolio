@@ -21,7 +21,6 @@ async function createNextConfig(): Promise<NextConfig> {
       useTypeScriptCli: true,
     },
     images: {
-      dangerouslyAllowSVG: true,
       qualities: [100, 75, 85, 95],
       remotePatterns: [
         {

@@ -2,6 +2,7 @@
 
 import { GrainGradient } from '@paper-design/shaders-react'
 import { useTheme } from 'next-themes'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { cn } from '@/lib/utils'
 
 const PALETTES = {
@@ -25,6 +26,7 @@ export function GrainBackdrop({
 }) {
   const { resolvedTheme } = useTheme()
   const colors = PALETTES[resolvedTheme === 'light' ? 'light' : 'dark']
+  const reduceMotion = useReducedMotion()
 
   return (
     <GrainGradient
@@ -43,7 +45,7 @@ export function GrainBackdrop({
       noise={0.35}
       shape='wave'
       softness={1}
-      speed={0.3}
+      speed={reduceMotion ? 0 : 0.3}
     />
   )
 }

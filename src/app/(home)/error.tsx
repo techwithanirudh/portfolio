@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { owner, repo } from '@/constants/config'
 import { cn } from '@/lib/utils'
 
+const LINE_BREAK = /\r?\n/
+
 const ISSUE_URL = `https://github.com/${owner}/${repo}/issues/new`
 
 const withOccurrenceKeys = (lines: string[]) => {
@@ -22,43 +24,42 @@ interface ErrorPageProps {
 }
 
 const ErrorPage = ({ error, retry }: ErrorPageProps) => {
-  // biome-ignore lint/performance/useTopLevelRegex: small stack parsing on render
-  const stackLines = error.stack?.split(/\r?\n/).slice(1) ?? []
+  const stackLines =
+    error.stack
+      ?.split(LINE_BREAK)
+      .slice(1)
+      .map((line) => line.trim()) ?? []
   const errorStack = withOccurrenceKeys(stackLines)
 
   return (
-    <div className='flex flex-1'>
-      <div className='container relative mx-auto min-h-full border-border border-x border-dashed'>
-        <div className='flex w-full flex-col gap-4 self-center px-4 py-12 sm:px-8'>
-          <h1 className='typography-hero text-destructive'>
-            Something went wrong
+    <section className='flex flex-1 flex-col border-border border-b border-dashed'>
+      <div className='container relative mx-auto flex min-h-[28rem] flex-1 items-center justify-center border-border border-x border-dashed px-4 py-16'>
+        <div className='flex w-full max-w-xl flex-col items-center gap-4 text-center'>
+          <p className='font-mono text-muted-foreground text-xs uppercase tracking-widest'>
+            Error
+          </p>
+          <h1 className='text-balance font-semibold text-2xl tracking-tight'>
+            Something broke on this page.
           </h1>
-          <p className='text-muted-foreground'>
-            <span className='font-medium text-foreground'>Whoops!</span>{' '}
-            Something on this page broke.
-          </p>
-          <p className='-mt-2 text-muted-foreground'>
-            Please{' '}
-            <Link
-              className='link-underline'
-              href={ISSUE_URL}
-              rel='noopener noreferrer'
-              target='_blank'
+          <div className='mt-2 flex flex-wrap justify-center gap-2'>
+            <Button onClick={() => retry()}>Try again</Button>
+            <Button
+              nativeButton={false}
+              render={<Link href='/' />}
+              variant='secondary'
             >
-              share the details
-            </Link>{' '}
-            of this issue so I can fix it.
-          </p>
-          <details className='rounded-md border border-border'>
-            <summary className='select-none px-3 py-2 font-medium'>
+              Go home
+            </Button>
+          </div>
+          <details className='mt-6 w-full rounded-md border border-border text-left'>
+            <summary className='cursor-pointer select-none px-3 py-2 text-muted-foreground text-sm'>
               Error details
             </summary>
             <div className='border-border border-t'>
               <code
                 className={cn(
-                  'flex flex-col gap-1 p-3',
-                  'overflow-x-auto text-nowrap',
-                  'whitespace-pre-line font-mono text-2xs',
+                  'flex max-h-64 flex-col gap-1 overflow-auto p-3',
+                  'whitespace-pre font-mono text-[11px] leading-relaxed',
                   'bg-primary/5 dark:bg-primary/10'
                 )}
               >
@@ -75,20 +76,22 @@ const ErrorPage = ({ error, retry }: ErrorPageProps) => {
                 ))}
               </code>
             </div>
+            <p className='border-border border-t px-3 py-2 text-muted-foreground text-sm'>
+              Still broken?{' '}
+              <Link
+                className='link-underline'
+                href={ISSUE_URL}
+                rel='noopener noreferrer'
+                target='_blank'
+              >
+                Open an issue
+              </Link>{' '}
+              with these details.
+            </p>
           </details>
-          <div className='mt-2 flex flex-wrap gap-2'>
-            <Button onClick={() => retry()}>Try again</Button>
-            <Button
-              nativeButton={false}
-              render={<Link aria-label='Go back home' href='/' />}
-              variant='secondary'
-            >
-              Go home
-            </Button>
-          </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 

@@ -1,57 +1,29 @@
-import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { HeroSection } from '@/components/layout/sections/hero'
-
-const CurrentPostsCount = ({
-  startIndex,
-  endIndex,
-  totalPosts = 0,
-}: {
-  startIndex: number
-  endIndex: number
-  totalPosts?: number
-}) => {
-  const start = startIndex + 1
-  const end = endIndex < totalPosts ? endIndex : totalPosts
-  if (start === end) {
-    return <span>({start})</span>
-  }
-  return (
-    <span>
-      ({start}-{end})
-    </span>
-  )
-}
+import { buttonVariants } from '@/components/ui/button'
 
 export const Hero = ({
-  totalPosts,
-  startIndex,
-  endIndex,
+  description,
+  pageCount,
+  pageIndex,
 }: {
-  totalPosts: number
-  startIndex: number
-  endIndex: number
+  description: string
+  pageCount: number
+  pageIndex: number
 }) => (
   <HeroSection
-    title={
-      <div className='flex items-center justify-between gap-4'>
-        <span className='flex items-center gap-2'>
-          All {totalPosts} posts{' '}
-          <CurrentPostsCount
-            endIndex={endIndex}
-            startIndex={startIndex}
-            totalPosts={totalPosts}
-          />
-        </span>
-
-        <Link
-          aria-label='Subscribe to RSS feed'
-          className='inline-flex items-center justify-center rounded-md text-muted-foreground transition-colors hover:text-foreground'
-          href='/blog/rss.xml'
-        >
-          <Icons.rss className='size-5' />
-        </Link>
-      </div>
+    action={
+      <a
+        aria-label='RSS feed'
+        className={buttonVariants({ size: 'sm', variant: 'outline' })}
+        href='/blog/rss.xml'
+      >
+        <Icons.rss />
+        RSS
+      </a>
     }
+    caption={pageIndex > 0 ? `Page ${pageIndex + 1} of ${pageCount}` : null}
+    description={description}
+    title='Blog'
   />
 )

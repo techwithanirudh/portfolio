@@ -5,12 +5,13 @@ import { isToolUIPart } from 'ai'
 import { useRef } from 'react'
 import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { animations } from './constants'
 import type { MascotAgent } from './provider'
 import { playAnimation } from './utils'
 
 export const playSubmitAnimation = (agent: MascotAgent | undefined) => {
-  if (!agent) {
+  if (!agent || prefersReducedMotion()) {
     return
   }
   playAnimation(agent, animations.submit, { interrupt: true })
@@ -34,6 +35,10 @@ export function useMascotPanel({
       return
     }
     agent.stop()
+    if (prefersReducedMotion()) {
+      agent.play(animations.rest)
+      return
+    }
     if (open) {
       playAnimation(agent, animations.open)
       return
@@ -55,7 +60,7 @@ export function useMascotPanel({
   })
 
   useOn(messages, () => {
-    if (!agent || status !== 'streaming') {
+    if (!agent || status !== 'streaming' || prefersReducedMotion()) {
       return
     }
     const toolPart = (messages.at(-1)?.parts ?? []).find(isToolUIPart)

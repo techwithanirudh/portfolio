@@ -9,6 +9,8 @@ export function getColophonText() {
   return `# Colophon
 Route: ${url('/colophon')}
 
+The tools, fonts, and people behind this website.
+
 ## Technology
 
 ${technology
@@ -21,6 +23,10 @@ ${technology
 ## Typography
 
 ${typography.map((item) => `- ${item.label}`).join('\n')}
+
+## Design and colors
+
+A layout with wide spacing and dashed borders. Geist Sans sets headings and body text, and Geist Mono sets code and labels. The palette is neutral, with a blue accent for focus rings and links.
 
 ## Attribution
 

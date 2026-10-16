@@ -72,6 +72,7 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
           className={itemClassName}
           render={
             <a
+              aria-label='Share on X'
               href={`https://x.com/intent/tweet?url=${encoded}&text=${encodeURIComponent(title)}`}
               rel='noopener'
               target='_blank'
@@ -85,6 +86,7 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
           className={itemClassName}
           render={
             <a
+              aria-label='Share on LinkedIn'
               href={`https://www.linkedin.com/sharing/share-offsite?url=${encoded}`}
               rel='noopener'
               target='_blank'

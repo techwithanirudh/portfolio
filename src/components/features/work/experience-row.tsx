@@ -2,7 +2,10 @@ import Image from 'next/image'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import { PreviewLink } from '@/components/preview-link'
 import { formatDuration, formatPeriod } from '@/lib/employment-period'
-import type { ExperienceItemType } from '@/types/experience'
+import type {
+  ExperienceItemType,
+  ExperiencePositionItemType,
+} from '@/types/experience'
 
 const markdownComponents: Components = {
   a: ({ children, href }) =>
@@ -21,15 +24,12 @@ export function ExperienceRow({
 }: {
   experience: ExperienceItemType
 }) {
-  const [position] = experience.positions
-  if (!position) {
+  if (experience.positions.length === 0) {
     return null
   }
 
-  const { start, end } = position.employmentPeriod
-
   return (
-    <article className='grid gap-4 px-6 py-8 sm:grid-cols-[auto_1fr_auto] sm:gap-6'>
+    <article className='grid gap-4 px-6 py-8 sm:grid-cols-[auto_1fr] sm:gap-6'>
       {experience.companyLogo ? (
         <Image
           alt=''
@@ -42,23 +42,42 @@ export function ExperienceRow({
         <span className='size-13 shrink-0 rounded-lg bg-muted' />
       )}
 
+      <div className='flex min-w-0 flex-col'>
+        <h3 className='font-medium text-lg'>
+          {experience.companyWebsite ? (
+            <PreviewLink
+              className='transition-colors hover:text-muted-foreground'
+              href={experience.companyWebsite}
+            >
+              {experience.companyName}
+            </PreviewLink>
+          ) : (
+            experience.companyName
+          )}
+          {experience.isCurrentEmployer && <NowBadge />}
+        </h3>
+
+        <ol className='divide-y divide-dashed divide-border'>
+          {experience.positions.map((position) => (
+            <ExperiencePosition key={position.id} position={position} />
+          ))}
+        </ol>
+      </div>
+    </article>
+  )
+}
+
+function ExperiencePosition({
+  position,
+}: {
+  position: ExperiencePositionItemType
+}) {
+  const { start, end } = position.employmentPeriod
+
+  return (
+    <li className='grid gap-4 py-4 first:pt-0 last:pb-0 sm:grid-cols-[1fr_auto] sm:gap-6'>
       <div className='flex min-w-0 flex-col gap-3'>
-        <div>
-          <h3 className='flex items-center gap-3 font-medium text-lg'>
-            {experience.companyWebsite ? (
-              <PreviewLink
-                className='transition-colors hover:text-muted-foreground'
-                href={experience.companyWebsite}
-              >
-                {experience.companyName}
-              </PreviewLink>
-            ) : (
-              experience.companyName
-            )}
-            {experience.isCurrentEmployer && <NowBadge />}
-          </h3>
-          <p className='text-muted-foreground'>{position.title}</p>
-        </div>
+        <p className='text-muted-foreground'>{position.title}</p>
 
         {position.description && (
           <p className='max-w-2xl text-pretty text-muted-foreground leading-relaxed'>
@@ -86,7 +105,7 @@ export function ExperienceRow({
         {formatPeriod(start, end)}
         <span className='block opacity-70'>{formatDuration(start, end)}</span>
       </p>
-    </article>
+    </li>
   )
 }
 
@@ -94,7 +113,7 @@ function NowBadge() {
   return (
     <span
       aria-label='Current role'
-      className='relative flex items-center justify-center'
+      className='relative ml-3 inline-flex size-3 items-center justify-center align-middle'
       role='img'
     >
       <span className='absolute inline-flex size-3 animate-ping rounded-full bg-primary opacity-40 motion-reduce:animate-none' />

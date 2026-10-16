@@ -5,6 +5,7 @@ import { Caveat, Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
 import { SignInModalProvider } from '@/components/features/auth/sign-in-modal'
 import CustomSearchDialog from '@/components/features/search'
+import { ThemeColorSync } from '@/components/theme-color-sync'
 import { ThemeProvider } from '@/components/theme-provider'
 import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
@@ -13,6 +14,7 @@ import { PagesProvider } from '@/contexts/pages'
 import { createMetadata } from '@/lib/metadata'
 import { revealScript } from '@/lib/reveal-script'
 import { getPageEntries } from '@/lib/source'
+import { themeColor } from '@/lib/theme-color'
 import '@/styles/globals.css'
 import 'fumadocs-ui/components/image-zoom2.css'
 import 'katex/dist/katex.css'
@@ -51,9 +53,11 @@ export const metadata = createMetadata({
 })
 
 export const viewport: Viewport = {
+  // Android: the keyboard shrinks the layout viewport, so dvh panels stay above it
+  interactiveWidget: 'resizes-content',
   themeColor: [
-    { color: '#0A0A0A', media: '(prefers-color-scheme: dark)' },
-    { color: '#fff', media: '(prefers-color-scheme: light)' },
+    { color: themeColor.dark, media: '(prefers-color-scheme: dark)' },
+    { color: themeColor.light, media: '(prefers-color-scheme: light)' },
   ],
   // Required for Safari 26 to tint the bottom bar and for env(safe-area-inset-*).
   viewportFit: 'cover',
@@ -129,6 +133,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             disableTransitionOnChange
             enableSystem
           >
+            <ThemeColorSync />
             <SoundsProvider>
               <SignInModalProvider>
                 <RootProvider

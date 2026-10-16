@@ -3,6 +3,7 @@ import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { SectionMoreLink } from '@/components/layout/sections/more-link'
 import { ViewAnimation } from '@/components/view-animation'
+import { formatDate } from '@/lib/format-date'
 import type { BlogPage } from '@/lib/source'
 
 export default function Writing({ posts }: { posts: BlogPage[] }) {
@@ -22,7 +23,7 @@ export default function Writing({ posts }: { posts: BlogPage[] }) {
               <ViewAnimation delay={0.05 * index} key={post.url}>
                 <PostCard
                   author={post.data.author}
-                  date={new Date(post.data.date).toDateString()}
+                  date={formatDate(post.data.date)}
                   description={post.data.description ?? ''}
                   title={post.data.title}
                   url={post.url}
