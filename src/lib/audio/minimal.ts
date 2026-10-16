@@ -69,12 +69,6 @@ export const expand: SoundDefinition = {
   source: { frequency: { end: 1000, start: 800 }, type: 'sine' },
 }
 
-export const hover: SoundDefinition = {
-  envelope: { attack: 0, decay: 0.01, release: 0.004, sustain: 0 },
-  gain: 0.04,
-  source: { frequency: 1300, type: 'sine' },
-}
-
 export const info: SoundDefinition = {
   envelope: { attack: 0, decay: 0.04, release: 0.015, sustain: 0 },
   gain: 0.08,

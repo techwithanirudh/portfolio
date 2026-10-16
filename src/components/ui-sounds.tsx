@@ -9,7 +9,6 @@ import {
   collapse,
   error,
   expand,
-  hover as hoverSound,
   keyPress,
   pageEnter,
   send,
@@ -22,23 +21,9 @@ import { playSound } from '@/lib/audio/preferences'
 
 const PRESS =
   'a[href], button:not([type="submit"]), [role="tab"], [role="switch"], [role="checkbox"], [aria-expanded]'
-// Plain inline links in prose stay quiet
-const HOVER = [
-  '[data-sound-hover]',
-  '[data-slot="button"]',
-  '[data-slot="section-button"]',
-  'header a[href]',
-  'footer a[href]',
-  '#main-content a.group[href]',
-  '[data-slot="accordion-trigger"]',
-  '[data-slot="collapsible-trigger"]',
-  '[data-slot="pagination-link"]',
-  '[data-slot="tooltip-trigger"]',
-].join(', ')
 const OPT_OUT = '[data-sound="off"]'
 // For components that already play their own sound on press or submit
 const PRESS_OPT_OUT = '[data-sound="off"], [data-sound-press="off"]'
-const HOVER_GAP = 45
 // Long enough for a client side validator to flag its fields
 const VALIDATION_DELAY = 120
 
@@ -125,9 +110,6 @@ export function UiSounds() {
   }, [pathname])
 
   useEffect(() => {
-    let lastHover = 0
-    let lastHovered: Element | null = null
-
     const onPopState = () => {
       historyNavigation.current = true
     }
@@ -165,23 +147,6 @@ export function UiSounds() {
       }
     }
 
-    const onPointerOver = (event: PointerEvent) => {
-      if (event.pointerType !== 'mouse' || !(event.target instanceof Element)) {
-        return
-      }
-      const el = event.target.closest(HOVER)
-      const now = performance.now()
-      if (!el || el === lastHovered || el.closest(OPT_OUT)) {
-        lastHovered = el
-        return
-      }
-      lastHovered = el
-      if (now - lastHover > HOVER_GAP) {
-        lastHover = now
-        playSound(hoverSound, jitter(80, 0.2))
-      }
-    }
-
     const onKeyDown = (event: KeyboardEvent) => {
       onGesture()
       if (
@@ -206,7 +171,6 @@ export function UiSounds() {
 
     document.addEventListener('pointerdown', onPointerDown, { passive: true })
     document.addEventListener('click', onClick, { passive: true })
-    document.addEventListener('pointerover', onPointerOver, { passive: true })
     // Captured so fields whose widgets stop propagation, like the command
     // menu input, still click
     document.addEventListener('keydown', onKeyDown, {
@@ -220,7 +184,6 @@ export function UiSounds() {
       document.removeEventListener('submit', onSubmit, { capture: true })
       document.removeEventListener('pointerdown', onPointerDown)
       document.removeEventListener('click', onClick)
-      document.removeEventListener('pointerover', onPointerOver)
       document.removeEventListener('keydown', onKeyDown, { capture: true })
     }
   }, [])

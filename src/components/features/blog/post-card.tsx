@@ -19,7 +19,6 @@ export const PostCard: React.FC<PostCardProps> = ({
 }) => (
   <Link
     className='block bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
-    data-sound-hover
     href={url}
   >
     <div className='flex flex-col gap-2'>
