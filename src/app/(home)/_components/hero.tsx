@@ -3,7 +3,7 @@ import * as motion from 'motion/react-client'
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import { HeroGradient } from '@/components/shader/hero-gradient'
+import { GrainBackdrop } from '@/components/shader/grain-backdrop'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { linkItems } from '@/constants/navigation'
@@ -32,7 +32,7 @@ const Hero = () => {
         viewport={{ once: true }}
         whileInView={{ opacity: 1 }}
       >
-        <HeroGradient />
+        <GrainBackdrop />
       </motion.div>
       <ViewAnimation delay={0.1}>
         <h1

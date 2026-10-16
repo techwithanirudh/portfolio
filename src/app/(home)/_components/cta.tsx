@@ -2,13 +2,18 @@ import Link from 'next/link'
 import type React from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
+import { GrainBackdrop } from '@/components/shader/grain-backdrop'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 
 export default function CTA(): React.ReactElement {
   return (
-    <Section className='p-4'>
-      <div className='grid place-items-center gap-4 rounded-xl border bg-card p-8 shadow-sm sm:p-16'>
+    <Section className='relative isolate overflow-hidden'>
+      <GrainBackdrop
+        className='-z-10 opacity-60 dark:opacity-75'
+        fade='bottom'
+      />
+      <div className='grid place-items-center gap-4 px-6 py-20 sm:px-16 sm:py-28'>
         <ViewAnimation delay={0.1}>
           <h2 className='typography-title text-balance text-center font-regular text-3xl tracking-tighter sm:text-5xl'>
             Let's Collaborate

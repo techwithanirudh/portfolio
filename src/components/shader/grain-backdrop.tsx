@@ -9,11 +9,25 @@ const PALETTES = {
   light: ['#8b5cf6', '#c4b5fd', '#7dd3fc', '#60a5fa'],
 }
 
+// Where the blob sits; the mask fades everything else back to the page bg.
+const FADES = {
+  bottom:
+    '[mask-image:radial-gradient(ellipse_70%_90%_at_50%_100%,black_20%,transparent_75%)]',
+  corner:
+    '[mask-image:radial-gradient(ellipse_75%_105%_at_100%_100%,black_25%,transparent_80%)]',
+}
+
 /**
- * Soft purple/azure grain blob pinned to the bottom-right corner, the same
- * look as the old static hero image, but animated with Paper Shaders.
+ * Soft purple/azure grain blob, animated with Paper Shaders. Purely
+ * decorative: it drifts on its own and ignores the pointer.
  */
-export function HeroGradient({ className }: { className?: string }) {
+export function GrainBackdrop({
+  className,
+  fade = 'corner',
+}: {
+  className?: string
+  fade?: keyof typeof FADES
+}) {
   const { resolvedTheme } = useTheme()
   const colors = PALETTES[resolvedTheme === 'light' ? 'light' : 'dark']
 
@@ -21,7 +35,8 @@ export function HeroGradient({ className }: { className?: string }) {
     <GrainGradient
       aria-hidden
       className={cn(
-        'pointer-events-none absolute inset-0 opacity-80 [mask-image:radial-gradient(ellipse_75%_105%_at_100%_100%,black_25%,transparent_80%)] dark:opacity-100',
+        'pointer-events-none absolute inset-0 opacity-80 dark:opacity-100',
+        FADES[fade],
         className
       )}
       colorBack='#00000000'
