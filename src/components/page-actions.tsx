@@ -85,12 +85,7 @@ export function LLMCopyButton({
       type='button'
       variant='secondary'
     >
-      <CopyStateIcon
-        doneIcon={<Icons.check className='text-muted-foreground' />}
-        errorIcon={<Icons.x className='text-destructive' />}
-        idleIcon={<Icons.copy className='text-muted-foreground' />}
-        state={state}
-      />
+      <CopyStateIcon className='text-muted-foreground' state={state} />
       <span>Copy Page</span>
     </Button>
   )
