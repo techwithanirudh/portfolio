@@ -2,7 +2,7 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
-import { Presence } from '@radix-ui/react-presence'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useSound } from '@web-kits/audio/react'
 import { DefaultChatTransport, getStaticToolName, isStaticToolUIPart } from 'ai'
 import { buttonVariants } from 'fumadocs-ui/components/ui/button'
@@ -513,27 +513,26 @@ function AssistantPanel() {
   })
   useMascotTools(chat.messages)
 
+  // Non-modal so the page stays usable beside the panel on desktop. Pointer
+  // dismissal is off because the backdrop (below lg) and the close button
+  // own closing, and Base UI keeps both mounted until their exit animations end
   return (
-    <>
-      <Presence present={open}>
-        <button
-          aria-label='Close assistant panel'
-          className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-[state=closed]:animate-fd-fade-out data-[state=open]:animate-fd-fade-in lg:hidden'
-          data-state={open ? 'open' : 'closed'}
+    <DialogPrimitive.Root
+      disablePointerDismissal
+      modal={false}
+      onOpenChange={setOpen}
+      open={open}
+    >
+      <DialogPrimitive.Portal>
+        <DialogPrimitive.Backdrop
+          className='fixed inset-0 z-30 bg-fd-overlay backdrop-blur-xs data-closed:animate-fd-fade-out data-open:animate-fd-fade-in lg:hidden'
           onClick={() => setOpen(false)}
-          type='button'
         />
-      </Presence>
-      <Presence present={open}>
-        <div
+        <DialogPrimitive.Popup
           aria-label='Ask Simba'
-          className={cn(
-            'fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]',
-            open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
-          )}
+          className='fixed inset-x-4 top-4 bottom-5 z-50 flex flex-col overflow-hidden rounded-lg border border-dashed bg-fd-popover text-fd-popover-foreground shadow-lg outline-none data-closed:animate-fd-dialog-out data-open:animate-fd-dialog-in sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-28 sm:h-[500px] sm:w-[360px]'
           // The panel plays its own send, error and action sounds
           data-sound-press='off'
-          role='dialog'
         >
           <div className='flex h-full flex-col divide-y divide-dashed divide-border'>
             <Header />
@@ -542,8 +541,8 @@ function AssistantPanel() {
               <AssistantInput />
             </div>
           </div>
-        </div>
-      </Presence>
-    </>
+        </DialogPrimitive.Popup>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   )
 }
