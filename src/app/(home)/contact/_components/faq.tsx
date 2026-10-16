@@ -11,7 +11,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 import { ViewAnimation } from '@/components/view-animation'
-import { InlineLink } from './inline-link'
+import { AskSimbaLink } from './ask-simba-link'
 
 const faq = [
   {
@@ -43,10 +43,7 @@ export const FAQ = () => (
         align='left'
         description={
           <>
-            Still have questions?{' '}
-            <InlineLink className='no-underline' href='/contact'>
-              Contact Me
-            </InlineLink>
+            Still curious? <AskSimbaLink />, he's read everything on this site.
           </>
         }
         title='Frequently Asked Questions'

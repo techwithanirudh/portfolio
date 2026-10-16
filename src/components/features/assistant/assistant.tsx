@@ -127,7 +127,8 @@ function Header() {
           aria-label='New chat'
           className={cn(
             buttonVariants({
-              className: 'size-10 rounded-none border-none [&_svg]:size-4',
+              className:
+                'group/button size-10 rounded-none border-none [&_svg]:size-4',
               color: 'secondary',
               size: 'icon-sm',
             })
@@ -145,7 +146,8 @@ function Header() {
           aria-label='Close'
           className={cn(
             buttonVariants({
-              className: 'size-10 rounded-none border-none [&_svg]:size-4',
+              className:
+                'group/button size-10 rounded-none border-none [&_svg]:size-4',
               color: 'primary',
               size: 'icon-sm',
             })
@@ -284,21 +286,19 @@ function AssistantInput() {
           placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
           value={input}
         />
-        <div className='flex h-10 shrink-0 items-center pe-1.5'>
-          <PromptInputSubmit
-            disabled={
-              !isStreaming &&
-              ((input.trim().length === 0 && !context) || hasPendingToolInput)
-            }
-            onStop={stop}
-            status={status}
-          />
-        </div>
       </PromptInputBody>
       <PromptInputFooter>
         <PromptInputTools>
           <RegenerateButton />
         </PromptInputTools>
+        <PromptInputSubmit
+          disabled={
+            !isStreaming &&
+            ((input.trim().length === 0 && !context) || hasPendingToolInput)
+          }
+          onStop={stop}
+          status={status}
+        />
       </PromptInputFooter>
     </PromptInput>
   )
