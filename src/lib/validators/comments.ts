@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const CommentImageContentSchema = z.object({
+const CommentImageContentSchema = z.object({
   attrs: z.object({
     alt: z.string().optional(),
     height: z.number(),
@@ -10,7 +10,7 @@ export const CommentImageContentSchema = z.object({
   type: z.literal('image'),
 })
 
-export const CommentMentionContentSchema = z.object({
+const CommentMentionContentSchema = z.object({
   attrs: z.object({
     id: z.string(),
     label: z.string().optional(),

@@ -6,11 +6,7 @@ export const workSource = loader(toFumadocsSource(work, []), {
   baseUrl: '/projects',
 })
 
-export const {
-  getPage: getWork,
-  getPages: getWorkPages,
-  pageTree: workPageTree,
-} = workSource
+export const { getPage: getWork, getPages: getWorkPages } = workSource
 
 export type WorkPage = ReturnType<typeof getWorkPages>[number]
 

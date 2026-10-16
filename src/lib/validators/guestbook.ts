@@ -21,7 +21,7 @@ export const GuestbookReactionSchema = z.object({
   entryId: z.number().int().positive(),
 })
 
-export const GuestbookEntryIdSchema = z.object({
+const GuestbookEntryIdSchema = z.object({
   entryId: z.number().int().positive(),
 })
 
@@ -33,11 +33,6 @@ export const GuestbookDeleteSchema = GuestbookEntryIdSchema
 export const GuestbookBanUserSchema = z.object({
   action: z.enum(['ban', 'unban']),
   userId: z.string().min(1),
-})
-
-export const GuestbookModerationInputSchema = GuestbookEntrySchema.pick({
-  message: true,
-  signature: true,
 })
 
 export const ModerationResultSchema = z.object({
@@ -71,9 +66,6 @@ export type GuestbookReaction = z.infer<typeof GuestbookReactionSchema>
 export type GuestbookEdit = z.infer<typeof GuestbookEditSchema>
 export type GuestbookDelete = z.infer<typeof GuestbookDeleteSchema>
 export type GuestbookBanUser = z.infer<typeof GuestbookBanUserSchema>
-export type GuestbookModerationInput = z.infer<
-  typeof GuestbookModerationInputSchema
->
 export type GuestbookModerationResult = z.infer<typeof ModerationResultSchema>
 export type GuestbookReactionItem = z.infer<typeof GuestbookReactionItemSchema>
 export type GuestbookEntryItem = z.infer<typeof GuestbookEntryItemSchema>
