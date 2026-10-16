@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, use } from 'react'
+import { Suspense, use, useState } from 'react'
 
 import {
   type Activity,
@@ -13,11 +13,7 @@ import {
 } from '@/components/features/contributions'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
@@ -26,9 +22,44 @@ interface ContributionsProps {
   contributions: Promise<Activity[]>
 }
 
+interface HoveredDay {
+  count: number
+  date: string
+  rect: SVGRectElement
+}
+
+// A year is ~370 blocks, so one tooltip follows the pointer instead of
+// mounting a tooltip per block
+const useDayTooltip = () => {
+  const [day, setDay] = useState<HoveredDay | null>(null)
+  const [open, setOpen] = useState(false)
+
+  const onPointerOver = (event: React.PointerEvent) => {
+    const rect = (event.target as Element).closest<SVGRectElement>(
+      'rect[data-date]'
+    )
+    if (!rect?.dataset.date) {
+      return
+    }
+    setDay({
+      count: Number(rect.dataset.count),
+      date: rect.dataset.date,
+      rect,
+    })
+    setOpen(true)
+  }
+
+  return {
+    day,
+    handlers: { onPointerLeave: () => setOpen(false), onPointerOver },
+    open,
+  }
+}
+
 const ContributionsGraph = ({ contributions }: ContributionsProps) => {
   const data = use(contributions)
   const isMobile = useIsMobile()
+  const tooltip = useDayTooltip()
   const blockSize = isMobile ? 12 : 23.5
 
   return (
@@ -45,33 +76,39 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
             aria-hidden
             className='overflow-x-auto pb-2'
             title='GitHub Contributions'
+            {...tooltip.handlers}
           >
             {({ activity, dayIndex, weekIndex }) => (
-              <Tooltip>
-                <TooltipTrigger render={<g />}>
-                  <ContributionGraphBlock
-                    activity={activity}
-                    className={cn(
-                      'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-                      'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-                      'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-                      'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
-                      'cursor-pointer'
-                    )}
-                    dayIndex={dayIndex}
-                    weekIndex={weekIndex}
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className='font-semibold'>{activity.date}</p>
-                  <p>
-                    <span className='tabular-nums'>{activity.count}</span>{' '}
-                    {activity.count === 1 ? 'contribution' : 'contributions'}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
+              <ContributionGraphBlock
+                activity={activity}
+                className={cn(
+                  'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
+                  'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
+                  'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
+                  'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
+                  'cursor-pointer'
+                )}
+                dayIndex={dayIndex}
+                weekIndex={weekIndex}
+              />
             )}
           </ContributionGraphCalendar>
+          <Tooltip open={tooltip.open}>
+            <TooltipContent
+              anchor={tooltip.day?.rect}
+              className='pointer-events-none'
+            >
+              {tooltip.day ? (
+                <>
+                  <p className='font-semibold'>{tooltip.day.date}</p>
+                  <p>
+                    <span className='tabular-nums'>{tooltip.day.count}</span>{' '}
+                    {tooltip.day.count === 1 ? 'contribution' : 'contributions'}
+                  </p>
+                </>
+              ) : null}
+            </TooltipContent>
+          </Tooltip>
           <ContributionGraphFooter>
             <ContributionGraphTotalCount>
               {({ totalCount }) => (
