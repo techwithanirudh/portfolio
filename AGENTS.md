@@ -3,7 +3,7 @@
 ## Project Overview
 - Next.js App Router portfolio site with Fumadocs content and MDX.
 - TypeScript in strict mode with path aliases (`@/*`, `@/public/*`).
-- Tailwind CSS (v4) with PostCSS, plus Radix UI and shadcn/ui components.
+- Tailwind CSS (v4) with PostCSS, plus Base UI and shadcn/ui components.
 - Content lives in `content/` and Fumadocs-generated `.source/`.
 - Always use Context7 MCP when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
 
@@ -55,7 +55,8 @@ Fight entropy. Leave the codebase better than you found it.
 - Prefer `cn` from `src/lib/utils.ts` to merge class names.
 - App-level icons should be sourced via `src/components/icons/icons.tsx`; prefer Lucide for generic UI/app icons and keep non-Lucid/icon-specific SVGs centralized there when a different source is necessary.
 - shadcn/ui components live in `src/components/ui`; extend them rather than copy/paste.
-- Radix UI primitives are used for accessible overlays, menus, and form controls.
+- Base UI primitives (`@base-ui/react`) are used for accessible overlays, menus, and form controls; compose with the `render` prop (not `asChild`) and style state with `data-open`/`data-closed`, `data-starting-style`/`data-ending-style` and `--anchor-width`/`--available-height`/`--transform-origin`.
+- `fumadocs-ui` is still the Radix build, so its components and `fd-*` styles emit Radix markup (`data-state`); do not copy that pattern into our components.
 
 ## Data & Email
 - Drizzle schema lives in `src/server/db/schema/index.ts` and uses the `portfolio_*` table prefix.

@@ -27,7 +27,7 @@ export const technology = [
   },
   {
     description: 'Accessible primitives and components I customized.',
-    name: 'Radix UI and shadcn/ui',
+    name: 'Base UI and shadcn/ui',
     url: 'https://ui.shadcn.com',
   },
   {
