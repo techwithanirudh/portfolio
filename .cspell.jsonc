@@ -5,7 +5,8 @@
   "ignorePaths": ["pnpm-lock.yaml", "bun.lock", "bun.lockb"],
   "ignoreRegExpList": [
     "apiKey='[a-zA-Z0-9-]{32}'",
-    "'[A-Za-z0-9+/]{24,}={0,2}'"
+    "'[A-Za-z0-9+/]{24,}={0,2}'",
+    "#[0-9a-fA-F]{3,8}(?![0-9a-fA-F])"
   ],
   "import": ["@cspell/dict-bash/cspell-ext.json"],
   "useGitignore": true,

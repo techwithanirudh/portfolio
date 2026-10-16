@@ -1,101 +1,81 @@
-import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
-import * as motion from 'motion/react-client'
 import Link from 'next/link'
+import { AskSimbaButton } from '@/components/features/assistant/ask-simba-button'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { GrainBackdrop } from '@/components/shader/grain-backdrop'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
-import { linkItems } from '@/constants/navigation'
-import { baseOptions } from '@/constants/site'
+import { socials } from '@/constants/navigation'
 import { cn } from '@/lib/utils'
+import { Portrait } from './portrait'
 
-const Hero = () => {
-  const links = resolveLinkItems({
-    githubUrl: baseOptions.githubUrl,
-    links: linkItems,
-  }) as LinkItemType[]
-  const navItems = links.filter((item) =>
-    ['nav', 'all'].includes(item.on ?? 'all')
-  )
-
-  return (
-    <Section className='relative flex flex-col items-center justify-center gap-4 overflow-hidden px-4 py-24 sm:px-16 sm:py-32 md:py-40'>
-      <motion.div
-        animate={{ opacity: 1, translateY: 0 }}
-        className='absolute inset-0 -z-10 h-full w-full'
-        initial={{ opacity: 0, translateY: -6 }}
-        transition={{
-          duration: 0.4,
-          scale: { bounce: 0.5, type: 'spring', visualDuration: 0.4 },
-        }}
-        viewport={{ once: true }}
-        whileInView={{ opacity: 1 }}
-      >
-        <GrainBackdrop />
-      </motion.div>
-      <ViewAnimation delay={0.1}>
-        <h1
-          className={cn(
-            'typography-hero text-balance text-center font-normal text-4xl leading-tight tracking-tighter',
-            'md:text-5xl'
-          )}
-        >
-          Hi! I'm Anirudh!
-        </h1>
-      </ViewAnimation>
-      <ViewAnimation delay={0.15}>
-        <p className='max-w-sm text-pretty text-center text-base text-muted-foreground leading-relaxed tracking-tight sm:max-w-xl sm:text-lg md:text-xl'>
-          I'm a design engineer and full-stack developer who designs websites
-          and writes the code behind them.
-        </p>
-      </ViewAnimation>
-
-      <div className='mt-2 flex flex-wrap items-center justify-center gap-4'>
-        <ViewAnimation delay={0.2}>
-          <Link
-            className={cn(
-              buttonVariants({
-                size: 'lg',
-                variant: 'default',
-              }),
-              'rounded-full bg-primary hover:bg-primary/90'
-            )}
-            href='/projects'
-          >
-            Browse Projects
-            <Icons.arrowRight className='icon-arrow-button size-5' />
-          </Link>
-        </ViewAnimation>
-
-        <div className='flex items-center space-x-4'>
-          {navItems
-            .filter((item) => item.type === 'icon')
-            .map((item, i) => (
-              <ViewAnimation
-                className='flex items-center'
-                delay={0.1 + i * 0.05}
-                key={i.toString()}
-              >
-                <Link
-                  className={cn(
-                    buttonVariants({
-                      size: 'icon',
-                      variant: 'ghost',
-                    }),
-                    'rounded-full'
-                  )}
-                  href={item.url}
-                >
-                  {item.icon}
-                  <span className='sr-only'>{item.text}</span>
-                </Link>
-              </ViewAnimation>
-            ))}
-        </div>
+// One column, type first: portrait, name, one line, actions, with the grain
+// blob drifting in from the corner
+const Hero = () => (
+  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-16 pb-14 sm:px-12 sm:pt-20 sm:pb-16'>
+    <GrainBackdrop className='-z-10' />
+    <ViewAnimation delay={0.05}>
+      <div className='mb-7 size-16 overflow-hidden rounded-2xl border border-foreground/15 shadow-sm sm:mb-8 sm:size-[4.75rem] sm:rounded-[1.25rem]'>
+        <Portrait />
       </div>
-    </Section>
-  )
-}
+    </ViewAnimation>
+    <ViewAnimation delay={0.1}>
+      <h1 className='mb-4 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-5 sm:text-[3.4rem]'>
+        Anirudh Sriram<span className='text-primary'>.</span>
+      </h1>
+    </ViewAnimation>
+    <ViewAnimation delay={0.15}>
+      <p className='max-w-[58ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>
+        Design engineer and full-stack developer. I design websites and write
+        the code behind them, lately AI products with Next.js, React and
+        TypeScript, as a Software Engineering Intern at{' '}
+        <a
+          className='underline decoration-foreground/30 decoration-dashed underline-offset-4 transition-colors hover:text-primary hover:decoration-primary'
+          href='https://quiver.ai'
+          rel='noreferrer'
+          target='_blank'
+        >
+          QuiverAI
+        </a>
+        .
+      </p>
+    </ViewAnimation>
+
+    <div className='mt-7 flex flex-wrap items-center gap-2.5 sm:mt-9'>
+      <ViewAnimation delay={0.2}>
+        <Link
+          className={buttonVariants({ size: 'lg', variant: 'default' })}
+          href='/projects'
+        >
+          Projects
+          <Icons.arrowRight className='icon-arrow-button size-4' />
+        </Link>
+      </ViewAnimation>
+      <ViewAnimation delay={0.25}>
+        <AskSimbaButton />
+      </ViewAnimation>
+      <ViewAnimation
+        className='flex w-full gap-1.5 max-sm:mt-2 sm:ml-auto sm:w-auto'
+        delay={0.3}
+      >
+        {socials.map((social) => (
+          <a
+            aria-label={social.name}
+            className={cn(
+              buttonVariants({ size: 'icon-sm', variant: 'outline' }),
+              'text-muted-foreground hover:-translate-y-0.5 hover:text-foreground dark:bg-background dark:ring-white/10'
+            )}
+            href={social.url}
+            key={social.name}
+            rel='noreferrer'
+            target={social.url.startsWith('mailto:') ? undefined : '_blank'}
+          >
+            {social.icon}
+          </a>
+        ))}
+      </ViewAnimation>
+    </div>
+  </Section>
+)
 
 export default Hero

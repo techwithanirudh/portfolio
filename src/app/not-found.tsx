@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { AskSimbaButton } from '@/components/features/not-found/ask-simba-button'
+import { AskSimbaButton } from '@/components/features/assistant/ask-simba-button'
 import { SimbaSprite } from '@/components/features/not-found/simba-sprite'
 import { Icons } from '@/components/icons/icons'
 import { SiteShell } from '@/components/layout/site-shell'
