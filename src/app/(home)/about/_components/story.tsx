@@ -86,7 +86,8 @@ function ChapterRow({
 }
 
 // A tilted photo resting in its slot that straightens once the track reaches
-// its chapter, or the empty slot with an icon
+// its chapter, or the empty slot with an icon. Straight, it sits lifted 8px
+// up-left of the slot, so its corners are the slot's 20px minus that 8px
 function Snapshot({ chapter, tilt }: { chapter: StoryChapter; tilt: number }) {
   const { photo } = chapter
 
@@ -104,7 +105,7 @@ function Snapshot({ chapter, tilt }: { chapter: StoryChapter; tilt: number }) {
       <ShadowBox height={278} label={photo.caption} width={188} />
       <div
         className={cn(
-          'absolute top-0 left-0 h-[270px] w-[180px] overflow-hidden rounded-lg shadow-black/15 shadow-lg dark:shadow-black/50',
+          'absolute top-0 left-0 h-[270px] w-[180px] overflow-hidden rounded-xl shadow-black/15 shadow-lg dark:shadow-black/50',
           'transition-transform duration-300 ease-out hover:rotate-0 group-data-reached/chapter:rotate-0 motion-reduce:transition-none',
           tilt < 0 ? '-rotate-8' : 'rotate-8',
           photo.contain && 'bg-white',

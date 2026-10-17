@@ -8,7 +8,10 @@ export default function Hero(): React.ReactElement {
       description={pages.about.description}
       title={
         <>
-          {pages.about.title} <PortraitChip /> me
+          {pages.about.title} <PortraitChip />{' '}
+          {/* The m's wide left bearing leaves more air on this side of the
+              face than the t does on the other, so it tucks in to match */}
+          <span className='-ml-[0.09em]'>me</span>
           <TitleDot />
         </>
       }

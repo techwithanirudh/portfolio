@@ -35,9 +35,7 @@ export const PostRow = ({
   return (
     <Link
       className={cn(
-        'group grid gap-x-6 gap-y-1.5 px-6 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80',
-        // The extra air makes up for the missing meta line
-        meta ? 'py-5 sm:py-6' : 'py-6 sm:py-8',
+        'group grid gap-x-6 gap-y-1.5 px-6 py-6 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80 sm:py-8',
         date === 'short'
           ? 'sm:grid-cols-[4.75rem_minmax(0,1fr)]'
           : 'sm:grid-cols-[7.5rem_minmax(0,1fr)]'
