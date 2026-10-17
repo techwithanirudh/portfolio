@@ -17,6 +17,7 @@ import { isBotRequest } from '@/server/botid'
 import { getLLMsTxt } from './utils/llms'
 import { getPageContent } from './utils/tools/get-page-content'
 import { navigateOutputSchema, navigateTool } from './utils/tools/navigate'
+import { renderPortfolioTool } from './utils/tools/render-portfolio'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
 
@@ -74,6 +75,7 @@ const parseMessages = async (request: Request) => {
 
 const toolsAfterNavigation = [
   'getPageContent',
+  'renderPortfolio',
   'searchDocs',
   'showContactForm',
 ] as const
@@ -118,6 +120,8 @@ export async function POST(request: Request) {
               }
             },
             ignoreIncompleteToolCalls: true,
+            // Earlier cards go back to the model as their short summary
+            tools: { renderPortfolio: renderPortfolioTool },
           }),
           getLLMsTxt(),
         ])
@@ -157,6 +161,7 @@ export async function POST(request: Request) {
           tools: {
             getPageContent,
             navigate: navigateTool,
+            renderPortfolio: renderPortfolioTool,
             searchDocs: createSearchDocsTool(writer),
             showContactForm: showContactFormTool,
           },

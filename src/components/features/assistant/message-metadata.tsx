@@ -25,7 +25,10 @@ export const MessagePending = () => (
 )
 
 // These tools render their own progress row in the message body
-const toolsWithOwnStatus = new Set<keyof ChatTools>(['navigate'])
+const toolsWithOwnStatus = new Set<keyof ChatTools>([
+  'navigate',
+  'renderPortfolio',
+])
 
 const toolStatus = (toolName: keyof ChatTools) => {
   switch (toolName) {

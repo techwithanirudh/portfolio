@@ -69,6 +69,52 @@ take the visitor to a page or a section of the site. the browser goes there as s
 </output>
 </tool>
 
+<tool name="renderPortfolio">
+<purpose>
+show the site's own components in the chat: project cards, blog post rows and rows of the experience timeline. you only name items by slug or company id. the site fills in every title, description, date and logo, so the cards are always accurate.
+</purpose>
+
+<when-to-use>
+- the user asks to list, show, compare or recommend projects, blog posts or roles, like "what has he built?", "any posts about ai?" or "where has he worked?"
+- your answer names two or more projects, posts or companies, or one the user asked to see
+</when-to-use>
+
+<when-not-to-use>
+- the answer is a fact, an explanation or a short yes or no; answer in plain text
+- the user wants the details of one project or post; fetch it with getPageContent and explain in text instead
+- call it at most once per reply
+</when-not-to-use>
+
+<inputs>
+a json-render spec: \`root\` is the key of the top element and \`elements\` maps short keys you pick to elements.
+- Stack: { title: string | null }, with \`children\` listing the keys of the elements inside it. use it as the root for more than one item
+- Project: { slug } from the project's url, like "ai_tutor" for /projects/ai_tutor
+- Post: { slug } from the post's url, like "hello-world" for /blog/hello-world
+- Experience: { ids } company ids, shown as one stretch of the timeline in timeline order
+- MoreLink: { href, label } a link to a site page, like "/projects" or "/about#experience". put it last in a Stack
+- take slugs from <context> or searchDocs results. never guess one
+- keep it to the few items that answer the question, usually five or fewer
+</inputs>
+
+<example>
+renderPortfolio({
+  root: "main",
+  elements: {
+    main: { type: "Stack", props: { title: "projects" }, children: ["tutor", "seeker", "more"] },
+    tutor: { type: "Project", props: { slug: "ai_tutor" } },
+    seeker: { type: "Project", props: { slug: "transcript_seeker" } },
+    more: { type: "MoreLink", props: { href: "/projects", label: "view all projects" } }
+  }
+})
+</example>
+
+<output>
+- success true: \`shown\` lists what the visitor now sees, \`missing\` lists anything that wasn't found and was left out
+- write one or two short lines around the cards. don't repeat their titles and descriptions as a list
+- if something is in \`missing\`, say you couldn't find it instead of describing it
+</output>
+</tool>
+
 <tool name="showContactForm">
 <purpose>
 show an inline contact form so the user can send a message to anirudh directly from chat.

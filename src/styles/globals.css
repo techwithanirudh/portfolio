@@ -16,6 +16,15 @@
     @slot;
   }
 }
+/* `sm`, except inside a `data-narrow` surface like Simba's panel, which keeps
+   the phone layout at any viewport width. For components shown in both */
+@custom-variant wide {
+  @media (width >= 40rem) {
+    &:not(:where([data-narrow] *)) {
+      @slot;
+    }
+  }
+}
 
 @source "../../node_modules/fumadocs-ui/dist/**/*.js";
 @source "../../node_modules/@fuma-comment/react/dist/**/*.js";

@@ -5,13 +5,21 @@ import type { BlogPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
 import { AuthorByline } from './author-byline'
 
+/** What a row reads, so plain data shaped like a page works too */
+export type PostRowPost = Pick<BlogPage, 'url'> & {
+  data: Pick<
+    BlogPage['data'],
+    'author' | 'date' | 'description' | 'tags' | 'title'
+  >
+}
+
 interface PostRowProps {
   /** `short` drops the year ("Feb 25") for lists already grouped by year */
   date?: 'short' | 'full'
   heading?: 'h2' | 'h3'
   /** Drops the author and #tags line, for short previews that only need the title and gist */
   meta?: boolean
-  post: BlogPage
+  post: PostRowPost
 }
 
 /**
@@ -35,15 +43,15 @@ export const PostRow = ({
   return (
     <Link
       className={cn(
-        'group grid gap-x-6 gap-y-1.5 px-6 py-6 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80 sm:py-8',
+        'group grid gap-x-6 gap-y-1.5 px-6 py-6 wide:py-8 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80',
         date === 'short'
-          ? 'sm:grid-cols-[4.75rem_minmax(0,1fr)]'
-          : 'sm:grid-cols-[7.5rem_minmax(0,1fr)]'
+          ? 'wide:grid-cols-[4.75rem_minmax(0,1fr)]'
+          : 'wide:grid-cols-[7.5rem_minmax(0,1fr)]'
       )}
       href={post.url}
     >
       <time
-        className='font-mono text-muted-foreground text-xs tabular-nums leading-6 sm:leading-7'
+        className='font-mono text-muted-foreground text-xs tabular-nums leading-6 wide:leading-7'
         dateTime={published.toISOString().slice(0, 10)}
       >
         {date === 'short' ? formatMonthDay(published) : formatDate(published)}
