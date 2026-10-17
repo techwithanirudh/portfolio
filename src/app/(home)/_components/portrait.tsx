@@ -171,7 +171,7 @@ function BonkChip({ className }: { className?: string }) {
       if (!prefersReducedMotion()) {
         animate(
           scope.current,
-          { rotate: [null, -10, 9, -6, 3, 0] },
+          { rotate: [0, -10, 9, -6, 3, 0] },
           { duration: 0.45, ease: 'easeOut' }
         )
       }
@@ -201,10 +201,7 @@ function BonkChip({ className }: { className?: string }) {
     if (!prefersReducedMotion()) {
       animate(
         scope.current,
-        {
-          scaleX: [null, 1.16, 0.94, 1.03, 1],
-          scaleY: [null, 0.8, 1.08, 0.98, 1],
-        },
+        { scaleX: [1, 1.16, 0.94, 1.03, 1], scaleY: [1, 0.8, 1.08, 0.98, 1] },
         { duration: 0.45, ease: 'easeOut' }
       )
     }
