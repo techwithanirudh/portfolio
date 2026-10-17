@@ -1,7 +1,7 @@
 'use client'
 
 import { Comments } from '@fuma-comment/react'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -15,13 +15,17 @@ import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
-export function ShareMenu({ title, url }: { title: string; url: string }) {
-  const [canShare, setCanShare] = useState(false)
-  const encoded = encodeURIComponent(url)
+const subscribeNoop = () => () => undefined
 
-  useEffect(() => {
-    setCanShare('share' in navigator)
-  }, [])
+export function ShareMenu({ title, url }: { title: string; url: string }) {
+  // The server can't know whether the browser has the Web Share API, so it
+  // renders without it and the client snapshot takes over on hydration
+  const canShare = useSyncExternalStore(
+    subscribeNoop,
+    () => 'share' in navigator,
+    () => false
+  )
+  const encoded = encodeURIComponent(url)
 
   const { copy } = useCopyToClipboard({
     onCopyError: () => toast.error('Unable to copy link'),
