@@ -195,7 +195,7 @@ function BonkChip({ className }: { className?: string }) {
     if (streak.current >= SULK_AT) {
       streak.current = 0
       setSulking(true)
-      toast("that's it, I'm not talking to you", { id: 'bonk' })
+      toast('you bonked me unconscious. happy?', { id: 'bonk' })
       return
     }
     if (!prefersReducedMotion()) {
