@@ -96,9 +96,18 @@ export function UiSounds() {
       historyNavigation.current = false
     }
 
+    // A finger lands on pointerdown even when it is starting a scroll, so touch
+    // presses sound on the click that follows a real tap instead
+    let touchPress = false
+
     const onPointerDown = (event: PointerEvent) => {
       onGesture()
-      if (event.button !== 0 || !(event.target instanceof Element)) {
+      touchPress = event.pointerType === 'touch'
+      if (
+        touchPress ||
+        event.button !== 0 ||
+        !(event.target instanceof Element)
+      ) {
         return
       }
       const el = event.target.closest(PRESS)
@@ -109,9 +118,13 @@ export function UiSounds() {
 
     // Keyboard activation has no pointerdown, a click without a pointer does
     const onClick = (event: MouseEvent) => {
-      if (event.detail !== 0 || !(event.target instanceof Element)) {
+      if (
+        (event.detail !== 0 && !touchPress) ||
+        !(event.target instanceof Element)
+      ) {
         return
       }
+      touchPress = false
       const el = event.target.closest(PRESS)
       if (el && !el.closest(PRESS_OPT_OUT)) {
         playPress(el)
