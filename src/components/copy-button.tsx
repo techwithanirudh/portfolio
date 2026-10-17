@@ -20,11 +20,16 @@ interface CopyStateIconProps {
 export function CopyStateIcon({
   className,
   state,
-  idleIcon = <Icons.copy />,
-  doneIcon = <Icons.check />,
-  errorIcon = <Icons.error />,
+  idleIcon,
+  doneIcon,
+  errorIcon,
 }: CopyStateIconProps) {
-  const iconByState = { done: doneIcon, error: errorIcon, idle: idleIcon }
+  // Fallbacks live here, since the compiler can't memoize JSX in default params
+  const iconByState = {
+    done: doneIcon ?? <Icons.check />,
+    error: errorIcon ?? <Icons.error />,
+    idle: idleIcon ?? <Icons.copy />,
+  }
 
   return (
     <IconSwap>

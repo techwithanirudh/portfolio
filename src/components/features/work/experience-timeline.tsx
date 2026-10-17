@@ -28,6 +28,28 @@ const rowClassName =
 const startYear = (experience: ExperienceItemType) =>
   experience.positions[0]?.employmentPeriod.start.split('.').at(-1) ?? ''
 
+type TimelineEntry =
+  | { experience: ExperienceItemType; kind: 'role' }
+  | { kind: 'year'; year: string }
+
+// Built outside render so each row's stagger is just its position in the list
+const toEntries = (
+  experiences: ExperienceItemType[],
+  withYears: boolean
+): TimelineEntry[] => {
+  const entries: TimelineEntry[] = []
+  let year: string | undefined
+  for (const experience of experiences) {
+    const experienceYear = startYear(experience)
+    if (withYears && experienceYear !== year) {
+      year = experienceYear
+      entries.push({ kind: 'year', year: experienceYear })
+    }
+    entries.push({ experience, kind: 'role' })
+  }
+  return entries
+}
+
 /**
  * Experience as a vertical timeline: dates on the left, logo nodes on a dashed rail.
  * `preview` keeps each role to one line; `full` groups roles by start year, adds kind and skills,
@@ -40,9 +62,6 @@ export function ExperienceTimeline({
   experiences: ExperienceItemType[]
   variant?: TimelineVariant
 }) {
-  let year: string | undefined
-  let index = 0
-
   return (
     <div
       className={cn(
@@ -57,34 +76,24 @@ export function ExperienceTimeline({
         // fills it all the way down
         <ExperienceRail className='left-11 sm:left-64' />
       )}
-      {experiences.flatMap((experience) => {
-        const items: React.ReactNode[] = []
-        const experienceYear = startYear(experience)
-
-        if (variant === 'full' && experienceYear !== year) {
-          year = experienceYear
-          items.push(
-            <ViewAnimation
-              className={cn(rowClassName, 'items-center pt-4.5')}
-              delay={0.05 * index++}
-              key={`year-${experienceYear}`}
-            >
-              <p className='col-start-2 row-start-1 font-mono text-[12.5px] text-foreground tracking-wide sm:col-start-1'>
-                {experienceYear}
-              </p>
-              <RailNode className='col-start-1 row-start-1 size-[9px] justify-self-center rounded-full border border-muted-foreground bg-background data-passed:border-primary data-passed:bg-primary sm:col-start-2' />
-            </ViewAnimation>
-          )
-        }
-
-        items.push(
-          <ViewAnimation delay={0.05 * index++} key={experience.id}>
-            <TimelineRow experience={experience} variant={variant} />
+      {toEntries(experiences, variant === 'full').map((entry, index) =>
+        entry.kind === 'year' ? (
+          <ViewAnimation
+            className={cn(rowClassName, 'items-center pt-4.5')}
+            delay={0.05 * index}
+            key={`year-${entry.year}`}
+          >
+            <p className='col-start-2 row-start-1 font-mono text-[12.5px] text-foreground tracking-wide sm:col-start-1'>
+              {entry.year}
+            </p>
+            <RailNode className='col-start-1 row-start-1 size-[9px] justify-self-center rounded-full border border-muted-foreground bg-background data-passed:border-primary data-passed:bg-primary sm:col-start-2' />
+          </ViewAnimation>
+        ) : (
+          <ViewAnimation delay={0.05 * index} key={entry.experience.id}>
+            <TimelineRow experience={entry.experience} variant={variant} />
           </ViewAnimation>
         )
-
-        return items
-      })}
+      )}
     </div>
   )
 }

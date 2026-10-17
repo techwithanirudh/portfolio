@@ -2,7 +2,9 @@ import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
 import { PostRow } from './post-row'
 
-// Posts arrive newest first, so years come out in order and keep their posts' order
+// Posts arrive newest first, so years come out in order and keep their posts' order.
+// Each group also carries its first row's position, so the stagger runs on
+// across years
 const groupByYear = (posts: BlogPage[]) => {
   const years = new Map<number, BlogPage[]>()
   for (const post of posts) {
@@ -14,7 +16,12 @@ const groupByYear = (posts: BlogPage[]) => {
       years.set(year, [post])
     }
   }
-  return [...years]
+  let start = 0
+  return [...years].map(([year, yearPosts]) => {
+    const group = { start, year, yearPosts }
+    start += yearPosts.length
+    return group
+  })
 }
 
 /**
@@ -23,11 +30,9 @@ const groupByYear = (posts: BlogPage[]) => {
  * only as tall as its rows, so a short list stays compact.
  */
 export const PostLedger = ({ posts }: { posts: BlogPage[] }) => {
-  let index = 0
-
   return (
     <div className='dashed-stack'>
-      {groupByYear(posts).map(([year, yearPosts]) => (
+      {groupByYear(posts).map(({ start, year, yearPosts }) => (
         <section
           aria-labelledby={`year-${year}`}
           className='grid md:grid-cols-[10rem_minmax(0,1fr)]'
@@ -45,8 +50,8 @@ export const PostLedger = ({ posts }: { posts: BlogPage[] }) => {
             </h2>
           </div>
           <ul className='dashed-stack'>
-            {yearPosts.map((post) => (
-              <ViewAnimation as='li' delay={0.05 * index++} key={post.url}>
+            {yearPosts.map((post, i) => (
+              <ViewAnimation as='li' delay={0.05 * (start + i)} key={post.url}>
                 <PostRow date='short' post={post} />
               </ViewAnimation>
             ))}
