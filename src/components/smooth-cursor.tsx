@@ -148,8 +148,11 @@ export function SmoothCursor({
 
   return (
     <motion.div
-      className={`pointer-events-none fixed top-0 left-0 z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${(isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
-      style={{ willChange: 'transform', x: cursorX, y: cursorY }}
+      className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${(isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
+      // Positioned with left/top, not x/y: the scale-200 fade would also scale
+      // an x/y transform and fling the ring down and right instead of
+      // blooming in place
+      style={{ left: cursorX, top: cursorY, willChange: 'transform' }}
     >
       {Cursor ? (
         <Cursor cursorType={cursorType} isOverPointer={isOverPointer} />

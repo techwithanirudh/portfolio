@@ -128,19 +128,30 @@ const COMPLAINTS: Record<number, string> = {
   7: 'stop it',
   9: 'okay seriously, stop',
   12: 'AAAARGH',
-  16: 'okay you win, I need a nap',
 }
+// Keep going past the last complaint and the face gives up on you for a bit
+const SULK_AT = 16
+const SULK_MS = 5000
 
 // Tap the face and it squashes, squeezes its eyes shut and says bonk
 function BonkChip({ className }: { className?: string }) {
   const [scope, animate] = useAnimate<HTMLButtonElement>()
   const [bonks, setBonks] = useState(0)
   const [bonked, setBonked] = useState(false)
+  const [sulking, setSulking] = useState(false)
   const playPop = useSound(pop)
   const streak = useRef(0)
   const streakTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
   useEffect(() => () => clearTimeout(streakTimer.current), [])
+
+  useEffect(() => {
+    if (!sulking) {
+      return
+    }
+    const timer = setTimeout(() => setSulking(false), SULK_MS)
+    return () => clearTimeout(timer)
+  }, [sulking])
 
   useEffect(() => {
     if (!bonked) {
@@ -151,6 +162,17 @@ function BonkChip({ className }: { className?: string }) {
   }, [bonked])
 
   const bonk = () => {
+    if (sulking) {
+      // Eyes stay shut and it just shakes its head at you
+      if (!prefersReducedMotion()) {
+        animate(
+          scope.current,
+          { rotate: [0, -10, 9, -6, 3, 0] },
+          { duration: 0.45, ease: 'easeOut' }
+        )
+      }
+      return
+    }
     playPop()
     setBonks((count) => count + 1)
     setBonked(true)
@@ -166,6 +188,12 @@ function BonkChip({ className }: { className?: string }) {
       // so each complaint replaces the last instead of stacking up
       toast(complaint, { id: 'bonk' })
     }
+    if (streak.current >= SULK_AT) {
+      streak.current = 0
+      setSulking(true)
+      toast("that's it, I'm not talking to you", { id: 'bonk' })
+      return
+    }
     if (!prefersReducedMotion()) {
       animate(
         scope.current,
@@ -178,12 +206,13 @@ function BonkChip({ className }: { className?: string }) {
   return (
     <span className='relative inline-block'>
       <button
+        aria-disabled={sulking || undefined}
         className={cn(
           chipClassName,
-          'origin-bottom cursor-pointer align-baseline outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          'origin-bottom cursor-pointer align-baseline outline-none focus-visible:ring-2 focus-visible:ring-ring aria-disabled:cursor-not-allowed',
           className
         )}
-        data-bonked={bonked || undefined}
+        data-bonked={bonked || sulking || undefined}
         // The smooth cursor would sit on the face and hide it, as on Simba
         data-native-cursor
         onClick={bonk}
@@ -203,6 +232,25 @@ function BonkChip({ className }: { className?: string }) {
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             bonk
+          </motion.span>
+        )}
+        {sulking && (
+          <motion.span
+            animate={{ opacity: [0, 1, 1, 0], x: '0.25em', y: '-0.45em' }}
+            aria-hidden
+            className='pointer-events-none absolute -top-[0.1em] left-1/2 font-medium font-mono text-[0.18em] text-muted-foreground tracking-normal'
+            // Its own transition, or the infinite repeat below would loop the exit
+            // too and the zzz would never leave
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            initial={{ opacity: 0, x: 0, y: 0 }}
+            key='zzz'
+            transition={{
+              duration: 1.6,
+              ease: 'easeOut',
+              repeat: Number.POSITIVE_INFINITY,
+            }}
+          >
+            zzz
           </motion.span>
         )}
       </AnimatePresence>
