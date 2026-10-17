@@ -146,7 +146,7 @@ const ContactFormInner = () => {
           disabled={action.status === 'executing'}
           type='submit'
         >
-          <span>Send Message</span>
+          <span>Send message</span>
           {action.status === 'executing' ? (
             <Icons.spinner
               className='size-4 animate-spin'

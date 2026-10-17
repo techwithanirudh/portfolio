@@ -17,8 +17,8 @@ export const Design = () => (
   <div className='dashed-stack flex flex-col text-left'>
     <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
       <p>
-        A layout with wide spacing and dashed borders. Geist Sans sets headings
-        and body text, and Geist Mono sets code and labels.
+        The layout uses wide spacing and dashed borders. Geist Sans sets
+        headings and body text, and Geist Mono sets code and labels.
       </p>
     </div>
     <div className='bg-card/50 p-6'>

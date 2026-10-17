@@ -17,7 +17,7 @@ async function getFullText() {
     getProfileText(),
   ])
 
-  return `<SYSTEM>This document contains comprehensive information about ${owner}'s professional profile, portfolio, and blog content. It includes quick facts, background, work experience, stack, projects, testimonials, contact options, a site map, and all published blog posts and work projects. This data is formatted for consumption by Large Language Models (LLMs) to provide accurate and up-to-date information about ${owner}'s background, skills, and expertise.</SYSTEM>
+  return `<SYSTEM>This document is ${owner}'s whole site in one file for LLMs to read. It has quick facts, background, work experience, stack, projects, testimonials, contact options, a site map, and every published blog post and project.</SYSTEM>
 
 # ${title}
 

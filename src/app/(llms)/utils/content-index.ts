@@ -16,7 +16,7 @@ export const getContentIndexText = (links: ContentIndexLinks) => `## Work
 ${getSortedWork()
   .map(
     (item) =>
-      `- [${item.data.title}](${links.work(item)}): ${item.data.description ?? 'Project showcase'}`
+      `- [${item.data.title}](${links.work(item)}): ${item.data.description ?? 'Project page'}`
   )
   .join('\n')}
 

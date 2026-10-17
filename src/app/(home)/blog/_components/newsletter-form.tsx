@@ -88,8 +88,7 @@ export const NewsletterForm = () => {
           <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
-              {action.result.data?.message ??
-                "Hmm... Our server didn't respond."}
+              {action.result.data?.message ?? "The server didn't respond."}
             </AlertTitle>
           </Alert>
         )}

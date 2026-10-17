@@ -6,7 +6,7 @@ import { staticPages } from '../utils/site-pages'
 const content = `# ${title}
 > ${description}
 
-**Note:** For a comprehensive single-file version with all content, see [llms-full.txt](${url('/llms-full.txt')})
+For everything in one file, see [llms-full.txt](${url('/llms-full.txt')}).
 
 ## Site
 

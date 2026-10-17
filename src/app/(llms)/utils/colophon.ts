@@ -26,7 +26,7 @@ ${typography.map((item) => `- ${item.label}`).join('\n')}
 
 ## Design and colors
 
-A layout with wide spacing and dashed borders. Geist Sans sets headings and body text, and Geist Mono sets code and labels. The palette is neutral, with a blue accent for focus rings and links.
+The layout uses wide spacing and dashed borders. Geist Sans sets headings and body text, and Geist Mono sets code and labels. The palette is neutral, with a blue accent for focus rings and links.
 
 ## Attribution
 

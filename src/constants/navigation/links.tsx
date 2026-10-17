@@ -26,11 +26,10 @@ export const linkItems: LinkItemType[] = [
     text: 'Contact',
     url: '/contact',
   },
+  {
+    active: 'url',
+    icon: <Icons.messageSquare />,
+    text: 'Guestbook',
+    url: '/guestbook',
+  },
 ]
-
-export const guestbookLink = {
-  active: 'url',
-  icon: <Icons.messageSquare />,
-  text: 'Guestbook',
-  url: '/guestbook',
-} satisfies LinkItemType

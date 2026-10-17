@@ -23,7 +23,7 @@ Route: ${url('/about#story')}
 
 ${story.map((chapter) => `### ${chapter.title} (${chapter.when})\n\n${absoluteMarkdownLinks(chapter.body)}`).join('\n\n')}
 
-## Personal Information
+## Personal information
 
 - Name: ${owner}
 - Location: ${profile.location}
@@ -31,8 +31,8 @@ ${story.map((chapter) => `### ${chapter.title} (${chapter.when})\n\n${absoluteMa
 - Website: ${baseUrl.toString()}
 - Resume: ${url('/resume')}
 
-## Social Links
+## Social links
 
-${socials.map((item) => `- [${item.name}](${item.url})${item.description ? ` - ${item.description}` : ''}`).join('\n')}
+${socials.map((item) => `- [${item.name}](${item.url})${item.description ? `: ${item.description}` : ''}`).join('\n')}
 `
 }

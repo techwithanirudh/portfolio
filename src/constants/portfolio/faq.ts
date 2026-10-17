@@ -16,7 +16,7 @@ export const faq = [
   },
   {
     answer:
-      'I keep code simple and easy to maintain. I care about the user experience, write clear code, and document the parts that need it. I like shipping small improvements often.',
+      'I keep code simple and easy to maintain, and I document the parts that need it. I care about the user experience and like shipping small improvements often.',
     question: "What's your development approach?",
   },
 ]

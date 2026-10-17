@@ -80,7 +80,6 @@ export const Links = () => {
     },
     {
       items: [
-        { children: 'Guestbook', href: '/guestbook' },
         { children: 'Uses', href: '/uses' },
         { children: 'Colophon', href: '/colophon' },
         { children: 'Resume', href: '/resume' },

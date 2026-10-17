@@ -8,7 +8,7 @@ import {
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
-import { useEffect } from 'react'
+import { type ReactNode, useEffect } from 'react'
 import { PostEmpty } from '@/components/features/blog/post-empty'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
@@ -69,15 +69,33 @@ const ResultsSkeleton = () => (
   </div>
 )
 
+// Fills the results area (the viewport is a size container) so Simba sits in
+// the middle of it; the 0.5rem is the list's top padding
+const CenteredEmpty = ({ children }: { children: ReactNode }) => (
+  <div className='flex min-h-[calc(100cqh-0.5rem)] flex-col justify-center'>
+    {children}
+  </div>
+)
+
 // Every tab gets the ledger's bashful Simba when nothing matches, with a way
 // back to the full list where there is one
 const emptyByScope = {
-  all: () => <PostEmpty link={null} />,
-  blog: () => <PostEmpty />,
+  all: () => (
+    <CenteredEmpty>
+      <PostEmpty link={null} />
+    </CenteredEmpty>
+  ),
+  blog: () => (
+    <CenteredEmpty>
+      <PostEmpty />
+    </CenteredEmpty>
+  ),
   projects: () => (
-    <PostEmpty
-      link={{ href: pages.projects.path, label: 'See every project' }}
-    />
+    <CenteredEmpty>
+      <PostEmpty
+        link={{ href: pages.projects.path, label: 'See every project' }}
+      />
+    </CenteredEmpty>
   ),
 }
 
@@ -189,7 +207,7 @@ export function SearchClient() {
           <ScrollArea
             // Fades the top edge in only once you've scrolled, so results
             // ease under the tabs instead of being cut off at them
-            className='h-full w-full [&>[data-slot=scroll-area-scrollbar]]:py-1.5 [&>[data-slot=scroll-area-scrollbar]]:pr-1 [&>[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_bottom,transparent,#000_min(2.5rem,var(--scroll-area-overflow-y-start,0px)))]'
+            className='h-full w-full [&>[data-slot=scroll-area-scrollbar]]:py-1.5 [&>[data-slot=scroll-area-scrollbar]]:pr-1 [&>[data-slot=scroll-area-viewport]]:[container-type:size] [&>[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_bottom,transparent,#000_min(2.5rem,var(--scroll-area-overflow-y-start,0px)))]'
             data-lenis-prevent
           >
             {!hasQuery && (

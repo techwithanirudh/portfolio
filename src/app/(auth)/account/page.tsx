@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
       url: '/account',
     },
     robots: { follow: false, index: false },
-    title: 'Account Settings',
+    title: 'Account settings',
   })
 }
 
@@ -30,7 +30,7 @@ export default function AccountPage() {
         <div className='flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between'>
           <div className='space-y-2'>
             <h1 className='typography-title font-medium text-3xl tracking-tight'>
-              Account Settings
+              Account settings
             </h1>
             <p className='typography-body text-muted-foreground text-sm'>
               Manage your account information.

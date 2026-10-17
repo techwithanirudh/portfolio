@@ -2,7 +2,7 @@ import type { StoryChapter } from '@/types'
 
 export const story: StoryChapter[] = [
   {
-    body: 'It started with Lego sets as a kid: building, breaking and rebuilding whatever I could think of. Nobody taught me, which is still how I learn most things.',
+    body: 'It started with Lego sets as a kid. I built, broke and rebuilt whatever I could think of. Nobody taught me, which is still how I learn most things.',
     icon: 'wrench',
     id: 'tinkering',
     photo: {
@@ -14,7 +14,7 @@ export const story: StoryChapter[] = [
     when: 'the beginning',
   },
   {
-    body: 'The bricks turned into code. Python and some early AI experiments first, then websites and apps, and plenty of bugs that taught me more than any tutorial did.',
+    body: 'Then I moved from bricks to code. I started with Python and some early AI experiments, then built websites and apps, and hit plenty of bugs that taught me more than any tutorial did.',
     icon: 'codeXml',
     id: 'code',
     photo: {
@@ -26,7 +26,7 @@ export const story: StoryChapter[] = [
     when: 'python, then the web',
   },
   {
-    body: 'Co-authored a research paper with Bosch on [privacy challenges for autonomous vehicles](https://osf.io/preprints/osf/mtfpy_v1). My first time writing for people who check the references.',
+    body: 'I co-authored a research paper with Bosch on [privacy challenges for autonomous vehicles](https://osf.io/preprints/osf/mtfpy_v1). It was my first time writing for people who check the references.',
     id: 'bosch',
     photo: {
       alt: 'Bosch',
@@ -38,7 +38,7 @@ export const story: StoryChapter[] = [
     when: '2022',
   },
   {
-    body: 'Freelance full-stack work for MeetingBaaS: [Transcript Seeker](/projects/transcript_seeker), [Speaking Meeting Bot](/projects/speaking_meeting_bot) and the AI chat and MCP tooling around their meeting APIs. Then an internship at [Energent.ai](https://energent.ai) on the frontend and microservices of an AI data analysis platform.',
+    body: 'I did freelance full-stack work for MeetingBaaS, building [Transcript Seeker](/projects/transcript_seeker), [Speaking Meeting Bot](/projects/speaking_meeting_bot) and the AI chat and MCP tooling around their meeting APIs. Then I interned at [Energent.ai](https://energent.ai), working on the frontend and microservices of their AI data analysis platform.',
     id: 'shipping',
     photo: {
       alt: 'Transcript Seeker',
@@ -50,7 +50,7 @@ export const story: StoryChapter[] = [
     when: '2024 to 2025',
   },
   {
-    body: 'A student and a Software Engineering Intern at [QuiverAI](https://quiver.ai), a platform for generating, editing and animating SVG graphics with AI. I care about the small details most people never notice but always feel.',
+    body: "I'm a student and a software engineering intern at [QuiverAI](https://quiver.ai), a platform for generating, editing and animating SVG graphics with AI. I care about the small details most people never notice.",
     id: 'now',
     photo: {
       alt: 'QuiverAI',

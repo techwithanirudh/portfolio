@@ -38,7 +38,7 @@ const Hero = () => (
           className={buttonVariants({ size: 'lg', variant: 'default' })}
           href='/projects'
         >
-          Browse Projects
+          Browse projects
           <Icons.arrowRight className='icon-arrow-button size-4' />
         </Link>
       </ViewAnimation>

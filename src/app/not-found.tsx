@@ -16,5 +16,5 @@ export default function NotFound() {
 export const metadata: Metadata = createMetadata({
   description: "This page doesn't exist.",
   robots: { follow: false, index: false },
-  title: 'Not Found',
+  title: 'Not found',
 })

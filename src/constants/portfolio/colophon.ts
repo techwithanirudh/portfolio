@@ -21,7 +21,7 @@ export const technology = [
     url: 'https://tailwindcss.com',
   },
   {
-    description: 'Typed MDX content with a docs-friendly layout engine.',
+    description: 'Typed MDX content, search and the docs layouts.',
     name: 'Fumadocs',
     url: 'https://fumadocs.dev',
   },
@@ -41,12 +41,12 @@ export const technology = [
     url: 'https://orm.drizzle.team',
   },
   {
-    description: 'Subtle reveal and transition animations.',
+    description: 'Reveal and transition animations.',
     name: 'Motion',
     url: 'https://motion.dev',
   },
   {
-    description: 'Fast all-in-one runtime, bundler, and package manager.',
+    description: 'Runtime, bundler and package manager in one.',
     name: 'Bun',
     url: 'https://bun.sh',
   },
