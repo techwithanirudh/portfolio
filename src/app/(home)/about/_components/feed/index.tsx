@@ -13,8 +13,8 @@ export default async function Feed(): Promise<React.ReactElement | null> {
 
     return (
       <Section>
-        <ViewAnimation className='border-border border-b border-dashed bg-muted/40 px-6 py-2 font-mono text-muted-foreground text-xs'>
-          <h3>Latest activity</h3>
+        <ViewAnimation className='border-border border-b border-dashed bg-muted/40 px-6 py-3 font-mono text-muted-foreground text-xs'>
+          <h2>Latest activity</h2>
         </ViewAnimation>
         <div className='relative flex max-h-96 flex-col gap-2 overflow-hidden p-6 font-mono text-muted-foreground text-xs sm:text-sm'>
           {items.map((item, index) => (

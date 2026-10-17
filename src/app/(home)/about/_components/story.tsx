@@ -76,9 +76,9 @@ function ChapterRow({
         <p className='mb-3 font-medium text-primary text-sm' data-track-marker>
           {chapter.when}
         </p>
-        <h3 className='mb-5 text-balance font-medium text-2xl leading-tight tracking-tighter sm:text-3xl'>
+        <h2 className='mb-5 text-balance font-medium text-2xl leading-tight tracking-tighter sm:text-3xl'>
           {chapter.title}
-        </h3>
+        </h2>
         <p className='text-pretty text-base text-muted-foreground leading-8'>
           <InlineMarkdown
             linkClassName='link-underline text-foreground'
