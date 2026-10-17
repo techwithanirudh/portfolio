@@ -51,7 +51,7 @@ export default async function Page(props: {
       >
         <ViewAnimation delay={0.05}>
           <SearchRedirectInput
-            className='min-w-full'
+            className='h-10 min-w-full rounded-none border-0 shadow-none'
             placeholder='Search projects...'
             tag='projects'
           />

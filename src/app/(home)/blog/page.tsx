@@ -8,6 +8,7 @@ import { createMetadata } from '@/lib/metadata'
 import { getPageHref, parsePageParam } from '@/lib/pagination'
 import { getSortedByDatePosts } from '@/lib/source'
 import { Hero } from './_components/hero'
+import { NewsletterSection } from './_components/newsletter-section'
 import { PostIndex } from './_components/post-index'
 
 const totalPosts = getSortedByDatePosts().length
@@ -37,6 +38,7 @@ export default async function Page(props: {
         posts={posts}
         totalPages={pageCount}
       />
+      <NewsletterSection />
       <CollectionPageJsonLd
         description={pages.blog.description}
         path={pages.blog.path}

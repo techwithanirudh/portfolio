@@ -5,6 +5,7 @@ import { ViewAnimation } from '@/components/view-animation'
 import { formatDuration, formatPeriod } from '@/lib/employment-period'
 import { cn } from '@/lib/utils'
 import type { ExperienceItemType } from '@/types/experience'
+import { ExperienceRail } from './experience-rail'
 
 type TimelineVariant = 'preview' | 'full'
 
@@ -29,7 +30,8 @@ const startYear = (experience: ExperienceItemType) =>
 
 /**
  * Experience as a vertical timeline: dates on the left, logo nodes on a dashed rail.
- * `preview` keeps each role to one line; `full` groups roles by start year and adds kind and skills.
+ * `preview` keeps each role to one line; `full` groups roles by start year, adds kind and skills,
+ * and draws the rail in as you scroll.
  */
 export function ExperienceTimeline({
   experiences,
@@ -50,6 +52,10 @@ export function ExperienceTimeline({
           'pb-16 before:[mask-image:linear-gradient(to_bottom,#000_calc(100%-6rem),transparent)]'
       )}
     >
+      {variant === 'full' && (
+        // Stops short of the fade at the bottom, along the same rail
+        <ExperienceRail className='top-0 bottom-16 left-11 sm:left-64' />
+      )}
       {experiences.flatMap((experience) => {
         const items: React.ReactNode[] = []
         const experienceYear = startYear(experience)

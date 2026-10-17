@@ -22,6 +22,7 @@ runs:
         cat << EOF > .env
         DATABASE_URL="postgresql://postgres:password@localhost:5432/blog"
         RESEND_API_KEY="re_dummy_key"
+        RESEND_AUDIENCE_ID="aud_dummy"
         EMAIL_FROM="blog@example.com"
         EMAIL_TO="receiver@gmail.com"
         BETTER_AUTH_URL="http://localhost:3000"

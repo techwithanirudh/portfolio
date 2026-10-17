@@ -40,22 +40,21 @@ export function SearchRedirectInput({
   )
 
   return (
-    <InputGroup
-      className={cn(
-        '!bg-background h-10 overflow-hidden rounded-none border-0 shadow-none',
-        className
-      )}
-    >
-      <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
+    <InputGroup className={cn('bg-background', className)}>
+      <InputGroupAddon className='text-muted-foreground'>
         <Icons.search className='icon-turn size-4' />
       </InputGroupAddon>
       <InputGroupInput
-        className='text-sm'
+        // The submit arrow and Escape replace the browser's own clear button
+        className='text-sm [&::-webkit-search-cancel-button]:hidden'
         onChange={(event) => setValue(event.target.value)}
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             event.preventDefault()
             handleSubmit(event.currentTarget.value)
+          }
+          if (event.key === 'Escape') {
+            setValue('')
           }
         }}
         placeholder={placeholder}
@@ -74,9 +73,8 @@ export function SearchRedirectInput({
         <InputGroupButton
           aria-label='Submit search'
           onClick={() => handleSubmit(value)}
-          shape='square'
-          size='icon-sm'
-          variant={'default'}
+          size='icon-xs'
+          variant='default'
         >
           <Icons.arrowRight className='icon-arrow-button size-3.5' />
         </InputGroupButton>

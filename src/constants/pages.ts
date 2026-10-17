@@ -23,7 +23,7 @@ export const pages = {
       'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.',
     path: '/blog',
     summary:
-      'Every post grouped by year, newest first, with inline tag filters and post search.',
+      'Every post grouped by year, newest first, with inline tag filters, post search and a newsletter signup.',
     title: 'Blog',
   },
   colophon: {
