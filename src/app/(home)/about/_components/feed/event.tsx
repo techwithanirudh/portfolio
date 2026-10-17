@@ -115,7 +115,10 @@ const PullRequestEvent = ({ event }: { event: GitHubEvent }) => {
   const payload = event.payload as PullRequestPayload
   const pullRequest = payload.pull_request
   const repoName = getRepoName(event)
-  const title = pullRequest?.title ?? 'a pull request'
+  const number = pullRequest?.number
+  const title =
+    pullRequest?.title ??
+    (number ? `pull request #${number}` : 'a pull request')
   const user = pullRequest?.user?.login
   const description = user
     ? `Merged ${user}'s ${title} on ${repoName}`
@@ -229,16 +232,23 @@ const ForkEvent = ({ event }: { event: GitHubEvent }) => (
   />
 )
 
+// GitHub can leave the title out of the payload, so the noun lives here and
+// the label never reads "pull request a pull request"
 const pullRequestLabel = (payload: PullRequestPayload) => {
-  const title = payload.pull_request?.title ?? 'a pull request'
+  const title = payload.pull_request?.title
   const number = payload.pull_request?.number
-  return number ? `${title} (#${number})` : title
+  if (title) {
+    return number
+      ? `pull request ${title} (#${number})`
+      : `pull request ${title}`
+  }
+  return number ? `pull request #${number}` : 'a pull request'
 }
 
 const PullRequestReviewEvent = ({ event }: { event: GitHubEvent }) => (
   <EventRow
     date={event.created_at}
-    description={`Reviewed pull request ${pullRequestLabel(event.payload as PullRequestPayload)}`}
+    description={`Reviewed ${pullRequestLabel(event.payload as PullRequestPayload)}`}
     icon={Icons.gitPullRequest}
   />
 )
@@ -246,7 +256,7 @@ const PullRequestReviewEvent = ({ event }: { event: GitHubEvent }) => (
 const PullRequestReviewCommentEvent = ({ event }: { event: GitHubEvent }) => (
   <EventRow
     date={event.created_at}
-    description={`Commented on pull request ${pullRequestLabel(event.payload as PullRequestPayload)}`}
+    description={`Commented on ${pullRequestLabel(event.payload as PullRequestPayload)}`}
     icon={Icons.gitPullRequest}
   />
 )
