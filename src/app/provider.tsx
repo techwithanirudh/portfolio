@@ -6,7 +6,6 @@ import { domAnimation, LazyMotion } from 'motion/react'
 import dynamic from 'next/dynamic'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
-import Analytics from '@/components/analytics'
 import { AssistantProvider } from '@/components/features/assistant'
 import { MobileNav } from '@/components/layout/header/mobile'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
@@ -75,7 +74,6 @@ export function Provider({
         <Assistant />
         <MobileNav />
       </AssistantProvider>
-      <Analytics />
       <Toaster position='top-center' />
       <TailwindIndicator />
       <SmoothCursor />
