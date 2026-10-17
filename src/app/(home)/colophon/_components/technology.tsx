@@ -29,7 +29,13 @@ export const Technology = () => {
         )
 
         return item.url ? (
-          <PreviewLink className={className} href={item.url} key={item.name}>
+          <PreviewLink
+            className={className}
+            href={item.url}
+            key={item.name}
+            // Cards sit in a tight grid, so a hover card on every cell is noise
+            preview={null}
+          >
             {content}
           </PreviewLink>
         ) : (

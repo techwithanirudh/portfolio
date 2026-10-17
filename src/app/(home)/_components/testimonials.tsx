@@ -79,7 +79,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
       } else {
         api.scrollTo(0)
       }
-    }, 6000)
+    }, 2500)
 
     return () => clearInterval(timer)
   }, [api, paused, prefersReducedMotion])

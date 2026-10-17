@@ -27,8 +27,8 @@ export const technology = [
   },
   {
     description: 'Accessible components that I restyled for this site.',
-    name: 'Base UI and shadcn/ui',
-    url: 'https://ui.shadcn.com',
+    name: 'Base UI',
+    url: 'https://base-ui.com',
   },
   {
     description: 'Relational database that stores the site data.',

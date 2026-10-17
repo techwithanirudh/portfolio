@@ -114,9 +114,11 @@ function TimelineRow({
         </span>
       </p>
 
+      {/* Phones put the logo beside the company name, nudged up so their
+          centers line up, rather than floating between it and the dates */}
       <Node
         className={cn(
-          'relative col-start-1 row-span-2 row-start-1 flex size-10 items-center justify-center justify-self-center rounded-full border border-muted-foreground/30 bg-background data-passed:border-primary sm:col-start-2 sm:row-span-1 sm:size-11',
+          'relative col-start-1 row-start-2 -mt-[7px] flex size-10 items-center justify-center justify-self-center rounded-full border border-muted-foreground/30 bg-background data-passed:border-primary sm:col-start-2 sm:row-start-1 sm:mt-0 sm:size-11',
           experience.isCurrentEmployer &&
             'border-2 border-primary ring-6 ring-primary/12'
         )}

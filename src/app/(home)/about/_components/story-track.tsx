@@ -183,12 +183,21 @@ export function StoryTrack({
 
   useEffect(() => {
     const path = pathRef.current
-    if (!(path && track)) {
+    const container = containerRef.current
+    if (!(path && track && container)) {
       return
     }
     const thresholds = markerProgress(path, track.markers)
-    const follow = (value: number) =>
-      setReached(thresholds.filter((threshold) => threshold <= value).length)
+    const lanes = [...container.querySelectorAll<HTMLElement>(LANE_SELECTOR)]
+    const follow = (value: number) => {
+      const count = thresholds.filter((threshold) => threshold <= value).length
+      setReached(count)
+      // Rows are server rendered, so they style off this flag (the photo
+      // straightens) instead of reading the count through props
+      lanes.forEach((lane, index) => {
+        lane.parentElement?.toggleAttribute('data-reached', index < count)
+      })
+    }
     follow(progress.get())
     const unsubscribe = progress.on('change', follow)
     return () => unsubscribe()

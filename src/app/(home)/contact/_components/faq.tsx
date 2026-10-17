@@ -38,7 +38,7 @@ export const FAQ = () => (
             key={item.question}
           >
             <AccordionItem value={`index-${index}`}>
-              <AccordionTrigger className='rounded-none px-4 hover:bg-card hover:no-underline data-open:bg-card'>
+              <AccordionTrigger className='items-center rounded-none px-4 hover:bg-card hover:no-underline focus-visible:border-transparent focus-visible:bg-card focus-visible:ring-1 focus-visible:ring-primary/60 focus-visible:ring-inset data-open:bg-card'>
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className='!h-auto p-4'>

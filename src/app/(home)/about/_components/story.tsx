@@ -39,7 +39,7 @@ function ChapterRow({
   const photoLeft = index % 2 === 0
 
   return (
-    <li className='relative grid grid-cols-1 gap-10 py-14 pl-10 sm:pl-14 lg:grid-cols-2 lg:items-center lg:gap-0 lg:py-20 lg:pl-0'>
+    <li className='group/chapter relative grid grid-cols-1 gap-10 py-14 pl-10 sm:pl-14 lg:grid-cols-2 lg:items-center lg:gap-0 lg:py-20 lg:pl-0'>
       <span
         aria-hidden
         className={cn(
@@ -85,7 +85,8 @@ function ChapterRow({
   )
 }
 
-// A tilted photo resting in its slot, or the empty slot with an icon
+// A tilted photo resting in its slot that straightens once the track reaches
+// its chapter, or the empty slot with an icon
 function Snapshot({ chapter, tilt }: { chapter: StoryChapter; tilt: number }) {
   const { photo } = chapter
 
@@ -104,7 +105,7 @@ function Snapshot({ chapter, tilt }: { chapter: StoryChapter; tilt: number }) {
       <div
         className={cn(
           'absolute top-0 left-0 h-[270px] w-[180px] overflow-hidden rounded-lg shadow-black/15 shadow-lg dark:shadow-black/50',
-          'transition-transform duration-300 ease-out hover:rotate-0 motion-reduce:transition-none',
+          'transition-transform duration-300 ease-out hover:rotate-0 group-data-reached/chapter:rotate-0 motion-reduce:transition-none',
           tilt < 0 ? '-rotate-8' : 'rotate-8',
           photo.contain && 'bg-white',
           photo.letterbox

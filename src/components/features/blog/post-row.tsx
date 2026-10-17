@@ -9,14 +9,16 @@ interface PostRowProps {
   /** `short` drops the year ("Feb 25") for lists already grouped by year */
   date?: 'short' | 'full'
   heading?: 'h2' | 'h3'
+  /** Drops the author and #tags line, for short previews that only need the title and gist */
+  meta?: boolean
   post: BlogPage
 }
 
 /**
  * One post as a ledger row: a mono date in the left rail, then the title,
- * description and an author and #tags line. The description stays visible so
- * the list reads on touch screens; hover only tints the row, turns the title
- * primary and slides in an arrow.
+ * description and (unless `meta` is off) an author and #tags line. The
+ * description stays visible so the list reads on touch screens; hover only
+ * tints the row, turns the title primary and slides in an arrow.
  *
  * The mono `<time>` rail beside the text column is adapted from braydoncoyer.dev
  * by Braydon Coyer (no license, used with attribution):
@@ -25,6 +27,7 @@ interface PostRowProps {
 export const PostRow = ({
   date = 'full',
   heading: Heading = 'h3',
+  meta = true,
   post,
 }: PostRowProps) => {
   const { author, date: published, description, tags, title } = post.data
@@ -32,7 +35,9 @@ export const PostRow = ({
   return (
     <Link
       className={cn(
-        'group grid gap-x-6 gap-y-1.5 px-6 py-5 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80 sm:py-6',
+        'group grid gap-x-6 gap-y-1.5 px-6 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80',
+        // The extra air makes up for the missing meta line
+        meta ? 'py-5 sm:py-6' : 'py-6 sm:py-8',
         date === 'short'
           ? 'sm:grid-cols-[4.75rem_minmax(0,1fr)]'
           : 'sm:grid-cols-[7.5rem_minmax(0,1fr)]'
@@ -58,17 +63,19 @@ export const PostRow = ({
             {description}
           </p>
         )}
-        <p className='mt-2.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-muted-foreground/70 text-sm'>
-          {author && <AuthorByline author={author} />}
-          {tags?.map((tag) => (
-            <span key={tag}>
-              <span aria-hidden className='opacity-60'>
-                #
+        {meta && (
+          <p className='mt-2.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-muted-foreground/70 text-sm'>
+            {author && <AuthorByline author={author} />}
+            {tags?.map((tag) => (
+              <span key={tag}>
+                <span aria-hidden className='opacity-60'>
+                  #
+                </span>
+                {tag}
               </span>
-              {tag}
-            </span>
-          ))}
-        </p>
+            ))}
+          </p>
+        )}
       </div>
     </Link>
   )
