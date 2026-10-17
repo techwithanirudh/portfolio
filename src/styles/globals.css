@@ -4,6 +4,7 @@
 @import "@fuma-comment/react/preset.css";
 @import "./fumacomment.css";
 @import "./scroll-fade-effect.css";
+@import "./simba.css";
 @import "shadcn/tailwind.css";
 
 @import "tw-animate-css";

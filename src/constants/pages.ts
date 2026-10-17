@@ -22,12 +22,9 @@ export const pages = {
     description:
       'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.',
     path: '/blog',
+    summary:
+      'Every post grouped by year, newest first, with inline tag filters and post search.',
     title: 'Blog',
-  },
-  blogTags: {
-    description: 'Browse blog posts by topic.',
-    path: '/blog/tags',
-    title: 'Tags',
   },
   colophon: {
     description: 'The tools, fonts, and people behind this website.',

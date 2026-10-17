@@ -7,17 +7,19 @@ import { ViewAnimation } from '@/components/view-animation'
 import { owner } from '@/constants/site'
 import { cn } from '@/lib/utils'
 import { Links } from './links'
+import { SimbaPeek } from './simba-peek'
 
 export const Footer = () => (
   <>
     <GuestbookBand before='since you read all the way down here, leave proof you were here in the' />
     <footer
       className={cn(
-        'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
+        'container relative mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
         'border-border border-b border-dashed',
         'sm:gap-16 sm:px-8 sm:pt-16 sm:pb-24 md:pb-16'
       )}
     >
+      <SimbaPeek />
       <Links />
       <div className='grid items-center gap-4 sm:grid-cols-3'>
         <ViewAnimation className='hidden w-min sm:flex' delay={0.1}>

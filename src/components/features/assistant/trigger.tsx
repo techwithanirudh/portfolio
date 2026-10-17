@@ -1,82 +1,93 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useAssistantContext } from '@/components/features/assistant/context'
-import { useMascot } from '@/components/features/assistant/mascot'
-import {
-  animations,
-  sprite,
-} from '@/components/features/assistant/mascot/constants'
-import { mascotActivity } from '@/components/features/assistant/mascot/hooks'
-import { playAnimation } from '@/components/features/assistant/mascot/utils'
-import { prefersReducedMotion } from '@/lib/reduced-motion'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
+import { useOn } from '@/hooks/use-on'
+import { useAssistantContext } from './context'
+import { useMascot } from './mascot'
+import { usePageSimba, usePeeking } from './mascot/presence'
+import { SimbaRig } from './mascot/rig'
+import { MascotSprite } from './mascot/sprite'
 
-const EDGE_OFFSET = 16
-const REST_MS = 3000
-const IDLE_MIN_MS = 9000
-const IDLE_MAX_MS = 18_000
+// How long a woken Simba stays up in dark mode before he naps again
+const NAP_AFTER_MS = 20_000
 
-// The element has no size until it is shown, so anchor the visible dog using
-// the known frame size and the empty space around it
-const getPosition = () => {
-  const { frame, padding } = sprite
-  return {
-    x: window.innerWidth - EDGE_OFFSET - frame[0] + padding.right,
-    y: window.innerHeight - EDGE_OFFSET - frame[1] + padding.bottom,
-  }
-}
-
+// Simba sits in the corner below the panel. The drawing has room on its
+// right for wider poses, so the button tucks half a rem past the panel's inset
+// to line his shadow up with the panel's edge.
+//
+// In dark mode he naps until the pointer or a click wakes him, then drifts
+// off again after a quiet spell. He steps away while he peeks over the footer
+// or a page shows its own Simba
 export function AssistantTrigger() {
-  const { setOpen } = useAssistantContext()
-  const { agent } = useMascot()
+  const { open, setOpen } = useAssistantContext()
+  const mascot = useMascot()
+  const peeking = usePeeking()
+  const pageSimba = usePageSimba()
+  const { resolvedTheme } = useTheme()
+  const dark = resolvedTheme === 'dark'
+  const [awake, setAwake] = useState(false)
+  const [hovered, setHovered] = useState(false)
+
+  // Switching to dark mode sends him straight back to sleep
+  useOn(dark, () => setAwake(false))
 
   useEffect(() => {
-    if (!agent) {
+    if (!(dark && awake) || open || hovered) {
       return
     }
+    const timer = setTimeout(() => setAwake(false), NAP_AFTER_MS)
+    return () => clearTimeout(timer)
+  }, [awake, dark, hovered, open])
 
-    const idleGap = () =>
-      IDLE_MIN_MS + Math.random() * (IDLE_MAX_MS - IDLE_MIN_MS)
-    let nextIdleAt = Date.now() + idleGap()
+  if (!mascot) {
+    return null
+  }
 
-    const onQueueEmpty = () => {
-      if (mascotActivity.current) {
-        agent.play(mascotActivity.current)
-        return
-      }
-      if (!prefersReducedMotion() && Date.now() >= nextIdleAt) {
-        nextIdleAt = Date.now() + idleGap()
-        playAnimation(agent, animations.idle)
-        return
-      }
-      agent.play(animations.rest, REST_MS)
+  const napping = dark && !awake && !open
+  const away = (peeking || pageSimba) && !open
+
+  const wake = () => {
+    if (napping) {
+      setAwake(true)
+      mascot.play('ClickedOn', { interrupt: true })
     }
-    agent._onQueueEmpty = onQueueEmpty
-    agent._queue._onEmptyCallback = onQueueEmpty
+  }
 
-    const place = () => {
-      const { x, y } = getPosition()
-      agent._el.style.left = `${x}px`
-      agent._el.style.top = `${y}px`
-    }
-    place()
-    agent._el.style.zIndex = '45'
-    agent.show(true)
-
-    const handleClick = (event: Event) => {
-      event.preventDefault()
-      event.stopPropagation()
-      setOpen((prev) => !prev)
-    }
-
-    agent._el.addEventListener('click', handleClick)
-    window.addEventListener('resize', place)
-
-    return () => {
-      agent._el.removeEventListener('click', handleClick)
-      window.removeEventListener('resize', place)
-    }
-  }, [agent, setOpen])
-
-  return null
+  return (
+    <button
+      aria-expanded={open}
+      aria-label={open ? 'Close Simba' : 'Ask Simba'}
+      className='fixed right-[calc(max(1rem,env(safe-area-inset-right))-0.5rem)] bottom-[max(1rem,env(safe-area-inset-bottom))] z-45 origin-bottom rounded-md outline-none transition-[translate,scale,opacity] duration-200 ease-out-strong hover:scale-105 focus-visible:ring-2 focus-visible:ring-ring active:scale-95 data-away:pointer-events-none data-away:translate-y-6 data-away:opacity-0 motion-reduce:transition-none print:hidden'
+      data-away={away || undefined}
+      data-native-cursor
+      inert={away}
+      onClick={() => {
+        setAwake(true)
+        setOpen((prev) => !prev)
+      }}
+      onFocus={wake}
+      onPointerEnter={() => {
+        setHovered(true)
+        wake()
+      }}
+      onPointerLeave={() => setHovered(false)}
+      type='button'
+    >
+      {napping ? (
+        <>
+          <SimbaRig pose='searching' size={88} />
+          <span
+            aria-hidden
+            className='simba-zzz pointer-events-none absolute top-1 left-2 font-hand text-primary leading-none'
+          >
+            z <span className='text-[1.2em]'>z</span>{' '}
+            <span className='text-[1.4em]'>z</span>
+          </span>
+        </>
+      ) : (
+        <MascotSprite mascot={mascot} size={88} />
+      )}
+    </button>
+  )
 }

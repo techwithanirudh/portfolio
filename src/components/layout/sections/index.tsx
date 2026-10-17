@@ -2,7 +2,12 @@ import type { HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 
 type SectionProps = {
-  fill?: boolean
+  /**
+   * Takes the leftover screen height in place of the shell's PageFill. It
+   * still grows with taller content; `contain` holds it to exactly the
+   * leftover height so the content scrolls inside instead (guestbook)
+   */
+  fill?: boolean | 'contain'
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
@@ -28,7 +33,8 @@ export const Section = ({
   <section
     className={cn(
       'overflow-x-clip',
-      fill && 'flex min-h-[28rem] flex-1 basis-0 flex-col',
+      fill && 'flex min-h-[28rem] grow flex-col',
+      fill === 'contain' && 'basis-0',
       sectionClassName
     )}
     data-fill={fill || undefined}

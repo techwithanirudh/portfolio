@@ -31,11 +31,11 @@ function PageScrollLock() {
 export function AssistantPanel() {
   const { open, setOpen } = useAssistantContext()
   const chat = useChatContext()
-  const { agent } = useMascot()
+  const mascot = useMascot()
   const isDocked = useMediaQuery(MEDIA.docked)
 
   useMascotPanel({
-    agent,
+    mascot,
     messages: chat.messages,
     open,
     status: chat.status,

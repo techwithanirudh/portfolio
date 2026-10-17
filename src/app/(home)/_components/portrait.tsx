@@ -75,3 +75,44 @@ export function Portrait({
     </span>
   )
 }
+
+const CHIP_VIEW_BOX = '110 60 730 730'
+
+// The face as an inline chip, sized in em so it sits in a line of heading text
+export function PortraitChip({
+  className,
+  still = false,
+}: {
+  className?: string
+  /**
+   * A decorative copy beside the name, for bylines and small print: the face
+   * comes from the cached image and only the eyes blink
+   */
+  still?: boolean
+}) {
+  return (
+    <span
+      aria-hidden={still || undefined}
+      className={cn(
+        'mx-[0.04em] inline-block size-[0.8em] shrink-0 translate-y-[0.08em] overflow-hidden rounded-full bg-muted ring-1 ring-border ring-inset',
+        className
+      )}
+    >
+      {still ? (
+        <svg className='block size-full' viewBox={CHIP_VIEW_BOX}>
+          <image height='1160' href='/images/portrait.svg' width='947' />
+          <g
+            className='[&>path]:origin-center [&>path]:animate-blink [&>path]:[transform-box:fill-box] motion-reduce:[&>path]:animate-none'
+            fill={PORTRAIT_EYE_FILL}
+          >
+            {PORTRAIT_EYE_PATHS.map((d) => (
+              <path d={d} key={d} />
+            ))}
+          </g>
+        </svg>
+      ) : (
+        <Portrait viewBox={CHIP_VIEW_BOX} />
+      )}
+    </span>
+  )
+}

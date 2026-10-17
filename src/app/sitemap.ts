@@ -45,7 +45,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { changeFrequency: 'yearly', priority: 0.4, url: url('/uses') },
     { changeFrequency: 'yearly', priority: 0.4, url: url('/colophon') },
     { changeFrequency: 'weekly', priority: 0.4, url: url('/guestbook') },
-    { changeFrequency: 'monthly', priority: 0.4, url: url('/blog/tags') },
   ]
 
   const tags: Entry[] = getTags().map((tag) => ({

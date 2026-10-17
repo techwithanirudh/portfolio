@@ -9,6 +9,7 @@ import {
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
 import { useEffect } from 'react'
+import { PostEmpty } from '@/components/features/blog/post-empty'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import {
@@ -37,6 +38,10 @@ const getItemTag = (url: string) => {
   }
   return 'page'
 }
+
+// A blog search from the /blog filters bar that finds nothing gets the same
+// empty state as the ledger
+const BlogEmpty = () => <PostEmpty />
 
 const tagValues = tags
   .map((tag) => tag.value)
@@ -147,6 +152,7 @@ export function SearchClient() {
         <SearchDialogList
           className='[&>div]:!p-0'
           data-lenis-prevent
+          Empty={tag === 'blog' ? BlogEmpty : undefined}
           Item={({ item, onClick }) => (
             <div className='relative'>
               <SearchDialogListItem

@@ -1,0 +1,197 @@
+/* Simba's rig (src/components/features/assistant/mascot/rig.tsx). Parts move
+   in the drawing's own coordinates, and every pose change is a CSS transition */
+.simba-rig :is(g, use) {
+  transform-box: view-box;
+}
+
+.simba-hair {
+  opacity: 0.44;
+  fill: none;
+  stroke: #c5ad8b;
+  stroke-width: 0.7;
+  stroke-linecap: round;
+}
+
+.simba-silk {
+  opacity: 0.57;
+  fill: none;
+  stroke: #fff8e9;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+.simba-earline {
+  opacity: 0.35;
+  fill: none;
+  stroke: #625e54;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+}
+
+.simba-toe {
+  opacity: 0.72;
+  fill: none;
+  stroke: #aa9272;
+  stroke-width: 0.85;
+  stroke-linecap: round;
+}
+
+.simba-root {
+  transform-origin: 69px 220px;
+  transition:
+    opacity 220ms ease-out,
+    transform 380ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.simba-rig[data-hidden] .simba-root {
+  opacity: 0;
+  transform: translateY(24px) scale(0.6);
+}
+
+.simba-fade {
+  transition: opacity 180ms ease-out;
+}
+
+.simba-head {
+  transform-origin: 66px 142px;
+  transition: transform 460ms cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
+.simba-pop {
+  transform-origin: 69px 220px;
+  animation: simba-pop 340ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.simba-tilt {
+  transform-origin: 66px 142px;
+  rotate: var(--look-tilt, 0deg);
+  transition: rotate 450ms ease-out;
+}
+
+/* Ears hang against the head's tilt and catch up late, so they swing */
+.simba-rig .simba-ear {
+  transform-origin: var(--ear-origin);
+  transform-box: fill-box;
+  transition: rotate 700ms cubic-bezier(0.34, 1.35, 0.5, 1);
+}
+
+.simba-rig .simba-ear-left {
+  --ear-origin: 80% 4%;
+}
+
+.simba-rig .simba-ear-right {
+  --ear-origin: 20% 4%;
+}
+
+.simba-rig .simba-ear-lag {
+  transform-origin: var(--ear-origin);
+  transform-box: fill-box;
+  rotate: calc(var(--look-tilt, 0deg) * -0.5);
+  transition: rotate 850ms cubic-bezier(0.34, 1.3, 0.5, 1);
+}
+
+.simba-rig .simba-ear-twitch {
+  transform-origin: var(--ear-origin);
+  transform-box: fill-box;
+  animation: simba-twitch 6.8s ease-in-out infinite;
+}
+
+.simba-ear-right .simba-ear-twitch {
+  animation-delay: -2.9s;
+  animation-direction: reverse;
+}
+
+.simba-body {
+  transform-origin: 69px 220px;
+  animation: simba-breathe 3.4s ease-in-out infinite;
+}
+
+.simba-eye {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: simba-blink 5.2s infinite;
+}
+
+.simba-paw {
+  transform-origin: 34px 170px;
+  animation: simba-wave 0.45s ease-in-out infinite alternate;
+}
+
+@keyframes simba-pop {
+  from {
+    transform: scale(1.05, 0.93);
+  }
+  55% {
+    transform: scale(0.98, 1.03);
+  }
+}
+
+@keyframes simba-twitch {
+  0%,
+  90%,
+  100% {
+    rotate: 0deg;
+  }
+  92% {
+    rotate: -7deg;
+  }
+  94.5% {
+    rotate: 4deg;
+  }
+  97% {
+    rotate: -1.5deg;
+  }
+}
+
+@keyframes simba-breathe {
+  50% {
+    transform: scale(1.012, 1.022);
+  }
+}
+
+@keyframes simba-blink {
+  0%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+  96.5% {
+    transform: scaleY(0.12);
+  }
+}
+
+@keyframes simba-wave {
+  from {
+    transform: rotate(-6deg);
+  }
+  to {
+    transform: rotate(8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simba-rig *,
+  .simba-root {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* The "z z z" over the corner Simba while he naps in dark mode */
+.simba-zzz {
+  rotate: -12deg;
+  animation: simba-zzz 3.2s ease-in-out infinite;
+}
+
+@keyframes simba-zzz {
+  50% {
+    opacity: 0.6;
+    translate: 2px -4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .simba-zzz {
+    animation: none;
+  }
+}

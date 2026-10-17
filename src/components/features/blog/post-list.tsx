@@ -1,26 +1,20 @@
 import { ViewAnimation } from '@/components/view-animation'
-import { formatDate } from '@/lib/format-date'
 import type { BlogPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
-import { PostCard } from './post-card'
+import { PostRow } from './post-row'
 
 interface PostListProps {
   className?: string
   posts: BlogPage[]
 }
 
+/** A flat run of ledger rows with the full date in the rail, for previews like the home page's */
 export const PostList = ({ className, posts }: PostListProps) => (
-  <div className={cn('dashed-stack grid text-left', className)}>
+  <ul className={cn('dashed-stack text-left', className)}>
     {posts.map((post, index) => (
-      <ViewAnimation delay={0.05 * index} key={post.url}>
-        <PostCard
-          author={post.data.author}
-          date={formatDate(post.data.date)}
-          description={post.data.description ?? ''}
-          title={post.data.title}
-          url={post.url}
-        />
+      <ViewAnimation as='li' delay={0.05 * index} key={post.url}>
+        <PostRow post={post} />
       </ViewAnimation>
     ))}
-  </div>
+  </ul>
 )

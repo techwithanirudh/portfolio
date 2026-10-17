@@ -79,7 +79,7 @@ const writeSavedInput = (value: string | null) => {
 export function AssistantInput() {
   const { setContext, context } = useAssistantContext()
   const { status, sendMessage, stop, messages } = useChatContext()
-  const { agent } = useMascot()
+  const mascot = useMascot()
   const playSend = useSound(send)
   const finePointer = useMediaQuery(MEDIA.finePointer)
   const [input, setInput] = useState(readSavedInput)
@@ -111,7 +111,7 @@ export function AssistantInput() {
     const messageText =
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
-    playSubmitAnimation(agent)
+    playSubmitAnimation(mascot)
     playSend()
 
     setInput('')

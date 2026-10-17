@@ -8,7 +8,7 @@ import { ViewAnimation } from '@/components/view-animation'
 import { heroIntro } from '@/constants/portfolio/intro'
 import { baseOptions } from '@/constants/site'
 import heroGradient from '@/public/images/hero-gradient.png'
-import { Portrait } from './portrait'
+import { PortraitChip } from './portrait'
 
 const Hero = () => (
   <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-20 pb-24 sm:px-12 sm:pt-28 sm:pb-32'>
@@ -23,11 +23,7 @@ const Hero = () => (
     />
     <ViewAnimation delay={0.05}>
       <h1 className='mb-5 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'>
-        Anirudh{' '}
-        <span className='mx-[0.04em] inline-block size-[0.8em] translate-y-[0.08em] overflow-hidden rounded-full bg-muted ring-1 ring-border ring-inset'>
-          <Portrait viewBox='110 60 730 730' />
-        </span>{' '}
-        Sriram<span className='text-primary'>.</span>
+        Anirudh <PortraitChip /> Sriram<span className='text-primary'>.</span>
       </h1>
     </ViewAnimation>
     <ViewAnimation delay={0.1}>

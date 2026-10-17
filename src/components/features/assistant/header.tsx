@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { toggleOn } from '@/lib/audio/minimal'
 import { useChatContext } from './chat-context'
 import { useAssistantContext } from './context'
+import { SimbaChip } from './mascot/simba-chip'
 
 const headerButtonClassName =
   'aspect-square h-full w-auto shadow-none ring-0 [&_svg]:size-4'
@@ -18,7 +19,7 @@ export function AssistantHeader() {
   return (
     <div className='sticky top-0 flex h-10 items-stretch'>
       <div className='flex min-w-0 flex-1 items-center gap-2 bg-card px-3 text-card-foreground'>
-        <Icons.pawPrint className='size-4 text-primary transition-transform duration-200 ease-out hover:-rotate-45 motion-reduce:transition-none' />
+        <SimbaChip className='mx-0 size-5 translate-y-0' />
         <span className='font-medium text-sm'>Ask Simba</span>
       </div>
 

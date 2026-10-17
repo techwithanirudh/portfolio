@@ -72,6 +72,12 @@ async function createNextConfig(): Promise<NextConfig> {
           permanent: true,
           source: '/work',
         },
+        // Tags are inline filters on the blog now, so the old index goes home
+        {
+          destination: '/blog',
+          permanent: true,
+          source: '/blog/tags',
+        },
         {
           destination: '/projects/:path*',
           permanent: true,

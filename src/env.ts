@@ -50,7 +50,6 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().min(1).startsWith('sk-proj-'),
     // Resend
     RESEND_API_KEY: z.string().min(1).startsWith('re_').optional(),
-    RESEND_AUDIENCE_ID: z.string().min(1).optional(),
   },
   shared: {
     NODE_ENV: z

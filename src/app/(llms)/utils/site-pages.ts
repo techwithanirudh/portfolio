@@ -29,7 +29,6 @@ const pageOrder: PageInfo[] = [
   pages.about,
   pages.projects,
   pages.blog,
-  pages.blogTags,
   pages.uses,
   pages.colophon,
   pages.contact,
@@ -68,7 +67,7 @@ export const getSitePages = (): SitePage[] => [
     title: page.data.title ?? 'Untitled',
   })),
   ...getTags().map((tag) => ({
-    description: `Blog posts tagged ${tag}.`,
+    description: `The blog filtered to posts tagged ${tag}, grouped by year.`,
     path: `/blog/tags/${tag}`,
     sections: [],
     title: `Tag: ${tag}`,

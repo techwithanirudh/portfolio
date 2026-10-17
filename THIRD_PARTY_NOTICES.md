@@ -123,6 +123,11 @@ Copyright (c) Braydon Coyer
   `app/components/AboutTrackPattern.tsx`, the photo slot from `app/components/ShadowBox.tsx`
   and the alternating chapter layout from `app/about/page.tsx` (master branch), ported to
   `src/app/(home)/about/_components/story-track.tsx`, `shadow-box.tsx` and `story.tsx`.
+- Blog list: the mono `<time>` date rail beside the text column from
+  `app/components/BlogPostList.tsx` and the "all plus each category" filter links marked
+  with `aria-current` from `app/components/CategorySelect.tsx` (v4 branch), ported to
+  `src/components/features/blog/post-row.tsx` and `post-filters.tsx`. The year grouping
+  is our own; braydoncoyer.dev lists posts in one run.
 
 ## Geist
 

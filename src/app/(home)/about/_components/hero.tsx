@@ -1,11 +1,17 @@
-import { HeroSection } from '@/components/layout/sections/hero'
+import { PortraitChip } from '@/app/(home)/_components/portrait'
+import { HeroSection, TitleDot } from '@/components/layout/sections/hero'
 import { pages } from '@/constants/pages'
 
 export default function Hero(): React.ReactElement {
   return (
     <HeroSection
       description={pages.about.description}
-      title={pages.about.title}
+      title={
+        <>
+          {pages.about.title} <PortraitChip /> me
+          <TitleDot />
+        </>
+      }
     />
   )
 }

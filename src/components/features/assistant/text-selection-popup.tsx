@@ -13,6 +13,7 @@ import { useMediaQuery } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
 import { MEDIA } from '@/lib/media'
 import { useAssistantContext } from './context'
+import { SimbaChip } from './mascot/simba-chip'
 
 const getContainer = () => document.getElementById('main-content')
 
@@ -135,7 +136,7 @@ export function TextSelectionPopup() {
             }}
             size='sm'
           >
-            Ask Simba
+            Ask <SimbaChip className='translate-y-0' /> Simba
           </Button>
         </div>,
         document.body

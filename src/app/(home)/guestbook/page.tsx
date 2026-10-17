@@ -81,7 +81,7 @@ export default function GuestbookPage() {
           <h2 className='font-medium text-xl'>Recent entries</h2>
         </ViewAnimation>
       </Section>
-      <Section fill>
+      <Section fill='contain'>
         <Suspense fallback={<GuestbookEntriesSkeleton />}>
           <GuestbookEntriesSection />
         </Suspense>

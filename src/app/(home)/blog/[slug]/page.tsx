@@ -5,6 +5,7 @@ import { ShareMenu } from '@/app/(home)/blog/[slug]/page.client'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
 import { MdxContent } from '@/components/content/mdx/layout'
+import { AuthorByline } from '@/components/features/blog/author-byline'
 import { TOCMinimap, TOCPopover } from '@/components/features/toc'
 import { PostJsonLd } from '@/components/json-ld'
 import { SectionBody } from '@/components/layout/sections/body'
@@ -33,7 +34,9 @@ export default async function Page(props: {
     <>
       <div>
         <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
-        <p className='font-medium'>{page.data.author ?? 'Unknown'}</p>
+        <p className='font-medium'>
+          <AuthorByline author={page.data.author ?? 'Unknown'} />
+        </p>
       </div>
       <div>
         <p className='mb-1 text-muted-foreground text-sm'>Published</p>

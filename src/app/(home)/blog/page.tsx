@@ -1,30 +1,17 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
-import Posts from '@/app/(home)/_components/posts'
 import { CollectionPageJsonLd } from '@/components/json-ld'
-import { Section } from '@/components/layout/sections'
-import { SectionBody } from '@/components/layout/sections/body'
 import { Wrapper } from '@/components/layout/wrapper'
-import { NumberedPagination } from '@/components/numbered-pagination'
 import { postsPerPage } from '@/constants/config'
 import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
 import { getPageHref, parsePageParam } from '@/lib/pagination'
-import { getPostsByTag, getSortedByDatePosts, getTags } from '@/lib/source'
+import { getSortedByDatePosts } from '@/lib/source'
 import { Hero } from './_components/hero'
-import { NewsletterSection } from './_components/newsletter-section'
-import { TagsAccordion, TagsSidebar } from './_components/tags-sidebar'
+import { PostIndex } from './_components/post-index'
 
 const totalPosts = getSortedByDatePosts().length
 const pageCount = Math.ceil(totalPosts / postsPerPage)
-
-const getTagsWithCount = () => {
-  const tagNames = getTags()
-  return tagNames.map((name) => ({
-    count: getPostsByTag(name).length,
-    name,
-  }))
-}
 
 export default async function Page(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -36,38 +23,20 @@ export default async function Page(props: {
   }
 
   const startIndex = pageIndex * postsPerPage
-  const endIndex = startIndex + postsPerPage
-  const posts = getSortedByDatePosts().slice(startIndex, endIndex)
-  const tags = getTagsWithCount()
+  const posts = getSortedByDatePosts().slice(
+    startIndex,
+    startIndex + postsPerPage
+  )
 
   return (
     <Wrapper>
       <Hero pageCount={pageCount} pageIndex={pageIndex} />
-      <SectionBody>
-        <div className='grid h-full lg:grid-cols-[1fr_280px]'>
-          <div className='dashed-stack min-w-0 lg:border-border lg:border-r lg:border-dashed'>
-            <TagsAccordion tags={tags} />
-            <Posts
-              className='h-full border-none'
-              posts={posts}
-              sectionClassName='flex flex-1'
-            />
-          </div>
-          <aside className='hidden lg:block'>
-            <TagsSidebar tags={tags} />
-          </aside>
-        </div>
-      </SectionBody>
-      {pageCount > 1 && (
-        <Section className='bg-dashed'>
-          <NumberedPagination
-            currentPage={pageIndex + 1}
-            getHref={(page) => getPageHref(pages.blog.path, page)}
-            totalPages={pageCount}
-          />
-        </Section>
-      )}
-      <NewsletterSection />
+      <PostIndex
+        currentPage={pageIndex + 1}
+        path={pages.blog.path}
+        posts={posts}
+        totalPages={pageCount}
+      />
       <CollectionPageJsonLd
         description={pages.blog.description}
         path={pages.blog.path}

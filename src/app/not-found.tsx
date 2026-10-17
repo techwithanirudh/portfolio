@@ -3,9 +3,10 @@ import Link from 'next/link'
 import { SimbaLoop } from '@/components/features/not-found/simba-loop'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import { SectionMoreLink } from '@/components/layout/sections/more-link'
+import { TitleDot } from '@/components/layout/sections/hero'
 import Separator from '@/components/layout/sections/separator'
 import { SiteShell } from '@/components/layout/site-shell'
+import { Button } from '@/components/ui/button'
 import { createMetadata } from '@/lib/metadata'
 
 // Ported from the an1rudh rebrand prototype (PR #108)
@@ -20,25 +21,36 @@ export default function NotFound() {
   return (
     <SiteShell>
       <Section>
-        {/* Simba is sized in em so he stays as tall as the digits */}
-        <div className='flex items-end justify-between gap-4 overflow-hidden px-4 py-10 text-[clamp(6rem,22vw,11rem)] sm:px-6 sm:pt-9 sm:pb-12'>
-          <p className='font-medium leading-[0.8] tracking-tighter'>404</p>
+        <div className='flex items-end justify-between gap-6 overflow-hidden px-4 pt-10 pb-8 sm:px-6 sm:pt-14 sm:pb-10'>
+          <div className='flex flex-col gap-3'>
+            <p className='font-mono text-muted-foreground text-xs uppercase tracking-widest'>
+              404
+            </p>
+            <h1 className='text-balance font-normal text-4xl leading-tight tracking-tighter md:text-5xl'>
+              Simba ate this page
+              <TitleDot />
+            </h1>
+          </div>
           <SimbaLoop
-            animation='Searching'
-            className='shrink-0 translate-y-[0.04em] max-sm:hidden'
-            size='0.88em'
+            animation='Sniffing'
+            className='shrink-0 translate-y-2'
+            size='clamp(5.5rem,16vw,9rem)'
           />
         </div>
       </Section>
       <Section>
-        <div className='flex flex-col gap-1 px-4 py-5 sm:px-6'>
-          <h1 className='font-medium text-2xl tracking-tight'>
-            Page not found
-          </h1>
-          <p className='text-muted-foreground'>
-            Simba&apos;s been sniffing around for it. It moved, never existed,
-            or he buried it somewhere.
+        <div className='flex flex-col items-start gap-4 px-4 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6'>
+          <p className='text-pretty text-muted-foreground'>
+            He&apos;s still sniffing around for it. The home page is safe.
           </p>
+          <Button
+            className='shrink-0'
+            nativeButton={false}
+            render={<Link href='/' />}
+          >
+            Take me home
+            <Icons.arrowRight className='icon-arrow-button size-4' />
+          </Button>
         </div>
       </Section>
       <Separator />
@@ -63,7 +75,6 @@ export default function NotFound() {
             </li>
           ))}
         </ul>
-        <SectionMoreLink href='/'>Back home</SectionMoreLink>
       </Section>
     </SiteShell>
   )

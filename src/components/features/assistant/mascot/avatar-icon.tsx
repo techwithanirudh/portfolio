@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
-import { sprite } from './constants'
+import { SimbaRig } from './rig'
 
+// The seated rig, scaled up to trim the headroom kept for taller poses
 export function AvatarIcon({
   className,
   size = 24,
@@ -8,30 +9,17 @@ export function AvatarIcon({
   className?: string
   size?: number
 }) {
-  const { frame, padding, sheet, src } = sprite
-  const scale = size / Math.max(...frame)
-
   return (
     <span
       aria-label='Simba'
       className={cn(
-        'inline-flex shrink-0 items-center justify-center',
+        'inline-flex shrink-0 items-end justify-center overflow-hidden',
         className
       )}
       role='img'
       style={{ height: size, width: size }}
     >
-      <span
-        style={{
-          backgroundImage: `url(${src})`,
-          backgroundPosition: '0 0',
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: `${sheet[0] * scale}px ${sheet[1] * scale}px`,
-          height: frame[1] * scale,
-          transform: `translateY(${((padding.bottom - padding.top) / 2) * scale}px)`,
-          width: frame[0] * scale,
-        }}
-      />
+      <SimbaRig pose='rest' size={size * 1.08} />
     </span>
   )
 }

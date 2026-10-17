@@ -197,7 +197,7 @@ export const ProfilePageJsonLd = (props: PageJsonLdProps) => (
 
 export const TagJsonLd = ({ tag }: { tag: string }) => {
   const tagUrl = new URL(`/blog/tags/${tag}`, baseUrl.href).href
-  const tagsUrl = new URL('/blog/tags', baseUrl.href).href
+  const blogUrl = new URL('/blog', baseUrl.href).href
 
   const page: CollectionPage = {
     '@id': `${tagUrl}#webpage`,
@@ -209,7 +209,7 @@ export const TagJsonLd = ({ tag }: { tag: string }) => {
 
   const breadcrumbs = makeBreadcrumbs([
     { name: homeTitle, url: baseUrl.href },
-    { name: 'Tags', url: tagsUrl },
+    { name: 'Blog', url: blogUrl },
     { name: `Posts tagged "${tag}"`, url: tagUrl },
   ])
 
