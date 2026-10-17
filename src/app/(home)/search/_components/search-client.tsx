@@ -51,8 +51,8 @@ const bar = 'bg-foreground/10'
 const ResultsSkeleton = () => (
   <div aria-busy className='flex w-full flex-col p-1' role='status'>
     <span className='sr-only'>Searching</span>
-    {excerptWidths.map((lines, index) => (
-      <div key={index.toString()}>
+    {excerptWidths.map((lines) => (
+      <div key={lines.join()}>
         <div className='flex items-center justify-between gap-4 border-border border-b border-dashed p-3'>
           <Skeleton className={cn('h-4 w-1/3', bar)} />
           <Skeleton className={cn('mr-2 h-5 w-14 rounded-full', bar)} />

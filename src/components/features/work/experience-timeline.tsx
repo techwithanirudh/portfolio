@@ -5,7 +5,7 @@ import { ViewAnimation } from '@/components/view-animation'
 import { formatDuration, formatPeriod } from '@/lib/employment-period'
 import { cn } from '@/lib/utils'
 import type { ExperienceItemType } from '@/types/experience'
-import { ExperienceRail } from './experience-rail'
+import { ExperienceRail, RailNode } from './experience-rail'
 
 type TimelineVariant = 'preview' | 'full'
 
@@ -71,7 +71,7 @@ export function ExperienceTimeline({
               <p className='col-start-2 row-start-1 font-mono text-[12.5px] text-foreground tracking-wide sm:col-start-1'>
                 {experienceYear}
               </p>
-              <span className='col-start-1 row-start-1 size-[9px] justify-self-center rounded-full border border-muted-foreground bg-background sm:col-start-2' />
+              <RailNode className='col-start-1 row-start-1 size-[9px] justify-self-center rounded-full border border-muted-foreground bg-background data-passed:border-primary data-passed:bg-primary sm:col-start-2' />
             </ViewAnimation>
           )
         }
@@ -101,6 +101,8 @@ function TimelineRow({
   }
 
   const { start, end } = position.employmentPeriod
+  // Only the full timeline has the scroll fill for its nodes to follow
+  const Node = variant === 'full' ? RailNode : 'div'
 
   return (
     <article className={cn(rowClassName, 'py-5.5 sm:py-6')}>
@@ -111,9 +113,9 @@ function TimelineRow({
         </span>
       </p>
 
-      <div
+      <Node
         className={cn(
-          'relative col-start-1 row-span-2 row-start-1 flex size-10 items-center justify-center justify-self-center rounded-full border border-muted-foreground/30 bg-background sm:col-start-2 sm:row-span-1 sm:size-11',
+          'relative col-start-1 row-span-2 row-start-1 flex size-10 items-center justify-center justify-self-center rounded-full border border-muted-foreground/30 bg-background data-passed:border-primary sm:col-start-2 sm:row-span-1 sm:size-11',
           experience.isCurrentEmployer &&
             'border-2 border-primary ring-6 ring-primary/12'
         )}
@@ -129,10 +131,7 @@ function TimelineRow({
         ) : (
           <span className='size-6 rounded-full bg-muted' />
         )}
-        {experience.isCurrentEmployer && (
-          <NowBadge className='absolute -top-0.5 -right-0.5' />
-        )}
-      </div>
+      </Node>
 
       <div className='col-start-2 row-start-2 min-w-0 sm:col-start-3 sm:row-start-1 sm:pt-2'>
         <h3 className='font-medium text-[17px] tracking-tight'>
@@ -187,18 +186,5 @@ function TimelineRow({
           )}
       </div>
     </article>
-  )
-}
-
-function NowBadge({ className }: { className?: string }) {
-  return (
-    <span
-      aria-label='Current role'
-      className={cn('flex size-3 items-center justify-center', className)}
-      role='img'
-    >
-      <span className='absolute inline-flex size-3 animate-ping rounded-full bg-primary opacity-40 motion-reduce:animate-none' />
-      <span className='relative inline-flex size-2 rounded-full bg-primary' />
-    </span>
   )
 }

@@ -64,7 +64,9 @@ export function SearchRedirectInput({
       <InputGroupAddon
         align='inline-end'
         className={cn(
-          'transition-all duration-150 ease-out',
+          // Undo the addon's pull towards the edge so the arrow keeps the
+          // same 8px gap on every side inside the bar
+          'transition-all duration-150 ease-out has-[>button]:mr-0',
           hasValue
             ? 'scale-100 opacity-100'
             : 'pointer-events-none scale-95 opacity-0'
