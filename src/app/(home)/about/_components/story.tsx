@@ -58,7 +58,12 @@ function ChapterRow({
           !chapter.photo && 'max-lg:hidden'
         )}
       >
-        <Snapshot chapter={chapter} tilt={photoLeft ? -8 : 8} />
+        <Snapshot
+          chapter={chapter}
+          // The first photo sits in the opening screen, where it's the LCP image
+          eager={index === 0}
+          tilt={photoLeft ? -8 : 8}
+        />
       </ViewAnimation>
 
       <ViewAnimation
@@ -88,7 +93,15 @@ function ChapterRow({
 // A tilted photo resting in its slot that straightens once the track reaches
 // its chapter, or the empty slot with an icon. Straight, it sits lifted 8px
 // up-left of the slot, so its corners are the slot's 20px minus that 8px
-function Snapshot({ chapter, tilt }: { chapter: StoryChapter; tilt: number }) {
+function Snapshot({
+  chapter,
+  eager = false,
+  tilt,
+}: {
+  chapter: StoryChapter
+  eager?: boolean
+  tilt: number
+}) {
   const { photo } = chapter
 
   if (!photo) {
@@ -120,7 +133,9 @@ function Snapshot({ chapter, tilt }: { chapter: StoryChapter; tilt: number }) {
               : 'object-cover',
             photo.contain && 'p-8'
           )}
+          fetchPriority={eager ? 'high' : undefined}
           fill
+          loading={eager ? 'eager' : undefined}
           sizes='180px'
           src={photo.src}
         />

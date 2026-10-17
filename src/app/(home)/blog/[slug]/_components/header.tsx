@@ -36,6 +36,8 @@ export const Header = ({ page, tags }: HeaderProps) => {
               className='absolute inset-0 h-full w-full'
               fill
               imageClassName='object-cover'
+              // The cover opens the post, so it's the LCP image
+              lazy={false}
               sizes='(min-width: 1024px) 800px, 100vw'
               src={image}
             />
