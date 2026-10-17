@@ -1,44 +1,63 @@
 import type { HTMLAttributes } from 'react'
-import { Icons } from '@/components/icons/icons'
-import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 type SectionProps = {
+  /**
+   * Takes the leftover screen height in place of the shell's PageFill. It
+   * still grows with taller content; `contain` holds it to exactly the
+   * leftover height so the content scrolls inside instead (guestbook)
+   */
+  fill?: boolean | 'contain'
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
-const Cross = () => (
-  <div className='relative h-6 w-6'>
-    <div className='absolute left-3 h-6 w-px bg-background' />
-    <div className='absolute top-3 h-px w-6 bg-background' />
-
-    <ViewAnimation
-      className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-    >
-      <Icons.add className='size-5 text-border/70 dark:text-border' />
-    </ViewAnimation>
+export const Cross = ({ className }: { className?: string }) => (
+  <div
+    className={cn(
+      'pointer-events-none absolute -bottom-2 z-10 hidden size-[15px] sm:block',
+      className
+    )}
+  >
+    <span className='absolute top-0 left-[7px] h-full w-px bg-border' />
+    <span className='absolute top-[7px] left-0 h-px w-full bg-border' />
   </div>
 )
 
 export const Section = ({
   children,
+  fill = false,
   sectionClassName,
   className,
   ...props
 }: SectionProps) => (
-  <section className={sectionClassName} {...props}>
-    <div className='container relative mx-auto'>
-      <div className={cn('border-border border-dashed sm:border-x', className)}>
+  <section
+    className={cn(
+      'overflow-x-clip',
+      fill && 'flex min-h-[28rem] grow flex-col',
+      fill === 'contain' && 'basis-0',
+      sectionClassName
+    )}
+    data-fill={fill || undefined}
+    data-slot='section'
+    {...props}
+  >
+    <div
+      className={cn(
+        'container relative mx-auto',
+        fill && 'flex min-h-0 flex-1 flex-col'
+      )}
+    >
+      <div
+        className={cn(
+          'border-border border-dashed sm:border-x',
+          fill && 'flex min-h-0 flex-1 flex-col',
+          className
+        )}
+      >
         {children}
       </div>
-      <div className='absolute -bottom-3 -left-3 z-10 hidden h-6 sm:block'>
-        <Cross />
-      </div>
-      <div className='absolute -right-3 -bottom-3 z-10 hidden h-6 -translate-x-px sm:block'>
-        <Cross />
-      </div>
+      <Cross className='-left-[7px]' />
+      <Cross className='-right-[7px]' />
     </div>
   </section>
 )

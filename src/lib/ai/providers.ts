@@ -1,8 +1,10 @@
-import { openai } from '@ai-sdk/openai'
+import { createOpenAI } from '@ai-sdk/openai'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { customProvider } from 'ai'
 import { createRetryable } from 'ai-retry'
 import { env } from '@/env'
+
+const openai = createOpenAI({ apiKey: env.OPENAI_API_KEY })
 
 const hackclub = createOpenRouter({
   apiKey: env.HACKCLUB_API_KEY,

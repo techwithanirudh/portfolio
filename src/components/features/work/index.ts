@@ -1,2 +1,2 @@
+export * from './experience-timeline'
 export * from './work-card'
-export * from './work-experience'

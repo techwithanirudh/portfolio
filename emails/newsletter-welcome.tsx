@@ -101,14 +101,12 @@ export default function NewsletterWelcomeEmail({
               </Heading>
               <Text className='text-lg leading-8'>Hey {firstName},</Text>
               <Text className='text-lg leading-8'>
-                Thanks for subscribing to my newsletter! I&apos;m excited to
-                share my thoughts and ideas with you. You can expect an email
+                Thanks for subscribing to my newsletter! You can expect an email
                 every few weeks. I might also send newsletter-only content now
-                and then, so stay tuned!
+                and then.
               </Text>
               <Text className='text-lg leading-8'>
-                Here are a few popular posts from the past few months that you
-                might find interesting:
+                Here&apos;s what I&apos;ve written so far, newest first:
               </Text>
             </Section>
 
@@ -119,7 +117,7 @@ export default function NewsletterWelcomeEmail({
                 posts.map((post) => <PostCard key={post.url} {...post} />)
               ) : (
                 <Text className='text-[16px] text-zinc-500 leading-[24px]'>
-                  Stay tuned for upcoming content!
+                  No posts yet. The first one is on its way.
                 </Text>
               )}
             </Section>
@@ -128,8 +126,7 @@ export default function NewsletterWelcomeEmail({
 
             <Section>
               <Text className='text-lg text-zinc-900 leading-8'>
-                Thank you for being a part of my community! I appreciate your
-                support and look forward to connecting with you.
+                Thanks for reading!
               </Text>
               <Text
                 className='select-none text-4xl text-zinc-900 leading-8'

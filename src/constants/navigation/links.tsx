@@ -9,6 +9,18 @@ export const linkItems: LinkItemType[] = [
     url: '/about',
   },
   {
+    active: 'nested-url',
+    icon: <Icons.work />,
+    text: 'Projects',
+    url: '/projects',
+  },
+  {
+    active: 'nested-url',
+    icon: <Icons.blog />,
+    text: 'Blog',
+    url: '/blog',
+  },
+  {
     active: 'url',
     icon: <Icons.mail />,
     text: 'Contact',
@@ -19,17 +31,5 @@ export const linkItems: LinkItemType[] = [
     icon: <Icons.messageSquare />,
     text: 'Guestbook',
     url: '/guestbook',
-  },
-  {
-    active: 'nested-url',
-    icon: <Icons.work />,
-    text: 'Work',
-    url: '/work',
-  },
-  {
-    active: 'nested-url',
-    icon: <Icons.blog />,
-    text: 'Blog',
-    url: '/blog',
   },
 ]

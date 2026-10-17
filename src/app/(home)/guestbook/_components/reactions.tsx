@@ -21,6 +21,10 @@ import { cn } from '@/lib/utils'
 import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 
+const reactionCountFormat = new Intl.NumberFormat('en', {
+  notation: 'compact',
+})
+
 interface GuestbookReactionsProps {
   canReact: boolean
   entryId: number
@@ -117,22 +121,26 @@ export const GuestbookReactions = ({
             variant='dashed'
           >
             <span>{reaction.emoji}</span>
-            <span className='tabular-nums'>{reaction.count}</span>
+            <span className='tabular-nums'>
+              {reactionCountFormat.format(reaction.count)}
+            </span>
           </Button>
         ))}
         <Popover onOpenChange={setIsOpen} open={isOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              className='gap-2 px-3 text-xs'
-              disabled={!canReact || status === 'executing'}
-              shape='square'
-              size='sm'
-              type='button'
-              variant='dashed'
-            >
-              <Icons.add className='size-3' />
-              Add
-            </Button>
+          <PopoverTrigger
+            render={
+              <Button
+                className='gap-2 px-3 text-xs'
+                disabled={!canReact || status === 'executing'}
+                shape='square'
+                size='sm'
+                type='button'
+                variant='dashed'
+              />
+            }
+          >
+            <Icons.add className='size-3' />
+            Add
           </PopoverTrigger>
           <PopoverContent className='w-fit p-0'>
             <EmojiPicker

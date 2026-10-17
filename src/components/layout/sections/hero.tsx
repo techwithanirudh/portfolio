@@ -1,29 +1,10 @@
-import { cva, type VariantProps } from 'class-variance-authority'
 import { Children, type ReactNode } from 'react'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 import { Section } from './index'
 
-const heroVariants = cva('flex flex-col', {
-  defaultVariants: {
-    align: 'center',
-    variant: 'default',
-  },
-  variants: {
-    align: {
-      center: 'items-start justify-center sm:items-center',
-      end: 'items-start justify-center sm:items-end',
-      start: 'items-start justify-center sm:items-start',
-    },
-    variant: {
-      compact: 'gap-4 py-6 lg:py-12 lg:px-2',
-      default:
-        'gap-8 py-10 sm:rounded-lg sm:border sm:bg-background sm:px-8 sm:py-20',
-    },
-  },
-})
-
 interface HeroProps {
+  action?: ReactNode
   caption?: string | ReactNode | null
   children?: ReactNode
   className?: string
@@ -33,7 +14,10 @@ interface HeroProps {
   title: string | ReactNode
 }
 
+export const TitleDot = () => <span className='text-primary'>.</span>
+
 export const HeroSection = ({
+  action,
   image,
   caption,
   title,
@@ -41,75 +25,46 @@ export const HeroSection = ({
   children,
   className,
   sectionClassName,
-  variant,
-  align,
-}: HeroProps &
-  VariantProps<typeof heroVariants> & {
-    asChild?: boolean
-  }) => (
+}: HeroProps) => (
   <Section className={cn('px-6 sm:p-4', sectionClassName)}>
-    <div className={cn(heroVariants({ align, className, variant }))}>
-      {image && (
-        <ViewAnimation
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {image}
-        </ViewAnimation>
+    <div
+      className={cn(
+        'flex flex-col items-start justify-center gap-4 py-6 lg:px-2 lg:py-12',
+        className
       )}
-      <div className='flex flex-col gap-4 sm:items-center'>
+    >
+      {image && <ViewAnimation>{image}</ViewAnimation>}
+      <div className='flex w-full flex-col gap-4'>
         {caption && (
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation>
             <small className='block text-balance text-muted-foreground text-sm sm:text-base'>
               {caption}
             </small>
           </ViewAnimation>
         )}
         <ViewAnimation
+          className={cn(
+            action &&
+              'flex flex-wrap items-center justify-between gap-x-4 gap-y-3'
+          )}
           delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
         >
-          <h1
-            className={cn(
-              'typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter',
-              'sm:text-center sm:text-4xl sm:leading-tight',
-              'md:text-5xl md:leading-tight',
-              variant === 'compact' && 'text-left sm:text-left'
-            )}
-          >
+          <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight'>
             {title}
+            {typeof title === 'string' && <TitleDot />}
           </h1>
+          {action}
         </ViewAnimation>
         {description && (
-          <ViewAnimation
-            delay={0.15}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <p
-              className={cn(
-                'text-pretty text-muted-foreground text-sm sm:text-base',
-                variant === 'compact' &&
-                  'text-left text-lg leading-relaxed tracking-tight'
-              )}
-            >
+          <ViewAnimation delay={0.15}>
+            <p className='text-pretty text-lg text-muted-foreground leading-relaxed tracking-tight'>
               {description}
             </p>
           </ViewAnimation>
         )}
       </div>
       {Children.map(children, (child, index) => (
-        <ViewAnimation
-          delay={0.1 + index * 0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
-          {child}
-        </ViewAnimation>
+        <ViewAnimation delay={0.1 + index * 0.05}>{child}</ViewAnimation>
       ))}
     </div>
   </Section>

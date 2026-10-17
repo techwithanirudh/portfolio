@@ -1,6 +1,46 @@
-import { BanToggleActionButton } from './ban-toggle-action'
-import { DeleteActionButton } from './delete-action'
-import { EditActionButton } from './edit-action'
+import type { ReactNode } from 'react'
+import { Icons } from '@/components/icons/icons'
+import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+
+interface EntryActionButtonProps {
+  disabled: boolean
+  icon: ReactNode
+  label: string
+  onClick: () => void
+  tone?: 'default' | 'destructive'
+}
+
+const EntryActionButton = ({
+  disabled,
+  icon,
+  label,
+  onClick,
+  tone = 'default',
+}: EntryActionButtonProps) => (
+  <Tooltip>
+    <TooltipTrigger
+      render={
+        <Button
+          aria-label={label}
+          className={tone === 'destructive' ? 'text-destructive' : undefined}
+          disabled={disabled}
+          onClick={onClick}
+          shape='square'
+          size='icon'
+          variant='ghost'
+        />
+      }
+    >
+      {icon}
+    </TooltipTrigger>
+    <TooltipContent>{label}</TooltipContent>
+  </Tooltip>
+)
 
 interface EntryCardActionsProps {
   canBan: boolean
@@ -31,18 +71,34 @@ export const EntryCardActions = ({
     <div className='flex items-center'>
       {canEdit ? (
         <>
-          <EditActionButton disabled={isBusy || isEditing} onClick={onEdit} />
-          <DeleteActionButton
+          <EntryActionButton
             disabled={isBusy || isEditing}
+            icon={<Icons.pencil className='size-4' />}
+            label='Edit entry'
+            onClick={onEdit}
+          />
+          <EntryActionButton
+            disabled={isBusy || isEditing}
+            icon={<Icons.trash className='size-4' />}
+            label='Delete entry'
             onClick={onDeleteModalOpen}
+            tone='destructive'
           />
         </>
       ) : null}
       {canBan ? (
-        <BanToggleActionButton
+        <EntryActionButton
           disabled={isBusy}
-          isBanned={isBanned}
+          icon={
+            isBanned ? (
+              <Icons.check className='size-4' />
+            ) : (
+              <Icons.ban className='size-4' />
+            )
+          }
+          label={isBanned ? 'Unban user' : 'Ban user'}
           onClick={onBanModalOpen}
+          tone='destructive'
         />
       ) : null}
     </div>

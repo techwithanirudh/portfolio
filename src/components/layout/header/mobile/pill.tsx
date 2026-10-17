@@ -22,7 +22,11 @@ export function FloatingPill({
       icon: <Icons.user className='size-4' />,
       label: 'About',
     },
-    { href: '/work', icon: <Icons.work className='size-4' />, label: 'Work' },
+    {
+      href: '/projects',
+      icon: <Icons.work className='size-4' />,
+      label: 'Projects',
+    },
   ]
 
   return (
@@ -30,17 +34,17 @@ export function FloatingPill({
       className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'
       data-mobile-nav-pill=''
     >
-      <div className='flex items-center gap-0.5 rounded-full border bg-background px-1.5 py-1.5 shadow-lg'>
+      <div className='flex items-center gap-1.5 rounded-full border bg-background p-1.5 shadow-lg'>
         <button
           aria-label='Search'
-          className='flex size-8 items-center justify-center rounded-full text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+          className='relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-95'
           onClick={onSearchOpen}
           type='button'
         >
           <Icons.search className='size-4' />
         </button>
 
-        <div className='mx-1 h-4 w-px bg-border' />
+        <div className='h-4 w-px bg-border' />
 
         {primaryLinks.map((link) => (
           <NavItem
@@ -52,14 +56,14 @@ export function FloatingPill({
           />
         ))}
 
-        <div className='mx-1 h-4 w-px bg-border' />
+        <div className='h-4 w-px bg-border' />
 
         <button
           aria-controls={menuId}
           aria-expanded={open}
           aria-label='Toggle menu'
           className={cn(
-            'relative flex size-8 items-center justify-center rounded-full transition-colors',
+            'relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 active:scale-95',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
             open
               ? 'bg-primary/10 text-primary'

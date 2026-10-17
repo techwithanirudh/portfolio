@@ -11,6 +11,8 @@ import type { ElementContent } from 'hast'
 import type { ShikiTransformer } from 'shiki'
 import { z } from 'zod'
 
+const dateSchema = z.union([z.string(), z.date()]).pipe(z.coerce.date())
+
 export const blog = defineCollections({
   dir: 'content/blog',
   postprocess: {
@@ -19,21 +21,7 @@ export const blog = defineCollections({
   },
   schema: frontmatterSchema.extend({
     author: z.string(),
-    date: z
-      .string()
-      .or(z.date())
-      .transform((value, context) => {
-        try {
-          return new Date(value)
-        } catch {
-          context.issues.push({
-            code: 'custom',
-            input: value,
-            message: 'The value could not be transformed to Date type.',
-          })
-          return z.NEVER
-        }
-      }),
+    date: dateSchema,
     image: z.string().optional(),
     tags: z.array(z.string()).optional(),
   }),
@@ -47,21 +35,7 @@ export const work = defineCollections({
     includeProcessedMarkdown: true,
   },
   schema: frontmatterSchema.extend({
-    date: z
-      .string()
-      .or(z.date())
-      .transform((value, context) => {
-        try {
-          return new Date(value)
-        } catch {
-          context.issues.push({
-            code: 'custom',
-            input: value,
-            message: 'The value could not be transformed to Date type.',
-          })
-          return z.NEVER
-        }
-      }),
+    date: dateSchema,
     github: z.string().optional(),
     image: z.string().optional(),
     /**
@@ -96,22 +70,29 @@ function transformerEscape(): ShikiTransformer {
 
 export default defineConfig({
   mdxOptions: async () => {
-    const { rehypeCodeDefaultOptions } = await import(
-      'fumadocs-core/mdx-plugins/rehype-code'
-    )
-    const { remarkSteps } = await import(
-      'fumadocs-core/mdx-plugins/remark-steps'
-    )
-    const { default: remarkMath } = await import('remark-math')
-    const { default: rehypeKatex } = await import('rehype-katex')
-    const { remarkAutoTypeTable } = await import('fumadocs-typescript')
+    const [
+      { rehypeCodeDefaultOptions },
+      { remarkSteps },
+      { default: remarkMath },
+      { default: rehypeKatex },
+      { remarkAutoTypeTable },
+    ] = await Promise.all([
+      import('fumadocs-core/mdx-plugins/rehype-code'),
+      import('fumadocs-core/mdx-plugins/remark-steps'),
+      import('remark-math'),
+      import('rehype-katex'),
+      import('fumadocs-typescript'),
+    ])
 
     return {
       rehypeCodeOptions: {
         inline: 'tailing-curly-colon',
         themes: {
-          dark: 'catppuccin-mocha',
-          light: 'catppuccin-latte',
+          // A matched pair, so a snippet keeps its colors and upright keywords
+          // when the theme flips (Catppuccin Latte's greens and yellows fail
+          // contrast on white, which ruled out the Catppuccin pair)
+          dark: 'github-dark',
+          light: 'github-light',
         },
         transformers: [
           ...(rehypeCodeDefaultOptions.transformers ?? []),

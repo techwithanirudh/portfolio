@@ -21,12 +21,11 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
       .toUpperCase()
     return (
       <div
-        aria-label={alt}
+        aria-hidden='true'
         className={cn(
           wrapper,
           'p-1 font-semibold text-[11px] text-muted-foreground'
         )}
-        role='img'
         style={{ height: size, width: size }}
       >
         {initials}
@@ -41,7 +40,7 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
         style={{ height: size, width: size }}
       >
         <Image
-          alt={alt}
+          alt=''
           className='rounded-lg object-contain'
           fill
           sizes={`${size}px`}
@@ -57,14 +56,14 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
       style={{ height: size, width: size }}
     >
       <Image
-        alt={alt}
+        alt=''
         className='rounded object-contain dark:hidden'
         fill
         sizes={`${size}px`}
         src={logo.light}
       />
       <Image
-        alt={alt}
+        alt=''
         className='hidden rounded object-contain dark:block'
         fill
         sizes={`${size}px`}

@@ -1,12 +1,19 @@
-export function getLoginUrl(redirectTo?: string): string {
+export const SIGN_IN_PARAM = 'signin'
+
+export function sanitizeRedirect(redirectTo?: string | null): string {
   if (!redirectTo) {
-    return '/login'
+    return '/'
   }
 
-  const safe =
-    redirectTo.startsWith('/') && !redirectTo.startsWith('//')
-      ? redirectTo
-      : '/'
+  const candidate = redirectTo.trim()
 
-  return `/login?redirectTo=${encodeURIComponent(safe)}`
+  return candidate.startsWith('/') &&
+    !candidate.startsWith('//') &&
+    !candidate.startsWith('/\\')
+    ? candidate
+    : '/'
+}
+
+export function getSignInUrl(redirectTo?: string): string {
+  return `/?${SIGN_IN_PARAM}=${encodeURIComponent(sanitizeRedirect(redirectTo))}`
 }

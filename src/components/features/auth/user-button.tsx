@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -13,9 +13,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
+import { signOut, useSession } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
+import { useSignInModal } from './sign-in-modal'
 import type { UserAvatarClassNames } from './user-avatar'
 import { UserAvatar } from './user-avatar'
 
@@ -42,47 +43,49 @@ export interface UserButtonProps {
 
 export function UserButton({ className, classNames }: UserButtonProps) {
   const router = useRouter()
-  const pathname = usePathname()
+  const { openSignIn } = useSignInModal()
   const { data: sessionData, isPending } = useSession()
   const user = sessionData?.user ?? null
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className={cn('rounded-md bg-transparent')}>
-        <Button
-          aria-label={'User Menu'}
-          className={cn(
-            'size-auto rounded-md border-none p-0',
-            'bg-secondary hover:bg-secondary/80',
-            classNames?.trigger?.base
-          )}
-          disabled={isPending}
-          variant='ghost'
-        >
-          {isPending ? (
-            <Skeleton
-              className={cn(
-                'size-8 rounded-md',
-                className,
-                classNames?.base,
-                classNames?.skeleton,
-                classNames?.trigger?.skeleton
-              )}
-            />
-          ) : (
-            <UserAvatar
-              className={cn('size-8', className, classNames?.base)}
-              classNames={classNames?.trigger?.avatar}
-              user={user}
-            />
-          )}
-        </Button>
+      <DropdownMenuTrigger
+        className='rounded-md'
+        render={
+          <Button
+            aria-label={'User menu'}
+            className={cn(
+              'size-auto rounded-md border border-border bg-background p-0 hover:bg-accent',
+              classNames?.trigger?.base
+            )}
+            disabled={isPending}
+            variant='ghost'
+          />
+        }
+      >
+        {isPending ? (
+          <Skeleton
+            className={cn(
+              'size-8 rounded-md',
+              className,
+              classNames?.base,
+              classNames?.skeleton,
+              classNames?.trigger?.skeleton
+            )}
+          />
+        ) : (
+          <UserAvatar
+            className={cn('size-8', className, classNames?.base)}
+            classNames={classNames?.trigger?.avatar}
+            user={user}
+          />
+        )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align='start'
         className={cn('w-fit min-w-56 max-w-64', classNames?.content?.base)}
-        onCloseAutoFocus={(e) => e.preventDefault()}
+        finalFocus={false}
         side='top'
       >
         {user ? (
@@ -109,11 +112,12 @@ export function UserButton({ className, classNames }: UserButtonProps) {
 
         {user ? (
           <>
-            <DropdownMenuItem asChild className={classNames?.content?.menuItem}>
-              <Link href='/account'>
-                <Icons.user className='size-4' />
-                Account
-              </Link>
+            <DropdownMenuItem
+              className={classNames?.content?.menuItem}
+              render={<Link href='/account' />}
+            >
+              <Icons.user className='size-4' />
+              Account
             </DropdownMenuItem>
 
             <DropdownMenuSeparator className={classNames?.content?.separator} />
@@ -126,15 +130,16 @@ export function UserButton({ className, classNames }: UserButtonProps) {
               }}
             >
               <Icons.logOut className='size-4' />
-              Log Out
+              Log out
             </DropdownMenuItem>
           </>
         ) : (
-          <DropdownMenuItem asChild className={classNames?.content?.menuItem}>
-            <Link href={getLoginUrl(pathname)}>
-              <Icons.logIn className='size-4' />
-              Sign In
-            </Link>
+          <DropdownMenuItem
+            className={classNames?.content?.menuItem}
+            onClick={() => openSignIn()}
+          >
+            <Icons.logIn className='size-4' />
+            Sign in
           </DropdownMenuItem>
         )}
       </DropdownMenuContent>

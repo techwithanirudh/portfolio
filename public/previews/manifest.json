@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-07T18:29:26.784Z",
+  "generated": "2026-10-15T23:04:51.033Z",
   "previews": {
     "ac8bc5b8d08d": {
       "generatedAt": "2026-05-13T07:45:44.634Z",
@@ -429,6 +429,870 @@
       "screenshotPath": "/previews/71ccdb1bc2a5.jpeg",
       "status": "success",
       "url": "https://depensa.techwithanirudh.com/",
+      "width": 1200
+    },
+    "a535b12c4b69": {
+      "generatedAt": "2026-10-15T06:38:10.603Z",
+      "height": 630,
+      "screenshotPath": "/previews/a535b12c4b69.jpeg",
+      "status": "success",
+      "url": "https://www.meetingbaas.com/en",
+      "width": 1200
+    },
+    "8364eb1ce10d": {
+      "generatedAt": "2026-10-15T06:38:11.555Z",
+      "height": 630,
+      "screenshotPath": "/previews/8364eb1ce10d.jpeg",
+      "status": "success",
+      "url": "https://energent.ai",
+      "width": 1200
+    },
+    "4f846901f9ff": {
+      "generatedAt": "2026-10-15T06:38:30.328Z",
+      "height": 630,
+      "screenshotPath": "/previews/4f846901f9ff.jpeg",
+      "status": "success",
+      "url": "https://www.typescriptlang.org",
+      "width": 1200
+    },
+    "638ef918d2a7": {
+      "generatedAt": "2026-10-15T06:38:31.799Z",
+      "height": 630,
+      "screenshotPath": "/previews/638ef918d2a7.jpeg",
+      "status": "success",
+      "url": "https://nextjs.org",
+      "width": 1200
+    },
+    "c1b67562504b": {
+      "generatedAt": "2026-10-15T06:38:36.208Z",
+      "height": 630,
+      "screenshotPath": "/previews/c1b67562504b.jpeg",
+      "status": "success",
+      "url": "https://www.bosch-softwaretechnologies.com/en/",
+      "width": 1200
+    },
+    "bf2905db04af": {
+      "generatedAt": "2026-10-15T06:38:54.647Z",
+      "height": 630,
+      "screenshotPath": "/previews/bf2905db04af.jpeg",
+      "status": "success",
+      "url": "https://tailwindcss.com",
+      "width": 1200
+    },
+    "02b81b60008c": {
+      "generatedAt": "2026-10-15T06:39:04.557Z",
+      "height": 630,
+      "screenshotPath": "/previews/02b81b60008c.jpeg",
+      "status": "success",
+      "url": "https://fumadocs.dev",
+      "width": 1200
+    },
+    "affc29967a7c": {
+      "generatedAt": "2026-10-15T06:39:04.618Z",
+      "height": 630,
+      "screenshotPath": "/previews/affc29967a7c.jpeg",
+      "status": "success",
+      "url": "https://ui.shadcn.com",
+      "width": 1200
+    },
+    "1ca5b14a8203": {
+      "generatedAt": "2026-10-15T06:39:20.724Z",
+      "height": 630,
+      "screenshotPath": "/previews/1ca5b14a8203.jpeg",
+      "status": "success",
+      "url": "https://www.postgresql.org",
+      "width": 1200
+    },
+    "374543d4f72b": {
+      "generatedAt": "2026-10-15T06:39:21.727Z",
+      "height": 630,
+      "screenshotPath": "/previews/374543d4f72b.jpeg",
+      "status": "success",
+      "url": "https://motion.dev",
+      "width": 1200
+    },
+    "768db728288f": {
+      "generatedAt": "2026-10-15T06:39:30.446Z",
+      "height": 630,
+      "screenshotPath": "/previews/768db728288f.jpeg",
+      "status": "success",
+      "url": "https://orm.drizzle.team",
+      "width": 1200
+    },
+    "4233e360f956": {
+      "generatedAt": "2026-10-15T06:39:47.007Z",
+      "height": 630,
+      "screenshotPath": "/previews/4233e360f956.jpeg",
+      "status": "success",
+      "url": "https://www.braydoncoyer.dev",
+      "width": 1200
+    },
+    "3b1a46da764e": {
+      "generatedAt": "2026-10-15T06:39:47.245Z",
+      "height": 630,
+      "screenshotPath": "/previews/3b1a46da764e.jpeg",
+      "status": "success",
+      "url": "https://bun.sh",
+      "width": 1200
+    },
+    "7cc1786bad5d": {
+      "generatedAt": "2026-10-15T06:39:50.022Z",
+      "height": 630,
+      "screenshotPath": "/previews/7cc1786bad5d.jpeg",
+      "status": "success",
+      "url": "https://nelsonlai.dev",
+      "width": 1200
+    },
+    "dd6fa0274e3f": {
+      "generatedAt": "2026-10-15T06:40:08.154Z",
+      "height": 630,
+      "screenshotPath": "/previews/dd6fa0274e3f.jpeg",
+      "status": "success",
+      "url": "https://chanhdai.com",
+      "width": 1200
+    },
+    "37a261499fe2": {
+      "generatedAt": "2026-10-15T06:40:21.261Z",
+      "height": 630,
+      "screenshotPath": "/previews/37a261499fe2.jpeg",
+      "status": "success",
+      "url": "https://tiptap.dev",
+      "width": 1200
+    },
+    "c0cd34ee1475": {
+      "errorMessage": "HTTP 404",
+      "generatedAt": "2026-10-15T06:40:22.261Z",
+      "height": 630,
+      "screenshotPath": "/previews/c0cd34ee1475.jpeg",
+      "status": "failed",
+      "url": "https://www.eververse.ai",
+      "width": 1200
+    },
+    "f42d89f4c74b": {
+      "generatedAt": "2026-10-15T06:40:35.939Z",
+      "height": 630,
+      "screenshotPath": "/previews/f42d89f4c74b.jpeg",
+      "status": "success",
+      "url": "https://ingo.au",
+      "width": 1200
+    },
+    "5349002575e0": {
+      "generatedAt": "2026-10-15T06:40:36.294Z",
+      "height": 630,
+      "screenshotPath": "/previews/5349002575e0.jpeg",
+      "status": "success",
+      "url": "https://www.joshwcomeau.com",
+      "width": 1200
+    },
+    "a77d0c7acd29": {
+      "generatedAt": "2026-10-15T06:40:49.758Z",
+      "height": 630,
+      "screenshotPath": "/previews/a77d0c7acd29.jpeg",
+      "status": "success",
+      "url": "https://shud.in",
+      "width": 1200
+    },
+    "faccdc39f046": {
+      "generatedAt": "2026-10-15T06:40:49.809Z",
+      "height": 630,
+      "screenshotPath": "/previews/faccdc39f046.jpeg",
+      "status": "success",
+      "url": "https://emilkowal.ski",
+      "width": 1200
+    },
+    "9a53de76076b": {
+      "generatedAt": "2026-10-15T06:40:51.994Z",
+      "height": 630,
+      "screenshotPath": "/previews/9a53de76076b.jpeg",
+      "status": "success",
+      "url": "https://iamsteve.me",
+      "width": 1200
+    },
+    "70d228d51006": {
+      "generatedAt": "2026-10-15T06:41:06.968Z",
+      "height": 630,
+      "screenshotPath": "/previews/70d228d51006.jpeg",
+      "status": "success",
+      "url": "https://ephraimduncan.com/",
+      "width": 1200
+    },
+    "48bbc8af035c": {
+      "generatedAt": "2026-10-15T06:41:07.355Z",
+      "height": 630,
+      "screenshotPath": "/previews/48bbc8af035c.jpeg",
+      "status": "success",
+      "url": "https://www.surajgaud.com/",
+      "width": 1200
+    },
+    "1d2b22cd0b9e": {
+      "generatedAt": "2026-10-15T06:41:12.459Z",
+      "height": 630,
+      "screenshotPath": "/previews/1d2b22cd0b9e.jpeg",
+      "status": "success",
+      "url": "https://visitors.now",
+      "width": 1200
+    },
+    "b06dee31e793": {
+      "generatedAt": "2026-10-15T06:41:26.204Z",
+      "height": 630,
+      "screenshotPath": "/previews/b06dee31e793.jpeg",
+      "status": "success",
+      "url": "https://kinfish.farmui.com/",
+      "width": 1200
+    },
+    "687657a80d5d": {
+      "generatedAt": "2026-10-15T06:41:26.456Z",
+      "height": 630,
+      "screenshotPath": "/previews/687657a80d5d.jpeg",
+      "status": "success",
+      "url": "https://leanrada.com/",
+      "width": 1200
+    },
+    "07a507c3272d": {
+      "generatedAt": "2026-10-15T06:41:27.695Z",
+      "height": 630,
+      "screenshotPath": "/previews/07a507c3272d.jpeg",
+      "status": "success",
+      "url": "https://enscribe.dev/",
+      "width": 1200
+    },
+    "4f78db4d07cf": {
+      "generatedAt": "2026-10-15T06:41:41.152Z",
+      "height": 630,
+      "screenshotPath": "/previews/4f78db4d07cf.jpeg",
+      "status": "success",
+      "url": "https://noahdunnagan.com/",
+      "width": 1200
+    },
+    "9c83989c98dc": {
+      "generatedAt": "2026-10-15T06:41:42.357Z",
+      "height": 630,
+      "screenshotPath": "/previews/9c83989c98dc.jpeg",
+      "status": "success",
+      "url": "https://victoreke.com/",
+      "width": 1200
+    },
+    "14f2faea348e": {
+      "generatedAt": "2026-10-15T06:41:43.270Z",
+      "height": 630,
+      "screenshotPath": "/previews/14f2faea348e.jpeg",
+      "status": "success",
+      "url": "https://github.com/techwithanirudh",
+      "width": 1200
+    },
+    "8f56a6c0fdfc": {
+      "generatedAt": "2026-10-15T06:41:59.917Z",
+      "height": 630,
+      "screenshotPath": "/previews/8f56a6c0fdfc.jpeg",
+      "status": "success",
+      "url": "https://www.jetbrains.com/lp/mono/",
+      "width": 1200
+    },
+    "7ad90401a8ac": {
+      "generatedAt": "2026-10-15T06:42:00.010Z",
+      "height": 630,
+      "screenshotPath": "/previews/7ad90401a8ac.jpeg",
+      "status": "success",
+      "url": "https://code.visualstudio.com",
+      "width": 1200
+    },
+    "0df5b545aa81": {
+      "generatedAt": "2026-10-15T06:42:02.111Z",
+      "height": 630,
+      "screenshotPath": "/previews/0df5b545aa81.jpeg",
+      "status": "success",
+      "url": "https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json",
+      "width": 1200
+    },
+    "935cdb2492cc": {
+      "generatedAt": "2026-10-15T06:43:17.019Z",
+      "height": 630,
+      "screenshotPath": "/previews/935cdb2492cc.jpeg",
+      "status": "success",
+      "url": "https://godly.website/",
+      "width": 1200
+    },
+    "9918d213cb0f": {
+      "generatedAt": "2026-10-15T06:44:44.758Z",
+      "height": 630,
+      "screenshotPath": "/previews/9918d213cb0f.jpeg",
+      "status": "success",
+      "url": "https://osf.io/preprints/osf/mtfpy_v1",
+      "width": 1200
+    },
+    "74ae6e3ceca7": {
+      "generatedAt": "2026-10-15T06:45:53.636Z",
+      "height": 630,
+      "screenshotPath": "/previews/74ae6e3ceca7.jpeg",
+      "status": "success",
+      "url": "https://quiver.ai",
+      "width": 1200
+    },
+    "f73b6aacb515": {
+      "generatedAt": "2026-10-15T06:46:10.039Z",
+      "height": 630,
+      "screenshotPath": "/previews/f73b6aacb515.jpeg",
+      "status": "success",
+      "url": "https://hexaa.sh",
+      "width": 1200
+    },
+    "78414a9e632b": {
+      "generatedAt": "2026-10-15T22:50:08.345Z",
+      "height": 630,
+      "screenshotPath": "/previews/78414a9e632b.jpeg",
+      "status": "success",
+      "url": "https://react.dev",
+      "width": 1200
+    },
+    "5ad17689dcb3": {
+      "generatedAt": "2026-10-15T22:50:08.570Z",
+      "height": 630,
+      "screenshotPath": "/previews/5ad17689dcb3.jpeg",
+      "status": "success",
+      "url": "https://www.python.org",
+      "width": 1200
+    },
+    "1f297cad465f": {
+      "generatedAt": "2026-10-15T22:50:09.033Z",
+      "height": 630,
+      "screenshotPath": "/previews/1f297cad465f.jpeg",
+      "status": "success",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
+      "width": 1200
+    },
+    "01db82f90e23": {
+      "generatedAt": "2026-10-15T22:50:22.996Z",
+      "height": 630,
+      "screenshotPath": "/previews/01db82f90e23.jpeg",
+      "status": "success",
+      "url": "https://www.radix-ui.com",
+      "width": 1200
+    },
+    "f0d6d1e956a4": {
+      "generatedAt": "2026-10-15T22:50:25.594Z",
+      "height": 630,
+      "screenshotPath": "/previews/f0d6d1e956a4.jpeg",
+      "status": "success",
+      "url": "https://nodejs.org",
+      "width": 1200
+    },
+    "3ecea9e30c78": {
+      "generatedAt": "2026-10-15T22:50:26.054Z",
+      "height": 630,
+      "screenshotPath": "/previews/3ecea9e30c78.jpeg",
+      "status": "success",
+      "url": "https://tanstack.com",
+      "width": 1200
+    },
+    "9aaf59373a46": {
+      "generatedAt": "2026-10-15T22:50:40.712Z",
+      "height": 630,
+      "screenshotPath": "/previews/9aaf59373a46.jpeg",
+      "status": "success",
+      "url": "https://git-scm.com",
+      "width": 1200
+    },
+    "e13a57d163b5": {
+      "generatedAt": "2026-10-15T22:51:01.669Z",
+      "height": 630,
+      "screenshotPath": "/previews/e13a57d163b5.jpeg",
+      "status": "success",
+      "url": "https://www.docker.com",
+      "width": 1200
+    },
+    "5df12506b03f": {
+      "generatedAt": "2026-10-15T22:51:41.211Z",
+      "height": 630,
+      "screenshotPath": "/previews/5df12506b03f.jpeg",
+      "status": "success",
+      "url": "https://redis.io",
+      "width": 1200
+    },
+    "5502a6be3bf0": {
+      "errorMessage": "HTTP 403",
+      "generatedAt": "2026-10-15T22:51:48.411Z",
+      "height": 630,
+      "screenshotPath": "/previews/5502a6be3bf0.jpeg",
+      "status": "failed",
+      "url": "https://claude.ai",
+      "width": 1200
+    },
+    "44cb5a404ad0": {
+      "generatedAt": "2026-10-15T22:52:02.237Z",
+      "height": 630,
+      "screenshotPath": "/previews/44cb5a404ad0.jpeg",
+      "status": "success",
+      "url": "https://vercel.com",
+      "width": 1200
+    },
+    "d8864b187c86": {
+      "generatedAt": "2026-10-15T22:52:04.670Z",
+      "height": 630,
+      "screenshotPath": "/previews/d8864b187c86.jpeg",
+      "status": "success",
+      "url": "https://cursor.com",
+      "width": 1200
+    },
+    "7160d989c9c6": {
+      "errorMessage": "HTTP 403",
+      "generatedAt": "2026-10-15T22:52:08.849Z",
+      "height": 630,
+      "screenshotPath": "/previews/7160d989c9c6.jpeg",
+      "status": "failed",
+      "url": "https://chatgpt.com/codex",
+      "width": 1200
+    },
+    "0062bfbf3d0c": {
+      "generatedAt": "2026-10-15T22:52:35.607Z",
+      "height": 630,
+      "screenshotPath": "/previews/0062bfbf3d0c.jpeg",
+      "status": "success",
+      "url": "https://posthog.com",
+      "width": 1200
+    },
+    "3d1e4a517746": {
+      "generatedAt": "2026-10-15T22:53:19.158Z",
+      "height": 630,
+      "screenshotPath": "/previews/3d1e4a517746.jpeg",
+      "status": "success",
+      "url": "https://umami.is",
+      "width": 1200
+    },
+    "fd3c2a3a5685": {
+      "generatedAt": "2026-10-15T22:53:34.005Z",
+      "height": 630,
+      "screenshotPath": "/previews/fd3c2a3a5685.jpeg",
+      "status": "success",
+      "url": "https://www.figma.com",
+      "width": 1200
+    },
+    "3c2778c61774": {
+      "generatedAt": "2026-10-15T22:53:35.145Z",
+      "height": 630,
+      "screenshotPath": "/previews/3c2778c61774.jpeg",
+      "status": "success",
+      "url": "https://support.apple.com/en-us/111346",
+      "width": 1200
+    },
+    "1ad03806e06f": {
+      "generatedAt": "2026-10-15T22:53:37.643Z",
+      "height": 630,
+      "screenshotPath": "/previews/1ad03806e06f.jpeg",
+      "status": "success",
+      "url": "https://paper.design",
+      "width": 1200
+    },
+    "de52b3b5b0e2": {
+      "generatedAt": "2026-10-15T22:53:51.520Z",
+      "height": 630,
+      "screenshotPath": "/previews/de52b3b5b0e2.jpeg",
+      "status": "success",
+      "url": "https://support.apple.com/en-us/121555",
+      "width": 1200
+    },
+    "0aa1a6707adf": {
+      "generatedAt": "2026-10-15T22:54:19.116Z",
+      "height": 630,
+      "screenshotPath": "/previews/0aa1a6707adf.jpeg",
+      "status": "success",
+      "url": "https://www.lenovo.com/in/en/p/desktops/thinkcentre/m-series-tiny/lenovo-thinkcentre-m70q-gen-5-tiny-intel/12tqcto1wwin1",
+      "width": 1200
+    },
+    "1653b7d2a45e": {
+      "generatedAt": "2026-10-15T22:54:58.129Z",
+      "height": 630,
+      "screenshotPath": "/previews/1653b7d2a45e.jpeg",
+      "status": "success",
+      "url": "https://www.samsung.com/in/monitors/smart/smart-monitor-m7-32-inch-smart-tv-apps-4k-uhd-ls32fm700uwxxl/",
+      "width": 1200
+    },
+    "955463da4239": {
+      "errorMessage": "HTTP 404",
+      "generatedAt": "2026-10-15T22:55:11.298Z",
+      "height": 630,
+      "screenshotPath": "/previews/955463da4239.jpeg",
+      "status": "failed",
+      "url": "https://www.logitech.com/products/mice/signature-m650.html",
+      "width": 1200
+    },
+    "792ddd2c3fa5": {
+      "generatedAt": "2026-10-15T22:55:15.642Z",
+      "height": 630,
+      "screenshotPath": "/previews/792ddd2c3fa5.jpeg",
+      "status": "success",
+      "url": "https://www.logitech.com/products/keyboards/mx-mechanical-mini.html",
+      "width": 1200
+    },
+    "3185120c7f80": {
+      "generatedAt": "2026-10-15T22:56:13.138Z",
+      "height": 630,
+      "screenshotPath": "/previews/3185120c7f80.jpeg",
+      "status": "success",
+      "url": "https://www.logitech.com/products/webcams/brio-300-webcam.html",
+      "width": 1200
+    },
+    "f6e51f61d18d": {
+      "generatedAt": "2026-10-15T22:56:26.984Z",
+      "height": 630,
+      "screenshotPath": "/previews/f6e51f61d18d.jpeg",
+      "status": "success",
+      "url": "https://www.marshall.com/us/en/product/major-v",
+      "width": 1200
+    },
+    "8c70b4e6247f": {
+      "generatedAt": "2026-10-15T22:56:27.569Z",
+      "height": 630,
+      "screenshotPath": "/previews/8c70b4e6247f.jpeg",
+      "status": "success",
+      "url": "https://support.apple.com/en-us/111833",
+      "width": 1200
+    },
+    "dc3feab74112": {
+      "generatedAt": "2026-10-15T22:56:28.069Z",
+      "height": 630,
+      "screenshotPath": "/previews/dc3feab74112.jpeg",
+      "status": "success",
+      "url": "https://support.apple.com/en-us/111840",
+      "width": 1200
+    },
+    "37c4df22eb1b": {
+      "generatedAt": "2026-10-15T22:56:42.154Z",
+      "height": 630,
+      "screenshotPath": "/previews/37c4df22eb1b.jpeg",
+      "status": "success",
+      "url": "https://support.apple.com/en-us/121031",
+      "width": 1200
+    },
+    "7d1120570c5e": {
+      "generatedAt": "2026-10-15T22:56:44.377Z",
+      "height": 630,
+      "screenshotPath": "/previews/7d1120570c5e.jpeg",
+      "status": "success",
+      "url": "https://1password.com",
+      "width": 1200
+    },
+    "2de253dbefaa": {
+      "generatedAt": "2026-10-15T22:57:44.588Z",
+      "height": 630,
+      "screenshotPath": "/previews/2de253dbefaa.jpeg",
+      "status": "success",
+      "url": "https://www.ikea.com/us/en/p/mittled-led-kitchen-cntrtp-lighting-strip-dimmable-white-10455434/",
+      "width": 1200
+    },
+    "727054811ede": {
+      "generatedAt": "2026-10-15T22:57:59.007Z",
+      "height": 630,
+      "screenshotPath": "/previews/727054811ede.jpeg",
+      "status": "success",
+      "url": "https://antinote.io",
+      "width": 1200
+    },
+    "5b6f2bab80b4": {
+      "generatedAt": "2026-10-15T22:57:59.007Z",
+      "height": 630,
+      "screenshotPath": "/previews/5b6f2bab80b4.jpeg",
+      "status": "success",
+      "url": "https://tryalcove.com",
+      "width": 1200
+    },
+    "cd654e8b44d0": {
+      "generatedAt": "2026-10-15T22:57:59.866Z",
+      "height": 630,
+      "screenshotPath": "/previews/cd654e8b44d0.jpeg",
+      "status": "success",
+      "url": "https://apps.apple.com/app/amphetamine/id937984704",
+      "width": 1200
+    },
+    "40620722288f": {
+      "errorMessage": "HTTP 403",
+      "generatedAt": "2026-10-15T22:58:01.730Z",
+      "height": 630,
+      "screenshotPath": "/previews/40620722288f.jpeg",
+      "status": "failed",
+      "url": "https://www.beeper.com",
+      "width": 1200
+    },
+    "4e57cba927a9": {
+      "generatedAt": "2026-10-15T22:58:14.961Z",
+      "height": 630,
+      "screenshotPath": "/previews/4e57cba927a9.jpeg",
+      "status": "success",
+      "url": "https://www.macbartender.com",
+      "width": 1200
+    },
+    "7bb85cf971ff": {
+      "generatedAt": "2026-10-15T22:58:15.305Z",
+      "height": 630,
+      "screenshotPath": "/previews/7bb85cf971ff.jpeg",
+      "status": "success",
+      "url": "https://betterdisplay.pro",
+      "width": 1200
+    },
+    "26a3308f0bc2": {
+      "generatedAt": "2026-10-15T22:58:30.969Z",
+      "height": 630,
+      "screenshotPath": "/previews/26a3308f0bc2.jpeg",
+      "status": "success",
+      "url": "https://cleanshot.com",
+      "width": 1200
+    },
+    "f8d50a5ca925": {
+      "generatedAt": "2026-10-15T22:58:31.016Z",
+      "height": 630,
+      "screenshotPath": "/previews/f8d50a5ca925.jpeg",
+      "status": "success",
+      "url": "https://conductor.build",
+      "width": 1200
+    },
+    "02083ae91410": {
+      "generatedAt": "2026-10-15T22:58:33.978Z",
+      "height": 630,
+      "screenshotPath": "/previews/02083ae91410.jpeg",
+      "status": "success",
+      "url": "https://www.anthropic.com/claude-code",
+      "width": 1200
+    },
+    "b746288e3915": {
+      "generatedAt": "2026-10-15T22:58:46.958Z",
+      "height": 630,
+      "screenshotPath": "/previews/b746288e3915.jpeg",
+      "status": "success",
+      "url": "https://software.charliemonroe.net/downie/",
+      "width": 1200
+    },
+    "72a5d8054a4b": {
+      "generatedAt": "2026-10-15T22:58:51.761Z",
+      "height": 630,
+      "screenshotPath": "/previews/72a5d8054a4b.jpeg",
+      "status": "success",
+      "url": "https://www.craft.do",
+      "width": 1200
+    },
+    "f0c2b9985610": {
+      "generatedAt": "2026-10-15T22:59:01.758Z",
+      "height": 630,
+      "screenshotPath": "/previews/f0c2b9985610.jpeg",
+      "status": "success",
+      "url": "https://diabrowser.com",
+      "width": 1200
+    },
+    "77680e44a6b5": {
+      "generatedAt": "2026-10-15T22:59:14.049Z",
+      "height": 630,
+      "screenshotPath": "/previews/77680e44a6b5.jpeg",
+      "status": "success",
+      "url": "https://ghostty.org",
+      "width": 1200
+    },
+    "f306136360f1": {
+      "generatedAt": "2026-10-15T22:59:14.967Z",
+      "height": 630,
+      "screenshotPath": "/previews/f306136360f1.jpeg",
+      "status": "success",
+      "url": "https://dropoverapp.com",
+      "width": 1200
+    },
+    "f62678a1a0de": {
+      "generatedAt": "2026-10-15T22:59:17.329Z",
+      "height": 630,
+      "screenshotPath": "/previews/f62678a1a0de.jpeg",
+      "status": "success",
+      "url": "https://www.goodnotes.com",
+      "width": 1200
+    },
+    "87143cebcfee": {
+      "generatedAt": "2026-10-15T22:59:30.161Z",
+      "height": 630,
+      "screenshotPath": "/previews/87143cebcfee.jpeg",
+      "status": "success",
+      "url": "https://iina.io",
+      "width": 1200
+    },
+    "41462e497513": {
+      "generatedAt": "2026-10-15T22:59:32.562Z",
+      "height": 630,
+      "screenshotPath": "/previews/41462e497513.jpeg",
+      "status": "success",
+      "url": "https://lookaway.app",
+      "width": 1200
+    },
+    "1b4322406e9b": {
+      "generatedAt": "2026-10-15T22:59:34.548Z",
+      "height": 630,
+      "screenshotPath": "/previews/1b4322406e9b.jpeg",
+      "status": "success",
+      "url": "https://github.com/MrKai77/Loop",
+      "width": 1200
+    },
+    "c5e3f7b4452c": {
+      "generatedAt": "2026-10-15T22:59:50.128Z",
+      "height": 630,
+      "screenshotPath": "/previews/c5e3f7b4452c.jpeg",
+      "status": "success",
+      "url": "https://github.com/tw93/Mole",
+      "width": 1200
+    },
+    "e5eefade953c": {
+      "generatedAt": "2026-10-15T22:59:51.765Z",
+      "height": 630,
+      "screenshotPath": "/previews/e5eefade953c.jpeg",
+      "status": "success",
+      "url": "https://www.notion.com",
+      "width": 1200
+    },
+    "51047ab7e984": {
+      "generatedAt": "2026-10-15T22:59:52.746Z",
+      "height": 630,
+      "screenshotPath": "/previews/51047ab7e984.jpeg",
+      "status": "success",
+      "url": "https://www.notion.com/product/calendar",
+      "width": 1200
+    },
+    "2d59a23a2b45": {
+      "generatedAt": "2026-10-15T23:00:05.025Z",
+      "height": 630,
+      "screenshotPath": "/previews/2d59a23a2b45.jpeg",
+      "status": "success",
+      "url": "https://opencode.ai",
+      "width": 1200
+    },
+    "617b0a1aedbe": {
+      "generatedAt": "2026-10-15T23:00:05.391Z",
+      "height": 630,
+      "screenshotPath": "/previews/617b0a1aedbe.jpeg",
+      "status": "success",
+      "url": "https://pasteapp.io",
+      "width": 1200
+    },
+    "26e9bf081e4b": {
+      "generatedAt": "2026-10-15T23:00:05.622Z",
+      "height": 630,
+      "screenshotPath": "/previews/26e9bf081e4b.jpeg",
+      "status": "success",
+      "url": "https://orbstack.dev",
+      "width": 1200
+    },
+    "8350251237b5": {
+      "errorMessage": "goto: net::ERR_CERT_DATE_INVALID at https://pictogramapp.com/\nCall log:\n\u001b[2m  - navigating to \"https://pictogramapp.com/\", waiting until \"domcontentloaded\"\u001b[22m\n",
+      "generatedAt": "2026-10-15T23:00:07.270Z",
+      "height": 630,
+      "screenshotPath": "/previews/8350251237b5.jpeg",
+      "status": "failed",
+      "url": "https://pictogramapp.com",
+      "width": 1200
+    },
+    "96127608f5c8": {
+      "generatedAt": "2026-10-15T23:00:19.215Z",
+      "height": 630,
+      "screenshotPath": "/previews/96127608f5c8.jpeg",
+      "status": "success",
+      "url": "https://raindrop.io",
+      "width": 1200
+    },
+    "0b2d783f1ed6": {
+      "generatedAt": "2026-10-15T23:00:19.545Z",
+      "height": 630,
+      "screenshotPath": "/previews/0b2d783f1ed6.jpeg",
+      "status": "success",
+      "url": "https://pixelsnap.com",
+      "width": 1200
+    },
+    "7ab0984ff243": {
+      "generatedAt": "2026-10-15T23:00:37.219Z",
+      "height": 630,
+      "screenshotPath": "/previews/7ab0984ff243.jpeg",
+      "status": "success",
+      "url": "https://sparkmailapp.com",
+      "width": 1200
+    },
+    "b3927a7a04d1": {
+      "generatedAt": "2026-10-15T23:00:37.292Z",
+      "height": 630,
+      "screenshotPath": "/previews/b3927a7a04d1.jpeg",
+      "status": "success",
+      "url": "https://spotify.com",
+      "width": 1200
+    },
+    "f838d4a64981": {
+      "errorMessage": "screenshot: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n",
+      "generatedAt": "2026-10-15T23:02:06.751Z",
+      "height": 630,
+      "screenshotPath": "/previews/f838d4a64981.jpeg",
+      "status": "failed",
+      "url": "https://raycast.com",
+      "width": 1200
+    },
+    "3094ed31b852": {
+      "generatedAt": "2026-10-15T23:02:19.592Z",
+      "height": 630,
+      "screenshotPath": "/previews/3094ed31b852.jpeg",
+      "status": "success",
+      "url": "https://termius.com",
+      "width": 1200
+    },
+    "3120ff9fb11f": {
+      "generatedAt": "2026-10-15T23:02:19.700Z",
+      "height": 630,
+      "screenshotPath": "/previews/3120ff9fb11f.jpeg",
+      "status": "success",
+      "url": "https://sindresorhus.com/supercharge",
+      "width": 1200
+    },
+    "3c9e3795ec79": {
+      "generatedAt": "2026-10-15T23:02:23.546Z",
+      "height": 630,
+      "screenshotPath": "/previews/3c9e3795ec79.jpeg",
+      "status": "success",
+      "url": "https://typefully.com",
+      "width": 1200
+    },
+    "b2e9eb66c181": {
+      "generatedAt": "2026-10-15T23:02:35.137Z",
+      "height": 630,
+      "screenshotPath": "/previews/b2e9eb66c181.jpeg",
+      "status": "success",
+      "url": "https://vesktop.dev",
+      "width": 1200
+    },
+    "a46d47d63da8": {
+      "generatedAt": "2026-10-15T23:02:35.390Z",
+      "height": 630,
+      "screenshotPath": "/previews/a46d47d63da8.jpeg",
+      "status": "success",
+      "url": "https://mac.getutm.app",
+      "width": 1200
+    },
+    "a94e1b587274": {
+      "generatedAt": "2026-10-15T23:03:39.118Z",
+      "height": 630,
+      "screenshotPath": "/previews/a94e1b587274.jpeg",
+      "status": "success",
+      "url": "https://warp.dev",
+      "width": 1200
+    },
+    "f61506dbe55b": {
+      "generatedAt": "2026-10-15T23:03:52.095Z",
+      "height": 630,
+      "screenshotPath": "/previews/f61506dbe55b.jpeg",
+      "status": "success",
+      "url": "https://yaak.app",
+      "width": 1200
+    },
+    "817761e68476": {
+      "generatedAt": "2026-10-15T23:03:52.597Z",
+      "height": 630,
+      "screenshotPath": "/previews/817761e68476.jpeg",
+      "status": "success",
+      "url": "https://v1.techwithanirudh.com/",
+      "width": 1200
+    },
+    "feb362fd4dac": {
+      "errorMessage": "waitForTimeout: Target page, context or browser has been closed",
+      "generatedAt": "2026-10-15T23:04:50.888Z",
+      "height": 630,
+      "screenshotPath": "/previews/feb362fd4dac.jpeg",
+      "status": "failed",
+      "url": "https://wisprflow.ai",
       "width": 1200
     }
   }

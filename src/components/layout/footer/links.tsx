@@ -2,20 +2,53 @@ import { resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/layout/footer/active-link'
+import { PreviewLink } from '@/components/preview-link'
 import { ViewAnimation } from '@/components/view-animation'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
-import { getSortedWork } from '@/lib/source'
+import { cn } from '@/lib/utils'
+
+interface LinkEntry {
+  children: ReactNode
+  external?: boolean
+  href: string
+  routeHandler?: boolean
+}
 
 interface ListItem {
   external?: boolean
   href?: string
-  items: {
-    href: string
-    children: ReactNode
-    external?: boolean
-  }[]
+  items: LinkEntry[]
   title: string
+}
+
+const plainLinkClassName =
+  'text-muted-foreground text-sm transition-colors hover:text-foreground'
+
+const FooterLink = ({ item }: { item: LinkEntry }) => {
+  if (item.external) {
+    // No hover previews down here: most socials sit behind a login wall, so
+    // only GitHub ever had one
+    return (
+      <PreviewLink
+        className={plainLinkClassName}
+        href={item.href}
+        preview={null}
+      >
+        {item.children}
+      </PreviewLink>
+    )
+  }
+
+  if (item.routeHandler) {
+    return (
+      <a className={plainLinkClassName} href={item.href}>
+        {item.children}
+      </a>
+    )
+  }
+
+  return <ActiveLink href={item.href}>{item.children}</ActiveLink>
 }
 
 export const Links = () => {
@@ -26,8 +59,6 @@ export const Links = () => {
   const navItems = links.filter((item) =>
     ['nav', 'all'].includes(item.on ?? 'all')
   )
-
-  const works = getSortedWork()
 
   const lists: ListItem[] = [
     {
@@ -51,22 +82,15 @@ export const Links = () => {
       items: [
         { children: 'Uses', href: '/uses' },
         { children: 'Colophon', href: '/colophon' },
+        { children: 'Resume', href: '/resume' },
         {
-          children: 'V1 Portfolio',
+          children: 'V1 portfolio',
           external: true,
           href: 'https://v1.techwithanirudh.com/',
         },
-        { children: 'RSS Feed', href: '/rss.xml' },
-        { children: 'Sitemap', href: '/sitemap.xml' },
+        { children: 'RSS feed', href: '/rss.xml', routeHandler: true },
       ],
       title: 'More',
-    },
-    {
-      items: works.slice(0, 5).map((work) => ({
-        children: work.data.title,
-        href: work.url,
-      })),
-      title: 'Work',
     },
     {
       items: socials.map((social) => ({
@@ -84,14 +108,15 @@ export const Links = () => {
   ]
 
   return (
-    <div className='grid grid-cols-2 gap-6 text-muted-foreground text-sm sm:grid-cols-4 sm:gap-8'>
+    <div className='grid grid-cols-2 gap-6 text-muted-foreground text-sm sm:grid-cols-3 sm:gap-8'>
       {lists.map((list, index) => (
         <ViewAnimation
-          className='flex flex-col gap-3 sm:gap-6'
+          className={cn(
+            'flex flex-col gap-3 sm:gap-6',
+            index === lists.length - 1 && 'max-sm:col-span-2'
+          )}
           delay={0.05 * index}
-          initial={{ opacity: 0, translateY: -6 }}
           key={list.title}
-          whileInView={{ opacity: 1, translateY: 0 }}
         >
           <div className='border-b pb-1 font-medium text-foreground sm:border-none sm:pb-0'>
             {list.href ? (
@@ -103,13 +128,7 @@ export const Links = () => {
           <ul className='flex flex-col gap-2 sm:gap-3'>
             {list.items.map((item) => (
               <li key={item.href}>
-                <ActiveLink
-                  href={item.href}
-                  rel={item.external ? 'noopener noreferrer' : undefined}
-                  target={item.external ? '_blank' : undefined}
-                >
-                  {item.children}
-                </ActiveLink>
+                <FooterLink item={item} />
               </li>
             ))}
           </ul>

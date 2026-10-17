@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -22,6 +22,8 @@ interface TimeStyles extends React.CSSProperties {
 const HAND_BASE_CLASSES =
   'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
 const HAND_ORIGIN = { transformOrigin: '0px 0px' }
+const FACE_CLASSES =
+  'relative block size-9 rotate-180 rounded-md border border-border bg-background'
 const FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: '2-digit',
   hour12: true,
@@ -30,6 +32,15 @@ const FORMATTER = new Intl.DateTimeFormat('en-US', {
   timeZone: 'Asia/Kolkata',
   timeZoneName: 'short',
 })
+
+const subscribe = (onChange: () => void) => {
+  const interval = setInterval(onChange, 1000)
+  return () => clearInterval(interval)
+}
+
+const getSecond = () => Math.floor(Date.now() / 1000) * 1000
+
+const getServerSecond = () => null
 
 const getParts = (date: Date) => {
   const parts = FORMATTER.formatToParts(date)
@@ -44,100 +55,85 @@ const getParts = (date: Date) => {
   }
 }
 
+const CenterDot = () => (
+  <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
+)
+
 export function Clock({ className }: ClockProps) {
-  const [mounted, setMounted] = useState(false)
-  const [time, setTime] = useState<Date>(new Date())
+  const second = useSyncExternalStore(subscribe, getSecond, getServerSecond)
 
-  useEffect(() => {
-    setMounted(true)
-    const interval = setInterval(() => {
-      setTime(new Date())
-    }, 1000)
+  if (second === null) {
+    return (
+      <Button
+        aria-label='Clock'
+        className='rounded-md'
+        size='icon'
+        variant='ghost'
+      >
+        <div className={cn(FACE_CLASSES, className)}>
+          <CenterDot />
+        </div>
+      </Button>
+    )
+  }
 
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
-
+  const time = new Date(second)
   const { hours, minutes, seconds, timeString } = getParts(time)
-  const accessibleLabel = mounted ? timeString : 'Clock'
-
   const timeStyles: TimeStyles = {
     '--time-hours': hours,
     '--time-minutes': minutes,
     '--time-seconds': seconds,
   }
 
-  if (!mounted) {
-    return (
-      <Button
-        aria-label={accessibleLabel}
-        className='rounded-full'
-        size='icon'
-        variant='ghost'
-      >
-        <div
-          className={cn(
-            'relative block size-8 rotate-180 rounded-full border border-border',
-            className
-          )}
-        >
-          <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
-        </div>
-      </Button>
-    )
-  }
-
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Button
-          aria-label={accessibleLabel}
-          className='rounded-full'
-          size='icon'
-          variant='ghost'
+      <TooltipTrigger
+        render={
+          <Button
+            aria-label={timeString}
+            className='rounded-md'
+            size='icon'
+            variant='ghost'
+          />
+        }
+      >
+        <time
+          className={cn(FACE_CLASSES, className)}
+          dateTime={time.toISOString()}
+          style={timeStyles}
         >
-          <time
+          <CenterDot />
+
+          <div
+            className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
+            style={{
+              ...HAND_ORIGIN,
+              transform:
+                'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
+            }}
+          />
+
+          <div
+            className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
+            style={{
+              ...HAND_ORIGIN,
+              transform:
+                'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
+            }}
+          />
+
+          <div
             className={cn(
-              'relative block size-8 rotate-180 rounded-full border border-border',
-              className
+              HAND_BASE_CLASSES,
+              'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
             )}
-            dateTime={time.toISOString()}
-            style={timeStyles}
-          >
-            <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
-
-            <div
-              className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
-              style={{
-                ...HAND_ORIGIN,
-                transform:
-                  'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
-              }}
-            />
-
-            <div
-              className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
-              style={{
-                ...HAND_ORIGIN,
-                transform:
-                  'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
-              }}
-            />
-
-            <div
-              className={cn(
-                HAND_BASE_CLASSES,
-                'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
-              )}
-              style={{
-                ...HAND_ORIGIN,
-                transform:
-                  'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
-              }}
-            />
-          </time>
-        </Button>
+            style={{
+              ...HAND_ORIGIN,
+              transform:
+                'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
+            }}
+          />
+        </time>
       </TooltipTrigger>
       <TooltipContent>
         <p>{timeString}</p>

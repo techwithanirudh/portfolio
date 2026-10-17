@@ -1,4 +1,6 @@
 [data-media-player] {
+  /* A soft fill instead of black while the stream buffers */
+  --video-bg: var(--color-muted);
   --video-border: none;
   --video-border-radius: var(--radius-xl);
 }

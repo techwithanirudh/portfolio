@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, type ReactNode, use } from 'react'
-import type { PageEntry } from '@/app/actions/pages'
+import type { PageEntry } from '@/lib/source'
 
 const PagesContext = createContext<PageEntry[] | null>(null)
 

@@ -1,16 +1,63 @@
-'use client'
+import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Button } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
+  PaginationLink,
 } from '@/components/ui/pagination'
-import { usePagination } from '@/hooks/use-pagination'
+import { getPaginationRange } from '@/lib/pagination'
+
+const ellipsisClassName =
+  'flex size-9 items-center justify-center text-muted-foreground text-sm'
+
+const linkClassName = 'shadow-none hover:z-10 focus-visible:z-10'
+
+// Both arrows always render, greyed out at the ends, so the page numbers
+// stay centered and the bar doesn't jump between pages
+function StepLink({
+  children,
+  href,
+  label,
+}: {
+  children: ReactNode
+  href?: string
+  label: string
+}) {
+  if (!href) {
+    return (
+      // Just a placeholder for sighted users; there's nowhere to go
+      <span
+        aria-hidden
+        className={buttonVariants({
+          className: 'opacity-40',
+          shape: 'square',
+          size: 'icon',
+          variant: 'ghost',
+        })}
+      >
+        {children}
+      </span>
+    )
+  }
+
+  return (
+    <PaginationLink
+      aria-label={label}
+      className={linkClassName}
+      href={href}
+      shape='square'
+      variant='ghost'
+    >
+      {children}
+    </PaginationLink>
+  )
+}
 
 interface NumberedPaginationProps {
   currentPage: number
-  onPageChange: (page: number) => void
+  getHref: (page: number) => string
   paginationItemsToDisplay?: number
   totalPages: number
 }
@@ -19,101 +66,69 @@ function NumberedPagination({
   currentPage,
   totalPages,
   paginationItemsToDisplay = 5,
-  onPageChange,
+  getHref,
 }: NumberedPaginationProps) {
-  const { pages, showLeftEllipsis, showRightEllipsis } = usePagination({
+  const { pages, showLeftEllipsis, showRightEllipsis } = getPaginationRange({
     currentPage,
-    paginationItemsToDisplay,
+    itemsToDisplay: paginationItemsToDisplay,
     totalPages,
   })
-
-  const handlePageChange = (page: number) => (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (page >= 1 && page <= totalPages) {
-      onPageChange(page)
-    }
-  }
 
   return (
     <Pagination>
       <PaginationContent className='grid w-full grid-cols-[1fr_auto_1fr] items-center gap-0'>
         <PaginationItem className='flex'>
-          {currentPage > 1 && (
-            <Button
-              aria-label='Go to previous page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage - 1)}
-              shape='square'
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
-            </Button>
-          )}
+          <StepLink
+            href={currentPage > 1 ? getHref(currentPage - 1) : undefined}
+            label='Go to previous page'
+          >
+            <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
+          </StepLink>
         </PaginationItem>
 
         <PaginationItem className='justify-self-center'>
           <ul className='inline-flex items-center gap-1 -space-x-px rtl:space-x-reverse'>
             {showLeftEllipsis && (
               <PaginationItem>
-                <Button
-                  className='pointer-events-none shadow-none'
-                  shape='square'
-                  size='icon'
-                  variant='ghost'
-                >
+                <span aria-hidden='true' className={ellipsisClassName}>
                   ...
-                </Button>
+                </span>
               </PaginationItem>
             )}
 
             {pages.map((page) => (
               <PaginationItem className='w-max' key={page}>
-                <Button
-                  aria-current={page === currentPage ? 'page' : undefined}
-                  className='shadow-none hover:z-10 focus-visible:z-10'
-                  onClick={handlePageChange(page)}
+                <PaginationLink
+                  className={linkClassName}
+                  href={getHref(page)}
+                  isActive={page === currentPage}
                   shape='square'
-                  size='icon'
                   variant={page === currentPage ? 'default' : 'ghost'}
                 >
                   {page}
-                </Button>
+                </PaginationLink>
               </PaginationItem>
             ))}
 
             {showRightEllipsis && (
               <PaginationItem>
-                <Button
-                  className='pointer-events-none shadow-none'
-                  shape='square'
-                  size='icon'
-                  variant='ghost'
-                >
+                <span aria-hidden='true' className={ellipsisClassName}>
                   ...
-                </Button>
+                </span>
               </PaginationItem>
             )}
           </ul>
         </PaginationItem>
 
         <PaginationItem className='flex justify-end'>
-          {currentPage < totalPages && (
-            <Button
-              aria-label='Go to next page'
-              className='shadow-none hover:z-10 focus-visible:z-10'
-              onClick={handlePageChange(currentPage + 1)}
-              shape='square'
-              size='icon'
-              variant='ghost'
-            >
-              <Icons.chevronRight
-                aria-hidden='true'
-                size={16}
-                strokeWidth={2}
-              />
-            </Button>
-          )}
+          <StepLink
+            href={
+              currentPage < totalPages ? getHref(currentPage + 1) : undefined
+            }
+            label='Go to next page'
+          >
+            <Icons.chevronRight aria-hidden='true' size={16} strokeWidth={2} />
+          </StepLink>
         </PaginationItem>
       </PaginationContent>
     </Pagination>

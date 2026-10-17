@@ -74,7 +74,7 @@ function GithubRepoFallback({
   return (
     <a
       className={cn(
-        'not-prose inline-flex items-center gap-1.5 text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         className
       )}
       href={href}
@@ -98,20 +98,25 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
     const linkLabel = label ?? details.name
 
     return (
-      <HoverCard closeDelay={120} openDelay={120}>
-        <HoverCardTrigger asChild>
-          <a
-            className={cn(
-              'not-prose inline-flex items-center gap-1.5 text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-              className
-            )}
-            href={details.url}
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
-            <span>{linkLabel}</span>
-          </a>
+      <HoverCard>
+        <HoverCardTrigger
+          closeDelay={120}
+          delay={120}
+          render={
+            <a
+              aria-label={linkLabel}
+              className={cn(
+                'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                className
+              )}
+              href={details.url}
+              rel='noopener noreferrer'
+              target='_blank'
+            />
+          }
+        >
+          <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
+          <span>{linkLabel}</span>
         </HoverCardTrigger>
         <HoverCardContent className='not-prose w-96 max-w-[calc(100vw-2rem)] border-dashed p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
           <div className='flex flex-col bg-card/60'>
@@ -125,7 +130,7 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
                   target='_blank'
                 >
                   <span className='truncate'>{details.name}</span>
-                  <Icons.arrowUpRight className='size-3.5 shrink-0 text-muted-foreground transition-transform will-change-transform group-hover/github-repo:scale-125' />
+                  <Icons.arrowUpRight className='size-3.5 shrink-0 text-muted-foreground transition-transform group-hover/github-repo:scale-125' />
                 </a>
                 <p className='mt-1 line-clamp-2 text-pretty text-muted-foreground text-xs leading-5'>
                   {details.description ?? 'This repo has no description.'}
@@ -183,15 +188,10 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
       </HoverCard>
     )
   } catch (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      return (
-        <span className='not-prose text-destructive text-sm'>
-          Unable to load GitHub repo:{' '}
-          {error instanceof Error ? error.message : 'Unknown error'}
-        </span>
-      )
-    }
-
+    console.error(
+      `Failed to load GitHub repo ${getGitHubRepoUrl(parseGitHubRepoInput(repo))}:`,
+      error instanceof Error ? error.message : error
+    )
     return <GithubRepoFallback className={className} repo={repo} />
   }
 }

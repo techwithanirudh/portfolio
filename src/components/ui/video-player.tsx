@@ -3,7 +3,7 @@
 import '@vidstack/react/player/styles/default/theme.css'
 import '@vidstack/react/player/styles/default/layouts/video.css'
 
-import { MediaPlayer, MediaProvider } from '@vidstack/react'
+import { MediaPlayer, MediaProvider, Poster } from '@vidstack/react'
 import {
   DefaultVideoLayout,
   defaultLayoutIcons,
@@ -31,7 +31,11 @@ export const VideoPlayer = ({
     poster={poster}
     {...props}
   >
-    <MediaProvider />
+    <MediaProvider>
+      {/* The player only paints `poster` through this; without it a
+          buffering embed is a bare black box */}
+      {poster && <Poster alt='' className='vds-poster' />}
+    </MediaProvider>
     <DefaultVideoLayout
       colorScheme='default'
       icons={defaultLayoutIcons}

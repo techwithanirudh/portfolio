@@ -6,10 +6,9 @@ export const post = loader(toFumadocsSource(blog, []), {
   baseUrl: '/blog',
 })
 
-export const { getPage: getPost, getPages: getPosts, pageTree } = post
+export const { getPage: getPost, getPages: getPosts } = post
 
 export type Post = ReturnType<typeof getPost>
-export type PageTree = typeof pageTree
 export type BlogPage = ReturnType<typeof getPosts>[number]
 
 const posts = getPosts()

@@ -1,20 +1,36 @@
 import { ImageResponse } from '@takumi-rs/image-response'
-import { generate } from '@/app/banner.png/og'
+import { ogCoverSize, ogImageSize, PageImage } from '@/app/og/_lib/template'
+import { clampOgParams } from '@/lib/metadata'
+import { getCoverDataUrl, getOgFonts } from '@/lib/og'
 
-export const GET = (request: Request): ImageResponse | Response => {
+export const GET = async (
+  request: Request
+): Promise<ImageResponse | Response> => {
   const { searchParams } = new URL(request.url)
-  const title = searchParams.get('title')
-  const description = searchParams.get('description') ?? undefined
+  const rawTitle = searchParams.get('title')
 
-  if (!title) {
+  if (!rawTitle) {
     return new Response('Missing title', { status: 400 })
   }
 
-  const image = new ImageResponse(generate({ subtitle: description, title }), {
-    format: 'webp',
-    height: 630,
-    width: 1200,
-  })
+  const { title, description } = clampOgParams(
+    rawTitle,
+    searchParams.get('description') ?? undefined
+  )
 
-  return image
+  return new ImageResponse(
+    <PageImage
+      coverSrc={getCoverDataUrl(title, ogCoverSize)}
+      description={description}
+      title={title}
+    />,
+    {
+      fonts: await getOgFonts(),
+      format: 'webp',
+      headers: {
+        'Cache-Control': 'public, max-age=86400, s-maxage=31536000, immutable',
+      },
+      ...ogImageSize,
+    }
+  )
 }

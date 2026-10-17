@@ -19,10 +19,8 @@ async function createNextConfig(): Promise<NextConfig> {
       // TypeScript 7 dropped the compiler API Next.js reaches for directly, so
       // it has to shell out to tsc instead.
       useTypeScriptCli: true,
-      viewTransition: true,
     },
     images: {
-      dangerouslyAllowSVG: true,
       qualities: [100, 75, 85, 95],
       remotePatterns: [
         {
@@ -57,6 +55,36 @@ async function createNextConfig(): Promise<NextConfig> {
     poweredByHeader: false,
     productionBrowserSourceMaps: process.env.SOURCE_MAPS === 'true',
     reactStrictMode: true,
+    async redirects() {
+      return [
+        {
+          destination: '/?signin=%2F',
+          permanent: false,
+          source: '/login',
+        },
+        {
+          destination: '/resume',
+          permanent: true,
+          source: '/resume.pdf',
+        },
+        {
+          destination: '/projects',
+          permanent: true,
+          source: '/work',
+        },
+        // Tags are inline filters on the blog now, so the old index goes home
+        {
+          destination: '/blog',
+          permanent: true,
+          source: '/blog/tags',
+        },
+        {
+          destination: '/projects/:path*',
+          permanent: true,
+          source: '/work/:path*',
+        },
+      ]
+    },
     async rewrites() {
       return [
         {
@@ -65,7 +93,7 @@ async function createNextConfig(): Promise<NextConfig> {
         },
         {
           destination: '/work.mdx/:path*',
-          source: '/work/:path*.mdx',
+          source: '/projects/:path*.mdx',
         },
         {
           destination: '/blog/rss.xml',

@@ -3,25 +3,30 @@
 import { useSound } from '@web-kits/audio/react'
 import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
 import { toggleOn } from '@/lib/audio/minimal'
+import { MEDIA } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 type Theme = 'light' | 'dark' | 'system'
 
-const itemVariants = cva(
-  'size-6.5 rounded-full p-1.5 text-fd-muted-foreground',
-  {
-    variants: {
-      active: {
-        false: 'text-fd-muted-foreground',
-        true: 'bg-fd-accent text-fd-accent-foreground',
-      },
+const itemVariants = cva('size-6.5 rounded-sm p-1.5 text-muted-foreground', {
+  variants: {
+    active: {
+      false: 'text-muted-foreground',
+      true: 'bg-accent text-accent-foreground',
     },
-  }
-)
+  },
+})
+
+const lightDarkActive = {
+  dark: 'dark:bg-accent dark:text-accent-foreground',
+  light:
+    'bg-accent text-accent-foreground dark:bg-transparent dark:text-muted-foreground',
+} as const
+
+const subscribeNoop = () => () => undefined
 
 const full = [
   ['light', Icons.sun] as const,
@@ -30,7 +35,7 @@ const full = [
 ]
 
 const shouldSkipViewTransitionForBrowserTint = () =>
-  window.matchMedia('(pointer: coarse)').matches
+  window.matchMedia(MEDIA.coarsePointer).matches
 
 export function ThemeToggle({
   className,
@@ -40,14 +45,12 @@ export function ThemeToggle({
   mode?: 'light-dark' | 'light-dark-system'
 }) {
   const { resolvedTheme, setTheme, theme } = useTheme()
-  const [mounted, setMounted] = useState(false)
+  const mounted = useSyncExternalStore(
+    subscribeNoop,
+    () => true,
+    () => false
+  )
   const playToggle = useSound(toggleOn)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useThemeShortcut()
 
   const handleChangeTheme = async (next: Theme) => {
     playToggle()
@@ -77,17 +80,16 @@ export function ThemeToggle({
   }
 
   const container = cn(
-    'inline-flex items-center rounded-full border p-1',
+    'inline-flex items-center rounded-md border bg-background p-1',
     className
   )
 
   if (mode === 'light-dark') {
-    const value = mounted ? resolvedTheme : null
-
     return (
       <button
-        aria-label={'Toggle Theme'}
+        aria-label={'Toggle theme'}
         className={container}
+        data-sound-press='off'
         data-theme-toggle=''
         onClick={() =>
           handleChangeTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
@@ -101,7 +103,10 @@ export function ThemeToggle({
 
           return (
             <Icon
-              className={itemVariants({ active: value === key })}
+              className={cn(
+                itemVariants({ active: false }),
+                lightDarkActive[key]
+              )}
               fill='currentColor'
               key={key}
             />
@@ -119,6 +124,7 @@ export function ThemeToggle({
         <button
           aria-label={key}
           className={itemVariants({ active: value === key })}
+          data-sound-press='off'
           key={key}
           onClick={() => handleChangeTheme(key)}
           type='button'

@@ -1,117 +1,46 @@
 'use client'
 
-import {
-  CancelCircleIcon,
-  Copy01Icon,
-  Tick02Icon,
-} from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
-import type { HTMLMotionProps, Variants } from 'motion/react'
-import { AnimatePresence, motion } from 'motion/react'
-import type { ComponentProps } from 'react'
-import { Button } from '@/components/ui/button'
+import { m } from 'motion/react'
+import type { ReactNode } from 'react'
+import { IconSwap, IconSwapItem } from '@/components/icon-swap'
+import { Icons } from '@/components/icons/icons'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
-import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
+import { cn } from '@/lib/utils'
 
-export const motionIconVariants: Variants = {
-  animate: { filter: 'blur(0px)', opacity: 1, scale: 1 },
-  exit: { opacity: 0, scale: 0.8 },
-  initial: { filter: 'blur(2px)', opacity: 0, scale: 0.8 },
-}
-
-export const motionIconProps: HTMLMotionProps<'span'> = {
-  animate: 'animate',
-  exit: 'exit',
-  initial: 'initial',
-  transition: { duration: 0.15, ease: 'easeOut' },
-  variants: motionIconVariants,
-}
-
-export interface CopyStateIconProps {
-  /** Custom icon for done state. */
-  doneIcon?: React.ReactNode
-  /** Custom icon for error state. */
-  errorIcon?: React.ReactNode
-  /** Custom icon for idle state. */
-  idleIcon?: React.ReactNode
+interface CopyStateIconProps {
+  className?: string
+  doneIcon?: ReactNode
+  errorIcon?: ReactNode
+  idleIcon?: ReactNode
   state: CopyState
 }
 
+// Blur swap from chanhdai's Copy Button (MIT):
+// https://chanhdai.com/components/copy-button
 export function CopyStateIcon({
+  className,
   state,
-  idleIcon,
-  doneIcon,
-  errorIcon,
+  idleIcon = <Icons.copy />,
+  doneIcon = <Icons.check />,
+  errorIcon = <Icons.error />,
 }: CopyStateIconProps) {
-  const iconByState = {
-    done: doneIcon ?? (
-      <HugeiconsIcon data-slot='done-icon' icon={Tick02Icon} strokeWidth={2} />
-    ),
-    error: errorIcon ?? (
-      <HugeiconsIcon
-        data-slot='error-icon'
-        icon={CancelCircleIcon}
-        strokeWidth={2}
-      />
-    ),
-    idle: idleIcon ?? (
-      <HugeiconsIcon data-slot='idle-icon' icon={Copy01Icon} strokeWidth={2} />
-    ),
-  }
+  const iconByState = { done: doneIcon, error: errorIcon, idle: idleIcon }
 
   return (
-    <AnimatePresence initial={false} mode='popLayout'>
-      <motion.span key={state} {...motionIconProps}>
+    <IconSwap>
+      <IconSwapItem
+        as={m.span}
+        className={cn(
+          'inline-flex transition-colors duration-300 [&_svg]:size-4',
+          className,
+          state === 'done' && 'text-primary',
+          state === 'error' && 'text-destructive'
+        )}
+        data-slot={`${state}-icon`}
+        key={state}
+      >
         {iconByState[state]}
-      </motion.span>
-    </AnimatePresence>
-  )
-}
-
-export type CopyButtonProps = ComponentProps<typeof Button> & {
-  /** The text to copy, or a function that returns the text. */
-  text: string | (() => string)
-  /** Called with the copied text on successful copy. */
-  onCopySuccess?: (text: string) => void
-  /** Called with the error if the copy operation fails. */
-  onCopyError?: (error: Error) => void
-} & Omit<CopyStateIconProps, 'state'>
-
-export function CopyButton({
-  size = 'icon',
-  children,
-  text,
-  idleIcon,
-  doneIcon,
-  errorIcon,
-  onClick,
-  onCopySuccess,
-  onCopyError,
-  ...props
-}: CopyButtonProps) {
-  const { state, copy } = useCopyToClipboard({
-    onCopyError,
-    onCopySuccess,
-  })
-
-  return (
-    <Button
-      aria-label='Copy'
-      className='will-change-transform'
-      onClick={(e) => {
-        copy(text)
-        onClick?.(e)
-      }}
-      size={size}
-      {...props}
-    >
-      <CopyStateIcon
-        doneIcon={doneIcon}
-        errorIcon={errorIcon}
-        idleIcon={idleIcon}
-        state={state}
-      />
-      {children}
-    </Button>
+      </IconSwapItem>
+    </IconSwap>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, use } from 'react'
+import { Suspense, use, useState } from 'react'
 
 import {
   type Activity,
@@ -13,12 +13,9 @@ import {
 } from '@/components/features/contributions'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
+import { baseOptions } from '@/constants/site'
 import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
@@ -26,58 +23,105 @@ interface ContributionsProps {
   contributions: Promise<Activity[]>
 }
 
+const LEVELS = cn(
+  'data-[level="0"]:fill-foreground/5',
+  'data-[level="1"]:fill-primary/25',
+  'data-[level="2"]:fill-primary/50',
+  'data-[level="3"]:fill-primary/75',
+  'data-[level="4"]:fill-primary'
+)
+
+interface HoveredDay {
+  count: number
+  date: string
+  rect: SVGRectElement
+}
+
+const useDayTooltip = () => {
+  const [day, setDay] = useState<HoveredDay | null>(null)
+  const [open, setOpen] = useState(false)
+
+  const onPointerOver = (event: React.PointerEvent) => {
+    const rect = (event.target as Element).closest<SVGRectElement>(
+      'rect[data-date]'
+    )
+    if (!rect?.dataset.date) {
+      return
+    }
+    setDay({
+      count: Number(rect.dataset.count),
+      date: rect.dataset.date,
+      rect,
+    })
+    setOpen(true)
+  }
+
+  return {
+    day,
+    handlers: { onPointerLeave: () => setOpen(false), onPointerOver },
+    open,
+  }
+}
+
 const ContributionsGraph = ({ contributions }: ContributionsProps) => {
   const data = use(contributions)
   const isMobile = useIsMobile()
-  const blockSize = isMobile ? 10 : 23.5
+  const tooltip = useDayTooltip()
+  const blockSize = isMobile ? 12 : 23.5
+
+  if (data.length === 0) {
+    return (
+      <Section className='p-6 text-muted-foreground text-sm'>
+        The contribution graph is unavailable right now.{' '}
+        <a className='link-underline' href={baseOptions.githubUrl}>
+          See it on GitHub
+        </a>
+        .
+      </Section>
+    )
+  }
 
   return (
     <Section className='relative w-full p-6'>
-      <ViewAnimation
-        className='relative w-full'
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-      >
+      <ViewAnimation className='relative w-full'>
         <ContributionGraph
-          aria-label='GitHub Contributions Graph'
-          blockMargin={isMobile ? 1 : 2}
+          aria-label='GitHub contributions graph'
+          blockMargin={isMobile ? 3 : 2}
           blockSize={blockSize}
           className='w-full'
           data={data}
         >
           <ContributionGraphCalendar
             aria-hidden
-            className='overflow-auto'
-            title='GitHub Contributions'
+            className='overflow-x-auto pb-2'
+            title='GitHub contributions'
+            {...tooltip.handlers}
           >
             {({ activity, dayIndex, weekIndex }) => (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <g>
-                    <ContributionGraphBlock
-                      activity={activity}
-                      className={cn(
-                        'data-[level="1"]:fill-[#9be9a8] dark:data-[level="1"]:fill-[#0e4429]',
-                        'data-[level="2"]:fill-[#40c463] dark:data-[level="2"]:fill-[#006d32]',
-                        'data-[level="3"]:fill-[#30a14e] dark:data-[level="3"]:fill-[#26a641]',
-                        'data-[level="4"]:fill-[#216e39] dark:data-[level="4"]:fill-[#39d353]',
-                        'cursor-pointer'
-                      )}
-                      dayIndex={dayIndex}
-                      weekIndex={weekIndex}
-                    />
-                  </g>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className='font-semibold'>{activity.date}</p>
-                  <p>
-                    <span className='tabular-nums'>{activity.count}</span>{' '}
-                    {activity.count === 1 ? 'contribution' : 'contributions'}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
+              <ContributionGraphBlock
+                activity={activity}
+                className={cn(LEVELS, 'cursor-pointer')}
+                dayIndex={dayIndex}
+                weekIndex={weekIndex}
+              />
             )}
           </ContributionGraphCalendar>
+          <Tooltip open={tooltip.open}>
+            <TooltipContent
+              anchor={tooltip.day?.rect}
+              className='pointer-events-none'
+            >
+              {tooltip.day ? (
+                <>
+                  <p className='font-semibold'>{tooltip.day.date}</p>
+                  <p>
+                    <span className='tabular-nums'>{tooltip.day.count}</span>{' '}
+                    {tooltip.day.count === 1 ? 'contribution' : 'contributions'}
+                  </p>
+                </>
+              ) : null}
+            </TooltipContent>
+          </Tooltip>
           <ContributionGraphFooter>
             <ContributionGraphTotalCount>
               {({ totalCount }) => (
@@ -90,20 +134,23 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
             <ContributionGraphLegend>
               {({ level }) => (
                 <div
-                  className='group relative flex h-3 w-3 items-center justify-center'
+                  className='group relative flex size-3 items-center justify-center'
                   data-level={level}
                 >
-                  <div
-                    className={cn(
-                      'h-full w-full rounded-xs border border-border',
-                      level === 0 && 'bg-[#eeeeee] dark:bg-[#262626]',
-                      level === 1 && 'bg-[#9be9a8] dark:bg-[#0e4429]',
-                      level === 2 && 'bg-[#40c463] dark:bg-[#006d32]',
-                      level === 3 && 'bg-[#30a14e] dark:bg-[#26a641]',
-                      level === 4 && 'bg-[#216e39] dark:bg-[#39d353]'
-                    )}
-                  />
-                  <span className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'>
+                  <svg aria-hidden className='size-full' viewBox='0 0 12 12'>
+                    <rect
+                      className={LEVELS}
+                      data-level={level}
+                      height={12}
+                      rx={2}
+                      width={12}
+                    />
+                  </svg>
+                  <span className='sr-only'>Level {level}</span>
+                  <span
+                    aria-hidden
+                    className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'
+                  >
                     Level {level}
                   </span>
                 </div>

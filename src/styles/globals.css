@@ -4,6 +4,7 @@
 @import "@fuma-comment/react/preset.css";
 @import "./fumacomment.css";
 @import "./scroll-fade-effect.css";
+@import "./simba.css";
 @import "shadcn/tailwind.css";
 
 @import "tw-animate-css";
@@ -45,10 +46,12 @@
   --color-destructive-foreground: var(--color-fd-destructive-foreground); */
   --color-destructive: hsl(0 84.2% 60.2%);
   --color-destructive-foreground: hsl(0 0% 98%);
+  --color-success: var(--color-emerald-500);
 
   --color-border: var(--color-fd-border);
   --color-input: var(--color-fd-border);
   --color-ring: var(--color-fd-ring);
+  --color-overlay: var(--color-fd-overlay);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
@@ -57,12 +60,16 @@
   /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-hand: var(--font-caveat);
 }
 
 html {
   scrollbar-gutter: stable;
 }
 
+/* react-remove-scroll (used by the Radix overlays inside fumadocs-ui and
+   fuma-comment) pads the body for the scrollbar, which scrollbar-gutter
+   already reserves. Base UI overlays lock scroll without this attribute */
 html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
   margin-right: 0px !important;
@@ -82,8 +89,27 @@ html > body[data-scroll-locked] {
     @apply border-border outline-ring/50;
   }
 
+  :where(
+    a[href],
+    button,
+    summary,
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    [role="checkbox"],
+    [role="radio"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+    /* The same soft ring the buttons and inputs use, rounded so plain links
+       don't get a hard square; a radius utility on the element still wins */
+    outline: 2px solid color-mix(in oklab, var(--color-ring) 60%, transparent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
   body {
     font-synthesis-weight: none;
+    text-wrap: pretty;
     text-rendering: optimizeLegibility;
     @apply bg-background text-foreground antialiased;
   }
@@ -95,12 +121,54 @@ html > body[data-scroll-locked] {
   [id] {
     @apply scroll-mt-20;
   }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
 }
 
 @theme {
   --color-fd-primary-foreground: hsl(0, 0%, 98%);
   --color-fd-primary: hsl(226, 55%, 45%);
   --color-fd-ring: hsl(0, 0%, 63.9%);
+
+  --animate-blink: blink 4.5s ease-in-out infinite;
+
+  --animate-shimmer: shimmer 2s linear infinite;
+  @keyframes blink {
+    0%,
+    94%,
+    100% {
+      scale: 1 1;
+    }
+    97% {
+      scale: 1 0.1;
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: 100% center;
+    }
+    to {
+      background-position: 0% center;
+    }
+  }
+}
+
+@theme static {
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Fumadocs' light muted text sits at 4.35:1 on the background; a touch darker
+   clears WCAG AA. Zero specificity root so .dark still wins */
+:where(:root):not(.dark) {
+  --color-fd-muted-foreground: hsl(0, 0%, 40%);
 }
 
 .dark {
@@ -109,47 +177,9 @@ html > body[data-scroll-locked] {
   --color-fd-primary-foreground: hsl(240, 7%, 11%);
 }
 
-.oiia {
-  --color-fd-background: hsl(75, 45%, 96%);
-  --color-fd-foreground: hsl(75, 35%, 18%);
-  --color-fd-primary: hsl(80, 60%, 40%);
-  --color-fd-primary-foreground: hsl(80, 100%, 16%);
-  --color-fd-border: hsla(80, 35%, 70%, 0.5);
-  --color-fd-ring: hsl(80, 60%, 40%);
-  --color-fd-accent: hsl(75, 50%, 90%);
-  --color-fd-accent-foreground: hsl(80, 60%, 22%);
-  --color-fd-muted: hsl(75, 40%, 92%);
-  --color-fd-muted-foreground: hsl(75, 25%, 45%);
-  --color-fd-secondary: hsl(80, 45%, 88%);
-  --color-fd-secondary-foreground: hsl(80, 50%, 18%);
-  --color-fd-card: hsl(75, 45%, 94%);
-  --color-fd-card-foreground: hsl(75, 35%, 18%);
-  --color-fd-popover: hsl(75, 45%, 97%);
-  --color-fd-popover-foreground: hsl(75, 35%, 18%);
-}
-
-.oiia.dark {
-  --color-fd-background: hsl(80, 25%, 7%);
-  --color-fd-foreground: hsl(75, 35%, 88%);
-  --color-fd-primary: hsl(80, 60%, 55%);
-  --color-fd-primary-foreground: hsl(80, 35%, 8%);
-  --color-fd-border: hsla(80, 35%, 35%, 0.35);
-  --color-fd-ring: hsl(80, 60%, 55%);
-  --color-fd-accent: hsl(80, 25%, 18%);
-  --color-fd-accent-foreground: hsl(80, 60%, 75%);
-  --color-fd-muted: hsl(80, 25%, 12%);
-  --color-fd-muted-foreground: hsl(75, 25%, 65%);
-  --color-fd-secondary: hsl(80, 25%, 16%);
-  --color-fd-secondary-foreground: hsl(75, 35%, 88%);
-  --color-fd-card: hsl(80, 25%, 10%);
-  --color-fd-card-foreground: hsl(75, 35%, 88%);
-  --color-fd-popover: hsl(80, 25%, 8%);
-  --color-fd-popover-foreground: hsl(75, 35%, 88%);
-}
-
 @layer base {
   a {
-    @apply [overflow-wrap:anywhere] decoration-wavy;
+    @apply [overflow-wrap:anywhere];
   }
 
   button:not(:disabled),
@@ -166,11 +196,32 @@ html > body[data-scroll-locked] {
 }
 
 @utility link-underline {
-  @apply underline decoration-primary/60 decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
+  @apply text-foreground underline decoration-primary/60 decoration-solid decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
-@utility code-inline {
-  @apply rounded-md border bg-muted/50 px-1 py-px font-mono text-[0.8125rem] font-normal whitespace-pre-wrap;
+/*
+  Dashed rules between grid cells: under every cell but the last, and, from
+  the breakpoint `dashed-grid-2` is applied at, between the two columns with
+  none under the last row. The section's own border frames the outside.
+*/
+@utility dashed-grid {
+  & > * {
+    @apply border-dashed border-border/70 dark:border-border;
+  }
+
+  & > :not(:last-child) {
+    @apply border-b;
+  }
+}
+
+@utility dashed-grid-2 {
+  & > :nth-child(odd) {
+    @apply border-r;
+  }
+
+  & > :nth-child(odd):nth-last-child(2) {
+    @apply border-b-0;
+  }
 }
 
 @utility step {
@@ -185,30 +236,73 @@ html > body[data-scroll-locked] {
 
 @utility prose-content {
   @apply prose-headings:font-medium prose-headings:tracking-tight prose-headings:text-pretty md:prose-headings:text-balance prose-h2:text-xl prose-h3:text-lg;
-  @apply prose-a:font-normal prose-a:text-foreground prose-a:link-underline;
+  @apply prose-a:font-normal prose-a:link-underline;
   @apply prose-code:rounded-md prose-code:border prose-code:bg-muted/50 prose-code:px-1 prose-code:py-px prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none;
   @apply prose-strong:font-medium;
   @apply prose-hr:border-border;
   @apply prose-blockquote:border-l prose-blockquote:not-italic prose-blockquote:font-normal prose-blockquote:text-muted-foreground prose-blockquote:border-border prose-blockquote:[&_p:first-of-type]:before:content-none prose-blockquote:[&_p:last-of-type]:after:content-none;
 }
 
-@utility prose-no-margin {
-  & > :first-child {
-    @apply mt-0;
-  }
+@utility texture-popup {
+  background-color: var(--color-secondary);
+  background-image: linear-gradient(
+    to bottom,
+    oklch(1 0 0 / 0.55),
+    oklch(1 0 0 / 0) 48%
+  );
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 0.6) inset,
+    0 12px 32px -12px oklch(0 0 0 / 0.25),
+    0 1px 3px oklch(0.21 0.034 264.665 / 0.2);
 
-  & > :last-child {
-    @apply mb-0;
-  }
-
-  :where(p):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-    @apply mt-3 mb-3;
+  :where(.dark) & {
+    background-image: linear-gradient(
+      to bottom,
+      oklch(1 0 0 / 0.07),
+      oklch(1 0 0 / 0) 48%
+    );
+    box-shadow:
+      0 1px 0 0 oklch(1 0 0 / 0.07) inset,
+      0 12px 32px -12px oklch(0 0 0 / 0.6),
+      0 1px 3px oklch(0 0 0 / 0.4);
   }
 }
 
-@utility extend-touch-target {
-  @media (pointer: coarse) {
-    @apply relative touch-manipulation after:absolute after:-inset-2;
+@utility texture-item {
+  transition:
+    background-color 150ms,
+    box-shadow 150ms;
+
+  &:focus,
+  &[data-highlighted],
+  &[data-selected="true"],
+  &[aria-selected="true"] {
+    background-color: var(--color-background);
+    background-image: linear-gradient(
+      to bottom,
+      oklch(1 0 0 / 0.5),
+      oklch(1 0 0 / 0)
+    );
+    box-shadow:
+      0 1px 0 0 oklch(1 0 0 / 0.7) inset,
+      0 1px 3px oklch(0.21 0.034 264.665 / 0.18),
+      0 0 0 1px oklch(0 0 0 / 0.05);
+  }
+
+  :where(.dark) &:focus,
+  :where(.dark) &[data-highlighted],
+  :where(.dark) &[data-selected="true"],
+  :where(.dark) &[aria-selected="true"] {
+    background-color: oklch(1 0 0 / 0.08);
+    background-image: linear-gradient(
+      to bottom,
+      oklch(1 0 0 / 0.08),
+      oklch(1 0 0 / 0)
+    );
+    box-shadow:
+      0 1px 0 0 oklch(1 0 0 / 0.08) inset,
+      0 1px 3px oklch(0 0 0 / 0.4),
+      0 0 0 1px oklch(1 0 0 / 0.04);
   }
 }
 
@@ -249,7 +343,7 @@ html > body[data-scroll-locked] {
   }
 
   .dashed-stack {
-    @apply divide-y divide-dashed divide-border;
+    @apply divide-y divide-dashed divide-border/70 dark:divide-border;
   }
 
   .divider-top-dashed {
@@ -301,67 +395,6 @@ html > body[data-scroll-locked] {
   }
 }
 
-@layer components {
-  .footer {
-    --footer-text-size: clamp(3rem, 14rem, 14vw);
-    position: relative;
-
-    display: flex;
-    justify-content: center;
-    min-height: var(--footer-text-size);
-    overflow: clip;
-    color: var(--color-muted-foreground);
-  }
-
-  .footer-text {
-    position: absolute;
-    bottom: calc(-1 * var(--footer-text-size) / 1.6);
-    font-size: var(--footer-text-size);
-    font-weight: 900;
-    letter-spacing: 0;
-    opacity: 0.3;
-    text-rendering: geometricPrecision;
-  }
-
-  .footer-grid {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    flex: none;
-    overflow: visible;
-    background-color: transparent;
-    background-image: radial-gradient(transparent 1px, rgb(255, 255, 255) 1px);
-    background-size: 4px 4px;
-    opacity: 1;
-    backdrop-filter: blur(3px);
-    mask: linear-gradient(
-      rgba(255, 255, 255, 0) 0%,
-      rgb(255, 255, 255, 0.6) 100%
-    );
-  }
-
-  .footer-gradient {
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(
-      rgba(255, 255, 255, 0) 0% 50%,
-      rgba(255, 255, 255, 0.5) 100%
-    );
-  }
-
-  .dark .footer-gradient {
-    background-image: linear-gradient(
-      rgba(0, 0, 0, 0) 0% 50%,
-      rgba(0, 0, 0, 0.5) 100%
-    );
-  }
-
-  .dark .footer-grid {
-    background-image: radial-gradient(transparent 1px, rgb(0, 0, 0) 1px);
-    mask: linear-gradient(rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0, 0.6) 100%);
-  }
-}
-
 ::selection {
   color: var(--color-foreground);
   background-color: var(--color-accent);
@@ -375,6 +408,14 @@ html > body[data-scroll-locked] {
 .dark [data-hide-on-theme="dark"],
 .light [data-hide-on-theme="light"] {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -393,29 +434,6 @@ html > body[data-scroll-locked] {
     }
   }
 
-  @keyframes reveal {
-    0% {
-      scale: 0.8;
-      opacity: 0;
-      translate: 0 4lh;
-      filter: blur(20px);
-    }
-  }
-
-  ::view-transition-new(.page-enter):only-child {
-    animation-name: reveal;
-  }
-
-  ::view-transition-old(.page-exit):only-child {
-    animation-name: reveal;
-    animation-direction: reverse;
-  }
-
-  /* util for faster than default (250ms) transitions. Typically used to make exits faster so they don't visually overlap with enters */
-  ::view-transition-group(.duration-100) {
-    animation-duration: 100ms;
-  }
-
   @keyframes via-blur {
     30% {
       filter: blur(8px);
@@ -427,18 +445,19 @@ html > body[data-scroll-locked] {
   }
 
   ::view-transition-old(.via-blur) {
-    animation-duration: 180ms;
-    animation-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    animation-duration: 150ms;
+    animation-timing-function: var(--ease-out-strong);
   }
 
   ::view-transition-new(.via-blur) {
-    animation-duration: 350ms;
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    animation-duration: 300ms;
+    animation-timing-function: var(--ease-out-strong);
     animation-delay: 100ms;
   }
 
   ::view-transition-group(.via-blur) {
-    animation-duration: 450ms;
+    animation-duration: 400ms;
+    animation-timing-function: var(--ease-in-out-strong);
   }
 
   /* Prevent background color flash during transition */
@@ -449,26 +468,9 @@ html > body[data-scroll-locked] {
   }
 }
 
-@keyframes ask-ai-open {
-  from {
-    width: 0px;
-  }
-  to {
-    width: var(--ai-chat-width);
-  }
-}
-
-@keyframes ask-ai-close {
-  from {
-    width: var(--ai-chat-width);
-  }
-  to {
-    width: 0px;
-  }
-}
-
-/* Prevent iOS Safari auto-zoom on input focus (triggers when font-size < 16px) */
-@media screen and (max-width: 768px) {
+/* iOS zooms into any focused field under 16px. Gate on touch, not width, so
+   landscape phones and iPads are covered too */
+@media (pointer: coarse) {
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   select,
   textarea {
@@ -476,8 +478,50 @@ html > body[data-scroll-locked] {
   }
 }
 
-@custom-variant retina {
-  @media (min-resolution: 2dppx) {
-    @slot;
+/* Fumadocs dims prose links on any :hover, which sticks after a tap */
+@media not ((hover: hover) and (pointer: fine)) {
+  .prose a:hover {
+    opacity: 1;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-spin {
+    animation-duration: 1.5s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+    size: A4;
+  }
+
+  html:has([data-resume]),
+  body:has([data-resume]) {
+    color-scheme: light;
+    background: #fff !important;
+  }
+
+  body:has([data-resume])
+    *:not([data-resume], [data-resume] *, :has([data-resume])) {
+    display: none !important;
+  }
+}
+
+:root[data-reveal]
+  [data-reveal-item]:not(
+    #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
+  ) {
+  opacity: 0;
 }

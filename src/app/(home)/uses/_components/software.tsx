@@ -10,7 +10,7 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
       rel='noopener noreferrer'
       target='_blank'
     >
-      <div className='relative transition-transform duration-300 will-change-transform group-hover:-translate-y-1 group-hover:scale-105'>
+      <div className='relative transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105'>
         <div
           className='grid size-20 place-items-center rounded-xl border-2 border-foreground/5 bg-muted'
           style={{
@@ -40,12 +40,17 @@ export function SoftwareGrid({ items }: SoftwareGridProps) {
   )
 
   return (
-    <div className='grid grid-cols-2 gap-px bg-border sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8'>
-      {sortedItems.map((item) => (
-        <div className='bg-card' key={item.name}>
-          <AppIcon {...item} />
-        </div>
-      ))}
+    <div className='overflow-hidden'>
+      <div className='-mr-px -mb-px grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8'>
+        {sortedItems.map((item) => (
+          <div
+            className='border-border border-r border-b bg-card'
+            key={item.name}
+          >
+            <AppIcon {...item} />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

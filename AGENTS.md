@@ -3,7 +3,7 @@
 ## Project Overview
 - Next.js App Router portfolio site with Fumadocs content and MDX.
 - TypeScript in strict mode with path aliases (`@/*`, `@/public/*`).
-- Tailwind CSS (v4) with PostCSS, plus Radix UI and shadcn/ui components.
+- Tailwind CSS (v4) with PostCSS, plus Base UI and shadcn/ui components.
 - Content lives in `content/` and Fumadocs-generated `.source/`.
 - Always use Context7 MCP when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.
 
@@ -49,16 +49,28 @@ Fight entropy. Leave the codebase better than you found it.
 - Author content in `content/`; generated content lives in `.source/` (never edit by hand).
 - `bun install` runs `fumadocs-mdx` via `postinstall` to sync MDX types.
 - Prefer MDX frontmatter for metadata (title, description, dates).
+- When page content changes, update the llms routes in `src/app/(llms)` (or the constants they read from) in the same change, so `llms.txt`, the `.md` routes and the Simba assistant stay accurate.
 
 ## UI & Styling
 - Tailwind CSS v4 with PostCSS; global tokens live in `src/styles/globals.css`.
 - Prefer `cn` from `src/lib/utils.ts` to merge class names.
-- App-level icons should be sourced via `src/components/icons/icons.tsx`; prefer Lucide for generic UI/app icons and keep non-Lucid/icon-specific SVGs centralized there when a different source is necessary.
+- App-level icons should be sourced via `src/components/icons/icons.tsx`, which keeps the site's mix: Hugeicons (`@hugeicons/react` with `@hugeicons/core-free-icons`) by default, Lucide (`lucide-react`) for arrows, chevrons, the paw and volume icons, and Primer Octicons for the GitHub activity feed. Keep brand and other icon-specific SVGs centralized there too.
 - shadcn/ui components live in `src/components/ui`; extend them rather than copy/paste.
-- Radix UI primitives are used for accessible overlays, menus, and form controls.
+- Base UI primitives (`@base-ui/react`) are used for accessible overlays, menus, and form controls; compose with the `render` prop (not `asChild`) and style state with `data-open`/`data-closed`, `data-starting-style`/`data-ending-style` and `--anchor-width`/`--available-height`/`--transform-origin`.
+- `fumadocs-ui` is still the Radix build, so its components and `fd-*` styles emit Radix markup (`data-state`); do not copy that pattern into our components.
 
 ## Data & Email
 - Drizzle schema lives in `src/server/db/schema/index.ts` and uses the `portfolio_*` table prefix.
 - Use `bun run db:generate` after schema changes to regenerate migrations.
 - Email templates live in `emails/` and are built/exported via the `email:*` scripts.
 - Resend credentials are required for email functionality.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

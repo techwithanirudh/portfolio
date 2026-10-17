@@ -1,56 +1,13 @@
 import { BlurImage } from '@/components/blur-image'
+import { InlineMarkdown } from '@/components/inline-markdown'
+import { codingSetup } from '@/constants/portfolio/uses'
 
 export function Coding() {
   return (
     <div>
       <div className='border-border border-b border-dashed p-6'>
         <p className='text-muted-foreground'>
-          I use{' '}
-          <a
-            className='font-medium text-primary hover:underline'
-            href='https://code.visualstudio.com'
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            Visual Studio Code
-          </a>{' '}
-          as my primary editor with the{' '}
-          <a
-            className='font-medium text-primary hover:underline'
-            href='https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme'
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            Cursor theme
-          </a>{' '}
-          ,{' '}
-          <a
-            className='font-medium text-primary hover:underline'
-            href='https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style'
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            Custom UI Style
-          </a>{' '}
-          tweaks, and the{' '}
-          <a
-            className='font-medium text-primary hover:underline'
-            href='https://www.jetbrains.com/lp/mono/'
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            JetBrains Mono
-          </a>{' '}
-          font with ligatures enabled. If you want the config, it lives in{' '}
-          <a
-            className='font-medium text-primary hover:underline'
-            href='https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json'
-            rel='noopener noreferrer'
-            target='_blank'
-          >
-            my dotfiles
-          </a>
-          .
+          <InlineMarkdown linkClassName='link-underline' text={codingSetup} />
         </p>
       </div>
 
@@ -61,6 +18,7 @@ export function Coding() {
             className='h-full w-full dark:hidden'
             height={720}
             imageClassName='h-full w-full object-cover'
+            sizes='(min-width: 1400px) 1400px, 100vw'
             src='/images/uses/vscode-light.png'
             width={1280}
           />
@@ -69,6 +27,7 @@ export function Coding() {
             className='hidden h-full w-full dark:block'
             height={720}
             imageClassName='h-full w-full object-cover'
+            sizes='(min-width: 1400px) 1400px, 100vw'
             src='/images/uses/vscode-dark.png'
             width={1280}
           />

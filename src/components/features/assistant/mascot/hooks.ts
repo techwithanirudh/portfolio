@@ -2,67 +2,66 @@
 
 import type { UseChatHelpers } from '@ai-sdk/react'
 import { isToolUIPart } from 'ai'
-import { useRef } from 'react'
-import type { MyUIMessage } from '@/app/api/chat/types'
 import { useOn } from '@/hooks/use-on'
-import { animations } from './constants'
-import type { MascotAgent } from './provider'
-import { playAnimation } from './utils'
+import type { MyUIMessage } from '@/lib/ai/chat/types'
+import { type AnimationName, animations } from './constants'
+import { pick, type SimbaController } from './controller'
 
-export const playSubmitAnimation = (agent: MascotAgent | undefined) => {
-  if (!agent) {
-    return
+type ChatStatus = UseChatHelpers<MyUIMessage>['status']
+
+// What Simba acts out while he works on a reply
+const activityFor = (
+  status: ChatStatus,
+  messages: MyUIMessage[]
+): AnimationName | null => {
+  if (status === 'submitted') {
+    return animations.submit
   }
-  playAnimation(agent, animations.submit, { interrupt: true })
+  if (status !== 'streaming') {
+    return null
+  }
+  const lastPart = messages.at(-1)?.parts.at(-1)
+  if (!lastPart || lastPart.type === 'reasoning') {
+    return animations.thinking
+  }
+  if (isToolUIPart(lastPart)) {
+    return animations.tool
+  }
+  return animations.writing
+}
+
+// Reacts the moment a message is sent, before the chat status catches up
+export const playSubmitAnimation = (mascot: SimbaController | undefined) => {
+  mascot?.setActivity(animations.submit)
 }
 
 export function useMascotPanel({
-  agent,
+  mascot,
   messages,
   open,
   status,
 }: {
-  agent: MascotAgent | undefined
+  mascot: SimbaController | undefined
   messages: MyUIMessage[]
   open: boolean
-  status: UseChatHelpers<MyUIMessage>['status']
+  status: ChatStatus
 }) {
-  const lastTool = useRef<string | null>(null)
-
   useOn(open, () => {
-    if (!agent) {
+    if (!mascot) {
       return
     }
-    agent.stop()
     if (open) {
-      playAnimation(agent, animations.open)
+      mascot.play(pick(animations.open), { interrupt: true })
       return
     }
-    agent.play(animations.bye)
-    agent.play(animations.show)
+    mascot.stop()
+    mascot.play(animations.bye)
+    mascot.play(animations.show)
   })
 
-  useOn(status, () => {
-    if (!agent) {
-      return
-    }
-    if (status === 'streaming') {
-      agent.stopCurrent()
-    }
-    if (status === 'ready') {
-      lastTool.current = null
-    }
-  })
+  const activity = activityFor(status, messages)
 
-  useOn(messages, () => {
-    if (!agent || status !== 'streaming') {
-      return
-    }
-    const toolPart = (messages.at(-1)?.parts ?? []).find(isToolUIPart)
-    if (!toolPart || lastTool.current === toolPart.type) {
-      return
-    }
-    lastTool.current = toolPart.type
-    playAnimation(agent, animations.tool, { interrupt: true })
+  useOn(activity, () => {
+    mascot?.setActivity(activity)
   })
 }

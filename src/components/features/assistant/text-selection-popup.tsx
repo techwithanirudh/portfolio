@@ -7,36 +7,39 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom'
-import { buttonVariants } from 'fumadocs-ui/components/ui/button'
-import {
-  type ReactNode,
-  useEffect,
-  useEffectEvent,
-  useRef,
-  useState,
-} from 'react'
+import { useEffect, useEffectEvent, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { cn } from '@/lib/utils'
-import { useAssistantContext } from './assistant'
+import { useMediaQuery } from 'usehooks-ts'
+import { Button } from '@/components/ui/button'
+import { MEDIA } from '@/lib/media'
+import { useAssistantContext } from './context'
+import { SimbaChip } from './mascot/simba-chip'
+
+const getContainer = () => document.getElementById('main-content')
 
 interface PopupState {
   text: string
 }
 
-export function TextSelectionPopup({ children }: { children: ReactNode }) {
+// Offers to ask Simba about text selected anywhere in the page content
+export function TextSelectionPopup() {
   const { setContext, setOpen } = useAssistantContext()
-  const containerRef = useRef<HTMLDivElement>(null)
   const [popup, setPopup] = useState<PopupState | null>(null)
+  // Touch browsers draw their own Copy/Share callout above a selection, so
+  // sit below it, clear of the selection handles
+  const coarsePointer = useMediaQuery(MEDIA.coarsePointer, {
+    initializeWithValue: false,
+  })
 
   const { refs, floatingStyles } = useFloating({
-    middleware: [offset(8), flip(), shift({ padding: 8 })],
+    middleware: [offset(coarsePointer ? 28 : 8), flip(), shift({ padding: 8 })],
     open: popup !== null,
-    placement: 'top',
+    placement: coarsePointer ? 'bottom' : 'top',
     whileElementsMounted: autoUpdate,
   })
 
   const updatePopup = useEffectEvent(() => {
-    const container = containerRef.current
+    const container = getContainer()
     const selection = window.getSelection()
 
     if (
@@ -83,7 +86,7 @@ export function TextSelectionPopup({ children }: { children: ReactNode }) {
     }
     if (
       refs.floating.current?.contains(target) ||
-      containerRef.current?.contains(target)
+      getContainer()?.contains(target)
     ) {
       return
     }
@@ -117,48 +120,26 @@ export function TextSelectionPopup({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  return (
-    <>
-      {/*
-        `contents` keeps this wrapper out of the layout, but it is still a DOM
-        child, so the parent's `divide-y` sees one child and draws nothing --
-        and a `contents` box cannot paint a border anyway. Dividing here puts
-        the separators back on the sections themselves. `divide-y` skips the
-        last child, so the rule above the footer is restored explicitly.
-      */}
-      <div
-        className='contents divide-y divide-dashed divide-border [&>:last-child]:border-border [&>:last-child]:border-b [&>:last-child]:border-dashed'
-        ref={containerRef}
-      >
-        {children}
-      </div>
-      {popup &&
-        createPortal(
-          <div
-            className='not-prose z-[25]'
-            ref={refs.setFloating}
-            style={floatingStyles}
+  return popup
+    ? createPortal(
+        <div
+          className='not-prose z-[25]'
+          ref={refs.setFloating}
+          style={floatingStyles}
+        >
+          <Button
+            className='shadow-lg'
+            onClick={() => {
+              setContext(popup.text)
+              setOpen(true)
+              setPopup(null)
+            }}
+            size='sm'
           >
-            <button
-              className={cn(
-                buttonVariants({
-                  className: 'shadow-lg',
-                  color: 'primary',
-                  size: 'sm',
-                })
-              )}
-              onClick={() => {
-                setContext(popup.text)
-                setOpen(true)
-                setPopup(null)
-              }}
-              type='button'
-            >
-              Ask Simba
-            </button>
-          </div>,
-          document.body
-        )}
-    </>
-  )
+            Ask <SimbaChip className='translate-y-0' /> Simba
+          </Button>
+        </div>,
+        document.body
+      )
+    : null
 }

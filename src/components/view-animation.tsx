@@ -1,50 +1,27 @@
-'use client'
-
-import { motion } from 'motion/react'
-import type { ReactNode } from 'react'
-import { cn } from '@/lib/utils'
+import type { CSSProperties, ReactNode } from 'react'
 
 interface ViewAnimationProps {
-  animate?: Record<string, string | number>
-  blur?: boolean
+  as?: 'div' | 'li'
   children: ReactNode
-  // className?: ComponentProps<typeof motion.div>['className'];
   className?: string
   delay?: number
-  duration?: number
-  initial?: Record<string, string | number>
-  whileInView?: Record<string, string | number>
 }
 
 export const ViewAnimation = ({
-  initial,
-  whileInView,
-  animate,
+  as: Tag = 'div',
   delay,
-  duration,
-  blur = false,
   className,
   children,
-}: ViewAnimationProps) => {
-  const initialState = blur ? { filter: 'blur(4px)', ...initial } : initial
-  const whileInViewState = blur
-    ? { filter: 'blur(0px)', ...whileInView }
-    : whileInView
-  const normalizedDelay = delay ? Math.min(delay, 0.2) : delay
-
-  return (
-    <motion.div
-      animate={animate}
-      className={cn(
-        className,
-        'motion-reduce:transform-none! motion-reduce:opacity-100! motion-reduce:[filter:none]!'
-      )}
-      initial={initialState}
-      transition={{ delay: normalizedDelay, duration: duration ?? 0.3 }}
-      viewport={{ amount: 0.1, once: true }}
-      whileInView={whileInViewState}
-    >
-      {children}
-    </motion.div>
-  )
-}
+}: ViewAnimationProps) => (
+  <Tag
+    className={className}
+    data-reveal-item
+    style={
+      delay
+        ? ({ '--reveal-delay': `${Math.min(delay, 0.2)}s` } as CSSProperties)
+        : undefined
+    }
+  >
+    {children}
+  </Tag>
+)

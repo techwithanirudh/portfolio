@@ -1,7 +1,6 @@
 'use client'
 
 import type { LenisOptions } from 'lenis'
-import { useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
 import { Lenis } from './lenis'
 
@@ -10,15 +9,12 @@ interface WrapperProps {
   lenis?: boolean | LenisOptions
 }
 
+// Lenis skips itself when reduced motion is preferred
 export function Wrapper({ children, lenis = true }: WrapperProps) {
-  const prefersReducedMotion = useReducedMotion()
-
   return (
     <>
       {children}
-      {lenis && !prefersReducedMotion && (
-        <Lenis options={typeof lenis === 'object' ? lenis : {}} root />
-      )}
+      {lenis && <Lenis options={typeof lenis === 'object' ? lenis : {}} root />}
     </>
   )
 }

@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {
   align?: 'left' | 'center'
+  as?: 'h1' | 'h2'
   children?: ReactNode
   className?: string
   description?: string | ReactNode | null
@@ -21,6 +22,7 @@ export const SectionHeader = ({
   titleClassName,
   descriptionClassName,
   align = 'center',
+  as: Heading = 'h2',
   sticky = false,
 }: SectionHeaderProps) => (
   <div
@@ -31,26 +33,19 @@ export const SectionHeader = ({
       className
     )}
   >
-    <ViewAnimation
-      initial={{ opacity: 0, translateY: -6 }}
-      whileInView={{ opacity: 1, translateY: 0 }}
-    >
-      <h2
+    <ViewAnimation>
+      <Heading
         className={cn(
-          'typography-title text-balance font-regular text-3xl leading-tight tracking-tighter',
+          'typography-title text-balance font-normal text-3xl leading-tight tracking-tighter',
           'md:text-5xl',
           titleClassName
         )}
       >
         {title}
-      </h2>
+      </Heading>
     </ViewAnimation>
     {description && (
-      <ViewAnimation
-        delay={0.1}
-        initial={{ opacity: 0, translateY: -6 }}
-        whileInView={{ opacity: 1, translateY: 0 }}
-      >
+      <ViewAnimation delay={0.1}>
         <p
           className={cn(
             'text-pretty text-base text-muted-foreground',
@@ -67,12 +62,7 @@ export const SectionHeader = ({
         : `${String(child)}-${index}`
 
       return child ? (
-        <ViewAnimation
-          delay={0.1 + index * 0.05}
-          initial={{ opacity: 0, translateY: -6 }}
-          key={key}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation delay={0.1 + index * 0.05} key={key}>
           {child}
         </ViewAnimation>
       ) : null

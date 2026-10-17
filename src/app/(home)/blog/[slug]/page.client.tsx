@@ -1,17 +1,17 @@
 'use client'
 
 import { Comments } from '@fuma-comment/react'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuIconItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { getLoginUrl } from '@/lib/auth-client'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
@@ -23,59 +23,64 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
     setCanShare('share' in navigator)
   }, [])
 
-  const copyLink = async () => {
-    try {
-      await navigator.clipboard.writeText(url)
-      toast.success('Link copied')
-    } catch {
-      toast.error('Unable to copy link')
-    }
-  }
+  const { copy } = useCopyToClipboard({
+    onCopyError: () => toast.error('Unable to copy link'),
+    onCopySuccess: () => toast.success('Link copied'),
+  })
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label='Share'
-          className='w-full justify-start border-none shadow-none active:scale-none'
-          size='sm'
-          variant='secondary'
-        >
-          <Icons.share className='text-muted-foreground' />
-          Share
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            aria-label='Share'
+            className='w-full justify-start border-none shadow-none active:scale-none'
+            size='sm'
+            variant='secondary'
+          />
+        }
+      >
+        <Icons.share className='text-muted-foreground' />
+        Share
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='start'
+        className='w-(--anchor-width) gap-0.5 rounded-xl p-1.5'
         collisionPadding={8}
-        onCloseAutoFocus={(e) => e.preventDefault()}
+        finalFocus={false}
       >
-        <DropdownMenuItem onClick={copyLink}>
-          <Icons.link className='size-4' />
+        <DropdownMenuIconItem icon={Icons.link} onClick={() => copy(url)}>
           Copy link
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <a
-            href={`https://x.com/intent/tweet?url=${encoded}&text=${encodeURIComponent(title)}`}
-            rel='noopener'
-            target='_blank'
-          >
-            <Icons.x className='size-4' />
-            Share on X
-          </a>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <a
-            href={`https://www.linkedin.com/sharing/share-offsite?url=${encoded}`}
-            rel='noopener'
-            target='_blank'
-          >
-            <Icons.linkedin className='size-4' />
-            Share on LinkedIn
-          </a>
-        </DropdownMenuItem>
+        </DropdownMenuIconItem>
+        <DropdownMenuIconItem
+          icon={Icons.x}
+          render={
+            <a
+              aria-label='Share on X'
+              href={`https://x.com/intent/tweet?url=${encoded}&text=${encodeURIComponent(title)}`}
+              rel='noopener'
+              target='_blank'
+            />
+          }
+        >
+          Share on X
+        </DropdownMenuIconItem>
+        <DropdownMenuIconItem
+          icon={Icons.linkedin}
+          render={
+            <a
+              aria-label='Share on LinkedIn'
+              href={`https://www.linkedin.com/sharing/share-offsite?url=${encoded}`}
+              rel='noopener'
+              target='_blank'
+            />
+          }
+        >
+          Share on LinkedIn
+        </DropdownMenuIconItem>
         {canShare && (
-          <DropdownMenuItem
+          <DropdownMenuIconItem
+            icon={Icons.moreHorizontal}
             onClick={() => {
               navigator.share({ title, url }).catch((error) => {
                 if (process.env.NODE_ENV !== 'production') {
@@ -84,9 +89,8 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
               })
             }}
           >
-            <Icons.moreHorizontal className='size-4' />
             More
-          </DropdownMenuItem>
+          </DropdownMenuIconItem>
         )}
       </DropdownMenuContent>
     </DropdownMenu>
@@ -100,13 +104,13 @@ export function PostComments({
   slug: string
   className?: string
 }) {
-  const router = useRouter()
+  const { openSignIn } = useSignInModal()
 
   return (
     <Comments
       auth={{
         signIn: () => {
-          router.push(getLoginUrl(`/blog/${slug}`))
+          openSignIn(`/blog/${slug}`)
         },
         type: 'api',
       }}

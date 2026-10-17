@@ -1,25 +1,19 @@
 'use client'
 
-import {
-  type ButtonProps,
-  buttonVariants,
-} from 'fumadocs-ui/components/ui/button'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import type { ComponentProps } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 interface SearchToggleProps
-  extends Omit<ComponentProps<'button'>, 'color'>,
-    ButtonProps {
+  extends Pick<ComponentProps<typeof Button>, 'className' | 'size'> {
   hideIfDisabled?: boolean
 }
 
 export const SearchToggle = ({
+  className,
   hideIfDisabled,
   size = 'icon-sm',
-  color = 'ghost',
-  ...props
 }: SearchToggleProps) => {
   const { setOpenSearch, enabled } = useSearchContext()
 
@@ -28,59 +22,16 @@ export const SearchToggle = ({
   }
 
   return (
-    <button
-      aria-label='Open Search'
-      className={cn(
-        buttonVariants({
-          color,
-          size,
-        }),
-        props.className
-      )}
+    <Button
+      aria-label='Open search'
+      className={className}
       data-search=''
+      data-sound-press='off'
       onClick={() => setOpenSearch(true)}
-      type='button'
+      size={size}
+      variant='ghost'
     >
-      <Icons.search />
-    </button>
-  )
-}
-
-export const LargeSearchToggle = ({
-  hideIfDisabled,
-  ...props
-}: ComponentProps<'button'> & {
-  hideIfDisabled?: boolean
-}) => {
-  const { enabled, hotKey, setOpenSearch } = useSearchContext()
-
-  if (hideIfDisabled && !enabled) {
-    return null
-  }
-
-  return (
-    <button
-      data-search-full=''
-      type='button'
-      {...props}
-      className={cn(
-        'inline-flex items-center gap-2 rounded-lg border bg-fd-secondary/50 p-1.5 ps-2 text-fd-muted-foreground text-sm transition-colors hover:bg-fd-accent hover:text-fd-accent-foreground',
-        props.className
-      )}
-      onClick={() => setOpenSearch(true)}
-    >
-      <Icons.search className='size-4' />
-      Search
-      <div className='ms-auto inline-flex gap-0.5'>
-        {hotKey.map((k, i) => (
-          <kbd
-            className='rounded-md border bg-fd-background px-1.5'
-            key={i.toString()}
-          >
-            {k.display}
-          </kbd>
-        ))}
-      </div>
-    </button>
+      <Icons.search className='size-4.5' />
+    </Button>
   )
 }

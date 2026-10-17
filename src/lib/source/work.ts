@@ -3,14 +3,10 @@ import { loader } from 'fumadocs-core/source'
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server'
 
 export const workSource = loader(toFumadocsSource(work, []), {
-  baseUrl: '/work',
+  baseUrl: '/projects',
 })
 
-export const {
-  getPage: getWork,
-  getPages: getWorkPages,
-  pageTree: workPageTree,
-} = workSource
+export const { getPage: getWork, getPages: getWorkPages } = workSource
 
 export type WorkPage = ReturnType<typeof getWorkPages>[number]
 

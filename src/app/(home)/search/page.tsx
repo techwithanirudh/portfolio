@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import { HeroSection } from '@/components/layout/sections/hero'
 import { Wrapper } from '@/components/layout/wrapper'
 import { Skeleton } from '@/components/ui/skeleton'
-import { title as homeTitle } from '@/constants/site'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
 import { BackButton } from './_components/back-button'
 import { SearchClient } from './_components/search-client'
@@ -11,9 +11,7 @@ import { SearchClient } from './_components/search-client'
 export default function Page() {
   return (
     <Wrapper>
-      <HeroSection align='center' title='Search'>
-        <BackButton />
-      </HeroSection>
+      <HeroSection caption={<BackButton />} title={pages.search.title} />
       <Suspense
         fallback={
           <div className='flex flex-1 flex-col gap-4 px-4 pb-10 sm:px-6'>
@@ -32,15 +30,10 @@ export default function Page() {
   )
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  return createMetadata({
-    alternates: {
-      canonical: '/search',
-    },
-    description: `Search posts and projects on ${homeTitle}.`,
-    openGraph: {
-      url: '/search',
-    },
-    title: 'Search',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: pages.search.path },
+  description: pages.search.description,
+  openGraph: { url: pages.search.path },
+  robots: { follow: false, index: false },
+  title: pages.search.title,
+})

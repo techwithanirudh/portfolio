@@ -19,6 +19,13 @@ export const commands: CommandGroup[] = [
         url: '/about#experience',
       },
       {
+        icon: <Icons.download className='size-4' />,
+        keywords: ['cv', 'pdf'],
+        kind: 'page',
+        title: 'Resume',
+        url: '/resume',
+      },
+      {
         icon: <Icons.mail className='size-4' />,
         kind: 'page',
         title: 'Contact',
@@ -33,8 +40,8 @@ export const commands: CommandGroup[] = [
       {
         icon: <Icons.work className='size-4' />,
         kind: 'page',
-        title: 'Work',
-        url: '/work',
+        title: 'Projects',
+        url: '/projects',
       },
       {
         icon: <Icons.blog className='size-4' />,
@@ -94,12 +101,24 @@ export const commands: CommandGroup[] = [
     position: 'after',
   },
   {
+    group: 'Preferences',
+    items: [
+      {
+        icon: <Icons.volumeOn className='size-4' />,
+        keywords: ['sound', 'audio', 'mute', 'unmute', 'volume'],
+        kind: 'sound',
+        title: 'Toggle sound',
+      },
+    ],
+    position: 'after',
+  },
+  {
     group: 'Others',
     items: [
       {
         icon: <Icons.rss className='size-4' />,
         kind: 'link',
-        title: 'RSS Feed',
+        title: 'RSS feed',
         url: '/rss.xml',
       },
       {
@@ -124,7 +143,7 @@ export const COMMAND_META_MAP = new Map<string, CommandKind>(
     items.map((item) => {
       let kind: CommandKind = 'page'
 
-      if (item.kind === 'theme') {
+      if (item.kind === 'theme' || item.kind === 'sound') {
         kind = 'command'
       }
 

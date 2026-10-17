@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 import {
@@ -21,8 +22,7 @@ import {
 } from '../../actions/guestbook'
 import { GuestbookReactions } from '../reactions'
 import { EntryCardActions } from './actions'
-import { BanUserModal } from './ban-user-modal'
-import { DeleteEntryModal } from './delete-entry-modal'
+import { ConfirmDialog } from './confirm-dialog'
 
 interface GuestbookEntryCardProps {
   currentUserId: string | null
@@ -45,11 +45,7 @@ export const GuestbookEntryCard = ({
 
   const editAction = useAction(editGuestbookEntry, {
     onError: ({ error }) => {
-      toast.error(
-        typeof error.serverError === 'string'
-          ? error.serverError
-          : 'Failed to update message.'
-      )
+      toast.error(getActionErrorMessage(error, 'Failed to update message.'))
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -59,11 +55,7 @@ export const GuestbookEntryCard = ({
   })
   const deleteAction = useAction(removeGuestbookEntry, {
     onError: ({ error }) => {
-      toast.error(
-        typeof error.serverError === 'string'
-          ? error.serverError
-          : 'Failed to delete message.'
-      )
+      toast.error(getActionErrorMessage(error, 'Failed to delete message.'))
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -74,11 +66,7 @@ export const GuestbookEntryCard = ({
   })
   const banAction = useAction(banGuestbookUser, {
     onError: ({ error }) => {
-      toast.error(
-        typeof error.serverError === 'string'
-          ? error.serverError
-          : 'Failed to update ban status.'
-      )
+      toast.error(getActionErrorMessage(error, 'Failed to update ban status.'))
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -151,17 +139,17 @@ export const GuestbookEntryCard = ({
   return (
     <div
       className={cn(
-        'relative grid gap-4 bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'
+        'relative grid grid-cols-[minmax(0,1fr)] gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
       )}
     >
       <div className='flex flex-wrap items-start justify-between gap-3'>
-        <div className='space-y-1'>
-          <h3 className='flex items-center gap-1.5 font-medium text-sm'>
+        <div className='min-w-0 space-y-1'>
+          <h3 className='wrap-anywhere font-medium text-sm'>
             {entry.name}
             {entry.role === 'admin' ? (
               <Icons.verifiedAdmin
                 aria-label='Verified admin'
-                className='icon-pop size-4 text-primary'
+                className='icon-pop ml-1.5 inline size-4 align-[-3px] text-primary'
               />
             ) : null}
           </h3>
@@ -187,7 +175,7 @@ export const GuestbookEntryCard = ({
         <div className='space-y-3'>
           <Textarea
             aria-label='Edit message'
-            className='min-h-[8rem] resize-y bg-background'
+            className='wrap-anywhere min-h-[8rem] resize-y bg-background'
             disabled={isBusy}
             onChange={(event) => setDraftMessage(event.target.value)}
             value={draftMessage}
@@ -215,14 +203,11 @@ export const GuestbookEntryCard = ({
               Cancel
             </Button>
           </div>
-          {editAction.result.serverError ? (
-            <p className='text-destructive text-xs'>
-              {editAction.result.serverError}
-            </p>
-          ) : null}
         </div>
       ) : (
-        <p className='text-muted-foreground text-sm'>{entry.message}</p>
+        <p className='wrap-anywhere text-muted-foreground text-sm'>
+          {entry.message}
+        </p>
       )}
       <div className='flex w-full flex-wrap items-end justify-between gap-4 empty:hidden'>
         {isEditing ? null : (
@@ -245,30 +230,30 @@ export const GuestbookEntryCard = ({
           </div>
         ) : null}
       </div>
-      {deleteAction.result.serverError ? (
-        <p className='text-destructive text-xs'>
-          {deleteAction.result.serverError}
-        </p>
-      ) : null}
-      {banAction.result.serverError ? (
-        <p className='text-destructive text-xs'>
-          {banAction.result.serverError}
-        </p>
-      ) : null}
-      <BanUserModal
-        isBanned={entry.banned}
+      <ConfirmDialog
+        busyLabel={entry.banned ? 'Unbanning...' : 'Banning...'}
+        confirmLabel={entry.banned ? 'Unban user' : 'Ban user'}
+        description={
+          entry.banned
+            ? `This will allow ${entry.name} to sign in again.`
+            : `This will sign ${entry.name} out and block future sign-ins.`
+        }
         isBusy={isBusy}
         isOpen={isBanModalOpen}
-        name={entry.name}
         onConfirm={banUser}
         onOpenChange={setIsBanModalOpen}
+        title={entry.banned ? 'Unban user?' : 'Ban user?'}
+        variant={entry.banned ? 'outline' : 'destructive'}
       />
-      <DeleteEntryModal
+      <ConfirmDialog
+        busyLabel='Deleting...'
+        confirmLabel='Delete entry'
+        description={`This will remove ${entry.name}'s guestbook entry permanently.`}
         isBusy={isBusy}
         isOpen={isDeleteModalOpen}
-        name={entry.name}
         onConfirm={deleteEntry}
         onOpenChange={setIsDeleteModalOpen}
+        title='Delete entry?'
       />
     </div>
   )

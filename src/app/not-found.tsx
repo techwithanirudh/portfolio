@@ -1,45 +1,20 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { Icons } from '@/components/icons/icons'
-import { buttonVariants } from '@/components/ui/button'
+import { NotFoundContent } from '@/components/features/not-found/not-found-content'
+import { SiteShell } from '@/components/layout/site-shell'
 import { createMetadata } from '@/lib/metadata'
 
+// Catches URLs no route matches, which render outside the (home) layout, so
+// this page brings its own shell
 export default function NotFound() {
   return (
-    <main className='flex flex-1'>
-      <div className='container relative mx-auto flex min-h-full flex-1 items-center justify-center border-border border-x border-dashed'>
-        <div className='flex w-fit flex-col items-center justify-center gap-4 px-4'>
-          <div className='flex flex-col items-center text-center sm:flex-row'>
-            <h1 className='border-border font-extrabold text-2xl text-foreground tracking-tight sm:mr-6 sm:border-r sm:pr-6 sm:text-3xl'>
-              404
-            </h1>
-            <h2 className='mt-2 text-pretty text-muted-foreground sm:mt-0'>
-              This page could not be found.
-            </h2>
-          </div>
-          <Link
-            className={buttonVariants({
-              className: 'w-full',
-            })}
-            href='/'
-          >
-            Go Home
-            <Icons.arrowRight className='icon-arrow-button size-4' />
-          </Link>
-        </div>
-      </div>
-    </main>
+    <SiteShell>
+      <NotFoundContent />
+    </SiteShell>
   )
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>
-}): Promise<Metadata> {
-  const _params = await props.params
-  const description = 'The page you are looking for could not be found.'
-
-  return createMetadata({
-    description,
-    title: 'Not Found',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  description: "This page doesn't exist.",
+  robots: { follow: false, index: false },
+  title: 'Not found',
+})

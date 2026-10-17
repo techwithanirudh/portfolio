@@ -2,9 +2,9 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Activity, useRef, useState } from 'react'
+import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -24,13 +24,15 @@ import {
 } from '@/components/ui/signature-pad'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
-import { getLoginUrl, useSession } from '@/lib/auth-client'
+import { useSession } from '@/lib/auth-client'
+import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
 export const GuestbookForm = () => {
   const router = useRouter()
+  const { openSignIn } = useSignInModal()
   const { data: session, isPending } = useSession()
   const user = session?.user
   const [step, setStep] = useState<1 | 2>(1)
@@ -47,9 +49,7 @@ export const GuestbookForm = () => {
             setStep(1)
           }
           toast.error(
-            typeof error.serverError === 'string'
-              ? error.serverError
-              : 'Failed to post guestbook entry.'
+            getActionErrorMessage(error, 'Failed to post guestbook entry.')
           )
         },
         onSuccess: () => {
@@ -109,14 +109,12 @@ export const GuestbookForm = () => {
             You need an account to post.
           </p>
         </div>
-        <Button asChild className='w-full'>
-          <Link href={getLoginUrl('/guestbook')}>
-            <span>Sign in to post</span>
-            <Icons.arrowRight
-              className='icon-arrow-button size-4'
-              data-icon='inline-end'
-            />
-          </Link>
+        <Button className='w-full' onClick={() => openSignIn('/guestbook')}>
+          <span>Sign in to post</span>
+          <Icons.arrowRight
+            className='icon-arrow-button size-4'
+            data-icon='inline-end'
+          />
         </Button>
       </div>
     )
@@ -204,7 +202,7 @@ export const GuestbookForm = () => {
             </div>
           </Activity>
           {action.status === 'hasSucceeded' && (
-            <Alert className='mt-6 border-emerald-500/15 bg-emerald-500/15 p-3 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+            <Alert className='mt-6' variant='success'>
               <Icons.success size={16} />
               <AlertTitle className='mb-0 leading-normal'>
                 Thanks for signing the guestbook!
@@ -212,7 +210,7 @@ export const GuestbookForm = () => {
             </Alert>
           )}
           {action.result.serverError && (
-            <Alert className='mt-6 border-destructive/15 bg-destructive/15 p-3 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+            <Alert className='mt-6' variant='destructive-soft'>
               <Icons.warning className='size-4' />
               <AlertTitle className='mb-0 leading-normal'>
                 {action.result.serverError}

@@ -1,16 +1,16 @@
 'use server'
 
-import { Resend } from 'resend'
 import { env } from '@/env'
-import { getContact, sendWelcomeEmail, updateContact } from '@/lib/resend'
-import { ActionError, actionClient } from '@/lib/safe-action/client'
-import { botIdMiddleware } from '@/lib/safe-action/middleware'
+import {
+  getContact,
+  resend,
+  sendWelcomeEmail,
+  updateContact,
+} from '@/lib/resend'
+import { ActionError, publicActionClient } from '@/lib/safe-action'
 import { getSortedByDatePosts } from '@/lib/source'
 import { NewsletterSchema } from '@/lib/validators'
 import { getSession } from '@/server/auth'
-
-const resend = new Resend(env.RESEND_API_KEY)
-const audienceId = env.RESEND_AUDIENCE_ID
 
 const splitName = (name = '') => {
   const [firstName, ...lastName] = name.split(' ').filter(Boolean)
@@ -20,10 +20,17 @@ const splitName = (name = '') => {
   }
 }
 
-export const subscribe = actionClient
-  .use(botIdMiddleware)
+export const subscribe = publicActionClient
   .inputSchema(NewsletterSchema)
   .action(async ({ parsedInput: { email } }) => {
+    const audienceId = env.RESEND_AUDIENCE_ID
+
+    if (!(resend && audienceId && env.EMAIL_FROM)) {
+      throw new ActionError(
+        'The newsletter is unavailable right now. Please try again later.'
+      )
+    }
+
     const session = await getSession()
     const fullName = session?.user.name || ''
     const { firstName, lastName } = fullName

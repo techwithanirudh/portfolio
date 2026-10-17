@@ -38,7 +38,7 @@ interface AccountSettingsProps {
 
 export function AccountSettings({ user }: AccountSettingsProps) {
   return (
-    <Card className='dashed-stack' variant='flat'>
+    <Card className='dashed-stack rounded-none border-0' variant='flat'>
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Avatar</span>
@@ -48,7 +48,7 @@ export function AccountSettings({ user }: AccountSettingsProps) {
 
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Display Name</span>
+          <span className='text-muted-foreground text-sm'>Display name</span>
           <span className='text-sm'>{user.name || 'No name set'}</span>
         </div>
         <EditNameDialog name={user.name ?? ''} />
@@ -63,7 +63,7 @@ export function AccountSettings({ user }: AccountSettingsProps) {
 
       <div className='p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Account Created</span>
+          <span className='text-muted-foreground text-sm'>Account created</span>
           <span className='text-sm'>{formatAccountDate(user.createdAt)}</span>
         </div>
       </div>
@@ -107,14 +107,14 @@ function EditNameDialog({ name }: { name: string }) {
       }}
       open={open}
     >
-      <AlertDialogTrigger asChild>
-        <Button shape='square' size='sm' variant='secondary'>
-          Edit
-        </Button>
+      <AlertDialogTrigger
+        render={<Button shape='square' size='sm' variant='secondary' />}
+      >
+        Edit
       </AlertDialogTrigger>
       <AlertDialogContent className='dashed-frame rounded-none shadow-none ring-0'>
         <AlertDialogHeader>
-          <AlertDialogTitle>Edit Name</AlertDialogTitle>
+          <AlertDialogTitle>Edit name</AlertDialogTitle>
           <AlertDialogDescription>
             Enter your full name, or a display name you are comfortable with.
           </AlertDialogDescription>

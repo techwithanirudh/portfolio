@@ -1,10 +1,17 @@
-import { getAboutText, getCommitHistoryText } from '../utils'
+import {
+  getAboutText,
+  getCommitHistoryText,
+  getProfileFactsText,
+} from '../utils'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const commitHistory = await getCommitHistoryText()
-  const content = [getAboutText(), commitHistory].filter(Boolean).join('\n').trim()
+  const content = [getProfileFactsText(), getAboutText(), commitHistory]
+    .filter(Boolean)
+    .join('\n')
+    .trim()
 
   return new Response(content, {
     headers: {

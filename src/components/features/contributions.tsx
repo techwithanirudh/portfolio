@@ -365,7 +365,7 @@ export interface ContributionGraphCalendarProps
 
 export const ContributionGraphCalendar = ({
   hideMonthLabels = false,
-  title = 'Contribution Graph',
+  title = 'Contribution graph',
   className,
   children,
   ...props
@@ -384,7 +384,7 @@ export const ContributionGraphCalendar = ({
       {...props}
     >
       <svg
-        className='block overflow-visible'
+        className='block max-w-none overflow-visible'
         height={height}
         viewBox={`0 0 ${width} ${height}`}
         width={width}

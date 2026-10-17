@@ -3,25 +3,18 @@ import { cn } from '@/lib/utils'
 import type { HardwareItem } from '@/types'
 
 function HardwareCard({ name, description, url, image }: HardwareItem) {
-  const Wrapper = url ? 'a' : 'div'
-  const linkProps = url
-    ? { href: url, rel: 'noopener noreferrer', target: '_blank' }
-    : {}
-
-  return (
-    <Wrapper
-      className={cn(
-        'group/item flex items-center gap-3 bg-card/50 p-4 transition-colors sm:gap-4 sm:p-6',
-        url && 'hover:bg-card/80'
-      )}
-      {...linkProps}
-    >
+  const className = cn(
+    'group/item flex items-center gap-3 bg-card/50 p-4 transition-colors sm:gap-4 sm:p-6',
+    url && 'hover:bg-card/80'
+  )
+  const content = (
+    <>
       {image ? (
         <div className='flex size-16 shrink-0 items-center justify-center'>
           <Image
             alt={name}
             className={cn(
-              'max-h-14 w-auto object-contain drop-shadow-md transition-transform',
+              'h-auto max-h-14 w-auto object-contain drop-shadow-md transition-transform',
               url && 'group-hover/item:scale-105'
             )}
             height={56}
@@ -42,7 +35,20 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
           <p className='text-muted-foreground text-sm'>{description}</p>
         )}
       </div>
-    </Wrapper>
+    </>
+  )
+
+  return url ? (
+    <a
+      className={className}
+      href={url}
+      rel='noopener noreferrer'
+      target='_blank'
+    >
+      {content}
+    </a>
+  ) : (
+    <div className={className}>{content}</div>
   )
 }
 
@@ -52,7 +58,7 @@ interface HardwareGridProps {
 
 export function HardwareGrid({ items }: HardwareGridProps) {
   return (
-    <div className='grid divide-x divide-dashed divide-border sm:grid-cols-2 [&>*:nth-last-child(-n+1)]:border-b-0 sm:[&>*:nth-last-child(-n+2)]:border-b-0 [&>*]:border-border [&>*]:border-b [&>*]:border-dashed'>
+    <div className='dashed-grid sm:dashed-grid-2 grid sm:grid-cols-2'>
       {items.map((item) => (
         <HardwareCard key={item.name} {...item} />
       ))}

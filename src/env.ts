@@ -34,13 +34,14 @@ export const env = createEnv({
     // BotID
     BOTID_DEV_BYPASS: z.enum(['BAD-BOT', 'GOOD-BOT', 'HUMAN']).optional(),
     // Database
-    DATABASE_URL: z.string().url(),
-    EMAIL_FROM: z.email(),
-    EMAIL_TO: z.email(),
+    DATABASE_URL: z.url(),
+    EMAIL_FROM: z.email().optional(),
+    EMAIL_TO: z.email().optional(),
     // Github
     GITHUB_CLIENT_ID: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
-    GITHUB_TOKEN: z.string().min(1).startsWith('github_pat_'),
+    GITHUB_CONTRIBUTIONS_API_URL: z.url().optional(),
+    GITHUB_TOKEN: z.string().min(1).startsWith('github_pat_').optional(),
     // Google
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
@@ -48,8 +49,8 @@ export const env = createEnv({
     // OpenAI
     OPENAI_API_KEY: z.string().min(1).startsWith('sk-proj-'),
     // Resend
-    RESEND_API_KEY: z.string().min(1).startsWith('re_'),
-    RESEND_AUDIENCE_ID: z.string().min(1),
+    RESEND_API_KEY: z.string().min(1).startsWith('re_').optional(),
+    RESEND_AUDIENCE_ID: z.string().min(1).optional(),
   },
   shared: {
     NODE_ENV: z

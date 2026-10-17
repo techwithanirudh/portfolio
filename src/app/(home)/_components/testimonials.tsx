@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Section } from '@/components/layout/sections'
-import { SectionHeader } from '@/components/layout/sections/header'
+import { ListSection } from '@/components/layout/sections/list-section'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   Carousel,
@@ -12,6 +11,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel'
 import { ViewAnimation } from '@/components/view-animation'
+import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 interface Testimonial {
   author: {
@@ -33,14 +33,8 @@ const TestimonialCard = ({
   testimonial: Testimonial
   index: number
 }) => (
-  <ViewAnimation
-    blur={false}
-    className='h-full'
-    delay={0.1 + index * 0.05}
-    initial={{ opacity: 0, scale: 0.98, translateX: -12 }}
-    whileInView={{ opacity: 1, scale: 1, translateX: 0 }}
-  >
-    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-all duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
+  <ViewAnimation className='h-full' delay={0.1 + index * 0.05}>
+    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-colors duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
       <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>
@@ -50,12 +44,8 @@ const TestimonialCard = ({
           </p>
         </div>
         <p className='flex flex-row items-center gap-2 text-sm'>
-          <span className='text-muted-foreground'>By</span>
-          <Avatar className='h-6 w-6' outlined={false}>
-            <AvatarImage
-              alt={testimonial.author.name}
-              src={testimonial.author.image}
-            />
+          <Avatar className='size-6' outlined={false}>
+            <AvatarImage alt='' src={testimonial.author.image} />
             <AvatarFallback>
               {testimonial.author.name
                 .split(' ')
@@ -73,56 +63,58 @@ const TestimonialCard = ({
 
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
+  const prefersReducedMotion = useReducedMotion()
+  const paused = hovered || focused
 
   useEffect(() => {
-    if (!api) {
+    if (!api || prefersReducedMotion || paused) {
       return
     }
 
-    const timer = setTimeout(() => {
-      if (api.selectedScrollSnap() + 1 === api.scrollSnapList().length) {
-        setCurrent(0)
-        api.scrollTo(0)
-      } else {
+    const timer = setInterval(() => {
+      if (api.canScrollNext()) {
         api.scrollNext()
-        setCurrent(current + 1)
+      } else {
+        api.scrollTo(0)
       }
-    }, 2500)
+    }, 6000)
 
-    return () => clearTimeout(timer)
-  }, [api, current])
+    return () => clearInterval(timer)
+  }, [api, paused, prefersReducedMotion])
 
   return (
-    <Section className='relative w-full pt-10'>
-      <div className='flex flex-col gap-10'>
-        <SectionHeader
-          align='left'
-          className='px-6'
-          description="I've worked with some great people. Here's what they say about working with me."
-          title='What others are saying'
-        />
-
-        <ViewAnimation
-          blur={false}
-          initial={{ opacity: 0, translateY: 16 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
+    <ListSection
+      description="I've worked with some great people. Here's what they say about working with me."
+      title='What others are saying'
+    >
+      <ViewAnimation>
+        <Carousel
+          className='divider-top-dashed'
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+              setFocused(false)
+            }
+          }}
+          onFocus={() => setFocused(true)}
+          onPointerEnter={() => setHovered(true)}
+          onPointerLeave={() => setHovered(false)}
+          setApi={setApi}
         >
-          <Carousel className='divider-top-dashed' setApi={setApi}>
-            <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
-              {testimonials.map((item, index) => (
-                <CarouselItem
-                  className='pl-0 md:basis-1/2'
-                  key={`${item.title}-${item.author.name}`}
-                >
-                  <TestimonialCard index={index} testimonial={item} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
-        </ViewAnimation>
-      </div>
-    </Section>
+          <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
+            {testimonials.map((item, index) => (
+              <CarouselItem
+                className='pl-0 md:basis-1/2'
+                key={`${item.title}-${item.author.name}`}
+              >
+                <TestimonialCard index={index} testimonial={item} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </ViewAnimation>
+    </ListSection>
   )
 }
 

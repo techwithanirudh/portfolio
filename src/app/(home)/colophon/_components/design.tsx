@@ -4,21 +4,21 @@ const palette = [
   { className: 'bg-background', label: 'Background' },
   { className: 'bg-card', label: 'Card' },
   { className: 'bg-muted', label: 'Muted' },
-  { className: 'bg-muted-foreground', label: 'Muted F.G' },
+  { className: 'bg-muted-foreground', label: 'Muted foreground' },
   { className: 'bg-border', label: 'Border' },
   { className: 'bg-foreground', label: 'Foreground' },
   { className: 'bg-primary', label: 'Primary' },
-  { className: 'bg-primary/30', label: 'Primary Soft' },
+  { className: 'bg-primary/30', label: 'Primary soft' },
   { className: 'bg-accent', label: 'Accent' },
-  { className: 'bg-accent-foreground', label: 'Accent F.G' },
+  { className: 'bg-accent-foreground', label: 'Accent foreground' },
 ]
 
 export const Design = () => (
-  <div className='flex flex-col divide-y divide-dashed divide-border text-left'>
+  <div className='dashed-stack flex flex-col text-left'>
     <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
       <p>
-        A layout with wide spacing and dashed borders. Geist Sans sets headings
-        and body text, and Geist Mono sets code and labels.
+        The layout uses wide spacing and dashed borders. Geist Sans sets
+        headings and body text, and Geist Mono sets code and labels.
       </p>
     </div>
     <div className='bg-card/50 p-6'>
@@ -33,7 +33,7 @@ export const Design = () => (
               )}
               key={tone.label}
             >
-              <span className='hidden h-6 items-center justify-center truncate rounded-sm border bg-white/80 px-2 font-medium text-[11px] text-black lg:inline-flex dark:bg-black/80 dark:text-white'>
+              <span className='hidden h-6 items-center justify-center truncate rounded-sm border bg-white/80 px-2 font-medium text-[0.6875rem] text-black lg:inline-flex dark:bg-black/80 dark:text-white'>
                 {tone.label}
               </span>
             </div>

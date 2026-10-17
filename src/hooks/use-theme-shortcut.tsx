@@ -16,6 +16,7 @@ export function useThemeShortcut() {
         e.metaKey ||
         e.ctrlKey ||
         e.altKey ||
+        e.shiftKey ||
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement ||
         e.target instanceof HTMLSelectElement ||

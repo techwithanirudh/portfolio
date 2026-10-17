@@ -11,7 +11,7 @@ export const technology = [
     url: 'https://nextjs.org',
   },
   {
-    description: 'Strict typing for safer, more readable UI code.',
+    description: 'Strict mode across the whole codebase.',
     name: 'TypeScript',
     url: 'https://www.typescriptlang.org',
   },
@@ -21,13 +21,13 @@ export const technology = [
     url: 'https://tailwindcss.com',
   },
   {
-    description: 'Typed MDX content with a docs-friendly layout engine.',
+    description: 'Typed MDX content, search and the docs layouts.',
     name: 'Fumadocs',
     url: 'https://fumadocs.dev',
   },
   {
-    description: 'Accessible primitives and components I customized.',
-    name: 'Radix UI and shadcn/ui',
+    description: 'Accessible components that I restyled for this site.',
+    name: 'Base UI and shadcn/ui',
     url: 'https://ui.shadcn.com',
   },
   {
@@ -41,12 +41,12 @@ export const technology = [
     url: 'https://orm.drizzle.team',
   },
   {
-    description: 'Subtle reveal and transition animations.',
+    description: 'Reveal and transition animations.',
     name: 'Motion',
     url: 'https://motion.dev',
   },
   {
-    description: 'Fast all-in-one runtime, bundler, and package manager.',
+    description: 'Runtime, bundler and package manager in one.',
     name: 'Bun',
     url: 'https://bun.sh',
   },
