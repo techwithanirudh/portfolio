@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import type { ReactNode } from 'react'
 import { IconSwap, IconSwapItem } from '@/components/icon-swap'
 import { Icons } from '@/components/icons/icons'
@@ -29,7 +29,7 @@ export function CopyStateIcon({
   return (
     <IconSwap>
       <IconSwapItem
-        as={motion.span}
+        as={m.span}
         className={cn(
           'inline-flex transition-colors duration-300 [&_svg]:size-4',
           className,

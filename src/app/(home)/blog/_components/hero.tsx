@@ -20,6 +20,9 @@ export const Hero = ({
           variant: 'ghost',
         })}
         href='/blog/rss.xml'
+        rel='noopener'
+        // The feed is XML, not a page, so it opens on its own
+        target='_blank'
       >
         <Icons.rss className='size-5' />
       </a>

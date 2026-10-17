@@ -3,16 +3,16 @@
 // Icon Swap by Chánh Đại (MIT): https://chanhdai.com/components/icon-swap
 // https://github.com/ncdai/chanhdai.com/blob/main/src/registry/components/icon-swap/icon-swap.tsx
 import type { AnimatePresenceProps, HTMLMotionProps } from 'motion/react'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, m } from 'motion/react'
 
 export function IconSwap(props: React.PropsWithChildren<AnimatePresenceProps>) {
   return <AnimatePresence initial={false} mode='popLayout' {...props} />
 }
 
-type MotionElement = typeof motion.div | typeof motion.span
+type MotionElement = typeof m.div | typeof m.span
 
 export function IconSwapItem({
-  as: Component = motion.div,
+  as: Component = m.div,
   ...props
 }: HTMLMotionProps<'div'> & {
   as?: MotionElement

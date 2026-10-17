@@ -2,7 +2,7 @@
 
 // Adapted from braydoncoyer.dev by Braydon Coyer (no license, used with
 // attribution): https://github.com/braydoncoyer/braydoncoyer.dev/blob/master/app/components/AboutTrackPattern.tsx
-import { motion, useScroll, useSpring } from 'motion/react'
+import { m, useScroll, useSpring } from 'motion/react'
 import {
   type ReactNode,
   useEffect,
@@ -269,7 +269,7 @@ export function StoryTrack({
           viewBox={`0 0 ${track.width} ${track.height}`}
           width={track.width}
         >
-          <motion.path
+          <m.path
             className='stroke-primary'
             d={track.d}
             strokeLinejoin='round'

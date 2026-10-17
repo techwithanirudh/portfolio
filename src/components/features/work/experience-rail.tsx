@@ -2,7 +2,7 @@
 
 // Adapted from braydoncoyer.dev by Braydon Coyer (no license, used with
 // attribution): https://github.com/braydoncoyer/braydoncoyer.dev/blob/v4/app/components/Timeline.tsx
-import { motion, useScroll, useSpring } from 'motion/react'
+import { m, useScroll, useSpring } from 'motion/react'
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { cn } from '@/lib/utils'
@@ -37,7 +37,7 @@ export function ExperienceRail({ className }: { className?: string }) {
       ref={ref}
     >
       {/* Fades out over the same last 6rem as the dashed rail it sits on */}
-      <motion.div
+      <m.div
         className='absolute inset-y-0 left-0 w-px origin-top -translate-x-1/2 bg-linear-to-b from-primary/10 to-primary [mask-image:linear-gradient(to_bottom,#000_calc(100%-6rem),transparent)]'
         style={{ scaleY: progress }}
       />

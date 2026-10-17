@@ -2,6 +2,7 @@
 
 import { ProgressProvider } from '@bprogress/next/app'
 import { SoundProvider } from '@web-kits/audio/react'
+import { domAnimation, LazyMotion } from 'motion/react'
 import dynamic from 'next/dynamic'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
@@ -53,8 +54,9 @@ export function Provider({
 }: {
   children: ReactNode
 }): React.ReactElement {
+  // Animated components use the slim `m` and load these features once, here
   return (
-    <>
+    <LazyMotion features={domAnimation}>
       <AssistantProvider>
         <ProgressProvider
           color='var(--color-primary)'
@@ -77,6 +79,6 @@ export function Provider({
       <Toaster position='top-center' />
       <TailwindIndicator />
       <SmoothCursor />
-    </>
+    </LazyMotion>
   )
 }

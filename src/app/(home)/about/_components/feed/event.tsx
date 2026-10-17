@@ -1,6 +1,7 @@
 import type { RestEndpointMethodTypes } from '@octokit/rest'
 import type { ComponentType } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { isSupportedEvent } from './event-types'
 
 export type GitHubEvent =
   RestEndpointMethodTypes['activity']['listPublicEventsForUser']['response']['data'][number]
@@ -9,28 +10,6 @@ export interface PushCommit {
   message: string
   sha: string
 }
-
-const eventTypes = [
-  'CreateEvent',
-  'DeleteEvent',
-  'ForkEvent',
-  'IssueCommentEvent',
-  'IssuesEvent',
-  'PublicEvent',
-  'PullRequestEvent',
-  'PullRequestReviewEvent',
-  'PullRequestReviewCommentEvent',
-  'PullRequestReviewThreadEvent',
-  'PushEvent',
-  'WatchEvent',
-] as const
-
-type EventType = (typeof eventTypes)[number]
-
-export const isSupportedEvent = (
-  event: GitHubEvent
-): event is GitHubEvent & { type: EventType } =>
-  (eventTypes as readonly (string | null)[]).includes(event.type)
 
 interface IssuesPayload {
   action?:

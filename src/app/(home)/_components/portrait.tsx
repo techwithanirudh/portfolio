@@ -1,10 +1,10 @@
 'use client'
 
 import { useSound } from '@web-kits/audio/react'
-import { AnimatePresence, motion, useAnimate } from 'motion/react'
+import { AnimatePresence, m, useAnimate } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { pop } from '@/lib/audio/minimal'
+import { error as errorSound, pop } from '@/lib/audio/minimal'
 import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
@@ -140,6 +140,7 @@ function BonkChip({ className }: { className?: string }) {
   const [bonked, setBonked] = useState(false)
   const [sulking, setSulking] = useState(false)
   const playPop = useSound(pop)
+  const playError = useSound(errorSound)
   const streak = useRef(0)
   const streakTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
@@ -163,7 +164,8 @@ function BonkChip({ className }: { className?: string }) {
 
   const bonk = () => {
     if (sulking) {
-      // Eyes stay shut and it just shakes its head at you
+      // Eyes stay shut, it buzzes and just shakes its head at you
+      playError()
       if (!prefersReducedMotion()) {
         animate(
           scope.current,
@@ -223,7 +225,7 @@ function BonkChip({ className }: { className?: string }) {
       </button>
       <AnimatePresence>
         {bonks > 0 && (
-          <motion.span
+          <m.span
             animate={{ opacity: [0, 1, 0], y: '-0.35em' }}
             aria-hidden
             className='pointer-events-none absolute -top-[0.1em] left-1/2 -translate-x-1/2 font-medium font-mono text-[0.18em] text-primary tracking-normal'
@@ -232,10 +234,10 @@ function BonkChip({ className }: { className?: string }) {
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             bonk
-          </motion.span>
+          </m.span>
         )}
         {sulking && (
-          <motion.span
+          <m.span
             animate={{ opacity: [0, 1, 1, 0], x: '0.25em', y: '-0.45em' }}
             aria-hidden
             className='pointer-events-none absolute -top-[0.1em] left-1/2 font-medium font-mono text-[0.18em] text-muted-foreground tracking-normal'
@@ -251,7 +253,7 @@ function BonkChip({ className }: { className?: string }) {
             }}
           >
             zzz
-          </motion.span>
+          </m.span>
         )}
       </AnimatePresence>
     </span>

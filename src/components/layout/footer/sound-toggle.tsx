@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'motion/react'
+import { m } from 'motion/react'
 import { IconSwap, IconSwapItem } from '@/components/icon-swap'
 import { Icons } from '@/components/icons/icons'
 import {
@@ -30,7 +30,7 @@ export function SoundToggle() {
       >
         <IconSwap>
           <IconSwapItem
-            as={motion.span}
+            as={m.span}
             className='inline-flex'
             key={enabled ? 'on' : 'off'}
           >

@@ -11,7 +11,6 @@ import {
 } from 'fumadocs-ui/layouts/shared'
 import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
 import { useLenis } from 'lenis/react'
-import { usePathname } from 'next/navigation'
 import {
   type ComponentProps,
   Fragment,
@@ -86,7 +85,6 @@ const renderNavTitle = (
 }
 
 function NavTitleLink({ href, onClick, ...props }: ComponentProps<'a'>) {
-  const pathname = usePathname()
   const lenis = useLenis()
 
   return (
@@ -94,7 +92,7 @@ function NavTitleLink({ href, onClick, ...props }: ComponentProps<'a'>) {
       href={href}
       onClick={(event) => {
         onClick?.(event)
-        if (event.defaultPrevented || pathname !== href) {
+        if (event.defaultPrevented || window.location.pathname !== href) {
           return
         }
         event.preventDefault()

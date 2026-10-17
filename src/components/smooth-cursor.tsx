@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useSpring } from 'motion/react'
+import { m, useSpring } from 'motion/react'
 import { type JSX, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
@@ -147,7 +147,7 @@ export function SmoothCursor({
   }
 
   return (
-    <motion.div
+    <m.div
       className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${(isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
       // Positioned with left/top, not x/y: the scale-200 fade would also scale
       // an x/y transform and fling the ring down and right instead of
@@ -176,6 +176,6 @@ export function SmoothCursor({
           />
         </>
       )}
-    </motion.div>
+    </m.div>
   )
 }

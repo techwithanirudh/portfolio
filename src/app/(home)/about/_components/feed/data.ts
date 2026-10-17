@@ -2,7 +2,8 @@ import { unstable_cache } from 'next/cache'
 import { activity, githubUser } from '@/constants/config'
 import { env } from '@/env'
 import { octokit } from '@/lib/github'
-import { type GitHubEvent, isSupportedEvent, type PushCommit } from './event'
+import type { GitHubEvent, PushCommit } from './event'
+import { isSupportedEvent } from './event-types'
 
 const { limit } = activity
 

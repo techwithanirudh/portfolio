@@ -1,15 +1,13 @@
 'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
   createContext,
   type ReactNode,
   Suspense,
   use,
   useCallback,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
@@ -41,57 +39,68 @@ export function useSignInModal(): SignInModalContextValue {
   return ctx
 }
 
-function SignInParamListener({
-  onOpen,
-}: {
-  onOpen: (redirectTo: string) => void
-}) {
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
-  const router = useRouter()
-  const param = searchParams.get(SIGN_IN_PARAM)
-
-  useEffect(() => {
-    if (param === null) {
-      return
-    }
-    onOpen(sanitizeRedirect(param))
-
-    const next = new URLSearchParams(searchParams.toString())
-    next.delete(SIGN_IN_PARAM)
-    const query = next.toString()
-    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
-  }, [param, onOpen, pathname, router, searchParams])
-
-  return null
-}
-
 export function SignInModalProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const [open, setOpen] = useState(false)
-  const redirectToRef = useRef('/')
-  const [loadingProvider, setLoadingProvider] = useState<Provider | null>(null)
-
-  const openWith = useCallback((target: string) => {
-    redirectToRef.current = target
-    setOpen(true)
-  }, [])
+  // Where to send people after signing in, while the modal is open
+  const [request, setRequest] = useState<string | null>(null)
 
   const openSignIn = useCallback(
-    (target?: string) => openWith(sanitizeRedirect(target ?? pathname)),
-    [openWith, pathname]
+    (target?: string) => setRequest(sanitizeRedirect(target ?? pathname)),
+    [pathname]
   )
 
   const value = useMemo(() => ({ openSignIn }), [openSignIn])
 
+  return (
+    <SignInModalContext.Provider value={value}>
+      {children}
+      <Suspense>
+        <SignInDialog onClose={() => setRequest(null)} request={request} />
+      </Suspense>
+    </SignInModalContext.Provider>
+  )
+}
+
+// Server pages send people to /?signin=<path>, so the modal also opens from
+// that param; it's read while rendering and dropped once the modal closes
+function SignInDialog({
+  onClose,
+  request,
+}: {
+  onClose: () => void
+  request: string | null
+}) {
+  const searchParams = useSearchParams()
+  const param = searchParams.get(SIGN_IN_PARAM)
+  const redirectTo =
+    request ?? (param === null ? null : sanitizeRedirect(param))
+  const [loadingProvider, setLoadingProvider] = useState<Provider | null>(null)
+
+  const close = () => {
+    onClose()
+    setLoadingProvider(null)
+    if (param === null) {
+      return
+    }
+    const next = new URLSearchParams(searchParams.toString())
+    next.delete(SIGN_IN_PARAM)
+    const query = next.toString()
+    const { pathname } = window.location
+    window.history.replaceState(
+      null,
+      '',
+      query ? `${pathname}?${query}` : pathname
+    )
+  }
+
   const signInWithProvider = async (provider: Provider) => {
-    if (loadingProvider) {
+    if (loadingProvider || redirectTo === null) {
       return
     }
 
     try {
       setLoadingProvider(provider)
-      await signIn.social({ callbackURL: redirectToRef.current, provider })
+      await signIn.social({ callbackURL: redirectTo, provider })
     } catch {
       toast.error('Sign in failed. Please try again.')
       setLoadingProvider(null)
@@ -104,47 +113,40 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
   ]
 
   return (
-    <SignInModalContext.Provider value={value}>
-      {children}
-      <Suspense>
-        <SignInParamListener onOpen={openWith} />
-      </Suspense>
-      <Dialog
-        onOpenChange={(next) => {
-          setOpen(next)
-          if (!next) {
-            setLoadingProvider(null)
-          }
-        }}
-        open={open}
-      >
-        <DialogContent className='max-sm:data-closed:slide-out-to-bottom max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
-          <DialogHeader>
-            <DialogTitle className='text-lg'>Sign in</DialogTitle>
-            <DialogDescription>
-              Use your Google or GitHub account.
-            </DialogDescription>
-          </DialogHeader>
-          <div className='flex w-full flex-col gap-2'>
-            {providers.map(({ id, label, icon }) => (
-              <Button
-                className='w-full gap-2'
-                disabled={loadingProvider !== null}
-                key={id}
-                onClick={() => signInWithProvider(id)}
-                variant='outline'
-              >
-                {loadingProvider === id ? (
-                  <Icons.spinner className='size-4 animate-spin' />
-                ) : (
-                  icon
-                )}
-                {label}
-              </Button>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </SignInModalContext.Provider>
+    <Dialog
+      onOpenChange={(next) => {
+        if (!next) {
+          close()
+        }
+      }}
+      open={redirectTo !== null}
+    >
+      <DialogContent className='max-sm:data-closed:slide-out-to-bottom max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
+        <DialogHeader>
+          <DialogTitle className='text-lg'>Sign in</DialogTitle>
+          <DialogDescription>
+            Use your Google or GitHub account.
+          </DialogDescription>
+        </DialogHeader>
+        <div className='flex w-full flex-col gap-2'>
+          {providers.map(({ id, label, icon }) => (
+            <Button
+              className='w-full gap-2'
+              disabled={loadingProvider !== null}
+              key={id}
+              onClick={() => signInWithProvider(id)}
+              variant='outline'
+            >
+              {loadingProvider === id ? (
+                <Icons.spinner className='size-4 animate-spin' />
+              ) : (
+                icon
+              )}
+              {label}
+            </Button>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
