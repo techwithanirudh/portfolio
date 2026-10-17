@@ -60,8 +60,9 @@ function TOCPopoverContent({ className }: { className?: string }) {
     >
       <header
         className={cn(
-          'border-b backdrop-blur-sm transition-colors',
-          open && 'bg-background/80 shadow-lg'
+          // Always frosted, since the post scrolls right under it while collapsed
+          'border-b bg-background/90 backdrop-blur-md transition-shadow',
+          open && 'shadow-lg'
         )}
         ref={ref}
       >

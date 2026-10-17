@@ -22,6 +22,7 @@ import {
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { TitleDot } from '@/components/layout/sections/hero'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Collapsible,
@@ -70,7 +71,16 @@ const renderNavTitle = (
 
   return (
     <NavTitleLink href={href} {...props}>
-      {title as ReactNode}
+      {/* The wordmark ends on the same blue full stop as the page headings,
+          wrapped so the link's gap doesn't push the dot away */}
+      {typeof title === 'string' ? (
+        <span>
+          {title}
+          <TitleDot />
+        </span>
+      ) : (
+        (title as ReactNode)
+      )}
     </NavTitleLink>
   )
 }

@@ -1,4 +1,6 @@
+import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Pagination,
   PaginationContent,
@@ -11,6 +13,47 @@ const ellipsisClassName =
   'flex size-9 items-center justify-center text-muted-foreground text-sm'
 
 const linkClassName = 'shadow-none hover:z-10 focus-visible:z-10'
+
+// Both arrows always render, greyed out at the ends, so the page numbers
+// stay centered and the bar doesn't jump between pages
+function StepLink({
+  children,
+  href,
+  label,
+}: {
+  children: ReactNode
+  href?: string
+  label: string
+}) {
+  if (!href) {
+    return (
+      // Just a placeholder for sighted users; there's nowhere to go
+      <span
+        aria-hidden
+        className={buttonVariants({
+          className: 'opacity-40',
+          shape: 'square',
+          size: 'icon',
+          variant: 'ghost',
+        })}
+      >
+        {children}
+      </span>
+    )
+  }
+
+  return (
+    <PaginationLink
+      aria-label={label}
+      className={linkClassName}
+      href={href}
+      shape='square'
+      variant='ghost'
+    >
+      {children}
+    </PaginationLink>
+  )
+}
 
 interface NumberedPaginationProps {
   currentPage: number
@@ -35,17 +78,12 @@ function NumberedPagination({
     <Pagination>
       <PaginationContent className='grid w-full grid-cols-[1fr_auto_1fr] items-center gap-0'>
         <PaginationItem className='flex'>
-          {currentPage > 1 && (
-            <PaginationLink
-              aria-label='Go to previous page'
-              className={linkClassName}
-              href={getHref(currentPage - 1)}
-              shape='square'
-              variant='ghost'
-            >
-              <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
-            </PaginationLink>
-          )}
+          <StepLink
+            href={currentPage > 1 ? getHref(currentPage - 1) : undefined}
+            label='Go to previous page'
+          >
+            <Icons.chevronLeft aria-hidden='true' size={16} strokeWidth={2} />
+          </StepLink>
         </PaginationItem>
 
         <PaginationItem className='justify-self-center'>
@@ -83,21 +121,14 @@ function NumberedPagination({
         </PaginationItem>
 
         <PaginationItem className='flex justify-end'>
-          {currentPage < totalPages && (
-            <PaginationLink
-              aria-label='Go to next page'
-              className={linkClassName}
-              href={getHref(currentPage + 1)}
-              shape='square'
-              variant='ghost'
-            >
-              <Icons.chevronRight
-                aria-hidden='true'
-                size={16}
-                strokeWidth={2}
-              />
-            </PaginationLink>
-          )}
+          <StepLink
+            href={
+              currentPage < totalPages ? getHref(currentPage + 1) : undefined
+            }
+            label='Go to next page'
+          >
+            <Icons.chevronRight aria-hidden='true' size={16} strokeWidth={2} />
+          </StepLink>
         </PaginationItem>
       </PaginationContent>
     </Pagination>

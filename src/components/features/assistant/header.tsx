@@ -44,6 +44,7 @@ export function AssistantHeader() {
           onClick={() => setOpen(false)}
           shape='square'
           size='icon-sm'
+          variant='secondary'
         >
           <Icons.close className='icon-turn-button' />
         </Button>

@@ -88,8 +88,10 @@ export default defineConfig({
       rehypeCodeOptions: {
         inline: 'tailing-curly-colon',
         themes: {
-          dark: 'catppuccin-mocha',
-          // Latte's greens and yellows fail contrast on white
+          // A matched pair, so a snippet keeps its colors and upright keywords
+          // when the theme flips (Catppuccin Latte's greens and yellows fail
+          // contrast on white, which ruled out the Catppuccin pair)
+          dark: 'github-dark',
           light: 'github-light',
         },
         transformers: [

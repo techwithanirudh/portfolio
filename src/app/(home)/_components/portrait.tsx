@@ -3,6 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { AnimatePresence, motion, useAnimate } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { pop } from '@/lib/audio/minimal'
 import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
@@ -118,13 +119,48 @@ export function PortraitChip({
 }
 
 const BONK_MS = 260
+// A streak ends once you leave the face alone for this long
+const STREAK_RESET_MS = 1500
+// How many taps in a row it takes before the face starts complaining
+const COMPLAINTS: Record<number, string> = {
+  3: 'ouch',
+  5: "hey, that's my face",
+  7: 'stop it',
+  9: 'okay seriously, stop',
+  12: 'AAAARGH',
+}
+// Keep going past the last complaint and the face gives up on you for a bit
+const SULK_AT = 16
+const SULK_MS = 5000
 
 // Tap the face and it squashes, squeezes its eyes shut and says bonk
 function BonkChip({ className }: { className?: string }) {
   const [scope, animate] = useAnimate<HTMLButtonElement>()
   const [bonks, setBonks] = useState(0)
   const [bonked, setBonked] = useState(false)
+  const [sulking, setSulking] = useState(false)
   const playPop = useSound(pop)
+  const streak = useRef(0)
+  const streakTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+
+  useEffect(() => () => clearTimeout(streakTimer.current), [])
+
+  useEffect(() => {
+    if (!sulking) {
+      return
+    }
+    const timer = setTimeout(() => {
+      setSulking(false)
+      if (!prefersReducedMotion()) {
+        animate(
+          scope.current,
+          { rotate: 0, scale: [0.72, 1.1, 1], y: 0 },
+          { duration: 0.4, ease: 'easeOut' }
+        )
+      }
+    }, SULK_MS)
+    return () => clearTimeout(timer)
+  }, [sulking, animate, scope])
 
   useEffect(() => {
     if (!bonked) {
@@ -135,9 +171,38 @@ function BonkChip({ className }: { className?: string }) {
   }, [bonked])
 
   const bonk = () => {
+    if (sulking) {
+      return
+    }
     playPop()
     setBonks((count) => count + 1)
     setBonked(true)
+
+    streak.current += 1
+    clearTimeout(streakTimer.current)
+    streakTimer.current = setTimeout(() => {
+      streak.current = 0
+    }, STREAK_RESET_MS)
+    const complaint = COMPLAINTS[streak.current]
+    if (complaint) {
+      // Straight from sonner, since the pop above is already the sound; one id
+      // so each complaint replaces the last instead of stacking up
+      toast(complaint, { id: 'bonk' })
+    }
+    if (streak.current >= SULK_AT) {
+      streak.current = 0
+      setSulking(true)
+      toast("that's it, I'm not talking to you", { id: 'bonk' })
+      if (!prefersReducedMotion()) {
+        // Ducks down and turns away, eyes shut, until it cools off
+        animate(
+          scope.current,
+          { rotate: -14, scale: 0.72, y: '0.12em' },
+          { duration: 0.35, ease: 'easeOut' }
+        )
+      }
+      return
+    }
     if (!prefersReducedMotion()) {
       animate(
         scope.current,
@@ -150,12 +215,13 @@ function BonkChip({ className }: { className?: string }) {
   return (
     <span className='relative inline-block'>
       <button
+        aria-disabled={sulking || undefined}
         className={cn(
           chipClassName,
-          'origin-bottom cursor-pointer align-baseline outline-none focus-visible:ring-2 focus-visible:ring-ring',
+          'origin-bottom cursor-pointer align-baseline outline-none focus-visible:ring-2 focus-visible:ring-ring aria-disabled:cursor-not-allowed',
           className
         )}
-        data-bonked={bonked || undefined}
+        data-bonked={bonked || sulking || undefined}
         // The smooth cursor would sit on the face and hide it, as on Simba
         data-native-cursor
         onClick={bonk}
@@ -175,6 +241,23 @@ function BonkChip({ className }: { className?: string }) {
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
             bonk
+          </motion.span>
+        )}
+        {sulking && (
+          <motion.span
+            animate={{ opacity: [0, 1, 1, 0], x: '0.25em', y: '-0.45em' }}
+            aria-hidden
+            className='pointer-events-none absolute -top-[0.1em] left-1/2 font-medium font-mono text-[0.18em] text-muted-foreground tracking-normal'
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, x: 0, y: 0 }}
+            key='zzz'
+            transition={{
+              duration: 1.6,
+              ease: 'easeOut',
+              repeat: Number.POSITIVE_INFINITY,
+            }}
+          >
+            zzz
           </motion.span>
         )}
       </AnimatePresence>

@@ -161,7 +161,8 @@ function TimelineRow({
           <p
             className={cn(
               'mt-2 max-w-[60ch] text-pretty text-muted-foreground leading-relaxed',
-              variant === 'preview' && 'line-clamp-2 sm:line-clamp-1'
+              // Phones show the whole line, since a clamp there cuts it mid-word
+              variant === 'preview' && 'sm:line-clamp-1'
             )}
           >
             <ReactMarkdown components={markdownComponents}>

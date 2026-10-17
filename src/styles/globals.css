@@ -100,8 +100,11 @@ html > body[data-scroll-locked] {
     [role="radio"],
     [tabindex]:not([tabindex="-1"])
   ):focus-visible {
-    outline: 2px solid var(--color-ring);
+    /* The same soft ring the buttons and inputs use, rounded so plain links
+       don't get a hard square; a radius utility on the element still wins */
+    outline: 2px solid color-mix(in oklab, var(--color-ring) 60%, transparent);
     outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   body {

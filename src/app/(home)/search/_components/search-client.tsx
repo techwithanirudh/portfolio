@@ -175,7 +175,12 @@ export function SearchClient() {
           </ViewAnimation>
         </div>
         <div className='min-h-0 flex-1'>
-          <ScrollArea className='h-full w-full' data-lenis-prevent>
+          <ScrollArea
+            // Fades the top edge in only once you've scrolled, so results
+            // ease under the tabs instead of being cut off at them
+            className='h-full w-full [&>[data-slot=scroll-area-scrollbar]]:py-1.5 [&>[data-slot=scroll-area-scrollbar]]:pr-1 [&>[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_bottom,transparent,#000_min(2.5rem,var(--scroll-area-overflow-y-start,0px)))]'
+            data-lenis-prevent
+          >
             {!hasQuery && (
               <ViewAnimation delay={0.1}>
                 <p className='py-12 text-center text-muted-foreground text-sm'>
@@ -186,7 +191,7 @@ export function SearchClient() {
             {pending && <ResultsSkeleton />}
             <SearchDialogList
               // Let the scroll area own the height instead of fumadocs' 460px cap
-              className='!h-auto [&>div]:!p-0 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
+              className='!h-auto [&>div]:!p-0 [&>div]:!pt-2 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
               Empty={tag === 'blog' ? BlogEmpty : undefined}
               Item={({ item, onClick }) => (
                 <div className='relative'>

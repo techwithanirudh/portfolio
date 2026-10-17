@@ -78,11 +78,13 @@ export function MenuPanel({
         ))}
       </nav>
       <div className='flex items-center justify-between border-t border-dashed px-1.5 py-0.5'>
+        {/* A touch narrower than square so the three-way theme switch still
+            fits beside them on a 360px phone */}
         <div className='flex items-center'>
           {socials.map((social) => (
             <a
               aria-label={social.name}
-              className='flex size-11 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+              className='flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
               href={social.url}
               key={social.name}
               rel='noopener noreferrer'
@@ -95,13 +97,13 @@ export function MenuPanel({
         <div className='flex items-center gap-1'>
           <button
             aria-label='Open assistant'
-            className='flex size-11 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+            className='flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
             onClick={onAssistantOpen}
             type='button'
           >
             <Icons.aiChat />
           </button>
-          <ThemeToggle />
+          <ThemeToggle mode='light-dark-system' />
         </div>
       </div>
     </DialogPrimitive.Popup>
