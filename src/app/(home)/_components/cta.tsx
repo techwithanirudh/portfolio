@@ -35,7 +35,10 @@ export default function CTA(): React.ReactElement {
                 size='lg'
               >
                 Contact me{' '}
-                <Icons.arrowRight className='icon-arrow-button size-4' />
+                <Icons.arrowRight
+                  className='icon-arrow-button size-4'
+                  data-icon='inline-end'
+                />
               </Button>
             </ViewAnimation>
           </div>

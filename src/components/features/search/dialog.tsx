@@ -251,7 +251,11 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
   return (
     <CommandDialog
-      commandProps={{ onKeyDown: handleKeyDown, shouldFilter: false }}
+      commandProps={{
+        label: 'Search the site',
+        onKeyDown: handleKeyDown,
+        shouldFilter: false,
+      }}
       description='Search or jump to a page'
       onOpenChange={(next) => {
         if (!next) {
@@ -266,7 +270,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
         data-sound-press='off'
         enterKeyHint='search'
         onValueChange={setSearch}
-        placeholder='Type a command or search...'
+        placeholder='Type a command or search…'
         value={search}
       />
 

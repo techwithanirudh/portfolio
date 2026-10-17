@@ -1,4 +1,5 @@
 export const themeColor = {
-  dark: '#0A0A0A',
-  light: '#fff',
+  // The body's own background, so the browser bar blends into the page
+  dark: '#121212',
+  light: '#f5f5f5',
 } as const

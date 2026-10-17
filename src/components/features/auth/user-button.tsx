@@ -85,7 +85,6 @@ export function UserButton({ className, classNames }: UserButtonProps) {
       <DropdownMenuContent
         align='start'
         className={cn('w-fit min-w-56 max-w-64', classNames?.content?.base)}
-        finalFocus={false}
         side='top'
       >
         {user ? (

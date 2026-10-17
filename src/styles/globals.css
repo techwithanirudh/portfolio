@@ -42,11 +42,12 @@
   --color-accent: var(--color-fd-accent);
   --color-accent-foreground: var(--color-fd-accent-foreground);
 
-  /* --color-destructive: var(--color-fd-destructive);
-  --color-destructive-foreground: var(--color-fd-destructive-foreground); */
-  --color-destructive: hsl(0 84.2% 60.2%);
+  /* Status colors are text-safe (4.5:1 on the page and on their own tints)
+     and switch under .dark. `destructive-solid` is the fill behind a label */
+  --color-destructive: oklch(50.5% 0.213 27.518); /* red-700 */
+  --color-destructive-solid: oklch(57.7% 0.245 27.325); /* red-600 */
   --color-destructive-foreground: hsl(0 0% 98%);
-  --color-success: var(--color-emerald-500);
+  --color-success: oklch(43.2% 0.095 166.913); /* emerald-800 */
 
   --color-border: var(--color-fd-border);
   --color-input: var(--color-fd-border);
@@ -114,12 +115,15 @@ html > body[data-scroll-locked] {
     @apply bg-background text-foreground antialiased;
   }
 
+  /* Keeps focused and anchored things out from under the sticky header,
+     and the phone pill at the bottom */
   html {
-    @apply scroll-smooth accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-track-transparent;
+    @apply scroll-smooth scroll-pt-16 accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border max-md:scroll-pb-24 dark:scrollbar-track-transparent;
   }
 
+  /* Adds to the scroll padding above, so anchors still land 80px down */
   [id] {
-    @apply scroll-mt-20;
+    @apply scroll-mt-4;
   }
 
   h1,
@@ -135,7 +139,9 @@ html > body[data-scroll-locked] {
 @theme {
   --color-fd-primary-foreground: hsl(0, 0%, 98%);
   --color-fd-primary: hsl(226, 55%, 45%);
-  --color-fd-ring: hsl(0, 0%, 63.9%);
+  /* The primary, darkened so the half strength halo on buttons and inputs
+     still reaches 3:1 on the light background. Dark sets its own below */
+  --color-fd-ring: color-mix(in oklab, var(--color-fd-primary) 55%, black);
 
   --animate-blink: blink 4.5s ease-in-out infinite;
 
@@ -175,6 +181,8 @@ html > body[data-scroll-locked] {
   --color-fd-ring: hsl(234, 100%, 83%);
   --color-fd-primary: hsl(234, 100%, 83%);
   --color-fd-primary-foreground: hsl(240, 7%, 11%);
+  --color-destructive: oklch(70.4% 0.191 22.216); /* red-400 */
+  --color-success: oklch(69.6% 0.17 162.48); /* emerald-500 */
 }
 
 @layer base {
@@ -355,31 +363,31 @@ html > body[data-scroll-locked] {
   }
 
   .icon-pop {
-    @apply transition-transform hover:scale-125 will-change-transform;
+    @apply transition-transform hover:scale-125;
   }
 
   .icon-tilt {
-    @apply transition-transform hover:rotate-12 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:rotate-12 hover:scale-125;
   }
 
   .icon-tilt-reverse {
-    @apply transition-transform hover:-rotate-12 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:-rotate-12 hover:scale-125;
   }
 
   .icon-turn {
-    @apply transition-transform hover:rotate-90 hover:scale-125 will-change-transform;
+    @apply transition-transform hover:rotate-90 hover:scale-125;
   }
 
   .icon-arrow {
-    @apply transition-transform group-hover:-rotate-45 will-change-transform;
+    @apply transition-transform group-hover:-rotate-45;
   }
 
   .icon-arrow-button {
-    @apply transition-transform group-hover/button:-rotate-45 will-change-transform;
+    @apply transition-transform group-hover/button:-rotate-45;
   }
 
   .icon-turn-button {
-    @apply transition-transform group-hover/button:rotate-90 will-change-transform;
+    @apply transition-transform group-hover/button:rotate-90;
   }
 
   .typography-hero {
@@ -491,7 +499,9 @@ html > body[data-scroll-locked] {
   ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    /* Fades and color changes stay, since they don't move anything */
+    transition-property:
+      opacity, color, background-color, border-color, box-shadow !important;
     scroll-behavior: auto !important;
   }
 

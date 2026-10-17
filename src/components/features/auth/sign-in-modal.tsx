@@ -121,7 +121,7 @@ function SignInDialog({
       }}
       open={redirectTo !== null}
     >
-      <DialogContent className='max-sm:data-closed:slide-out-to-bottom max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
+      <DialogContent className='max-sm:data-closed:slide-out-to-bottom-[30%] max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
         <DialogHeader>
           <DialogTitle className='text-lg'>Sign in</DialogTitle>
           <DialogDescription>

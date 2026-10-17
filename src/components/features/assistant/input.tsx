@@ -164,7 +164,7 @@ export function AssistantInput() {
           className={cn('min-h-16', isLoading && 'text-muted-foreground')}
           id='nd-ai-input'
           onChange={(event) => handleInputChange(event.target.value)}
-          placeholder={isLoading ? 'Sniffing for answers...' : 'Ask Simba'}
+          placeholder={isLoading ? 'Sniffing for answers…' : 'Ask Simba'}
           value={input}
         />
       </PromptInputBody>

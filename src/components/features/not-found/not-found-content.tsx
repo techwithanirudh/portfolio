@@ -47,7 +47,10 @@ export function NotFoundContent() {
             render={<Link href='/' />}
           >
             Take me home
-            <Icons.arrowRight className='icon-arrow-button size-4' />
+            <Icons.arrowRight
+              className='icon-arrow-button size-4'
+              data-icon='inline-end'
+            />
           </Button>
         </div>
       </Section>

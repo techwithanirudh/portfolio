@@ -194,7 +194,10 @@ export function ContactForm({
           <div className='flex items-center gap-2 text-destructive text-xs'>
             <Icons.warning className='size-3.5 shrink-0' />
             <p>
-              {getActionErrorMessage(action.result, 'Failed to send message')}
+              {getActionErrorMessage(
+                action.result,
+                "Your message didn't send. Try again."
+              )}
             </p>
           </div>
         )}
@@ -209,7 +212,7 @@ export function ContactForm({
             {isExecuting ? (
               <>
                 <Icons.spinner className='size-3.5 animate-spin' />
-                sending...
+                sending…
               </>
             ) : (
               <>

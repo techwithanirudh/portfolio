@@ -65,7 +65,9 @@ export async function generateMetadata(
   }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
-  const pageTitle = isFirstPage ? 'Posts' : `Posts, page ${pageIndex}`
+  const pageTitle = isFirstPage
+    ? pages.blog.title
+    : `${pages.blog.title}, page ${pageIndex}`
   const canonicalUrl = getPageHref(pages.blog.path, isFirstPage ? 1 : pageIndex)
   const pageDescription = isFirstPage
     ? pages.blog.description

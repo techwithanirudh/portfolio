@@ -11,14 +11,17 @@ import { cn } from '@/lib/utils'
 
 type Theme = 'light' | 'dark' | 'system'
 
-const itemVariants = cva('size-6.5 rounded-sm p-1.5 text-muted-foreground', {
-  variants: {
-    active: {
-      false: 'text-muted-foreground',
-      true: 'bg-accent text-accent-foreground',
+const itemVariants = cva(
+  'size-6.5 rounded-sm p-1.5 text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong',
+  {
+    variants: {
+      active: {
+        false: 'text-muted-foreground hover:text-foreground',
+        true: 'bg-accent text-accent-foreground',
+      },
     },
-  },
-})
+  }
+)
 
 const lightDarkActive = {
   dark: 'dark:bg-accent dark:text-accent-foreground',
@@ -80,7 +83,7 @@ export function ThemeToggle({
   }
 
   const container = cn(
-    'inline-flex items-center rounded-md border bg-background p-1',
+    'inline-flex items-center rounded-lg border bg-background p-1 transition-[scale] duration-150 ease-out-strong active:scale-[0.96]',
     className
   )
 
@@ -88,7 +91,10 @@ export function ThemeToggle({
     return (
       <button
         aria-label={'Toggle theme'}
-        className={container}
+        className={cn(
+          container,
+          'relative after:absolute after:inset-x-0 after:-inset-y-0.5'
+        )}
         data-sound-press='off'
         data-theme-toggle=''
         onClick={() =>
@@ -119,11 +125,21 @@ export function ThemeToggle({
   const value = mounted ? theme : null
 
   return (
-    <div className={container} data-theme-toggle=''>
+    <div
+      aria-label='Theme'
+      className={container}
+      data-theme-toggle=''
+      role='group'
+    >
       {full.map(([key, Icon]) => (
         <button
-          aria-label={key}
-          className={itemVariants({ active: value === key })}
+          aria-label={`${key[0]?.toUpperCase()}${key.slice(1)} theme`}
+          aria-pressed={value === key}
+          // Taller hit area only, since the segments sit flush side by side
+          className={cn(
+            itemVariants({ active: value === key }),
+            'relative after:absolute after:inset-x-0 after:-inset-y-[7px]'
+          )}
           data-sound-press='off'
           key={key}
           onClick={() => handleChangeTheme(key)}

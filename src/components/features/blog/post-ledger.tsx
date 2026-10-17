@@ -43,7 +43,7 @@ export const PostLedger = ({ posts }: { posts: BlogPage[] }) => {
               title's baseline, so it moves with the rows' sm:py-8 */}
           <div className='border-border border-b border-dashed px-6 py-3 md:border-r md:border-b-0 md:pt-5.5 md:pb-8'>
             <h2
-              className='font-mono text-muted-foreground/70 text-xl tabular-nums tracking-tight md:sticky md:top-20 md:text-2xl'
+              className='font-mono text-muted-foreground text-xl tabular-nums tracking-tight md:sticky md:top-20 md:text-2xl'
               id={`year-${year}`}
             >
               {year}

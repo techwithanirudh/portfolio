@@ -118,7 +118,7 @@ function TimelineRow({
     <article className={cn(rowClassName, 'py-5.5 sm:py-6')}>
       <p className='col-start-2 row-start-1 mb-2 font-mono text-muted-foreground text-xs tabular-nums leading-normal sm:col-start-1 sm:mb-0 sm:pt-3'>
         {formatPeriod(start, end)}
-        <span className='ml-2 opacity-70 sm:ml-0 sm:block'>
+        <span className='ml-2 sm:ml-0 sm:block'>
           {formatDuration(start, end)}
         </span>
       </p>

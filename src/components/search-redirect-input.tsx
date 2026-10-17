@@ -45,6 +45,7 @@ export function SearchRedirectInput({
         <Icons.search className='icon-turn size-4' />
       </InputGroupAddon>
       <InputGroupInput
+        aria-label={placeholder}
         // The submit arrow and Escape replace the browser's own clear button
         className='text-sm [&::-webkit-search-cancel-button]:hidden'
         onChange={(event) => setValue(event.target.value)}
@@ -66,7 +67,7 @@ export function SearchRedirectInput({
         className={cn(
           // Undo the addon's pull towards the edge so the arrow keeps the
           // same 8px gap on every side inside the bar
-          'transition-all duration-150 ease-out has-[>button]:mr-0',
+          'transition-[scale,opacity] duration-150 ease-out-strong has-[>button]:mr-0',
           hasValue
             ? 'scale-100 opacity-100'
             : 'pointer-events-none scale-95 opacity-0'
@@ -74,6 +75,8 @@ export function SearchRedirectInput({
       >
         <InputGroupButton
           aria-label='Submit search'
+          // Hidden while empty, so it shouldn't take a Tab stop either
+          disabled={!hasValue}
           onClick={() => handleSubmit(value)}
           size='icon-xs'
           variant='default'

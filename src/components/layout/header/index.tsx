@@ -319,7 +319,7 @@ const HeaderNavigationMenu = ({
           {children}
         </NavigationMenu.List>
         <CollapsibleContent
-          className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-300 ease-out data-ending-style:h-0 data-starting-style:h-0 lg:hidden'
+          className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none lg:hidden'
           onClick={(event) => {
             if ((event.target as Element).closest('a')) {
               setMenuOpen(false)

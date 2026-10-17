@@ -166,12 +166,15 @@ export function SearchClient() {
                 onChange={(event) => {
                   handleSearchChange(event.target.value)
                 }}
-                placeholder='Search posts and projects...'
+                placeholder='Search posts and projects…'
                 value={search}
               />
               {search.length > 0 && !pending && (
-                <InputGroupAddon align='inline-end' className='pr-3'>
-                  {resultCount} results
+                <InputGroupAddon
+                  align='inline-end'
+                  className='pr-3 tabular-nums'
+                >
+                  {resultCount} {resultCount === 1 ? 'result' : 'results'}
                 </InputGroupAddon>
               )}
             </InputGroup>

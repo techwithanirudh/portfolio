@@ -37,7 +37,7 @@ export function FloatingPill({
       <div className='flex items-center gap-1.5 rounded-full border bg-background p-1.5 shadow-lg'>
         <button
           aria-label='Search'
-          className='relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-95'
+          className='relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-[0.96]'
           onClick={onSearchOpen}
           type='button'
         >
@@ -63,7 +63,7 @@ export function FloatingPill({
           aria-expanded={open}
           aria-label='Toggle menu'
           className={cn(
-            'relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 active:scale-95',
+            'relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 active:scale-[0.96]',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
             open
               ? 'bg-primary/10 text-primary'

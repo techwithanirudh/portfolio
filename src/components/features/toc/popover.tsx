@@ -103,7 +103,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
           />
         </CollapsibleTrigger>
 
-        <CollapsibleContent>
+        <CollapsibleContent className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none'>
           <div className='flex max-h-[50vh] flex-col px-4 md:px-6'>
             <TOCScrollArea>
               <TOCItems>

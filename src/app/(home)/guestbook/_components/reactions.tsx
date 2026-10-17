@@ -108,6 +108,7 @@ export const GuestbookReactions = ({
       <div className='flex flex-wrap gap-2'>
         {optimisticReactions.map((reaction: GuestbookReactionItem) => (
           <Button
+            aria-pressed={reaction.reacted}
             className={cn(
               'gap-2 px-3 text-xs',
               reaction.reacted && 'border-primary text-primary'

@@ -15,7 +15,7 @@ const alertVariants = cva(
         success:
           'border-success/15 bg-success/15 px-3 py-2 text-success has-[>svg]:gap-x-1.5',
         'destructive-soft':
-          'border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground',
+          'border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive-solid dark:bg-destructive-solid dark:text-destructive-foreground',
       },
     },
     defaultVariants: {

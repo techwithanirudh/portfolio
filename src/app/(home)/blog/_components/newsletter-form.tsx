@@ -19,6 +19,9 @@ import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import { NewsletterSchema } from '@/lib/validators'
 
+const subscribeFailedMessage =
+  "You're not subscribed yet. Check your connection and try again."
+
 export const NewsletterForm = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     subscribe,
@@ -26,7 +29,7 @@ export const NewsletterForm = () => {
     {
       actionProps: {
         onError: ({ error }) => {
-          toast.error(getActionErrorMessage(error, 'Failed to subscribe.'))
+          toast.error(getActionErrorMessage(error, subscribeFailedMessage))
         },
         onSuccess: ({ data }) => {
           toast.success(data?.message ?? "You're subscribed.")
@@ -44,7 +47,7 @@ export const NewsletterForm = () => {
   return (
     <Form {...form}>
       <form className='flex-1 space-y-4' onSubmit={handleSubmitWithAction}>
-        <div className='flex h-full min-h-10 overflow-hidden rounded-md border bg-muted p-0'>
+        <div className='flex h-full min-h-10 overflow-hidden rounded-md border bg-muted p-0 transition-[color,box-shadow] has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50'>
           <div className='flex-1'>
             <FormField
               control={form.control}
@@ -96,7 +99,7 @@ export const NewsletterForm = () => {
           <Alert variant='destructive-soft'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
-              {action.result.serverError}
+              {getActionErrorMessage(action.result, subscribeFailedMessage)}
             </AlertTitle>
           </Alert>
         )}

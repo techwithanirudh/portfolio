@@ -128,7 +128,7 @@ export const ContactForm = () => {
                 <Textarea
                   className='max-h-[20rem] min-h-[10rem] resize-y bg-background'
                   maxLength={CONTACT_MESSAGE_MAX_LENGTH}
-                  placeholder="Hi there, I'm interested in..."
+                  placeholder="Hi there, I'm interested in…"
                   {...field}
                   disabled={action.status === 'executing'}
                 />

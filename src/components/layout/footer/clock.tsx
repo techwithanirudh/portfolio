@@ -91,7 +91,7 @@ export function Clock({ className }: ClockProps) {
         render={
           <Button
             aria-label={timeString}
-            className='rounded-md'
+            className='relative rounded-md after:absolute after:-inset-0.5'
             size='icon'
             variant='ghost'
           />
@@ -136,7 +136,7 @@ export function Clock({ className }: ClockProps) {
         </time>
       </TooltipTrigger>
       <TooltipContent>
-        <p>{timeString}</p>
+        <p className='tabular-nums'>{timeString}</p>
       </TooltipContent>
     </Tooltip>
   )

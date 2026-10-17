@@ -80,7 +80,10 @@ const Hero = () => (
           href='/projects'
         >
           Browse projects
-          <Icons.arrowRight className='icon-arrow-button size-4' />
+          <Icons.arrowRight
+            className='icon-arrow-button size-4'
+            data-icon='inline-end'
+          />
         </Link>
       </ViewAnimation>
       <ViewAnimation className='flex' delay={0.2}>

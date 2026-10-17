@@ -45,7 +45,9 @@ export const GuestbookEntryCard = ({
 
   const editAction = useAction(editGuestbookEntry, {
     onError: ({ error }) => {
-      toast.error(getActionErrorMessage(error, 'Failed to update message.'))
+      toast.error(
+        getActionErrorMessage(error, "Your message wasn't updated. Try again.")
+      )
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -55,7 +57,9 @@ export const GuestbookEntryCard = ({
   })
   const deleteAction = useAction(removeGuestbookEntry, {
     onError: ({ error }) => {
-      toast.error(getActionErrorMessage(error, 'Failed to delete message.'))
+      toast.error(
+        getActionErrorMessage(error, "The message wasn't deleted. Try again.")
+      )
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -66,7 +70,9 @@ export const GuestbookEntryCard = ({
   })
   const banAction = useAction(banGuestbookUser, {
     onError: ({ error }) => {
-      toast.error(getActionErrorMessage(error, 'Failed to update ban status.'))
+      toast.error(
+        getActionErrorMessage(error, "The ban status didn't change. Try again.")
+      )
     },
     onSuccess: () => {
       setIsEditing(false)
@@ -231,7 +237,7 @@ export const GuestbookEntryCard = ({
         ) : null}
       </div>
       <ConfirmDialog
-        busyLabel={entry.banned ? 'Unbanning...' : 'Banning...'}
+        busyLabel={entry.banned ? 'Unbanning…' : 'Banning…'}
         confirmLabel={entry.banned ? 'Unban user' : 'Ban user'}
         description={
           entry.banned
@@ -246,7 +252,7 @@ export const GuestbookEntryCard = ({
         variant={entry.banned ? 'outline' : 'destructive'}
       />
       <ConfirmDialog
-        busyLabel='Deleting...'
+        busyLabel='Deleting…'
         confirmLabel='Delete entry'
         description={`This will remove ${entry.name}'s guestbook entry permanently.`}
         isBusy={isBusy}

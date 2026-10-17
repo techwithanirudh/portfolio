@@ -28,7 +28,8 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
   const encoded = encodeURIComponent(url)
 
   const { copy } = useCopyToClipboard({
-    onCopyError: () => toast.error('Unable to copy link'),
+    onCopyError: () =>
+      toast.error("Couldn't copy the link. Copy it from the address bar."),
     onCopySuccess: () => toast.success('Link copied'),
   })
 

@@ -57,7 +57,7 @@ export const WorkCard = ({
           <BlurImage
             alt={title}
             blur={false}
-            className='relative aspect-video w-full overflow-hidden rounded-lg bg-background transition-transform group-hover:scale-102'
+            className='relative aspect-video w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 dark:outline-white/10'
             fill
             imageClassName='object-cover'
             lazy={!priority}

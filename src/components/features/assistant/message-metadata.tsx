@@ -62,7 +62,7 @@ export const MessageMetadata = ({
     return reasoning ? (
       <div className='flex items-center gap-2 text-muted-foreground'>
         <Icons.brain aria-hidden className='size-4' />
-        <Shimmer>Sniffing around...</Shimmer>
+        <Shimmer>Sniffing around…</Shimmer>
       </div>
     ) : (
       <MessagePending />

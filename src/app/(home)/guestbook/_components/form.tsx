@@ -30,6 +30,9 @@ import { toast } from '@/lib/toast'
 import { GuestbookEntrySchema } from '@/lib/validators'
 import { createGuestbookEntry } from '../actions/guestbook'
 
+const postFailedMessage =
+  "Your entry wasn't posted. Check your connection and try again."
+
 export const GuestbookForm = () => {
   const router = useRouter()
   const { openSignIn } = useSignInModal()
@@ -48,9 +51,7 @@ export const GuestbookForm = () => {
           if (form.formState.errors.message) {
             setStep(1)
           }
-          toast.error(
-            getActionErrorMessage(error, 'Failed to post guestbook entry.')
-          )
+          toast.error(getActionErrorMessage(error, postFailedMessage))
         },
         onSuccess: () => {
           toast.success('Guestbook entry posted.')
@@ -142,7 +143,7 @@ export const GuestbookForm = () => {
                       <Textarea
                         className='min-h-[10rem] resize-y bg-background'
                         disabled={isExecuting}
-                        placeholder='Say hello...'
+                        placeholder='Say hello…'
                         {...field}
                       />
                     </FormControl>
@@ -213,7 +214,7 @@ export const GuestbookForm = () => {
             <Alert className='mt-6' variant='destructive-soft'>
               <Icons.warning className='size-4' />
               <AlertTitle className='mb-0 leading-normal'>
-                {action.result.serverError}
+                {getActionErrorMessage(action.result, postFailedMessage)}
               </AlertTitle>
             </Alert>
           )}

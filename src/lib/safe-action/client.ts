@@ -1,7 +1,5 @@
-import {
-  createSafeActionClient,
-  DEFAULT_SERVER_ERROR_MESSAGE,
-} from 'next-safe-action'
+import { createSafeActionClient } from 'next-safe-action'
+import { UNEXPECTED_ACTION_ERROR } from './error-message'
 
 export class ActionError extends Error {}
 
@@ -13,6 +11,6 @@ export const actionClient = createSafeActionClient({
       return e.message
     }
 
-    return DEFAULT_SERVER_ERROR_MESSAGE
+    return UNEXPECTED_ACTION_ERROR
   },
 })

@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { cn } from '@/lib/utils'
 
 export const SectionMoreLink = ({
   children,
@@ -15,10 +16,12 @@ export const SectionMoreLink = ({
 }) => (
   <ViewAnimation className='border-border border-t border-dashed' delay={delay}>
     <Link
-      className={buttonVariants({
-        className: 'w-full py-8 ring-inset active:scale-none active:opacity-80',
-        shape: 'square',
-      })}
+      // The ring sits inside the full width bar, where the usual ring color
+      // matches the fill in dark mode, so it takes the label color instead
+      className={cn(
+        buttonVariants({ shape: 'square' }),
+        'w-full py-8 ring-inset focus-visible:ring-primary-foreground active:scale-none active:opacity-80'
+      )}
       href={href}
     >
       {children}

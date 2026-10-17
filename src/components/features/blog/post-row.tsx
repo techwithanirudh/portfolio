@@ -62,7 +62,7 @@ export const PostRow = ({
           </p>
         )}
         {meta && (
-          <p className='mt-2.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-muted-foreground/70 text-sm'>
+          <p className='mt-2.5 flex flex-wrap items-center gap-x-3.5 gap-y-1 text-muted-foreground text-sm'>
             {author && <AuthorByline author={author} />}
             {tags?.map((tag) => (
               <span key={tag}>

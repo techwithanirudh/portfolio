@@ -21,7 +21,7 @@ export function SoundToggle() {
           <button
             aria-label={label}
             aria-pressed={enabled}
-            className='inline-flex size-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-foreground'
+            className='relative inline-flex size-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-0.5 hover:bg-accent hover:text-foreground active:scale-[0.96]'
             data-sound='off'
             onClick={toggleSound}
             type='button'
