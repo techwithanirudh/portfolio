@@ -21,6 +21,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
+import { pages } from '@/constants/pages'
 import { cn } from '@/lib/utils'
 
 const ItemBadge = ({ label }: { label: string }) => (
@@ -68,9 +69,17 @@ const ResultsSkeleton = () => (
   </div>
 )
 
-// A blog search from the /blog filters bar that finds nothing gets the same
-// empty state as the ledger
-const BlogEmpty = () => <PostEmpty />
+// Every tab gets the ledger's bashful Simba when nothing matches, with a way
+// back to the full list where there is one
+const emptyByScope = {
+  all: () => <PostEmpty link={null} />,
+  blog: () => <PostEmpty />,
+  projects: () => (
+    <PostEmpty
+      link={{ href: pages.projects.path, label: 'See every project' }}
+    />
+  ),
+}
 
 const tagValues = tags
   .map((tag) => tag.value)
@@ -128,7 +137,9 @@ export function SearchClient() {
       <Section fill='contain'>
         <div className='flex flex-col'>
           <ViewAnimation>
-            <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none ring-inset'>
+            {/* A thin inset primary line on focus; the stock 3px ring stacked on the
+                dashed rules above and below read as a double border */}
+            <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none ring-inset has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot=input-group-control]:focus-visible]:ring-primary/60'>
               <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
@@ -192,7 +203,7 @@ export function SearchClient() {
             <SearchDialogList
               // Let the scroll area own the height instead of fumadocs' 460px cap
               className='!h-auto [&>div]:!p-0 [&>div]:!pt-2 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
-              Empty={tag === 'blog' ? BlogEmpty : undefined}
+              Empty={emptyByScope[scopeParam]}
               Item={({ item, onClick }) => (
                 <div className='relative'>
                   <SearchDialogListItem

@@ -1,6 +1,8 @@
 'use client'
 
-import { MorphIcon, morphIcons } from '@/components/icons/morph-icon'
+import { motion } from 'motion/react'
+import { IconSwap, IconSwapItem } from '@/components/icon-swap'
+import { Icons } from '@/components/icons/icons'
 import {
   Tooltip,
   TooltipContent,
@@ -26,10 +28,19 @@ export function SoundToggle() {
           />
         }
       >
-        <MorphIcon
-          className='size-4'
-          icon={enabled ? morphIcons.volumeOn : morphIcons.volumeOff}
-        />
+        <IconSwap>
+          <IconSwapItem
+            as={motion.span}
+            className='inline-flex'
+            key={enabled ? 'on' : 'off'}
+          >
+            {enabled ? (
+              <Icons.volumeOn className='size-4' />
+            ) : (
+              <Icons.volumeOff className='size-4' />
+            )}
+          </IconSwapItem>
+        </IconSwap>
       </TooltipTrigger>
       <TooltipContent>{label}</TooltipContent>
     </Tooltip>

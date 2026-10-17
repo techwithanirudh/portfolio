@@ -1,5 +1,6 @@
 import type { RestEndpointMethodTypes } from '@octokit/rest'
-import { type Icon, Icons } from '@/components/icons/icons'
+import type { ComponentType } from 'react'
+import { Icons } from '@/components/icons/icons'
 
 export type GitHubEvent =
   RestEndpointMethodTypes['activity']['listPublicEventsForUser']['response']['data'][number]
@@ -92,7 +93,8 @@ const EventRow = ({
 }: {
   date: string | null | undefined
   description: string
-  icon: Icon
+  // Octicons, so only className is shared with the other icon sets
+  icon: ComponentType<{ className?: string }>
 }) => (
   <div className='flex items-center gap-4'>
     <EventIcon className='icon-tilt-reverse size-4 shrink-0 text-muted-foreground' />

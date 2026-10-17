@@ -38,7 +38,7 @@ export const story: StoryChapter[] = [
     when: '2022',
   },
   {
-    body: 'Freelance full-stack work for MeetingBaaS: [Transcript Seeker](/projects/transcript_seeker), [Speaking Meeting Bot](/projects/speaking_meeting_bot) and the AI chat and MCP tooling around their meeting APIs. Then an internship at Energent.ai on the frontend and microservices of an AI data analysis platform.',
+    body: 'Freelance full-stack work for MeetingBaaS: [Transcript Seeker](/projects/transcript_seeker), [Speaking Meeting Bot](/projects/speaking_meeting_bot) and the AI chat and MCP tooling around their meeting APIs. Then an internship at [Energent.ai](https://energent.ai) on the frontend and microservices of an AI data analysis platform.',
     id: 'shipping',
     photo: {
       alt: 'Transcript Seeker',

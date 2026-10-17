@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { PostComments } from '@/app/(home)/blog/[slug]/page.client'
 import { Section } from '@/components/layout/sections'
 import { SectionBody } from '@/components/layout/sections/body'
-import { Prose, proseMeasure } from '@/components/prose'
+import { Prose } from '@/components/prose'
 import { cn } from '@/lib/utils'
 
 interface MdxLayoutProps {
@@ -33,11 +33,7 @@ export const MdxContent = ({
 }: MdxContentProps) => (
   <div className={cn('flex min-w-0 flex-1 flex-col gap-4', className)}>
     <Prose
-      className={cn(
-        'min-w-0 flex-1 px-4 text-foreground/90',
-        proseMeasure,
-        proseClassName
-      )}
+      className={cn('min-w-0 flex-1 px-4 text-foreground/90', proseClassName)}
     >
       {children}
     </Prose>

@@ -1,6 +1,6 @@
 // Whole drawings (lying down, standing) that replace the seated rig; each is
 // a pose-* group in rig-art.ts
-type FullPose = 'alert' | 'bashful' | 'playful' | 'searching'
+type FullPose = 'bashful' | 'playful' | 'searching'
 
 type Muzzle = 'neutral' | 'smile' | 'surprise'
 
@@ -18,7 +18,6 @@ export type Pose =
   | { hidden: true }
 
 const poses = {
-  alert: { full: 'alert' },
   attention: { head: 0, lift: -4 },
   bashful: { full: 'bashful' },
   curious: { head: -20, shift: -2 },
@@ -50,7 +49,6 @@ const seq = (...frames: [PoseName, number][]) =>
 
 // Each frame is a key pose; CSS transitions ease from one to the next
 const ANIMATIONS = {
-  Alert: seq(['alert', 1600]),
   Butterfly: seq(
     ['lookUp', 600],
     ['curious', 600],
@@ -89,7 +87,6 @@ export const SIMBA_ANIMATIONS: Record<AnimationName, Frame[]> = ANIMATIONS
 export const animations = {
   bye: 'Hide',
   idle: [
-    'Alert',
     'Butterfly',
     'Embarrassed',
     'Flower',

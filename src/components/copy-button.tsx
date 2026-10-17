@@ -1,37 +1,46 @@
 'use client'
 
-import type { IconInput } from 'morphicons/react'
-import { MorphIcon, morphIcons } from '@/components/icons/morph-icon'
+import { motion } from 'motion/react'
+import type { ReactNode } from 'react'
+import { IconSwap, IconSwapItem } from '@/components/icon-swap'
+import { Icons } from '@/components/icons/icons'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
 import { cn } from '@/lib/utils'
 
 interface CopyStateIconProps {
   className?: string
-  doneIcon?: IconInput
-  errorIcon?: IconInput
-  idleIcon?: IconInput
+  doneIcon?: ReactNode
+  errorIcon?: ReactNode
+  idleIcon?: ReactNode
   state: CopyState
 }
 
+// Blur swap from chanhdai's Copy Button (MIT):
+// https://chanhdai.com/components/copy-button
 export function CopyStateIcon({
   className,
   state,
-  idleIcon = morphIcons.copy,
-  doneIcon = morphIcons.check,
-  errorIcon = morphIcons.error,
+  idleIcon = <Icons.copy />,
+  doneIcon = <Icons.check />,
+  errorIcon = <Icons.error />,
 }: CopyStateIconProps) {
   const iconByState = { done: doneIcon, error: errorIcon, idle: idleIcon }
 
   return (
-    <MorphIcon
-      className={cn(
-        'transition-colors duration-300',
-        className,
-        state === 'done' && 'text-primary',
-        state === 'error' && 'text-destructive'
-      )}
-      data-slot={`${state}-icon`}
-      icon={iconByState[state]}
-    />
+    <IconSwap>
+      <IconSwapItem
+        as={motion.span}
+        className={cn(
+          'inline-flex transition-colors duration-300 [&_svg]:size-4',
+          className,
+          state === 'done' && 'text-primary',
+          state === 'error' && 'text-destructive'
+        )}
+        data-slot={`${state}-icon`}
+        key={state}
+      >
+        {iconByState[state]}
+      </IconSwapItem>
+    </IconSwap>
   )
 }

@@ -62,7 +62,7 @@ export function SimbaRig({
       aria-hidden
       className={cn('simba-rig', className)}
       data-hidden={hidden || undefined}
-      // The standing pose's tail reaches past the frame
+      // A full pose's tail can reach past the frame
       overflow='visible'
       ref={ref}
       style={{ aspectRatio: `${view.width} / ${view.height}`, height: size }}

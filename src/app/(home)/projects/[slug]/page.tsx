@@ -12,7 +12,7 @@ import { Icons } from '@/components/icons/icons'
 import { WorkJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { SectionBody } from '@/components/layout/sections/body'
-import { Prose, proseMeasure } from '@/components/prose'
+import { Prose } from '@/components/prose'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
@@ -122,7 +122,7 @@ export default async function Page(props: {
         <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col'>
           <TOCPopover items={toc} />
-          <Prose className={cn('min-w-0 flex-1 p-4', proseMeasure)}>
+          <Prose className='min-w-0 flex-1 p-4'>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </Prose>
         </article>
