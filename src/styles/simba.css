@@ -176,22 +176,3 @@
     animation: none !important;
   }
 }
-
-/* The "z z z" over the corner Simba while he naps in dark mode */
-.simba-zzz {
-  rotate: -12deg;
-  animation: simba-zzz 3.2s ease-in-out infinite;
-}
-
-@keyframes simba-zzz {
-  50% {
-    opacity: 0.6;
-    translate: 2px -4px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .simba-zzz {
-    animation: none;
-  }
-}
