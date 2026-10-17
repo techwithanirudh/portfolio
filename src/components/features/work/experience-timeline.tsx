@@ -53,8 +53,9 @@ export function ExperienceTimeline({
       )}
     >
       {variant === 'full' && (
-        // Stops short of the fade at the bottom, along the same rail
-        <ExperienceRail className='top-0 bottom-16 left-11 sm:left-64' />
+        // Runs the rail's full length and fades out with it, so a full scroll
+        // fills it all the way down
+        <ExperienceRail className='left-11 sm:left-64' />
       )}
       {experiences.flatMap((experience) => {
         const items: React.ReactNode[] = []

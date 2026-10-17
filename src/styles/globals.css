@@ -269,6 +269,10 @@ html > body[data-scroll-locked] {
 }
 
 @utility texture-item {
+  transition:
+    background-color 150ms,
+    box-shadow 150ms;
+
   &:focus,
   &[data-highlighted],
   &[data-selected="true"],

@@ -10,7 +10,8 @@ import { cn } from '@/lib/utils'
 /**
  * Draws the timeline's rail in as you scroll: a primary line fills down from
  * the top, reaching each role as that row crosses the middle of the screen.
- * Sits on the dashed rail, so its parent sets the left offset.
+ * Sits on the full length of the dashed rail, so its parent sets the left
+ * offset.
  */
 export function ExperienceRail({ className }: { className?: string }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -35,8 +36,9 @@ export function ExperienceRail({ className }: { className?: string }) {
       className={cn('pointer-events-none absolute inset-y-0 w-0', className)}
       ref={ref}
     >
+      {/* Fades out over the same last 6rem as the dashed rail it sits on */}
       <motion.div
-        className='absolute inset-y-0 left-0 w-px origin-top -translate-x-1/2 bg-linear-to-b from-primary/10 to-primary'
+        className='absolute inset-y-0 left-0 w-px origin-top -translate-x-1/2 bg-linear-to-b from-primary/10 to-primary [mask-image:linear-gradient(to_bottom,#000_calc(100%-6rem),transparent)]'
         style={{ scaleY: progress }}
       />
     </div>
