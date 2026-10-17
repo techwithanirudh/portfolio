@@ -145,8 +145,9 @@ const markerProgress = (path: SVGPathElement, markers: Point[]) => {
 
 const spring = { damping: 20, mass: 0.5, stiffness: 100 }
 
+// Phones get plain stacked chapters like the original, with no track
 const svgClassName =
-  'pointer-events-none absolute inset-0 select-none overflow-visible [mask-image:linear-gradient(black,black)]'
+  'pointer-events-none absolute inset-0 select-none overflow-visible [mask-image:linear-gradient(black,black)] max-lg:hidden'
 
 export function StoryTrack({
   children,

@@ -27,8 +27,8 @@ export default function Story(): React.ReactElement {
 }
 
 // The original alternates photo and text across two columns with the track
-// running between them on the photo side. On phones the track hugs the left
-// edge and the photo sits above the text
+// running between them on the photo side. On phones there's no track, and the
+// photo sits centered above the text
 function ChapterRow({
   chapter,
   index,
@@ -39,11 +39,11 @@ function ChapterRow({
   const photoLeft = index % 2 === 0
 
   return (
-    <li className='group/chapter relative grid grid-cols-1 gap-10 py-14 pl-10 sm:pl-14 lg:grid-cols-2 lg:items-center lg:gap-0 lg:py-20 lg:pl-0'>
+    <li className='group/chapter relative grid grid-cols-1 gap-8 py-12 lg:grid-cols-2 lg:items-center lg:gap-0 lg:py-20'>
       <span
         aria-hidden
         className={cn(
-          'absolute inset-y-0 left-1.5 sm:left-2.5',
+          'absolute inset-y-0 max-lg:hidden',
           photoLeft
             ? 'lg:left-[calc(50%-5.5rem)]'
             : 'lg:left-[calc(50%+5.5rem)]'
@@ -53,7 +53,7 @@ function ChapterRow({
 
       <ViewAnimation
         className={cn(
-          'lg:flex lg:justify-center',
+          'flex justify-center',
           photoLeft ? 'lg:order-1' : 'lg:order-2',
           !chapter.photo && 'max-lg:hidden'
         )}
