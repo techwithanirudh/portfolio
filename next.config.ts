@@ -54,7 +54,6 @@ async function createNextConfig(): Promise<NextConfig> {
     },
     poweredByHeader: false,
     productionBrowserSourceMaps: process.env.SOURCE_MAPS === 'true',
-    reactCompiler: true,
     reactStrictMode: true,
     async redirects() {
       return [

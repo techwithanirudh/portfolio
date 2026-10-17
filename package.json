@@ -124,7 +124,6 @@
     "@types/node": "26.6.5",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "babel-plugin-react-compiler": "^1.0.0",
     "cspell": "^10.4.0",
     "drizzle-kit": "^0.31.11",
     "lefthook": "^2.2.2",
