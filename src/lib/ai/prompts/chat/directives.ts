@@ -51,7 +51,6 @@ export const directivesPrompt = `
 </directive>
 
 <directive name="visuals">
-<rule>use mermaid for diagrams and flowcharts when helpful</rule>
 <rule>use latex (inside $$) for mathematical notation</rule>
 </directive>
 
