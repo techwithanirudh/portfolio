@@ -17,7 +17,7 @@ import { Typography } from './_components/typography'
 const { description, path, title } = pages.colophon
 
 export default function ColophonPage() {
-  const sections: Array<{ title?: string | null; content: ReactNode }> = [
+  const sections: Array<{ title: string; content: ReactNode }> = [
     {
       content: <Technology />,
       title: 'Technology',
@@ -46,7 +46,7 @@ export default function ColophonPage() {
         const contentDelay = section.title ? headingDelay + 0.05 : 0
 
         return (
-          <Fragment key={section.title ?? `colophon-section-${index}`}>
+          <Fragment key={section.title}>
             {section.title && (
               <Section className='px-6 py-8'>
                 <ViewAnimation delay={headingDelay}>

@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { PreviewLink } from '@/components/preview-link'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { getLinkPreviewImage } from '@/lib/link-preview'
 
 interface PreviewButtonProps {

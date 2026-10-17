@@ -34,7 +34,11 @@ import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
 
-export default function SearchDialog({ open, onOpenChange }: SharedProps) {
+export default function SearchDialog({
+  open,
+  onOpenChange,
+  onMount,
+}: SharedProps & { onMount?: () => void }) {
   const { locale } = useI18n()
   const pathname = usePathname()
   const { openSignIn } = useSignInModal()
@@ -46,6 +50,11 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const playCollapse = useSound(collapse)
   const playNavigate = useSound(keyPress)
   const lastNavSoundAtRef = useRef(0)
+
+  // Lets the lazy wrapper open it only after it has mounted closed
+  useEffect(() => {
+    onMount?.()
+  }, [onMount])
 
   useEffect(() => {
     if (!open) {

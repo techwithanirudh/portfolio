@@ -7,6 +7,9 @@ import { Step, Steps } from 'fumadocs-ui/components/steps'
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { MDXComponents } from 'mdx/types'
+// Math only renders inside MDX, so its styles and 20 font faces load with it
+// rather than blocking every page
+import 'katex/dist/katex.css'
 import { VideoPlayer } from '@/components/ui/video-player'
 import { FramedImage, type FramedImageProps, IframeEmbed } from './embed'
 import { GitHubRepo, GithubRepo } from './github-repo'

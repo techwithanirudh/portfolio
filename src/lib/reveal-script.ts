@@ -7,6 +7,7 @@ const reveal = () => {
   const selector =
     '[data-reveal-item]:not(#main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *)'
   const still = window.matchMedia('(prefers-reduced-motion: reduce)')
+  const touch = window.matchMedia('(pointer: coarse)')
   const seen = new WeakSet<Element>()
   const observer = new IntersectionObserver(
     (entries) => {
@@ -36,7 +37,10 @@ const reveal = () => {
         )
       }
     },
-    { rootMargin: '0px 0px -4% 0px' }
+    // iOS holds observer callbacks back while a flick is still travelling, so
+    // on touch screens items are revealed a screen before they arrive and the
+    // page never scrolls into a blank
+    { rootMargin: touch.matches ? '0px 0px 100% 0px' : '0px 0px -4% 0px' }
   )
   let queued = false
   const scan = () => {

@@ -57,9 +57,8 @@ export const SectionHeader = ({
       </ViewAnimation>
     )}
     {Children.map(Children.toArray(children), (child, index) => {
-      const key = isValidElement(child)
-        ? (child.key ?? `section-header-child-${index}`)
-        : `${String(child)}-${index}`
+      // Children.toArray has already keyed every element
+      const key = isValidElement(child) ? child.key : String(child)
 
       return child ? (
         <ViewAnimation delay={0.1 + index * 0.05} key={key}>

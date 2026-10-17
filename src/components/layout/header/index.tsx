@@ -22,7 +22,7 @@ import {
 } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { TitleDot } from '@/components/layout/sections/hero'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import {
   Collapsible,
   CollapsibleContent,

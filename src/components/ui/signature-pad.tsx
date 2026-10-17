@@ -98,7 +98,8 @@ export function SignaturePad({
   const isDrawing = useRef(false)
   const lastPoint = useRef<Point | null>(null)
   const strokes = useRef(0)
-  const strokeColor = useRef(getStrokeColor(resolvedTheme))
+  // Filled in by the theme effect below before anything is drawn
+  const strokeColor = useRef('')
   const history = useRefHistory<ImageData>()
 
   useEffect(() => {

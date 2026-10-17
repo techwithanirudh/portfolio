@@ -1,6 +1,6 @@
 import { Icons } from '@/components/icons/icons'
 import { HeroSection } from '@/components/layout/sections/hero'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { pages } from '@/constants/pages'
 
 export const Hero = ({

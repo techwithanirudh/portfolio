@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 

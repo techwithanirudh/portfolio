@@ -18,7 +18,6 @@ import { getPageEntries } from '@/lib/source'
 import { themeColor } from '@/lib/theme-color'
 import '@/styles/globals.css'
 import 'fumadocs-ui/components/image-zoom2.css'
-import 'katex/dist/katex.css'
 import { Provider, SoundsProvider } from './provider'
 
 const geistSans = Geist({
@@ -31,7 +30,10 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
 })
 
+// Only the home footer and the About captions use it, so it isn't preloaded
+// on every page
 const caveat = Caveat({
+  preload: false,
   subsets: ['latin'],
   variable: '--font-caveat',
 })

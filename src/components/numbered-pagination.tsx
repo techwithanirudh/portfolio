@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import {
   Pagination,
   PaginationContent,

@@ -110,6 +110,15 @@ async function createNextConfig(): Promise<NextConfig> {
       'shiki',
       '@takumi-rs/image-response',
     ],
+    turbopack: {
+      resolveAlias: {
+        // motion/react reads `motion` off a namespace import of framer-motion,
+        // which keeps the full motion component (drag, pan, layout) in every
+        // page even though we only render `m` under LazyMotion. framer-motion
+        // is the same code with plain re-exports, so unused bits shake out
+        'motion/react': 'framer-motion',
+      },
+    },
     typescript: {
       ignoreBuildErrors: true,
     },

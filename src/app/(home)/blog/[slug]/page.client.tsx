@@ -1,7 +1,6 @@
 'use client'
 
-import { Comments } from '@fuma-comment/react'
-import { useSyncExternalStore } from 'react'
+import { lazy, Suspense, useEffect, useRef, useSyncExternalStore } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -12,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
+import { useNearViewport } from '@/hooks/use-near-viewport'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
@@ -102,6 +102,22 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
   )
 }
 
+// The comment widget ships a whole editor plus highlight.js (about 200KB
+// gzipped) and sits at the very end of the post. The server still renders it,
+// but on the client its code waits until it's a screen away, and React keeps
+// the server markup on screen until then
+let wantComments: (() => void) | undefined
+const commentsWanted = new Promise<void>((resolve) => {
+  wantComments = resolve
+})
+const loadComments = () =>
+  import('@fuma-comment/react').then((mod) => ({ default: mod.Comments }))
+const Comments = lazy(() =>
+  typeof window === 'undefined'
+    ? loadComments()
+    : commentsWanted.then(loadComments)
+)
+
 export function PostComments({
   slug,
   className,
@@ -110,17 +126,29 @@ export function PostComments({
   className?: string
 }) {
   const { openSignIn } = useSignInModal()
+  const ref = useRef<HTMLDivElement>(null)
+  const near = useNearViewport(ref)
+
+  useEffect(() => {
+    if (near) {
+      wantComments?.()
+    }
+  }, [near])
 
   return (
-    <Comments
-      auth={{
-        signIn: () => {
-          openSignIn(`/blog/${slug}`)
-        },
-        type: 'api',
-      }}
-      className={cn('w-full', className)}
-      page={slug}
-    />
+    <div ref={ref}>
+      <Suspense>
+        <Comments
+          auth={{
+            signIn: () => {
+              openSignIn(`/blog/${slug}`)
+            },
+            type: 'api',
+          }}
+          className={cn('w-full', className)}
+          page={slug}
+        />
+      </Suspense>
+    </div>
   )
 }

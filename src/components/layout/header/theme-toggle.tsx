@@ -125,12 +125,7 @@ export function ThemeToggle({
   const value = mounted ? theme : null
 
   return (
-    <div
-      aria-label='Theme'
-      className={container}
-      data-theme-toggle=''
-      role='group'
-    >
+    <fieldset aria-label='Theme' className={container} data-theme-toggle=''>
       {full.map(([key, Icon]) => (
         <button
           aria-label={`${key[0]?.toUpperCase()}${key.slice(1)} theme`}
@@ -148,6 +143,6 @@ export function ThemeToggle({
           <Icon className='size-full' fill='currentColor' />
         </button>
       ))}
-    </div>
+    </fieldset>
   )
 }

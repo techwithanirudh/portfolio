@@ -19,11 +19,11 @@ import { visit } from 'unist-util-visit'
 
 const WHITESPACE_LOOKAHEAD = /(?=\s)/
 
-export interface Processor {
+interface Processor {
   process: (content: string) => Promise<ReactNode>
 }
 
-export function rehypeWrapWords() {
+function rehypeWrapWords() {
   return (tree: Root) => {
     visit(tree, ['text', 'element'], (node, index, parent) => {
       if (node.type === 'element' && node.tagName === 'pre') {

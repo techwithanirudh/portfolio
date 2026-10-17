@@ -66,7 +66,7 @@ export function Clock({ className }: ClockProps) {
     return (
       <Button
         aria-label='Clock'
-        className='rounded-md'
+        className='relative rounded-md after:absolute after:-inset-0.5'
         size='icon'
         variant='ghost'
       >

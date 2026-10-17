@@ -27,20 +27,28 @@ export function generateMetadata(): Metadata {
 }
 
 export default function UsesPage() {
-  const sections: Array<{ title?: string | null; content: ReactNode }> = [
+  const sections: Array<{
+    id: string
+    title?: string | null
+    content: ReactNode
+  }> = [
     {
       content: <Setup />,
+      id: 'setup',
     },
     {
       content: <HardwareGrid items={hardware} />,
+      id: 'hardware',
       title: 'Hardware',
     },
     {
       content: <SoftwareGrid items={software} />,
+      id: 'software',
       title: 'Software',
     },
     {
       content: <Coding />,
+      id: 'coding',
       title: 'Coding',
     },
   ]
@@ -55,7 +63,7 @@ export default function UsesPage() {
         const contentDelay = section.title ? headingDelay + 0.05 : 0
 
         return (
-          <Fragment key={section.title ?? `uses-section-${index}`}>
+          <Fragment key={section.id}>
             {section.title && (
               <Section className='px-6 py-8'>
                 <ViewAnimation delay={headingDelay}>

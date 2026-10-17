@@ -8,7 +8,7 @@ import {
   SplitSectionSidebar,
 } from '@/components/layout/sections/split'
 import { Prose } from '@/components/prose'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { ViewAnimation } from '@/components/view-animation'
 import { aboutIntro } from '@/constants/portfolio/intro'
 import { cn } from '@/lib/utils'
@@ -44,6 +44,8 @@ export default function About(): React.ReactElement {
               href='/about'
             >
               Learn more
+              {/* Screen readers and crawlers get where the link goes */}
+              <span className='sr-only'> about me</span>
               <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>
           </div>

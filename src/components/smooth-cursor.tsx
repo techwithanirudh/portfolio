@@ -1,6 +1,6 @@
 'use client'
 
-import { m, useSpring } from 'motion/react'
+import { type MotionValue, m, useSpring } from 'motion/react'
 import { type JSX, useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
@@ -23,16 +23,17 @@ export interface SmoothCursorProps {
   disableSmooth?: boolean
 }
 
-export function SmoothCursor({
-  cursor: Cursor,
-  disableRotation = false,
-  disableSmooth = false,
-  cursorType = 'default',
-}: SmoothCursorProps) {
-  const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
-  const reducedMotion = useReducedMotion()
-  const enabled = finePointer && !reducedMotion
+const SMOOTH_SPRING = { damping: 80, mass: 0.3, stiffness: 1200 }
+// Close to instant, for pages that want the ring glued to the pointer
+const SNAPPY_SPRING = { damping: 100, mass: 0.1, stiffness: 10_000 }
 
+// Follows the mouse into the springs and reports whether it has moved, is
+// moving, and what it is hovering
+function usePointerTracking(
+  enabled: boolean,
+  cursorX: MotionValue<number>,
+  cursorY: MotionValue<number>
+) {
   const [hasMoved, setHasMoved] = useState(false)
   const [isMoving, setIsMoving] = useState(false)
   const [isOverPointer, setIsOverPointer] = useState(false)
@@ -41,17 +42,6 @@ export function SmoothCursor({
   const velocity = useRef<Position>({ x: 0, y: 0 })
   const lastUpdateTime = useRef(0)
   const movingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  const cursorX = useSpring(0, {
-    damping: disableSmooth ? 100 : 80,
-    mass: disableSmooth ? 0.1 : 0.3,
-    stiffness: disableSmooth ? 10_000 : 1200,
-  })
-  const cursorY = useSpring(0, {
-    damping: disableSmooth ? 100 : 80,
-    mass: disableSmooth ? 0.1 : 0.3,
-    stiffness: disableSmooth ? 10_000 : 1200,
-  })
 
   useEffect(() => {
     if (!enabled) {
@@ -142,39 +132,75 @@ export function SmoothCursor({
     }
   }, [cursorX, cursorY, enabled])
 
+  return { hasMoved, isMoving, isOverNative, isOverPointer }
+}
+
+function DefaultCursor({
+  cursorType,
+  disableRotation,
+  isOverPointer,
+}: {
+  cursorType: 'default' | 'text' | 'pointer'
+  disableRotation: boolean
+  isOverPointer: boolean
+}) {
+  const showRing = cursorType === 'pointer' || isOverPointer
+
+  return (
+    <>
+      <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
+      <div
+        className='pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-[opacity,scale] duration-300 ease-out'
+        style={{ opacity: showRing ? 1 : 0, scale: showRing ? 1.2 : 1 }}
+      />
+      <div
+        className={`pointer-events-none absolute top-0 left-0 size-[24px] rounded-full border-2 shadow-sm drop-shadow-sm transition-opacity duration-300 ease-out dark:border-border ${disableRotation ? '-rotate-45' : ''}`}
+        style={{ opacity: isOverPointer ? 0 : 1 }}
+      />
+    </>
+  )
+}
+
+export function SmoothCursor({
+  cursor: Cursor,
+  disableRotation = false,
+  disableSmooth = false,
+  cursorType = 'default',
+}: SmoothCursorProps) {
+  const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
+  const reducedMotion = useReducedMotion()
+  const enabled = finePointer && !reducedMotion
+
+  const spring = disableSmooth ? SNAPPY_SPRING : SMOOTH_SPRING
+  const cursorX = useSpring(0, spring)
+  const cursorY = useSpring(0, spring)
+
+  const { hasMoved, isMoving, isOverNative, isOverPointer } =
+    usePointerTracking(enabled, cursorX, cursorY)
+
   if (!(enabled && hasMoved)) {
     return null
   }
 
+  const visible =
+    (isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative
+
   return (
     <m.div
-      className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${(isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
+      className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${visible ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
       // Positioned with left/top, not x/y: the scale-200 fade would also scale
       // an x/y transform and fling the ring down and right instead of
       // blooming in place
-      style={{ left: cursorX, top: cursorY, willChange: 'transform' }}
+      style={{ left: cursorX, top: cursorY }}
     >
       {Cursor ? (
         <Cursor cursorType={cursorType} isOverPointer={isOverPointer} />
       ) : (
-        <>
-          <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
-          <div
-            className={
-              'pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-[opacity,scale] duration-300 ease-out'
-            }
-            style={{
-              opacity: cursorType === 'pointer' || isOverPointer ? 1 : 0,
-              scale: cursorType === 'pointer' || isOverPointer ? 1.2 : 1,
-            }}
-          />
-          <div
-            className={`pointer-events-none absolute top-0 left-0 size-[24px] rounded-full border-2 shadow-sm drop-shadow-sm transition-opacity duration-300 ease-out dark:border-border ${disableRotation ? '-rotate-45' : ''}`}
-            style={{
-              opacity: isOverPointer ? 0 : 1,
-            }}
-          />
-        </>
+        <DefaultCursor
+          cursorType={cursorType}
+          disableRotation={disableRotation}
+          isOverPointer={isOverPointer}
+        />
       )}
     </m.div>
   )

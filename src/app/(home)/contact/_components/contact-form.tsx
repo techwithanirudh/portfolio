@@ -25,7 +25,8 @@ import {
 } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
-const sendFailedMessage = 'Your message failed to send. Please try again.'
+const sendFailedMessage =
+  "Your message didn't send. Check your connection and try again."
 
 // Nothing here suspends, so no Suspense boundary: React streams any boundary
 // over 500 bytes out of line and reveals it after first paint, which pushed the
