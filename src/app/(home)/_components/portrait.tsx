@@ -5,7 +5,11 @@ import { AnimatePresence, m, useAnimate } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 import { error as errorSound, pop } from '@/lib/audio/minimal'
-import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
+import {
+  PORTRAIT_CHIP_VIEW_BOX,
+  PORTRAIT_EYE_FILL,
+  PORTRAIT_EYE_PATHS,
+} from '@/lib/portrait-eyes'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 import { PortraitFace } from './portrait-face'
@@ -80,8 +84,6 @@ export function Portrait({
   )
 }
 
-const CHIP_VIEW_BOX = '110 60 730 730'
-
 const chipClassName =
   'mx-[0.04em] inline-block size-[0.8em] shrink-0 translate-y-[0.08em] overflow-hidden rounded-full bg-muted ring-1 ring-border ring-inset'
 
@@ -103,7 +105,7 @@ export function PortraitChip({
 
   return (
     <span aria-hidden className={cn(chipClassName, className)}>
-      <svg className='block size-full' viewBox={CHIP_VIEW_BOX}>
+      <svg className='block size-full' viewBox={PORTRAIT_CHIP_VIEW_BOX}>
         <image height='1160' href='/images/portrait.svg' width='947' />
         <g
           className='[&>path]:origin-center [&>path]:animate-blink [&>path]:[transform-box:fill-box] motion-reduce:[&>path]:animate-none'
@@ -221,7 +223,7 @@ function BonkChip({ className }: { className?: string }) {
         ref={scope}
         type='button'
       >
-        <Portrait viewBox={CHIP_VIEW_BOX} />
+        <Portrait viewBox={PORTRAIT_CHIP_VIEW_BOX} />
       </button>
       <AnimatePresence>
         {bonks > 0 && (

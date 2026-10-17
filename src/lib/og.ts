@@ -1,7 +1,11 @@
 import { readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { type CoverSwatch, createCover } from '@/lib/cover'
-import { PORTRAIT_EYE_FILL, PORTRAIT_EYE_PATHS } from '@/lib/portrait-eyes'
+import {
+  PORTRAIT_CHIP_VIEW_BOX,
+  PORTRAIT_EYE_FILL,
+  PORTRAIT_EYE_PATHS,
+} from '@/lib/portrait-eyes'
 
 const PORTRAIT_PATH = path.join(process.cwd(), 'public/images/portrait.svg')
 
@@ -10,8 +14,14 @@ const EYES = `<g fill="${PORTRAIT_EYE_FILL}">${PORTRAIT_EYE_PATHS.map((d) => `<p
 const loadPortrait = async (): Promise<string | null> => {
   try {
     const svg = await readFile(PORTRAIT_PATH, 'utf8')
-    const withEyes = svg.replace('</svg>', `${EYES}</svg>`)
-    return `data:image/svg+xml;base64,${Buffer.from(withEyes).toString('base64')}`
+    // Cropped to the head like the site's face chip
+    const chip = svg
+      .replace(
+        'width="947" height="1160" viewBox="0 0 947 1160"',
+        `width="730" height="730" viewBox="${PORTRAIT_CHIP_VIEW_BOX}"`
+      )
+      .replace('</svg>', `${EYES}</svg>`)
+    return `data:image/svg+xml;base64,${Buffer.from(chip).toString('base64')}`
   } catch {
     return null
   }

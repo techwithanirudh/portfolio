@@ -13,6 +13,7 @@ const colors = {
   muted: '#4d4d4d',
   page: '#f4f4f4',
   primary: 'hsl(226, 55%, 45%)',
+  surface: '#f5f5f5',
 }
 
 // Geist comes from getOgFonts; the renderer's bundled Geist Sans covers
@@ -99,24 +100,22 @@ function Rails(): ReactElement {
   )
 }
 
-function PortraitTile({
-  radius,
+// The site's round face chip: the head crop on the muted surface, ringed
+function PortraitChip({
   size,
   src,
 }: {
-  radius: number
   size: number
   src: string
 }): ReactElement {
   return (
     <div
       style={{
-        backgroundImage: `url(${src}), linear-gradient(160deg, #c3b6fa, #9fccfa 55%, #7fd0f5)`,
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundColor: colors.surface,
+        backgroundImage: `url(${src})`,
         backgroundSize: 'cover',
-        border: '1px solid rgba(0, 0, 0, 0.08)',
-        borderRadius: radius,
+        border: `1px solid ${colors.border}`,
+        borderRadius: '50%',
         display: 'flex',
         flexShrink: 0,
         height: size,
@@ -153,7 +152,6 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
           backgroundImage: `url(${coverSrc})`,
           backgroundSize: '100% 100%',
           border: `1px solid ${colors.border}`,
-          borderRadius: 14,
           display: 'flex',
           flexDirection: 'column',
           gap,
@@ -301,9 +299,7 @@ export function PostImage({
         title={title}
       />
       <div style={{ alignItems: 'center', display: 'flex', gap: 14 }}>
-        {portraitSrc && (
-          <PortraitTile radius={11} size={40} src={portraitSrc} />
-        )}
+        {portraitSrc && <PortraitChip size={40} src={portraitSrc} />}
         <span
           style={{
             fontSize: 26,
@@ -326,23 +322,16 @@ export function PostImage({
 interface BannerImageProps {
   coverSrc: string
   description: string
-  portraitSrc: string | null
   title: string
 }
 
 export function BannerImage({
   coverSrc,
   description,
-  portraitSrc,
   title,
 }: BannerImageProps): ReactElement {
   return (
     <OgFrame coverSrc={coverSrc} gap={18}>
-      {portraitSrc && (
-        <div style={{ display: 'flex', marginBottom: 6 }}>
-          <PortraitTile radius={19} size={72} src={portraitSrc} />
-        </div>
-      )}
       <Title size={96} title={title} />
       <Description>{description}</Description>
     </OgFrame>
