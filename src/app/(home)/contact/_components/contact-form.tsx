@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import { Suspense } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -28,7 +27,10 @@ import { contact } from '../actions/contact'
 
 const sendFailedMessage = 'Your message failed to send. Please try again.'
 
-const ContactFormInner = () => {
+// Nothing here suspends, so no Suspense boundary: React streams any boundary
+// over 500 bytes out of line and reveals it after first paint, which pushed the
+// FAQ down the page (CLS 0.32 on mobile)
+export const ContactForm = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
     zodResolver(ContactSchema),
@@ -181,9 +183,3 @@ const ContactFormInner = () => {
     </Form>
   )
 }
-
-export const ContactForm = () => (
-  <Suspense>
-    <ContactFormInner />
-  </Suspense>
-)
