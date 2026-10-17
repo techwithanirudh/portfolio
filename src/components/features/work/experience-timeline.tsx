@@ -21,9 +21,9 @@ const markdownComponents: Components = {
   p: ({ children }) => children,
 }
 
-// Mobile stacks the period above the body; from `sm` the period gets its own column left of the rail.
+// Mobile stacks the period above the body; from `wide` (`sm` outside narrow surfaces like Simba's panel) the period gets its own column left of the rail.
 const rowClassName =
-  'grid grid-cols-[40px_minmax(0,1fr)] gap-x-3.5 px-6 sm:grid-cols-[200px_64px_minmax(0,1fr)] sm:gap-x-0'
+  'grid grid-cols-[40px_minmax(0,1fr)] gap-x-3.5 px-6 wide:grid-cols-[200px_64px_minmax(0,1fr)] wide:gap-x-0'
 
 const startYear = (experience: ExperienceItemType) =>
   experience.positions[0]?.employmentPeriod.start.split('.').at(-1) ?? ''
@@ -56,25 +56,28 @@ const toEntries = (
  * and draws the rail in as you scroll.
  */
 export function ExperienceTimeline({
+  className,
   experiences,
   variant = 'preview',
 }: {
+  className?: string
   experiences: ExperienceItemType[]
   variant?: TimelineVariant
 }) {
   return (
     <div
       className={cn(
-        // The rail runs through the node column's center: 24px gutter + 20px on mobile, 24px + 200px + 32px from `sm`.
-        'relative border-border border-t border-dashed pt-3 pb-2 before:absolute before:inset-y-0 before:left-11 before:w-px before:-translate-x-1/2 before:border-muted-foreground/30 before:border-l before:border-dashed sm:before:left-64',
+        // The rail runs through the node column's center: 24px gutter + 20px on mobile, 24px + 200px + 32px from `wide`.
+        'relative border-border border-t border-dashed pt-3 pb-2 before:absolute before:inset-y-0 before:left-11 wide:before:left-64 before:w-px before:-translate-x-1/2 before:border-muted-foreground/30 before:border-l before:border-dashed',
         variant === 'full' &&
-          'pb-16 before:[mask-image:linear-gradient(to_bottom,#000_calc(100%-6rem),transparent)]'
+          'pb-16 before:[mask-image:linear-gradient(to_bottom,#000_calc(100%-6rem),transparent)]',
+        className
       )}
     >
       {variant === 'full' && (
         // Runs the rail's full length and fades out with it, so a full scroll
         // fills it all the way down
-        <ExperienceRail className='left-11 sm:left-64' />
+        <ExperienceRail className='left-11 wide:left-64' />
       )}
       {toEntries(experiences, variant === 'full').map((entry, index) =>
         entry.kind === 'year' ? (
@@ -83,10 +86,10 @@ export function ExperienceTimeline({
             delay={0.05 * index}
             key={`year-${entry.year}`}
           >
-            <p className='col-start-2 row-start-1 font-mono text-[12.5px] text-foreground tracking-wide sm:col-start-1'>
+            <p className='col-start-2 wide:col-start-1 row-start-1 font-mono text-[12.5px] text-foreground tracking-wide'>
               {entry.year}
             </p>
-            <RailNode className='col-start-1 row-start-1 size-[9px] justify-self-center rounded-full border border-muted-foreground bg-background data-passed:border-primary data-passed:bg-primary sm:col-start-2' />
+            <RailNode className='col-start-1 wide:col-start-2 row-start-1 size-[9px] justify-self-center rounded-full border border-muted-foreground bg-background data-passed:border-primary data-passed:bg-primary' />
           </ViewAnimation>
         ) : (
           <ViewAnimation delay={0.05 * index} key={entry.experience.id}>
@@ -115,10 +118,10 @@ function TimelineRow({
   const Node = variant === 'full' ? RailNode : 'div'
 
   return (
-    <article className={cn(rowClassName, 'py-5.5 sm:py-6')}>
-      <p className='col-start-2 row-start-1 mb-2 font-mono text-muted-foreground text-xs tabular-nums leading-normal sm:col-start-1 sm:mb-0 sm:pt-3'>
+    <article className={cn(rowClassName, 'py-5.5 wide:py-6')}>
+      <p className='col-start-2 wide:col-start-1 row-start-1 mb-2 wide:mb-0 wide:pt-3 font-mono text-muted-foreground text-xs tabular-nums leading-normal'>
         {formatPeriod(start, end)}
-        <span className='ml-2 opacity-70 sm:ml-0 sm:block'>
+        <span className='ml-2 wide:ml-0 wide:block opacity-70'>
           {formatDuration(start, end)}
         </span>
       </p>
@@ -127,7 +130,7 @@ function TimelineRow({
           centers line up, rather than floating between it and the dates */}
       <Node
         className={cn(
-          'relative col-start-1 row-start-2 -mt-[7px] flex size-10 items-center justify-center justify-self-center rounded-full border border-muted-foreground/30 bg-background data-passed:border-primary sm:col-start-2 sm:row-start-1 sm:mt-0 sm:size-11',
+          'relative col-start-1 wide:col-start-2 row-start-2 wide:row-start-1 -mt-[7px] wide:mt-0 flex size-10 wide:size-11 items-center justify-center justify-self-center rounded-full border border-muted-foreground/30 bg-background data-passed:border-primary',
           experience.isCurrentEmployer &&
             'border-2 border-primary ring-6 ring-primary/12'
         )}
@@ -145,7 +148,7 @@ function TimelineRow({
         )}
       </Node>
 
-      <div className='col-start-2 row-start-2 min-w-0 sm:col-start-3 sm:row-start-1 sm:pt-2'>
+      <div className='col-start-2 wide:col-start-3 row-start-2 wide:row-start-1 min-w-0 wide:pt-2'>
         <h3 className='font-medium text-[17px] tracking-tight'>
           {experience.companyWebsite ? (
             <PreviewLink
@@ -174,7 +177,7 @@ function TimelineRow({
             className={cn(
               'mt-2 max-w-[60ch] text-pretty text-muted-foreground leading-relaxed',
               // Phones show the whole line, since a clamp there cuts it mid-word
-              variant === 'preview' && 'sm:line-clamp-1'
+              variant === 'preview' && 'wide:line-clamp-1'
             )}
           >
             <ReactMarkdown components={markdownComponents}>

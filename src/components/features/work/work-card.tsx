@@ -2,7 +2,7 @@
 
 import { getImageProps } from 'next/image'
 import Link from 'next/link'
-import { ViewTransition } from 'react'
+import { type ReactNode, ViewTransition } from 'react'
 import { preload } from 'react-dom'
 import { BlurImage, IMAGE_QUALITY } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
@@ -15,9 +15,31 @@ interface WorkCardProps {
   slugs: string[]
   title: string
   url: string
+  /**
+   * Off where the same card can sit beside the page's own copy (Simba's
+   * panel), since two transitions can't share a name
+   */
+  viewTransition?: boolean
 }
 
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
+
+const SharedTransition = ({
+  children,
+  enabled,
+  name,
+}: {
+  children: ReactNode
+  enabled: boolean
+  name: string
+}) =>
+  enabled ? (
+    <ViewTransition name={name} share={transition}>
+      {children}
+    </ViewTransition>
+  ) : (
+    children
+  )
 
 const preloadCover = (src: string, alt: string) => {
   const { props } = getImageProps({
@@ -41,6 +63,7 @@ export const WorkCard = ({
   priority = false,
   url,
   slugs,
+  viewTransition = true,
 }: WorkCardProps) => {
   const transitionName = slugs.join('/')
 
@@ -53,7 +76,10 @@ export const WorkCard = ({
       transitionTypes={['work-card']}
     >
       {image && (
-        <ViewTransition name={`${transitionName}-image`} share={transition}>
+        <SharedTransition
+          enabled={viewTransition}
+          name={`${transitionName}-image`}
+        >
           <BlurImage
             alt={title}
             blur={false}
@@ -64,21 +90,24 @@ export const WorkCard = ({
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}
           />
-        </ViewTransition>
+        </SharedTransition>
       )}
       <div className='flex flex-1 flex-col gap-3'>
         <div className='flex flex-1 flex-col gap-2'>
-          <ViewTransition name={`${transitionName}-title`} share={transition}>
+          <SharedTransition
+            enabled={viewTransition}
+            name={`${transitionName}-title`}
+          >
             <h2 className='font-medium text-lg md:text-xl'>{title}</h2>
-          </ViewTransition>
-          <ViewTransition
+          </SharedTransition>
+          <SharedTransition
+            enabled={viewTransition}
             name={`${transitionName}-description`}
-            share={transition}
           >
             <p className='line-clamp-3 text-pretty text-muted-foreground text-sm'>
               {description}
             </p>
-          </ViewTransition>
+          </SharedTransition>
         </div>
         <span className='inline-flex items-center gap-2 text-muted-foreground text-sm transition-colors group-hover:text-foreground'>
           View case study

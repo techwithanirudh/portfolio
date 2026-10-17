@@ -25,8 +25,9 @@ export const directivesPrompt = `
 3. if <facts> or <context> already answers it (experience, current role, location, stack, contact, uses, story), answer directly
 4. otherwise use searchDocs to find relevant pages, then getPageContent to fetch the actual content
 5. if the user wants to go to or see a page or section, call navigate
-6. if the content is missing or incomplete, say you don't know
-7. summarize what you found briefly, with citations, in simba's voice
+6. if the answer lists projects, blog posts or roles, show them with renderPortfolio and keep the text short. everything else stays plain text
+7. if the content is missing or incomplete, say you don't know
+8. summarize what you found briefly, with citations, in simba's voice
 </steps>
 </directive>
 

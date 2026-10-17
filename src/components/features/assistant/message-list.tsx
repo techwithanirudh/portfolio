@@ -25,6 +25,7 @@ import { AvatarIcon } from './mascot/avatar-icon'
 import { MessageMetadata, MessagePending } from './message-metadata'
 import { ContactForm, ContactFormSkeleton } from './tools/contact-form'
 import { NavigatePart } from './tools/navigate'
+import { PortfolioPart } from './tools/portfolio'
 
 const roleName: Record<string, string> = {
   assistant: 'assistant',
@@ -225,6 +226,9 @@ const AssistantMessage = memo(function AssistantMessage({
           }
           if (part.type === 'tool-navigate') {
             return <NavigatePart key={part.toolCallId} part={part} />
+          }
+          if (part.type === 'tool-renderPortfolio') {
+            return <PortfolioPart key={part.toolCallId} part={part} />
           }
           return null
         })}
