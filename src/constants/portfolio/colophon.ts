@@ -61,7 +61,7 @@ export const attributions = [
   { name: 'Hexaa', url: 'https://hexaa.sh' },
   { name: 'Josh W. Comeau', url: 'https://www.joshwcomeau.com' },
   { name: 'Ingo', url: 'https://ingo.au' },
-  { name: 'Eververse', url: 'https://www.eververse.ai' },
+  { name: 'Rafael Camargo', url: 'https://cmrg.me' },
   { name: 'Shu Ding', url: 'https://shud.in' },
   { name: 'Emil Kowalski', url: 'https://emilkowal.ski' },
   { name: 'shadcn/ui', url: 'https://ui.shadcn.com' },
