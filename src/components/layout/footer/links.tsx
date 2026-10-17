@@ -27,8 +27,14 @@ const plainLinkClassName =
 
 const FooterLink = ({ item }: { item: LinkEntry }) => {
   if (item.external) {
+    // No hover previews down here: most socials sit behind a login wall, so
+    // only GitHub ever had one
     return (
-      <PreviewLink className={plainLinkClassName} href={item.href}>
+      <PreviewLink
+        className={plainLinkClassName}
+        href={item.href}
+        preview={null}
+      >
         {item.children}
       </PreviewLink>
     )

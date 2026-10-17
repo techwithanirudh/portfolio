@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { useOn } from '@/hooks/use-on'
 import { useAssistantContext } from './context'
 import { useMascot } from './mascot'
-import { usePageSimba, usePeeking } from './mascot/presence'
+import { usePageSimba } from './mascot/presence'
 import { SimbaRig } from './mascot/rig'
 import { MascotSprite } from './mascot/sprite'
 
@@ -17,12 +17,11 @@ const NAP_AFTER_MS = 20_000
 // to line his shadow up with the panel's edge.
 //
 // In dark mode he naps until the pointer or a click wakes him, then drifts
-// off again after a quiet spell. He steps away while he peeks over the footer
-// or a page shows its own Simba
+// off again after a quiet spell. He steps away while a page shows its own
+// Simba
 export function AssistantTrigger() {
   const { open, setOpen } = useAssistantContext()
   const mascot = useMascot()
-  const peeking = usePeeking()
   const pageSimba = usePageSimba()
   const { resolvedTheme } = useTheme()
   const dark = resolvedTheme === 'dark'
@@ -45,7 +44,7 @@ export function AssistantTrigger() {
   }
 
   const napping = dark && !awake && !open
-  const away = (peeking || pageSimba) && !open
+  const away = pageSimba && !open
 
   const wake = () => {
     if (napping) {

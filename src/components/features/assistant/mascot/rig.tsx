@@ -96,11 +96,6 @@ export function SimbaRig({
                   <use href={href('frontLegR')} />
                   <use href={href('bib')} />
                 </g>
-                <g className='simba-fade' opacity={rig.paw ? 1 : 0}>
-                  <g className='simba-paw'>
-                    <use href={href('paw-up')} transform='translate(12 120)' />
-                  </g>
-                </g>
               </g>
               <g
                 className='simba-head'
@@ -157,6 +152,15 @@ export function SimbaRig({
                         opacity={name === muzzle ? 1 : 0}
                       />
                     ))}
+                  </g>
+                </g>
+              </g>
+              {/* Drawn over the head so the waving paw sits in front of the
+                  cheek and ear, not tucked behind them */}
+              <g className='simba-body'>
+                <g className='simba-fade' opacity={rig.paw ? 1 : 0}>
+                  <g className='simba-paw'>
+                    <use href={href('paw-up')} transform='translate(12 120)' />
                   </g>
                 </g>
               </g>

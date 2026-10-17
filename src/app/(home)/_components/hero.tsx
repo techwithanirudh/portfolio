@@ -28,11 +28,7 @@ const Hero = () => (
     </ViewAnimation>
     <ViewAnimation delay={0.1}>
       <p className='max-w-[52ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>
-        <InlineMarkdown
-          linkClassName='link-underline'
-          previews={false}
-          text={heroIntro}
-        />
+        <InlineMarkdown linkClassName='link-underline' text={heroIntro} />
       </p>
     </ViewAnimation>
 

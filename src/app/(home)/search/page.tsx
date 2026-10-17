@@ -11,9 +11,7 @@ import { SearchClient } from './_components/search-client'
 export default function Page() {
   return (
     <Wrapper>
-      <HeroSection title={pages.search.title}>
-        <BackButton />
-      </HeroSection>
+      <HeroSection caption={<BackButton />} title={pages.search.title} />
       <Suspense
         fallback={
           <div className='flex flex-1 flex-col gap-4 px-4 pb-10 sm:px-6'>

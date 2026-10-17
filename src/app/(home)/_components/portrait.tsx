@@ -156,6 +156,8 @@ function BonkChip({ className }: { className?: string }) {
           className
         )}
         data-bonked={bonked || undefined}
+        // The smooth cursor would sit on the face and hide it, as on Simba
+        data-native-cursor
         onClick={bonk}
         ref={scope}
         type='button'

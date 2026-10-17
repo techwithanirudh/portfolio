@@ -1,6 +1,6 @@
 // Whole drawings (lying down, standing) that replace the seated rig; each is
 // a pose-* group in rig-art.ts
-type FullPose = 'alert' | 'bashful' | 'playful' | 'searching' | 'show'
+type FullPose = 'alert' | 'bashful' | 'playful' | 'searching'
 
 type Muzzle = 'neutral' | 'smile' | 'surprise'
 
@@ -31,7 +31,6 @@ const poses = {
   pleased: { head: 4, muzzle: 'smile' },
   rest: { head: 0 },
   searching: { full: 'searching' },
-  show: { full: 'show' },
   surprised: { head: 0, lift: -3, muzzle: 'surprise' },
   thinking: { head: -14, lift: -2 },
 } satisfies Record<string, Pose>
@@ -72,7 +71,6 @@ const ANIMATIONS = {
   Pleased: seq(['pleased', 1400]),
   Searching: seq(['searching', 2400]),
   Show: seq(['hidden', 120], ['rest', 450]),
-  ShowOff: seq(['show', 1600]),
   Sniffing: seq(
     ['searching', 2600],
     ['curious', 900],
@@ -100,7 +98,6 @@ export const animations = {
     'LookUp',
     'Play',
     'Pleased',
-    'ShowOff',
     'Thinking',
   ],
   open: ['ClickedOn', 'Pleased'],

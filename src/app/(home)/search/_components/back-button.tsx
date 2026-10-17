@@ -1,34 +1,21 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import type { ComponentProps } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { Button } from '@/components/ui/button'
 
-type BackButtonProps = ComponentProps<typeof Button> & {
-  iconOnly?: boolean
-  label?: string
-}
-
-export function BackButton({
-  iconOnly = false,
-  label = 'Back',
-  size,
-  ...props
-}: BackButtonProps) {
+// A quiet text link above the title rather than a ghost button below it, so
+// it lines up with the heading instead of sitting inset by button padding
+export function BackButton() {
   const router = useRouter()
-  const resolvedSize = iconOnly ? 'icon' : (size ?? 'sm')
 
   return (
-    <Button
-      aria-label={iconOnly ? label : undefined}
+    <button
+      className='group inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground'
       onClick={() => router.back()}
-      size={resolvedSize}
-      variant='ghost'
-      {...props}
+      type='button'
     >
-      <Icons.arrowLeft />
-      {!iconOnly && label}
-    </Button>
+      <Icons.arrowLeft className='size-4 transition-transform duration-200 ease-out group-hover:-translate-x-0.5 motion-reduce:transition-none' />
+      Back
+    </button>
   )
 }

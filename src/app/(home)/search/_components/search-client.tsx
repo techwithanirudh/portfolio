@@ -17,6 +17,8 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Skeleton } from '@/components/ui/skeleton'
 import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
 import { cn } from '@/lib/utils'
@@ -38,6 +40,33 @@ const getItemTag = (url: string) => {
   }
   return 'page'
 }
+
+// Stand-in rows shaped like the results (a title with its tag pill, then
+// indented excerpts) while the first response is on its way
+const excerptWidths = [['w-3/5'], ['w-4/5', 'w-2/5'], ['w-1/2']]
+// The light muted token is nearly the page background, so the bars take a
+// tint of the text color instead
+const bar = 'bg-foreground/10'
+
+const ResultsSkeleton = () => (
+  <div aria-busy className='flex w-full flex-col p-1' role='status'>
+    <span className='sr-only'>Searching</span>
+    {excerptWidths.map((lines, index) => (
+      <div key={index.toString()}>
+        <div className='flex items-center justify-between gap-4 border-border border-b border-dashed p-3'>
+          <Skeleton className={cn('h-4 w-1/3', bar)} />
+          <Skeleton className={cn('mr-2 h-5 w-14 rounded-full', bar)} />
+        </div>
+        {lines.map((width) => (
+          <div className='relative p-3 ps-7' key={width}>
+            <div className='absolute inset-y-0 start-3 w-px bg-border' />
+            <Skeleton className={cn('h-3.5', width, bar)} />
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+)
 
 // A blog search from the /blog filters bar that finds nothing gets the same
 // empty state as the ledger
@@ -82,6 +111,9 @@ export function SearchClient() {
   }, [queryParam, setSearch])
 
   const hasQuery = search.trim().length > 0
+  // Between typing and the first response the list has nothing to show, so
+  // skeleton rows stand in instead of a blank list and a "0 results"
+  const pending = hasQuery && query.data === 'empty'
 
   return (
     <SearchDialog
@@ -91,10 +123,12 @@ export function SearchClient() {
       open
       search={search}
     >
-      <Section className='flex flex-1 flex-col' sectionClassName='h-full'>
+      {/* Held to the leftover screen height so the results scroll inside it,
+          as the guestbook entries do */}
+      <Section fill='contain'>
         <div className='flex flex-col'>
           <ViewAnimation>
-            <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none'>
+            <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none ring-inset'>
               <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
@@ -106,7 +140,7 @@ export function SearchClient() {
                 placeholder='Search posts and projects...'
                 value={search}
               />
-              {search.length > 0 && (
+              {search.length > 0 && !pending && (
                 <InputGroupAddon align='inline-end' className='pr-3'>
                   {resultCount} results
                 </InputGroupAddon>
@@ -140,33 +174,36 @@ export function SearchClient() {
             </div>
           </ViewAnimation>
         </div>
-        {!hasQuery && (
-          <ViewAnimation delay={0.1}>
-            <div className='flex max-h-[460px] w-full flex-col overflow-y-auto p-1'>
-              <div className='py-12 text-center text-muted-foreground text-sm'>
-                Start typing to search.
-              </div>
-            </div>
-          </ViewAnimation>
-        )}
-        <SearchDialogList
-          className='[&>div]:!p-0'
-          data-lenis-prevent
-          Empty={tag === 'blog' ? BlogEmpty : undefined}
-          Item={({ item, onClick }) => (
-            <div className='relative'>
-              <SearchDialogListItem
-                className='rounded-none border-border border-b border-dashed p-3 last:border-b-0'
-                item={item}
-                onClick={onClick}
-              />
-              {item.type === 'page' ? (
-                <ItemBadge label={getItemTag(item.url)} />
-              ) : null}
-            </div>
-          )}
-          items={query.data === 'empty' ? null : query.data}
-        />
+        <div className='min-h-0 flex-1'>
+          <ScrollArea className='h-full w-full' data-lenis-prevent>
+            {!hasQuery && (
+              <ViewAnimation delay={0.1}>
+                <p className='py-12 text-center text-muted-foreground text-sm'>
+                  Start typing to search.
+                </p>
+              </ViewAnimation>
+            )}
+            {pending && <ResultsSkeleton />}
+            <SearchDialogList
+              // Let the scroll area own the height instead of fumadocs' 460px cap
+              className='!h-auto [&>div]:!p-0 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
+              Empty={tag === 'blog' ? BlogEmpty : undefined}
+              Item={({ item, onClick }) => (
+                <div className='relative'>
+                  <SearchDialogListItem
+                    className='rounded-none border-border border-b border-dashed p-3 last:border-b-0'
+                    item={item}
+                    onClick={onClick}
+                  />
+                  {item.type === 'page' ? (
+                    <ItemBadge label={getItemTag(item.url)} />
+                  ) : null}
+                </div>
+              )}
+              items={query.data === 'empty' ? null : query.data}
+            />
+          </ScrollArea>
+        </div>
       </Section>
     </SearchDialog>
   )
