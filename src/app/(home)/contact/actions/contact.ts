@@ -4,6 +4,7 @@ import { env } from '@/env'
 import { resend } from '@/lib/resend'
 import { ActionError, publicActionClient } from '@/lib/safe-action'
 import { ContactSchema } from '@/lib/validators/contact'
+import ContactNotificationEmail from '../../../../../emails/contact-notification'
 
 export const contact = publicActionClient
   .inputSchema(ContactSchema)
@@ -17,14 +18,22 @@ export const contact = publicActionClient
       )
     }
 
+    const sentAt = `${new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+      timeZone: 'Asia/Kolkata',
+    }).format(new Date())} IST`
+
     // Resend returns API failures and throws on network ones. Either way the
     // detail is logged once and the visitor gets a generic message
     const { error } = await resend.emails
       .send({
         from,
+        react: ContactNotificationEmail({ email, message, name, sentAt }),
         replyTo: email,
         subject: `New contact form submission from ${name}`,
-        text: message,
+        // For mail apps that don't show HTML
+        text: `${message}\n\nFrom ${name} (${email}), ${sentAt}`,
         to,
       })
       .catch((cause: unknown) => ({ error: cause }))
