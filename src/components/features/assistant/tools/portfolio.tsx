@@ -16,6 +16,8 @@ import {
   portfolioCatalog,
   statePath,
 } from '@/lib/ai/chat/catalog'
+import { cn } from '@/lib/utils'
+import { eyebrow } from '../class-names'
 import { ToolPendingLine, ToolWarningLine } from './status-line'
 import type { ToolPart } from './types'
 
@@ -28,11 +30,7 @@ function StackGroup({
 }) {
   return (
     <section className='dashed-stack'>
-      {title && (
-        <h3 className='px-3 py-2 font-medium text-[11px] text-muted-foreground uppercase tracking-wide'>
-          {title}
-        </h3>
-      )}
+      {title && <h3 className={cn('px-3 py-2', eyebrow)}>{title}</h3>}
       {children}
     </section>
   )
@@ -119,11 +117,7 @@ export function PortfolioPart({ part }: { part: ToolPart<'renderPortfolio'> }) {
   }
 
   return (
-    // `data-narrow` keeps the site's components in their phone layout here
-    <div
-      className='not-prose overflow-hidden rounded-md border border-dashed'
-      data-narrow
-    >
+    <div className='not-prose overflow-hidden rounded-md border border-dashed'>
       <JSONUIProvider initialState={output.spec.state} registry={registry}>
         <Renderer registry={registry} spec={output.spec} />
       </JSONUIProvider>

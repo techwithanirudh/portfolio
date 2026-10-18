@@ -69,6 +69,7 @@ export function TextSelectionPopup() {
       },
     })
 
+    // TODO(slopradar): magic-number: the 1200-character cap on selected context exists only here and contextDataSchema has no max, name it once and enforce it with .max() on the schema so the server applies the same limit
     setPopup({ text: text.slice(0, 1200) })
   })
 

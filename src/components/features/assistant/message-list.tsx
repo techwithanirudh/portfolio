@@ -19,11 +19,19 @@ import { Tool, ToolContent, ToolHeader } from '@/components/ai-elements/tool'
 import { Icons } from '@/components/icons/icons'
 import { contextDataSchema, type MyUIMessage } from '@/lib/ai/chat/types'
 import { tap } from '@/lib/audio/minimal'
+import { cn } from '@/lib/utils'
 import { isChatBusy, useChatContext } from './chat-context'
+import { expandedColumn, eyebrow } from './class-names'
 import { AvatarIcon } from './mascot/avatar-icon'
 import { MessageMetadata, MessagePending } from './message-metadata'
 import { ownerName } from './owner-name'
-import { ContactForm, ContactFormSkeleton } from './tools/contact-form'
+import { CelebratePart } from './tools/celebrate'
+import {
+  ContactForm,
+  ContactFormCanceled,
+  ContactFormSent,
+  ContactFormSkeleton,
+} from './tools/contact-form'
 import { NavigatePart } from './tools/navigate'
 import { PortfolioPart } from './tools/portfolio'
 import type { ToolPart } from './tools/types'
@@ -88,7 +96,7 @@ export function MessageList({
       data-lenis-prevent
     >
       <ConversationContent
-        className='dashed-stack px-3'
+        className={cn('dashed-stack px-3', expandedColumn)}
         scrollClassName='fd-scroll-container supports-timeline-scroll:scroll-fade-effect-y'
       >
         {messages.length === 0 && !isFailed ? (
@@ -135,21 +143,33 @@ const contactFormStatus = (part: ToolPart<'showContactForm'>) => {
   }
 }
 
-function ContactFormPart({ part }: { part: ToolPart<'showContactForm'> }) {
-  const isSubmitted = part.state === 'output-available'
-  const submittedData =
-    isSubmitted &&
-    part.output?.success &&
-    part.output.name &&
-    part.output.email &&
-    part.output.message
-      ? {
-          email: part.output.email,
-          message: part.output.message,
-          name: part.output.name,
-        }
-      : undefined
+function ContactFormBody({ part }: { part: ToolPart<'showContactForm'> }) {
+  if (part.state === 'output-available') {
+    const { output } = part
+    return output?.success && output.name && output.email && output.message ? (
+      <ContactFormSent
+        data={{
+          email: output.email,
+          message: output.message,
+          name: output.name,
+        }}
+      />
+    ) : (
+      <ContactFormCanceled />
+    )
+  }
+  if (part.state !== 'input-available') {
+    return <ContactFormSkeleton />
+  }
+  return (
+    <ContactForm
+      prefill={part.input?.prefill ?? undefined}
+      toolCallId={part.toolCallId}
+    />
+  )
+}
 
+function ContactFormPart({ part }: { part: ToolPart<'showContactForm'> }) {
   return (
     <Tool defaultOpen>
       <ToolHeader
@@ -159,16 +179,7 @@ function ContactFormPart({ part }: { part: ToolPart<'showContactForm'> }) {
         title='contact form'
       />
       <ToolContent>
-        {!isSubmitted && part.state !== 'input-available' ? (
-          <ContactFormSkeleton />
-        ) : (
-          <ContactForm
-            isSubmitted={isSubmitted}
-            prefill={part.input?.prefill ?? undefined}
-            submittedData={submittedData}
-            toolCallId={part.toolCallId}
-          />
-        )}
+        <ContactFormBody part={part} />
       </ToolContent>
     </Tool>
   )
@@ -182,6 +193,7 @@ const AssistantMessage = memo(function AssistantMessage({
   isInProgress: boolean
 }) {
   const { parts } = message
+  // TODO(slopradar): redundant-validation: the 'data' in check and contextDataSchema.safeParse re-check a part MyUIMessage already types as { text }, written trimmed and non-empty by input.tsx; find it with a type-guard predicate (part.type === 'data-context') and read part.data.text
   const context = (() => {
     const contextPart = parts.find((part) => part.type === 'data-context')
     if (!(contextPart && 'data' in contextPart)) {
@@ -196,9 +208,7 @@ const AssistantMessage = memo(function AssistantMessage({
       <MessageContent>
         {message.role === 'user' && context ? (
           <div className='not-prose rounded-md border border-border border-dashed bg-muted/40 p-2 text-xs'>
-            <p className='mb-1 font-medium text-[11px] text-muted-foreground uppercase tracking-wide'>
-              Context
-            </p>
+            <p className={cn('mb-1', eyebrow)}>Context</p>
             <p className='line-clamp-3 break-words'>{context}</p>
           </div>
         ) : null}
@@ -216,6 +226,9 @@ const AssistantMessage = memo(function AssistantMessage({
           }
           if (part.type === 'tool-showContactForm') {
             return <ContactFormPart key={part.toolCallId} part={part} />
+          }
+          if (part.type === 'tool-celebrate') {
+            return <CelebratePart key={part.toolCallId} part={part} />
           }
           if (part.type === 'tool-navigate') {
             return <NavigatePart key={part.toolCallId} part={part} />

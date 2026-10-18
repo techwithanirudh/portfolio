@@ -4,10 +4,8 @@ import { useLenis } from 'lenis/react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useEffectEvent, useRef } from 'react'
-import { useMediaQuery } from 'usehooks-ts'
 import { useAssistantContext } from '@/components/features/assistant/context'
 import { Icons } from '@/components/icons/icons'
-import { MEDIA } from '@/lib/media'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { scrollToTarget } from '@/lib/scroll-to-target'
 import { ToolPendingLine, ToolWarningLine } from './status-line'
@@ -20,7 +18,7 @@ const handledCalls = new Set<string>()
 
 const LOCKED_OVERFLOW = /hidden|clip/
 
-// The mobile panel is a modal that locks page scroll until it finishes closing
+// The sheet and expanded panels lock page scroll while they are open
 const isScrollLocked = () =>
   [document.documentElement, document.body].some((element) =>
     LOCKED_OVERFLOW.test(getComputedStyle(element).overflowY)
@@ -31,8 +29,7 @@ export function NavigatePart({ part }: { part: ToolPart<'navigate'> }) {
   const lenis = useLenis()
   const lenisRef = useRef(lenis)
   const mountedRef = useRef(false)
-  const { setOpen } = useAssistantContext()
-  const isDocked = useMediaQuery(MEDIA.docked)
+  const { isDocked, mode, setExpanded, setOpen } = useAssistantContext()
   const output = part.state === 'output-available' ? part.output : null
   const href = output?.success ? output.href : null
 
@@ -88,8 +85,11 @@ export function NavigatePart({ part }: { part: ToolPart<'navigate'> }) {
     handledCalls.add(part.toolCallId)
 
     const [path = '/', id] = target.split('#')
+    // Leave the new page in view: dock an expanded panel, or close a modal one
     if (!isDocked) {
       setOpen(false)
+    } else if (mode === 'expanded') {
+      setExpanded(false)
     }
     router.push(target, { scroll: !id })
     if (id) {

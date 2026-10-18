@@ -1,6 +1,7 @@
 import type { ChatTools } from './types'
 
 export const toolConfirmationMap = {
+  celebrate: false,
   getPageContent: false,
   navigate: false,
   renderPortfolio: false,

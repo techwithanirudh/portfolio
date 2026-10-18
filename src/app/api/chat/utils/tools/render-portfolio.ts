@@ -107,6 +107,7 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
         state.projects[slug] = {
           description: page.data.description ?? '',
           image: page.data.image ?? null,
+          // TODO(slopradar): dead-field: no client reads `slugs` since WorkCard takes transitionName, stop writing it here so the Pick in lib/ai/chat/catalog.ts (its own annotation) can drop it
           slugs: page.slugs,
           title: page.data.title,
           url: page.url,

@@ -33,6 +33,7 @@ function RegenerateButton() {
   const playRegenerate = useSound(tap)
 
   return (
+    // TODO(slopradar): redundant-a11y: disabled already takes the native button out of the tab order and ignores pointer presses, so tabIndex={canShow ? 0 : -1} and pointer-events-none repeat it; keep disabled, aria-hidden and the opacity fade
     <PromptInputButton
       aria-hidden={!canShow}
       aria-label='Regenerate response'
@@ -162,6 +163,7 @@ export function AssistantInput() {
           aria-label='Ask Simba a question'
           autoFocus={finePointer}
           className={cn('min-h-16', isLoading && 'text-muted-foreground')}
+          // TODO(slopradar): dead-code: id='nd-ai-input' is a leftover from the fumadocs AI template that nothing reads (no selector, label or script references it), drop it
           id='nd-ai-input'
           onChange={(event) => handleInputChange(event.target.value)}
           placeholder={isLoading ? 'Sniffing for answers…' : 'Ask Simba'}

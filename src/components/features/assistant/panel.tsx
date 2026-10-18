@@ -2,10 +2,12 @@
 
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useLenis } from 'lenis/react'
-import { useEffect, useRef } from 'react'
-import { useMediaQuery, useScrollLock } from 'usehooks-ts'
-import { MEDIA } from '@/lib/media'
+import { type RefObject, useEffect, useLayoutEffect, useRef } from 'react'
+import { useScrollLock } from 'usehooks-ts'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
+import { cn } from '@/lib/utils'
 import { useChatContext } from './chat-context'
+import { expandedColumn } from './class-names'
 import { useAssistantContext } from './context'
 import { AssistantHeader } from './header'
 import { AssistantInput } from './input'
@@ -28,8 +30,11 @@ function PageScrollLock() {
   return null
 }
 
-function useReturnFocus(open: boolean) {
-  const popupRef = useRef<HTMLDivElement>(null)
+// Nothing opens the panel through a Dialog.Trigger, so Base UI would return focus to the body
+function useReturnFocus(
+  open: boolean,
+  popupRef: RefObject<HTMLDivElement | null>
+) {
   const lastFocused = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
@@ -46,20 +51,57 @@ function useReturnFocus(open: boolean) {
     }
     document.addEventListener('focusin', remember)
     return () => document.removeEventListener('focusin', remember)
-  }, [open])
+  }, [open, popupRef])
 
-  const finalFocus = () =>
-    lastFocused.current?.isConnected ? lastFocused.current : true
+  return () => (lastFocused.current?.isConnected ? lastFocused.current : true)
+}
 
-  return { finalFocus, popupRef }
+const MORPH_EASING = 'cubic-bezier(0.2, 0, 0, 1)'
+const GROW_MS = 380
+const SHRINK_MS = 300
+
+function useMorph() {
+  const { expanded, morphFrom, open, popupRef } = useAssistantContext()
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const popup = popupRef.current
+    const first = morphFrom.current
+    morphFrom.current = null
+    if (!(popup && first && open) || prefersReducedMotion()) {
+      return
+    }
+
+    const next = popup.getBoundingClientRect()
+    const duration = expanded ? GROW_MS : SHRINK_MS
+    popup.animate(
+      [
+        {
+          transform: `translate(${first.left - next.left}px, ${first.top - next.top}px) scale(${first.width / next.width}, ${first.height / next.height})`,
+          transformOrigin: 'top left',
+        },
+        { transform: 'none', transformOrigin: 'top left' },
+      ],
+      { duration, easing: MORPH_EASING }
+    )
+    contentRef.current?.animate([{ opacity: 0 }, { opacity: 1 }], {
+      delay: duration * 0.3,
+      duration: duration * 0.5,
+      easing: 'ease-out',
+      fill: 'backwards',
+    })
+  }, [expanded, morphFrom, open, popupRef])
+
+  return contentRef
 }
 
 export function AssistantPanel() {
-  const { open, setOpen } = useAssistantContext()
+  const { expanded, mode, open, popupRef, setExpanded, setOpen } =
+    useAssistantContext()
   const chat = useChatContext()
   const mascot = useMascot()
-  const isDocked = useMediaQuery(MEDIA.docked)
-  const { finalFocus, popupRef } = useReturnFocus(open)
+  const finalFocus = useReturnFocus(open, popupRef)
+  const contentRef = useMorph()
 
   useMascotPanel({
     mascot,
@@ -70,29 +112,45 @@ export function AssistantPanel() {
 
   return (
     <DialogPrimitive.Root
-      disablePointerDismissal
-      modal={isDocked ? false : 'trap-focus'}
-      onOpenChange={setOpen}
+      // The docked panel stays open while the visitor uses the page
+      disablePointerDismissal={mode === 'docked'}
+      modal={mode === 'docked' ? false : 'trap-focus'}
+      onOpenChange={(next, { reason }) => {
+        const dismiss = reason === 'escape-key' || reason === 'outside-press'
+        if (!next && expanded && dismiss) {
+          setExpanded(false)
+          return
+        }
+        setOpen(next)
+      }}
       open={open}
     >
-      {open && !isDocked ? <PageScrollLock /> : null}
+      {open && mode !== 'docked' ? <PageScrollLock /> : null}
       <DialogPrimitive.Portal>
         <DialogPrimitive.Backdrop
-          className='fixed inset-0 z-30 touch-none bg-overlay backdrop-blur-xs transition-opacity duration-200 ease-out-strong data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 lg:hidden'
-          onClick={() => setOpen(false)}
+          className={cn(
+            'fixed inset-0 z-30 touch-none bg-overlay backdrop-blur-xs transition-opacity duration-200 ease-out-strong data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150',
+            mode === 'docked' && 'hidden'
+          )}
         />
         <DialogPrimitive.Popup
           aria-label='Ask Simba'
-          className='fixed inset-x-4 top-[max(1rem,env(safe-area-inset-top))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-50 flex origin-bottom flex-col overflow-hidden rounded-lg border border-dashed bg-popover text-popover-foreground shadow-lg outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 sm:inset-x-auto sm:top-auto sm:right-[max(1rem,env(safe-area-inset-right))] sm:bottom-28 sm:h-[min(500px,calc(100dvh-8rem))] sm:w-[360px] sm:origin-bottom-right sm:[@media(max-height:640px)]:bottom-[max(1rem,env(safe-area-inset-bottom))] sm:[@media(max-height:640px)]:h-[calc(100dvh-2rem)]'
+          // TODO(slopradar): utility-sprawl: one 1000-character string holds the sheet, docked, expanded and short-viewport geometry plus the enter and exit motion, name those groups as constants in class-names.ts (beside expandedColumn) and join them with cn
+          className='fixed inset-x-4 top-[max(1rem,env(safe-area-inset-top))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-50 flex origin-bottom flex-col overflow-hidden rounded-lg border border-dashed bg-popover text-popover-foreground shadow-lg outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 sm:inset-x-auto sm:top-auto sm:right-[max(1rem,env(safe-area-inset-right))] sm:bottom-28 sm:h-[min(500px,calc(100dvh-8rem))] sm:w-[360px] sm:origin-bottom-right sm:data-expanded:inset-0 sm:data-expanded:h-dvh sm:data-expanded:w-dvw sm:data-expanded:origin-center sm:data-expanded:rounded-none sm:data-expanded:border-0 sm:data-expanded:shadow-none sm:[@media(max-height:640px)]:bottom-[max(1rem,env(safe-area-inset-bottom))] sm:[@media(max-height:640px)]:h-[calc(100dvh-2rem)]'
+          data-expanded={expanded || undefined}
+          // Keeps the site's components in their phone layout (the `wide` variant)
+          data-narrow={!expanded || undefined}
           data-sound-press='off'
           finalFocus={finalFocus}
           ref={popupRef}
         >
-          <div className='dashed-stack flex h-full flex-col'>
+          <div className='dashed-stack flex h-full flex-col' ref={contentRef}>
             <AssistantHeader />
             <MessageList messages={chat.messages} status={chat.status} />
             <div className='border-t border-dashed bg-card text-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring'>
-              <AssistantInput />
+              <div className={expandedColumn}>
+                <AssistantInput />
+              </div>
             </div>
           </div>
         </DialogPrimitive.Popup>

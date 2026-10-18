@@ -25,12 +25,14 @@ export const MessagePending = () => (
   </div>
 )
 
-type ToolWithOwnStatus = 'navigate' | 'renderPortfolio'
+type ToolWithOwnStatus = 'celebrate' | 'navigate' | 'renderPortfolio'
 
 const hasOwnStatus = (
   toolName: keyof ChatTools
 ): toolName is ToolWithOwnStatus =>
-  toolName === 'navigate' || toolName === 'renderPortfolio'
+  toolName === 'celebrate' ||
+  toolName === 'navigate' ||
+  toolName === 'renderPortfolio'
 
 const toolStatus: Record<
   Exclude<keyof ChatTools, ToolWithOwnStatus>,
@@ -103,6 +105,7 @@ export const MessageMetadata = ({
     const { Icon, label } = toolStatus[toolName]
 
     return (
+      // TODO(slopradar): dead-class: motion-reduce:animate-none never changes anything here, the global reduced-motion rule in globals.css already cuts the pulse to one 0.01ms run (as round 4 found for motion-reduce:transition-none), delete it; the one on the spinner above stays, since globals keeps .animate-spin spinning
       <div className='flex animate-pulse items-center gap-2 text-muted-foreground motion-reduce:animate-none'>
         <Icon aria-hidden className='size-4' />
         <Shimmer>{label}</Shimmer>

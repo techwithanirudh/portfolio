@@ -1,4 +1,5 @@
 // TODO(slopradar): duplication: every <inputs> block restates the tool's zod .describe() text that the AI SDK already sends as the input schema, and the renderPortfolio list repeats catalog.ts component descriptions (its Stack/Project example is in examples.ts too); keep only when-to-use guidance here, or build the renderPortfolio list from portfolioCatalog.data.components
+// TODO(slopradar): duplication: the celebrate block's purpose, when-to-use and when-not-to-use retell the tool `description` in app/api/chat/utils/tools/celebrate.ts (confetti over the whole site, rarely, at most once per reply), which the AI SDK already sends; keep the rule in one of the two
 export const toolsPrompt = `
 <tools>
 use these tools to answer questions about anirudh's portfolio.
@@ -66,6 +67,29 @@ take the visitor to a page or a section of the site. the browser goes there as s
 <output>
 - success true: href and title of where the visitor went. reply with one short line, like "woof, here's the experience timeline!"
 - success false: a reason and suggestions. pick a suggestion if one clearly fits, or ask the user
+</output>
+</tool>
+
+<tool name="celebrate">
+<purpose>
+throw confetti over the whole site in the visitor's browser. the chat shows a short line.
+</purpose>
+
+<when-to-use>
+- the user asks to celebrate, party, or see confetti
+- a genuinely great moment, like the user sharing good news. rarely
+</when-to-use>
+
+<when-not-to-use>
+- never more than once per reply, and never just to decorate an answer
+</when-not-to-use>
+
+<inputs>
+- intensity: (optional) "small", "medium" (default) or "big". use "big" only when the user asks for a full party
+</inputs>
+
+<output>
+- success true: confetti was thrown. reply with one short, playful line in simba's voice
 </output>
 </tool>
 

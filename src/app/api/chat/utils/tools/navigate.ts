@@ -7,6 +7,7 @@ import {
 } from '@/app/(llms)/utils/site-pages'
 import { baseUrl } from '@/lib/metadata'
 
+// TODO(slopradar): unused-export: nothing outside this file imports navigateOutputSchema since round 4 dropped it from the chat route, make it module-private
 export const navigateOutputSchema = z.discriminatedUnion('success', [
   z.object({
     href: z.string(),
@@ -26,26 +27,20 @@ type NavigateOutput = z.infer<typeof navigateOutputSchema>
 const TRAILING_SLASHES = /\/+$/
 const WORK_PREFIX = /^\/work(?=\/|$)/
 
-const parseTarget = (target: string) => {
+export const parseSitePath = (target: string) => {
+  let parsed: URL
   try {
-    return new URL(target.trim(), baseUrl)
+    parsed = new URL(target.trim(), baseUrl)
   } catch {
     return null
   }
-}
 
-const toPathAndHash = (parsed: URL) => {
   const path = parsed.pathname.replace(TRAILING_SLASHES, '') || '/'
   return {
     hash: parsed.hash.replace(LEADING_HASH, ''),
     path: path.replace(WORK_PREFIX, '/projects'),
     sameOrigin: parsed.origin === baseUrl.origin,
   }
-}
-
-export const parseSitePath = (target: string) => {
-  const parsed = parseTarget(target)
-  return parsed ? toPathAndHash(parsed) : null
 }
 
 const suggest = (pages: SitePage[], path: string) => {

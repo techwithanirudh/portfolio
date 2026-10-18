@@ -1,5 +1,6 @@
 import { type ToolSet, tool } from 'ai'
 import { z } from 'zod'
+import { celebrateTool } from './celebrate'
 import { getPageContent } from './get-page-content'
 import { navigateTool } from './navigate'
 import { renderPortfolioTool } from './render-portfolio'
@@ -18,6 +19,7 @@ const searchDocsToolType = tool({
 })
 
 export const tools = {
+  celebrate: celebrateTool,
   getPageContent,
   navigate: navigateTool,
   renderPortfolio: renderPortfolioTool,

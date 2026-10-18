@@ -25,19 +25,43 @@ import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 import { ownerName } from '../owner-name'
 
-interface ContactFormProps {
-  isSubmitted: boolean
-  prefill?: Partial<Contact>
-  submittedData?: Contact
-  toolCallId: string
+export function ContactFormSent({ data }: { data: Contact }) {
+  return (
+    <div className='flex flex-col gap-2 bg-success/10 p-3 text-sm text-success'>
+      <div className='flex items-center gap-2'>
+        <Icons.success className='size-4 shrink-0' />
+        <p>{`message sent! ${ownerName} will get back to you soon.`}</p>
+      </div>
+      <div className='mt-1 space-y-1 text-xs opacity-80'>
+        <p>
+          <span className='font-medium'>from:</span> {data.name} ({data.email})
+        </p>
+        <p>
+          <span className='font-medium'>message:</span> {data.message}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export function ContactFormCanceled() {
+  return (
+    <div className='flex flex-col gap-2 bg-muted/40 p-3 text-muted-foreground text-sm'>
+      <div className='flex items-center gap-2'>
+        <Icons.info className='size-4 shrink-0' />
+        <p>message canceled. you can keep chatting.</p>
+      </div>
+    </div>
+  )
 }
 
 export function ContactForm({
   toolCallId,
   prefill,
-  isSubmitted,
-  submittedData,
-}: ContactFormProps) {
+}: {
+  prefill?: Partial<Contact>
+  toolCallId: string
+}) {
   const { addToolOutput, sendMessage } = useChatContext()
   const playPop = useSound(pop)
   const playError = useSound(error)
@@ -78,38 +102,6 @@ export function ContactForm({
   )
 
   const isExecuting = action.status === 'executing'
-
-  if (isSubmitted && submittedData) {
-    return (
-      <div className='flex flex-col gap-2 bg-success/10 p-3 text-sm text-success'>
-        <div className='flex items-center gap-2'>
-          <Icons.success className='size-4 shrink-0' />
-          <p>{`message sent! ${ownerName} will get back to you soon.`}</p>
-        </div>
-        <div className='mt-1 space-y-1 text-xs opacity-80'>
-          <p>
-            <span className='font-medium'>from:</span> {submittedData.name} (
-            {submittedData.email})
-          </p>
-          <p>
-            <span className='font-medium'>message:</span>{' '}
-            {submittedData.message}
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if (isSubmitted && !submittedData) {
-    return (
-      <div className='flex flex-col gap-2 bg-muted/40 p-3 text-muted-foreground text-sm'>
-        <div className='flex items-center gap-2'>
-          <Icons.info className='size-4 shrink-0' />
-          <p>message canceled. you can keep chatting.</p>
-        </div>
-      </div>
-    )
-  }
 
   const handleCancel = () => {
     addToolOutput({
@@ -206,6 +198,7 @@ export function ContactForm({
 
         <div className='flex items-center gap-2'>
           <Button
+            // TODO(slopradar): redundant-class: h-8 and gap-1.5 are what size='sm' sets and text-sm is in the button base, so only flex-1 does anything (x2 with the cancel button's h-8 text-sm), drop the repeats
             className='h-8 flex-1 gap-1.5 text-sm'
             disabled={isExecuting}
             size='sm'

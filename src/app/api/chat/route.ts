@@ -15,8 +15,9 @@ import { systemPrompt } from '@/lib/ai/prompts/chat'
 import { provider } from '@/lib/ai/providers'
 import { isBotRequest } from '@/server/botid'
 import { getAssistantContext } from './utils/context'
+import { celebrateTool } from './utils/tools/celebrate'
 import { getPageContent } from './utils/tools/get-page-content'
-import { navigateOutputSchema, navigateTool } from './utils/tools/navigate'
+import { navigateTool } from './utils/tools/navigate'
 import { renderPortfolioTool } from './utils/tools/render-portfolio'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
@@ -129,6 +130,7 @@ export async function POST(request: Request) {
 
         // TODO(slopradar): duplicate-logic: this tool map is rebuilt in utils/tools/index.ts with a stub searchDocs just for typing, export one createChatTools(writer) and infer ChatTools from its return type
         const tools = {
+          celebrate: celebrateTool,
           getPageContent,
           navigate: navigateTool,
           renderPortfolio: renderPortfolioTool,
@@ -155,8 +157,9 @@ export async function POST(request: Request) {
             steps.some((step) =>
               step.toolResults.some(
                 (result) =>
+                  !result.dynamic &&
                   result.toolName === 'navigate' &&
-                  navigateOutputSchema.safeParse(result.output).data?.success
+                  result.output.success
               )
             )
               ? { activeTools: toolsAfterNavigation }
