@@ -185,7 +185,12 @@ export async function POST(request: Request) {
       originalMessages: messages,
     })
 
-    return createUIMessageStreamResponse({ stream })
+    // The SDK's default `text/event-stream` names no charset, so tools that
+    // decode the body by its header (DevTools, Playwright) read it as Latin-1
+    return createUIMessageStreamResponse({
+      headers: { 'content-type': 'text/event-stream; charset=utf-8' },
+      stream,
+    })
   } catch (error) {
     logError('Failed to process chat request:', error)
 

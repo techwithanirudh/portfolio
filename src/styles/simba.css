@@ -30,10 +30,44 @@
   transition: rotate 450ms ease-out;
 }
 
-/* In the arm's own coordinates, around the shoulder */
-.simba-rig .simba-wave {
-  transform-origin: 4px 40px;
-  animation: simba-wave 0.45s ease-in-out infinite alternate;
+/* Motions use the individual transform properties, so they add to the pop's
+   transform, the flip and the look tilt's rotate instead of replacing them.
+   He hops off his shadow, which stays on the ground */
+.simba-rig[data-motion="hop"] .simba-body {
+  animation: simba-hop 520ms cubic-bezier(0.3, 0, 0.4, 1) infinite;
+}
+
+.simba-rig[data-motion="nod"] .simba-look {
+  animation: simba-nod 380ms ease-in-out infinite alternate;
+}
+
+.simba-rig[data-motion="twitch"] .simba-look {
+  animation: simba-twitch 1.4s ease-out;
+}
+
+/* Sleeping's z marks drift up one after another */
+.simba-zzz path {
+  animation: simba-zzz 2.4s ease-in-out infinite;
+}
+
+.simba-zzz path:nth-child(2) {
+  animation-delay: 0.4s;
+}
+
+.simba-zzz path:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+@keyframes simba-zzz {
+  0%,
+  100% {
+    opacity: 0.45;
+    translate: 0 1px;
+  }
+  50% {
+    opacity: 1;
+    translate: 1px -3px;
+  }
 }
 
 @keyframes simba-pop {
@@ -45,12 +79,39 @@
   }
 }
 
-@keyframes simba-wave {
+@keyframes simba-hop {
+  0%,
+  70%,
+  100% {
+    translate: 0 0;
+  }
+  35% {
+    translate: 0 -10px;
+  }
+}
+
+@keyframes simba-nod {
   from {
-    transform: rotate(-6deg);
+    translate: 0 0;
   }
   to {
-    transform: rotate(8deg);
+    translate: 0 2.5px;
+  }
+}
+
+/* Two quick flicks as he hears something, then he holds the tilt */
+@keyframes simba-twitch {
+  0%,
+  24%,
+  100% {
+    transform: none;
+  }
+  6%,
+  16% {
+    transform: rotate(-4deg) translateY(-1px);
+  }
+  11% {
+    transform: rotate(2deg);
   }
 }
 

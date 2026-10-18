@@ -1,22 +1,32 @@
+import type { ChatTools } from '@/lib/ai/chat/types'
 import type { SpriteName } from './rig-art'
 
-/** A sprite from the sheet, mirrored with flip */
-export type Pose = { flip?: boolean; sprite: SpriteName } | { hidden: true }
+/** A CSS loop on top of a sprite, for the moves the sheet has no frames for */
+export type Motion = 'hop' | 'nod'
+
+/**
+ * A sprite from the sheet, mirrored with flip. Every pose keeps his front paws
+ * on the ground except reading, where they hold the book
+ */
+export type Pose =
+  | { flip?: boolean; motion?: Motion; sprite: SpriteName }
+  | { hidden: true }
 
 const poses = {
-  attention: { sprite: 'getAttention' },
   bashful: { sprite: 'embarrassed' },
   // The sheet's tilt leans to the right, so the left one is its mirror
   curious: { flip: true, sprite: 'curiousTilt' },
   curiousRight: { sprite: 'curiousTilt' },
-  focus: { sprite: 'show' },
-  greet: { sprite: 'waving' },
+  earFlick: { sprite: 'earTwitch' },
   hidden: { hidden: true },
+  hopping: { motion: 'hop', sprite: 'happy' },
   lookUp: { sprite: 'lookAround' },
-  playful: { sprite: 'excited' },
+  nodding: { motion: 'nod', sprite: 'happy' },
   pleased: { sprite: 'happy' },
+  reading: { sprite: 'books' },
   rest: { sprite: 'rest' },
-  searching: { sprite: 'searching' },
+  // Curled up with the z marks, when the page sits idle (controller nap)
+  sleeping: { sprite: 'sleeping' },
   surprised: { sprite: 'surprised' },
   thinking: { sprite: 'thinking' },
 } satisfies Record<string, Pose>
@@ -43,27 +53,30 @@ const ANIMATIONS = {
     ['lookUp', 500],
     ['pleased', 700]
   ),
+  Celebrate: seq(['hopping', 1600], ['pleased', 800]),
   ClickedOn: seq(['surprised', 450], ['pleased', 800]),
   Embarrassed: seq(['bashful', 1800]),
   Flower: seq(['curious', 700], ['pleased', 1000]),
-  GetAttention: seq(['attention', 400], ['greet', 1100], ['attention', 300]),
-  Greet: seq(['greet', 1500], ['pleased', 500]),
+  // Ears flick on rest's body, then he tilts his head through the sheet's
+  // in-between frames
+  GetAttention: seq(
+    ['earFlick', 150],
+    ['rest', 120],
+    ['earFlick', 150],
+    ['rest', 120],
+    ['curiousRight', 1300]
+  ),
+  Greet: seq(['nodding', 1500], ['pleased', 500]),
   Hide: seq(['hidden', 450]),
   Idle: seq(['rest', 2600]),
-  Listening: seq(['attention', 300], ['focus', 1200], ['pleased', 500]),
   LookUp: seq(['lookUp', 1400]),
-  Play: seq(['playful', 1600]),
+  Play: seq(['hopping', 1600]),
   Pleased: seq(['pleased', 1400]),
-  Searching: seq(['searching', 2400]),
+  Reading: seq(['reading', 2400]),
   Show: seq(['hidden', 120], ['rest', 450]),
-  Sniffing: seq(
-    ['searching', 2600],
-    ['curious', 900],
-    ['curiousRight', 900],
-    ['thinking', 1100]
-  ),
+  Sniffing: seq(['curious', 900], ['curiousRight', 900], ['thinking', 1100]),
   Thinking: seq(['thinking', 2000], ['curiousRight', 700]),
-  Writing: seq(['focus', 1400], ['thinking', 700], ['focus', 900]),
+  Writing: seq(['nodding', 1400], ['thinking', 700], ['nodding', 900]),
 } satisfies Record<string, Frame[]>
 
 export type AnimationName = keyof typeof ANIMATIONS
@@ -86,8 +99,16 @@ export const animations = {
   open: ['ClickedOn', 'Pleased'],
   rest: 'Idle',
   show: 'Show',
-  submit: 'Listening',
-  thinking: 'Thinking',
-  tool: 'Searching',
+  submit: 'Reading',
+  thinking: 'Reading',
+  tool: 'Reading',
   writing: 'Writing',
 } as const satisfies Record<string, AnimationName | readonly AnimationName[]>
+
+const TOOL_ANIMATIONS = {
+  celebrate: 'Celebrate',
+} satisfies Partial<Record<keyof ChatTools, AnimationName>>
+
+/** What he does while a tool runs, by tool name; the rest play animations.tool */
+export const toolAnimations: Partial<Record<string, AnimationName>> =
+  TOOL_ANIMATIONS

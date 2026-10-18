@@ -6,18 +6,19 @@ import {
   Renderer,
   useStateValue,
 } from '@json-render/react'
+import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { PostRow } from '@/components/features/blog/post-row'
-import { ExperienceTimeline, WorkCard } from '@/components/features/work'
+import { ExperienceTimeline, preloadCover } from '@/components/features/work'
 import { Icons } from '@/components/icons/icons'
-import { SectionMoreLink } from '@/components/layout/sections/more-link'
 import {
   type PortfolioState,
   portfolioCatalog,
   statePath,
 } from '@/lib/ai/chat/catalog'
+import { formatDate } from '@/lib/format-date'
 import { cn } from '@/lib/utils'
 import { eyebrow } from '../class-names'
+import { PostRow, ProjectRow } from './portfolio-row'
 import { ToolPendingLine, ToolWarningLine } from './status-line'
 import type { ToolPart } from './types'
 
@@ -51,16 +52,32 @@ function usePortfolioState(collection: PortfolioCollection, key?: string) {
   )
 }
 
-function ProjectItemCard({ slug }: { slug: string }) {
+function ProjectItemRow({ slug }: { slug: string }) {
   const project = usePortfolioState('projects', slug)
-  return project ? (
-    <WorkCard
-      description={project.description}
-      image={project.image}
-      title={project.title}
-      url={project.url}
+  if (!project) {
+    return null
+  }
+  const { date, description, image, title, url } = project
+  const warmCover = () => image && preloadCover(image, title)
+  return (
+    <ProjectRow
+      description={description}
+      image={image}
+      meta={
+        <time
+          className='text-foreground/80 tabular-nums'
+          dateTime={date.slice(0, 10)}
+        >
+          {date.slice(0, 4)}
+        </time>
+      }
+      onFocus={warmCover}
+      onPointerEnter={warmCover}
+      title={title}
+      transitionTypes={['work-card']}
+      url={url}
     />
-  ) : null
+  )
 }
 
 function PostItemRow({ slug }: { slug: string }) {
@@ -68,13 +85,51 @@ function PostItemRow({ slug }: { slug: string }) {
   if (!post) {
     return null
   }
-  // TODO(slopradar): duplicate-shape: catalog PostItem is PostRowPost flattened with an ISO date, so every row rebuilds the nested { data, url } shape; have the tool ship PostRowPost's shape (date as string) and convert only the date here
-  const { url, ...data } = post
+  const { date, description, tags, title, url } = post
+  const time = <time dateTime={date.slice(0, 10)}>{formatDate(date)}</time>
   return (
     <PostRow
-      meta={false}
-      post={{ data: { ...data, date: new Date(data.date) }, url }}
+      date={time}
+      description={description}
+      meta={
+        <>
+          {time}
+          {tags?.slice(0, 2).map((tag) => (
+            <span key={tag}>
+              <span aria-hidden className='px-1.5 opacity-60'>
+                ·
+              </span>
+              {tag}
+            </span>
+          ))}
+        </>
+      }
+      title={title}
+      url={url}
     />
+  )
+}
+
+// A slim row rather than the site's full-width SectionMoreLink bar, which
+// would be taller than the rows above it
+function MoreLinkRow({
+  children,
+  href,
+}: {
+  children: ReactNode
+  href: string
+}) {
+  return (
+    <Link
+      className='group flex items-center justify-between gap-2 px-3 wide:px-4 py-2 font-medium text-sm transition-colors hover:bg-card focus-visible:bg-card focus-visible:-outline-offset-2'
+      href={href}
+    >
+      {children}
+      <Icons.arrowRight
+        aria-hidden
+        className='size-4 shrink-0 text-muted-foreground transition-[translate,color] duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-foreground group-focus-visible:text-foreground motion-reduce:transition-none'
+      />
+    </Link>
   )
 }
 
@@ -93,10 +148,10 @@ const { registry } = defineRegistry(portfolioCatalog, {
   components: {
     Experience: ({ props }) => <ExperienceItems ids={props.ids} />,
     MoreLink: ({ props }) => (
-      <SectionMoreLink href={props.href}>{props.label}</SectionMoreLink>
+      <MoreLinkRow href={props.href}>{props.label}</MoreLinkRow>
     ),
     Post: ({ props }) => <PostItemRow slug={props.slug} />,
-    Project: ({ props }) => <ProjectItemCard slug={props.slug} />,
+    Project: ({ props }) => <ProjectItemRow slug={props.slug} />,
     Stack: ({ children, props }) => (
       <StackGroup title={props.title}>{children}</StackGroup>
     ),

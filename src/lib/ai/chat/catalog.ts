@@ -24,7 +24,7 @@ export const portfolioCatalog = defineCatalog(schema, {
     },
     MoreLink: {
       description:
-        'A full width link to a page on this site, like "/projects" or "/about#experience". Put it last, after the items it expands on.',
+        'A slim link row to a page on this site, like "/projects" or "/about#experience". Put it last, after the items it expands on.',
       props: z.object({
         href: z.string().describe('A site path from the site map.'),
         label: z.string().describe('A short label, like "view all projects".'),
@@ -33,7 +33,7 @@ export const portfolioCatalog = defineCatalog(schema, {
     },
     Post: {
       description:
-        'A blog post row with its date, title and description, linking to the post.',
+        'A compact blog post row with its title, date and one line of description, linking to the post.',
       props: z.object({
         slug: z
           .string()
@@ -43,7 +43,7 @@ export const portfolioCatalog = defineCatalog(schema, {
     },
     Project: {
       description:
-        'A project card with its cover, title and description, linking to the case study.',
+        'A compact project row with a small cover thumbnail, its title and one line of description, linking to the case study.',
       props: z.object({
         slug: z
           .string()
@@ -70,12 +70,14 @@ export type PortfolioComponent = keyof typeof portfolioCatalog.data.components
 // TODO(slopradar): dead-field: `slugs` is written by render-portfolio.ts and shipped in every spec, but nothing reads it since WorkCard takes transitionName; drop it from the Pick and from the tool's state entry
 export type ProjectItem = Pick<WorkPage, 'slugs' | 'url'> &
   Pick<WorkPage['data'], 'title'> & {
+    /** ISO date, since the spec travels as JSON */
+    date: string
     description: string
     image: string | null
   }
 
 export type PostItem = Pick<BlogPage, 'url'> &
-  Pick<BlogPage['data'], 'author' | 'description' | 'tags' | 'title'> & {
+  Pick<BlogPage['data'], 'description' | 'tags' | 'title'> & {
     /** ISO date, since the spec travels as JSON */
     date: string
   }

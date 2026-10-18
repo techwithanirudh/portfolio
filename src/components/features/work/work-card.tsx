@@ -40,7 +40,8 @@ const SharedTransition = ({
     children
   )
 
-const preloadCover = (src: string, alt: string) => {
+/** Warms the case study's cover while the pointer or focus is on a link to it */
+export const preloadCover = (src: string, alt: string) => {
   const { props } = getImageProps({
     alt,
     fill: true,
@@ -83,7 +84,7 @@ export const WorkCard = ({
             fill
             imageClassName='object-cover'
             lazy={!priority}
-            // TODO(slopradar): magic-string: sizes assumes two columns from md, but WorkGrid splits at lg by default (columnsFrom) and Simba's panel shows the card at about 360px, so it over-fetches; take sizes from the caller (or derive it from columnsFrom)
+            // TODO(slopradar): magic-string: sizes assumes two columns from md, but WorkGrid splits at lg by default (columnsFrom), so it over-fetches; take sizes from the caller (or derive it from columnsFrom)
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}
           />

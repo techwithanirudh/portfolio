@@ -134,6 +134,7 @@ export function ContactForm({
               <FormLabel className='text-xs'>name</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='name'
                   className='h-8 text-sm'
                   disabled={isExecuting}
                   placeholder='your name'
@@ -153,9 +154,11 @@ export function ContactForm({
               <FormLabel className='text-xs'>email</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='email'
                   className='h-8 text-sm'
                   disabled={isExecuting}
                   placeholder='you@example.com'
+                  spellCheck={false}
                   type='email'
                   {...field}
                 />
@@ -185,7 +188,10 @@ export function ContactForm({
         />
 
         {action.result.serverError && (
-          <div className='flex items-center gap-2 text-destructive text-xs'>
+          <div
+            className='flex items-center gap-2 text-destructive text-xs'
+            role='alert'
+          >
             <Icons.warning className='size-3.5 shrink-0' />
             <p>
               {getActionErrorMessage(
@@ -201,6 +207,7 @@ export function ContactForm({
             // TODO(slopradar): redundant-class: h-8 and gap-1.5 are what size='sm' sets and text-sm is in the button base, so only flex-1 does anything (x2 with the cancel button's h-8 text-sm), drop the repeats
             className='h-8 flex-1 gap-1.5 text-sm'
             disabled={isExecuting}
+            focusableWhenDisabled
             size='sm'
             type='submit'
           >

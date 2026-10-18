@@ -54,7 +54,9 @@ export function SimbaRig({
   const target: Shown = hidden
     ? { flip: false, sprite: 'rest' }
     : { flip: current.flip ?? false, sprite: current.sprite }
-  const { pop, shown } = useSpriteFrames(target, !(still || reducedMotion))
+  const animate = !(still || reducedMotion)
+  const { pop, shown } = useSpriteFrames(target, animate)
+  const motion = animate && !hidden ? current.motion : undefined
   const sprite = useMemo(
     () => scopeIds(SPRITES[shown.sprite], prefix),
     [prefix, shown.sprite]
@@ -65,6 +67,7 @@ export function SimbaRig({
       aria-hidden
       className={cn('simba-rig', className)}
       data-hidden={hidden || undefined}
+      data-motion={motion}
       overflow='visible'
       ref={ref}
       style={{ aspectRatio: `${view.width} / ${view.height}`, height: size }}
@@ -82,6 +85,7 @@ export function SimbaRig({
             ry='8'
           />
           <g
+            className='simba-body'
             // biome-ignore lint/security/noDangerouslySetInnerHtml: static artwork bundled with the site
             dangerouslySetInnerHTML={{ __html: sprite }}
             transform={shown.flip ? FLIP : undefined}

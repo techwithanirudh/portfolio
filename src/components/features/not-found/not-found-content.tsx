@@ -10,7 +10,7 @@ import { pages } from '@/constants/pages'
 const destinations = [
   { description: 'Who I am and what I do', page: pages.about },
   { description: 'Things I have built', page: pages.projects },
-  { description: 'Notes and write ups', page: pages.blog },
+  { description: 'Notes and write-ups', page: pages.blog },
   { description: 'Leave a note', page: pages.guestbook },
 ].map(({ description, page }) => ({
   description,

@@ -7,7 +7,7 @@ import {
   shift,
   useFloating,
 } from '@floating-ui/react-dom'
-import { useEffect, useEffectEvent, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useMediaQuery } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
@@ -17,6 +17,20 @@ import { SimbaChip } from './mascot/simba-chip'
 
 const getContainer = () => document.getElementById('main-content')
 
+// Rapid clicks on a control (the portrait bonk) extend into the words next to
+// it, which isn't a deliberate selection. Links stay selectable: sentences
+// with links in them are the feature
+const SETTLE_MS = 200
+const CONTROL_SELECTOR =
+  'button, input, textarea, select, summary, [role="button"], [contenteditable="true"]'
+
+const isInsideControl = (node: Node | null) =>
+  Boolean(
+    (node instanceof Element ? node : node?.parentElement)?.closest(
+      CONTROL_SELECTOR
+    )
+  )
+
 interface PopupState {
   text: string
 }
@@ -24,6 +38,7 @@ interface PopupState {
 export function TextSelectionPopup() {
   const { setContext, setOpen } = useAssistantContext()
   const [popup, setPopup] = useState<PopupState | null>(null)
+  const startedOnControl = useRef(false)
   // Touch browsers draw their own Copy/Share callout above a selection, so
   // sit below it, clear of the selection handles
   const coarsePointer = useMediaQuery(MEDIA.coarsePointer, {
@@ -51,13 +66,18 @@ export function TextSelectionPopup() {
     }
 
     const text = selection.toString().trim()
-    if (text.length === 0) {
+    if (text.length === 0 || startedOnControl.current) {
       setPopup(null)
       return
     }
 
     const range = selection.getRangeAt(0).cloneRange()
-    if (!container.contains(range.commonAncestorContainer)) {
+    if (
+      !container.contains(range.commonAncestorContainer) ||
+      Array.from(container.querySelectorAll(CONTROL_SELECTOR)).some((control) =>
+        range.intersectsNode(control)
+      )
+    ) {
       setPopup(null)
       return
     }
@@ -75,6 +95,7 @@ export function TextSelectionPopup() {
 
   // TODO(slopradar): library-exists: Escape, outside-press dismissal and the portal are hand-written over @floating-ui/react-dom (its only user); Base UI Popover takes a virtual anchor and controlled open and owns dismissal, check initialFocus keeps the selection
   const closeOnEscape = useEffectEvent((e: KeyboardEvent) => {
+    startedOnControl.current = false
     if (popup !== null && e.key === 'Escape') {
       setPopup(null)
     }
@@ -82,6 +103,7 @@ export function TextSelectionPopup() {
 
   const closeOnPointerDown = useEffectEvent((e: PointerEvent) => {
     const target = e.target
+    startedOnControl.current = target instanceof Node && isInsideControl(target)
     if (popup === null || !(target instanceof Node)) {
       return
     }
@@ -95,16 +117,16 @@ export function TextSelectionPopup() {
   })
 
   useEffect(() => {
-    let frame: number | null = null
+    let timer: number | null = null
 
     const scheduleUpdate = () => {
-      if (frame !== null) {
-        window.cancelAnimationFrame(frame)
+      if (timer !== null) {
+        window.clearTimeout(timer)
       }
-      frame = window.requestAnimationFrame(() => {
-        frame = null
+      timer = window.setTimeout(() => {
+        timer = null
         updatePopup()
-      })
+      }, SETTLE_MS)
     }
 
     document.addEventListener('selectionchange', scheduleUpdate)
@@ -115,8 +137,8 @@ export function TextSelectionPopup() {
       document.removeEventListener('selectionchange', scheduleUpdate)
       document.removeEventListener('keydown', closeOnEscape)
       document.removeEventListener('pointerdown', closeOnPointerDown)
-      if (frame !== null) {
-        window.cancelAnimationFrame(frame)
+      if (timer !== null) {
+        window.clearTimeout(timer)
       }
     }
   }, [])

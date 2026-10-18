@@ -201,10 +201,10 @@ function PromptContext({
         <span className='sr-only'>Context: </span>
         {context.slice(0, MAX_SOURCE_PREVIEW_CHARS)}
       </span>
-      {/* TODO(slopradar): hit-area: the remove-context button is the bare 14px icon, extend it toward 40px with an after:-inset pseudo element like SearchToggle */}
+      {/* The icon is 14px; the pseudo element makes the target 24px, as far as it goes before reaching the textarea below */}
       <button
         aria-label='Remove context'
-        className='inline-flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground'
+        className='after:-translate-1/2 relative inline-flex items-center justify-center text-muted-foreground transition-colors after:absolute after:top-1/2 after:left-1/2 after:size-6 hover:text-foreground'
         onClick={onClear}
         type='button'
       >

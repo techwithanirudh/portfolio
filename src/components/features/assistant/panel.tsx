@@ -53,7 +53,19 @@ function useReturnFocus(
     return () => document.removeEventListener('focusin', remember)
   }, [open, popupRef])
 
-  return () => (lastFocused.current?.isConnected ? lastFocused.current : true)
+  return () => {
+    // The docked panel also closes on Escape while the visitor works on the
+    // page, and focus should stay where they are
+    const active = document.activeElement
+    if (
+      active instanceof HTMLElement &&
+      active !== document.body &&
+      !popupRef.current?.contains(active)
+    ) {
+      return false
+    }
+    return lastFocused.current?.isConnected ? lastFocused.current : true
+  }
 }
 
 const MORPH_EASING = 'cubic-bezier(0.2, 0, 0, 1)'

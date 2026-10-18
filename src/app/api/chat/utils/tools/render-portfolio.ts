@@ -105,6 +105,7 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
         }
         const slug = page.slugs.join('/')
         state.projects[slug] = {
+          date: page.data.date.toISOString(),
           description: page.data.description ?? '',
           image: page.data.image ?? null,
           // TODO(slopradar): dead-field: no client reads `slugs` since WorkCard takes transitionName, stop writing it here so the Pick in lib/ai/chat/catalog.ts (its own annotation) can drop it
@@ -122,7 +123,6 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
         }
         const slug = page.slugs.join('/')
         state.posts[slug] = {
-          author: page.data.author,
           date: page.data.date.toISOString(),
           description: page.data.description,
           tags: page.data.tags,
