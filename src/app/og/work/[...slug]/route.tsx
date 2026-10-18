@@ -1,37 +1,8 @@
-import { ImageResponse } from '@takumi-rs/image-response'
-import { generate, getImageResponseOptions } from '@/app/og/work/[...slug]/og'
-import { getWorkPageImage } from '@/lib/metadata'
-import { getLocalImageDataUrl } from '@/lib/og'
+import { createOgRoute } from '@/app/og/_lib/route'
 import { getWork, getWorkPages } from '@/lib/source'
 
-export const GET = async (
-  _request: Request,
-  context: { params: Promise<{ slug?: string[] }> }
-): Promise<ImageResponse | Response> => {
-  const params = await context.params
-  const slug = params.slug ?? []
-  const page = getWork(slug.slice(0, -1))
-
-  if (!page) {
-    return new Response('Not Found', { status: 404 })
-  }
-
-  const backgroundImage = await getLocalImageDataUrl(page.data.image)
-
-  return new ImageResponse(
-    generate({
-      backgroundImage,
-      description: page.data.description ?? '',
-      title: page.data.title ?? 'Untitled',
-    }),
-    getImageResponseOptions()
-  )
-}
-
-export function generateStaticParams(): {
-  slug: string[]
-}[] {
-  return getWorkPages().map((page) => ({
-    slug: getWorkPageImage(page).segments,
-  }))
-}
+export const { GET, generateStaticParams } = createOgRoute({
+  collection: 'work',
+  getPage: getWork,
+  getPages: getWorkPages,
+})

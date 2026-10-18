@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
+import { InlineMarkdown } from '@/components/inline-markdown'
 import { SectionHeader } from '@/components/layout/sections/header'
 import {
   SplitSection,
@@ -9,34 +10,28 @@ import {
 import { Prose } from '@/components/prose'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { aboutIntro } from '@/constants/portfolio/intro'
 import { cn } from '@/lib/utils'
 
 export default function About(): React.ReactElement {
   return (
     <SplitSection>
       <SplitSectionSidebar>
-        <SectionHeader align='left' title='About Me' />
+        <SectionHeader align='left' title='About me' />
       </SplitSectionSidebar>
 
       <SplitSectionContent inset>
-        <ViewAnimation
-          className='relative'
-          delay={0.1}
-          initial={{ opacity: 0, translateY: -6 }}
-          whileInView={{ opacity: 1, translateY: 0 }}
-        >
+        <ViewAnimation className='relative' delay={0.1}>
           <div className='space-y-4'>
             <Prose className='typography-body w-full space-y-4'>
-              <p className='text-lg'>
-                I'm Anirudh, a full-stack developer who builds practical web
-                apps. I started tinkering with Lego Mindstorms and kept building
-                from there.
-              </p>
-              <p className='text-lg'>
-                My stack is Next.js, TypeScript, tRPC, Drizzle, and PostgreSQL.
-                Python was part of my early experiments. I build open-source
-                projects like AI Tutor and Coolify Tweaks.
-              </p>
+              {aboutIntro.map((paragraph) => (
+                <p className='text-lg' key={paragraph}>
+                  <InlineMarkdown
+                    linkClassName='whitespace-nowrap'
+                    text={paragraph}
+                  />
+                </p>
+              ))}
             </Prose>
             <Link
               className={cn(
@@ -48,7 +43,7 @@ export default function About(): React.ReactElement {
               )}
               href='/about'
             >
-              Learn More
+              Learn more
               <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>
           </div>

@@ -1,42 +1,55 @@
 'use server'
 
-import { Resend } from 'resend'
 import { env } from '@/env'
-import { ActionError, actionClient } from '@/lib/safe-action/client'
-import { botIdMiddleware } from '@/lib/safe-action/middleware'
+import { resend } from '@/lib/resend'
+import { ActionError, publicActionClient } from '@/lib/safe-action'
 import { ContactSchema } from '@/lib/validators/contact'
+import ContactNotificationEmail from '../../../../../emails/contact-notification'
 
-const resend = new Resend(env.RESEND_API_KEY)
+// Built once, since every submission formats with the same options
+const sentAtFormat = new Intl.DateTimeFormat('en-US', {
+  dateStyle: 'medium',
+  timeStyle: 'short',
+  timeZone: 'Asia/Kolkata',
+})
 
-export const contact = actionClient
-  .use(botIdMiddleware)
+export const contact = publicActionClient
   .inputSchema(ContactSchema)
   .action(async ({ parsedInput: { name, email, message } }) => {
-    try {
-      const { error } = await resend.emails.send({
-        from: env.EMAIL_FROM,
+    const from = env.EMAIL_FROM
+    const to = env.EMAIL_TO
+
+    if (!(resend && from && to)) {
+      throw new ActionError(
+        'The contact form is unavailable right now. Please try again later.'
+      )
+    }
+
+    const sentAt = `${sentAtFormat.format(new Date())} IST`
+
+    // Resend returns API failures and throws on network ones. Either way the
+    // detail is logged once and the visitor gets a generic message
+    const { error } = await resend.emails
+      .send({
+        from,
+        react: ContactNotificationEmail({ email, message, name, sentAt }),
         replyTo: email,
         subject: `New contact form submission from ${name}`,
-        text: message,
-        to: env.EMAIL_TO,
+        // For mail apps that don't show HTML
+        text: `${message}\n\nFrom ${name} (${email}), ${sentAt}`,
+        to,
       })
+      .catch((cause: unknown) => ({ error: cause }))
 
-      if (error) {
-        console.error('Error sending contact email:', error)
-        throw new ActionError(`Failed to send contact email: ${error.message}`)
-      }
-
-      return {
-        message: "Thanks, I got your message. I'll reply soon.",
-        success: true,
-      }
-    } catch (error) {
-      console.error('Contact form error:', error)
-      if (error instanceof ActionError) {
-        throw error
-      }
+    if (error) {
+      console.error('Failed to send contact email:', error)
       throw new ActionError(
         'Failed to send your message. Please try again later.'
       )
+    }
+
+    return {
+      message: "Thanks, I got your message. I'll reply soon.",
+      success: true,
     }
   })

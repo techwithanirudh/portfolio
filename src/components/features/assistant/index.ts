@@ -1,5 +1,1 @@
-export {
-  Assistant,
-  useAssistantContext,
-} from './assistant'
-export { AssistantTrigger } from './trigger'
+export { AssistantProvider, useAssistantContext } from './context'

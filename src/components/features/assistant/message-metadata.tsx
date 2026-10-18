@@ -1,17 +1,48 @@
 import { getStaticToolName, isStaticToolUIPart, isToolUIPart } from 'ai'
-import type { ChatTools, MyUIMessage } from '@/app/api/chat/types'
-import { Shimmer } from '@/components/features/assistant/shimmer'
+import { Shimmer } from '@/components/ai-elements/shimmer'
 import {
   Source,
   Sources,
   SourcesContent,
   SourcesTrigger,
-} from '@/components/features/assistant/sources'
+} from '@/components/ai-elements/sources'
 import { Icons } from '@/components/icons/icons'
+import type { ChatTools, MyUIMessage } from '@/lib/ai/chat/types'
 
 interface MessageMetadataProps {
   inProgress: boolean
   parts: MyUIMessage['parts']
+}
+
+export const MessagePending = () => (
+  <div className='flex items-center gap-2'>
+    <Icons.pawPrint
+      aria-hidden
+      className='size-4 animate-spin text-primary motion-reduce:animate-none'
+    />
+    <span className='sr-only'>Simba is thinking</span>
+  </div>
+)
+
+// These tools render their own progress row in the message body
+const toolsWithOwnStatus = new Set<keyof ChatTools>(['navigate'])
+
+const toolStatus = (toolName: keyof ChatTools) => {
+  switch (toolName) {
+    case 'searchDocs':
+      return { Icon: Icons.search, label: 'Sniffing the pages' }
+    case 'getPageContent':
+      return { Icon: Icons.link, label: 'Fetching a page' }
+    case 'showContactForm':
+      return { Icon: Icons.mail, label: 'Fetching contact form' }
+    default:
+      return {
+        Icon: Icons.wrench,
+        label: `Running ${String(toolName)
+          .replace(/([A-Z])/g, ' $1')
+          .trim()}`,
+      }
+  }
 }
 
 export const MessageMetadata = ({
@@ -25,17 +56,16 @@ export const MessageMetadata = ({
   const reasoning = parts.at(-1)?.type === 'reasoning'
 
   if (!lastPart) {
-    return (
-      <div className='flex items-center gap-2'>
-        {reasoning ? (
-          <>
-            <Icons.brain className='size-4' />
-            <Shimmer>Sniffing around...</Shimmer>
-          </>
-        ) : (
-          <Icons.pawPrint className='size-4 animate-spin text-fd-primary' />
-        )}
+    if (!inProgress) {
+      return null
+    }
+    return reasoning ? (
+      <div className='flex items-center gap-2 text-muted-foreground'>
+        <Icons.brain aria-hidden className='size-4' />
+        <Shimmer>Sniffing around...</Shimmer>
       </div>
+    ) : (
+      <MessagePending />
     )
   }
 
@@ -51,16 +81,10 @@ export const MessageMetadata = ({
 
   if (sources.length > 0 && !(tool && inProgress)) {
     return (
-      <Sources className='group/source peer/source'>
-        <SourcesTrigger count={sources.length}>
-          <span className='relative size-4'>
-            <Icons.search className='absolute inset-0 size-4 transition-opacity duration-200 group-hover/source:opacity-0' />
-            <Icons.chevronDown className='absolute inset-0 size-4 opacity-0 transition-all duration-200 group-hover/source:opacity-100 peer-data-[state=open]/source:rotate-180' />
-          </span>
-          <p>Used {sources.length} sources</p>
-        </SourcesTrigger>
+      <Sources>
+        <SourcesTrigger count={sources.length} />
         <SourcesContent>
-          <ul className='flex flex-col gap-2'>
+          <ul className='flex flex-col gap-2 pt-3'>
             {sources.map((source) => (
               <li className='ml-4.5 list-disc pl-1' key={source.url}>
                 <Source href={source.url} title={source.url}>
@@ -74,41 +98,21 @@ export const MessageMetadata = ({
     )
   }
 
-  if (tool && inProgress && isStaticToolUIPart<ChatTools>(tool)) {
-    let Icon = Icons.wrench
-    let label = 'Working'
-    const toolName = getStaticToolName(tool)
-    const name = toolName.replace(/([A-Z])/g, ' $1').trim()
-
-    switch (toolName) {
-      case 'searchDocs':
-        Icon = Icons.search
-        label = 'Sniffing the pages'
-        break
-      case 'getPageContent':
-        Icon = Icons.link
-        label = 'Fetching a page'
-        break
-      case 'showContactForm':
-        Icon = Icons.mail
-        label = 'Fetching contact form'
-        break
-      default:
-        label = `Running ${name}`
-        break
-    }
+  if (
+    tool &&
+    inProgress &&
+    isStaticToolUIPart<ChatTools>(tool) &&
+    !toolsWithOwnStatus.has(getStaticToolName(tool))
+  ) {
+    const { Icon, label } = toolStatus(getStaticToolName(tool))
 
     return (
-      <div className='flex animate-pulse items-center gap-2 text-muted-foreground'>
-        <Icon className='size-4' />
+      <div className='flex animate-pulse items-center gap-2 text-muted-foreground motion-reduce:animate-none'>
+        <Icon aria-hidden className='size-4' />
         <Shimmer>{label}</Shimmer>
       </div>
     )
   }
 
-  if (!tool && sources.length === 0) {
-    return null
-  }
-
-  return <div />
+  return null
 }

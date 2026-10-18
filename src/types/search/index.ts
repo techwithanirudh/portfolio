@@ -13,6 +13,7 @@ export type CommandItem =
   | (BaseItem & { kind: 'page'; url: string })
   | (BaseItem & { kind: 'link'; url: string })
   | (BaseItem & { kind: 'theme'; theme: 'light' | 'dark' | 'system' })
+  | (BaseItem & { kind: 'sound' })
   | (BaseItem & { action: AccountAction; kind: 'account' })
 
 export interface CommandGroup {

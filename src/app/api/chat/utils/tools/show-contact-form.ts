@@ -24,7 +24,7 @@ export type ContactFormOutput = z.infer<typeof contactFormOutputSchema>
 
 export const showContactFormTool = tool({
   description:
-    'Show an inline contact form so the user can send a message, from the chat.',
+    'Show an inline contact form so the user can send a message from the chat.',
   inputSchema: z.object({
     prefill: prefillSchema.describe(
       'Optional prefill data for the form fields based on chat context'

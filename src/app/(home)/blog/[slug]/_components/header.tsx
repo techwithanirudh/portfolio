@@ -23,16 +23,21 @@ export const Header = ({ page, tags }: HeaderProps) => {
   const formattedDate = formatPostDate(page.data.date)
 
   return (
-    <Section>
+    // `isolate` keeps the card's z-indexed, blended and composited layers in
+    // one stacking context of its own, so none of them can rise past the
+    // sticky site header in the page's root stacking context
+    <Section className='isolate'>
       <FrameDecoration />
       <div className='relative h-[280px] overflow-clip md:h-[420px] lg:h-[600px]'>
-        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl bg-primary/80 shadow-xl'>
+        <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image && (
             <BlurImage
               alt={page.data.title ?? 'Blog cover image'}
-              className='absolute inset-0 h-full w-full rounded-2xl'
+              className='absolute inset-0 h-full w-full'
               fill
-              imageClassName='object-cover rounded-2xl'
+              imageClassName='object-cover'
+              // The cover opens the post, so it's the LCP image
+              lazy={false}
               sizes='(min-width: 1024px) 800px, 100vw'
               src={image}
             />
@@ -41,21 +46,11 @@ export const Header = ({ page, tags }: HeaderProps) => {
             className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent'
             style={{ viewTransitionName: 'none' }}
           />
-          <motion.div
-            animate={{ opacity: 1 }}
-            className='relative z-5 mt-auto p-8 md:p-16'
-            initial={{ opacity: 0 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
-          >
+          <div className='relative z-5 mt-auto p-8 md:p-16'>
             {tags?.length ? (
               <div className='mb-4 hidden gap-2 md:flex md:flex-wrap'>
                 {tags.map((tag, index) => (
-                  <ViewAnimation
-                    delay={0.1 + index * 0.05}
-                    initial={{ opacity: 0, translateY: -6 }}
-                    key={tag}
-                    whileInView={{ opacity: 1, translateY: 0 }}
-                  >
+                  <ViewAnimation delay={0.1 + index * 0.05} key={tag}>
                     <TagCard
                       className='border border-white/60 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
                       name={tag}
@@ -72,10 +67,15 @@ export const Header = ({ page, tags }: HeaderProps) => {
                 {page.data.description ?? ''}
               </p>
             </div>
-            <div className='flex items-center gap-6 text-slate-200 text-xs dark:text-foreground/45'>
+            <motion.div
+              animate={{ opacity: 1 }}
+              className='flex items-center gap-6 text-slate-200 text-xs dark:text-foreground/45'
+              initial={{ opacity: 0 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
+            >
               <span>{formattedDate}</span>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </Section>
@@ -84,17 +84,17 @@ export const Header = ({ page, tags }: HeaderProps) => {
 
 const FrameDecoration = () => (
   <>
-    <span className='absolute top-6 z-4 h-px w-full bg-zinc-500/75 mix-blend-screen md:top-12' />
-    <span className='absolute bottom-6 z-4 h-px w-full bg-zinc-500/75 mix-blend-screen md:bottom-12' />
-    <span className='absolute left-6 z-4 h-full w-px bg-zinc-500/75 mix-blend-screen md:left-12' />
-    <span className='absolute right-6 z-4 h-full w-px bg-zinc-500/75 mix-blend-screen md:right-12' />
-    <span className='absolute top-12 left-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute top-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute top-12 right-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute top-[44.5px] right-[48px] z-5 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute bottom-12 left-[44.5px] z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute bottom-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white md:block' />
-    <span className='absolute right-[44.5px] bottom-12 z-5 hidden h-px w-2 bg-white md:block' />
-    <span className='absolute right-[48px] bottom-[44.5px] z-5 hidden h-2 w-px bg-white md:block' />
+    <span className='absolute top-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:top-12 dark:bg-white/15' />
+    <span className='absolute bottom-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:bottom-12 dark:bg-white/15' />
+    <span className='absolute left-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:left-12 dark:bg-white/15' />
+    <span className='absolute right-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:right-12 dark:bg-white/15' />
+    <span className='absolute top-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute top-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute top-12 right-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute top-[44.5px] right-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute bottom-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute bottom-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute right-[44.5px] bottom-12 z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
+    <span className='absolute right-[48px] bottom-[44.5px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
   </>
 )

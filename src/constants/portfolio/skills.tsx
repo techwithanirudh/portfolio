@@ -1,35 +1,8 @@
-import { Icons } from '@/components/icons/icons'
-import type { Skill, TechStackItem } from '@/types'
+import type { TechStackItem } from '@/types'
 
 const base = '/images/tech-stack'
 const s = (file: string) => `${base}/${file}`
 const t = (light: string, dark: string) => ({ dark: s(dark), light: s(light) })
-
-export const skills: Skill[] = [
-  {
-    description:
-      'Building web apps with Next.js, React, TypeScript, and UI frameworks.',
-    Icon: Icons.globe,
-    id: 1,
-    size: 'sm',
-    title: 'Web development',
-  },
-  {
-    description: 'Exploring AI features with Python, OpenCV, and LLMs.',
-    Icon: Icons.ai,
-    id: 2,
-    size: 'sm',
-    title: 'AI and machine learning',
-  },
-  {
-    description:
-      'Building full-stack apps with Node.js, TypeScript, databases, and cloud services.',
-    Icon: Icons.layers,
-    id: 3,
-    size: 'sm',
-    title: 'Full-stack development',
-  },
-]
 
 export const technologies: TechStackItem[] = [
   {
@@ -177,3 +150,16 @@ export const technologies: TechStackItem[] = [
     label: 'Paper',
   },
 ]
+
+/** The stack by category, in first seen order. An item is listed under every category it has */
+export const groupTechnologies = (items: TechStackItem[] = technologies) => {
+  const grouped = new Map<string, TechStackItem[]>()
+
+  for (const item of items) {
+    for (const category of item.categories) {
+      grouped.set(category, [...(grouped.get(category) ?? []), item])
+    }
+  }
+
+  return [...grouped]
+}

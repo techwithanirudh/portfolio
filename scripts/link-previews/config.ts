@@ -9,6 +9,17 @@ export const content = [
   'content/work/**/*.{md,mdx}',
 ]
 
+export const previewLinkSourceFiles = [
+  'src/constants/navigation/social.tsx',
+  'src/constants/portfolio/colophon.ts',
+  'src/constants/portfolio/experiences.tsx',
+  'src/constants/portfolio/skills.tsx',
+  'src/constants/portfolio/uses.ts',
+  'src/app/(home)/colophon/_components/attribution.tsx',
+  'src/app/(home)/uses/_components/coding.tsx',
+  'src/components/layout/footer/links.tsx',
+]
+
 export const concurrency = 3
 
 export const maxScreenshotAgeMs = 6 * 30 * 24 * 60 * 60 * 1000
@@ -53,12 +64,10 @@ export const exclusions: ExclusionsConfig = {
     '.exe',
     '.pkg',
   ],
-  hostnames: ['localhost'],
+  hostnames: ['localhost', 'www.w3.org'],
 }
 
 export const detection: DetectionConfig = {
-  components: {
-    // Card: ['href'],
-  },
+  components: {},
   frontmatter: ['website', 'github'],
 }

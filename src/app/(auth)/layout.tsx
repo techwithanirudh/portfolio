@@ -19,7 +19,7 @@ const Layout = ({ children }: { children: ReactNode }) => (
       ),
     }}
   >
-    <main className='container relative flex min-h-full flex-1 border-border border-x border-b border-dashed'>
+    <main className='dashed-stack relative flex flex-1 flex-col border-border border-dashed sm:border-b'>
       {children}
     </main>
   </HomeLayout>

@@ -25,7 +25,7 @@ async function checkLinks() {
           },
         }))
       ),
-      '(home)/work/[slug]': await Promise.all(
+      '(home)/projects/[slug]': await Promise.all(
         workPages.map((page) => ({
           hashes: getHeadings(page),
           value: {

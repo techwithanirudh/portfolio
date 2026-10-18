@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useSound } from '@web-kits/audio/react'
 import { contact } from '@/app/(home)/contact/actions/contact'
-import { useAssistantContext } from '@/components/features/assistant/assistant'
+import { useChatContext } from '@/components/features/assistant/chat-context'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,6 +19,7 @@ import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { error, pop } from '@/lib/audio/minimal'
+import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
 
@@ -35,8 +36,7 @@ export function ContactForm({
   isSubmitted,
   submittedData,
 }: ContactFormProps) {
-  const { chat } = useAssistantContext()
-  const { addToolOutput, sendMessage } = chat
+  const { addToolOutput, sendMessage } = useChatContext()
   const playPop = useSound(pop)
   const playError = useSound(error)
 
@@ -80,7 +80,7 @@ export function ContactForm({
 
   if (isSubmitted && submittedData) {
     return (
-      <div className='flex flex-col gap-2 rounded-md border border-green-500/50 border-dashed bg-green-500/10 p-3 text-green-600 text-sm dark:text-green-400'>
+      <div className='flex flex-col gap-2 bg-success/10 p-3 text-sm text-success'>
         <div className='flex items-center gap-2'>
           <Icons.success className='size-4 shrink-0' />
           <p>message sent! anirudh will get back to you soon.</p>
@@ -101,7 +101,7 @@ export function ContactForm({
 
   if (isSubmitted && !submittedData) {
     return (
-      <div className='flex flex-col gap-2 rounded-md border border-muted-foreground/30 border-dashed bg-muted/40 p-3 text-muted-foreground text-sm'>
+      <div className='flex flex-col gap-2 bg-muted/40 p-3 text-muted-foreground text-sm'>
         <div className='flex items-center gap-2'>
           <Icons.success className='size-4 shrink-0' />
           <p>message canceled. you can keep chatting.</p>
@@ -125,10 +125,10 @@ export function ContactForm({
   return (
     <Form {...form}>
       <form
-        className='flex flex-col gap-3 rounded-md border border-dashed p-3'
+        className='flex flex-col gap-3 p-3'
         onSubmit={handleSubmitWithAction}
       >
-        <p className='text-fd-muted-foreground text-xs'>
+        <p className='text-muted-foreground text-xs'>
           fill this out and i&apos;ll send it to anirudh for you!
         </p>
 
@@ -194,9 +194,7 @@ export function ContactForm({
           <div className='flex items-center gap-2 text-destructive text-xs'>
             <Icons.warning className='size-3.5 shrink-0' />
             <p>
-              {typeof action.result.serverError === 'string'
-                ? action.result.serverError
-                : 'Failed to send message'}
+              {getActionErrorMessage(action.result, 'Failed to send message')}
             </p>
           </div>
         )}
@@ -238,7 +236,7 @@ export function ContactForm({
 
 export function ContactFormSkeleton() {
   return (
-    <div className='flex flex-col gap-3 rounded-md border border-dashed p-3'>
+    <div className='flex flex-col gap-3 p-3'>
       <Skeleton className='h-3 w-48' />
       <div className='space-y-2'>
         <Skeleton className='h-3 w-12' />

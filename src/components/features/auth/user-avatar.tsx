@@ -44,9 +44,9 @@ export function UserAvatar({
           'rounded-md bg-transparent uppercase',
           classNames?.fallback
         )}
-        delayMs={src ? 200 : 0}
+        delay={src ? 200 : 0}
       >
-        {firstTwoCharacters(name) ?? (
+        {initials(name) ?? (
           <Icons.user className={cn('w-[55%]', classNames?.fallbackIcon)} />
         )}
       </AvatarFallback>
@@ -54,4 +54,22 @@ export function UserAvatar({
   )
 }
 
-const firstTwoCharacters = (name?: string | null) => name?.slice(0, 2)
+const whitespace = /\s+/
+
+const graphemes = new Intl.Segmenter('en', { granularity: 'grapheme' })
+
+const leadingGraphemes = (word: string, count: number) =>
+  Array.from(graphemes.segment(word), ({ segment }) => segment)
+    .slice(0, count)
+    .join('')
+
+const initials = (name?: string | null) => {
+  const [first, ...rest] = name?.trim().split(whitespace).filter(Boolean) ?? []
+  if (!first) {
+    return null
+  }
+  const last = rest.at(-1)
+  return last
+    ? leadingGraphemes(first, 1) + leadingGraphemes(last, 1)
+    : leadingGraphemes(first, 2)
+}

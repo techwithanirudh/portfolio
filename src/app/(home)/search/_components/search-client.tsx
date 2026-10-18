@@ -1,6 +1,5 @@
 'use client'
 
-import type { HighlightedText } from 'fumadocs-core/search'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import {
   SearchDialog,
@@ -9,7 +8,8 @@ import {
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
-import { Fragment, type ReactNode, useEffect } from 'react'
+import { type ReactNode, useEffect } from 'react'
+import { PostEmpty } from '@/components/features/blog/post-empty'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import {
@@ -17,45 +17,86 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@/components/ui/input-group'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Skeleton } from '@/components/ui/skeleton'
 import { ViewAnimation } from '@/components/view-animation'
 import { tags } from '@/constants/config'
+import { pages } from '@/constants/pages'
 import { cn } from '@/lib/utils'
 
-const renderHighlights = (
-  highlights: HighlightedText<ReactNode>[],
-  badge?: string
-) => (
-  <span className='inline-flex w-full items-center justify-between'>
-    <span>
-      {highlights.map((node, index) => {
-        if (node.styles?.highlight) {
-          return (
-            <span className='text-primary underline' key={index.toString()}>
-              {node.content}
-            </span>
-          )
-        }
-
-        return <Fragment key={index.toString()}>{node.content}</Fragment>
-      })}
+const ItemBadge = ({ label }: { label: string }) => (
+  <span className='pointer-events-none absolute inset-y-0 right-5 flex items-center'>
+    <span className='rounded-full border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
+      {label}
     </span>
-
-    {badge ? (
-      <span className='mr-2 rounded-full border border-border px-2 py-0.5 text-muted-foreground text-xs uppercase tracking-wide'>
-        {badge}
-      </span>
-    ) : null}
   </span>
 )
 
 const getItemTag = (url: string) => {
-  if (url.startsWith('/work')) {
-    return 'work'
+  if (url.startsWith('/projects')) {
+    return 'projects'
   }
   if (url.startsWith('/blog')) {
     return 'blog'
   }
   return 'page'
+}
+
+// Stand-in rows shaped like the results (a title with its tag pill, then
+// indented excerpts) while the first response is on its way
+const excerptWidths = [['w-3/5'], ['w-4/5', 'w-2/5'], ['w-1/2']]
+// The light muted token is nearly the page background, so the bars take a
+// tint of the text color instead
+const bar = 'bg-foreground/10'
+
+const ResultsSkeleton = () => (
+  <div aria-busy className='flex w-full flex-col p-1' role='status'>
+    <span className='sr-only'>Searching</span>
+    {excerptWidths.map((lines) => (
+      <div key={lines.join()}>
+        <div className='flex items-center justify-between gap-4 border-border border-b border-dashed p-3'>
+          <Skeleton className={cn('h-4 w-1/3', bar)} />
+          <Skeleton className={cn('mr-2 h-5 w-14 rounded-full', bar)} />
+        </div>
+        {lines.map((width) => (
+          <div className='relative p-3 ps-7' key={width}>
+            <div className='absolute inset-y-0 start-3 w-px bg-border' />
+            <Skeleton className={cn('h-3.5', width, bar)} />
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+)
+
+// Fills the results area (the viewport is a size container) so Simba sits in
+// the middle of it; the 0.5rem is the list's top padding
+const CenteredEmpty = ({ children }: { children: ReactNode }) => (
+  <div className='flex min-h-[calc(100cqh-0.5rem)] flex-col justify-center'>
+    {children}
+  </div>
+)
+
+// Every tab gets the ledger's bashful Simba when nothing matches, with a way
+// back to the full list where there is one
+const emptyByScope = {
+  all: () => (
+    <CenteredEmpty>
+      <PostEmpty link={null} />
+    </CenteredEmpty>
+  ),
+  blog: () => (
+    <CenteredEmpty>
+      <PostEmpty />
+    </CenteredEmpty>
+  ),
+  projects: () => (
+    <CenteredEmpty>
+      <PostEmpty
+        link={{ href: pages.projects.path, label: 'See every project' }}
+      />
+    </CenteredEmpty>
+  ),
 }
 
 const tagValues = tags
@@ -97,6 +138,9 @@ export function SearchClient() {
   }, [queryParam, setSearch])
 
   const hasQuery = search.trim().length > 0
+  // Between typing and the first response the list has nothing to show, so
+  // skeleton rows stand in instead of a blank list and a "0 results"
+  const pending = hasQuery && query.data === 'empty'
 
   return (
     <SearchDialog
@@ -106,17 +150,15 @@ export function SearchClient() {
       open
       search={search}
     >
-      <Section className='flex flex-1 flex-col' sectionClassName='h-full'>
+      {/* Held to the leftover screen height so the results scroll inside it,
+          as the guestbook entries do */}
+      <Section fill='contain'>
         <div className='flex flex-col'>
-          <ViewAnimation
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
-            <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none'>
-              <InputGroupAddon
-                className='border-0 pl-3 text-muted-foreground'
-                focusInputOnClick
-              >
+          <ViewAnimation>
+            {/* A thin inset primary line on focus; the stock 3px ring stacked on the
+                dashed rules above and below read as a double border */}
+            <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none ring-inset has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot=input-group-control]:focus-visible]:ring-primary/60'>
+              <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
               <InputGroupInput
@@ -124,21 +166,17 @@ export function SearchClient() {
                 onChange={(event) => {
                   handleSearchChange(event.target.value)
                 }}
-                placeholder='Search posts and work...'
+                placeholder='Search posts and projects...'
                 value={search}
               />
-              {search.length > 0 && (
+              {search.length > 0 && !pending && (
                 <InputGroupAddon align='inline-end' className='pr-3'>
                   {resultCount} results
                 </InputGroupAddon>
               )}
             </InputGroup>
           </ViewAnimation>
-          <ViewAnimation
-            delay={0.05}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
-          >
+          <ViewAnimation delay={0.05}>
             <div className='flex w-full flex-wrap justify-between divide-x divide-dashed divide-border border-border border-y border-dashed'>
               {tags.map((scopeOption) => {
                 const value = scopeOption.value ?? 'all'
@@ -165,37 +203,41 @@ export function SearchClient() {
             </div>
           </ViewAnimation>
         </div>
-        {!hasQuery && (
-          <ViewAnimation
-            delay={0.1}
-            initial={{ opacity: 0, translateY: -6 }}
-            whileInView={{ opacity: 1, translateY: 0 }}
+        <div className='min-h-0 flex-1'>
+          <ScrollArea
+            // Fades the top edge in only once you've scrolled, so results
+            // ease under the tabs instead of being cut off at them
+            className='h-full w-full [&>[data-slot=scroll-area-scrollbar]]:py-1.5 [&>[data-slot=scroll-area-scrollbar]]:pr-1 [&>[data-slot=scroll-area-viewport]]:[container-type:size] [&>[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_bottom,transparent,#000_min(2.5rem,var(--scroll-area-overflow-y-start,0px)))]'
+            data-lenis-prevent
           >
-            <div className='flex max-h-[460px] w-full flex-col overflow-y-auto p-1'>
-              <div className='py-12 text-center text-fd-muted-foreground text-sm'>
-                Start typing to search.
-              </div>
-            </div>
-          </ViewAnimation>
-        )}
-        <SearchDialogList
-          className='[&>div]:!p-0'
-          data-lenis-prevent
-          Item={({ item, onClick }) => (
-            <SearchDialogListItem
-              className='rounded-none border-border border-b border-dashed px-3 py-3 last:border-b-0'
-              item={item}
-              onClick={onClick}
-              renderHighlights={(highlights) =>
-                renderHighlights(
-                  highlights,
-                  item.type === 'page' ? getItemTag(item.url) : undefined
-                )
-              }
+            {!hasQuery && (
+              <ViewAnimation delay={0.1}>
+                <p className='py-12 text-center text-muted-foreground text-sm'>
+                  Start typing to search.
+                </p>
+              </ViewAnimation>
+            )}
+            {pending && <ResultsSkeleton />}
+            <SearchDialogList
+              // Let the scroll area own the height instead of fumadocs' 460px cap
+              className='!h-auto [&>div]:!p-0 [&>div]:!pt-2 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
+              Empty={emptyByScope[scopeParam]}
+              Item={({ item, onClick }) => (
+                <div className='relative'>
+                  <SearchDialogListItem
+                    className='rounded-none border-border border-b border-dashed p-3 last:border-b-0'
+                    item={item}
+                    onClick={onClick}
+                  />
+                  {item.type === 'page' ? (
+                    <ItemBadge label={getItemTag(item.url)} />
+                  ) : null}
+                </div>
+              )}
+              items={query.data === 'empty' ? null : query.data}
             />
-          )}
-          items={query.data === 'empty' ? null : query.data}
-        />
+          </ScrollArea>
+        </div>
       </Section>
     </SearchDialog>
   )

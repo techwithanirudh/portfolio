@@ -42,7 +42,7 @@ export const hardware: HardwareItem[] = [
     description: 'Off-white wireless mouse',
     image: hw('m650-off-white.png'),
     name: 'Logitech Signature M650',
-    url: 'https://www.logitech.com/products/mice/signature-m650.html',
+    url: 'https://www.logitech.com/en-us/shop/p/m650-signature-wireless-mouse',
   },
   {
     description: 'Off-white USB webcam',
@@ -140,7 +140,7 @@ export const software: SoftwareItem[] = [
     url: 'https://www.anthropic.com/claude-code',
   },
   {
-    description: 'Utility app',
+    description: 'Runs coding agents side by side',
     logo: sw('conductor.png'),
     name: 'Conductor',
     url: 'https://conductor.build',
@@ -188,6 +188,12 @@ export const software: SoftwareItem[] = [
     url: 'https://iina.io',
   },
   {
+    description: 'Mechanical keyboard sounds',
+    logo: sw('klack.png'),
+    name: 'Klack',
+    url: 'https://tryklack.com',
+  },
+  {
     description: 'Break reminders',
     logo: sw('lookaway.png'),
     name: 'LookAway',
@@ -200,7 +206,7 @@ export const software: SoftwareItem[] = [
     url: 'https://github.com/MrKai77/Loop',
   },
   {
-    description: 'Volume control per app',
+    description: 'Cleans up and optimizes my Mac',
     logo: sw('mole.png'),
     name: 'Mole',
     url: 'https://github.com/tw93/Mole',
@@ -235,12 +241,6 @@ export const software: SoftwareItem[] = [
     logo: sw('paste.png'),
     name: 'Paste',
     url: 'https://pasteapp.io',
-  },
-  {
-    description: 'Utility app',
-    logo: sw('pictogram.png'),
-    name: 'Pictogram',
-    url: 'https://pictogramapp.com',
   },
   {
     description: 'Screen measuring tool',
@@ -329,3 +329,7 @@ export const software: SoftwareItem[] = [
     url: 'https://yaak.app',
   },
 ]
+
+/** Plain text with `[label](href)` links, shared by the page and the llms routes */
+export const codingSetup =
+  'I use [Visual Studio Code](https://code.visualstudio.com) as my main editor with the [Cursor theme](https://marketplace.visualstudio.com/items?itemName=MohdZaid.vscode-cursor-theme), [Custom UI Style](https://marketplace.visualstudio.com/items?itemName=subframe7536.custom-ui-style) tweaks, and the [JetBrains Mono](https://www.jetbrains.com/lp/mono/) font with ligatures enabled. The config is in [my dotfiles](https://github.com/techwithanirudh/dotfiles/blob/main/editors/vscode/settings.json).'

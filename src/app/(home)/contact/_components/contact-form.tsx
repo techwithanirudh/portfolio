@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import { Suspense } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -17,22 +16,28 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
+import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
-import { ContactSchema } from '@/lib/validators/contact'
+import {
+  CONTACT_MESSAGE_MAX_LENGTH,
+  CONTACT_NAME_MAX_LENGTH,
+  ContactSchema,
+} from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
-const ContactFormInner = () => {
+const sendFailedMessage = 'Your message failed to send. Please try again.'
+
+// Nothing here suspends, so no Suspense boundary: React streams any boundary
+// over 500 bytes out of line and reveals it after first paint, which pushed the
+// FAQ down the page (CLS 0.32 on mobile)
+export const ContactForm = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
     zodResolver(ContactSchema),
     {
       actionProps: {
         onError: ({ error }) => {
-          toast.error(
-            typeof error.serverError === 'string'
-              ? error.serverError
-              : 'Your message failed to send. Please try again.'
-          )
+          toast.error(getActionErrorMessage(error, sendFailedMessage))
         },
         onSuccess: ({ data }) => {
           toast.success(
@@ -56,7 +61,11 @@ const ContactFormInner = () => {
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-8' onSubmit={handleSubmitWithAction}>
+      <form
+        className='flex-1 space-y-8'
+        noValidate
+        onSubmit={handleSubmitWithAction}
+      >
         <FormField
           control={form.control}
           name='name'
@@ -65,7 +74,9 @@ const ContactFormInner = () => {
               <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='name'
                   className='bg-background'
+                  maxLength={CONTACT_NAME_MAX_LENGTH}
                   placeholder='Jane Smith'
                   {...field}
                   disabled={action.status === 'executing'}
@@ -89,10 +100,12 @@ const ContactFormInner = () => {
               <FormLabel>Email address</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='email'
                   className='bg-background'
                   placeholder='jane@acme.com'
                   {...field}
                   disabled={action.status === 'executing'}
+                  type='email'
                 />
               </FormControl>
               {form.formState.errors.email ? (
@@ -114,6 +127,7 @@ const ContactFormInner = () => {
               <FormControl>
                 <Textarea
                   className='max-h-[20rem] min-h-[10rem] resize-y bg-background'
+                  maxLength={CONTACT_MESSAGE_MAX_LENGTH}
                   placeholder="Hi there, I'm interested in..."
                   {...field}
                   disabled={action.status === 'executing'}
@@ -134,7 +148,7 @@ const ContactFormInner = () => {
           disabled={action.status === 'executing'}
           type='submit'
         >
-          <span>Send Message</span>
+          <span>Send message</span>
           {action.status === 'executing' ? (
             <Icons.spinner
               className='size-4 animate-spin'
@@ -148,7 +162,7 @@ const ContactFormInner = () => {
           )}
         </Button>
         {action.status === 'hasSucceeded' && (
-          <Alert className='border-emerald-500/15 bg-emerald-500/15 px-3 py-2 text-emerald-500 has-[>svg]:gap-x-1.5'>
+          <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
               {action.result.data?.success && action.result.data?.message
@@ -158,12 +172,10 @@ const ContactFormInner = () => {
           </Alert>
         )}
         {action.result.serverError && (
-          <Alert className='border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground'>
+          <Alert variant='destructive-soft'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
-              {typeof action.result.serverError === 'string'
-                ? action.result.serverError
-                : 'Your message failed to send. Please try again.'}
+              {getActionErrorMessage(action.result, sendFailedMessage)}
             </AlertTitle>
           </Alert>
         )}
@@ -171,9 +183,3 @@ const ContactFormInner = () => {
     </Form>
   )
 }
-
-export const ContactForm = () => (
-  <Suspense>
-    <ContactFormInner />
-  </Suspense>
-)

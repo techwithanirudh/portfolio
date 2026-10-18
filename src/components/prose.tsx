@@ -1,22 +1,24 @@
-import { Slot } from '@radix-ui/react-slot'
-import type { ComponentProps } from 'react'
+import { mergeProps } from '@base-ui/react/merge-props'
+import { useRender } from '@base-ui/react/use-render'
 import { cn } from '@/lib/utils'
 
 export function Prose({
   className,
-  asChild = false,
+  render,
   ...props
-}: ComponentProps<'div'> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : 'div'
-
-  return (
-    <Comp
-      className={cn(
-        'prose prose-zinc dark:prose-invert prose-content max-w-none',
-        className
-      )}
-      data-slot='prose'
-      {...props}
-    />
-  )
+}: useRender.ComponentProps<'div'>) {
+  return useRender({
+    defaultTagName: 'div',
+    props: mergeProps<'div'>(
+      {
+        className: cn(
+          'prose prose-zinc dark:prose-invert prose-content max-w-none',
+          className
+        ),
+      },
+      props
+    ),
+    render,
+    state: { slot: 'prose' },
+  })
 }

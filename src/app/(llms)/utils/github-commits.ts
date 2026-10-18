@@ -1,4 +1,4 @@
-import { getActivityItems } from '@/app/(home)/about/_components/feed/actions'
+import { getActivityItems } from '@/app/(home)/about/_components/feed/data'
 
 export const getCommitHistoryText = async () => {
   try {
@@ -14,7 +14,7 @@ export const getCommitHistoryText = async () => {
       return ''
     }
 
-    return `## Recent GitHub Commits\n\n${commitItems
+    return `## Recent GitHub commits\n\n${commitItems
       .map(
         (item) =>
           `### ${item.repoName}\n${item.commits

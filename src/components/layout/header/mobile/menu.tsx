@@ -1,5 +1,6 @@
 'use client'
 
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
@@ -9,12 +10,10 @@ import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
 export function MenuPanel({
-  open,
   menuId,
   onAssistantOpen,
   onClose,
 }: {
-  open: boolean
   menuId: string
   onAssistantOpen: () => void
   onClose: () => void
@@ -38,17 +37,12 @@ export function MenuPanel({
   )
 
   return (
-    <div
+    <DialogPrimitive.Popup
       aria-label='Mobile navigation'
-      aria-modal='true'
-      className={cn(
-        'fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background md:hidden',
-        open ? 'animate-fd-dialog-in' : 'animate-fd-dialog-out'
-      )}
+      className='fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] origin-bottom overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 md:hidden'
       id={menuId}
-      role='dialog'
     >
-      <nav className='flex flex-col divide-y divide-dashed divide-border'>
+      <nav className='dashed-stack flex flex-col'>
         {menuRows.map((row) => (
           <div
             className='grid grid-cols-2 divide-x divide-dashed divide-border'
@@ -65,7 +59,7 @@ export function MenuPanel({
                 <Link
                   aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'flex items-center gap-2 px-4 py-3 text-sm transition-colors hover:bg-muted [&_svg]:size-3.5',
+                    'flex touch-manipulation select-none items-center gap-2 px-4 py-3 text-sm transition-colors [-webkit-touch-callout:none] hover:bg-muted active:bg-muted [&_svg]:size-3.5',
                     active
                       ? 'font-medium text-primary'
                       : 'text-muted-foreground'
@@ -82,12 +76,14 @@ export function MenuPanel({
           </div>
         ))}
       </nav>
-      <div className='flex items-center justify-between border-t border-dashed px-3 py-2'>
+      <div className='flex items-center justify-between border-t border-dashed px-1.5 py-0.5'>
+        {/* A touch narrower than square so the three-way theme switch still
+            fits beside them on a 360px phone */}
         <div className='flex items-center'>
           {socials.map((social) => (
             <a
               aria-label={social.name}
-              className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+              className='flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
               href={social.url}
               key={social.name}
               rel='noopener noreferrer'
@@ -100,15 +96,15 @@ export function MenuPanel({
         <div className='flex items-center gap-1'>
           <button
             aria-label='Open assistant'
-            className='flex size-8 items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+            className='flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
             onClick={onAssistantOpen}
             type='button'
           >
             <Icons.aiChat />
           </button>
-          <ThemeToggle />
+          <ThemeToggle mode='light-dark-system' />
         </div>
       </div>
-    </div>
+    </DialogPrimitive.Popup>
   )
 }

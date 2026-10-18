@@ -7,6 +7,7 @@ import { useLenis } from 'lenis/react'
 import { usePathname, useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { CommandMenuFooter } from '@/components/features/search/footer'
 import { SearchResults as SearchResultsList } from '@/components/features/search/results'
 import {
@@ -16,7 +17,7 @@ import {
 } from '@/components/features/search/utils/groups'
 import { Icons } from '@/components/icons/icons'
 import {
-  Command,
+  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
@@ -24,16 +25,11 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
-import { getLoginUrl, signOut, useSession } from '@/lib/auth-client'
+import { toggleSound } from '@/lib/audio/preferences'
+import { signOut, useSession } from '@/lib/auth-client'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
@@ -41,6 +37,7 @@ const NAV_SOUND_THROTTLE_MS = 60
 export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const { locale } = useI18n()
   const pathname = usePathname()
+  const { openSignIn } = useSignInModal()
   const router = useRouter()
   const lenis = useLenis()
   const { setTheme, theme } = useTheme()
@@ -77,7 +74,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               action: 'logout',
               icon: <Icons.logOut className='size-4' />,
               kind: 'account',
-              title: 'Log Out',
+              title: 'Log out',
             },
           ]
         : [
@@ -85,7 +82,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
               action: 'signin',
               icon: <Icons.logIn className='size-4' />,
               kind: 'account',
-              title: 'Sign In',
+              title: 'Sign in',
             },
           ],
     [user]
@@ -137,7 +134,11 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    event.stopPropagation()
+    // Keep typing away from page shortcuts, but let Escape through: Base UI
+    // dismisses on a bubbling document listener (Radix listened in capture)
+    if (event.key !== 'Escape') {
+      event.stopPropagation()
+    }
 
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       playNavigationSound()
@@ -161,9 +162,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     const hashIndex = url.indexOf('#')
     const hash = hashIndex === -1 ? null : url.slice(hashIndex)
     const sameRouteTarget = hash ? document.querySelector(hash) : null
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches
 
     router.push(url)
 
@@ -172,7 +170,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (sameRouteTarget) {
-      scrollToHashTarget(sameRouteTarget, prefersReducedMotion)
+      scrollToHashTarget(sameRouteTarget, prefersReducedMotion())
     }
   }
 
@@ -188,7 +186,8 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (action === 'signin') {
-      navigateToUrl(getLoginUrl(pathname))
+      onOpenChange(false)
+      openSignIn(pathname)
       return
     }
 
@@ -202,6 +201,12 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   ) => {
     if (item.kind === 'account') {
       await handleAccountAction(item.action)
+      return
+    }
+
+    if (item.kind === 'sound') {
+      close()
+      toggleSound()
       return
     }
 
@@ -245,7 +250,9 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   )
 
   return (
-    <Dialog
+    <CommandDialog
+      commandProps={{ onKeyDown: handleKeyDown, shouldFilter: false }}
+      description='Search or jump to a page'
       onOpenChange={(next) => {
         if (!next) {
           setSearch('')
@@ -253,71 +260,60 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
         onOpenChange(next)
       }}
       open={open}
+      title='Command palette'
     >
-      <DialogContent
-        className='top-0 flex max-w-full translate-y-0 flex-col rounded-none! border-none bg-popover bg-clip-padding p-2 shadow-2xl sm:top-1/3 sm:max-w-lg sm:rounded-xl! sm:pb-11 sm:ring-4 sm:ring-neutral-200/80 dark:bg-neutral-900 dark:sm:ring-neutral-800'
-        data-lenis-prevent
-        showCloseButton={false}
-      >
-        <DialogHeader className='sr-only'>
-          <DialogTitle>Command Palette</DialogTitle>
-          <DialogDescription>Search or jump to a page</DialogDescription>
-        </DialogHeader>
-        <Command
-          className='rounded-none bg-transparent **:data-[slot=command-input-wrapper]:mb-0 **:data-[slot=command-input-wrapper]:h-9! **:data-[slot=command-input]:h-9! **:data-[slot=command-input-wrapper]:rounded-md **:data-[slot=command-input-wrapper]:border **:data-[slot=command-input-wrapper]:border-input **:data-[slot=command-input-wrapper]:bg-input/50 **:data-[slot=command-input]:py-0'
-          onKeyDown={handleKeyDown}
-          shouldFilter={false}
+      <CommandInput
+        data-sound-press='off'
+        enterKeyHint='search'
+        onValueChange={setSearch}
+        placeholder='Type a command or search...'
+        value={search}
+      />
+
+      <div className='rounded-xl bg-background ring-1 ring-border'>
+        <CommandList
+          className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-[min(20rem,50dvh)] [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-[min(20rem,60dvh)]'
+          data-lenis-prevent
         >
-          <CommandInput
-            onValueChange={setSearch}
-            placeholder='Type a command or search...'
-            value={search}
-          />
+          {groups.map(({ group, items }, i) => (
+            <Fragment key={group}>
+              {i > 0 && <CommandSeparator />}
+              <CommandGroup heading={group}>
+                {items.map(renderCommandItem)}
+              </CommandGroup>
+            </Fragment>
+          ))}
 
-          <CommandList
-            className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-80 scroll-pt-2 scroll-pb-1.5 [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-80'
-            data-lenis-prevent
-          >
-            {groups.map(({ group, items }, i) => (
-              <Fragment key={group}>
-                {i > 0 && <CommandSeparator />}
-                <CommandGroup heading={group}>
-                  {items.map(renderCommandItem)}
-                </CommandGroup>
-              </Fragment>
-            ))}
+          {!isEmpty && query.isLoading && (
+            <div className='flex items-center justify-center py-6'>
+              <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
+            </div>
+          )}
 
-            {!isEmpty && query.isLoading && (
-              <div className='flex items-center justify-center py-6'>
-                <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
-              </div>
-            )}
+          {hasNoResults && (
+            <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
+          )}
 
-            {hasNoResults && (
-              <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
-            )}
+          {isEmpty ? (
+            <SearchResultsList groups={tagGroups} onSelect={go} />
+          ) : null}
 
-            {isEmpty ? (
-              <SearchResultsList groups={tagGroups} onSelect={go} />
-            ) : null}
+          {afterGroups.map(({ group, items }) => (
+            <Fragment key={group}>
+              <CommandSeparator />
+              <CommandGroup heading={group}>
+                {items.map(renderCommandItem)}
+              </CommandGroup>
+            </Fragment>
+          ))}
 
-            {afterGroups.map(({ group, items }) => (
-              <Fragment key={group}>
-                <CommandSeparator />
-                <CommandGroup heading={group}>
-                  {items.map(renderCommandItem)}
-                </CommandGroup>
-              </Fragment>
-            ))}
+          {isEmpty ? null : (
+            <SearchResultsList groups={tagGroups} onSelect={go} />
+          )}
+        </CommandList>
+      </div>
 
-            {isEmpty ? null : (
-              <SearchResultsList groups={tagGroups} onSelect={go} />
-            )}
-          </CommandList>
-
-          <CommandMenuFooter />
-        </Command>
-      </DialogContent>
-    </Dialog>
+      <CommandMenuFooter />
+    </CommandDialog>
   )
 }

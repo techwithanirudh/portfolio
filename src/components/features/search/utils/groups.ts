@@ -1,7 +1,7 @@
 import { defaultFilter } from 'cmdk'
 import type { SortedResult } from 'fumadocs-core/search'
-import type { PageEntry } from '@/app/actions/pages'
 import { commands } from '@/constants/search'
+import type { PageEntry } from '@/lib/source'
 import type { CommandItem } from '@/types/search'
 import type { SearchPageGroup, SearchTagGroup } from '@/types/search/results'
 
@@ -9,7 +9,7 @@ function tagFromUrl(url: string): string {
   if (url === '/blog' || url.startsWith('/blog/')) {
     return 'blog'
   }
-  if (url === '/work' || url.startsWith('/work/')) {
+  if (url === '/projects' || url.startsWith('/projects/')) {
     return 'projects'
   }
   return 'other'

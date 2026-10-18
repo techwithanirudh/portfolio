@@ -1,17 +1,27 @@
 'use client'
 
-import { Presence } from '@radix-ui/react-presence'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import { usePathname } from 'next/navigation'
 import { useTheme } from 'next-themes'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAssistantContext } from '@/components/features/assistant'
 import { MenuPanel } from '@/components/layout/header/mobile/menu'
 import { FloatingPill } from '@/components/layout/header/mobile/pill'
-import { useOiiaMode } from '@/components/oiia'
+import { MEDIA } from '@/lib/media'
 
+const MENU_ID = 'mobile-navigation-menu'
+const FOCUSABLE = 'a[href], button:not([disabled])'
 const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
-const DESKTOP_QUERY = '(min-width: 768px)'
+
+const getToggle = () =>
+  document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`)
+const getFocusable = () => [
+  ...(document
+    .getElementById(MENU_ID)
+    ?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []),
+  ...[getToggle()].filter((el): el is HTMLElement => el !== null),
+]
 
 // Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
 // does not re-read their color when it changes in place, but it re-samples
@@ -32,6 +42,8 @@ function useRemountAfterThemeApplied() {
   return generation
 }
 
+// No dimming overlay (Safari would tint its bars from it), so outside taps are
+// caught here instead
 function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
   useEffect(() => {
     if (!open) {
@@ -51,7 +63,7 @@ function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
       closeMenu()
     }
 
-    const desktop = window.matchMedia(DESKTOP_QUERY)
+    const desktop = window.matchMedia(MEDIA.desktopNav)
     const closeOnDesktop = (event: MediaQueryListEvent) => {
       if (event.matches) {
         closeMenu()
@@ -68,86 +80,86 @@ function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
 }
 
 export function MobileNav() {
-  const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const previousPathname = useRef(pathname)
+  // The path the menu was opened on, or null while it is closed
+  const [openPath, setOpenPath] = useState<string | null>(null)
   const { setOpenSearch } = useSearchContext()
   const { open: assistantOpen, setOpen: setOpenAssistant } =
     useAssistantContext()
-  const { mode } = useOiiaMode()
 
-  const closeMenu = useCallback(() => setOpen(false), [])
+  // Navigating or opening the assistant closes the menu. Adjusting state
+  // while rendering saves the extra commit a syncing effect would cost
+  if (openPath !== null && (openPath !== pathname || assistantOpen)) {
+    setOpenPath(null)
+  }
+  const open = openPath !== null
+
+  const closeMenu = useCallback(() => setOpenPath(null), [])
 
   const tintGeneration = useRemountAfterThemeApplied()
   useCloseMenuOnOutsideClick(open, closeMenu)
-
-  useEffect(() => {
-    if (mode === 'oiia' || assistantOpen) {
-      closeMenu()
-    }
-  }, [assistantOpen, closeMenu, mode])
-
-  useEffect(() => {
-    if (previousPathname.current === pathname) {
-      return
-    }
-
-    previousPathname.current = pathname
-    setOpen(false)
-  }, [pathname])
 
   useEffect(() => {
     if (!open) {
       return
     }
 
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        closeMenu()
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab') {
+        return
       }
+      const focusable = getFocusable()
+      const index = focusable.indexOf(document.activeElement as HTMLElement)
+      const next = event.shiftKey ? index - 1 : index + 1
+      event.preventDefault()
+      focusable.at(next % focusable.length)?.focus()
     }
 
-    document.addEventListener('keydown', closeOnEscape)
-    return () => document.removeEventListener('keydown', closeOnEscape)
-  }, [closeMenu, open])
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [open])
 
   return (
     <>
       <div
         aria-hidden
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 md:hidden'
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-[30] md:hidden'
         key={`fade-${tintGeneration}`}
       >
-        <div className='h-16 bg-gradient-to-t from-background to-transparent' />
+        <div className='mask-linear-[to_top,var(--background)_25%,transparent] h-24 bg-linear-to-b from-transparent to-background backdrop-blur-[1px]' />
         <div className='bg-background pb-[env(safe-area-inset-bottom,0)]' />
       </div>
 
-      {mode !== 'oiia' && (
-        <>
-          <Presence present={open}>
-            <MenuPanel
-              menuId='mobile-navigation-menu'
-              onAssistantOpen={() => {
-                closeMenu()
-                setOpenAssistant(true)
-              }}
-              onClose={closeMenu}
-              open={open}
-            />
-          </Presence>
-
-          <FloatingPill
-            key={`pill-${tintGeneration}`}
-            menuId='mobile-navigation-menu'
-            onMenuToggle={() => setOpen((value) => !value)}
-            onSearchOpen={() => {
+      <DialogPrimitive.Root
+        disablePointerDismissal
+        modal={false}
+        onOpenChange={(next) => setOpenPath(next ? pathname : null)}
+        open={open}
+      >
+        <DialogPrimitive.Portal>
+          <MenuPanel
+            menuId={MENU_ID}
+            onAssistantOpen={() => {
               closeMenu()
-              setOpenSearch(true)
+              setOpenAssistant(true)
             }}
-            open={open}
+            onClose={closeMenu}
           />
-        </>
-      )}
+        </DialogPrimitive.Portal>
+      </DialogPrimitive.Root>
+
+      <FloatingPill
+        key={`pill-${tintGeneration}`}
+        menuId={MENU_ID}
+        onMenuToggle={() =>
+          setOpenPath((current) => (current === null ? pathname : null))
+        }
+        onSearchOpen={() => {
+          closeMenu()
+          setOpenSearch(true)
+        }}
+        open={open}
+      />
     </>
   )
 }

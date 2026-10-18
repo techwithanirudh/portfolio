@@ -1,38 +1,24 @@
 import {
   AiChat02Icon,
-  AiChemistry01Icon,
   Alert02Icon,
-  ArtificialIntelligence04Icon,
-  AtIcon,
-  BotIcon,
   BrainIcon,
   Briefcase01Icon,
   Briefcase02Icon,
-  BubbleChatIcon,
   Calendar03Icon,
-  CallIcon,
   Cancel01Icon,
   CheckmarkBadge02Icon,
   CheckmarkCircle01Icon,
-  ChipIcon,
   CodeIcon,
   Copy01Icon,
-  CopyCheckIcon,
-  CreditCardIcon,
   Delete02Icon,
-  DollarCircleIcon,
+  DiscoverCircleIcon,
   Download01Icon,
   EraserIcon,
-  StarIcon as FeaturedIcon,
   File01Icon,
   File02Icon,
   Globe02Icon,
-  HelpCircleIcon,
   Home01Icon,
-  Image01Icon,
   InformationCircleIcon,
-  LaptopIcon,
-  Layers01Icon,
   Link01Icon,
   Loading03Icon,
   Login03Icon,
@@ -44,10 +30,8 @@ import {
   MoreHorizontalCircle01Icon,
   MoreVerticalIcon,
   MultiplicationSignCircleIcon,
-  NewsIcon,
   Notebook01Icon,
   PencilEdit01Icon,
-  Pizza01Icon,
   PlusSignIcon,
   QuoteUpIcon,
   Redo03Icon,
@@ -55,30 +39,29 @@ import {
   RssIcon,
   Search01Icon,
   SentIcon,
-  Settings01Icon,
   Share08Icon,
   SmartPhone01Icon,
   SourceCodeSquareIcon,
   SquareIcon,
+  StarIcon,
   Sun03Icon,
   Tablet01Icon,
   Tag01Icon,
-  TagsIcon,
   Tick02Icon,
   Tv01Icon,
   Tv02Icon,
   UnavailableIcon,
   Undo03Icon,
-  UserBlock01Icon,
   UserIcon,
   Wrench01Icon,
 } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
+import { HugeiconsIcon, type IconSvgElement } from '@hugeicons/react'
 import {
   CommentIcon,
   FeedPublicIcon,
   GitBranchIcon,
   GitCommitIcon,
+  StarIcon as GitHubStarIcon,
   GitPullRequestIcon,
   IssueClosedIcon,
   IssueOpenedIcon,
@@ -88,38 +71,30 @@ import {
   MarkGithubIcon,
   RepoForkedIcon,
   RepoIcon,
-  StarIcon,
   TagIcon,
 } from '@primer/octicons-react'
 import {
   ArrowDown,
-  ArrowDownLeft,
-  ArrowDownRight,
   ArrowLeft,
   ArrowRight,
   ArrowUp,
-  ArrowUpLeft,
   ArrowUpRight,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
   CornerDownLeft,
   type LucideIcon,
-  PawPrintIcon,
+  PawPrint,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
-import type { ComponentProps } from 'react'
 import {
   ClaudeIcon,
-  CursorIcon,
   GitHubIcon,
   GoogleIcon,
-  GrokIcon,
   LinkedInIcon,
   MarkdownIcon,
   OpenAIIcon,
-  SciraIcon,
-  V0Icon,
   XIcon,
   YouTubeIcon,
 } from './brands'
@@ -128,31 +103,37 @@ import { getSvgSizeProps } from './utils'
 
 export type { Icon } from './utils'
 
-type HugeIconDefinition = ComponentProps<typeof HugeiconsIcon>['icon']
+const DEFAULT_STROKE_WIDTH = 2
 
-const hugeIcon = (icon: HugeIconDefinition): SvgIcon => {
-  const Icon = ({ height, size, strokeWidth, width, ...props }: IconProps) => {
-    const parsedStrokeWidth =
-      typeof strokeWidth === 'string'
-        ? Number.parseFloat(strokeWidth)
-        : strokeWidth
-    const resolvedStrokeWidth =
-      typeof parsedStrokeWidth === 'number' &&
-      Number.isFinite(parsedStrokeWidth)
-        ? parsedStrokeWidth
-        : 2
+const toStrokeWidth = (value: IconProps['strokeWidth']) => {
+  const parsed = typeof value === 'string' ? Number.parseFloat(value) : value
 
-    return (
-      <HugeiconsIcon
-        {...props}
-        icon={icon}
-        strokeWidth={resolvedStrokeWidth}
-        {...getSvgSizeProps({ height, size, width })}
-      />
-    )
-  }
+  return typeof parsed === 'number' && Number.isFinite(parsed)
+    ? parsed
+    : DEFAULT_STROKE_WIDTH
+}
 
-  return Icon
+// Decorative unless the caller labels it
+const isLabelled = (props: IconProps) =>
+  Object.keys(props).some(
+    (key) =>
+      (key.startsWith('aria-') && key !== 'aria-hidden') ||
+      key === 'role' ||
+      key === 'title'
+  )
+
+const hugeIcon = (icon: IconSvgElement): SvgIcon => {
+  const Huge = ({ height, size, strokeWidth, width, ...props }: IconProps) => (
+    <HugeiconsIcon
+      aria-hidden={isLabelled(props) ? undefined : true}
+      {...props}
+      icon={icon}
+      strokeWidth={toStrokeWidth(strokeWidth)}
+      {...getSvgSizeProps({ height, size, width })}
+    />
+  )
+
+  return Huge
 }
 
 const lucideIcon = (Icon: LucideIcon): SvgIcon => {
@@ -163,61 +144,50 @@ const lucideIcon = (Icon: LucideIcon): SvgIcon => {
   return Lucide
 }
 
+// The mix the site had before everything got routed through one set:
+// Hugeicons by default, Lucide for arrows, chevrons, paw and volume, and
+// Primer Octicons for the GitHub activity feed
+
 export const Icons = {
   add: hugeIcon(PlusSignIcon),
-  ai: hugeIcon(ArtificialIntelligence04Icon),
   aiChat: hugeIcon(AiChat02Icon),
   arrowDown: lucideIcon(ArrowDown),
-  arrowDownLeft: lucideIcon(ArrowDownLeft),
-  arrowDownRight: lucideIcon(ArrowDownRight),
   arrowLeft: lucideIcon(ArrowLeft),
   arrowRight: lucideIcon(ArrowRight),
   arrowUp: lucideIcon(ArrowUp),
-  arrowUpLeft: lucideIcon(ArrowUpLeft),
   arrowUpRight: lucideIcon(ArrowUpRight),
-  atSign: hugeIcon(AtIcon),
   ban: hugeIcon(UnavailableIcon),
-  billing: hugeIcon(CreditCardIcon),
   blog: hugeIcon(Notebook01Icon),
-  bot: hugeIcon(BotIcon),
   brain: hugeIcon(BrainIcon),
   calendar: hugeIcon(Calendar03Icon),
   check: hugeIcon(Tick02Icon),
   chevronDown: lucideIcon(ChevronDown),
   chevronLeft: lucideIcon(ChevronLeft),
   chevronRight: lucideIcon(ChevronRight),
-  chevronUp: lucideIcon(ChevronUp),
   claude: ClaudeIcon,
   close: hugeIcon(Cancel01Icon),
   code: hugeIcon(CodeIcon),
   codeXml: hugeIcon(SourceCodeSquareIcon),
   comment: CommentIcon,
-  copied: hugeIcon(CopyCheckIcon),
+  compass: hugeIcon(DiscoverCircleIcon),
   copy: hugeIcon(Copy01Icon),
   cornerDownLeft: lucideIcon(CornerDownLeft),
-  cpu: hugeIcon(ChipIcon),
-  cursor: CursorIcon,
   desktop: hugeIcon(Tv02Icon),
   download: hugeIcon(Download01Icon),
   ellipsis: hugeIcon(MoreVerticalIcon),
   eraser: hugeIcon(EraserIcon),
   error: hugeIcon(MultiplicationSignCircleIcon),
   experience: hugeIcon(Briefcase01Icon),
-  featured: hugeIcon(FeaturedIcon),
+  featured: hugeIcon(StarIcon),
   feedPublic: FeedPublicIcon,
-  flask: hugeIcon(AiChemistry01Icon),
   gitBranch: GitBranchIcon,
   gitCommit: GitCommitIcon,
-  // Brand / platform icons
   github: GitHubIcon,
-  // Primer Octicons (GitHub activity feed)
   githubMark: MarkGithubIcon,
   gitPullRequest: GitPullRequestIcon,
   gitTag: TagIcon,
   globe: hugeIcon(Globe02Icon),
   google: GoogleIcon,
-  grok: GrokIcon,
-  help: hugeIcon(HelpCircleIcon),
   home: hugeIcon(Home01Icon),
   info: hugeIcon(InformationCircleIcon),
   issueClosed: IssueClosedIcon,
@@ -225,58 +195,45 @@ export const Icons = {
   issueReopened: IssueReopenedIcon,
   issueTrackedBy: IssueTrackedByIcon,
   issueTracks: IssueTracksIcon,
-  laptop: hugeIcon(LaptopIcon),
-  layers: hugeIcon(Layers01Icon),
   link: hugeIcon(Link01Icon),
   linkedin: LinkedInIcon,
   logIn: hugeIcon(Login03Icon),
   logOut: hugeIcon(Logout03Icon),
-  logo: hugeIcon(CodeIcon),
   mail: hugeIcon(Mail01Icon),
   markdown: MarkdownIcon,
-  media: hugeIcon(Image01Icon),
   menu: hugeIcon(Menu01Icon),
-  messageCircle: hugeIcon(BubbleChatIcon),
   messageSquare: hugeIcon(Message01Icon),
   mobile: hugeIcon(SmartPhone01Icon),
   moon: hugeIcon(Moon02Icon),
   moreHorizontal: hugeIcon(MoreHorizontalCircle01Icon),
   openai: OpenAIIcon,
   page: hugeIcon(File01Icon),
-  pawPrint: lucideIcon(PawPrintIcon),
+  pawPrint: lucideIcon(PawPrint),
   pencil: hugeIcon(PencilEdit01Icon),
-  phone: hugeIcon(CallIcon),
-  pizza: hugeIcon(Pizza01Icon),
   post: hugeIcon(File02Icon),
-  posts: hugeIcon(NewsIcon),
-  pricing: hugeIcon(DollarCircleIcon),
   quote: hugeIcon(QuoteUpIcon),
   redo: hugeIcon(Redo03Icon),
   refresh: hugeIcon(RefreshIcon),
   repo: RepoIcon,
   repoForked: RepoForkedIcon,
   rss: hugeIcon(RssIcon),
-  scira: SciraIcon,
   search: hugeIcon(Search01Icon),
   send: hugeIcon(SentIcon),
-  settings: hugeIcon(Settings01Icon),
   share: hugeIcon(Share08Icon),
   spinner: hugeIcon(Loading03Icon),
   square: hugeIcon(SquareIcon),
-  star: StarIcon,
+  star: GitHubStarIcon,
   success: hugeIcon(CheckmarkCircle01Icon),
   sun: hugeIcon(Sun03Icon),
   tablet: hugeIcon(Tablet01Icon),
   tag: hugeIcon(Tag01Icon),
-  tags: hugeIcon(TagsIcon),
   trash: hugeIcon(Delete02Icon),
   tv: hugeIcon(Tv01Icon),
   undo: hugeIcon(Undo03Icon),
   user: hugeIcon(UserIcon),
-  userBlocked: hugeIcon(UserBlock01Icon),
-  v0: V0Icon,
-  verified: hugeIcon(CheckmarkCircle01Icon),
   verifiedAdmin: hugeIcon(CheckmarkBadge02Icon),
+  volumeOff: lucideIcon(VolumeX),
+  volumeOn: lucideIcon(Volume2),
   warning: hugeIcon(Alert02Icon),
   work: hugeIcon(Briefcase02Icon),
   wrench: hugeIcon(Wrench01Icon),

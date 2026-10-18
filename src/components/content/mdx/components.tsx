@@ -8,7 +8,7 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { MDXComponents } from 'mdx/types'
 import { VideoPlayer } from '@/components/ui/video-player'
-import { FramedImage, IframeEmbed } from './embed'
+import { FramedImage, type FramedImageProps, IframeEmbed } from './embed'
 import { GitHubRepo, GithubRepo } from './github-repo'
 import { Heading } from './heading'
 import { LinkPreviewAnchor } from './link-preview'
@@ -36,7 +36,9 @@ export const mdxComponents: MDXComponents = {
   h6: (props) => <Heading as='h6' {...props} />,
   IframeEmbed,
   ImageZoom,
-  img: FramedImage,
+  // MDX types `img` as a plain <img>, but fumadocs' remark-image passes
+  // next/image props (a static import or a sized URL)
+  img: (props) => <FramedImage {...(props as FramedImageProps)} />,
   Mermaid,
   Step,
   Steps,

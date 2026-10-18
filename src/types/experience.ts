@@ -1,5 +1,3 @@
-import type React from 'react'
-
 export interface ExperiencePositionItemType {
   description?: string
   employmentPeriod: {
@@ -7,9 +5,7 @@ export interface ExperiencePositionItemType {
     end?: string
   }
   employmentType?: string
-  icon?: React.ReactElement
   id: string
-  isExpanded?: boolean
   skills?: string[]
   title: string
 }
@@ -21,17 +17,4 @@ export interface ExperienceItemType {
   id: string
   isCurrentEmployer?: boolean
   positions: ExperiencePositionItemType[]
-}
-
-export interface WorkExperienceProps {
-  className?: string
-  experiences: ExperienceItemType[]
-}
-
-export interface ExperienceItemProps {
-  experience: ExperienceItemType
-}
-
-export interface ExperiencePositionItemProps {
-  position: ExperiencePositionItemType
 }

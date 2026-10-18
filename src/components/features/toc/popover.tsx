@@ -60,14 +60,15 @@ function TOCPopoverContent({ className }: { className?: string }) {
     >
       <header
         className={cn(
-          'border-b backdrop-blur-sm transition-colors',
-          open && 'bg-fd-background/80 shadow-lg'
+          // Always frosted, since the post scrolls right under it while collapsed
+          'border-b bg-background/90 backdrop-blur-md transition-shadow',
+          open && 'shadow-lg'
         )}
         ref={ref}
       >
-        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-fd-muted-foreground text-sm focus-visible:outline-none md:px-6 [&_svg]:size-4'>
+        <CollapsibleTrigger className='flex h-10 w-full items-center gap-2.5 px-4 py-2.5 text-start text-muted-foreground text-sm focus-visible:bg-muted md:px-6 [&_svg]:size-4'>
           <ProgressCircle
-            className={cn('shrink-0', open && 'text-fd-primary')}
+            className={cn('shrink-0', open && 'text-primary')}
             value={
               (items.findLastIndex((item) => item.active) + 1) /
               Math.max(1, items.length)
@@ -77,7 +78,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
             <span
               className={cn(
                 'truncate transition-[opacity,translate,color]',
-                open && 'text-fd-foreground',
+                open && 'text-foreground',
                 showSelectedItem &&
                   'pointer-events-none -translate-y-full opacity-0'
               )}
@@ -156,7 +157,7 @@ function ProgressCircle({
         strokeWidth={strokeWidth}
       />
       <circle
-        className='transition-all'
+        className='transition-[stroke-dashoffset]'
         cx={size / 2}
         cy={size / 2}
         fill='none'

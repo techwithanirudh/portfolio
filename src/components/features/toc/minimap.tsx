@@ -37,23 +37,27 @@ function TOCMinimapContent({ className }: { className?: string }) {
       data-toc-minimap=''
     >
       <div className='sticky top-14'>
-        <HoverCard closeDelay={100} openDelay={100}>
-          <HoverCardTrigger asChild>
-            <button
-              aria-label='Open table of contents'
-              className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-7 pb-3 pl-6 outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
-              type='button'
-            >
-              {items.map((item) => (
-                <div
-                  aria-hidden
-                  className='pointer-events-none h-0.5 w-6 shrink-0 rounded-xs bg-muted-foreground/50 transition-colors data-[depth=3]:ml-2 data-[depth=4]:ml-4 data-[depth=3]:w-4 data-[depth=4]:w-2 data-[active=true]:bg-fd-primary'
-                  data-active={item.active}
-                  data-depth={item.original.depth}
-                  key={item.id}
-                />
-              ))}
-            </button>
+        <HoverCard>
+          <HoverCardTrigger
+            closeDelay={100}
+            delay={100}
+            render={
+              <button
+                aria-label='Open table of contents'
+                className='flex max-h-[calc(100dvh-6rem)] flex-col gap-3 overflow-hidden pt-7 pb-3 pl-6 outline-none focus-visible:ring-2 focus-visible:ring-ring/50'
+                type='button'
+              />
+            }
+          >
+            {items.map((item) => (
+              <div
+                aria-hidden
+                className='pointer-events-none h-0.5 w-6 shrink-0 rounded-xs bg-muted-foreground/50 transition-colors data-[depth=3]:ml-2 data-[depth=4]:ml-4 data-[depth=3]:w-4 data-[depth=4]:w-2 data-[active=true]:bg-primary'
+                data-active={item.active}
+                data-depth={item.original.depth}
+                key={item.id}
+              />
+            ))}
           </HoverCardTrigger>
 
           <HoverCardContent
@@ -67,7 +71,7 @@ function TOCMinimapContent({ className }: { className?: string }) {
               {items.map((item) => (
                 <li className='flex py-1' key={item.id}>
                   <a
-                    className='line-clamp-2 w-full text-muted-foreground transition-colors hover:text-foreground data-active:text-fd-primary'
+                    className='line-clamp-2 w-full text-muted-foreground transition-colors hover:text-foreground data-active:text-primary'
                     data-active={item.active}
                     data-depth={item.original.depth}
                     href={item.original.url}

@@ -8,10 +8,13 @@ const buttonGroupVariants = cva(
   {
     variants: {
       orientation: {
+        // Matches [data-slot] children, not :first-child/:last-child, because an
+        // open Base UI menu drops focus-guard spans next to its trigger, which
+        // squared off the trigger's outer corners while the menu was open
         horizontal:
-          '[&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none',
+          '[&>[data-slot]~[data-slot]]:rounded-l-none [&>[data-slot]~[data-slot]]:border-l-0 [&>[data-slot]:has(~[data-slot])]:rounded-r-none',
         vertical:
-          'flex-col [&>*:not(:first-child)]:rounded-t-none [&>*:not(:first-child)]:border-t-0 [&>*:not(:last-child)]:rounded-b-none',
+          'flex-col [&>[data-slot]~[data-slot]]:rounded-t-none [&>[data-slot]~[data-slot]]:border-t-0 [&>[data-slot]:has(~[data-slot])]:rounded-b-none',
       },
     },
     defaultVariants: {

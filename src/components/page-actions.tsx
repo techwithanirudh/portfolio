@@ -1,7 +1,7 @@
 'use client'
 
 import { useSound } from '@web-kits/audio/react'
-import { useMemo, useRef, useState } from 'react'
+import { type RefObject, useMemo, useRef, useState } from 'react'
 import { CopyStateIcon } from '@/components/copy-button'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -9,11 +9,12 @@ import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuIconItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
 import { copy as copySound } from '@/lib/audio/minimal'
+import { cn } from '@/lib/utils'
 
 const cache = new Map<string, string>()
 
@@ -78,28 +79,27 @@ export function LLMCopyButton({
     <Button
       aria-busy={isCopying}
       className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
+      data-sound-press='off'
       disabled={isCopying}
       onClick={onClick}
       size='sm'
       type='button'
       variant='secondary'
     >
-      <CopyStateIcon
-        doneIcon={<Icons.check className='text-muted-foreground' />}
-        errorIcon={<Icons.x className='text-destructive' />}
-        idleIcon={<Icons.copy className='text-muted-foreground' />}
-        state={state}
-      />
-      <span>Copy Page</span>
+      <CopyStateIcon className='text-muted-foreground' state={state} />
+      <span>Copy page</span>
     </Button>
   )
 }
 
 export function ViewOptions({
+  anchor,
   markdownUrl,
   githubUrl,
   disabled = false,
 }: {
+  /** Element the menu lines up with and takes its width from */
+  anchor?: RefObject<HTMLElement | null>
   markdownUrl: string
   githubUrl: string
   disabled?: boolean
@@ -121,11 +121,6 @@ export function ViewOptions({
         title: 'Open in GitHub',
       },
       {
-        href: `https://scira.ai/?${new URLSearchParams({ q })}`,
-        icon: Icons.scira,
-        title: 'Open in Scira AI',
-      },
-      {
         href: `https://chatgpt.com/?${new URLSearchParams({ hints: 'search', q })}`,
         icon: Icons.openai,
         title: 'Open in ChatGPT',
@@ -135,39 +130,50 @@ export function ViewOptions({
         icon: Icons.claude,
         title: 'Open in Claude',
       },
-      {
-        href: `https://t3.chat/new?${new URLSearchParams({ q })}`,
-        icon: Icons.messageCircle,
-        title: 'Open in T3 Chat',
-      },
     ]
   }, [githubUrl, markdownUrl])
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label='View Options'
-          className='size-8 border-none shadow-none active:scale-none'
-          disabled={disabled}
-          size='icon-sm'
-          variant='secondary'
-        >
-          <Icons.chevronDown className='mt-0.5 size-4' />
-        </Button>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            aria-label='View options'
+            className='size-8 border-none shadow-none active:scale-none'
+            disabled={disabled}
+            size='icon-sm'
+            variant='secondary'
+          />
+        }
+      >
+        <Icons.chevronDown className='mt-0.5 size-4' />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
-        className='w-full max-w-full'
-        onCloseAutoFocus={(e) => e.preventDefault()}
+        anchor={anchor}
+        className={cn(
+          'max-w-none gap-0.5 rounded-xl p-1.5',
+          anchor && 'w-(--anchor-width)'
+        )}
+        finalFocus={false}
       >
-        {items.map(({ title, href, icon: Icon }) => (
-          <DropdownMenuItem asChild key={href}>
-            <a href={href} rel='noopener' target='_blank'>
-              <Icon />
-              {title}
-            </a>
-          </DropdownMenuItem>
+        {items.map(({ title, href, icon }) => (
+          <DropdownMenuIconItem
+            className='group/item'
+            icon={icon}
+            key={href}
+            render={
+              <a
+                aria-label={title}
+                href={href}
+                rel='noopener'
+                target='_blank'
+              />
+            }
+          >
+            <span className='truncate'>{title}</span>
+            <Icons.arrowUpRight className='group-focus/item:translate-0 motion-reduce:translate-0 ml-auto size-3.5 -translate-x-0.5 translate-y-0.5 text-muted-foreground opacity-0 transition-[opacity,transform] duration-200 ease-out group-focus/item:opacity-100' />
+          </DropdownMenuIconItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
@@ -182,12 +188,14 @@ export function LLMCopyButtonWithViewOptions({
   githubUrl: string
 }) {
   const { state, isCopying, handleCopy } = useMarkdownCopy(markdownUrl)
+  const groupRef = useRef<HTMLDivElement>(null)
 
   return (
-    <ButtonGroup className='w-full min-w-0'>
+    <ButtonGroup className='w-full min-w-0' ref={groupRef}>
       <LLMCopyButton isCopying={isCopying} onClick={handleCopy} state={state} />
       <ButtonGroupSeparator className='border-secondary border-y-4 data-vertical:my-0 dark:bg-white/20' />
       <ViewOptions
+        anchor={groupRef}
         disabled={isCopying}
         githubUrl={githubUrl}
         markdownUrl={markdownUrl}

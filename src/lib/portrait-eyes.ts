@@ -1,0 +1,9 @@
+export const PORTRAIT_EYE_FILL = '#292929'
+
+export const PORTRAIT_EYE_PATHS = [
+  'm291 487c5-14 16-23 27-22 16 0 27 15 23 32-4 19-16 57-23 79-4 14-16 22-29 19-14-3-23-15-19-31 5-22 15-56 21-77z',
+  'm570 564c4-15 16-25 28-24 15-1 25 11 23 28-1 10-6 24-10 38l-12 39c-4 14-16 24-28 22-15-2-24-13-22-28 3-13 7-27 11-40z',
+] as const
+
+// The head-and-shoulders crop of the 947x1160 portrait the round face chips use
+export const PORTRAIT_CHIP_VIEW_BOX = '110 60 730 730'

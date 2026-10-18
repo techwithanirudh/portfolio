@@ -1,49 +1,18 @@
 import type { Metadata, ResolvingMetadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
-import Posts from '@/app/(home)/_components/posts'
+import { notFound } from 'next/navigation'
 import { CollectionPageJsonLd } from '@/components/json-ld'
-import { Section } from '@/components/layout/sections'
-import { SectionBody } from '@/components/layout/sections/body'
 import { Wrapper } from '@/components/layout/wrapper'
-import { NumberedPagination } from '@/components/numbered-pagination'
 import { postsPerPage } from '@/constants/config'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
-import { parsePageParam } from '@/lib/pagination'
-import { getPostsByTag, getSortedByDatePosts, getTags } from '@/lib/source'
+import { getPageHref, parsePageParam } from '@/lib/pagination'
+import { getSortedByDatePosts } from '@/lib/source'
 import { Hero } from './_components/hero'
 import { NewsletterSection } from './_components/newsletter-section'
-import { TagsAccordion, TagsSidebar } from './_components/tags-sidebar'
-
-export const dynamicParams = false
+import { PostIndex } from './_components/post-index'
 
 const totalPosts = getSortedByDatePosts().length
 const pageCount = Math.ceil(totalPosts / postsPerPage)
-
-const getTagsWithCount = () => {
-  const tagNames = getTags()
-  return tagNames.map((name) => ({
-    count: getPostsByTag(name).length,
-    name,
-  }))
-}
-
-const Pagination = ({ pageIndex }: { pageIndex: number }) => {
-  const handlePageChange = async (page: number) => {
-    'use server'
-    redirect(`/blog?page=${page}`)
-  }
-
-  return (
-    <Section className='bg-dashed'>
-      <NumberedPagination
-        currentPage={pageIndex + 1}
-        onPageChange={handlePageChange}
-        paginationItemsToDisplay={5}
-        totalPages={pageCount}
-      />
-    </Section>
-  )
-}
 
 export default async function Page(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -55,38 +24,25 @@ export default async function Page(props: {
   }
 
   const startIndex = pageIndex * postsPerPage
-  const endIndex = startIndex + postsPerPage
-  const posts = getSortedByDatePosts().slice(startIndex, endIndex)
-  const tags = getTagsWithCount()
+  const posts = getSortedByDatePosts().slice(
+    startIndex,
+    startIndex + postsPerPage
+  )
 
   return (
     <Wrapper>
-      <Hero
-        endIndex={endIndex}
-        startIndex={startIndex}
-        totalPosts={totalPosts}
+      <Hero pageCount={pageCount} pageIndex={pageIndex} />
+      <PostIndex
+        currentPage={pageIndex + 1}
+        path={pages.blog.path}
+        posts={posts}
+        totalPages={pageCount}
       />
-      <SectionBody>
-        <div className='grid h-full lg:grid-cols-[1fr_280px]'>
-          <div className='min-w-0 divide-y divide-dashed divide-border lg:border-border lg:border-r lg:border-dashed'>
-            <TagsAccordion tags={tags} />
-            <Posts
-              className='h-full border-none'
-              posts={posts}
-              sectionClassName='flex flex-1'
-            />
-          </div>
-          <aside className='hidden lg:block'>
-            <TagsSidebar tags={tags} />
-          </aside>
-        </div>
-      </SectionBody>
-      {pageCount > 1 && <Pagination pageIndex={pageIndex} />}
       <NewsletterSection />
       <CollectionPageJsonLd
-        description='Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
-        path='/blog'
-        title='Blog'
+        description={pages.blog.description}
+        path={pages.blog.path}
+        title={pages.blog.title}
       />
     </Wrapper>
   )
@@ -109,17 +65,17 @@ export async function generateMetadata(
   }
 
   const isFirstPage = pageIndex === 1 || !searchParams.page
-  const pageTitle = isFirstPage ? 'Posts' : `Posts - Page ${pageIndex}`
-  const canonicalUrl = isFirstPage ? '/blog' : `/blog?page=${pageIndex}`
-  const description = isFirstPage
-    ? 'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.'
+  const pageTitle = isFirstPage ? 'Posts' : `Posts, page ${pageIndex}`
+  const canonicalUrl = getPageHref(pages.blog.path, isFirstPage ? 1 : pageIndex)
+  const pageDescription = isFirstPage
+    ? pages.blog.description
     : `Browse page ${pageIndex} of blog posts.`
 
   return createMetadata({
     alternates: {
       canonical: canonicalUrl,
     },
-    description,
+    description: pageDescription,
     openGraph: {
       url: canonicalUrl,
     },

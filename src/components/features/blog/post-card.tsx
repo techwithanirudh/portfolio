@@ -6,7 +6,6 @@ interface PostCardProps {
   author: string
   date: string
   description: string
-  slugs: string[]
   title: string
   url: string
 }
@@ -17,7 +16,6 @@ export const PostCard: React.FC<PostCardProps> = ({
   url,
   date,
   author,
-  slugs: _slugs,
 }) => (
   <Link
     className='block bg-card/50 px-6 py-6 transition-colors hover:bg-card/80'

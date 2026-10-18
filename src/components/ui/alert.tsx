@@ -11,6 +11,11 @@ const alertVariants = cva(
         default: 'bg-card text-card-foreground',
         destructive:
           'bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current',
+        // Compact tinted banners for form results
+        success:
+          'border-success/15 bg-success/15 px-3 py-2 text-success has-[>svg]:gap-x-1.5',
+        'destructive-soft':
+          'border-destructive/15 bg-destructive/15 px-3 py-2 text-destructive has-[>svg]:gap-x-1.5 dark:border-destructive dark:bg-destructive dark:text-destructive-foreground',
       },
     },
     defaultVariants: {

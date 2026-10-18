@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export function AccountSettingsSkeleton() {
   return (
-    <Card className='dashed-stack' variant='flat'>
+    <Card className='dashed-stack rounded-none border-0' variant='flat'>
       <div className='flex items-center justify-between p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
           <span className='text-muted-foreground text-sm'>Avatar</span>
@@ -13,7 +13,7 @@ export function AccountSettingsSkeleton() {
 
       <div className='flex items-center justify-between gap-6 p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Display Name</span>
+          <span className='text-muted-foreground text-sm'>Display name</span>
           <Skeleton className='h-4 w-56' />
         </div>
         <Skeleton className='h-8 w-12.5 rounded-none' />
@@ -28,7 +28,7 @@ export function AccountSettingsSkeleton() {
 
       <div className='p-4 sm:p-6'>
         <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Account Created</span>
+          <span className='text-muted-foreground text-sm'>Account created</span>
           <Skeleton className='h-4 w-44' />
         </div>
       </div>
