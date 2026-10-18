@@ -16,7 +16,6 @@ import {
   buildSearchTagGroups,
 } from '@/components/features/search/utils/groups'
 import { Icons } from '@/components/icons/icons'
-import { scrollToTarget } from '@/components/layout/lenis'
 import {
   CommandDialog,
   CommandEmpty,
@@ -31,6 +30,7 @@ import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 import { toggleSound } from '@/lib/audio/preferences'
 import { signOut, useSession } from '@/lib/auth-client'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
+import { scrollToTarget } from '@/lib/scroll-to-target'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60

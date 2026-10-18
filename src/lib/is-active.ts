@@ -1,3 +1,5 @@
+import type { LinkItemType } from 'fumadocs-ui/layouts/shared'
+
 function normalize(urlOrPath: string) {
   if (urlOrPath.length > 1 && urlOrPath.endsWith('/')) {
     return urlOrPath.slice(0, -1)
@@ -22,3 +24,10 @@ export function isActive(
     (nested && normalizedPathname.startsWith(`${normalizedHref}/`))
   )
 }
+
+type WithHref = Extract<LinkItemType, { url: string }>
+
+export const isLinkItemActive = (
+  { active = 'url', url }: Pick<WithHref, 'active' | 'url'>,
+  pathname: string
+) => active !== 'none' && isActive(url, pathname, active === 'nested-url')

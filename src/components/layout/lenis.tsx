@@ -1,24 +1,11 @@
 'use client'
 
-import type LenisInstance from 'lenis'
 import 'lenis/dist/lenis.css'
 import type { LenisRef } from 'lenis/react'
 import { ReactLenis } from 'lenis/react'
 import { useRef } from 'react'
 import { useTempus } from 'tempus/react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
-
-export const scrollToTarget = (
-  lenis: LenisInstance | undefined,
-  target: HTMLElement,
-  { immediate }: { immediate: boolean }
-) => {
-  if (lenis) {
-    lenis.scrollTo(target, { immediate })
-  } else {
-    target.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth' })
-  }
-}
 
 export function Lenis() {
   const reducedMotion = useReducedMotion()

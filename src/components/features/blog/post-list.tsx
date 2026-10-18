@@ -1,5 +1,6 @@
-import { staggerDelay, ViewAnimation } from '@/components/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
+import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 import { PostRow } from './post-row'
 

@@ -7,11 +7,7 @@ interface ViewAnimationProps {
   delay?: number
 }
 
-const STAGGER_STEP = 0.05
 const MAX_DELAY = 0.2
-
-export const staggerDelay = (index: number, offset = 0) =>
-  offset + STAGGER_STEP * index
 
 export const ViewAnimation = ({
   as: Tag = 'div',

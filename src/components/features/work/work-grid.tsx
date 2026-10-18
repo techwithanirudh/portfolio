@@ -1,5 +1,6 @@
-import { staggerDelay, ViewAnimation } from '@/components/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import type { WorkPage } from '@/lib/source'
+import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 import { WorkCard } from './work-card'
 

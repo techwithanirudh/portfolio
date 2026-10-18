@@ -3,9 +3,10 @@ import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/layout/footer/active-link'
 import { splitLinkItems } from '@/components/layout/split-link-items'
 import { PreviewLink } from '@/components/preview-link'
-import { staggerDelay, ViewAnimation } from '@/components/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
+import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 
 interface LinkEntry {

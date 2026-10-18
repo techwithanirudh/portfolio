@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
-import { isLinkItemActive } from '@/components/layout/header/link-item'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
+import { isLinkItemActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
 const footerIconClassName =

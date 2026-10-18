@@ -1,5 +1,6 @@
 import { Children, type ReactNode } from 'react'
-import { staggerDelay, ViewAnimation } from '@/components/view-animation'
+import { ViewAnimation } from '@/components/view-animation'
+import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {
