@@ -1,33 +1,24 @@
-type FullPose = 'bashful' | 'playful' | 'searching'
+import type { SpriteName } from './rig-art'
 
-type Muzzle = 'neutral' | 'smile' | 'surprise'
-
-export type Pose =
-  | {
-      head: number
-      lift?: number
-      muzzle?: Muzzle
-      paw?: boolean
-      shift?: number
-    }
-  | { full: FullPose }
-  | { hidden: true }
+/** A sprite from the sheet, mirrored with flip */
+export type Pose = { flip?: boolean; sprite: SpriteName } | { hidden: true }
 
 const poses = {
-  attention: { head: 0, lift: -4 },
-  bashful: { full: 'bashful' },
-  curious: { head: -20, shift: -2 },
-  curiousRight: { head: 14, shift: 2 },
-  focus: { head: 6, lift: 3 },
-  greet: { head: -5, paw: true },
+  attention: { sprite: 'getAttention' },
+  bashful: { sprite: 'embarrassed' },
+  // The sheet's tilt leans to the right, so the left one is its mirror
+  curious: { flip: true, sprite: 'curiousTilt' },
+  curiousRight: { sprite: 'curiousTilt' },
+  focus: { sprite: 'show' },
+  greet: { sprite: 'waving' },
   hidden: { hidden: true },
-  lookUp: { head: -9, lift: -5 },
-  playful: { full: 'playful' },
-  pleased: { head: 4, muzzle: 'smile' },
-  rest: { head: 0 },
-  searching: { full: 'searching' },
-  surprised: { head: 0, lift: -3, muzzle: 'surprise' },
-  thinking: { head: -14, lift: -2 },
+  lookUp: { sprite: 'lookAround' },
+  playful: { sprite: 'excited' },
+  pleased: { sprite: 'happy' },
+  rest: { sprite: 'rest' },
+  searching: { sprite: 'searching' },
+  surprised: { sprite: 'surprised' },
+  thinking: { sprite: 'thinking' },
 } satisfies Record<string, Pose>
 
 export type PoseName = keyof typeof poses
