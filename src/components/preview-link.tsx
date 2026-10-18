@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/hover-card'
 import type { LinkPreviewImage } from '@/lib/link-preview.shared'
 import { getPagePreviewPath, type PagePreview } from '@/lib/page-preview'
+import { cn } from '@/lib/utils'
 
 type Preview = LinkPreviewImage | null
 
@@ -86,6 +87,7 @@ export function PreviewLink({ href, preview, ...props }: PreviewLinkProps) {
 
 function HoverPreviewLink({
   children,
+  className,
   href,
   onPointerEnter,
   pagePath,
@@ -124,6 +126,10 @@ function HoverPreviewLink({
       open={wantsOpen && Boolean(popup)}
     >
       <HoverCardTrigger
+        className={cn(
+          'focus-visible:rounded-[3px] focus-visible:outline-offset-1',
+          className
+        )}
         closeDelay={120}
         delay={300}
         onPointerEnter={(event) => {

@@ -10,7 +10,7 @@ import { useAssistantContext } from './context'
 
 // TODO(slopradar): override-cascade: aspect-square h-full w-auto override the size-8 that size='icon-sm' sets on all three buttons (they render at the h-10 bar's 40px), and [&_svg]:size-4 repeats the base, so the size variant is dead; use size='icon-lg' (size-10) and drop the overrides, checking the box stays 40px
 const headerButtonClassName =
-  'aspect-square h-full w-auto shadow-none ring-0 focus-visible:-outline-offset-2 [&_svg]:size-4'
+  'aspect-square h-full w-auto shadow-none ring-0 focus-visible:ring-inset [&_svg]:size-4'
 
 export function AssistantHeader() {
   const { expanded, setContext, setExpanded, setOpen } = useAssistantContext()
