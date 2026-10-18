@@ -38,7 +38,7 @@ const reveal = () => {
         )
       }
     },
-    // iOS holds observer callbacks back while a flick is still travelling, so
+    // iOS holds observer callbacks back while a flick is still traveling, so
     // on touch screens items are revealed a screen before they arrive and the
     // page never scrolls into a blank
     { rootMargin: touch.matches ? '0px 0px 100% 0px' : '0px 0px -4% 0px' }
