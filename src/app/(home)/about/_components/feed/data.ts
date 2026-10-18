@@ -127,12 +127,14 @@ export const getActivityItems = async (): Promise<ActivityEventItem[]> => {
     return []
   }
 
-  const closedPullRequests = items.filter(
-    ({ event }) =>
-      event.type === 'PullRequestEvent' &&
-      (event.payload as { action?: string }).action === 'closed'
+  const closedPullRequests = new Set(
+    items.filter(
+      ({ event }) =>
+        event.type === 'PullRequestEvent' &&
+        (event.payload as { action?: string }).action === 'closed'
+    )
   )
-  if (closedPullRequests.length === 0) {
+  if (closedPullRequests.size === 0) {
     return items
   }
 
@@ -143,7 +145,7 @@ export const getActivityItems = async (): Promise<ActivityEventItem[]> => {
       item.event.payload as { pull_request?: { number?: number } }
     ).pull_request?.number
     const repoName = item.event.repo?.name
-    return closedPullRequests.includes(item) && repoName && number
+    return closedPullRequests.has(item) && repoName && number
       ? { ...item, merged: merged.has(pullRequestKey(repoName, number)) }
       : item
   })
