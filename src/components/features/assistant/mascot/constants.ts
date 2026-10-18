@@ -9,7 +9,13 @@ export type Motion = 'hop' | 'nod'
  * on the ground except reading, where they hold the book
  */
 export type Pose =
-  | { flip?: boolean; motion?: Motion; sprite: SpriteName }
+  | {
+      flip?: boolean
+      motion?: Motion
+      sprite: SpriteName
+      /** His mouth opens and shuts as he talks (rest's front sit only) */
+      talking?: boolean
+    }
   | { hidden: true }
 
 const poses = {
@@ -17,7 +23,6 @@ const poses = {
   // The sheet's tilt leans to the right, so the left one is its mirror
   curious: { flip: true, sprite: 'curiousTilt' },
   curiousRight: { sprite: 'curiousTilt' },
-  earFlick: { sprite: 'earTwitch' },
   hidden: { hidden: true },
   hopping: { motion: 'hop', sprite: 'happy' },
   lookUp: { sprite: 'lookAround' },
@@ -28,6 +33,8 @@ const poses = {
   // Curled up with the z marks, when the page sits idle (controller nap)
   sleeping: { sprite: 'sleeping' },
   surprised: { sprite: 'surprised' },
+  // Rest's front sit with the mouth moving, while the answer streams in
+  talking: { sprite: 'rest', talking: true },
   thinking: { sprite: 'thinking' },
 } satisfies Record<string, Pose>
 
@@ -57,15 +64,6 @@ const ANIMATIONS = {
   ClickedOn: seq(['surprised', 450], ['pleased', 800]),
   Embarrassed: seq(['bashful', 1800]),
   Flower: seq(['curious', 700], ['pleased', 1000]),
-  // Ears flick on rest's body, then he tilts his head through the sheet's
-  // in-between frames
-  GetAttention: seq(
-    ['earFlick', 150],
-    ['rest', 120],
-    ['earFlick', 150],
-    ['rest', 120],
-    ['curiousRight', 1300]
-  ),
   Greet: seq(['nodding', 1500], ['pleased', 500]),
   Hide: seq(['hidden', 450]),
   Idle: seq(['rest', 2600]),
@@ -75,8 +73,7 @@ const ANIMATIONS = {
   Reading: seq(['reading', 2400]),
   Show: seq(['hidden', 120], ['rest', 450]),
   Sniffing: seq(['curious', 900], ['curiousRight', 900], ['thinking', 1100]),
-  Thinking: seq(['thinking', 2000], ['curiousRight', 700]),
-  Writing: seq(['nodding', 1400], ['thinking', 700], ['nodding', 900]),
+  Writing: seq(['talking', 2400]),
 } satisfies Record<string, Frame[]>
 
 export type AnimationName = keyof typeof ANIMATIONS
@@ -85,16 +82,15 @@ export const SIMBA_ANIMATIONS: Record<AnimationName, Frame[]> = ANIMATIONS
 
 export const animations = {
   bye: 'Hide',
+  // No thinking beat while he idles, which reads as loading
   idle: [
     'Butterfly',
     'Embarrassed',
     'Flower',
-    'GetAttention',
     'Greet',
     'LookUp',
     'Play',
     'Pleased',
-    'Thinking',
   ],
   open: ['ClickedOn', 'Pleased'],
   rest: 'Idle',

@@ -55,7 +55,8 @@ export function SimbaRig({
     ? { flip: false, sprite: 'rest' }
     : { flip: current.flip ?? false, sprite: current.sprite }
   const animate = !(still || reducedMotion)
-  const { pop, shown } = useSpriteFrames(target, animate)
+  const talking = !hidden && (current.talking ?? false)
+  const { chest, pop, shown } = useSpriteFrames(target, animate, talking)
   const motion = animate && !hidden ? current.motion : undefined
   const sprite = useMemo(
     () => scopeIds(SPRITES[shown.sprite], prefix),
@@ -66,6 +67,7 @@ export function SimbaRig({
     <svg
       aria-hidden
       className={cn('simba-rig', className)}
+      data-chest={chest || undefined}
       data-hidden={hidden || undefined}
       data-motion={motion}
       overflow='visible'
