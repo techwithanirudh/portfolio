@@ -1,5 +1,5 @@
 import { type Content, RouteError } from '@fuma-comment/server'
-import { generateText, Output, type UserContent } from 'ai'
+import { generateText, Output } from 'ai'
 import { moderationPrompt } from '@/lib/ai/prompts/moderation'
 import { provider } from '@/lib/ai/providers'
 import {
@@ -63,34 +63,16 @@ export const moderateComment = async (content: Content) => {
     })
   }
 
-  const userContent: UserContent = [
-    {
-      text: `Moderate this comment:\n\n${text || '[no text content]'}`,
-      type: 'text',
-    },
-  ]
-
+  // TODO(slopradar): duplication: same generateText + Output.object(ModerationResultSchema) + console.error + 'Could not verify content safety' fallback as app/(home)/guestbook/actions/utils/moderation.ts, extract one shared moderate() and one message constant
   try {
     const { output } = await generateText({
       instructions: moderationPrompt,
-      messages: [
-        {
-          content: userContent,
-          role: 'user',
-        },
-      ],
       model: provider.languageModel('moderation-model'),
       output: Output.object({
         schema: ModerationResultSchema,
       }),
+      prompt: `Moderate this comment:\n\n${text || '[no text content]'}`,
     })
-
-    if (!output) {
-      throw new RouteError({
-        message: 'Could not verify content safety. Please try again.',
-        statusCode: 500,
-      })
-    }
 
     if (!output.allowed) {
       throw new RouteError({ message: output.reason, statusCode: 400 })

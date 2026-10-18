@@ -1,30 +1,31 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
 import { GuestbookEntryCard } from './entry-card'
 
+const EntriesNotice = ({ children }: { children: ReactNode }) => (
+  <div className='flex min-h-0 flex-1 flex-col items-center justify-center gap-2 px-6 text-center'>
+    <Icons.mail className='size-6 text-muted-foreground' />
+    <p className='text-muted-foreground text-sm'>{children}</p>
+  </div>
+)
+
 interface GuestbookEntriesProps {
   currentUserId: string | null
   entries: GuestbookEntryItem[]
   isAdmin: boolean
-  isSignedIn: boolean
 }
 
 export const GuestbookEntries = ({
   currentUserId,
   entries,
   isAdmin,
-  isSignedIn,
 }: GuestbookEntriesProps) => {
   if (entries.length === 0) {
-    return (
-      <div className='flex min-h-0 flex-1 flex-col items-center justify-center gap-2 px-6 text-center'>
-        <Icons.mail className='size-6 text-muted-foreground' />
-        <p className='text-muted-foreground text-sm'>No messages yet.</p>
-      </div>
-    )
+    return <EntriesNotice>No messages yet.</EntriesNotice>
   }
 
   return (
@@ -36,7 +37,6 @@ export const GuestbookEntries = ({
               currentUserId={currentUserId}
               entry={entry}
               isAdmin={isAdmin}
-              isSignedIn={isSignedIn}
               key={entry.id}
             />
           ))}
@@ -47,10 +47,7 @@ export const GuestbookEntries = ({
 }
 
 export const GuestbookEntriesError = () => (
-  <div className='flex min-h-0 flex-1 flex-col items-center justify-center gap-2 px-6 text-center'>
-    <Icons.mail className='size-6 text-muted-foreground' />
-    <p className='text-muted-foreground text-sm'>
-      Couldn't load the entries right now. Try again in a bit.
-    </p>
-  </div>
+  <EntriesNotice>
+    Couldn't load the entries right now. Try again in a bit.
+  </EntriesNotice>
 )

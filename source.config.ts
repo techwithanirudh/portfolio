@@ -1,3 +1,4 @@
+import { transformerRemoveNotationEscape } from '@shikijs/transformers'
 import {
   defineCollections,
   defineConfig,
@@ -7,8 +8,6 @@ import jsonSchema from 'fumadocs-mdx/plugins/json-schema'
 import lastModified from 'fumadocs-mdx/plugins/last-modified'
 import { transformerTwoslash } from 'fumadocs-twoslash'
 import { createFileSystemTypesCache } from 'fumadocs-twoslash/cache-fs'
-import type { ElementContent } from 'hast'
-import type { ShikiTransformer } from 'shiki'
 import { z } from 'zod'
 
 const dateSchema = z.union([z.string(), z.date()]).pipe(z.coerce.date())
@@ -36,37 +35,17 @@ export const work = defineCollections({
   },
   schema: frontmatterSchema.extend({
     date: dateSchema,
-    github: z.string().optional(),
+    github: z.url().optional(),
     image: z.string().optional(),
     /**
      * Pins a project to the front of the work list, lowest first. Anything
      * without it falls in behind, newest first.
      */
     order: z.number().optional(),
-    website: z.string().optional(),
+    website: z.url().optional(),
   }),
   type: 'doc',
 })
-
-function transformerEscape(): ShikiTransformer {
-  return {
-    code(hast) {
-      function replace(node: ElementContent) {
-        if (node.type === 'text') {
-          node.value = node.value.replace('[\\!code', '[!code')
-        } else if ('children' in node) {
-          for (const child of node.children) {
-            replace(child)
-          }
-        }
-      }
-
-      replace(hast)
-      return hast
-    },
-    name: '@shikijs/transformers:remove-notation-escape',
-  }
-}
 
 export default defineConfig({
   mdxOptions: async () => {
@@ -99,7 +78,7 @@ export default defineConfig({
           transformerTwoslash({
             typesCache: createFileSystemTypesCache(),
           }),
-          transformerEscape(),
+          transformerRemoveNotationEscape(),
         ],
       },
       rehypePlugins: (v) => [rehypeKatex, ...v],

@@ -3,7 +3,9 @@ import { getSvgSizeProps } from '../utils'
 
 export const GitHubIcon = ({ height, size, width, ...props }: IconProps) => (
   <svg
+    // TODO(slopradar): inconsistent-a11y: brand icons hard-code aria-hidden (`'true'` here, bare in claude/markdown/openai) and skip the isLabelled check hugeIcon uses, so a brand icon given an aria-label stays hidden; apply the same check in the shared factory
     aria-hidden='true'
+    // TODO(slopradar): dead-code: data-icon and data-prefix='fab' are Font Awesome export leftovers nothing reads, delete them
     data-icon='github'
     data-prefix='fab'
     focusable='false'

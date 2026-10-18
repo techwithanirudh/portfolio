@@ -14,6 +14,7 @@ const colors = {
   page: '#f4f4f4',
   primary: 'hsl(226, 55%, 45%)',
   surface: '#f5f5f5',
+  white: '#ffffff',
 }
 
 // Geist comes from getOgFonts; the renderer's bundled Geist Sans covers
@@ -100,7 +101,6 @@ function Rails(): ReactElement {
   )
 }
 
-// The site's round face chip: the head crop on the muted surface, ringed
 function PortraitChip({
   size,
   src,
@@ -148,7 +148,7 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
 
       <div
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: colors.white,
           backgroundImage: `url(${coverSrc})`,
           backgroundSize: '100% 100%',
           border: `1px solid ${colors.border}`,

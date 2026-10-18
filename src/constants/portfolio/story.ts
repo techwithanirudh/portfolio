@@ -26,7 +26,7 @@ export const story: StoryChapter[] = [
     when: 'python, then the web',
   },
   {
-    body: 'I co-authored a research paper with Bosch on [privacy challenges for autonomous vehicles](https://osf.io/preprints/osf/mtfpy_v1). It was my first time writing for people who check the references.',
+    body: 'I co-authored a research paper with Bosch on [privacy challenges for autonomous vehicles](https://osf.io/preprints/osf/mtfpy_v1).',
     id: 'bosch',
     photo: {
       alt: 'Bosch',
@@ -50,7 +50,7 @@ export const story: StoryChapter[] = [
     when: '2024 to 2025',
   },
   {
-    body: "I'm a student and a software engineering intern at [QuiverAI](https://quiver.ai), a platform for generating, editing and animating SVG graphics with AI. I care about the small details most people never notice.",
+    body: "I'm a student and a software engineering intern at [QuiverAI](https://quiver.ai), a platform for generating, editing and animating SVG graphics with AI.",
     id: 'now',
     photo: {
       alt: 'QuiverAI',

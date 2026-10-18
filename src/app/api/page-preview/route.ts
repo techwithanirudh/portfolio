@@ -1,8 +1,6 @@
 import type { PagePreview } from '@/lib/page-preview'
 import { getPosts, getWorkPages } from '@/lib/source'
-
-const cacheControl =
-  'public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800'
+import { previewCacheControl } from '../_lib/cache-control'
 
 export function GET(request: Request) {
   const path = new URL(request.url).searchParams.get('path')
@@ -12,7 +10,7 @@ export function GET(request: Request) {
 
   if (!page) {
     return Response.json(null, {
-      headers: { 'Cache-Control': cacheControl },
+      headers: { 'Cache-Control': previewCacheControl },
       status: 404,
     })
   }
@@ -21,8 +19,8 @@ export function GET(request: Request) {
     {
       description: page.data.description ?? null,
       image: page.data.image ?? null,
-      title: page.data.title ?? 'Untitled',
+      title: page.data.title,
     } satisfies PagePreview,
-    { headers: { 'Cache-Control': cacheControl } }
+    { headers: { 'Cache-Control': previewCacheControl } }
   )
 }

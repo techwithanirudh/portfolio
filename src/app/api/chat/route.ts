@@ -14,9 +14,10 @@ import type { MyUIMessage } from '@/lib/ai/chat/types'
 import { systemPrompt } from '@/lib/ai/prompts/chat'
 import { provider } from '@/lib/ai/providers'
 import { isBotRequest } from '@/server/botid'
-import { getLLMsTxt } from './utils/llms'
+import { getAssistantContext } from './utils/context'
 import { getPageContent } from './utils/tools/get-page-content'
 import { navigateOutputSchema, navigateTool } from './utils/tools/navigate'
+import { renderPortfolioTool } from './utils/tools/render-portfolio'
 import { createSearchDocsTool } from './utils/tools/search-docs'
 import { showContactFormTool } from './utils/tools/show-contact-form'
 
@@ -48,6 +49,7 @@ const requestSchema = z.object({
     ),
 })
 
+// TODO(slopradar): duplicate-logic: the error to { message, name } log shape is copied in guestbook/actions/guestbook.ts and guestbook/actions/utils/moderation.ts, move one helper to src/lib
 const logError = (label: string, error: unknown) => {
   console.error(
     label,
@@ -66,17 +68,12 @@ const parseMessages = async (request: Request) => {
 
   try {
     const result = requestSchema.safeParse(JSON.parse(body))
+    // TODO(slopradar): unchecked-cast: a loose zod shape is cast to MyUIMessage[], validate with safeValidateUIMessages({ messages, tools, dataSchemas }) from ai instead
     return result.success ? (result.data.messages as MyUIMessage[]) : null
   } catch {
     return null
   }
 }
-
-const toolsAfterNavigation = [
-  'getPageContent',
-  'searchDocs',
-  'showContactForm',
-] as const
 
 export async function POST(request: Request) {
   try {
@@ -116,11 +113,32 @@ export async function POST(request: Request) {
                   type: 'text',
                 }
               }
+              if (part.type === 'data-context') {
+                return {
+                  text: `[Selected Context: ${JSON.stringify(part.data)}]`,
+                  type: 'text',
+                }
+              }
             },
             ignoreIncompleteToolCalls: true,
+            // Earlier cards go back to the model as their short summary
+            tools: { renderPortfolio: renderPortfolioTool },
           }),
-          getLLMsTxt(),
+          getAssistantContext(),
         ])
+
+        // TODO(slopradar): duplicate-logic: this tool map is rebuilt in utils/tools/index.ts with a stub searchDocs just for typing, export one createChatTools(writer) and infer ChatTools from its return type
+        const tools = {
+          getPageContent,
+          navigate: navigateTool,
+          renderPortfolio: renderPortfolioTool,
+          searchDocs: createSearchDocsTool(writer),
+          showContactForm: showContactFormTool,
+        }
+        const toolsAfterNavigation = Object.keys(tools).filter(
+          (name): name is Exclude<keyof typeof tools, 'navigate'> =>
+            name !== 'navigate'
+        )
 
         const result = streamText({
           experimental_transform: smoothStream({
@@ -133,7 +151,6 @@ export async function POST(request: Request) {
           }),
           messages: modelMessages,
           model: provider.languageModel('chat-model'),
-          // One navigation per reply, so the browser never hops between pages
           prepareStep: ({ steps }) =>
             steps.some((step) =>
               step.toolResults.some(
@@ -153,13 +170,7 @@ export async function POST(request: Request) {
             },
           },
           stopWhen: isStepCount(10),
-          toolChoice: 'auto',
-          tools: {
-            getPageContent,
-            navigate: navigateTool,
-            searchDocs: createSearchDocsTool(writer),
-            showContactForm: showContactFormTool,
-          },
+          tools,
         })
 
         writer.merge(

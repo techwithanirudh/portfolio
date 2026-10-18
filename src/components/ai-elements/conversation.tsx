@@ -6,6 +6,7 @@ import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): unused-export: the exported *Props types in this file have no importers, un-export them (x4)
 export type ConversationProps = ComponentProps<typeof StickToBottom>
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (

@@ -1,5 +1,6 @@
 import { formatDistanceToNowStrict, isValid, parseISO } from 'date-fns'
 import type { ComponentType } from 'react'
+import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import {
   HoverCard,
@@ -61,6 +62,9 @@ function RepoStat({
   )
 }
 
+const repoLinkClassName =
+  'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+
 function GithubRepoFallback({
   className,
   repo,
@@ -73,13 +77,9 @@ function GithubRepoFallback({
 
   return (
     <a
-      className={cn(
-        'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        className
-      )}
+      className={cn(repoLinkClassName, className)}
       href={href}
-      rel='noopener noreferrer'
-      target='_blank'
+      {...externalLinkProps}
     >
       <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
       <span>
@@ -104,14 +104,9 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
           delay={120}
           render={
             <a
-              aria-label={linkLabel}
-              className={cn(
-                'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                className
-              )}
+              className={cn(repoLinkClassName, className)}
               href={details.url}
-              rel='noopener noreferrer'
-              target='_blank'
+              {...externalLinkProps}
             />
           }
         >
@@ -126,8 +121,7 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
                 <a
                   className='group/github-repo inline-flex max-w-full items-center gap-1.5 font-medium text-sm'
                   href={details.url}
-                  rel='noopener noreferrer'
-                  target='_blank'
+                  {...externalLinkProps}
                 >
                   <span className='truncate'>{details.name}</span>
                   <Icons.arrowUpRight className='size-3.5 shrink-0 text-muted-foreground transition-transform group-hover/github-repo:scale-125' />
@@ -195,5 +189,3 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
     return <GithubRepoFallback className={className} repo={repo} />
   }
 }
-
-export { GithubRepo as GitHubRepo }

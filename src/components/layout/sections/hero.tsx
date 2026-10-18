@@ -1,17 +1,17 @@
 import { Children, type ReactNode } from 'react'
-import { ViewAnimation } from '@/components/view-animation'
+import { Section } from '@/components/layout/sections'
+import { staggerDelay, ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
-import { Section } from './index'
 
 interface HeroProps {
   action?: ReactNode
-  caption?: string | ReactNode | null
+  caption?: ReactNode
   children?: ReactNode
   className?: string
-  description?: string | ReactNode | null
+  description?: ReactNode
   image?: ReactNode
   sectionClassName?: string
-  title: string | ReactNode
+  title: ReactNode
 }
 
 export const TitleDot = () => <span className='text-primary'>.</span>
@@ -63,8 +63,9 @@ export const HeroSection = ({
           </ViewAnimation>
         )}
       </div>
+      {/* TODO(slopradar): inconsistent: SectionHeader runs Children.toArray and skips falsy children, this wraps null/false children in an empty ViewAnimation, share one staggered-children helper */}
       {Children.map(children, (child, index) => (
-        <ViewAnimation delay={0.1 + index * 0.05}>{child}</ViewAnimation>
+        <ViewAnimation delay={staggerDelay(index, 0.1)}>{child}</ViewAnimation>
       ))}
     </div>
   </Section>

@@ -7,6 +7,7 @@ import { owner, tagline } from '@/constants/site'
 import { formatPeriod } from '@/lib/employment-period'
 import { url } from '@/lib/url'
 
+// TODO(slopradar): duplicate-logic: periodDate and monthsBetween reimplement parsePeriodDate and the month arithmetic in @/lib/employment-period, export and reuse those
 const periodDate = (value: string, edge: 'start' | 'end') =>
   value.includes('.')
     ? parse(value, 'MM.yyyy', new Date())
@@ -31,9 +32,12 @@ const formatMonths = (total: number) => {
   return parts.join(' ') || 'under a month'
 }
 
+export const DEFAULT_EMPLOYMENT_TYPE = 'Research'
+
 export const toPlainPeriod = (start: string, end?: string) =>
   formatPeriod(start, end).replace(' – ', ' to ')
 
+// TODO(slopradar): duplicate-logic: the same category-to-labels mapping is rebuilt as `stack` in (resume)/resume/page.tsx, move groupStack next to groupTechnologies in src/constants/portfolio/skills
 export const groupStack = () =>
   groupTechnologies().map(
     ([category, items]) => [category, items.map((item) => item.label)] as const
@@ -52,7 +56,7 @@ const getRoles = (now: Date) =>
       ),
       start: position.employmentPeriod.start,
       title: position.title,
-      type: position.employmentType ?? 'Research',
+      type: position.employmentType ?? DEFAULT_EMPLOYMENT_TYPE,
     }))
   )
 
@@ -64,6 +68,11 @@ export function getProfileFactsText(now = new Date()) {
       : first
   )
   const sinceFirst = monthsBetween(earliest.start, undefined, now)
+  const experienceLength =
+    sinceFirst >= 12
+      ? `about ${formatMonths(Math.floor(sinceFirst / 12) * 12)}`
+      : formatMonths(sinceFirst)
+  const firstRoleStart = format(periodDate(earliest.start, 'start'), 'MMM yyyy')
   const inRoles = roles.reduce((total, role) => total + role.months, 0)
   const current = roles.filter((role) => role.current)
   const email = socials.find((social) => social.url.startsWith('mailto:'))
@@ -85,7 +94,7 @@ Computed from the site's own data on ${now.toISOString().slice(0, 10)}.
       : 'No current role listed'
   }
 - Location: ${profile.location} (pronouns ${profile.pronouns})
-- Years of experience: ${sinceFirst >= 12 ? `about ${formatMonths(Math.floor(sinceFirst / 12) * 12)}` : formatMonths(sinceFirst)} since the first role in ${format(periodDate(earliest.start, 'start'), 'MMM yyyy')} (${earliest.title} with ${earliest.company}). Time spent in the listed roles adds up to ${formatMonths(inRoles)}.
+- Years of experience: ${experienceLength} since the first role in ${firstRoleStart} (${earliest.title} with ${earliest.company}). Time spent in the listed roles adds up to ${formatMonths(inRoles)}.
 - Experience breakdown, newest first:
 ${roles
   .map(

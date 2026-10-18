@@ -27,8 +27,6 @@ export const createGuestbookEntry = userActionClient
   .inputSchema(GuestbookEntrySchema)
   .action(async ({ parsedInput, ctx }) => {
     const { user } = ctx
-    const name = user.name ?? 'Guest'
-
     let parsedSignature: Base64FileParts | null = null
 
     if (parsedInput.signature) {
@@ -66,11 +64,12 @@ export const createGuestbookEntry = userActionClient
 
     await db.insert(guestbookEntries).values({
       message: parsedInput.message,
-      name,
+      name: user.name,
       signature: signatureUrl,
       userId: user.id,
     })
 
+    // TODO(slopradar): magic-string: the 'guestbook' cache tag is repeated 5 times here and again in the query's cacheTag, export one constant from @/server/db/queries/guestbook
     updateTag('guestbook')
 
     return { success: true }
@@ -82,6 +81,7 @@ export const toggleGuestbookReaction = userActionClient
     const { user } = ctx
     const { entryId, emoji } = parsedInput
 
+    // TODO(slopradar): boundary: reactions, edits and bans run Drizzle inline while list and delete go through server/db/queries/guestbook (x3 in this file), move them into the queries module
     const deleted = await db
       .delete(guestbookReactions)
       .where(
@@ -124,6 +124,7 @@ export const editGuestbookEntry = userActionClient
       throw new ActionError(moderation.reason)
     }
 
+    // TODO(slopradar): boundary: inline Drizzle update in an action, see toggleGuestbookReaction above
     const updated = await db
       .update(guestbookEntries)
       .set({

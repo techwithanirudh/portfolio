@@ -11,10 +11,6 @@ interface EmptyLink {
 
 const everyPost: EmptyLink = { href: pages.blog.path, label: 'See every post' }
 
-/**
- * Shown when a search or tag filter turns up nothing: bashful Simba, a line
- * saying so and a way back to the full list
- */
 export const PostEmpty = ({
   className,
   link = everyPost,

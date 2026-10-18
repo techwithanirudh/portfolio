@@ -10,7 +10,7 @@ interface ContentIndexLinks {
   work: (page: WorkPage) => string
 }
 
-/** Every project and post as a markdown list, linked however the caller needs */
+// TODO(slopradar): inconsistent: a missing description falls back to 'Project page' for work and '' for posts, pick one rule (or require description in the collection schema)
 export const getContentIndexText = (links: ContentIndexLinks) => `## Work
 
 ${getSortedWork()

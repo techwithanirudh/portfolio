@@ -2,11 +2,9 @@ import { ImageResponse } from '@takumi-rs/image-response'
 import { ogCoverSize, ogImageSize, PostImage } from '@/app/og/_lib/template'
 import { getPageImage, type OgCollection } from '@/lib/metadata'
 import { getCoverDataUrl, getOgFonts, getPortraitDataUrl } from '@/lib/og'
+import type { BlogPage, WorkPage } from '@/lib/source'
 
-interface OgPage {
-  data: { date?: Date; title?: string }
-  slugs: string[]
-}
+type OgPage = BlogPage | WorkPage
 
 interface OgRouteOptions<Page extends OgPage> {
   collection: OgCollection
@@ -40,7 +38,7 @@ export function createOgRoute<Page extends OgPage>({
         coverSrc={getCoverDataUrl(page.slugs.join('/'), ogCoverSize)}
         date={page.data.date}
         portraitSrc={portraitSrc}
-        title={page.data.title || 'Untitled'}
+        title={page.data.title}
       />,
       { fonts, format: 'webp', ...ogImageSize }
     )

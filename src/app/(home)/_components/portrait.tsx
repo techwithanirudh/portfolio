@@ -4,6 +4,7 @@ import { useSound } from '@web-kits/audio/react'
 import { AnimatePresence, m, useAnimate } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { owner } from '@/constants/site'
 import { error as errorSound, pop } from '@/lib/audio/minimal'
 import {
   PORTRAIT_CHIP_VIEW_BOX,
@@ -17,6 +18,18 @@ import { PortraitFace } from './portrait-face'
 const MAX_OFFSET_SVG = 24
 const REACH_PX = 320
 
+const BlinkingEyes = ({ fill }: { fill?: string }) => (
+  <g
+    className='[&>path]:origin-center [&>path]:animate-blink [&>path]:[transform-box:fill-box] motion-reduce:[&>path]:animate-none'
+    fill={fill}
+  >
+    {PORTRAIT_EYE_PATHS.map((d) => (
+      <path d={d} key={d} />
+    ))}
+  </g>
+)
+
+// TODO(slopradar): misplaced-module: PortraitChip is imported by src/components/features/blog/author-byline.tsx and the about hero, move this file to src/components and drop the export on Portrait
 export function Portrait({
   className,
   viewBox = '0 0 947 1160',
@@ -61,7 +74,7 @@ export function Portrait({
   return (
     <span className={cn('relative block size-full select-none', className)}>
       <svg
-        aria-label='Portrait of Anirudh Sriram'
+        aria-label={`Portrait of ${owner}`}
         className='pointer-events-none relative size-full'
         preserveAspectRatio='xMidYMid slice'
         role='img'
@@ -73,11 +86,7 @@ export function Portrait({
           fill={PORTRAIT_EYE_FILL}
           ref={eyesRef}
         >
-          <g className='[&>path]:origin-center [&>path]:animate-blink [&>path]:[transform-box:fill-box] motion-reduce:[&>path]:animate-none'>
-            {PORTRAIT_EYE_PATHS.map((d) => (
-              <path d={d} key={d} />
-            ))}
-          </g>
+          <BlinkingEyes />
         </g>
       </svg>
     </span>
@@ -87,16 +96,12 @@ export function Portrait({
 const chipClassName =
   'mx-[0.04em] inline-block size-[0.8em] shrink-0 translate-y-[0.08em] overflow-hidden rounded-full bg-muted ring-1 ring-border ring-inset'
 
-// The face as an inline chip, sized in em so it sits in a line of heading text
 export function PortraitChip({
   className,
+  // TODO(slopradar): boolean-parameter: still switches between the interactive BonkChip and a static chip (one caller each), export a separate StaticPortraitChip and drop the flag
   still = false,
 }: {
   className?: string
-  /**
-   * A decorative copy beside the name, for bylines and small print: the face
-   * comes from the cached image and only the eyes blink
-   */
   still?: boolean
 }) {
   if (!still) {
@@ -107,23 +112,14 @@ export function PortraitChip({
     <span aria-hidden className={cn(chipClassName, className)}>
       <svg className='block size-full' viewBox={PORTRAIT_CHIP_VIEW_BOX}>
         <image height='1160' href='/images/portrait.svg' width='947' />
-        <g
-          className='[&>path]:origin-center [&>path]:animate-blink [&>path]:[transform-box:fill-box] motion-reduce:[&>path]:animate-none'
-          fill={PORTRAIT_EYE_FILL}
-        >
-          {PORTRAIT_EYE_PATHS.map((d) => (
-            <path d={d} key={d} />
-          ))}
-        </g>
+        <BlinkingEyes fill={PORTRAIT_EYE_FILL} />
       </svg>
     </span>
   )
 }
 
 const BONK_MS = 260
-// A streak ends once you leave the face alone for this long
 const STREAK_RESET_MS = 1500
-// How many taps in a row it takes before the face starts complaining
 const COMPLAINTS: Record<number, string> = {
   3: 'ouch',
   5: "hey, that's my face",
@@ -131,11 +127,9 @@ const COMPLAINTS: Record<number, string> = {
   9: 'okay seriously, stop',
   12: 'AAAARGH',
 }
-// Keep going past the last complaint and the face gives up on you for a bit
 const SULK_AT = 16
 const SULK_MS = 5000
 
-// Tap the face and it squashes, squeezes its eyes shut and says bonk
 function BonkChip({ className }: { className?: string }) {
   const [scope, animate] = useAnimate<HTMLButtonElement>()
   const [bonks, setBonks] = useState(0)
@@ -148,6 +142,7 @@ function BonkChip({ className }: { className?: string }) {
 
   useEffect(() => () => clearTimeout(streakTimer.current), [])
 
+  // TODO(slopradar): effect-mirrors-state: sulking and bonked are each reset by an effect watching themselves, start the timeout in bonk() as streakTimer already does (rerender-move-effect-to-event, x2)
   useEffect(() => {
     if (!sulking) {
       return
@@ -166,7 +161,6 @@ function BonkChip({ className }: { className?: string }) {
 
   const bonk = () => {
     if (sulking) {
-      // Eyes stay shut, it buzzes and just shakes its head at you
       playError()
       if (!prefersReducedMotion()) {
         animate(
@@ -188,8 +182,6 @@ function BonkChip({ className }: { className?: string }) {
     }, STREAK_RESET_MS)
     const complaint = COMPLAINTS[streak.current]
     if (complaint) {
-      // Straight from sonner, since the pop above is already the sound; one id
-      // so each complaint replaces the last instead of stacking up
       toast(complaint, { id: 'bonk' })
     }
     if (streak.current >= SULK_AT) {
@@ -220,7 +212,6 @@ function BonkChip({ className }: { className?: string }) {
           className
         )}
         data-bonked={bonked || sulking || undefined}
-        // The smooth cursor would sit on the face and hide it, as on Simba
         data-native-cursor
         onClick={bonk}
         ref={scope}

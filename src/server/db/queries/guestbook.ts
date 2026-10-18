@@ -64,7 +64,7 @@ const fetchSharedGuestbookEntries = async (): Promise<
         name: row.name,
         reactions: [],
         role: row.role,
-        signature: row.signature ?? null,
+        signature: row.signature,
         userId: row.userId,
       }
       entries.set(row.id, entry)
@@ -78,6 +78,7 @@ const fetchSharedGuestbookEntries = async (): Promise<
   return [...entries.values()]
 }
 
+// TODO(slopradar): deprecated-api: unstable_cache is replaced by `use cache` in Next 16 (node_modules/next/dist/docs/.../unstable_cache.md); same in github-code.ts, github-repo.ts and github-contributions.ts (x4), migrate together with cacheComponents or record the decision
 const getSharedGuestbookEntries = unstable_cache(
   fetchSharedGuestbookEntries,
   ['guestbook'],
@@ -113,6 +114,7 @@ export const getGuestbookEntries = async (
   }))
 }
 
+// TODO(slopradar): boolean parameter: positional `isAdmin = false` reads as a bare true/false at the call site, take an options object or split into deleteOwnEntry and deleteAnyEntry
 export const deleteGuestbookEntry = async (
   entryId: number,
   userId: string,
@@ -133,5 +135,5 @@ export const deleteGuestbookEntry = async (
       signature: guestbookEntries.signature,
     })
 
-  return deleted.length > 0 ? deleted[0] : null
+  return deleted[0] ?? null
 }

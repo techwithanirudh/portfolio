@@ -1,50 +1,35 @@
 import { tool } from 'ai'
 import { z } from 'zod'
-import {
-  getAboutText,
-  getColophonText,
-  getContactText,
-  getExperienceText,
-  getProfileFactsText,
-  getSkillsText,
-  getTestimonialsText,
-  getUsesText,
-} from '@/app/(llms)/utils'
+import { getProfileFactsText } from '@/app/(llms)/utils'
+import { markdownPages } from '@/app/(llms)/utils/markdown-pages'
 import { post, workSource } from '@/lib/source'
+import { parseSitePath } from './navigate'
 
-const staticPageText: Record<string, () => string> = {
-  about: () => `${getProfileFactsText()}\n${getAboutText()}`,
-  colophon: getColophonText,
-  contact: getContactText,
-  experience: getExperienceText,
-  stack: getSkillsText,
-  testimonials: getTestimonialsText,
-  uses: getUsesText,
+const getStaticPageText = (name: string) => {
+  const text = markdownPages.find((page) => page.name === name)?.getText()
+  return name === 'about' ? `${getProfileFactsText()}\n${text}` : text
 }
 
-const QUERY_OR_HASH = /[?#]/
-
 const getText = async (path: string) => {
-  const [section, ...slugs] = (path.split(QUERY_OR_HASH)[0] ?? '')
-    .split('/')
-    .filter(Boolean)
+  const [section, ...slugs] =
+    parseSitePath(path)?.path.split('/').filter(Boolean) ?? []
 
   if (section === 'blog') {
+    // TODO(slopradar): inconsistent: returns raw processed markdown while the .mdx routes serve getBlogLLMText/getWorkLLMText with title and URL, call those so the model reads the same text (x2)
     return await post.getPage(slugs)?.data.getText('processed')
   }
 
-  if (section === 'projects' || section === 'work') {
+  if (section === 'projects') {
     return await workSource.getPage(slugs)?.data.getText('processed')
   }
 
   if (section && slugs.length === 0) {
-    return staticPageText[section]?.()
+    return getStaticPageText(section)
   }
 }
 
 export const getPageContent = tool({
-  description:
-    'Get the content of a specific internal page: a blog post, a project, or one of about, experience, stack, testimonials, uses, colophon, contact.',
+  description: `Get the content of a specific internal page: a blog post, a project, or one of ${markdownPages.map((page) => page.name).join(', ')}.`,
   execute: async ({ path }) => {
     const data = await getText(path)
 

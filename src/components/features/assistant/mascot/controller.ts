@@ -6,16 +6,13 @@ import {
   SIMBA_ANIMATIONS,
 } from './constants'
 
-export const pick = <T>(items: readonly T[]) =>
-  items[Math.floor(Math.random() * items.length)] as T
+export const pick = <T>(items: readonly [T, ...T[]]): T =>
+  items[Math.floor(Math.random() * items.length)] ?? items[0]
 
 const restCycles = () => 3 + Math.floor(Math.random() * 4)
 
-const REST: Frame = { duration: 0, pose: 'rest' }
+export const REST: Frame = { duration: 0, pose: 'rest' }
 
-// Steps Simba through key poses on timers; CSS transitions ease between them.
-// With nothing queued he loops the current activity, or rests and now and then
-// plays an idle animation
 export class SimbaController {
   private activity: AnimationName | null = null
   private current: { frames: Frame[]; index: number } | null = null
@@ -33,7 +30,6 @@ export class SimbaController {
     this.motionQuery = reducedMotionQuery()
     this.motionQuery.addEventListener('change', this.onMotionChange)
     this.still = this.motionQuery.matches
-    // Pops in from nothing, like he just trotted over
     this.play(animations.show)
   }
 
@@ -59,13 +55,11 @@ export class SimbaController {
       return
     }
     this.queue.push(name)
-    // Resting counts as idle, so a queued animation starts right away
     if (!this.current || this.resting) {
       this.stopCurrent()
     }
   }
 
-  /** Loops an animation while Simba works on something; null winds it down */
   setActivity(name: AnimationName | null) {
     if (name === this.activity) {
       return

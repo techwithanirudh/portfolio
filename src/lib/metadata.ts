@@ -1,18 +1,16 @@
 import type { Metadata } from 'next'
-import { owner, title } from '@/constants/site'
+import { owner, title, xHandle } from '@/constants/site'
 import { env } from '@/env'
 import type { BlogPage } from './source/blog'
 import type { WorkPage } from './source/work'
 
+// TODO(slopradar): fallback shaping: a production build with no NEXT_PUBLIC_BASE_URL silently emits localhost canonical, OG and sitemap URLs, require it in env.ts for production like BETTER_AUTH_SECRET
 export const baseUrl =
   env.NODE_ENV === 'development' || !env.NEXT_PUBLIC_BASE_URL
     ? new URL('http://localhost:3000')
     : new URL(env.NEXT_PUBLIC_BASE_URL)
 
-export function getSimpleOgImage(
-  ogTitle: string,
-  description?: string
-): string {
+function getSimpleOgImage(ogTitle: string, description?: string): string {
   const params = new URLSearchParams({ title: ogTitle })
   if (description) {
     params.set('description', description)
@@ -26,12 +24,12 @@ const MAX_OG_DESCRIPTION = 320
 const clamp = (value: string, max: number) =>
   value.length > max ? `${value.slice(0, max - 1).trimEnd()}…` : value
 
-export function clampOgParams(title: string, description?: string) {
+export function clampOgParams(ogTitle: string, description?: string) {
   return {
     description: description
       ? clamp(description, MAX_OG_DESCRIPTION)
       : undefined,
-    title: clamp(title, MAX_OG_TITLE),
+    title: clamp(ogTitle, MAX_OG_TITLE),
   }
 }
 
@@ -85,7 +83,7 @@ export function createMetadata(override: Metadata): Metadata {
     },
     twitter: {
       card: 'summary_large_image',
-      creator: '@AnirudhWith',
+      creator: `@${xHandle}`,
       description: override.description ?? undefined,
       images: defaultImage,
       title: override.title ?? undefined,

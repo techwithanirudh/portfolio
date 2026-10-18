@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/input-group'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): unused-export: PromptInputMessage and the eight exported *Props types in this file have no importers, un-export them (x9)
 export interface PromptInputMessage {
   text: string
 }

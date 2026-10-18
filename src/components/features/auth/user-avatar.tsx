@@ -5,21 +5,12 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import type { User } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
-export interface UserAvatarClassNames {
-  base?: string
-  fallback?: string
-  fallbackIcon?: string
-  image?: string
-}
-
-export interface UserAvatarProps {
-  classNames?: UserAvatarClassNames
+interface UserAvatarProps {
   user?: User | null
 }
 
 export function UserAvatar({
   user,
-  classNames,
   className,
   ...props
 }: UserAvatarProps & ComponentProps<typeof Avatar>) {
@@ -28,27 +19,22 @@ export function UserAvatar({
 
   return (
     <Avatar
-      className={cn('rounded-md after:rounded-md', classNames?.base, className)}
+      className={cn('rounded-md after:rounded-md', className)}
       key={src}
       outlined={false}
       {...props}
     >
       <AvatarImage
         alt={name ?? 'Avatar'}
-        className={cn('rounded-md', classNames?.image)}
+        className='rounded-md'
         src={src ?? undefined}
       />
 
       <AvatarFallback
-        className={cn(
-          'rounded-md bg-transparent uppercase',
-          classNames?.fallback
-        )}
+        className='rounded-md bg-transparent uppercase'
         delay={src ? 200 : 0}
       >
-        {initials(name) ?? (
-          <Icons.user className={cn('w-[55%]', classNames?.fallbackIcon)} />
-        )}
+        {initials(name) ?? <Icons.user className='w-[55%]' />}
       </AvatarFallback>
     </Avatar>
   )
@@ -63,6 +49,7 @@ const leadingGraphemes = (word: string, count: number) =>
     .slice(0, count)
     .join('')
 
+// TODO(slopradar): duplication: a third initials implementation beside the ones in app/(home)/uses/_components/logo.tsx and app/(home)/_components/testimonials.tsx, keep one getInitials in lib/utils
 const initials = (name?: string | null) => {
   const [first, ...rest] = name?.trim().split(whitespace).filter(Boolean) ?? []
   if (!first) {

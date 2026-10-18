@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useRouter } from 'next/navigation'
-import { Activity, useRef, useState } from 'react'
+import { Activity, useState } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
@@ -18,10 +18,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
-import {
-  SignaturePad,
-  type SignaturePadHandle,
-} from '@/components/ui/signature-pad'
+import { SignaturePad } from '@/components/ui/signature-pad'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { useSession } from '@/lib/auth-client'
@@ -40,7 +37,6 @@ export const GuestbookForm = () => {
   const user = session?.user
   const [step, setStep] = useState<1 | 2>(1)
   const [formKey, setFormKey] = useState(0)
-  const signaturePad = useRef<SignaturePadHandle>(null)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     createGuestbookEntry,
@@ -60,12 +56,10 @@ export const GuestbookForm = () => {
             signature: undefined,
           })
           setStep(1)
-          signaturePad.current?.clear()
           setFormKey((current) => current + 1)
           router.refresh()
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           message: '',
@@ -96,7 +90,7 @@ export const GuestbookForm = () => {
     )
   }
 
-  if (!(user || isPending)) {
+  if (!user) {
     return (
       <div className='w-full space-y-6'>
         <div className='grid gap-2'>
@@ -121,7 +115,7 @@ export const GuestbookForm = () => {
     )
   }
 
-  const isExecuting = action.status === 'executing'
+  const { isExecuting } = action
 
   return (
     <div className='w-full'>
@@ -150,9 +144,7 @@ export const GuestbookForm = () => {
                     {form.formState.errors.message ? (
                       <FormMessage />
                     ) : (
-                      <FormDescription>
-                        Posting as {user?.name ?? 'Guest'}.
-                      </FormDescription>
+                      <FormDescription>Posting as {user.name}.</FormDescription>
                     )}
                   </FormItem>
                 )}
@@ -179,7 +171,6 @@ export const GuestbookForm = () => {
                   disabled={isExecuting}
                   onChange={(dataUrl) => form.setValue('signature', dataUrl)}
                   onClear={() => form.setValue('signature', undefined)}
-                  ref={signaturePad}
                 />
               </FormItem>
               <div className='flex gap-2'>
@@ -202,7 +193,7 @@ export const GuestbookForm = () => {
               </div>
             </div>
           </Activity>
-          {action.status === 'hasSucceeded' && (
+          {action.hasSucceeded && (
             <Alert className='mt-6' variant='success'>
               <Icons.success size={16} />
               <AlertTitle className='mb-0 leading-normal'>

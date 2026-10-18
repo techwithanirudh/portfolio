@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
 import { pages } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
@@ -9,7 +8,7 @@ import { profile } from '@/constants/portfolio/profile'
 import { groupTechnologies } from '@/constants/portfolio/skills'
 import { description, owner } from '@/constants/site'
 import { formatPeriod } from '@/lib/employment-period'
-import { createMetadata } from '@/lib/metadata'
+import { baseUrl, createMetadata } from '@/lib/metadata'
 import { getSortedWork } from '@/lib/source'
 import { PrintButton } from './print-button'
 
@@ -23,6 +22,7 @@ const trailingSlash = /\/$/
 const prettyUrl = (url: string) =>
   url.replace(urlPrefix, '').replace(trailingSlash, '')
 
+// TODO(slopradar): duplicate-logic: second copy of groupStack in (llms)/utils/profile.ts, share one
 const stack = groupTechnologies().map(([category, items]) => ({
   category,
   labels: items.map((item) => item.label),
@@ -48,6 +48,7 @@ const ResumeSection = ({
 
 export default function ResumePage() {
   const projects = getSortedWork().slice(0, PROJECT_COUNT)
+  // TODO(slopradar): magic-string: filters socials by display name, add a flag to the socials data (for example onResume)
   const links = socials.filter((social) => social.name !== 'YouTube')
 
   return (
@@ -59,7 +60,7 @@ export default function ResumePage() {
         <div className='mx-auto flex h-14 max-w-[calc(210mm+2px)] items-center justify-between border-border border-dashed px-6 sm:border-x'>
           <Link
             className='group inline-flex items-center gap-1.5 font-mono text-muted-foreground text-xs transition-colors hover:text-foreground'
-            href='/about'
+            href={pages.about.path}
           >
             <Icons.arrowLeft className='size-3.5' />
             Back to site
@@ -162,7 +163,7 @@ export default function ResumePage() {
                       )}
                     </h3>
                     <span className='font-mono text-[0.6875rem] text-muted-foreground tabular-nums'>
-                      {new Date(project.data.date).getFullYear()}
+                      {project.data.date.getFullYear()}
                     </span>
                   </div>
                   <p className='line-clamp-2 min-h-[2lh] text-foreground/80'>
@@ -191,11 +192,9 @@ export default function ResumePage() {
   )
 }
 
-export function generateMetadata(): Metadata {
-  return createMetadata({
-    alternates: { canonical: pages.resume.path },
-    description: pages.resume.description,
-    openGraph: { url: pages.resume.path },
-    title: pages.resume.title,
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: pages.resume.path },
+  description: pages.resume.description,
+  openGraph: { url: pages.resume.path },
+  title: pages.resume.title,
+})

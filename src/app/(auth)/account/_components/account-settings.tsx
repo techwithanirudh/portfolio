@@ -31,6 +31,7 @@ import { Input } from '@/components/ui/input'
 import { authClient, type User } from '@/lib/auth-client'
 import { toast } from '@/lib/toast'
 import { type Account, AccountSchema } from '@/lib/validators/account'
+import { AccountField } from './account-field'
 
 interface AccountSettingsProps {
   user: User
@@ -40,32 +41,28 @@ export function AccountSettings({ user }: AccountSettingsProps) {
   return (
     <Card className='dashed-stack rounded-none border-0' variant='flat'>
       <div className='flex items-center justify-between p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Avatar</span>
+        <AccountField label='Avatar'>
           <UserAvatar className='size-16' user={user} />
-        </div>
+        </AccountField>
       </div>
 
       <div className='flex items-center justify-between p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Display name</span>
+        <AccountField label='Display name'>
           <span className='text-sm'>{user.name || 'No name set'}</span>
-        </div>
-        <EditNameDialog name={user.name ?? ''} />
+        </AccountField>
+        <EditNameDialog name={user.name} />
       </div>
 
       <div className='p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Email</span>
+        <AccountField label='Email'>
           <span className='text-sm'>{user.email}</span>
-        </div>
+        </AccountField>
       </div>
 
       <div className='p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Account created</span>
+        <AccountField label='Account created'>
           <span className='text-sm'>{formatAccountDate(user.createdAt)}</span>
-        </div>
+        </AccountField>
       </div>
     </Card>
   )
@@ -84,7 +81,7 @@ function EditNameDialog({ name }: { name: string }) {
 
   const onSubmit = async (values: Account) => {
     const { error } = await authClient.updateUser({
-      name: values.name.trim(),
+      name: values.name,
     })
 
     if (error) {
@@ -134,6 +131,7 @@ function EditNameDialog({ name }: { name: string }) {
                   <FormControl>
                     <Input
                       className='rounded-none'
+                      // TODO(slopradar): magic-string: 32 duplicates AccountSchema's max, export the limit like CONTACT_NAME_MAX_LENGTH
                       maxLength={32}
                       placeholder='Your name'
                       {...field}
@@ -171,11 +169,9 @@ function EditNameDialog({ name }: { name: string }) {
   )
 }
 
-function formatAccountDate(date: Date | string) {
-  const parsedDate = new Date(date)
-
-  const absoluteDate = format(parsedDate, 'MMMM d, yyyy')
-  const relativeDate = formatDistanceToNow(parsedDate, { addSuffix: true })
+function formatAccountDate(date: Date) {
+  const absoluteDate = format(date, 'MMMM d, yyyy')
+  const relativeDate = formatDistanceToNow(date, { addSuffix: true })
 
   return `${absoluteDate} (${relativeDate})`
 }

@@ -3,8 +3,8 @@ import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { pages } from '@/constants/pages'
 import { getPostsByTag, getTags } from '@/lib/source'
 import { cn } from '@/lib/utils'
+import { tagPath } from './tag-path'
 
-// Busiest tags first, so the filters people reach for most sit at the front
 const getFilterTags = () =>
   getTags()
     .map((tag) => ({ count: getPostsByTag(tag).length, tag }))
@@ -35,9 +35,7 @@ const FilterLink = ({
 )
 
 /**
- * The list header over the blog ledger: "Everything" plus each tag as inline
- * text filters, with search on the right. Each filter is a real link to its
- * tag page; the "all plus each category" links with `aria-current` are adapted
+ * The "all plus each category" links with `aria-current` are adapted
  * from braydoncoyer.dev by Braydon Coyer (no license, used with attribution):
  * https://github.com/braydoncoyer/braydoncoyer.dev/blob/v4/app/components/CategorySelect.tsx
  */
@@ -51,17 +49,12 @@ export const PostFilters = ({ activeTag }: { activeTag?: string }) => (
         Everything
       </FilterLink>
       {getFilterTags().map((tag) => (
-        <FilterLink
-          active={tag === activeTag}
-          href={`/blog/tags/${tag}`}
-          key={tag}
-        >
+        <FilterLink active={tag === activeTag} href={tagPath(tag)} key={tag}>
           {tag}
         </FilterLink>
       ))}
     </nav>
     <div className='shrink-0 px-6 pb-2 md:p-0 md:pr-3'>
-      {/* Stays compact beside the filters and widens while you type */}
       <SearchRedirectInput
         className='transition-[width] duration-200 ease-out motion-reduce:transition-none md:w-44 focus-within:md:w-72'
         placeholder='Search posts'

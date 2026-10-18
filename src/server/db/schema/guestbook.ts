@@ -1,7 +1,6 @@
 import {
   index,
   integer,
-  pgTableCreator,
   primaryKey,
   serial,
   text,
@@ -9,8 +8,7 @@ import {
 } from 'drizzle-orm/pg-core'
 
 import { users } from './auth'
-
-const createTable = pgTableCreator((name) => `portfolio_${name}`)
+import { createTable } from './table'
 
 export const guestbookEntries = createTable('guestbook_entries', {
   createdAt: timestamp('created_at', { withTimezone: true })

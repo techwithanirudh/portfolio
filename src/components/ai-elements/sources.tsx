@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): unused-export: the exported *Props types in this file have no importers, un-export them (x4)
 export type SourcesProps = ComponentProps<typeof Collapsible>
 
 export const Sources = ({ className, ...props }: SourcesProps) => (
@@ -57,6 +58,7 @@ export const SourcesContent = ({
 }: SourcesContentProps) => (
   <CollapsibleContent
     className={cn(
+      // TODO(slopradar): duplication: this panel-height transition string is repeated in ai-elements/tool.tsx, features/toc/popover.tsx and layout/header/index.tsx with drifting easing (x4), give ui/collapsible's CollapsibleContent one animated variant and use it
       'h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none',
       className
     )}

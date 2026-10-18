@@ -41,14 +41,9 @@ export const ContactForm = () => {
           toast.error(getActionErrorMessage(error, sendFailedMessage))
         },
         onSuccess: ({ data }) => {
-          toast.success(
-            data?.success && data.message
-              ? data.message
-              : "Thanks, I got your message. I'll reply soon."
-          )
+          toast.success(data.message)
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           email: '',
@@ -80,7 +75,7 @@ export const ContactForm = () => {
                   maxLength={CONTACT_NAME_MAX_LENGTH}
                   placeholder='Jane Smith'
                   {...field}
-                  disabled={action.status === 'executing'}
+                  disabled={action.isExecuting}
                 />
               </FormControl>
               {form.formState.errors.name ? (
@@ -105,7 +100,7 @@ export const ContactForm = () => {
                   className='bg-background'
                   placeholder='jane@acme.com'
                   {...field}
-                  disabled={action.status === 'executing'}
+                  disabled={action.isExecuting}
                   type='email'
                 />
               </FormControl>
@@ -131,26 +126,23 @@ export const ContactForm = () => {
                   maxLength={CONTACT_MESSAGE_MAX_LENGTH}
                   placeholder="Hi there, I'm interested in…"
                   {...field}
-                  disabled={action.status === 'executing'}
+                  disabled={action.isExecuting}
                 />
               </FormControl>
               {form.formState.errors.message ? (
                 <FormMessage />
               ) : (
                 <FormDescription>
+                  {/* TODO(slopradar): magic-string: 30 duplicates the min in ContactSchema, export CONTACT_MESSAGE_MIN_LENGTH beside the max constants and use it in both */}
                   Please include at least 30 characters.
                 </FormDescription>
               )}
             </FormItem>
           )}
         />
-        <Button
-          className='w-full'
-          disabled={action.status === 'executing'}
-          type='submit'
-        >
+        <Button className='w-full' disabled={action.isExecuting} type='submit'>
           <span>Send message</span>
-          {action.status === 'executing' ? (
+          {action.isExecuting ? (
             <Icons.spinner
               className='size-4 animate-spin'
               data-icon='inline-end'
@@ -162,13 +154,11 @@ export const ContactForm = () => {
             />
           )}
         </Button>
-        {action.status === 'hasSucceeded' && (
+        {action.hasSucceeded && (
           <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
-              {action.result.data?.success && action.result.data?.message
-                ? action.result.data.message
-                : "Thanks, I got your message. I'll reply soon."}
+              {action.result.data?.message}
             </AlertTitle>
           </Alert>
         )}

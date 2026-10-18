@@ -1,14 +1,16 @@
 import type { MetadataRoute } from 'next'
-import { baseUrl } from '@/lib/metadata'
-import { getPosts, getTags, getWorkPages } from '@/lib/source'
+import { pages } from '@/constants/pages'
+import {
+  type BlogPage,
+  getPosts,
+  getTags,
+  getWorkPages,
+  type WorkPage,
+} from '@/lib/source'
+import { url } from '@/lib/url'
 
 type Entry = MetadataRoute.Sitemap[number]
-interface Page {
-  data: { date: Date; lastModified?: Date }
-  url: string
-}
-
-const url = (path: string) => new URL(path, baseUrl).href
+type Page = BlogPage | WorkPage
 
 const modified = (page: Page) => page.data.lastModified ?? page.data.date
 
@@ -20,37 +22,41 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const work = getWorkPages()
   const lastContentUpdate = newest([...posts, ...work])
 
-  const pages: Entry[] = [
+  const staticEntries: Entry[] = [
     {
       changeFrequency: 'monthly',
       lastModified: lastContentUpdate,
       priority: 1,
-      url: url('/'),
+      url: url(pages.home.path),
     },
     {
       changeFrequency: 'weekly',
       lastModified: newest(posts),
       priority: 0.8,
-      url: url('/blog'),
+      url: url(pages.blog.path),
     },
     {
       changeFrequency: 'monthly',
       lastModified: newest(work),
       priority: 0.8,
-      url: url('/projects'),
+      url: url(pages.projects.path),
     },
-    { changeFrequency: 'monthly', priority: 0.6, url: url('/about') },
-    { changeFrequency: 'monthly', priority: 0.5, url: url('/contact') },
-    { changeFrequency: 'monthly', priority: 0.5, url: url('/resume') },
-    { changeFrequency: 'yearly', priority: 0.4, url: url('/uses') },
-    { changeFrequency: 'yearly', priority: 0.4, url: url('/colophon') },
-    { changeFrequency: 'weekly', priority: 0.4, url: url('/guestbook') },
+    { changeFrequency: 'monthly', priority: 0.6, url: url(pages.about.path) },
+    { changeFrequency: 'monthly', priority: 0.5, url: url(pages.contact.path) },
+    { changeFrequency: 'monthly', priority: 0.5, url: url(pages.resume.path) },
+    { changeFrequency: 'yearly', priority: 0.4, url: url(pages.uses.path) },
+    { changeFrequency: 'yearly', priority: 0.4, url: url(pages.colophon.path) },
+    {
+      changeFrequency: 'weekly',
+      priority: 0.4,
+      url: url(pages.guestbook.path),
+    },
   ]
 
   const tags: Entry[] = getTags().map((tag) => ({
     changeFrequency: 'monthly',
     priority: 0.3,
-    url: url(`/blog/tags/${tag}`),
+    url: url(`${pages.blog.path}/tags/${tag}`),
   }))
 
   const postEntries: Entry[] = posts.map((post) => ({
@@ -67,5 +73,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: url(page.url),
   }))
 
-  return [...pages, ...postEntries, ...workEntries, ...tags]
+  return [...staticEntries, ...postEntries, ...workEntries, ...tags]
 }

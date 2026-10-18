@@ -1,4 +1,4 @@
-import { ViewAnimation } from '@/components/view-animation'
+import { staggerDelay, ViewAnimation } from '@/components/view-animation'
 import type { WorkPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
 import { WorkCard } from './work-card'
@@ -36,13 +36,13 @@ export const WorkGrid = ({
     )}
   >
     {works.map((work, index) => (
-      <ViewAnimation delay={0.05 * index} key={work.url}>
+      <ViewAnimation delay={staggerDelay(index)} key={work.url}>
         <WorkCard
           description={work.data.description ?? ''}
           image={work.data.image ?? null}
           priority={index < eagerCount}
-          slugs={work.slugs}
-          title={work.data.title ?? 'Untitled'}
+          title={work.data.title}
+          transitionName={work.slugs.join('/')}
           url={work.url}
         />
       </ViewAnimation>

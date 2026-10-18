@@ -1,9 +1,9 @@
 import { resolveLinkItems } from 'fumadocs-ui/layouts/shared'
-import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/layout/footer/active-link'
+import { splitLinkItems } from '@/components/layout/split-link-items'
 import { PreviewLink } from '@/components/preview-link'
-import { ViewAnimation } from '@/components/view-animation'
+import { staggerDelay, ViewAnimation } from '@/components/view-animation'
 import { linkItems, socials } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 import { cn } from '@/lib/utils'
@@ -15,9 +15,7 @@ interface LinkEntry {
   routeHandler?: boolean
 }
 
-interface ListItem {
-  external?: boolean
-  href?: string
+interface LinkGroup {
   items: LinkEntry[]
   title: string
 }
@@ -27,8 +25,6 @@ const plainLinkClassName =
 
 const FooterLink = ({ item }: { item: LinkEntry }) => {
   if (item.external) {
-    // No hover previews down here: most socials sit behind a login wall, so
-    // only GitHub ever had one
     return (
       <PreviewLink
         className={plainLinkClassName}
@@ -56,11 +52,9 @@ export const Links = () => {
     githubUrl: baseOptions.githubUrl,
     links: linkItems,
   })
-  const navItems = links.filter((item) =>
-    ['nav', 'all'].includes(item.on ?? 'all')
-  )
+  const { navItems } = splitLinkItems(links)
 
-  const lists: ListItem[] = [
+  const lists: LinkGroup[] = [
     {
       items: [
         { children: 'Home', href: '/' },
@@ -79,6 +73,7 @@ export const Links = () => {
       title: 'Navigate',
     },
     {
+      // TODO(slopradar): data-in-component: the More links (Uses, Colophon, Resume, V1, RSS) are hard-coded here while nav and socials come from constants/navigation, move them there
       items: [
         { children: 'Uses', href: '/uses' },
         { children: 'Colophon', href: '/colophon' },
@@ -115,15 +110,12 @@ export const Links = () => {
             'flex flex-col gap-3 sm:gap-6',
             index === lists.length - 1 && 'max-sm:col-span-2'
           )}
-          delay={0.05 * index}
+          delay={staggerDelay(index)}
           key={list.title}
         >
+          {/* TODO(slopradar): a11y: each link group is titled by a <p> inside a <div>, use a heading (h2 or h3) or aria-labelledby on the list so the footer groups are navigable */}
           <div className='border-b pb-1 font-medium text-foreground sm:border-none sm:pb-0'>
-            {list.href ? (
-              <Link href={list.href}>{list.title}</Link>
-            ) : (
-              <p>{list.title}</p>
-            )}
+            <p>{list.title}</p>
           </div>
           <ul className='flex flex-col gap-2 sm:gap-3'>
             {list.items.map((item) => (

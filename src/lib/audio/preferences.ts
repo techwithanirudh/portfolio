@@ -52,7 +52,7 @@ const subscribe = (listener: () => void) => {
   return () => listeners.delete(listener)
 }
 
-export const setSoundEnabled = (next: boolean) => {
+const setSoundEnabled = (next: boolean) => {
   hydrate()
   enabled = next
   try {
@@ -73,6 +73,7 @@ const getSoundEnabled = () => {
 export const useSoundEnabled = () =>
   useSyncExternalStore(subscribe, getSoundEnabled, () => true)
 
+// TODO(slopradar): two sound gates: useSound under SoundProvider already honors `enabled` and reduced motion, this imperative path re-implements both checks plus its own player cache; keep one gate so hook and imperative sounds cannot drift
 export const playSound = (definition: SoundDefinition, opts?: PlayOptions) => {
   if (!(unlocked && getSoundEnabled()) || prefersReducedMotion()) {
     return

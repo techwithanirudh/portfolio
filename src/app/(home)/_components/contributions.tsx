@@ -42,9 +42,10 @@ const useDayTooltip = () => {
   const [open, setOpen] = useState(false)
 
   const onPointerOver = (event: React.PointerEvent) => {
-    const rect = (event.target as Element).closest<SVGRectElement>(
-      'rect[data-date]'
-    )
+    const rect =
+      event.target instanceof Element
+        ? event.target.closest<SVGRectElement>('rect[data-date]')
+        : null
     if (!rect?.dataset.date) {
       return
     }
@@ -169,7 +170,7 @@ const Contributions = ({ contributions }: ContributionsProps) => (
   </Suspense>
 )
 
-export const ContributionsFallback = () => (
+const ContributionsFallback = () => (
   <Section className='relative flex h-45 w-full items-center justify-center p-6'>
     <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
   </Section>

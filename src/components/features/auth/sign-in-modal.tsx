@@ -4,10 +4,12 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import {
   createContext,
   type ReactNode,
+  type RefObject,
   Suspense,
   use,
   useCallback,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
@@ -41,11 +43,15 @@ export function useSignInModal(): SignInModalContextValue {
 
 export function SignInModalProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  // Where to send people after signing in, while the modal is open
-  const [request, setRequest] = useState<string | null>(null)
+  const pushedHref = useRef<string | null>(null)
 
   const openSignIn = useCallback(
-    (target?: string) => setRequest(sanitizeRedirect(target ?? pathname)),
+    (target?: string) => {
+      const url = new URL(window.location.href)
+      url.searchParams.set(SIGN_IN_PARAM, sanitizeRedirect(target ?? pathname))
+      pushedHref.current = url.href
+      window.history.pushState(null, '', url)
+    },
     [pathname]
   )
 
@@ -55,31 +61,35 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
     <SignInModalContext.Provider value={value}>
       {children}
       <Suspense>
-        <SignInDialog onClose={() => setRequest(null)} request={request} />
+        <SignInDialog pushedHref={pushedHref} />
       </Suspense>
     </SignInModalContext.Provider>
   )
 }
 
-// Server pages send people to /?signin=<path>, so the modal also opens from
-// that param; it's read while rendering and dropped once the modal closes
+const providers: { id: Provider; label: string; icon: ReactNode }[] = [
+  { icon: <Icons.google />, id: 'google', label: 'Sign in with Google' },
+  { icon: <Icons.github />, id: 'github', label: 'Sign in with GitHub' },
+]
+
 function SignInDialog({
-  onClose,
-  request,
+  pushedHref,
 }: {
-  onClose: () => void
-  request: string | null
+  pushedHref: RefObject<string | null>
 }) {
   const searchParams = useSearchParams()
   const param = searchParams.get(SIGN_IN_PARAM)
-  const redirectTo =
-    request ?? (param === null ? null : sanitizeRedirect(param))
+  const redirectTo = param === null ? null : sanitizeRedirect(param)
   const [loadingProvider, setLoadingProvider] = useState<Provider | null>(null)
 
   const close = () => {
-    onClose()
     setLoadingProvider(null)
     if (param === null) {
+      return
+    }
+    if (pushedHref.current === window.location.href) {
+      pushedHref.current = null
+      window.history.back()
       return
     }
     const next = new URLSearchParams(searchParams.toString())
@@ -100,17 +110,16 @@ function SignInDialog({
 
     try {
       setLoadingProvider(provider)
-      await signIn.social({ callbackURL: redirectTo, provider })
+      const result = await signIn.social({ callbackURL: redirectTo, provider })
+      if (result?.error) {
+        toast.error('Sign in failed. Please try again.')
+        setLoadingProvider(null)
+      }
     } catch {
       toast.error('Sign in failed. Please try again.')
       setLoadingProvider(null)
     }
   }
-
-  const providers: { id: Provider; label: string; icon: ReactNode }[] = [
-    { icon: <Icons.google />, id: 'google', label: 'Sign in with Google' },
-    { icon: <Icons.github />, id: 'github', label: 'Sign in with GitHub' },
-  ]
 
   return (
     <Dialog

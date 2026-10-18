@@ -1,3 +1,4 @@
+// TODO(slopradar): layering: imports PortraitChip from app/(home)/_components, move it into src/components so features never depend on a route folder
 import { PortraitChip } from '@/app/(home)/_components/portrait'
 import { owner } from '@/constants/site'
 import { cn } from '@/lib/utils'
@@ -5,10 +6,6 @@ import { cn } from '@/lib/utils'
 const ownerFirstName = owner.split(' ')[0] ?? owner
 const coAuthorSeparator = /\s*(?:&|,|\band\b)\s*/
 
-/**
- * A post's author line with my face chip in front when I wrote it, alone or
- * with co-authors ("Anirudh & Devarsh"). Names stay plain text.
- */
 export const AuthorByline = ({
   author,
   className,

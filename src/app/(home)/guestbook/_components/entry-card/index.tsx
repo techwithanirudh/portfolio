@@ -2,13 +2,12 @@
 
 import { useState } from 'react'
 import { toast } from '@/lib/toast'
-import { cn } from '@/lib/utils'
 import {
   type GuestbookEntryItem,
   GuestbookEntrySchema,
 } from '@/lib/validators/guestbook'
-import { EntryCardActions } from './actions'
 import { EntryByline } from './byline'
+import { EntryCardActions } from './card-actions'
 import { ConfirmDialog } from './confirm-dialog'
 import { EntryEditForm } from './edit-form'
 import { EntryFooter } from './footer'
@@ -18,14 +17,12 @@ interface GuestbookEntryCardProps {
   currentUserId: string | null
   entry: GuestbookEntryItem
   isAdmin: boolean
-  isSignedIn: boolean
 }
 
 export const GuestbookEntryCard = ({
   entry,
   currentUserId,
   isAdmin,
-  isSignedIn,
 }: GuestbookEntryCardProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const [draftMessage, setDraftMessage] = useState(entry.message)
@@ -57,6 +54,7 @@ export const GuestbookEntryCard = ({
 
     const trimmedMessage = draftMessage.trim()
     const originalMessage = message.trim()
+    // TODO(slopradar): inconsistent: validates with GuestbookEntrySchema, then rechecks emptiness by hand and closes the editor on a no-op, validate with GuestbookEditSchema once and disable Save while the draft is unchanged
     const disabled =
       trimmedMessage.length === 0 || trimmedMessage === originalMessage
 
@@ -92,11 +90,7 @@ export const GuestbookEntryCard = ({
   }
 
   return (
-    <div
-      className={cn(
-        'relative grid grid-cols-[minmax(0,1fr)] gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
-      )}
-    >
+    <div className='relative grid grid-cols-[minmax(0,1fr)] gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'>
       <div className='flex flex-wrap items-start justify-between gap-3'>
         <EntryByline entry={entry} />
         <EntryCardActions
@@ -124,7 +118,9 @@ export const GuestbookEntryCard = ({
           {entry.message}
         </p>
       )}
-      {isEditing ? null : <EntryFooter canReact={isSignedIn} entry={entry} />}
+      {isEditing ? null : (
+        <EntryFooter canReact={!!currentUserId} entry={entry} />
+      )}
       <ConfirmDialog
         busyLabel={entry.banned ? 'Unbanning…' : 'Banning…'}
         confirmLabel={entry.banned ? 'Unban user' : 'Ban user'}

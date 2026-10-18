@@ -1,9 +1,9 @@
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-export function ActiveSessionsSkeleton({ count = 3 }: { count?: number }) {
-  const items = Array.from({ length: count }, (_, index) => index + 1)
+const items = [1, 2, 3]
 
+export function ActiveSessionsSkeleton() {
   return (
     <div className='space-y-4'>
       {items.map((item) => (

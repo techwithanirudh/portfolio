@@ -8,12 +8,7 @@ import {
   type LinkPreviewEntry,
   type LinkPreviewImage,
   type LinkPreviewManifest,
-} from './link-preview.shared'
-
-export type {
-  LinkPreviewEntry,
-  LinkPreviewImage,
-  LinkPreviewManifest,
+  linkPreviewManifestSchema,
 } from './link-preview.shared'
 
 const manifestPath = path.join(
@@ -24,13 +19,16 @@ const manifestPath = path.join(
 )
 
 const getLinkPreviewManifest = cache((): LinkPreviewManifest | null => {
-  if (!fs.existsSync(manifestPath)) {
-    return null
-  }
-
   try {
-    return JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
-  } catch {
+    return linkPreviewManifestSchema.parse(
+      JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
+    )
+  } catch (error) {
+    if (
+      !(error instanceof Error && 'code' in error && error.code === 'ENOENT')
+    ) {
+      console.error('Could not read the link preview manifest:', error)
+    }
     return null
   }
 })

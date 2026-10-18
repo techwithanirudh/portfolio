@@ -12,8 +12,8 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components'
-import { baseUrl } from '@/constants'
 import { handle } from '@/constants/site'
+import { url } from '@/lib/url'
 
 interface ContactNotificationEmailProps {
   email: string
@@ -22,10 +22,10 @@ interface ContactNotificationEmailProps {
   sentAt: string
 }
 
+// TODO(slopradar): magic-string: #3451b2, #737373, #0a0a0a and #e5e5e5 are inlined here while newsletter-welcome.tsx uses zinc classes and other fonts,
+// put the email palette and Font blocks in one shared emails/theme.ts used by both templates
 const primary = '#3451b2'
 
-// Kept plain on purpose: it reads like a note, and the mail app's own Reply
-// already goes to the visitor through replyTo
 export default function ContactNotificationEmail({
   email,
   message,
@@ -66,14 +66,13 @@ export default function ContactNotificationEmail({
               className='pl-4'
               style={{ borderLeft: `2px solid ${primary}` }}
             >
-              {/* Keeps the visitor's own line breaks */}
               <Text className='m-0 whitespace-pre-wrap text-[#0a0a0a] text-[16px] leading-[26px]'>
                 {message}
               </Text>
             </Section>
 
             <Text className='mt-8 mb-0 text-[13px]'>
-              <Link href={`${baseUrl}/contact`} style={{ color: '#737373' }}>
+              <Link href={url('/contact')} style={{ color: '#737373' }}>
                 {handle}
                 <span style={{ color: primary }}>.</span>
               </Link>

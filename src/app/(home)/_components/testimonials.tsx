@@ -12,15 +12,7 @@ import {
 } from '@/components/ui/carousel'
 import { ViewAnimation } from '@/components/view-animation'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
-
-interface Testimonial {
-  author: {
-    name: string
-    image: string
-  }
-  description: string
-  title: string
-}
+import type { Testimonial } from '@/types'
 
 interface TestimonialsProps {
   testimonials: Testimonial[]
@@ -47,6 +39,7 @@ const TestimonialCard = ({
           <Avatar className='size-6' outlined={false}>
             <AvatarImage alt='' src={testimonial.author.image} />
             <AvatarFallback>
+              {/* TODO(slopradar): duplicate-logic: initials are computed again in uses/_components/logo.tsx and hardware.tsx, add one getInitials helper in src/lib/utils (x3) */}
               {testimonial.author.name
                 .split(' ')
                 .map((n) => n[0])
@@ -68,6 +61,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const prefersReducedMotion = useReducedMotion()
   const paused = hovered || focused
 
+  // TODO(slopradar): library-exists: hand-rolled autoplay plus hovered/focused pause state, use embla-carousel-autoplay (stopOnMouseEnter, stopOnFocusIn) as a Carousel plugin
   useEffect(() => {
     if (!api || prefersReducedMotion || paused) {
       return

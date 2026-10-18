@@ -4,11 +4,9 @@ import {
   BrainIcon,
   Briefcase01Icon,
   Briefcase02Icon,
-  Calendar03Icon,
   Cancel01Icon,
   CheckmarkBadge02Icon,
   CheckmarkCircle01Icon,
-  CodeIcon,
   Copy01Icon,
   Delete02Icon,
   DiscoverCircleIcon,
@@ -28,7 +26,6 @@ import {
   Message01Icon,
   Moon02Icon,
   MoreHorizontalCircle01Icon,
-  MoreVerticalIcon,
   MultiplicationSignCircleIcon,
   Notebook01Icon,
   PencilEdit01Icon,
@@ -101,8 +98,6 @@ import {
 import type { IconProps, SvgIcon } from './utils'
 import { getSvgSizeProps } from './utils'
 
-export type { Icon } from './utils'
-
 const DEFAULT_STROKE_WIDTH = 2
 
 const toStrokeWidth = (value: IconProps['strokeWidth']) => {
@@ -113,7 +108,6 @@ const toStrokeWidth = (value: IconProps['strokeWidth']) => {
     : DEFAULT_STROKE_WIDTH
 }
 
-// Decorative unless the caller labels it
 const isLabelled = (props: IconProps) =>
   Object.keys(props).some(
     (key) =>
@@ -144,10 +138,6 @@ const lucideIcon = (Icon: LucideIcon): SvgIcon => {
   return Lucide
 }
 
-// The mix the site had before everything got routed through one set:
-// Hugeicons by default, Lucide for arrows, chevrons, paw and volume, and
-// Primer Octicons for the GitHub activity feed
-
 export const Icons = {
   add: hugeIcon(PlusSignIcon),
   aiChat: hugeIcon(AiChat02Icon),
@@ -159,14 +149,12 @@ export const Icons = {
   ban: hugeIcon(UnavailableIcon),
   blog: hugeIcon(Notebook01Icon),
   brain: hugeIcon(BrainIcon),
-  calendar: hugeIcon(Calendar03Icon),
   check: hugeIcon(Tick02Icon),
   chevronDown: lucideIcon(ChevronDown),
   chevronLeft: lucideIcon(ChevronLeft),
   chevronRight: lucideIcon(ChevronRight),
   claude: ClaudeIcon,
   close: hugeIcon(Cancel01Icon),
-  code: hugeIcon(CodeIcon),
   codeXml: hugeIcon(SourceCodeSquareIcon),
   comment: CommentIcon,
   compass: hugeIcon(DiscoverCircleIcon),
@@ -174,7 +162,6 @@ export const Icons = {
   cornerDownLeft: lucideIcon(CornerDownLeft),
   desktop: hugeIcon(Tv02Icon),
   download: hugeIcon(Download01Icon),
-  ellipsis: hugeIcon(MoreVerticalIcon),
   eraser: hugeIcon(EraserIcon),
   error: hugeIcon(MultiplicationSignCircleIcon),
   experience: hugeIcon(Briefcase01Icon),

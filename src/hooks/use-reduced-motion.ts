@@ -7,5 +7,6 @@ const subscribe = (onChange: () => void) => {
   return () => query.removeEventListener('change', onChange)
 }
 
+// TODO(slopradar): library exists: motion/react exports useReducedMotion (motion is a dependency); adopt it, or if the `true` server snapshot is the reason to keep this, name that in the hook
 export const useReducedMotion = () =>
   useSyncExternalStore(subscribe, prefersReducedMotion, () => true)

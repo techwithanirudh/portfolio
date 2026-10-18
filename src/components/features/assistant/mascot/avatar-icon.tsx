@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils'
 import { SimbaRig } from './rig'
 
-// The seated rig, scaled up to trim the headroom kept for taller poses
 export function AvatarIcon({
   className,
   size = 24,

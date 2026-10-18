@@ -5,7 +5,7 @@ import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
 import {
   Children,
   type ComponentProps,
-  type ReactElement,
+  isValidElement,
   type ReactNode,
   Suspense,
   use,
@@ -19,6 +19,7 @@ import { visit } from 'unist-util-visit'
 
 const WHITESPACE_LOOKAHEAD = /(?=\s)/
 
+// TODO(slopradar): over-abstraction: Processor plus createProcessor wrap one remark pipeline, and this is a third markdown stack beside fumadocs createMarkdownRenderer (features/search/results.tsx) and react-markdown (experience-timeline.tsx), keep one
 interface Processor {
   process: (content: string) => Promise<ReactNode>
 }
@@ -88,8 +89,11 @@ function createProcessor(): Processor {
 }
 
 function Pre(props: ComponentProps<'pre'>) {
-  const code = Children.only(props.children) as ReactElement
-  const codeProps = code.props as ComponentProps<'code'>
+  const code = Children.only(props.children)
+  if (!isValidElement<ComponentProps<'code'>>(code)) {
+    return null
+  }
+  const codeProps = code.props
   const content = codeProps.children
   if (typeof content !== 'string') {
     return null
@@ -109,6 +113,7 @@ function Pre(props: ComponentProps<'pre'>) {
 }
 
 const processor = createProcessor()
+const CACHE_LIMIT = 200
 const cache = new Map<string, Promise<ReactNode>>()
 
 export function Markdown({ text }: { text: string }) {
@@ -121,9 +126,17 @@ export function Markdown({ text }: { text: string }) {
   )
 }
 
-function Renderer({ text }: { text: string }) {
+const processCached = (text: string) => {
   const result = cache.get(text) ?? processor.process(text)
+  cache.delete(text)
   cache.set(text, result)
+  const oldest = cache.keys().next()
+  if (cache.size > CACHE_LIMIT && !oldest.done) {
+    cache.delete(oldest.value)
+  }
+  return result
+}
 
-  return use(result)
+function Renderer({ text }: { text: string }) {
+  return use(processCached(text))
 }

@@ -22,18 +22,23 @@ const PRESS =
   'a[href], button:not([type="submit"]), [role="tab"], [role="switch"], [role="checkbox"], [aria-expanded]'
 const PRESS_OPT_OUT = '[data-sound="off"], [data-sound-press="off"]'
 const VALIDATION_DELAY = 120
+const CLICK_SETTLE_DELAY = 16
 
 const jitter = (detune: number, volume: number): PlayOptions => ({
   jitter: { detune, volume },
 })
 
+const afterClickHandlers = (read: () => void) => {
+  // aria state flips after the click handlers ran, so read it a tick later
+  setTimeout(read, CLICK_SETTLE_DELAY)
+}
+
 const playPress = (el: Element) => {
-  // aria-expanded flips after the click handlers ran, so read it a tick later
   if (el.hasAttribute('aria-expanded')) {
-    setTimeout(() => {
+    afterClickHandlers(() => {
       const open = el.getAttribute('aria-expanded') === 'true'
       playSound(open ? expand : collapse, jitter(20, 0.06))
-    }, 16)
+    })
     return
   }
   const role = el.getAttribute('role')
@@ -42,9 +47,8 @@ const playPress = (el: Element) => {
     return
   }
   if (role === 'switch' || role === 'checkbox') {
-    // The state flips after the click handlers ran, so read it a tick later
     const wasChecked = el.getAttribute('aria-checked') === 'true'
-    setTimeout(() => {
+    afterClickHandlers(() => {
       const isChecked = el.getAttribute('aria-checked') === 'true'
       if (role === 'checkbox') {
         playSound(checkbox, jitter(20, 0.06))
@@ -54,7 +58,7 @@ const playPress = (el: Element) => {
           jitter(20, 0.06)
         )
       }
-    }, 16)
+    })
     return
   }
   if (el instanceof HTMLButtonElement) {
@@ -62,6 +66,13 @@ const playPress = (el: Element) => {
     return
   }
   playSound(click, jitter(60, 0.1))
+}
+
+const pressTarget = (target: Element) => {
+  const el = target.closest(PRESS)
+  if (el && !el.closest(PRESS_OPT_OUT)) {
+    playPress(el)
+  }
 }
 
 const playSubmit = (form: HTMLFormElement) => {
@@ -110,10 +121,7 @@ export function UiSounds() {
       ) {
         return
       }
-      const el = event.target.closest(PRESS)
-      if (el && !el.closest(PRESS_OPT_OUT)) {
-        playPress(el)
-      }
+      pressTarget(event.target)
     }
 
     // Keyboard activation has no pointerdown, a click without a pointer does
@@ -125,10 +133,7 @@ export function UiSounds() {
         return
       }
       touchPress = false
-      const el = event.target.closest(PRESS)
-      if (el && !el.closest(PRESS_OPT_OUT)) {
-        playPress(el)
-      }
+      pressTarget(event.target)
     }
 
     const onSubmit = (event: SubmitEvent) => {

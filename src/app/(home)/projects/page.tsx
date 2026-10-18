@@ -1,4 +1,4 @@
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { WorkGrid } from '@/components/features/work/work-grid'
 import { CollectionPageJsonLd } from '@/components/json-ld'
@@ -19,9 +19,11 @@ const EAGER_COVERS = 2
 const totalWorks = getSortedWork().length
 const pageCount = Math.ceil(totalWorks / worksPerPage)
 
-export default async function Page(props: {
+interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) {
+}
+
+export default async function Page(props: Props) {
   const searchParams = await props.searchParams
   const pageIndex = parsePageParam(searchParams.page) - 1
 
@@ -76,14 +78,7 @@ export default async function Page(props: {
   )
 }
 
-interface Props {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
-
-export async function generateMetadata(
-  props: Props,
-  _parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   const searchParams = await props.searchParams
 
   const pageIndex = parsePageParam(searchParams.page)
@@ -92,14 +87,11 @@ export async function generateMetadata(
     notFound()
   }
 
-  const isFirstPage = pageIndex === 1 || !searchParams.page
+  const isFirstPage = pageIndex === 1
   const pageTitle = isFirstPage
     ? pages.projects.title
     : `${pages.projects.title}, page ${pageIndex}`
-  const canonicalUrl = getPageHref(
-    pages.projects.path,
-    isFirstPage ? 1 : pageIndex
-  )
+  const canonicalUrl = getPageHref(pages.projects.path, pageIndex)
 
   return createMetadata({
     alternates: {

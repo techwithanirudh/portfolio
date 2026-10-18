@@ -13,20 +13,15 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components'
-import { baseUrl } from '@/constants'
-import { title } from '@/constants/site'
+import { title as siteTitle } from '@/constants/site'
+import type { BlogPage } from '@/lib/source'
+import { url as siteUrl } from '@/lib/url'
 
 interface NewsletterWelcomeEmailProps {
   firstName: string
-  posts: {
-    title: string
-    description?: string
-    date: Date
-    tags?: string[]
-    image?: string
-    author: string
+  posts: (Pick<BlogPage['data'], 'title' | 'description' | 'image'> & {
     url: string
-  }[]
+  })[]
 }
 
 function PostCard({
@@ -34,15 +29,15 @@ function PostCard({
   description,
   image,
   url,
-}: NewsletterWelcomeEmailProps['posts'][0]) {
+}: NewsletterWelcomeEmailProps['posts'][number]) {
   return (
     <Section className='my-[16px]'>
       <Link href={url}>
         <Img
-          alt='Post image'
+          alt={title}
           className='w-full rounded-[12px] object-cover'
           height='320'
-          src={image ?? `${baseUrl}/images/placeholder.png`}
+          src={image ?? siteUrl('/images/placeholder.png')}
         />
       </Link>
       <Section className='mt-[24px]'>
@@ -67,6 +62,7 @@ export default function NewsletterWelcomeEmail({
   return (
     <Html>
       <Head>
+        {/* TODO(slopradar): duplication: versioned gstatic Font blocks repeat across both templates (x3) with different families, move them to the shared emails/theme.ts noted in contact-notification.tsx */}
         <Font
           fallbackFontFamily='Georgia'
           fontFamily='Alex Brush'
@@ -94,7 +90,7 @@ export default function NewsletterWelcomeEmail({
           <Container className='mx-auto w-full max-w-[600px] p-8'>
             <Section>
               <Text className='mx-0 mt-4 mb-8 p-0 text-center font-normal text-2xl'>
-                <span className='font-bold tracking-tighter'>{title}</span>
+                <span className='font-bold tracking-tighter'>{siteTitle}</span>
               </Text>
               <Heading className='my-4 font-medium text-4xl leading-tight'>
                 Welcome!
@@ -132,7 +128,7 @@ export default function NewsletterWelcomeEmail({
                 className='select-none text-4xl text-zinc-900 leading-8'
                 style={{ fontFamily: 'Alex Brush' }}
               >
-                {title}
+                {siteTitle}
               </Text>
             </Section>
           </Container>
@@ -146,34 +142,24 @@ NewsletterWelcomeEmail.PreviewProps = {
   firstName: 'Jane',
   posts: [
     {
-      author: 'You',
-      date: new Date('2025-03-21'),
-      description:
-        'A look at Next.js Pages, with examples, dynamic routing, pre-rendering strategies like Static Generation and SSR, and tips for building fast, SEO-friendly web apps. Includes tricks from my latest project!',
-      image: `${baseUrl}/images/blog/pages.png`,
-      tags: ['Next.js', 'Pages', 'Routing'],
-      title: 'Next.js Pages',
-      url: `${baseUrl}/posts/pages`,
+      description: 'An introduction, and what I plan to write about here.',
+      image: siteUrl('/images/blog/first-post.png'),
+      title: 'Hello world',
+      url: siteUrl('/blog/hello-world'),
     },
     {
-      author: 'You',
-      date: new Date('2025-03-22'),
       description:
-        'Learn to use Markdown to format blogs, docs, and notes. This post has examples, tips, and practical use cases for writing content that is easier to read, share, and maintain.',
-      image: `${baseUrl}/images/blog/markdown-examples.png`,
-      tags: ['Markdown', 'Docs', 'Writing'],
-      title: 'Markdown Examples',
-      url: `${baseUrl}/posts/markdown-examples`,
+        'Teaching a Slack bot to run code safely, by way of Vercel Sandboxes, E2B, and finally Daytona.',
+      image: siteUrl('/images/blog/gorkie-sandboxes.jpg'),
+      title: 'How we taught a Slack bot to run code',
+      url: siteUrl('/blog/gorkie-sandboxes'),
     },
     {
-      author: 'You',
-      date: new Date('2025-03-23'),
       description:
-        'Learn MDX in Next.js to mix Markdown with React. This guide shows setup with @next/mdx, usage tips, and examples to embed JSX in posts. It works well for blogs, docs, and interactive tutorials.',
-      image: `${baseUrl}/images/blog/using-mdx.png`,
-      tags: ['MDX', 'Next.js', 'React'],
-      title: 'Using MDX',
-      url: `${baseUrl}/posts/using-mdx`,
+        'A custom UI-styled VS Code setup, with links to my real config.',
+      image: siteUrl('/images/blog/vscode-setup.jpg'),
+      title: 'my VSCode setup',
+      url: siteUrl('/blog/vscode-setup'),
     },
   ],
 } satisfies NewsletterWelcomeEmailProps

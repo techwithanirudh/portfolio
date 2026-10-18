@@ -26,9 +26,6 @@ export default function Story(): React.ReactElement {
   )
 }
 
-// The original alternates photo and text across two columns with the track
-// running between them on the photo side. On phones there's no track, and the
-// photo sits centered above the text
 function ChapterRow({
   chapter,
   index,
@@ -90,9 +87,6 @@ function ChapterRow({
   )
 }
 
-// A tilted photo resting in its slot that straightens once the track reaches
-// its chapter, or the empty slot with an icon. Straight, it sits lifted 8px
-// up-left of the slot, so its corners are the slot's 20px minus that 8px
 function Snapshot({
   chapter,
   eager = false,

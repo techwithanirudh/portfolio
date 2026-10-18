@@ -17,14 +17,12 @@ import { SoftwareGrid } from './_components/software'
 
 const { description, path, title } = pages.uses
 
-export function generateMetadata(): Metadata {
-  return createMetadata({
-    alternates: { canonical: path },
-    description,
-    openGraph: { url: path },
-    title,
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: path },
+  description,
+  openGraph: { url: path },
+  title,
+})
 
 export default function UsesPage() {
   const sections: Array<{

@@ -10,22 +10,15 @@ export function IconSwap(props: React.PropsWithChildren<AnimatePresenceProps>) {
   return <AnimatePresence initial={false} mode='popLayout' {...props} />
 }
 
-type MotionElement = typeof m.div | typeof m.span
-
 const shown = { filter: 'blur(0px)', opacity: 1, scale: 1 }
 const hidden = { filter: 'blur(4px)', opacity: 0, scale: 0.25 }
 
-export function IconSwapItem({
-  as: Component = m.div,
-  ...props
-}: HTMLMotionProps<'div'> & {
-  as?: MotionElement
-}) {
+export function IconSwapItem(props: HTMLMotionProps<'span'>) {
   // MotionConfig only drops the scale, so reduced motion gets a plain fade
   const reducedMotion = useReducedMotion()
 
   return (
-    <Component
+    <m.span
       animate={reducedMotion ? { opacity: 1 } : shown}
       exit={reducedMotion ? { opacity: 0 } : hidden}
       initial={reducedMotion ? { opacity: 0 } : hidden}

@@ -22,6 +22,7 @@ import {
 } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { TitleDot } from '@/components/layout/sections/hero'
+import { splitLinkItems } from '@/components/layout/split-link-items'
 import { buttonVariants } from '@/components/ui/button-variants'
 import {
   Collapsible,
@@ -34,6 +35,7 @@ import { LinkItem } from './link-item'
 import { SearchToggle } from './search-toggle'
 import { ThemeToggle } from './theme-toggle'
 
+// TODO(slopradar): attribution: this navbar (navItemVariants, renderNavTitle, both LinkItem renderers) is adapted from fumadocs-ui layouts/home/slots/header.js (MIT), add a source header and a THIRD_PARTY_NOTICES.md entry like the other adapted files
 const navItemVariants = cva('[&_svg]:size-4', {
   defaultVariants: {
     variant: 'main',
@@ -60,26 +62,16 @@ const renderNavTitle = (
   const title = nav?.title
   const href = nav?.url ?? '/'
 
-  if (!title) {
+  if (typeof title !== 'string' || !title) {
     return null
-  }
-
-  if (typeof title === 'function') {
-    return title({ href, ...props }) as ReactNode
   }
 
   return (
     <NavTitleLink href={href} {...props}>
-      {/* The wordmark ends on the same blue full stop as the page headings,
-          wrapped so the link's gap doesn't push the dot away */}
-      {typeof title === 'string' ? (
-        <span>
-          {title}
-          <TitleDot />
-        </span>
-      ) : (
-        (title as ReactNode)
-      )}
+      <span>
+        {title}
+        <TitleDot />
+      </span>
     </NavTitleLink>
   )
 }
@@ -114,26 +106,10 @@ export const Header = ({
   searchToggle = {},
   className,
 }: HomeLayoutProps & { className?: string }) => {
-  const { navItems, menuItems } = useMemo(() => {
-    const navItems: LinkItemType[] = []
-    const menuItems: LinkItemType[] = []
-
-    for (const item of resolveLinkItems({ links })) {
-      switch (item.on ?? 'all') {
-        case 'menu':
-          menuItems.push(item)
-          break
-        case 'nav':
-          navItems.push(item)
-          break
-        default:
-          navItems.push(item)
-          menuItems.push(item)
-      }
-    }
-
-    return { menuItems, navItems }
-  }, [links])
+  const { navItems, menuItems } = useMemo(
+    () => splitLinkItems(resolveLinkItems({ links })),
+    [links]
+  )
 
   return (
     <HeaderNavigationMenu
@@ -157,6 +133,7 @@ export const Header = ({
                 key={getItemKey(item, i)}
               />
             ))}
+            {/* TODO(slopradar): dead-code: site-shell passes themeSwitch={{ enabled: false }} and no searchToggle components or transparentMode, so these slots (x2 here, plus searchToggle.components and isTransparent) never vary; take links only and drop the HomeLayoutProps pass-through */}
             {themeSwitch.enabled !== false &&
               (themeSwitch.component ?? (
                 <ThemeToggle mode={themeSwitch?.mode} />
@@ -169,6 +146,7 @@ export const Header = ({
       <div className='relative flex w-full items-center'>
         <div className='flex items-center gap-2'>
           <div>
+            {/* TODO(slopradar): dead-markup: several single-child <div> wrappers (x6 in Header) come from the fumadocs port and wrap one element each, drop them */}
             {renderNavTitle(nav, {
               className:
                 'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
@@ -259,6 +237,7 @@ const HeaderNavigationMenu = ({
   const isTransparent =
     transparentMode === 'top' ? isTop : transparentMode === 'always'
 
+  // TODO(slopradar): duplication: outside-press plus Escape dismissal is hand-written here, in toc/popover.tsx and in mobile/index.tsx, extract one useDismiss(ref, open, onClose) hook
   // A collapsible has no dismiss behavior of its own, so close the menu on
   // Escape or a press outside the header like the popup it replaces
   useEffect(() => {
@@ -267,7 +246,12 @@ const HeaderNavigationMenu = ({
     }
 
     const onPointerDown = (event: PointerEvent) => {
-      if (!headerRef.current?.contains(event.target as Node)) {
+      if (
+        !(
+          event.target instanceof Node &&
+          headerRef.current?.contains(event.target)
+        )
+      ) {
         setMenuOpen(false)
       }
     }
@@ -321,7 +305,7 @@ const HeaderNavigationMenu = ({
         <CollapsibleContent
           className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none lg:hidden'
           onClick={(event) => {
-            if ((event.target as Element).closest('a')) {
+            if (event.target instanceof Element && event.target.closest('a')) {
               setMenuOpen(false)
             }
           }}
@@ -494,6 +478,7 @@ const MobileNavigationMenuLinkItem = ({
   return (
     <LinkItem
       aria-label={item.type === 'icon' ? item.label : undefined}
+      // TODO(slopradar): duplication: this button/icon/main class map restates navItemVariants above with small drifts, add a mobile variant to navItemVariants instead
       className={cn(
         {
           button: buttonVariants({

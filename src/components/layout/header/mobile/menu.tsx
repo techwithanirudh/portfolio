@@ -3,11 +3,15 @@
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
+import { isLinkItemActive } from '@/components/layout/header/link-item'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
-import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
+
+const footerIconClassName =
+  'flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
 
 export function MenuPanel({
   menuId,
@@ -39,7 +43,7 @@ export function MenuPanel({
   return (
     <DialogPrimitive.Popup
       aria-label='Mobile navigation'
-      className='fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-[32] max-h-[calc(100dvh-7rem)] origin-bottom overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 md:hidden'
+      className='fixed inset-x-4 bottom-[calc(5rem+env(safe-area-inset-bottom))] z-32 max-h-[calc(100dvh-7rem)] origin-bottom overflow-y-auto overscroll-contain rounded-xl border border-dashed bg-background outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 md:hidden'
       id={menuId}
     >
       <nav className='dashed-stack flex flex-col'>
@@ -49,11 +53,7 @@ export function MenuPanel({
             key={row.map((item) => item.url).join('-')}
           >
             {row.map((item) => {
-              const activeType =
-                'active' in item ? (item.active ?? 'url') : 'url'
-              const active =
-                activeType !== 'none' &&
-                isActive(item.url, pathname, activeType === 'nested-url')
+              const active = isLinkItemActive(item, pathname)
 
               return (
                 <Link
@@ -66,6 +66,7 @@ export function MenuPanel({
                   )}
                   href={item.url}
                   key={item.url}
+                  // TODO(slopradar): magic-deferral: setTimeout(0) defers the close with no stated reason, say why (navigation must run first) or call onClose directly
                   onClick={() => setTimeout(onClose, 0)}
                 >
                   {'icon' in item ? item.icon : null}
@@ -77,17 +78,14 @@ export function MenuPanel({
         ))}
       </nav>
       <div className='flex items-center justify-between border-t border-dashed px-1.5 py-0.5'>
-        {/* A touch narrower than square so the three-way theme switch still
-            fits beside them on a 360px phone */}
         <div className='flex items-center'>
           {socials.map((social) => (
             <a
               aria-label={social.name}
-              className='flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+              className={footerIconClassName}
               href={social.url}
               key={social.name}
-              rel='noopener noreferrer'
-              target='_blank'
+              {...externalLinkProps}
             >
               {social.icon}
             </a>
@@ -96,7 +94,7 @@ export function MenuPanel({
         <div className='flex items-center gap-1'>
           <button
             aria-label='Open assistant'
-            className='flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
+            className={footerIconClassName}
             onClick={onAssistantOpen}
             type='button'
           >

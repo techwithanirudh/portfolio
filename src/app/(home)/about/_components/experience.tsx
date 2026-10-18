@@ -5,6 +5,7 @@ import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
@@ -20,7 +21,7 @@ export default function Experience(): React.ReactElement {
           <ViewAnimation delay={0.15}>
             <Button
               nativeButton={false}
-              render={<Link href='/resume' />}
+              render={<Link href={pages.resume.path} />}
               size='sm'
               variant='outline'
             >

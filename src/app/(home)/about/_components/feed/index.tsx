@@ -1,32 +1,32 @@
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
 import { getActivityItems } from './data'
-import { GitHubEvent as GitHubEventComponent } from './event'
+import { GitHubEventRow } from './event'
 
 export default async function Feed(): Promise<React.ReactElement | null> {
-  try {
-    const items = await getActivityItems()
+  const items = await getActivityItems()
 
-    if (items.length === 0) {
-      return null
-    }
-
-    return (
-      <Section>
-        <ViewAnimation className='border-border border-b border-dashed bg-muted/40 px-6 py-3 font-mono text-muted-foreground text-xs'>
-          <h2>Latest activity</h2>
-        </ViewAnimation>
-        <div className='relative flex max-h-96 flex-col gap-2 overflow-hidden p-6 font-mono text-muted-foreground text-xs sm:text-sm'>
-          {items.map((item, index) => (
-            <ViewAnimation delay={0.03 * index} key={item.event.id}>
-              <GitHubEventComponent commits={item.commits} event={item.event} />
-            </ViewAnimation>
-          ))}
-          <div className='pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-b from-transparent to-background' />
-        </div>
-      </Section>
-    )
-  } catch {
+  if (items.length === 0) {
     return null
   }
+
+  return (
+    <Section>
+      <ViewAnimation className='border-border border-b border-dashed bg-muted/40 px-6 py-3 font-mono text-muted-foreground text-xs'>
+        <h2>Latest activity</h2>
+      </ViewAnimation>
+      <div className='relative flex max-h-96 flex-col gap-2 overflow-hidden p-6 font-mono text-muted-foreground text-xs sm:text-sm'>
+        {items.map((item, index) => (
+          <ViewAnimation delay={0.03 * index} key={item.event.id}>
+            <GitHubEventRow
+              commits={item.commits}
+              event={item.event}
+              merged={item.merged}
+            />
+          </ViewAnimation>
+        ))}
+        <div className='pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-linear-to-b from-transparent to-background' />
+      </div>
+    </Section>
+  )
 }

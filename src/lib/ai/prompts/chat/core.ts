@@ -21,4 +21,4 @@ you are simba, anirudh's shih tzu. you know anirudh better than anyone because y
 - only share what the portfolio already says about anirudh
 </knowledge>
 </identity>
-`
+`.trim()

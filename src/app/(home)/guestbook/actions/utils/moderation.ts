@@ -4,7 +4,7 @@ import { provider } from '@/lib/ai/providers'
 import type { Base64FileParts } from '@/lib/files'
 import { ModerationResultSchema } from '@/lib/validators'
 
-export interface ModerateGuestbookEntryInput {
+interface ModerateGuestbookEntryInput {
   message: string
   signature?: Base64FileParts
 }
@@ -14,12 +14,16 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
 
   const userContent: UserContent = [
     {
-      text: `Moderate this guestbook entry:\n\nMessage:\n${message}. If a signature image is included, also moderate the content of the signature.`,
+      text: `Moderate this guestbook entry:\n\nMessage:\n${message}`,
       type: 'text',
     },
   ]
 
   if (signature) {
+    userContent.push({
+      text: 'The entry also includes a signature image. Moderate its content too.',
+      type: 'text',
+    })
     userContent.push({
       data: signature.data,
       mediaType: signature.mediaType,

@@ -21,7 +21,6 @@ interface PaginationRangeOptions {
   totalPages: number
 }
 
-/** The page numbers to show around the current page, and where to elide */
 export function getPaginationRange({
   currentPage,
   totalPages,

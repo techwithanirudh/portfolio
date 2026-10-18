@@ -1,6 +1,7 @@
 import type { IconProps } from '../utils'
 import { getSvgSizeProps } from '../utils'
 
+// TODO(slopradar): duplication: all eight brand files repeat the same svg wrapper (getSvgSizeProps spread, fill, aria-hidden) and differ only in viewBox and paths, build them with one brandIcon(viewBox, paths) factory beside hugeIcon/lucideIcon (x8 across brands/)
 export const ClaudeIcon = ({ height, size, width, ...props }: IconProps) => (
   <svg
     aria-hidden

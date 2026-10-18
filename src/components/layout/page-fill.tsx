@@ -1,4 +1,4 @@
-import { Cross } from '@/components/layout/sections'
+import { CrossPair } from '@/components/layout/sections'
 import { cn } from '@/lib/utils'
 
 const CROSS_OVERHANG_MARGIN = 'mb-2'
@@ -16,8 +16,7 @@ export const PageFill = () => (
         CROSS_OVERHANG_MARGIN
       )}
     >
-      <Cross className='-left-[7px]' />
-      <Cross className='-right-[7px]' />
+      <CrossPair />
     </div>
     <span
       className={cn(

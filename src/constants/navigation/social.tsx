@@ -1,5 +1,6 @@
 import { Icons } from '@/components/icons/icons'
 import { githubUrl } from '@/constants/config'
+import { email, xHandle } from '@/constants/site'
 import type { Social } from '@/types'
 
 export const socials: Social[] = [
@@ -13,7 +14,7 @@ export const socials: Social[] = [
     description: 'Follow me for tech updates and project announcements',
     icon: <Icons.x />,
     name: 'X',
-    url: 'https://x.com/AnirudhWith',
+    url: `https://x.com/${xHandle}`,
   },
   {
     description: 'Connect with me professionally',
@@ -31,6 +32,6 @@ export const socials: Social[] = [
     description: 'Get in touch via email',
     icon: <Icons.mail />,
     name: 'Email',
-    url: 'mailto:hello@imanirudh.com',
+    url: `mailto:${email}`,
   },
 ]

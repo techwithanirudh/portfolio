@@ -1,6 +1,7 @@
 'use client'
 import NextImage from 'next/image'
 import { useCallback, useState } from 'react'
+// TODO(slopradar): attribution: the Delba de Oliveira header sits between imports and the source is missing from THIRD_PARTY_NOTICES.md, move it under 'use client' above the imports and add the notice
 /**
  * Copyright (c) Delba de Oliveira
  * Source: https://github.com/delbaoliveira/website/blob/59e6f181ad75751342ceaa8931db4cbcef86b018/ui/BlurImage.tsx
@@ -12,6 +13,7 @@ export const IMAGE_QUALITY = 85
 type ImageProps = {
   blur?: boolean
   imageClassName?: string
+  // TODO(slopradar): boolean-prop: `lazy` duplicates next/image's own `loading` prop, accept `loading` and derive fetchPriority from loading === 'eager'
   lazy?: boolean
 } & React.ComponentProps<typeof NextImage>
 

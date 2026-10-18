@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { type FileObject, readFiles } from 'next-validate-link'
-import type { Browser } from 'playwright'
+import type { Browser, Page, Response } from 'playwright'
 import { remark } from 'remark'
 import remarkGfm from 'remark-gfm'
 import remarkMdx from 'remark-mdx'
@@ -10,117 +10,76 @@ import {
   hashUrl,
   type LinkPreviewEntry,
   type LinkPreviewManifest,
+  linkPreviewManifestSchema,
 } from '@/lib/link-preview.shared'
 import {
-  content,
-  detection,
+  contentGlobs,
   exclusions,
-  previewLinkSourceFiles,
+  frontmatterLinks,
+  previewLinkSourceGlobs,
   screenshot,
 } from './config'
-import type { CaptureScreenshotResult } from './types'
 
 const mdProcessor = remark().use(remarkGfm)
 const mdxProcessor = remark().use(remarkMdx).use(remarkGfm)
 
-export function shouldGeneratePreview(url: string): boolean {
-  if (!(url.startsWith('http://') || url.startsWith('https://'))) {
+function shouldGeneratePreview(url: string): boolean {
+  const parsed = URL.parse(url)
+  if (
+    !parsed ||
+    (parsed.protocol !== 'http:' && parsed.protocol !== 'https:')
+  ) {
     return false
   }
-
-  try {
-    const parsed = new URL(url)
-    if (exclusions.hostnames.includes(parsed.hostname)) {
-      return false
-    }
-    if (
-      exclusions.extensions.some((e) =>
-        parsed.pathname.toLowerCase().endsWith(e)
-      )
-    ) {
-      return false
-    }
-    return !exclusions.domains.some((d) => parsed.hostname.includes(d))
-  } catch {
+  if (exclusions.hostnames.includes(parsed.hostname)) {
     return false
   }
+  if (
+    exclusions.extensions.some((e) => parsed.pathname.toLowerCase().endsWith(e))
+  ) {
+    return false
+  }
+  return !exclusions.domains.some(
+    (d) => parsed.hostname === d || parsed.hostname.endsWith(`.${d}`)
+  )
 }
 
-export function extractUrls(file: FileObject): string[] {
+function extractUrls(file: FileObject): string[] {
   const urls = new Set<string>()
   const processor = file.path.endsWith('.mdx') ? mdxProcessor : mdProcessor
   const tree = processor.parse(file.content)
 
-  if (file.data) {
-    const fm = file.data as Record<string, unknown>
-    for (const field of detection.frontmatter) {
-      const v = fm[field]
-      if (typeof v === 'string' && shouldGeneratePreview(v)) {
-        urls.add(v)
+  const frontmatter = frontmatterLinks.safeParse(file.data)
+  if (frontmatter.success) {
+    for (const url of Object.values(frontmatter.data)) {
+      if (url && shouldGeneratePreview(url)) {
+        urls.add(url)
       }
     }
   }
 
-  visit(
-    tree,
-    (node: {
-      type: string
-      url?: unknown
-      name?: unknown
-      attributes?: { type: string; name?: unknown; value?: unknown }[]
-    }) => {
-      if (
-        node.type === 'link' &&
-        typeof node.url === 'string' &&
-        shouldGeneratePreview(node.url)
-      ) {
-        urls.add(node.url)
-        return
-      }
-      if (
-        node.type !== 'mdxJsxFlowElement' &&
-        node.type !== 'mdxJsxTextElement'
-      ) {
-        return
-      }
-      if (typeof node.name !== 'string') {
-        return
-      }
-
-      const attrs = detection.components[node.name]
-      if (!attrs) {
-        return
-      }
-
-      for (const attr of node.attributes ?? []) {
-        if (
-          attr.type === 'mdxJsxAttribute' &&
-          typeof attr.name === 'string' &&
-          typeof attr.value === 'string' &&
-          attrs.includes(attr.name) &&
-          shouldGeneratePreview(attr.value)
-        ) {
-          urls.add(attr.value)
-        }
-      }
+  visit(tree, 'link', (node) => {
+    if (shouldGeneratePreview(node.url)) {
+      urls.add(node.url)
     }
-  )
+  })
 
   return [...urls]
 }
 
 const sourceUrlPattern = /(?:['"`]|\]\()(https?:\/\/[^'"`\s$)]+)(?=['"`)])/g
 
-export function extractSourceUrls(source: string): string[] {
+function extractSourceUrls(source: string): string[] {
   return [...source.matchAll(sourceUrlPattern)]
     .map(([, url]) => url)
     .filter((url): url is string => Boolean(url && shouldGeneratePreview(url)))
 }
 
 export async function collectUrls() {
-  const files = await readFiles(content)
+  const files = await readFiles(contentGlobs)
+  const sourceFiles = await Array.fromAsync(fs.glob(previewLinkSourceGlobs))
   const sourceTexts = await Promise.all(
-    previewLinkSourceFiles.map((file) => fs.readFile(file, 'utf8'))
+    sourceFiles.map((file) => fs.readFile(file, 'utf8'))
   )
   const urls = new Set([
     ...files.flatMap((f) => extractUrls(f)),
@@ -128,7 +87,7 @@ export async function collectUrls() {
   ])
 
   return {
-    fileCount: files.length + previewLinkSourceFiles.length,
+    fileCount: files.length + sourceFiles.length,
     urls: [...urls],
   }
 }
@@ -144,76 +103,94 @@ export function previewsForUrls(
 }
 
 export async function loadManifest(): Promise<LinkPreviewManifest | null> {
+  let text: string
   try {
-    return JSON.parse(await fs.readFile(screenshot.paths.manifest, 'utf8'))
-  } catch {
-    return null
+    text = await fs.readFile(screenshot.paths.manifest, 'utf8')
+  } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+      return null
+    }
+    throw error
   }
+
+  return linkPreviewManifestSchema.parse(JSON.parse(text))
 }
 
 export async function writeManifest(
   previews: Record<string, LinkPreviewEntry>
 ) {
-  await fs.mkdir(screenshot.paths.output, { recursive: true })
   await fs.writeFile(
     screenshot.paths.manifest,
     `${JSON.stringify({ generated: new Date().toISOString(), previews }, null, 2)}\n`
   )
 }
 
-export async function captureScreenshot(
-  browser: Browser,
+export type CaptureResult =
+  | { success: true }
+  | { error: string; success: false }
+
+async function gotoWithFallback(
+  page: Page,
   url: string,
-  timeout = screenshot.timeout
-) {
-  await fs.mkdir(screenshot.paths.output, { recursive: true })
-
-  const context = await browser.newContext({
-    userAgent:
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    viewport: {
-      height: screenshot.viewport.height,
-      width: screenshot.viewport.width,
-    },
-  })
-  const page = await context.newPage()
-
+  timeout: number
+): Promise<Response | null> {
   try {
-    await page.route('**/*', (route) => {
-      if (['media', 'websocket'].includes(route.request().resourceType())) {
-        route.abort()
-      } else {
-        route.continue()
-      }
-    })
-
-    let response = await page
-      .goto(url, { timeout, waitUntil: 'networkidle' })
-      .catch(() => null)
-    if (!response) {
+    return await page.goto(url, { timeout, waitUntil: 'networkidle' })
+  } catch (networkIdleError) {
+    let response: Response | null
+    try {
       response = await page.goto(url, {
         timeout,
         waitUntil: 'domcontentloaded',
       })
-      await page.waitForTimeout(3000)
+    } catch {
+      throw networkIdleError
     }
+    await page.waitForTimeout(screenshot.waitAfterFallback)
+    return response
+  }
+}
+
+export async function captureScreenshot(
+  browser: Browser,
+  url: string,
+  timeout: number
+): Promise<CaptureResult> {
+  const context = await browser.newContext({
+    userAgent:
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    viewport: screenshot.viewport,
+  })
+  const page = await context.newPage()
+
+  try {
+    await page.route('**/*', (route) =>
+      ['media', 'websocket'].includes(route.request().resourceType())
+        ? route.abort()
+        : route.continue()
+    )
+
+    const response = await gotoWithFallback(page, url, timeout)
 
     if (response && response.status() >= 400) {
       return { error: `HTTP ${response.status()}`, success: false }
     }
 
     await page.waitForTimeout(screenshot.waitAfterLoad)
-    await page.evaluate(() => document.fonts.ready).catch(() => null)
+    await page
+      .evaluate(async () => {
+        await document.fonts.ready
+      })
+      .catch((error: unknown) => {
+        console.warn(`  Fonts did not settle for ${url}:`, error)
+      })
 
     await page.screenshot({
       path: path.join(
         screenshot.paths.output,
         `${hashUrl(url)}.${screenshot.image.format}`
       ),
-      quality:
-        screenshot.image.format === 'jpeg'
-          ? screenshot.image.quality
-          : undefined,
+      quality: screenshot.image.quality,
       type: screenshot.image.format,
     })
 
@@ -234,15 +211,10 @@ export async function removeOrphans(
   const expectedFiles = new Set(
     Object.values(previews).map((p) => path.basename(p.screenshotPath))
   )
-  let files: string[]
-  try {
-    files = await fs.readdir(screenshot.paths.output)
-  } catch {
-    return
-  }
+  const files = await fs.readdir(screenshot.paths.output)
   for (const file of files) {
     if (
-      (file.endsWith('.jpeg') || file.endsWith('.png')) &&
+      file.endsWith(`.${screenshot.image.format}`) &&
       !expectedFiles.has(file)
     ) {
       await fs.unlink(path.join(screenshot.paths.output, file))
@@ -252,13 +224,13 @@ export async function removeOrphans(
 
 export function createEntry(
   url: string,
-  result: CaptureScreenshotResult
+  result: CaptureResult
 ): LinkPreviewEntry {
   return {
-    errorMessage: result.error,
+    errorMessage: result.success ? undefined : result.error,
     generatedAt: new Date().toISOString(),
     height: screenshot.viewport.height,
-    screenshotPath: `/previews/${hashUrl(url)}.${screenshot.image.format}`,
+    screenshotPath: `${screenshot.paths.publicPath}/${hashUrl(url)}.${screenshot.image.format}`,
     status: result.success ? 'success' : 'failed',
     url,
     width: screenshot.viewport.width,

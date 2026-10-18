@@ -5,10 +5,6 @@ import { useMascot } from './mascot'
 import { usePageSimba } from './mascot/presence'
 import { MascotSprite } from './mascot/sprite'
 
-// Simba sits in the corner below the panel. The drawing has room on its
-// right for wider poses, so the button tucks half a rem past the panel's inset
-// to line his shadow up with the panel's edge. He steps away while a page
-// shows its own Simba
 export function AssistantTrigger() {
   const { open, setOpen } = useAssistantContext()
   const mascot = useMascot()

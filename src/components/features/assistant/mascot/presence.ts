@@ -1,7 +1,5 @@
 import { useEffect, useSyncExternalStore } from 'react'
 
-// Where else Simba is on screen, so there is only ever one of him. A page's
-// own Simba (the 404, an empty filter) sends the corner Simba away
 let pageSimbaCount = 0
 const listeners = new Set<() => void>()
 
@@ -18,7 +16,6 @@ const emit = () => {
   }
 }
 
-/** Marks a page's own Simba as on screen for as long as the caller is mounted */
 export const useClaimPageSimba = () => {
   useEffect(() => {
     pageSimbaCount += 1

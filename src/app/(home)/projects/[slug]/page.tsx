@@ -16,12 +16,12 @@ import { Prose } from '@/components/prose'
 import { ViewAnimation } from '@/components/view-animation'
 import { description as homeDescription } from '@/constants/site'
 import { createMetadata, getWorkPageImage } from '@/lib/metadata'
-import { getWork, getWorkPages, type WorkPage as MDXPage } from '@/lib/source'
+import { getWork, getWorkPages, type WorkPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
 
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
 
-function Header(props: { page: MDXPage }) {
+function Header(props: { page: WorkPage }) {
   const { page } = props
   const links: { href: string; label: string; icon: ReactElement }[] = []
 
@@ -55,7 +55,7 @@ function Header(props: { page: MDXPage }) {
             share={transition}
           >
             <BlurImage
-              alt={page.data.title ?? 'Project cover image'}
+              alt={page.data.title}
               blur={false}
               className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
               fill
@@ -72,7 +72,7 @@ function Header(props: { page: MDXPage }) {
             share={transition}
           >
             <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-              {page.data.title ?? 'Untitled'}
+              {page.data.title}
             </h1>
           </ViewTransition>
           <ViewTransition
@@ -80,7 +80,7 @@ function Header(props: { page: MDXPage }) {
             share={transition}
           >
             <p className='typography-body mx-auto text-pretty'>
-              {page.data.description ?? ''}
+              {page.data.description}
             </p>
           </ViewTransition>
         </div>
@@ -153,12 +153,10 @@ export async function generateMetadata(props: {
     description,
     openGraph: {
       images: image.url,
-      modifiedTime: page.data.lastModified
-        ? new Date(page.data.lastModified).toISOString()
-        : new Date(page.data.date).toISOString(),
-      publishedTime: new Date(page.data.date).toISOString(),
+      modifiedTime: (page.data.lastModified ?? page.data.date).toISOString(),
+      publishedTime: page.data.date.toISOString(),
       type: 'article',
-      url: `/projects/${page.slugs.join('/')}`,
+      url: page.url,
     },
     title,
     twitter: {

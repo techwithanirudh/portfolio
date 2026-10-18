@@ -2,6 +2,7 @@ import { ExperienceTimeline } from '@/components/features/work'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { SectionMoreLink } from '@/components/layout/sections/more-link'
+import { pages } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
 
 const previewCount = 3
@@ -23,7 +24,7 @@ export default function ExperiencePreview() {
           <ExperienceTimeline experiences={recent} />
           <SectionMoreLink
             delay={0.05 * recent.length}
-            href='/about#experience'
+            href={`${pages.about.path}#experience`}
           >
             View full timeline
           </SectionMoreLink>

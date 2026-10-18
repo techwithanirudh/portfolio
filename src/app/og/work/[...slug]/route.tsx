@@ -1,4 +1,4 @@
-import { createOgRoute } from '@/app/og/_lib/route'
+import { createOgRoute } from '@/app/og/_lib/create-og-route'
 import { getWork, getWorkPages } from '@/lib/source'
 
 export const { GET, generateStaticParams } = createOgRoute({

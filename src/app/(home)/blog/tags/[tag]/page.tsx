@@ -1,4 +1,4 @@
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { PostIndex } from '@/app/(home)/blog/_components/post-index'
@@ -19,6 +19,7 @@ interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
+// TODO(slopradar): duplicate-logic: the tag path is also built in sitemap.ts and (llms)/utils/site-pages.ts, export one getTagUrl from @/lib/source
 const getTagPath = (tag: string) => `/blog/tags/${tag}`
 const getPageCount = (tag: string) =>
   Math.ceil(getPostsByTag(tag).length / postsPerPage)
@@ -77,10 +78,7 @@ export default async function Page(props: Props) {
 
 export const generateStaticParams = () => getTags().map((tag) => ({ tag }))
 
-export async function generateMetadata(
-  props: Props,
-  _parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   const { tag } = await props.params
   const searchParams = await props.searchParams
 
@@ -90,11 +88,11 @@ export async function generateMetadata(
     notFound()
   }
 
-  const isFirstPage = pageIndex === 1 || !searchParams.page
+  const isFirstPage = pageIndex === 1
   const pageTitle = isFirstPage
     ? `${tag} posts`
     : `${tag} posts, page ${pageIndex}`
-  const canonicalUrl = getPageHref(getTagPath(tag), isFirstPage ? 1 : pageIndex)
+  const canonicalUrl = getPageHref(getTagPath(tag), pageIndex)
   const description = isFirstPage
     ? `Blog posts tagged ${tag}, grouped by year.`
     : `Page ${pageIndex} of blog posts tagged ${tag}.`

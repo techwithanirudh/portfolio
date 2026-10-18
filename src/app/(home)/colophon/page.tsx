@@ -42,18 +42,15 @@ export default function ColophonPage() {
       <Separator />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
-        const headingDelay = section.title ? baseDelay : 0
-        const contentDelay = section.title ? headingDelay + 0.05 : 0
+        const contentDelay = baseDelay + 0.05
 
         return (
           <Fragment key={section.title}>
-            {section.title && (
-              <Section className='px-6 py-8'>
-                <ViewAnimation delay={headingDelay}>
-                  <h2 className='font-medium text-3xl'>{section.title}</h2>
-                </ViewAnimation>
-              </Section>
-            )}
+            <Section className='px-6 py-8'>
+              <ViewAnimation delay={baseDelay}>
+                <h2 className='font-medium text-3xl'>{section.title}</h2>
+              </ViewAnimation>
+            </Section>
             <Section>
               <ViewAnimation delay={contentDelay}>
                 {section.content}
@@ -68,11 +65,9 @@ export default function ColophonPage() {
   )
 }
 
-export function generateMetadata(): Metadata {
-  return createMetadata({
-    alternates: { canonical: path },
-    description,
-    openGraph: { url: path },
-    title,
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: path },
+  description,
+  openGraph: { url: path },
+  title,
+})

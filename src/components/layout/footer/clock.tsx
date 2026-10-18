@@ -7,6 +7,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { profile } from '@/constants/portfolio/profile'
 import { cn } from '@/lib/utils'
 
 interface ClockProps {
@@ -19,17 +20,24 @@ interface TimeStyles extends React.CSSProperties {
   '--time-seconds': number
 }
 
+// TODO(slopradar): token-rule: clock hands and centre dot use raw neutral-400/500/600 instead of theme tokens, use bg-muted-foreground or bg-foreground/60 (x3 in this file)
 const HAND_BASE_CLASSES =
   'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
+// TODO(slopradar): inline-style: this is Tailwind's origin-top-left (the hands already use classes), drop HAND_ORIGIN and add the class to HAND_BASE_CLASSES
 const HAND_ORIGIN = { transformOrigin: '0px 0px' }
 const FACE_CLASSES =
   'relative block size-9 rotate-180 rounded-md border border-border bg-background'
+const CLOCK_BUTTON_PROPS = {
+  className: 'relative rounded-md after:absolute after:-inset-0.5',
+  size: 'icon',
+  variant: 'ghost',
+} as const
 const FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour: '2-digit',
   hour12: true,
   minute: '2-digit',
   second: '2-digit',
-  timeZone: 'Asia/Kolkata',
+  timeZone: profile.timeZone,
   timeZoneName: 'short',
 })
 
@@ -64,12 +72,7 @@ export function Clock({ className }: ClockProps) {
 
   if (second === null) {
     return (
-      <Button
-        aria-label='Clock'
-        className='relative rounded-md after:absolute after:-inset-0.5'
-        size='icon'
-        variant='ghost'
-      >
+      <Button aria-label='Clock' {...CLOCK_BUTTON_PROPS}>
         <div className={cn(FACE_CLASSES, className)}>
           <CenterDot />
         </div>
@@ -88,14 +91,7 @@ export function Clock({ className }: ClockProps) {
   return (
     <Tooltip>
       <TooltipTrigger
-        render={
-          <Button
-            aria-label={timeString}
-            className='relative rounded-md after:absolute after:-inset-0.5'
-            size='icon'
-            variant='ghost'
-          />
-        }
+        render={<Button aria-label={timeString} {...CLOCK_BUTTON_PROPS} />}
       >
         <time
           className={cn(FACE_CLASSES, className)}

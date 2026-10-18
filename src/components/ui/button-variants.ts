@@ -19,9 +19,6 @@ export const buttonVariants = cva(
           'bg-destructive-solid text-white shadow-xs hover:bg-destructive-solid/90 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive-solid/60 dark:focus-visible:ring-destructive/40',
         link: 'text-primary underline-offset-4 hover:underline',
       },
-      // A trailing or leading icon gets 4px less padding on its side: the
-      // glyph's own blank space makes up the rest, so it sits as far from the
-      // edge as the label does on the other side
       size: {
         default:
           'h-9 px-4 py-2 has-[>svg]:px-3 in-data-[slot=button-group]:rounded-md has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2',

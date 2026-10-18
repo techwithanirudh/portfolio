@@ -1,8 +1,7 @@
 'use client'
 
-import type { UseChatHelpers } from '@ai-sdk/react'
 import { useSound } from '@web-kits/audio/react'
-import { isToolUIPart } from 'ai'
+import { type ChatStatus, isToolUIPart } from 'ai'
 import { memo } from 'react'
 import {
   Conversation,
@@ -20,14 +19,18 @@ import { Tool, ToolContent, ToolHeader } from '@/components/ai-elements/tool'
 import { Icons } from '@/components/icons/icons'
 import { contextDataSchema, type MyUIMessage } from '@/lib/ai/chat/types'
 import { tap } from '@/lib/audio/minimal'
-import { useChatContext } from './chat-context'
+import { isChatBusy, useChatContext } from './chat-context'
 import { AvatarIcon } from './mascot/avatar-icon'
 import { MessageMetadata, MessagePending } from './message-metadata'
+import { ownerName } from './owner-name'
 import { ContactForm, ContactFormSkeleton } from './tools/contact-form'
 import { NavigatePart } from './tools/navigate'
+import { PortfolioPart } from './tools/portfolio'
+import type { ToolPart } from './tools/types'
 
-const roleName: Record<string, string> = {
+const roleName: Record<MyUIMessage['role'], string> = {
   assistant: 'assistant',
+  system: 'system',
   user: 'you',
 }
 
@@ -63,15 +66,13 @@ export function MessageList({
   status,
 }: {
   messages: MyUIMessage[]
-  status: UseChatHelpers<MyUIMessage>['status']
+  status: ChatStatus
 }) {
-  const isBusy = status === 'streaming' || status === 'submitted'
-  // No assistant message exists before the first chunk, so show a placeholder
+  const isBusy = isChatBusy(status)
   const isAwaitingReply =
     status === 'submitted' && allMessages.at(-1)?.role === 'user'
   const isFailed = status === 'error'
   const lastMessage = allMessages.at(-1)
-  // A failed call can leave an empty assistant message; the error stands in for it
   const messages =
     isFailed &&
     lastMessage?.role === 'assistant' &&
@@ -97,8 +98,7 @@ export function MessageList({
               size={64}
             />
             <p>
-              heya! im simba, anirudh's dog. i can answer questions about him,
-              his work, or the site.
+              {`heya! im simba, ${ownerName}'s dog. i can answer questions about him, his work, or the site.`}
             </p>
           </ConversationEmptyState>
         ) : (
@@ -123,9 +123,7 @@ export function MessageList({
   )
 }
 
-const contactFormStatus = (
-  part: Extract<MyUIMessage['parts'][number], { type: 'tool-showContactForm' }>
-) => {
+const contactFormStatus = (part: ToolPart<'showContactForm'>) => {
   if (part.state === 'output-available') {
     return part.output?.success ? 'sent' : 'canceled'
   }
@@ -137,11 +135,7 @@ const contactFormStatus = (
   }
 }
 
-function ContactFormPart({
-  part,
-}: {
-  part: Extract<MyUIMessage['parts'][number], { type: 'tool-showContactForm' }>
-}) {
+function ContactFormPart({ part }: { part: ToolPart<'showContactForm'> }) {
   const isSubmitted = part.state === 'output-available'
   const submittedData =
     isSubmitted &&
@@ -198,7 +192,7 @@ const AssistantMessage = memo(function AssistantMessage({
 
   return (
     <Message className='py-4' from={message.role}>
-      <MessageHeader>{roleName[message.role] ?? 'unknown'}</MessageHeader>
+      <MessageHeader>{roleName[message.role]}</MessageHeader>
       <MessageContent>
         {message.role === 'user' && context ? (
           <div className='not-prose rounded-md border border-border border-dashed bg-muted/40 p-2 text-xs'>
@@ -225,6 +219,9 @@ const AssistantMessage = memo(function AssistantMessage({
           }
           if (part.type === 'tool-navigate') {
             return <NavigatePart key={part.toolCallId} part={part} />
+          }
+          if (part.type === 'tool-renderPortfolio') {
+            return <PortfolioPart key={part.toolCallId} part={part} />
           }
           return null
         })}

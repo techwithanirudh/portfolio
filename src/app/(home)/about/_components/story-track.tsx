@@ -38,7 +38,7 @@ const layoutOffsetWithin = (element: HTMLElement, container: HTMLElement) => {
   while (node && node !== container) {
     x += node.offsetLeft
     y += node.offsetTop
-    node = node.offsetParent as HTMLElement | null
+    node = node.offsetParent instanceof HTMLElement ? node.offsetParent : null
   }
   return { x, y }
 }
@@ -49,11 +49,10 @@ const roundedPath = (points: Point[]) => {
     return ''
   }
   let d = `M${first.x} ${first.y}`
-  for (let index = 0; index < rest.length; index++) {
-    const current = rest[index] as Point
-    const previous = points[index] as Point
+  for (const [index, current] of rest.entries()) {
+    const previous = points[index]
     const next = rest[index + 1]
-    if (!next) {
+    if (!(previous && next)) {
       d += ` L${current.x} ${current.y}`
       break
     }
@@ -76,8 +75,6 @@ const roundedPath = (points: Point[]) => {
   return d
 }
 
-// Starts above the box so the groove's lit end cap falls outside the mask,
-// leaving the track flush with the rule above
 const TRACK_START_Y = -4
 
 const traceTrack = (container: HTMLElement): Track | null => {
@@ -145,7 +142,6 @@ const markerProgress = (path: SVGPathElement, markers: Point[]) => {
 
 const spring = { damping: 20, mass: 0.5, stiffness: 100 }
 
-// Phones get plain stacked chapters like the original, with no track
 const svgClassName =
   'pointer-events-none absolute inset-0 select-none overflow-visible [mask-image:linear-gradient(black,black)] max-lg:hidden'
 
@@ -193,8 +189,6 @@ export function StoryTrack({
     const follow = (value: number) => {
       const count = thresholds.filter((threshold) => threshold <= value).length
       setReached(count)
-      // Rows are server rendered, so they style off this flag (the photo
-      // straightens) instead of reading the count through props
       lanes.forEach((lane, index) => {
         lane.parentElement?.toggleAttribute('data-reached', index < count)
       })

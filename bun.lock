@@ -15,6 +15,8 @@
         "@hookform/resolvers": "^5.9.1",
         "@hugeicons/core-free-icons": "^4.3.5",
         "@hugeicons/react": "^1.1.10",
+        "@json-render/core": "0.21.0",
+        "@json-render/react": "0.21.0",
         "@neondatabase/serverless": "^1.2.0",
         "@next-safe-action/adapter-react-hook-form": "^2.1.0",
         "@octokit/rest": "^22.0.1",
@@ -22,6 +24,7 @@
         "@paper-design/shaders-react": "^0.0.81",
         "@primer/octicons-react": "^19.40.0",
         "@react-email/components": "^1.0.12",
+        "@shikijs/transformers": "4.5.0",
         "@t3-oss/env-nextjs": "^0.13.11",
         "@takumi-rs/image-response": "^2.16.2",
         "@vercel/blob": "^2.8.2",
@@ -41,6 +44,7 @@
         "embla-carousel-react": "^8.6.0",
         "feed": "6.0.0",
         "flexsearch": "^0.8.212",
+        "framer-motion": "14.2.0",
         "frimousse": "^0.4.0",
         "fumadocs-core": "16.17.3",
         "fumadocs-mdx": "15.4.7",
@@ -48,11 +52,10 @@
         "fumadocs-typescript": "5.5.2",
         "fumadocs-ui": "16.17.3",
         "hast-util-to-jsx-runtime": "^2.3.6",
-        "jiti": "^2.7.0",
         "katex": "0.19.0",
         "lenis": "^1.3.26",
         "lucide-react": "^1.57.0",
-        "motion": "^14.2.0",
+        "motion": "14.2.0",
         "next": "16.4.2",
         "next-safe-action": "^8.7.3",
         "next-themes": "^0.4.6",
@@ -66,10 +69,8 @@
         "remark": "^15.0.1",
         "remark-gfm": "^4.0.1",
         "remark-math": "6.0.0",
-        "remark-mdx": "^3.1.1",
         "remark-rehype": "^11.1.2",
         "resend": "^6.33.0",
-        "schema-dts": "^2.1.0",
         "server-only": "^0.0.1",
         "shiki": "4.5.0",
         "sonner": "^2.0.8",
@@ -104,6 +105,8 @@
         "postcss-load-config": "^6.0.1",
         "react-doctor": "^0.9.18",
         "react-email": "^6.11.2",
+        "remark-mdx": "^3.1.1",
+        "schema-dts": "^2.1.0",
         "shadcn": "^4.21.5",
         "tailwindcss": "4.3.3",
         "typescript": "7.0.2",
@@ -612,6 +615,10 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.31", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw=="],
 
+    "@json-render/core": ["@json-render/core@0.21.0", "", { "dependencies": { "zod": "^4.3.6" } }, "sha512-vysEbTjO1y8mEgAsp0tztRyaWCkNsBrG8MhAqbndGK3qmMXjMRdCNtk21+AQRNKdRelFGVAwBgtUNW8tfjQlsw=="],
+
+    "@json-render/react": ["@json-render/react@0.21.0", "", { "dependencies": { "@json-render/core": "0.21.0" }, "peerDependencies": { "react": "^19.2.3" } }, "sha512-z/fZg0L8fJe2dnnQjWkmMw409iBclSWcOqdjoBy8eLHeBr/7F7VipzkY1CfgA2Fa5uW+zxZ54OvWMtdDcsp/yg=="],
+
     "@keyv/bigmap": ["@keyv/bigmap@1.3.1", "", { "dependencies": { "hashery": "^1.4.0", "hookified": "^1.15.0" }, "peerDependencies": { "keyv": "^5.6.0" } }, "sha512-WbzE9sdmQtKy8vrNPa9BRnwZh5UF4s1KTmSK0KUVLo3eff5BlQNNWDnFOouNpKfPKDnms9xynJjsMYjMaT/aFQ=="],
 
     "@keyv/serialize": ["@keyv/serialize@1.1.1", "", {}, "sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA=="],
@@ -971,6 +978,8 @@
     "@shikijs/primitive": ["@shikijs/primitive@4.5.0", "", { "dependencies": { "@shikijs/types": "4.5.0", "@shikijs/vscode-textmate": "^10.0.2", "@types/hast": "^3.0.5" } }, "sha512-UM7ShlA8oz0OWxLLO8BmO9Ip6fVqdkt8yF0EH7nOCqHfrx1eEAzF0ZUVK7L+I8NEgeu1PEWSRlxaiPPeCb4iDg=="],
 
     "@shikijs/themes": ["@shikijs/themes@4.5.0", "", { "dependencies": { "@shikijs/types": "4.5.0" } }, "sha512-zGb87H3UBbpuI4yoh5UguB1XbU+2BDU3kflM7UfZ+Cy2hWo9lBtqjSVK20gmLY6ukYl040hAypGXMgud9vul8Q=="],
+
+    "@shikijs/transformers": ["@shikijs/transformers@4.5.0", "", { "dependencies": { "@shikijs/core": "4.5.0", "@shikijs/types": "4.5.0" } }, "sha512-LM7twi043qCC3gRyGQfjoC2/sowzbEltWuruyRtT3RlBlk1hKzWk9ETnU7RcDBoVWQBmC8Mebnr7p28W7kPoaA=="],
 
     "@shikijs/types": ["@shikijs/types@4.5.0", "", { "dependencies": { "@shikijs/vscode-textmate": "^10.0.2", "@types/hast": "^3.0.5" } }, "sha512-drtPrtD8N0DENyD2cyt6Ajy+IWsiCLgMxODwLTpvH1UsN6a9jf90tNTPjqwHvA+0Lzu9e0txk8DjfqH1p9UJRw=="],
 

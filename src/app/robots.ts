@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { baseUrl } from '@/lib/metadata'
+import { url } from '@/lib/url'
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -9,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       disallow: ['/api/', '/account', '/login', '/search'],
       userAgent: '*',
     },
-    sitemap: new URL('/sitemap.xml', baseUrl).href,
+    sitemap: url('/sitemap.xml'),
   }
 }

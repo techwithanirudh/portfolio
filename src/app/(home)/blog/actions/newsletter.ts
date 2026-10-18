@@ -15,7 +15,7 @@ import { getSession } from '@/server/auth'
 const splitName = (name = '') => {
   const [firstName, ...lastName] = name.split(' ').filter(Boolean)
   return {
-    firstName,
+    firstName: firstName ?? '',
     lastName: lastName.join(' '),
   }
 }
@@ -32,10 +32,7 @@ export const subscribe = publicActionClient
     }
 
     const session = await getSession()
-    const fullName = session?.user.name || ''
-    const { firstName, lastName } = fullName
-      ? splitName(fullName)
-      : { firstName: '', lastName: '' }
+    const { firstName, lastName } = splitName(session?.user.name)
 
     try {
       const contact = await getContact({ audienceId, email })
@@ -63,6 +60,7 @@ export const subscribe = publicActionClient
         unsubscribed: false,
       })
 
+      // TODO(slopradar): inconsistent-error-handling: throws a plain Error only for its own catch to rewrap, throw ActionError here and let unexpected errors reach the safe-action handler
       if (!data || error) {
         throw new Error(
           `Failed to create contact: ${error?.message || 'Unknown error'}`

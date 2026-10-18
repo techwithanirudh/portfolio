@@ -1,7 +1,5 @@
 'use client'
 
-import { m } from 'motion/react'
-import type { ReactNode } from 'react'
 import { IconSwap, IconSwapItem } from '@/components/icon-swap'
 import { Icons } from '@/components/icons/icons'
 import type { CopyState } from '@/hooks/use-copy-to-clipboard'
@@ -9,32 +7,21 @@ import { cn } from '@/lib/utils'
 
 interface CopyStateIconProps {
   className?: string
-  doneIcon?: ReactNode
-  errorIcon?: ReactNode
-  idleIcon?: ReactNode
   state: CopyState
+}
+
+const iconByState = {
+  done: <Icons.check />,
+  error: <Icons.error />,
+  idle: <Icons.copy />,
 }
 
 // Blur swap from chanhdai's Copy Button (MIT):
 // https://chanhdai.com/components/copy-button
-export function CopyStateIcon({
-  className,
-  state,
-  idleIcon,
-  doneIcon,
-  errorIcon,
-}: CopyStateIconProps) {
-  // Fallbacks live here, since the compiler can't memoize JSX in default params
-  const iconByState = {
-    done: doneIcon ?? <Icons.check />,
-    error: errorIcon ?? <Icons.error />,
-    idle: idleIcon ?? <Icons.copy />,
-  }
-
+export function CopyStateIcon({ className, state }: CopyStateIconProps) {
   return (
     <IconSwap>
       <IconSwapItem
-        as={m.span}
         className={cn(
           'inline-flex transition-colors duration-300 [&_svg]:size-4',
           className,

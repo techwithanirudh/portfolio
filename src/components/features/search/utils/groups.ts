@@ -4,29 +4,19 @@ import { commands } from '@/constants/search'
 import type { PageEntry } from '@/lib/source'
 import type { CommandItem } from '@/types/search'
 import type { SearchPageGroup, SearchTagGroup } from '@/types/search/results'
+import { TAG_ORDER, tagFromUrl } from './tags'
 
-function tagFromUrl(url: string): string {
-  if (url === '/blog' || url.startsWith('/blog/')) {
-    return 'blog'
-  }
-  if (url === '/projects' || url.startsWith('/projects/')) {
-    return 'projects'
-  }
-  return 'other'
+const tagRank = (tag: string) => {
+  const rank = TAG_ORDER.indexOf(tag)
+  return rank === -1 ? TAG_ORDER.length : rank
 }
-
-const TAG_ORDER = ['blog', 'projects']
 
 function orderTagGroups(
   tagMap: Map<string, SearchPageGroup[]>
 ): SearchTagGroup[] {
-  return TAG_ORDER.filter((tag) => tagMap.has(tag))
-    .map((tag) => ({ pages: tagMap.get(tag)!, tag }))
-    .concat(
-      Array.from(tagMap.entries())
-        .filter(([tag]) => !TAG_ORDER.includes(tag))
-        .map(([tag, pages]) => ({ pages, tag }))
-    )
+  return Array.from(tagMap, ([tag, pages]) => ({ pages, tag })).toSorted(
+    (a, b) => tagRank(a.tag) - tagRank(b.tag)
+  )
 }
 
 function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
@@ -38,7 +28,7 @@ function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
       current = {
         children: [],
         page: {
-          content: String(result.content),
+          content: result.content,
           id: result.id,
           url: result.url,
         },
@@ -53,25 +43,18 @@ function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
   return grouped
 }
 
-function bucketPageGroupsByTag(
-  pages: SearchPageGroup[],
-  getTag: (page: SearchPageGroup) => string
+function bucketByTag(
+  entries: { page: SearchPageGroup; tag: string }[]
 ): SearchTagGroup[] {
-  const tagMap = new Map<string, SearchPageGroup[]>()
-
-  for (const page of pages) {
-    const tag = getTag(page)
-    const existing = tagMap.get(tag)
-
-    if (existing) {
-      existing.push(page)
-      continue
-    }
-
-    tagMap.set(tag, [page])
-  }
-
-  return orderTagGroups(tagMap)
+  const buckets = Map.groupBy(entries, (entry) => entry.tag)
+  return orderTagGroups(
+    new Map(
+      Array.from(buckets, ([tag, tagEntries]) => [
+        tag,
+        tagEntries.map((entry) => entry.page),
+      ])
+    )
+  )
 }
 
 export function buildCommandGroups(
@@ -79,13 +62,12 @@ export function buildCommandGroups(
   accountItems: CommandItem[] = []
 ) {
   const isEmpty = !search.trim()
+  const matchesSearch = (item: CommandItem) =>
+    isEmpty || defaultFilter(item.title, search, item.keywords) > 0
   const commandGroups = commands
     .map(({ group, position, items }) => ({
       group,
-      items: items.filter(
-        (item) =>
-          isEmpty || defaultFilter(item.title, search, item.keywords) > 0
-      ),
+      items: items.filter(matchesSearch),
       position,
     }))
     .filter(({ items }) => items.length > 0)
@@ -94,9 +76,7 @@ export function buildCommandGroups(
     return commandGroups
   }
 
-  const filteredAccountItems = accountItems.filter(
-    (item) => isEmpty || defaultFilter(item.title, search, item.keywords) > 0
-  )
+  const filteredAccountItems = accountItems.filter(matchesSearch)
 
   return filteredAccountItems.length > 0
     ? [
@@ -113,32 +93,26 @@ export function buildCommandGroups(
 export function buildSearchTagGroups(
   results: SortedResult[]
 ): SearchTagGroup[] {
-  return bucketPageGroupsByTag(groupSearchResultsByPage(results), (page) =>
-    tagFromUrl(page.page.url)
+  return bucketByTag(
+    groupSearchResultsByPage(results).map((page) => ({
+      page,
+      tag: tagFromUrl(page.page.url),
+    }))
   )
 }
 
 export function buildPageEntryGroups(entries: PageEntry[]): SearchTagGroup[] {
-  const tagMap = new Map<string, SearchPageGroup[]>()
-
-  for (const entry of entries) {
-    const existing = tagMap.get(entry.tag)
-    const page: SearchPageGroup = {
-      children: [],
+  return bucketByTag(
+    entries.map((entry) => ({
       page: {
-        content: entry.title,
-        id: entry.url,
-        url: entry.url,
+        children: [],
+        page: {
+          content: entry.title,
+          id: entry.url,
+          url: entry.url,
+        },
       },
-    }
-
-    if (existing) {
-      existing.push(page)
-      continue
-    }
-
-    tagMap.set(entry.tag, [page])
-  }
-
-  return orderTagGroups(tagMap)
+      tag: entry.tag,
+    }))
+  )
 }

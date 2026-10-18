@@ -9,7 +9,6 @@ import { useClaimPageSimba } from '@/components/features/assistant/mascot/presen
 import { SimbaRig } from '@/components/features/assistant/mascot/rig'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
-// Plays one of Simba's animations on repeat, resting a beat between runs
 export function SimbaLoop({
   animation,
   className,
@@ -28,6 +27,7 @@ export function SimbaLoop({
   useClaimPageSimba()
   const [index, setIndex] = useState(0)
 
+  // TODO(slopradar): duplication: re-implements SimbaController's frame stepping with a setState timer, drive a local SimbaController (or extract its stepper) so looping and reduced motion live in one place
   useEffect(() => {
     if (reducedMotion) {
       return

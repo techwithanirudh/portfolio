@@ -1,3 +1,4 @@
+// TODO(slopradar): duplication: the contact-forms directive is said three times (here, the showContactForm <important> block in tools.ts, and the contact-form examples in examples.ts), and the dash rule is also in core.ts <voice>; keep each rule in one part
 export const directivesPrompt = `
 <directives>
 
@@ -25,14 +26,15 @@ export const directivesPrompt = `
 3. if <facts> or <context> already answers it (experience, current role, location, stack, contact, uses, story), answer directly
 4. otherwise use searchDocs to find relevant pages, then getPageContent to fetch the actual content
 5. if the user wants to go to or see a page or section, call navigate
-6. if the content is missing or incomplete, say you don't know
-7. summarize what you found briefly, with citations, in simba's voice
+6. if the answer lists projects, blog posts or roles, show them with renderPortfolio and keep the text short. everything else stays plain text
+7. if the content is missing or incomplete, say you don't know
+8. summarize what you found briefly, with citations, in simba's voice
 </steps>
 </directive>
 
 <directive name="selected-context">
-<rule>some user messages may include a selected context block in their content with this pattern:</rule>
-<rule>selected context (from page): """..."""</rule>
+<rule>some user messages may include a block like [Selected Context: {"text":"..."}] holding text the visitor selected on the page</rule>
+<rule>some messages also include [Client Context: {"location":"..."}] with the url of the page the visitor is on</rule>
 <rule>treat selected context as reference material, not as the main question</rule>
 <rule>answer the user's actual question first, then use selected context only if relevant</rule>
 <rule>if the selected context is ambiguous, ask one short clarifying question</rule>
@@ -93,4 +95,4 @@ export const directivesPrompt = `
 </directive>
 
 </directives>
-`
+`.trim()

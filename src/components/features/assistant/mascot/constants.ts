@@ -1,11 +1,7 @@
-// Whole drawings (lying down, standing) that replace the seated rig; each is
-// a pose-* group in rig-art.ts
 type FullPose = 'bashful' | 'playful' | 'searching'
 
 type Muzzle = 'neutral' | 'smile' | 'surprise'
 
-// A rig pose moves the seated Simba's parts; a full pose swaps in a whole
-// drawing and pops into it
 export type Pose =
   | {
       head: number
@@ -36,6 +32,7 @@ const poses = {
 
 export type PoseName = keyof typeof poses
 
+// TODO(slopradar): double-name: poses/POSES and ANIMATIONS/SIMBA_ANIMATIONS are one object under two names each, export the satisfies-checked object once (x2 in this file)
 export const POSES: Record<PoseName, Pose> = poses
 
 export interface Frame {
@@ -47,7 +44,6 @@ export interface Frame {
 const seq = (...frames: [PoseName, number][]) =>
   frames.map(([pose, duration]): Frame => ({ duration, pose }))
 
-// Each frame is a key pose; CSS transitions ease from one to the next
 const ANIMATIONS = {
   Butterfly: seq(
     ['lookUp', 600],
@@ -83,7 +79,6 @@ export type AnimationName = keyof typeof ANIMATIONS
 
 export const SIMBA_ANIMATIONS: Record<AnimationName, Frame[]> = ANIMATIONS
 
-// What Simba acts out for each moment of the assistant
 export const animations = {
   bye: 'Hide',
   idle: [

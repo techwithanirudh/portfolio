@@ -21,6 +21,7 @@ export function createLLMRoute<Page>(
 
     return new Response(await getText(page), {
       headers: {
+        // TODO(slopradar): inconsistent: the .mdx routes send text/markdown without the charset every other llms route sets, share one header constant with the other routes
         'Content-Type': 'text/markdown',
       },
     })

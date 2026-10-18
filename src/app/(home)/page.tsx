@@ -22,7 +22,7 @@ export const metadata: Metadata = createMetadata({
   twitter: { images: '/banner.png' },
 })
 
-export default async function Home() {
+export default function Home() {
   const works = getSortedWork().slice(0, 4)
   const posts = getSortedByDatePosts().slice(0, 3)
 

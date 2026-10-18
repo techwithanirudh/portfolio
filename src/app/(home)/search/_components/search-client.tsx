@@ -5,10 +5,11 @@ import {
   SearchDialog,
   SearchDialogList,
   SearchDialogListItem,
+  type SearchItemType,
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
-import { type ReactNode, useEffect } from 'react'
+import { type ComponentProps, type ReactNode, useEffect } from 'react'
 import { PostEmpty } from '@/components/features/blog/post-empty'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
@@ -42,11 +43,7 @@ const getItemTag = (url: string) => {
   return 'page'
 }
 
-// Stand-in rows shaped like the results (a title with its tag pill, then
-// indented excerpts) while the first response is on its way
 const excerptWidths = [['w-3/5'], ['w-4/5', 'w-2/5'], ['w-1/2']]
-// The light muted token is nearly the page background, so the bars take a
-// tint of the text color instead
 const bar = 'bg-foreground/10'
 
 const ResultsSkeleton = () => (
@@ -69,35 +66,34 @@ const ResultsSkeleton = () => (
   </div>
 )
 
-// Fills the results area (the viewport is a size container) so Simba sits in
-// the middle of it; the 0.5rem is the list's top padding
 const CenteredEmpty = ({ children }: { children: ReactNode }) => (
   <div className='flex min-h-[calc(100cqh-0.5rem)] flex-col justify-center'>
     {children}
   </div>
 )
 
-// Every tab gets the ledger's bashful Simba when nothing matches, with a way
-// back to the full list where there is one
-const emptyByScope = {
-  all: () => (
-    <CenteredEmpty>
-      <PostEmpty link={null} />
-    </CenteredEmpty>
-  ),
-  blog: () => (
-    <CenteredEmpty>
-      <PostEmpty />
-    </CenteredEmpty>
-  ),
-  projects: () => (
-    <CenteredEmpty>
-      <PostEmpty
-        link={{ href: pages.projects.path, label: 'See every project' }}
-      />
-    </CenteredEmpty>
-  ),
-}
+const emptyLinkByScope = {
+  all: null,
+  blog: undefined,
+  projects: { href: pages.projects.path, label: 'See every project' },
+} satisfies Record<string, ComponentProps<typeof PostEmpty>['link']>
+
+const SearchResultItem = ({
+  item,
+  onClick,
+}: {
+  item: SearchItemType
+  onClick: () => void
+}) => (
+  <div className='relative'>
+    <SearchDialogListItem
+      className='rounded-none border-border border-b border-dashed p-3 last:border-b-0'
+      item={item}
+      onClick={onClick}
+    />
+    {item.type === 'page' ? <ItemBadge label={getItemTag(item.url)} /> : null}
+  </div>
+)
 
 const tagValues = tags
   .map((tag) => tag.value)
@@ -131,6 +127,7 @@ export function SearchClient() {
     setQueryParam(value.length > 0 ? value : null)
   }
 
+  // TODO(slopradar): effect-mirrors-state: copies the q param into the fumadocs search state after mount, so the query lives in two places, drive one from the other without an effect (rerender-derived-state-no-effect)
   useEffect(() => {
     if (queryParam) {
       setSearch(queryParam)
@@ -138,8 +135,6 @@ export function SearchClient() {
   }, [queryParam, setSearch])
 
   const hasQuery = search.trim().length > 0
-  // Between typing and the first response the list has nothing to show, so
-  // skeleton rows stand in instead of a blank list and a "0 results"
   const pending = hasQuery && query.data === 'empty'
 
   return (
@@ -150,13 +145,9 @@ export function SearchClient() {
       open
       search={search}
     >
-      {/* Held to the leftover screen height so the results scroll inside it,
-          as the guestbook entries do */}
       <Section fill='contain'>
         <div className='flex flex-col'>
           <ViewAnimation>
-            {/* A thin inset primary line on focus; the stock 3px ring stacked on the
-                dashed rules above and below read as a double border */}
             <InputGroup className='!bg-background h-10 rounded-none border-0 shadow-none ring-inset has-[[data-slot=input-group-control]:focus-visible]:ring-1 has-[[data-slot=input-group-control]:focus-visible]:ring-primary/60'>
               <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
@@ -208,8 +199,6 @@ export function SearchClient() {
         </div>
         <div className='min-h-0 flex-1'>
           <ScrollArea
-            // Fades the top edge in only once you've scrolled, so results
-            // ease under the tabs instead of being cut off at them
             className='h-full w-full [&>[data-slot=scroll-area-scrollbar]]:py-1.5 [&>[data-slot=scroll-area-scrollbar]]:pr-1 [&>[data-slot=scroll-area-viewport]]:[container-type:size] [&>[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_bottom,transparent,#000_min(2.5rem,var(--scroll-area-overflow-y-start,0px)))]'
             data-lenis-prevent
           >
@@ -224,19 +213,12 @@ export function SearchClient() {
             <SearchDialogList
               // Let the scroll area own the height instead of fumadocs' 460px cap
               className='!h-auto [&>div]:!p-0 [&>div]:!pt-2 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
-              Empty={emptyByScope[scopeParam]}
-              Item={({ item, onClick }) => (
-                <div className='relative'>
-                  <SearchDialogListItem
-                    className='rounded-none border-border border-b border-dashed p-3 last:border-b-0'
-                    item={item}
-                    onClick={onClick}
-                  />
-                  {item.type === 'page' ? (
-                    <ItemBadge label={getItemTag(item.url)} />
-                  ) : null}
-                </div>
+              Empty={() => (
+                <CenteredEmpty>
+                  <PostEmpty link={emptyLinkByScope[scopeParam]} />
+                </CenteredEmpty>
               )}
+              Item={SearchResultItem}
               items={query.data === 'empty' ? null : query.data}
             />
           </ScrollArea>

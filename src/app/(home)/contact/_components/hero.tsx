@@ -31,7 +31,6 @@ export const Hero = () => (
                   aria-label={social.name}
                   className='icon-pop relative flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors after:absolute after:-inset-0.5 hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
                   href={social.url}
-                  key={social.name}
                   rel='noopener noreferrer'
                   target='_blank'
                 />

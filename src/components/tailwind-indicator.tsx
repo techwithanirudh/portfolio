@@ -1,5 +1,7 @@
+import { isProduction } from '@/constants'
+
 export function TailwindIndicator() {
-  if (process.env.NODE_ENV === 'production') {
+  if (isProduction) {
     return null
   }
 

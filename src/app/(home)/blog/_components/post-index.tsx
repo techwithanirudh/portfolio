@@ -15,12 +15,6 @@ interface PostIndexProps {
   totalPages: number
 }
 
-/**
- * The blog listing shared by /blog and each tag page: tag filters and search,
- * the year ledger (or bashful Simba when nothing matches), then a hatched band that holds the pagination. The band
- * takes whatever height the screen has left, so a short list ends in the
- * hatch rather than in empty rows.
- */
 export const PostIndex = ({
   activeTag,
   currentPage,

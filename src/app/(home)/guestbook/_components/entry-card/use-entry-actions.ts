@@ -15,8 +15,6 @@ interface EntryActionHandlers {
   closeEditor: () => void
 }
 
-// The edit, delete and ban actions of one entry, with their toasts and the
-// refresh once the server has the change
 export function useEntryActions(
   entry: GuestbookEntryItem,
   { closeBanModal, closeDeleteModal, closeEditor }: EntryActionHandlers
@@ -64,10 +62,7 @@ export function useEntryActions(
     },
   })
 
-  const isBusy =
-    edit.status === 'executing' ||
-    remove.status === 'executing' ||
-    ban.status === 'executing'
+  const isBusy = edit.isExecuting || remove.isExecuting || ban.isExecuting
 
   return { ban, edit, isBusy, remove }
 }

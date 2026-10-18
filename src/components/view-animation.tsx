@@ -7,6 +7,12 @@ interface ViewAnimationProps {
   delay?: number
 }
 
+const STAGGER_STEP = 0.05
+const MAX_DELAY = 0.2
+
+export const staggerDelay = (index: number, offset = 0) =>
+  offset + STAGGER_STEP * index
+
 export const ViewAnimation = ({
   as: Tag = 'div',
   delay,
@@ -18,7 +24,9 @@ export const ViewAnimation = ({
     data-reveal-item
     style={
       delay
-        ? ({ '--reveal-delay': `${Math.min(delay, 0.2)}s` } as CSSProperties)
+        ? ({
+            '--reveal-delay': `${Math.min(delay, MAX_DELAY)}s`,
+          } as CSSProperties)
         : undefined
     }
   >

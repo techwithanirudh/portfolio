@@ -62,7 +62,6 @@ export function SimbaRig({
       aria-hidden
       className={cn('simba-rig', className)}
       data-hidden={hidden || undefined}
-      // A full pose's tail can reach past the frame
       overflow='visible'
       ref={ref}
       style={{ aspectRatio: `${view.width} / ${view.height}`, height: size }}
@@ -155,8 +154,6 @@ export function SimbaRig({
                   </g>
                 </g>
               </g>
-              {/* Drawn over the head so the waving paw sits in front of the
-                  cheek and ear, not tucked behind them */}
               <g className='simba-body'>
                 <g className='simba-fade' opacity={rig.paw ? 1 : 0}>
                   <g className='simba-paw'>

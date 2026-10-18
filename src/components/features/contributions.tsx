@@ -1,5 +1,6 @@
 'use client'
 
+// TODO(slopradar): vendored-location: this is the Kibo UI contribution-graph registry component (components.json @kibo-ui) kept outside src/components/ui with no source header, move it to ui/ untouched or own it and drop the unused Labels/weekStart/maxLevel generality
 import type { Day as WeekDay } from 'date-fns'
 import {
   differenceInCalendarDays,
@@ -108,7 +109,6 @@ const fillHoles = (activities: Activity[]): Activity[] => {
     return []
   }
 
-  // Sort activities by date to ensure correct date range
   const sortedActivities = [...activities].sort((a, b) =>
     a.date.localeCompare(b.date)
   )
@@ -350,6 +350,7 @@ export const ContributionGraphBlock = ({
 
   return (
     <rect
+      // TODO(slopradar): duplication: the level-to-fill class list repeats in ContributionGraphLegend, hoist one constant (x2 in this file)
       className={cn(
         'data-[level="0"]:fill-muted',
         'data-[level="1"]:fill-muted-foreground/20',

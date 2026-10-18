@@ -13,7 +13,7 @@ export const ContactSchema = z.object({
       message: 'Message must be at least 30 characters.',
     })
     .max(CONTACT_MESSAGE_MAX_LENGTH, {
-      message: 'Message must be under 5,000 characters.',
+      message: `Message must be under ${CONTACT_MESSAGE_MAX_LENGTH.toLocaleString('en-US')} characters.`,
     }),
   name: z
     .string()

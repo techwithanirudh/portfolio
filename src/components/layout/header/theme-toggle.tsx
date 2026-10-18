@@ -5,6 +5,7 @@ import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
+import type { SvgIcon } from '@/components/icons/utils'
 import { toggleOn } from '@/lib/audio/minimal'
 import { MEDIA } from '@/lib/media'
 import { cn } from '@/lib/utils'
@@ -31,11 +32,11 @@ const lightDarkActive = {
 
 const subscribeNoop = () => () => undefined
 
-const full = [
-  ['light', Icons.sun] as const,
-  ['dark', Icons.moon] as const,
-  ['system', Icons.desktop] as const,
-]
+const themeOptions = [
+  { Icon: Icons.sun, label: 'Light theme', value: 'light' },
+  { Icon: Icons.moon, label: 'Dark theme', value: 'dark' },
+  { Icon: Icons.desktop, label: 'System theme', value: 'system' },
+] as const satisfies readonly { Icon: SvgIcon; label: string; value: Theme }[]
 
 const shouldSkipViewTransitionForBrowserTint = () =>
   window.matchMedia(MEDIA.coarsePointer).matches
@@ -72,7 +73,7 @@ export function ThemeToggle({
         await document.startViewTransition(update).finished
       } catch (error) {
         if (!(error instanceof DOMException) || error.name !== 'AbortError') {
-          throw error
+          update()
         }
       } finally {
         document.documentElement.style.viewTransitionName = ''
@@ -90,7 +91,7 @@ export function ThemeToggle({
   if (mode === 'light-dark') {
     return (
       <button
-        aria-label={'Toggle theme'}
+        aria-label='Toggle theme'
         className={cn(
           container,
           'relative after:absolute after:inset-x-0 after:-inset-y-0.5'
@@ -102,22 +103,18 @@ export function ThemeToggle({
         }
         type='button'
       >
-        {full.map(([key, Icon]) => {
-          if (key === 'system') {
-            return null
-          }
-
-          return (
+        {themeOptions
+          .filter((option) => option.value !== 'system')
+          .map(({ Icon, value }) => (
             <Icon
               className={cn(
                 itemVariants({ active: false }),
-                lightDarkActive[key]
+                lightDarkActive[value]
               )}
               fill='currentColor'
-              key={key}
+              key={value}
             />
-          )
-        })}
+          ))}
       </button>
     )
   }
@@ -126,18 +123,17 @@ export function ThemeToggle({
 
   return (
     <fieldset aria-label='Theme' className={container} data-theme-toggle=''>
-      {full.map(([key, Icon]) => (
+      {themeOptions.map(({ Icon, label, value: option }) => (
         <button
-          aria-label={`${key[0]?.toUpperCase()}${key.slice(1)} theme`}
-          aria-pressed={value === key}
-          // Taller hit area only, since the segments sit flush side by side
+          aria-label={label}
+          aria-pressed={value === option}
           className={cn(
-            itemVariants({ active: value === key }),
+            itemVariants({ active: value === option }),
             'relative after:absolute after:inset-x-0 after:-inset-y-[7px]'
           )}
           data-sound-press='off'
-          key={key}
-          onClick={() => handleChangeTheme(key)}
+          key={option}
+          onClick={() => handleChangeTheme(option)}
           type='button'
         >
           <Icon className='size-full' fill='currentColor' />

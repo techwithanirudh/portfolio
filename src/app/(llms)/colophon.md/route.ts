@@ -1,12 +1,8 @@
 import { getColophonText } from '../utils'
+import { markdownResponse } from '../utils/markdown-response'
 
 export const dynamic = 'force-static'
-export const revalidate = false
 
 export function GET() {
-  return new Response(getColophonText(), {
-    headers: {
-      'Content-Type': 'text/markdown;charset=utf-8',
-    },
-  })
+  return markdownResponse(getColophonText())
 }

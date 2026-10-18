@@ -1,25 +1,32 @@
 'use client'
 
-import type { LenisOptions } from 'lenis'
+import type LenisInstance from 'lenis'
 import 'lenis/dist/lenis.css'
-import type { LenisRef, LenisProps as ReactLenisProps } from 'lenis/react'
+import type { LenisRef } from 'lenis/react'
 import { ReactLenis } from 'lenis/react'
 import { useRef } from 'react'
 import { useTempus } from 'tempus/react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
-interface LenisProps extends Omit<ReactLenisProps, 'ref'> {
-  options: LenisOptions
-  root: boolean
+export const scrollToTarget = (
+  lenis: LenisInstance | undefined,
+  target: HTMLElement,
+  { immediate }: { immediate: boolean }
+) => {
+  if (lenis) {
+    lenis.scrollTo(target, { immediate })
+  } else {
+    target.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth' })
+  }
 }
 
-export function Lenis(props: LenisProps) {
+export function Lenis() {
   const reducedMotion = useReducedMotion()
 
-  return reducedMotion ? null : <SmoothScroll {...props} />
+  return reducedMotion ? null : <SmoothScroll />
 }
 
-function SmoothScroll({ root, options }: LenisProps) {
+function SmoothScroll() {
   const lenisRef = useRef<LenisRef>(null)
 
   useTempus(({ time }) => {
@@ -31,16 +38,15 @@ function SmoothScroll({ root, options }: LenisProps) {
   return (
     <ReactLenis
       options={{
-        ...options,
         anchors: true,
         autoRaf: false,
-        lerp: options?.lerp ?? 0.18,
+        lerp: 0.18,
         prevent: (node: Element | null) =>
           node?.nodeName === 'VERCEL-LIVE-FEEDBACK' ||
           Boolean(node?.closest?.('[data-lenis-prevent]')),
       }}
       ref={lenisRef}
-      root={root}
+      root
     />
   )
 }

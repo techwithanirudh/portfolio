@@ -14,6 +14,7 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
         <div
           className='grid size-20 place-items-center rounded-xl border-2 border-foreground/5 bg-muted'
           style={{
+            // TODO(slopradar): duplicate-logic: inline copy of the inset shadow that about/_components/shadow-box.tsx writes as a Tailwind class, move it to one utility in globals.css
             boxShadow: '0px 2px 1.5px 0px rgba(165,174,184,0.32) inset',
           }}
         >
@@ -35,7 +36,7 @@ interface SoftwareGridProps {
 }
 
 export function SoftwareGrid({ items }: SoftwareGridProps) {
-  const sortedItems = [...items].sort(
+  const sortedItems = items.toSorted(
     (a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0)
   )
 

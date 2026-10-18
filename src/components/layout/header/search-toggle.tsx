@@ -25,7 +25,6 @@ export const SearchToggle = ({
   return (
     <Button
       aria-label='Open search'
-      // The 32px icon grows to a 40px hit area, still clear of its 6px gaps
       className={cn('relative after:absolute after:-inset-1', className)}
       data-search=''
       data-sound-press='off'

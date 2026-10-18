@@ -5,6 +5,7 @@ import { InlineMarkdown } from '@/components/inline-markdown'
 import { Section } from '@/components/layout/sections'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 import { heroIntro } from '@/constants/portfolio/intro'
 import { baseOptions } from '@/constants/site'
 import heroGradient640 from '@/public/images/hero-gradient/640.avif'
@@ -46,7 +47,6 @@ const { props: gradientProps } = getImageProps({
 
 const Hero = () => (
   <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-20 pb-24 sm:px-12 sm:pt-28 sm:pb-32'>
-    {/* The soft purple and azure corner blob from the v1 site */}
     <picture>
       <source
         sizes={gradientSizes}
@@ -57,13 +57,14 @@ const Hero = () => (
         {...gradientProps}
         alt=''
         aria-hidden
-        className='fade-in pointer-events-none absolute right-0 bottom-0 -z-10 h-[800px] w-[560px] max-w-none translate-x-1/2 translate-y-1/2 animate-in select-none fill-mode-both opacity-80 duration-1000 ease-out motion-reduce:animate-none sm:h-[860px] sm:w-[720px] sm:translate-x-[38%] sm:translate-y-[42%] md:h-[920px] md:w-[900px] lg:h-[960px] lg:w-[1004px] dark:opacity-100'
+        className='fade-in-[0.1] pointer-events-none absolute right-0 bottom-0 -z-10 h-[800px] w-[560px] max-w-none translate-x-1/2 translate-y-1/2 animate-in select-none fill-mode-both opacity-80 duration-1000 ease-out motion-reduce:animate-none sm:h-[860px] sm:w-[720px] sm:translate-x-[38%] sm:translate-y-[42%] md:h-[920px] md:w-[900px] lg:h-[960px] lg:w-[1004px] dark:opacity-100'
         height={heroGradient.height}
         width={heroGradient.width}
       />
     </picture>
     <ViewAnimation delay={0.05}>
       <h1 className='mb-5 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'>
+        {/* TODO(slopradar): magic-string: owner name typed around the chip, split owner from @/constants/site */}
         Anirudh <PortraitChip /> Sriram<span className='text-primary'>.</span>
       </h1>
     </ViewAnimation>
@@ -77,7 +78,7 @@ const Hero = () => (
       <ViewAnimation className='flex' delay={0.15}>
         <Link
           className={buttonVariants({ size: 'lg', variant: 'default' })}
-          href='/projects'
+          href={pages.projects.path}
         >
           Browse projects
           <Icons.arrowRight

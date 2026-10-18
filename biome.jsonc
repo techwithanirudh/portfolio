@@ -9,17 +9,11 @@
     "ignoreUnknown": true,
     "includes": [
       "!node_modules",
-      "!**/.next",
-      "!**/dist",
-      "!**/public",
       "!.github",
-      "!.vercel",
-      "!pnpm-lock.yaml",
-      "!bun.lock",
+      "!**/public",
       "!**/*.md",
       "!**/*.mdx",
-      "!src/components/ui",
-      "!**/*.grit"
+      "!src/components/ui"
     ]
   },
   "css": {
@@ -31,6 +25,7 @@
     "enabled": true,
     "rules": {
       "a11y": {
+        // TODO(slopradar): undocumented-config: unlike the parked 2.5 rules below, `noSvgWithoutTitle`, `useGenericFontNames`, `useUniqueElementIds`, `noBarrelFile`, `noNamespaceImport`, `noNonNullAssertion`, `noLeakedRender` and the cognitive-complexity ceiling of 31 (default 15) are off or loosened with no reason, add a one-line reason beside each or turn it back on
         "noSvgWithoutTitle": "off",
         "useGenericFontNames": "off",
         "useSemanticElements": "warn"
@@ -66,9 +61,7 @@
         // Graduated out of nursery in Biome 2.5.
         "noLeakedRender": "off",
         "noShadow": "off", // new in 2.5
-        "noUnnecessaryConditions": "off", // new in 2.5
-        // Flags `tw`, which Satori/takumi use to style OG images.
-        "noUnknownAttribute": "off"
+        "noUnnecessaryConditions": "off" // new in 2.5
       },
       "nursery": {
         "useSortedClasses": {

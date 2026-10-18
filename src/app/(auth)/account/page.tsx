@@ -9,19 +9,17 @@ import { AccountSettingsSkeleton } from './_components/account-settings-skeleton
 import { ActiveSessionsSection } from './_components/active-sessions-section'
 import { ActiveSessionsSkeleton } from './_components/active-sessions-skeleton'
 
-export async function generateMetadata(): Promise<Metadata> {
-  return createMetadata({
-    alternates: {
-      canonical: '/account',
-    },
-    description: 'Manage your account information and active sessions.',
-    openGraph: {
-      url: '/account',
-    },
-    robots: { follow: false, index: false },
-    title: 'Account settings',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: {
+    canonical: '/account',
+  },
+  description: 'Manage your account information and active sessions.',
+  openGraph: {
+    url: '/account',
+  },
+  robots: { follow: false, index: false },
+  title: 'Account settings',
+})
 
 export default function AccountPage() {
   return (

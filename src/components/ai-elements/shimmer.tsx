@@ -3,6 +3,7 @@
 import { type CSSProperties, type ElementType, memo } from 'react'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): unused-export: TextShimmerProps has no importer, un-export it
 export interface TextShimmerProps {
   as?: ElementType
   children: string

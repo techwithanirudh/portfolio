@@ -3,8 +3,6 @@
 import { useRouter } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 
-// A quiet text link above the title rather than a ghost button below it, so
-// it lines up with the heading instead of sitting inset by button padding
 export function BackButton() {
   const router = useRouter()
 

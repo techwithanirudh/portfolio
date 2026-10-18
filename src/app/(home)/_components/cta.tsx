@@ -5,6 +5,7 @@ import { Section } from '@/components/layout/sections'
 import { GrainBackdrop } from '@/components/shader/grain-backdrop'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 
 export default function CTA(): React.ReactElement {
   return (
@@ -31,7 +32,7 @@ export default function CTA(): React.ReactElement {
             <ViewAnimation delay={0.2}>
               <Button
                 nativeButton={false}
-                render={<Link href='/contact' />}
+                render={<Link href={pages.contact.path} />}
                 size='lg'
               >
                 Contact me{' '}

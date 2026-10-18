@@ -3,7 +3,7 @@ import { getSession, type SessionUser } from '@/server/auth'
 import { isBotRequest } from '@/server/botid'
 import { ActionError } from './client'
 
-export interface ActionContext {
+interface ActionContext {
   user: SessionUser
 }
 

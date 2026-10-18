@@ -2,6 +2,7 @@ import { socials } from '@/constants/navigation'
 import { faq } from '@/constants/portfolio/faq'
 import { url } from '@/lib/url'
 
+// TODO(slopradar): llms-parity: the intro restates contact/_components/hero.tsx by hand ('reply within a week'), keep it in one constant (for example pages.contact.summary) and read it in both
 export function getContactText() {
   return `# Contact
 Route: ${url('/contact')}

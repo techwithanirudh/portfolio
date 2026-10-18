@@ -10,6 +10,7 @@ import {
   DropdownMenuIconItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { isProduction } from '@/constants'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { useNearViewport } from '@/hooks/use-near-viewport'
 import { toast } from '@/lib/toast'
@@ -88,7 +89,7 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
             icon={Icons.moreHorizontal}
             onClick={() => {
               navigator.share({ title, url }).catch((error) => {
-                if (process.env.NODE_ENV !== 'production') {
+                if (!isProduction) {
                   console.error(error)
                 }
               })
@@ -118,6 +119,7 @@ const Comments = lazy(() =>
     : commentsWanted.then(loadComments)
 )
 
+// TODO(slopradar): misplaced-module: PostComments is imported by src/components/content/mdx/layout.tsx, so components depend on a route file, move it beside that layout
 export function PostComments({
   slug,
   className,

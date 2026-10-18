@@ -84,7 +84,7 @@ export const GuestbookReactions = ({
   const playError = useSound(error)
   const playReaction = useSound(pop)
 
-  const { execute, optimisticState, status } = useOptimisticAction(
+  const { execute, isExecuting, optimisticState } = useOptimisticAction(
     toggleGuestbookReaction,
     {
       currentState: { reactions },
@@ -106,14 +106,14 @@ export const GuestbookReactions = ({
   return (
     <div className='space-y-2'>
       <div className='flex flex-wrap gap-2'>
-        {optimisticReactions.map((reaction: GuestbookReactionItem) => (
+        {optimisticReactions.map((reaction) => (
           <Button
             aria-pressed={reaction.reacted}
             className={cn(
               'gap-2 px-3 text-xs',
               reaction.reacted && 'border-primary text-primary'
             )}
-            disabled={!canReact || status === 'executing'}
+            disabled={!canReact || isExecuting}
             key={`${entryId}-${reaction.emoji}`}
             onClick={() => handleReaction(reaction.emoji)}
             shape='square'
@@ -132,7 +132,7 @@ export const GuestbookReactions = ({
             render={
               <Button
                 className='gap-2 px-3 text-xs'
-                disabled={!canReact || status === 'executing'}
+                disabled={!canReact || isExecuting}
                 shape='square'
                 size='sm'
                 type='button'

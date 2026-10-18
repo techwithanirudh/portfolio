@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { type ComponentProps, useState } from 'react'
 import { BlurImage } from '@/components/blur-image'
+import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import {
   HoverCard,
@@ -15,34 +16,36 @@ import { getPagePreviewPath, type PagePreview } from '@/lib/page-preview'
 
 type Preview = LinkPreviewImage | null
 
-const previewRequests = new Map<string, Promise<unknown>>()
-
-function fetchJson<T>(url: string): Promise<T | null> {
-  let request = previewRequests.get(url)
-  if (!request) {
-    request = fetch(url)
-      .then((response) => (response.ok ? response.json() : null))
-      .catch(() => null)
-    previewRequests.set(url, request)
+function createJsonFetcher<T>() {
+  const requests = new Map<string, Promise<T | null>>()
+  return (url: string) => {
+    let request = requests.get(url)
+    if (!request) {
+      request = fetch(url)
+        .then((response) =>
+          response.ok ? (response.json() as Promise<T>) : null
+        )
+        .catch(() => null)
+      requests.set(url, request)
+    }
+    return request
   }
-  return request as Promise<T | null>
 }
 
+const fetchPreviewJson = createJsonFetcher<LinkPreviewImage>()
+const fetchPagePreviewJson = createJsonFetcher<PagePreview>()
+
 const fetchPreview = (href: string) =>
-  fetchJson<LinkPreviewImage>(
-    `/api/link-preview?url=${encodeURIComponent(href)}`
-  )
+  fetchPreviewJson(`/api/link-preview?url=${encodeURIComponent(href)}`)
 
 const fetchPagePreview = (path: string) =>
-  fetchJson<PagePreview>(`/api/page-preview?path=${encodeURIComponent(path)}`)
+  fetchPagePreviewJson(`/api/page-preview?path=${encodeURIComponent(path)}`)
 
 const externalHrefPattern = /^https?:\/\//
 const internalHrefPattern = /^\/(?!\/)/
 
 const popupClassName =
   'not-prose w-80 max-w-[calc(100vw-2rem)] overflow-hidden p-0'
-
-const externalLinkProps = { rel: 'noopener noreferrer', target: '_blank' }
 
 interface PreviewLinkProps extends Omit<ComponentProps<'a'>, 'href'> {
   href: string

@@ -7,6 +7,7 @@ interface SectionBodyProps {
   sectionClassName?: string
 }
 
+// TODO(slopradar): pass-through-wrapper: SectionBody is <Section fill> under another name, use <Section fill> at its call sites and delete the file
 export const SectionBody = ({
   children,
   className,

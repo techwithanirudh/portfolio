@@ -20,10 +20,10 @@ import type { ChatTools } from '@/lib/ai/chat/types'
 import { send, tap } from '@/lib/audio/minimal'
 import { MEDIA } from '@/lib/media'
 import { cn } from '@/lib/utils'
-import { useChatContext } from './chat-context'
+import { isChatBusy, useChatContext } from './chat-context'
 import { useAssistantContext } from './context'
 import { useMascot } from './mascot'
-import { playSubmitAnimation } from './mascot/hooks'
+import { animations } from './mascot/constants'
 
 function RegenerateButton() {
   const { messages, status, regenerate } = useChatContext()
@@ -53,8 +53,9 @@ function RegenerateButton() {
 }
 
 const assistantInputStorageKey = 'simba:draft'
-const MaxSourcePreviewChars = 120
+const MAX_SOURCE_PREVIEW_CHARS = 120
 
+// TODO(slopradar): library-exists: usehooks-ts (already a dependency) ships useLocalStorage, which already survives throwing storage, replace readSavedInput/writeSavedInput with it (keep the debounce)
 // Storage access throws when site data is blocked (Safari "Block all cookies")
 const readSavedInput = () => {
   try {
@@ -91,19 +92,18 @@ export function AssistantInput() {
         toolConfirmationMap[getStaticToolName<ChatTools>(part)]
     )
   )
-  const isStreaming = status === 'streaming' || status === 'submitted'
+  const isStreaming = isChatBusy(status)
   const isLoading = isStreaming || hasPendingToolInput
   const saveInput = useDebounceCallback(
     (value: string) => writeSavedInput(value),
     300
   )
 
+  const trimmedInput = input.trim()
+  const canSend = trimmedInput.length > 0 || Boolean(context)
+
   const onStart = async () => {
-    if (isLoading) {
-      return
-    }
-    const trimmedInput = input.trim()
-    if (trimmedInput.length === 0 && !context) {
+    if (isLoading || !canSend) {
       return
     }
 
@@ -111,7 +111,7 @@ export function AssistantInput() {
     const messageText =
       trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
 
-    playSubmitAnimation(mascot)
+    mascot?.setActivity(animations.submit)
     playSend()
 
     setInput('')
@@ -173,10 +173,7 @@ export function AssistantInput() {
           <RegenerateButton />
         </PromptInputTools>
         <PromptInputSubmit
-          disabled={
-            !isStreaming &&
-            ((input.trim().length === 0 && !context) || hasPendingToolInput)
-          }
+          disabled={!(isStreaming || (canSend && !hasPendingToolInput))}
           onStop={stop}
           status={status}
         />
@@ -200,8 +197,9 @@ function PromptContext({
       />
       <span className='line-clamp-2 flex-1 break-words'>
         <span className='sr-only'>Context: </span>
-        {context.slice(0, MaxSourcePreviewChars)}
+        {context.slice(0, MAX_SOURCE_PREVIEW_CHARS)}
       </span>
+      {/* TODO(slopradar): hit-area: the remove-context button is the bare 14px icon, extend it toward 40px with an after:-inset pseudo element like SearchToggle */}
       <button
         aria-label='Remove context'
         className='inline-flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground'

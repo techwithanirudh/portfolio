@@ -10,6 +10,7 @@ import {
 import { Prose } from '@/components/prose'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 import { aboutIntro } from '@/constants/portfolio/intro'
 import { cn } from '@/lib/utils'
 
@@ -41,10 +42,9 @@ export default function About(): React.ReactElement {
                 }),
                 '!p-0 h-fit'
               )}
-              href='/about'
+              href={pages.about.path}
             >
               Learn more
-              {/* Screen readers and crawlers get where the link goes */}
               <span className='sr-only'> about me</span>
               <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>

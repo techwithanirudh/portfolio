@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { PreviewLink } from '@/components/preview-link'
 
+// TODO(slopradar): library-exists: a regex link parser beside react-markdown, which experience-timeline.tsx already uses with the same a to PreviewLink mapping; reuse that renderer (check copy with * or _ still reads the same)
 const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g
 
 interface InlineMarkdownProps {
@@ -8,8 +9,6 @@ interface InlineMarkdownProps {
   text: string
 }
 
-// Copy written once as text with `[label](href)` links, so the page and the
-// llms routes read the same string
 export function InlineMarkdown({ linkClassName, text }: InlineMarkdownProps) {
   const parts: ReactNode[] = []
   let cursor = 0

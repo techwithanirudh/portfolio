@@ -5,6 +5,7 @@ import { type ComponentProps, memo } from 'react'
 import { cn } from '@/lib/utils'
 import { Markdown } from './markdown'
 
+// TODO(slopradar): unused-export: the exported *Props types in this file have no importers, un-export them (x4)
 export type MessageProps = ComponentProps<'div'> & {
   from: UIMessage['role']
 }
@@ -13,6 +14,7 @@ export const Message = ({ className, from, ...props }: MessageProps) => (
   <div
     className={cn(
       'group/message flex w-full flex-col gap-1',
+      // TODO(slopradar): duplicated-state: the role is set as an is-* class and as data-role, style with group-data-[role=assistant]/message in MessageHeader and drop the class
       from === 'user' ? 'is-user' : 'is-assistant',
       className
     )}

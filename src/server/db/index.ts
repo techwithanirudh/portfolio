@@ -7,7 +7,6 @@ import * as schema from './schema'
 const sql = neon(env.DATABASE_URL)
 
 export const db = drizzle({
-  casing: 'snake_case',
   client: sql,
   schema,
 })

@@ -1,9 +1,9 @@
+import { clamp } from 'motion/react'
 import { type RefObject, useEffect } from 'react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 type Watcher = (x: number, y: number) => void
 
-// One pointer listener feeds every Simba on the page
 const watchers = new Set<Watcher>()
 let frame = 0
 let pointer = { x: 0, y: 0 }
@@ -35,10 +35,13 @@ const watch = (watcher: Watcher) => {
   }
 }
 
-const clamp = (value: number) => Math.max(-1, Math.min(1, value))
+const LOOK_RANGE_PX = 360
+const LOOK_SHIFT_X_PX = 1.6
+const LOOK_SHIFT_Y_PX = 1.3
+const LOOK_TILT_DEG = 5
 
-// Eyes and head drift toward the pointer through CSS variables, so following
-// it never re-renders
+const toLook = (offset: number) => clamp(-1, 1, offset / LOOK_RANGE_PX)
+
 export function useLook(ref: RefObject<SVGSVGElement | null>, enabled = true) {
   const reducedMotion = useReducedMotion()
 
@@ -49,11 +52,11 @@ export function useLook(ref: RefObject<SVGSVGElement | null>, enabled = true) {
     }
     return watch((x, y) => {
       const box = svg.getBoundingClientRect()
-      const dx = clamp((x - (box.left + box.width / 2)) / 360)
-      const dy = clamp((y - (box.top + box.height * 0.35)) / 360)
-      svg.style.setProperty('--look-x', `${dx * 1.6}px`)
-      svg.style.setProperty('--look-y', `${dy * 1.3}px`)
-      svg.style.setProperty('--look-tilt', `${dx * 5}deg`)
+      const dx = toLook(x - (box.left + box.width / 2))
+      const dy = toLook(y - (box.top + box.height * 0.35))
+      svg.style.setProperty('--look-x', `${dx * LOOK_SHIFT_X_PX}px`)
+      svg.style.setProperty('--look-y', `${dy * LOOK_SHIFT_Y_PX}px`)
+      svg.style.setProperty('--look-tilt', `${dx * LOOK_TILT_DEG}deg`)
     })
   }, [enabled, ref, reducedMotion])
 }

@@ -1,3 +1,4 @@
+// TODO(slopradar): wrong extension: no JSX in this file, rename to experiences.ts
 import type { ExperienceItemType } from '@/types/experience'
 
 export const experiences: ExperienceItemType[] = [

@@ -21,7 +21,6 @@ interface PopupState {
   text: string
 }
 
-// Offers to ask Simba about text selected anywhere in the page content
 export function TextSelectionPopup() {
   const { setContext, setOpen } = useAssistantContext()
   const [popup, setPopup] = useState<PopupState | null>(null)
@@ -73,6 +72,7 @@ export function TextSelectionPopup() {
     setPopup({ text: text.slice(0, 1200) })
   })
 
+  // TODO(slopradar): library-exists: Escape, outside-press dismissal and the portal are hand-written over @floating-ui/react-dom (its only user); Base UI Popover takes a virtual anchor and controlled open and owns dismissal, check initialFocus keeps the selection
   const closeOnEscape = useEffectEvent((e: KeyboardEvent) => {
     if (popup !== null && e.key === 'Escape') {
       setPopup(null)
@@ -123,7 +123,7 @@ export function TextSelectionPopup() {
   return popup
     ? createPortal(
         <div
-          className='not-prose z-[25]'
+          className='not-prose z-25'
           ref={refs.setFloating}
           style={floatingStyles}
         >

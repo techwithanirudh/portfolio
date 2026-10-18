@@ -10,12 +10,12 @@ import { TOCMinimap, TOCPopover } from '@/components/features/toc'
 import { PostJsonLd } from '@/components/json-ld'
 import { SectionBody } from '@/components/layout/sections/body'
 import { LLMCopyButtonWithViewOptions } from '@/components/page-actions'
-import { baseUrl } from '@/constants'
-import { githubRepoUrl } from '@/constants/config'
-import { description as homeDescription, owner } from '@/constants/site'
+import { githubBranch, githubRepoUrl } from '@/constants/config'
+import { description as homeDescription } from '@/constants/site'
 import { formatDate } from '@/lib/format-date'
 import { createMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
+import { url } from '@/lib/url'
 import { Header } from './_components/header'
 
 export default async function Page(props: {
@@ -29,34 +29,30 @@ export default async function Page(props: {
   }
   const { body: Mdx, toc, tags, lastModified } = page.data
 
-  const lastUpdate = lastModified ? new Date(lastModified) : undefined
   const pageActions = (
     <>
       <div>
         <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
         <p className='font-medium'>
-          <AuthorByline author={page.data.author ?? 'Unknown'} />
+          <AuthorByline author={page.data.author} />
         </p>
       </div>
       <div>
         <p className='mb-1 text-muted-foreground text-sm'>Published</p>
         <p className='font-medium'>{formatDate(page.data.date)}</p>
       </div>
-      {lastUpdate && (
+      {lastModified && (
         <div>
           <p className='mb-1 text-muted-foreground text-sm'>Updated</p>
-          <p className='font-medium'>{formatDate(lastUpdate)}</p>
+          <p className='font-medium'>{formatDate(lastModified)}</p>
         </div>
       )}
       <div className='flex flex-col gap-2'>
         <LLMCopyButtonWithViewOptions
-          githubUrl={`${githubRepoUrl}/blob/main/content/blog/${params.slug}.mdx`}
-          markdownUrl={new URL(`/blog.mdx/${params.slug}`, baseUrl).toString()}
+          githubUrl={`${githubRepoUrl}/blob/${githubBranch}/content/blog/${params.slug}.mdx`}
+          markdownUrl={url(['blog.mdx', params.slug])}
         />
-        <ShareMenu
-          title={page.data.title ?? 'Untitled'}
-          url={new URL(page.url, baseUrl).toString()}
-        />
+        <ShareMenu title={page.data.title} url={url(page.url)} />
       </div>
     </>
   )
@@ -93,6 +89,7 @@ export default async function Page(props: {
   )
 }
 
+// TODO(slopradar): duplicate-logic: near-identical to generateMetadata in projects/[slug]/page.tsx, add a createArticleMetadata(page, image) helper in @/lib/metadata
 export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
@@ -103,7 +100,7 @@ export async function generateMetadata(props: {
     notFound()
   }
 
-  const title = page.data.title ?? 'Untitled'
+  const title = page.data.title
   const description = page.data.description ?? homeDescription
 
   const image = getBlogPageImage(page)
@@ -114,15 +111,13 @@ export async function generateMetadata(props: {
     },
     description,
     openGraph: {
-      authors: [page.data.author ?? owner],
+      authors: [page.data.author],
       images: image.url,
-      modifiedTime: page.data.lastModified
-        ? new Date(page.data.lastModified).toISOString()
-        : new Date(page.data.date).toISOString(),
-      publishedTime: new Date(page.data.date).toISOString(),
+      modifiedTime: (page.data.lastModified ?? page.data.date).toISOString(),
+      publishedTime: page.data.date.toISOString(),
       tags: page.data.tags,
       type: 'article',
-      url: `/blog/${page.slugs.join('/')}`,
+      url: page.url,
     },
     title,
     twitter: {
@@ -132,7 +127,5 @@ export async function generateMetadata(props: {
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return getPosts()
-    .map((page) => ({ slug: page.slugs[0] }))
-    .filter((p): p is { slug: string } => p.slug !== undefined)
+  return getPosts().flatMap(({ slugs: [slug] }) => (slug ? [{ slug }] : []))
 }

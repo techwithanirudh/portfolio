@@ -7,6 +7,7 @@ import {
 import {
   type BlogPage,
   getPosts,
+  getTags,
   getWorkPages,
   type WorkPage,
 } from '@/lib/source'
@@ -17,22 +18,11 @@ async function checkLinks() {
 
   const scanned = await scanURLs({
     populate: {
-      '(home)/(blog)/blog/[slug]': await Promise.all(
-        posts.map((page) => ({
-          hashes: getHeadings(page),
-          value: {
-            slug: page.slugs[0] ?? '',
-          },
-        }))
-      ),
-      '(home)/projects/[slug]': await Promise.all(
-        workPages.map((page) => ({
-          hashes: getHeadings(page),
-          value: {
-            slug: page.slugs[0] ?? '',
-          },
-        }))
-      ),
+      '(home)/blog/[slug]': toParams(posts),
+      '(home)/blog/tags/[tag]': getTags().map((tag) => ({
+        value: { tag },
+      })),
+      '(home)/projects/[slug]': toParams(workPages),
     },
   })
 
@@ -57,10 +47,19 @@ async function checkLinks() {
   )
 }
 
+function toParams(pages: BlogPage[] | WorkPage[]) {
+  return pages.map((page) => ({
+    hashes: getHeadings(page),
+    value: {
+      slug: page.slugs[0] ?? '',
+    },
+  }))
+}
+
 function getHeadings({ data }: BlogPage | WorkPage): string[] {
   const { _exports, toc } = data
   const headings = toc?.map((item) => item.url.slice(1)) ?? []
-  const elementIds = _exports?.elementIds
+  const elementIds = _exports.elementIds
   if (Array.isArray(elementIds)) {
     headings.push(...elementIds)
   }
@@ -68,18 +67,15 @@ function getHeadings({ data }: BlogPage | WorkPage): string[] {
   return headings
 }
 
-async function getFiles(pages: BlogPage[] | WorkPage[]) {
-  const files: FileObject[] = []
-  for (const page of pages) {
-    files.push({
+function getFiles(pages: BlogPage[] | WorkPage[]): Promise<FileObject[]> {
+  return Promise.all(
+    pages.map(async (page) => ({
       content: await page.data.getText('raw'),
       data: page.data,
       path: page.data.info.fullPath,
       url: page.url,
-    })
-  }
-
-  return files
+    }))
+  )
 }
 
 checkLinks().catch((error) => {

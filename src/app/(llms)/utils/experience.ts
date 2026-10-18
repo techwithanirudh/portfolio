@@ -1,12 +1,8 @@
 import { experiences } from '@/constants/portfolio/experiences'
-import { url } from '@/lib/url'
-import { toPlainPeriod } from './profile'
+import { absoluteMarkdownLinks, url } from '@/lib/url'
+import { DEFAULT_EMPLOYMENT_TYPE, toPlainPeriod } from './profile'
 
-const relativeLink = /\]\((\/[^)]*)\)/g
-
-const absoluteLinks = (markdown: string) =>
-  markdown.replace(relativeLink, (_, path: string) => `](${url(path)})`)
-
+// TODO(slopradar): llms-parity: 'Every role so far, newest first.' is typed again in about/_components/experience.tsx and llms.txt, read one shared constant in all three
 export function getExperienceText() {
   return `# Experience
 Route: ${url('/about#experience')}
@@ -17,7 +13,7 @@ ${experiences
   .flatMap((item) =>
     item.positions.map((position) => {
       const details = [
-        `- Type: ${position.employmentType ?? 'Research'}`,
+        `- Type: ${position.employmentType ?? DEFAULT_EMPLOYMENT_TYPE}`,
         `- Period: ${toPlainPeriod(position.employmentPeriod.start, position.employmentPeriod.end)}`,
         item.companyWebsite && `- Company website: ${item.companyWebsite}`,
         position.skills?.length && `- Skills: ${position.skills.join(', ')}`,
@@ -25,7 +21,7 @@ ${experiences
         .filter(Boolean)
         .join('\n')
       const body = position.description
-        ? `\n\n${absoluteLinks(position.description.trim())}`
+        ? `\n\n${absoluteMarkdownLinks(position.description.trim())}`
         : ''
 
       return `## ${position.title} | ${item.companyName}\n\n${details}${body}`

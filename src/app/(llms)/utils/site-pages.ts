@@ -1,8 +1,14 @@
 import type { TOCItemType } from 'fumadocs-core/toc'
 import { type PageInfo, pages } from '@/constants/pages'
-import { getSortedByDatePosts, getSortedWork, getTags } from '@/lib/source'
+import {
+  type BlogPage,
+  getSortedByDatePosts,
+  getSortedWork,
+  getTags,
+  type WorkPage,
+} from '@/lib/source'
 
-export interface SiteSection {
+interface SiteSection {
   id: string
   title: string
 }
@@ -14,6 +20,7 @@ export interface SitePage {
   title: string
 }
 
+// TODO(slopradar): llms-parity: section ids are typed by hand and drift silently from the ids on the pages (story, experience, stack, activity), export the ids beside the page sections and read them here
 const sectionsByPath: Record<string, SiteSection[]> = {
   '/': [{ id: 'experience', title: 'Experience preview' }],
   '/about': [
@@ -44,7 +51,7 @@ export const staticPages: SitePage[] = pageOrder.map((page) => ({
   title: page.title,
 }))
 
-const LEADING_HASH = /^#/
+export const LEADING_HASH = /^#/
 
 const tocSections = (toc: TOCItemType[]): SiteSection[] =>
   toc.map((item) => {
@@ -52,20 +59,17 @@ const tocSections = (toc: TOCItemType[]): SiteSection[] =>
     return { id, title: typeof item.title === 'string' ? item.title : id }
   })
 
+const toSitePage = (page: BlogPage | WorkPage): SitePage => ({
+  description: page.data.description ?? '',
+  path: page.url,
+  sections: tocSections(page.data.toc),
+  title: page.data.title,
+})
+
 export const getSitePages = (): SitePage[] => [
   ...staticPages,
-  ...getSortedWork().map((page) => ({
-    description: page.data.description ?? '',
-    path: page.url,
-    sections: tocSections(page.data.toc),
-    title: page.data.title ?? 'Untitled',
-  })),
-  ...getSortedByDatePosts().map((page) => ({
-    description: page.data.description ?? '',
-    path: page.url,
-    sections: tocSections(page.data.toc),
-    title: page.data.title ?? 'Untitled',
-  })),
+  ...getSortedWork().map(toSitePage),
+  ...getSortedByDatePosts().map(toSitePage),
   ...getTags().map((tag) => ({
     description: `The blog filtered to posts tagged ${tag}, grouped by year.`,
     path: `/blog/tags/${tag}`,

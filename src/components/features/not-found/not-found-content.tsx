@@ -5,16 +5,19 @@ import { Section } from '@/components/layout/sections'
 import { TitleDot } from '@/components/layout/sections/hero'
 import Separator from '@/components/layout/sections/separator'
 import { Button } from '@/components/ui/button'
+import { pages } from '@/constants/pages'
 
-// Ported from the an1rudh rebrand prototype (PR #108)
 const destinations = [
-  { description: 'Who I am and what I do', href: '/about', label: 'About' },
-  { description: 'Things I have built', href: '/projects', label: 'Projects' },
-  { description: 'Notes and write ups', href: '/blog', label: 'Blog' },
-  { description: 'Leave a note', href: '/guestbook', label: 'Guestbook' },
-]
+  { description: 'Who I am and what I do', page: pages.about },
+  { description: 'Things I have built', page: pages.projects },
+  { description: 'Notes and write ups', page: pages.blog },
+  { description: 'Leave a note', page: pages.guestbook },
+].map(({ description, page }) => ({
+  description,
+  href: page.path,
+  label: page.title,
+}))
 
-/** The 404 page's body, shared by the root and the (home) not-found pages */
 export function NotFoundContent() {
   return (
     <>

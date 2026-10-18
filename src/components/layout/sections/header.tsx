@@ -1,5 +1,5 @@
-import { Children, isValidElement, type ReactNode } from 'react'
-import { ViewAnimation } from '@/components/view-animation'
+import { Children, type ReactNode } from 'react'
+import { staggerDelay, ViewAnimation } from '@/components/view-animation'
 import { cn } from '@/lib/utils'
 
 export interface SectionHeaderProps {
@@ -7,11 +7,9 @@ export interface SectionHeaderProps {
   as?: 'h1' | 'h2'
   children?: ReactNode
   className?: string
-  description?: string | ReactNode | null
-  descriptionClassName?: string
+  description?: ReactNode
   sticky?: boolean
-  title: string | ReactNode
-  titleClassName?: string
+  title: ReactNode
 }
 
 export const SectionHeader = ({
@@ -19,8 +17,6 @@ export const SectionHeader = ({
   description,
   children,
   className,
-  titleClassName,
-  descriptionClassName,
   align = 'center',
   as: Heading = 'h2',
   sticky = false,
@@ -37,8 +33,7 @@ export const SectionHeader = ({
       <Heading
         className={cn(
           'typography-title text-balance font-normal text-3xl leading-tight tracking-tighter',
-          'md:text-5xl',
-          titleClassName
+          'md:text-5xl'
         )}
       >
         {title}
@@ -46,25 +41,15 @@ export const SectionHeader = ({
     </ViewAnimation>
     {description && (
       <ViewAnimation delay={0.1}>
-        <p
-          className={cn(
-            'text-pretty text-base text-muted-foreground',
-            descriptionClassName
-          )}
-        >
+        <p className='text-pretty text-base text-muted-foreground'>
           {description}
         </p>
       </ViewAnimation>
     )}
-    {Children.map(Children.toArray(children), (child, index) => {
-      // Children.toArray has already keyed every element
-      const key = isValidElement(child) ? child.key : String(child)
-
-      return child ? (
-        <ViewAnimation delay={0.1 + index * 0.05} key={key}>
-          {child}
-        </ViewAnimation>
+    {Children.map(Children.toArray(children), (child, index) =>
+      child ? (
+        <ViewAnimation delay={staggerDelay(index, 0.1)}>{child}</ViewAnimation>
       ) : null
-    })}
+    )}
   </div>
 )

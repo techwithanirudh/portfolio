@@ -4,6 +4,7 @@ const reveal = () => {
     return
   }
   root.dataset.reveal = ''
+  // TODO(slopradar): duplicated selector: the same :not(#main-content ...) selector is in globals.css (:root[data-reveal]), export it once and build the CSS rule from it or set a data attribute on the first section instead
   const selector =
     '[data-reveal-item]:not(#main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *)'
   const still = window.matchMedia('(prefers-reduced-motion: reduce)')

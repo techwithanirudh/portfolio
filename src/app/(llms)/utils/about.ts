@@ -1,9 +1,9 @@
-import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
 import { aboutIntro, heroIntro } from '@/constants/portfolio/intro'
 import { profile } from '@/constants/portfolio/profile'
 import { story } from '@/constants/portfolio/story'
 import { description, owner } from '@/constants/site'
+import { baseUrl } from '@/lib/metadata'
 import { absoluteMarkdownLinks, url } from '@/lib/url'
 
 export function getAboutText() {

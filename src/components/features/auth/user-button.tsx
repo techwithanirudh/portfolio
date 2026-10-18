@@ -17,31 +17,13 @@ import { signOut, useSession } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
 import { useSignInModal } from './sign-in-modal'
-import type { UserAvatarClassNames } from './user-avatar'
 import { UserAvatar } from './user-avatar'
 
-export interface UserButtonClassNames {
-  base?: string
-  content?: {
-    base?: string
-    avatar?: UserAvatarClassNames
-    menuItem?: string
-    separator?: string
-  }
-  skeleton?: string
-  trigger?: {
-    base?: string
-    avatar?: UserAvatarClassNames
-    skeleton?: string
-  }
-}
-
-export interface UserButtonProps {
+interface UserButtonProps {
   className?: string
-  classNames?: UserButtonClassNames
 }
 
-export function UserButton({ className, classNames }: UserButtonProps) {
+export function UserButton({ className }: UserButtonProps) {
   const router = useRouter()
   const { openSignIn } = useSignInModal()
   const { data: sessionData, isPending } = useSession()
@@ -53,43 +35,28 @@ export function UserButton({ className, classNames }: UserButtonProps) {
         className='rounded-md'
         render={
           <Button
-            aria-label={'User menu'}
-            className={cn(
-              'size-auto rounded-md border border-border bg-background p-0 hover:bg-accent',
-              classNames?.trigger?.base
-            )}
+            aria-label='User menu'
+            className='size-auto rounded-md border border-border bg-background p-0 hover:bg-accent'
             disabled={isPending}
             variant='ghost'
           />
         }
       >
         {isPending ? (
-          <Skeleton
-            className={cn(
-              'size-8 rounded-md',
-              className,
-              classNames?.base,
-              classNames?.skeleton,
-              classNames?.trigger?.skeleton
-            )}
-          />
+          <Skeleton className={cn('size-8 rounded-md', className)} />
         ) : (
-          <UserAvatar
-            className={cn('size-8', className, classNames?.base)}
-            classNames={classNames?.trigger?.avatar}
-            user={user}
-          />
+          <UserAvatar className={cn('size-8', className)} user={user} />
         )}
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
         align='start'
-        className={cn('w-fit min-w-56 max-w-64', classNames?.content?.base)}
+        className='w-fit min-w-56 max-w-64'
         side='top'
       >
         {user ? (
           <div className='flex items-center gap-2 p-2'>
-            <UserAvatar classNames={classNames?.content?.avatar} user={user} />
+            <UserAvatar user={user} />
 
             <div className='flex flex-col truncate'>
               <div className='truncate font-medium text-sm'>
@@ -107,22 +74,19 @@ export function UserButton({ className, classNames }: UserButtonProps) {
           <div className='px-2 py-1 text-muted-foreground text-xs'>Account</div>
         )}
 
-        <DropdownMenuSeparator className={classNames?.content?.separator} />
+        <DropdownMenuSeparator />
 
         {user ? (
           <>
-            <DropdownMenuItem
-              className={classNames?.content?.menuItem}
-              render={<Link href='/account' />}
-            >
+            {/* TODO(slopradar): duplication: icon plus label are placed by hand, DropdownMenuIconItem icon={...} (page-actions.tsx uses it) does it, and '/account' restates the route (x3 in this file) */}
+            <DropdownMenuItem render={<Link href='/account' />}>
               <Icons.user className='size-4' />
               Account
             </DropdownMenuItem>
 
-            <DropdownMenuSeparator className={classNames?.content?.separator} />
+            <DropdownMenuSeparator />
 
             <DropdownMenuItem
-              className={classNames?.content?.menuItem}
               onClick={async () => {
                 await signOut()
                 router.refresh()
@@ -133,10 +97,7 @@ export function UserButton({ className, classNames }: UserButtonProps) {
             </DropdownMenuItem>
           </>
         ) : (
-          <DropdownMenuItem
-            className={classNames?.content?.menuItem}
-            onClick={() => openSignIn()}
-          >
+          <DropdownMenuItem onClick={() => openSignIn()}>
             <Icons.logIn className='size-4' />
             Sign in
           </DropdownMenuItem>

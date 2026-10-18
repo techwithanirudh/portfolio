@@ -28,9 +28,6 @@ function PageScrollLock() {
   return null
 }
 
-// The panel opens from the corner trigger, the shortcut and the selection
-// popup, none of them a Dialog.Trigger, so remember where focus was while it
-// was closed and hand it back on close instead of dropping it on the body
 function useReturnFocus(open: boolean) {
   const popupRef = useRef<HTMLDivElement>(null)
   const lastFocused = useRef<HTMLElement | null>(null)
@@ -74,9 +71,6 @@ export function AssistantPanel() {
   return (
     <DialogPrimitive.Root
       disablePointerDismissal
-      // Below lg it covers the page, so keep focus inside it there. Not a full
-      // modal, so the corner trigger can still close it and PageScrollLock
-      // stays the one scroll lock
       modal={isDocked ? false : 'trap-focus'}
       onOpenChange={setOpen}
       open={open}

@@ -4,12 +4,13 @@ import { env } from '@/env'
 import { resend } from '@/lib/resend'
 import { ActionError, publicActionClient } from '@/lib/safe-action'
 import { ContactSchema } from '@/lib/validators/contact'
+// TODO(slopradar): path-alias: five-level relative import into emails/, add an @/emails path alias
 import ContactNotificationEmail from '../../../../../emails/contact-notification'
 
-// Built once, since every submission formats with the same options
 const sentAtFormat = new Intl.DateTimeFormat('en-US', {
   dateStyle: 'medium',
   timeStyle: 'short',
+  // TODO(slopradar): magic-string: the owner's time zone and the ' IST' suffix are typed here, read the zone from src/constants/portfolio/profile and let Intl print timeZoneName
   timeZone: 'Asia/Kolkata',
 })
 
@@ -35,7 +36,6 @@ export const contact = publicActionClient
         react: ContactNotificationEmail({ email, message, name, sentAt }),
         replyTo: email,
         subject: `New contact form submission from ${name}`,
-        // For mail apps that don't show HTML
         text: `${message}\n\nFrom ${name} (${email}), ${sentAt}`,
         to,
       })

@@ -31,11 +31,11 @@ export const NewsletterForm = () => {
         onError: ({ error }) => {
           toast.error(getActionErrorMessage(error, subscribeFailedMessage))
         },
+        // TODO(slopradar): duplicate-feedback: success shows a toast and the Alert below, each with a fallback the action never needs, pick one (x2 with contact-form)
         onSuccess: ({ data }) => {
           toast.success(data?.message ?? "You're subscribed.")
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           email: '',
@@ -60,7 +60,7 @@ export const NewsletterForm = () => {
                       {...field}
                       autoComplete='email'
                       className='h-full rounded-md rounded-r-none border-none px-4 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                      disabled={action.status === 'executing'}
+                      disabled={action.isExecuting}
                       placeholder='Email address'
                       type='email'
                     />
@@ -74,20 +74,19 @@ export const NewsletterForm = () => {
           <Button
             aria-label='Subscribe'
             className='size-auto w-15 rounded-md rounded-l-none px-3'
-            disabled={action.status === 'executing'}
+            disabled={action.isExecuting}
             size='icon'
             type='submit'
           >
-            {action.status === 'executing' ? (
+            {action.isExecuting ? (
               <Icons.spinner className='size-4 animate-spin' />
             ) : (
-              // Turned 45deg the plane's ink sits right of its box, so pull it back to look centered
               <Icons.send className='size-4 -translate-x-[3px] rotate-45 transition-transform group-hover/button:rotate-0' />
             )}
           </Button>
         </div>
 
-        {action.status === 'hasSucceeded' && (
+        {action.hasSucceeded && (
           <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>

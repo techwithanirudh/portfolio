@@ -35,12 +35,12 @@ export type Session = NonNullable<Awaited<ReturnType<typeof getSession>>>
 export type SessionUser = Session['user']
 
 export const listSessions = async () =>
-  await auth.api.listSessions({
+  auth.api.listSessions({
     headers: await headers(),
   })
 
 export const revokeSession = async (token: string) =>
-  await auth.api.revokeSession({
+  auth.api.revokeSession({
     body: {
       token,
     },

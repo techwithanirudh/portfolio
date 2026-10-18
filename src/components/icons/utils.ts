@@ -4,7 +4,6 @@ export type IconProps = ComponentProps<'svg'> & {
   size?: number | string
 }
 export type SvgIcon = (props: IconProps) => JSX.Element
-export type Icon = SvgIcon
 
 export const getSvgSizeProps = ({
   height,

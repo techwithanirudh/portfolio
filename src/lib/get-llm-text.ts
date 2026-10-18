@@ -1,33 +1,21 @@
 import { format } from 'date-fns'
-import { githubRepo, githubUser } from '@/constants/config'
+import { githubBranch, githubRepo, githubUser } from '@/constants/config'
 import type { BlogPage, WorkPage } from '@/lib/source'
 
 type ContentPage = BlogPage | WorkPage
 type ContentType = 'blog' | 'work'
+const headingPrefix = {
+  page: '#',
+  section: '##',
+} as const
+
 interface LLMTextOptions {
-  level?: 'page' | 'section' | 'subsection'
+  level?: keyof typeof headingPrefix
 }
 
 interface ContentMeta {
   tags?: string[]
   type: ContentType
-}
-
-function getHeadingPrefix(level: 'page' | 'section' | 'subsection') {
-  switch (level) {
-    case 'page': {
-      return '#'
-    }
-    case 'section': {
-      return '##'
-    }
-    case 'subsection': {
-      return '###'
-    }
-    default: {
-      throw new Error(`Unknown heading level: ${level}`)
-    }
-  }
 }
 
 async function getLLMText(
@@ -42,27 +30,21 @@ async function getLLMText(
   const tagsLine =
     meta.type === 'blog' ? `Tags: ${meta.tags?.join(', ') ?? ''}\n` : ''
 
-  return `${getHeadingPrefix(level)} ${page.data.title}
+  return `${headingPrefix[level]} ${page.data.title}
 URL: ${page.url}
-Source: https://raw.githubusercontent.com/${githubUser}/${githubRepo}/refs/heads/main/${path}
+Source: https://raw.githubusercontent.com/${githubUser}/${githubRepo}/refs/heads/${githubBranch}/${path}
 ${tagsLine}
 ${page.data.description ?? ''}
 
 ${processed}
 
-${page.data.lastModified ? `Last updated on ${format(new Date(page.data.lastModified), 'MMMM d, yyyy')}` : ''}`
+${page.data.lastModified ? `Last updated on ${format(page.data.lastModified, 'MMMM d, yyyy')}` : ''}`
 }
 
-export async function getBlogLLMText(
-  page: BlogPage,
-  options: LLMTextOptions = {}
-) {
-  return await getLLMText(page, { tags: page.data.tags, type: 'blog' }, options)
+export function getBlogLLMText(page: BlogPage, options: LLMTextOptions = {}) {
+  return getLLMText(page, { tags: page.data.tags, type: 'blog' }, options)
 }
 
-export async function getWorkLLMText(
-  page: WorkPage,
-  options: LLMTextOptions = {}
-) {
-  return await getLLMText(page, { type: 'work' }, options)
+export function getWorkLLMText(page: WorkPage, options: LLMTextOptions = {}) {
+  return getLLMText(page, { type: 'work' }, options)
 }

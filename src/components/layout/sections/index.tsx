@@ -23,6 +23,13 @@ export const Cross = ({ className }: { className?: string }) => (
   </div>
 )
 
+export const CrossPair = () => (
+  <>
+    <Cross className='-left-[7px]' />
+    <Cross className='-right-[7px]' />
+  </>
+)
+
 export const Section = ({
   children,
   fill = false,
@@ -56,8 +63,7 @@ export const Section = ({
       >
         {children}
       </div>
-      <Cross className='-left-[7px]' />
-      <Cross className='-right-[7px]' />
+      <CrossPair />
     </div>
   </section>
 )

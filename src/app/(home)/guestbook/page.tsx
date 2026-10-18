@@ -45,7 +45,6 @@ async function GuestbookEntriesSection() {
       currentUserId={currentUserId}
       entries={entries}
       isAdmin={isAdmin}
-      isSignedIn={Boolean(currentUserId)}
     />
   )
 }

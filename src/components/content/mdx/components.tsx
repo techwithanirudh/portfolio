@@ -12,7 +12,7 @@ import type { MDXComponents } from 'mdx/types'
 import 'katex/dist/katex.css'
 import { VideoPlayer } from '@/components/ui/video-player'
 import { FramedImage, type FramedImageProps, IframeEmbed } from './embed'
-import { GitHubRepo, GithubRepo } from './github-repo'
+import { GithubRepo } from './github-repo'
 import { Heading } from './heading'
 import { LinkPreviewAnchor } from './link-preview'
 import { Mermaid } from './mermaid'
@@ -29,7 +29,6 @@ export const mdxComponents: MDXComponents = {
   Files,
   Folder,
   FramedImage,
-  GitHubRepo,
   GithubRepo,
   h1: (props) => <Heading as='h1' {...props} />,
   h2: (props) => <Heading as='h2' {...props} />,

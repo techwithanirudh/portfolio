@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import type { Logo as LogoType } from '@/types'
+import type { ThemedImage } from '@/types'
 
 interface LogoProps {
   alt: string
   className?: string
-  logo?: LogoType
+  logo?: ThemedImage
   size?: number
 }
 
@@ -13,6 +13,7 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
   const wrapper = cn('flex items-center justify-center bg-muted', className)
 
   if (!logo) {
+    // TODO(slopradar): duplicate-logic: second copy of the initials helper (see testimonials.tsx)
     const initials = alt
       .split(' ')
       .map((w) => w[0])

@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): unused-export: ToolState and the three exported *Props types in this file have no importers, un-export them (x4)
 export type ToolState = ToolUIPart['state']
 
 export type ToolProps = ComponentProps<typeof Collapsible>
@@ -34,6 +35,7 @@ const defaultLabels: Record<ToolState, string> = {
   'output-error': 'error',
 }
 
+// TODO(slopradar): token-rule: raw amber/green palette colours where globals.css defines text-safe status tokens, use text-success for output-available and add a warning token instead of amber-600/400
 const statusTone: Record<ToolState, string> = {
   'approval-requested': 'text-amber-600 dark:text-amber-400',
   'approval-responded': 'text-primary',

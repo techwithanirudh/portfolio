@@ -21,9 +21,7 @@ export interface ParsedGitHubFileUrl {
   source: string
 }
 
-const parseLineRange = (
-  value?: string
-): { startLine?: number; endLine?: number } => {
+const parseLineRange = (value?: string): ParsedGitHubFileUrl['lineRange'] => {
   if (!value) {
     return {}
   }
@@ -37,14 +35,14 @@ const parseLineRange = (
   const end = match[2] ? Number(match[2]) : undefined
 
   return {
-    endLine: end !== undefined && !Number.isNaN(end) ? end : undefined,
-    startLine: Number.isNaN(start) ? undefined : start,
+    endLine: end,
+    startLine: start,
   }
 }
 
 export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
   const parsed = new URL(url)
-  const lineRange = parseLineRange(parsed.toString())
+  const lineRange = parseLineRange(parsed.hash)
   parsed.hash = ''
 
   const segments = parsed.pathname.split('/').filter(Boolean)
@@ -94,6 +92,7 @@ export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
   )
 }
 
+// TODO(slopradar): deprecated-api: unstable_cache is replaced by `use cache` in Next 16, see the note in server/db/queries/guestbook.ts (x4 across src/lib and src/server)
 export const getGitHubFileContent = unstable_cache(
   async (
     parsed: Pick<ParsedGitHubFileUrl, 'owner' | 'repo' | 'ref' | 'path'>

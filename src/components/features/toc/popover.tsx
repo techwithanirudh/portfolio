@@ -3,6 +3,7 @@
 import type { TOCItemType } from 'fumadocs-core/toc'
 import { TOCScrollArea, useItems } from 'fumadocs-ui/components/toc'
 import { TOCItem, TOCItems } from 'fumadocs-ui/components/toc/default'
+import { clamp } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import {
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): attribution: the popover trigger and ProgressCircle follow fumadocs-ui layouts/docs/page/slots/toc.js (MIT), add a source header and a THIRD_PARTY_NOTICES.md entry
 export function TOCPopover({
   className,
   items,
@@ -33,6 +35,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
   const selectedIndex = items.findIndex((item) => item.active)
   const showSelectedItem = selectedIndex !== -1 && !open
 
+  // TODO(slopradar): duplication: hand-written outside-click dismissal, the same as layout/header/index.tsx and mobile/index.tsx, use the shared dismiss hook
   useEffect(() => {
     const onClickOutside = (event: MouseEvent) => {
       if (!(open && event.target instanceof HTMLElement)) {
@@ -60,7 +63,6 @@ function TOCPopoverContent({ className }: { className?: string }) {
     >
       <header
         className={cn(
-          // Always frosted, since the post scrolls right under it while collapsed
           'border-b bg-background/90 backdrop-blur-md transition-shadow',
           open && 'shadow-lg'
         )}
@@ -134,14 +136,15 @@ function ProgressCircle({
   const strokeWidth = 1.5
   const radius = size / 2 - strokeWidth
   const circumference = 2 * Math.PI * radius
-  const progress = Math.min(1, Math.max(0, value)) * circumference
+  const clamped = clamp(0, 1, value)
+  const progress = clamped * circumference
 
   return (
     <svg
       aria-label='Table of contents progress'
       aria-valuemax={1}
       aria-valuemin={0}
-      aria-valuenow={Math.min(1, Math.max(0, value))}
+      aria-valuenow={clamped}
       className={className}
       height={size}
       role='progressbar'

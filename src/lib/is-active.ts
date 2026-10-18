@@ -5,6 +5,7 @@ function normalize(urlOrPath: string) {
   return urlOrPath
 }
 
+// TODO(slopradar): attribution: copied from fumadocs-ui src/utils/urls.ts (not in its exports map) with its JSDoc; add an adapted-from header and drop the JSDoc that restates the name
 /**
  * @returns if `href` is matching the given pathname
  */

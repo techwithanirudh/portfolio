@@ -1,7 +1,8 @@
 import { owner, title } from '@/constants/site'
 import { getBlogLLMText, getWorkLLMText } from '@/lib/get-llm-text'
 import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
-import { getProfileFactsText, getProfileText, getSiteMapText } from '../utils'
+import { getProfileFactsText, getSiteMapText, getSiteText } from '../utils'
+import { markdownResponse } from '../utils/markdown-response'
 
 async function getFullText() {
   const allPosts = getSortedByDatePosts()
@@ -14,7 +15,7 @@ async function getFullText() {
     Promise.all(
       allPosts.map((item) => getBlogLLMText(item, { level: 'section' }))
     ),
-    getProfileText(),
+    getSiteText(),
   ])
 
   return `<SYSTEM>This document is ${owner}'s whole site in one file for LLMs to read. It has quick facts, background, work experience, stack, projects, testimonials, contact options, a site map, and every published blog post and project.</SYSTEM>
@@ -36,9 +37,5 @@ ${blogContent.join('\n\n')}`
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  return new Response(await getFullText(), {
-    headers: {
-      'Content-Type': 'text/markdown;charset=utf-8',
-    },
-  })
+  return markdownResponse(await getFullText())
 }

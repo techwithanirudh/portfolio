@@ -16,6 +16,15 @@
     @slot;
   }
 }
+/* `sm`, except inside a `data-narrow` surface like Simba's panel, which keeps
+   the phone layout at any viewport width. For components shown in both */
+@custom-variant wide {
+  @media (width >= 40rem) {
+    &:not(:where([data-narrow] *)) {
+      @slot;
+    }
+  }
+}
 
 @source "../../node_modules/fumadocs-ui/dist/**/*.js";
 @source "../../node_modules/@fuma-comment/react/dist/**/*.js";
@@ -44,10 +53,10 @@
 
   /* Status colors are text-safe (4.5:1 on the page and on their own tints)
      and switch under .dark. `destructive-solid` is the fill behind a label */
-  --color-destructive: oklch(50.5% 0.213 27.518); /* red-700 */
-  --color-destructive-solid: oklch(57.7% 0.245 27.325); /* red-600 */
+  --color-destructive: oklch(50.5% 0.213 27.518);
+  --color-destructive-solid: oklch(57.7% 0.245 27.325);
   --color-destructive-foreground: hsl(0 0% 98%);
-  --color-success: oklch(43.2% 0.095 166.913); /* emerald-800 */
+  --color-success: oklch(43.2% 0.095 166.913);
 
   --color-border: var(--color-fd-border);
   --color-input: var(--color-fd-border);
@@ -58,7 +67,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-hand: var(--font-caveat);
@@ -83,9 +91,7 @@ html > body[data-scroll-locked] {
     --typography-title-width: 40rem;
     --typography-body-width: 60ch;
   }
-}
 
-@layer base {
   * {
     @apply border-border outline-ring/50;
   }
@@ -101,8 +107,6 @@ html > body[data-scroll-locked] {
     [role="radio"],
     [tabindex]:not([tabindex="-1"])
   ):focus-visible {
-    /* The same soft ring the buttons and inputs use, rounded so plain links
-       don't get a hard square; a radius utility on the element still wins */
     outline: 2px solid color-mix(in oklab, var(--color-ring) 60%, transparent);
     outline-offset: 2px;
     border-radius: var(--radius-sm);
@@ -115,13 +119,10 @@ html > body[data-scroll-locked] {
     @apply bg-background text-foreground antialiased;
   }
 
-  /* Keeps focused and anchored things out from under the sticky header,
-     and the phone pill at the bottom */
   html {
     @apply scroll-smooth scroll-pt-16 accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border max-md:scroll-pb-24 dark:scrollbar-track-transparent;
   }
 
-  /* Adds to the scroll padding above, so anchors still land 80px down */
   [id] {
     @apply scroll-mt-4;
   }
@@ -133,6 +134,15 @@ html > body[data-scroll-locked] {
   h5,
   h6 {
     text-wrap: balance;
+  }
+
+  a {
+    @apply [overflow-wrap:anywhere];
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
 
@@ -181,19 +191,8 @@ html > body[data-scroll-locked] {
   --color-fd-ring: hsl(234, 100%, 83%);
   --color-fd-primary: hsl(234, 100%, 83%);
   --color-fd-primary-foreground: hsl(240, 7%, 11%);
-  --color-destructive: oklch(70.4% 0.191 22.216); /* red-400 */
-  --color-success: oklch(69.6% 0.17 162.48); /* emerald-500 */
-}
-
-@layer base {
-  a {
-    @apply [overflow-wrap:anywhere];
-  }
-
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    cursor: pointer;
-  }
+  --color-destructive: oklch(70.4% 0.191 22.216);
+  --color-success: oklch(69.6% 0.17 162.48);
 }
 
 @utility container {
@@ -207,11 +206,6 @@ html > body[data-scroll-locked] {
   @apply text-foreground underline decoration-primary/60 decoration-solid decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
-/*
-  Dashed rules between grid cells: under every cell but the last, and, from
-  the breakpoint `dashed-grid-2` is applied at, between the two columns with
-  none under the last row. The section's own border frames the outside.
-*/
 @utility dashed-grid {
   & > * {
     @apply border-dashed border-border/70 dark:border-border;
@@ -323,6 +317,7 @@ html > body[data-scroll-locked] {
   }
 }
 
+/* TODO(slopradar): inconsistent: this block defines plain classes in `@layer utilities` while the rest of the file uses `@utility`, so .bg-dashed, .dashed-frame, .icon-* and .typography-* cannot take variants like hover: or md:, convert them to @utility */
 @layer utilities {
   .bg-dashed {
     background-image: linear-gradient(
@@ -338,6 +333,7 @@ html > body[data-scroll-locked] {
     background-size: 0.25rem 0.25rem;
   }
 
+  /* TODO(slopradar): shadowed utility: redefines Tailwind's generated border-border, so the class silently means border/70 in light mode; give the 70% border its own token (--color-border) or utility name */
   .border-border {
     @apply border-border/70 dark:border-border;
   }
@@ -356,10 +352,6 @@ html > body[data-scroll-locked] {
 
   .divider-top-dashed {
     @apply w-full border-border border-t border-dashed;
-  }
-
-  .divider-bottom-dashed {
-    @apply border-border border-b border-dashed;
   }
 
   .icon-pop {
@@ -408,24 +400,6 @@ html > body[data-scroll-locked] {
   background-color: var(--color-accent);
 }
 
-.dark ::selection {
-  color: var(--color-foreground);
-  background-color: var(--color-accent);
-}
-
-.dark [data-hide-on-theme="dark"],
-.light [data-hide-on-theme="light"] {
-  display: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-new(theme-transition) {
     clip-path: inset(0 0 100% 0);
@@ -468,7 +442,6 @@ html > body[data-scroll-locked] {
     animation-timing-function: var(--ease-in-out-strong);
   }
 
-  /* Prevent background color flash during transition */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     mix-blend-mode: normal;
@@ -494,12 +467,17 @@ html > body[data-scroll-locked] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
   *,
   ::before,
   ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    /* Fades and color changes stay, since they don't move anything */
     transition-property:
       opacity, color, background-color, border-color, box-shadow !important;
     scroll-behavior: auto !important;

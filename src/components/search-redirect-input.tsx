@@ -9,6 +9,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@/components/ui/input-group'
+import { pages } from '@/constants/pages'
 import { cn } from '@/lib/utils'
 
 interface SearchRedirectInputProps {
@@ -34,7 +35,7 @@ export function SearchRedirectInput({
       }
 
       const params = new URLSearchParams({ q: trimmedValue, tag })
-      router.push(`/search?${params.toString()}`)
+      router.push(`${pages.search.path}?${params.toString()}`)
     },
     [router, tag]
   )
@@ -46,9 +47,9 @@ export function SearchRedirectInput({
       </InputGroupAddon>
       <InputGroupInput
         aria-label={placeholder}
-        // The submit arrow and Escape replace the browser's own clear button
         className='text-sm [&::-webkit-search-cancel-button]:hidden'
         onChange={(event) => setValue(event.target.value)}
+        // TODO(slopradar): hand-written-form: Enter handling plus router.push rebuilds a GET form, render Form from 'next/form' with action='/search' and a hidden tag input so it works without JS, and drop handleSubmit/useCallback
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             event.preventDefault()
@@ -65,8 +66,6 @@ export function SearchRedirectInput({
       <InputGroupAddon
         align='inline-end'
         className={cn(
-          // Undo the addon's pull towards the edge so the arrow keeps the
-          // same 8px gap on every side inside the bar
           'transition-[scale,opacity] duration-150 ease-out-strong has-[>button]:mr-0',
           hasValue
             ? 'scale-100 opacity-100'
@@ -75,7 +74,6 @@ export function SearchRedirectInput({
       >
         <InputGroupButton
           aria-label='Submit search'
-          // Hidden while empty, so it shouldn't take a Tab stop either
           disabled={!hasValue}
           onClick={() => handleSubmit(value)}
           size='icon-xs'

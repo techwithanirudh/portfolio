@@ -1,21 +1,10 @@
-import { ViewAnimation } from '@/components/view-animation'
+import { staggerDelay, ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
 import { PostRow } from './post-row'
 
 // Posts arrive newest first, so years come out in order and keep their posts' order.
-// Each group also carries its first row's position, so the stagger runs on
-// across years
 const groupByYear = (posts: BlogPage[]) => {
-  const years = new Map<number, BlogPage[]>()
-  for (const post of posts) {
-    const year = post.data.date.getUTCFullYear()
-    const group = years.get(year)
-    if (group) {
-      group.push(post)
-    } else {
-      years.set(year, [post])
-    }
-  }
+  const years = Map.groupBy(posts, (post) => post.data.date.getUTCFullYear())
   let start = 0
   return [...years].map(([year, yearPosts]) => {
     const group = { start, year, yearPosts }
@@ -24,11 +13,6 @@ const groupByYear = (posts: BlogPage[]) => {
   })
 }
 
-/**
- * Posts grouped by year: the year sits in a left column and sticks while its
- * rows scroll past, and below `md` it becomes a strip above them. Each year is
- * only as tall as its rows, so a short list stays compact.
- */
 export const PostLedger = ({ posts }: { posts: BlogPage[] }) => {
   return (
     <div className='dashed-stack'>
@@ -51,7 +35,11 @@ export const PostLedger = ({ posts }: { posts: BlogPage[] }) => {
           </div>
           <ul className='dashed-stack'>
             {yearPosts.map((post, i) => (
-              <ViewAnimation as='li' delay={0.05 * (start + i)} key={post.url}>
+              <ViewAnimation
+                as='li'
+                delay={staggerDelay(start + i)}
+                key={post.url}
+              >
                 <PostRow date='short' post={post} />
               </ViewAnimation>
             ))}

@@ -3,16 +3,17 @@ import { RootProvider } from 'fumadocs-ui/provider/next'
 import type { Viewport } from 'next'
 import { Caveat, Geist, Geist_Mono } from 'next/font/google'
 import type { ReactNode } from 'react'
+import type { Graph } from 'schema-dts'
 import Analytics from '@/components/analytics'
 import { SignInModalProvider } from '@/components/features/auth/sign-in-modal'
 import CustomSearchDialog from '@/components/features/search'
 import { ThemeColorSync } from '@/components/theme-color-sync'
 import { ThemeProvider } from '@/components/theme-provider'
-import { baseUrl } from '@/constants'
+import { isProduction } from '@/constants'
 import { socials } from '@/constants/navigation'
 import { description as homeDescription, owner, title } from '@/constants/site'
 import { PagesProvider } from '@/contexts/pages'
-import { createMetadata } from '@/lib/metadata'
+import { baseUrl, createMetadata } from '@/lib/metadata'
 import { revealScript } from '@/lib/reveal-script'
 import { getPageEntries } from '@/lib/source'
 import { themeColor } from '@/lib/theme-color'
@@ -70,13 +71,15 @@ const socialUrls = socials
   .map((social) => social.url)
   .filter((url) => url.startsWith('http'))
 
-const jsonLd = {
+// TODO(slopradar): duplicate-type: untyped hand-written JSON-LD graph while schema-dts and src/components/json-ld.tsx already own JSON-LD, move it there as a typed WithContext<Graph> component
+const jsonLd: Graph = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@id': `${baseUrlString}#person`,
       '@type': 'Person',
       description: homeDescription,
+      // TODO(slopradar): magic-string: jobTitle and knowsAbout are profile facts typed into the layout, read them from src/constants/portfolio/profile so JSON-LD, resume and llms agree
       jobTitle: 'Full-stack Developer',
       knowsAbout: ['Next.js', 'React', 'TypeScript', 'Web Development', 'AI'],
       name: owner,
@@ -118,14 +121,16 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
           }}
           type='application/ld+json'
         />
-        <BotIdClient
-          protect={[
-            {
-              method: 'POST',
-              path: '/*',
-            },
-          ]}
-        />
+        {isProduction && (
+          <BotIdClient
+            protect={[
+              {
+                method: 'POST',
+                path: '/*',
+              },
+            ]}
+          />
+        )}
       </head>
       <body className='relative flex min-h-svh flex-col overflow-x-hidden'>
         <PagesProvider pages={pages}>

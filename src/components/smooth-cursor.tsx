@@ -1,34 +1,18 @@
 'use client'
 
 import { type MotionValue, m, useSpring } from 'motion/react'
-import { type JSX, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { cn } from '@/lib/utils'
 
 interface Position {
   x: number
   y: number
 }
 
-export interface SmoothCursorProps {
-  cursor?: ({
-    cursorType,
-    isOverPointer,
-  }: {
-    cursorType: 'default' | 'text' | 'pointer'
-    isOverPointer: boolean
-  }) => JSX.Element
-  cursorType?: 'default' | 'text' | 'pointer'
-  disableRotation?: boolean
-  disableSmooth?: boolean
-}
-
 const SMOOTH_SPRING = { damping: 80, mass: 0.3, stiffness: 1200 }
-// Close to instant, for pages that want the ring glued to the pointer
-const SNAPPY_SPRING = { damping: 100, mass: 0.1, stiffness: 10_000 }
 
-// Follows the mouse into the springs and reports whether it has moved, is
-// moving, and what it is hovering
 function usePointerTracking(
   enabled: boolean,
   cursorX: MotionValue<number>,
@@ -135,45 +119,33 @@ function usePointerTracking(
   return { hasMoved, isMoving, isOverNative, isOverPointer }
 }
 
-function DefaultCursor({
-  cursorType,
-  disableRotation,
-  isOverPointer,
-}: {
-  cursorType: 'default' | 'text' | 'pointer'
-  disableRotation: boolean
-  isOverPointer: boolean
-}) {
-  const showRing = cursorType === 'pointer' || isOverPointer
-
+function DefaultCursor({ isOverPointer }: { isOverPointer: boolean }) {
   return (
     <>
+      {/* TODO(slopradar): arbitrary-value: size-[24px] is the scale's size-6 (x3 in DefaultCursor), use the scale class */}
       <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
       <div
         className='pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-[opacity,scale] duration-300 ease-out'
-        style={{ opacity: showRing ? 1 : 0, scale: showRing ? 1.2 : 1 }}
+        style={{
+          opacity: isOverPointer ? 1 : 0,
+          scale: isOverPointer ? 1.2 : 1,
+        }}
       />
       <div
-        className={`pointer-events-none absolute top-0 left-0 size-[24px] rounded-full border-2 shadow-sm drop-shadow-sm transition-opacity duration-300 ease-out dark:border-border ${disableRotation ? '-rotate-45' : ''}`}
+        className='pointer-events-none absolute top-0 left-0 size-[24px] rounded-full border-2 shadow-sm drop-shadow-sm transition-opacity duration-300 ease-out dark:border-border'
         style={{ opacity: isOverPointer ? 0 : 1 }}
       />
     </>
   )
 }
 
-export function SmoothCursor({
-  cursor: Cursor,
-  disableRotation = false,
-  disableSmooth = false,
-  cursorType = 'default',
-}: SmoothCursorProps) {
+export function SmoothCursor() {
   const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
   const reducedMotion = useReducedMotion()
   const enabled = finePointer && !reducedMotion
 
-  const spring = disableSmooth ? SNAPPY_SPRING : SMOOTH_SPRING
-  const cursorX = useSpring(0, spring)
-  const cursorY = useSpring(0, spring)
+  const cursorX = useSpring(0, SMOOTH_SPRING)
+  const cursorY = useSpring(0, SMOOTH_SPRING)
 
   const { hasMoved, isMoving, isOverNative, isOverPointer } =
     usePointerTracking(enabled, cursorX, cursorY)
@@ -182,26 +154,22 @@ export function SmoothCursor({
     return null
   }
 
-  const visible =
-    (isMoving || cursorType === 'pointer' || isOverPointer) && !isOverNative
+  const visible = (isMoving || isOverPointer) && !isOverNative
 
   return (
     <m.div
-      className={`pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity] ${visible ? 'scale-100 opacity-100 duration-300' : 'scale-200 opacity-0 duration-700'}`}
+      className={cn(
+        'pointer-events-none fixed z-99999 translate-x-[-50%] translate-y-[-50%] mix-blend-exclusion transition-[scale,opacity]',
+        visible
+          ? 'scale-100 opacity-100 duration-300'
+          : 'scale-200 opacity-0 duration-700'
+      )}
       // Positioned with left/top, not x/y: the scale-200 fade would also scale
       // an x/y transform and fling the ring down and right instead of
       // blooming in place
       style={{ left: cursorX, top: cursorY }}
     >
-      {Cursor ? (
-        <Cursor cursorType={cursorType} isOverPointer={isOverPointer} />
-      ) : (
-        <DefaultCursor
-          cursorType={cursorType}
-          disableRotation={disableRotation}
-          isOverPointer={isOverPointer}
-        />
-      )}
+      <DefaultCursor isOverPointer={isOverPointer} />
     </m.div>
   )
 }

@@ -1,4 +1,4 @@
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Wrapper } from '@/components/layout/wrapper'
@@ -14,10 +14,13 @@ import { PostIndex } from './_components/post-index'
 const totalPosts = getSortedByDatePosts().length
 const pageCount = Math.ceil(totalPosts / postsPerPage)
 
-export default async function Page(props: {
+interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}) {
+}
+
+export default async function Page(props: Props) {
   const searchParams = await props.searchParams
+  // TODO(slopradar): duplicate-logic: parse, bounds check, slice and canonical logic is copied across blog, blog/tags/[tag] and projects and their generateMetadata, add a paginate(items, perPage, param) helper in @/lib/pagination
   const pageIndex = parsePageParam(searchParams.page) - 1
   if (pageIndex < 0 || pageIndex >= pageCount) {
     notFound()
@@ -48,14 +51,7 @@ export default async function Page(props: {
   )
 }
 
-interface Props {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-}
-
-export async function generateMetadata(
-  props: Props,
-  _parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata(props: Props): Promise<Metadata> {
   const searchParams = await props.searchParams
 
   const pageIndex = parsePageParam(searchParams.page)
@@ -64,11 +60,11 @@ export async function generateMetadata(
     notFound()
   }
 
-  const isFirstPage = pageIndex === 1 || !searchParams.page
+  const isFirstPage = pageIndex === 1
   const pageTitle = isFirstPage
     ? pages.blog.title
     : `${pages.blog.title}, page ${pageIndex}`
-  const canonicalUrl = getPageHref(pages.blog.path, isFirstPage ? 1 : pageIndex)
+  const canonicalUrl = getPageHref(pages.blog.path, pageIndex)
   const pageDescription = isFirstPage
     ? pages.blog.description
     : `Browse page ${pageIndex} of blog posts.`

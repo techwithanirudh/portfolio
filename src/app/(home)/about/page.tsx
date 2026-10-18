@@ -15,8 +15,6 @@ import Hero from './_components/hero'
 import Stack from './_components/stack'
 import Story from './_components/story'
 
-// A profile page, so search results get the full site description rather
-// than the hero's short line
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: pages.about.path },
   description: profileDescription,

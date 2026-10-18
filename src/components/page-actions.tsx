@@ -2,7 +2,7 @@
 
 import { useSound } from '@web-kits/audio/react'
 import { type RefObject, useMemo, useRef, useState } from 'react'
-import { CopyStateIcon } from '@/components/copy-button'
+import { CopyStateIcon } from '@/components/copy-state-icon'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils'
 
 const cache = new Map<string, string>()
 
+// TODO(slopradar): duplication: re-implements useCopyToClipboard (state machine, 1500ms reset, sound) because that hook only takes a string; extend the hook to accept a Promise<string> and use it here, which also brings its haptics and timer cleanup
 function useMarkdownCopy(markdownUrl: string) {
   const [state, setState] = useState<CopyState>('idle')
   const [isCopying, setIsCopying] = useState(false)
@@ -66,7 +67,7 @@ function useMarkdownCopy(markdownUrl: string) {
   return { handleCopy, isCopying, state }
 }
 
-export function LLMCopyButton({
+function LLMCopyButton({
   state,
   isCopying,
   onClick,
@@ -92,7 +93,7 @@ export function LLMCopyButton({
   )
 }
 
-export function ViewOptions({
+function ViewOptions({
   anchor,
   markdownUrl,
   githubUrl,
@@ -105,13 +106,11 @@ export function ViewOptions({
   disabled?: boolean
 }) {
   const items = useMemo(() => {
-    const fullMarkdownUrl = markdownUrl
-
-    const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`
+    const q = `Read ${markdownUrl}, I want to ask questions about it.`
 
     return [
       {
-        href: fullMarkdownUrl,
+        href: markdownUrl,
         icon: Icons.markdown,
         title: 'View as Markdown',
       },
@@ -164,6 +163,7 @@ export function ViewOptions({
             key={href}
             render={
               <a
+                // TODO(slopradar): redundant-aria: aria-label repeats the visible title, and rel='noopener' differs from the 'noopener noreferrer' every other external link uses; drop aria-label and share one external-link props constant
                 aria-label={title}
                 href={href}
                 rel='noopener'

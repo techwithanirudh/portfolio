@@ -3,6 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useSound } from '@web-kits/audio/react'
+// TODO(slopradar): layering: the shared assistant imports the server action from app/(home)/contact/actions, move contact into src/server since two features own it
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/features/assistant/chat-context'
 import { Icons } from '@/components/icons/icons'
@@ -22,6 +23,7 @@ import { error, pop } from '@/lib/audio/minimal'
 import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
+import { ownerName } from '../owner-name'
 
 interface ContactFormProps {
   isSubmitted: boolean
@@ -64,7 +66,6 @@ export function ContactForm({
           sendMessage()
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           email: prefill?.email ?? '',
@@ -83,7 +84,7 @@ export function ContactForm({
       <div className='flex flex-col gap-2 bg-success/10 p-3 text-sm text-success'>
         <div className='flex items-center gap-2'>
           <Icons.success className='size-4 shrink-0' />
-          <p>message sent! anirudh will get back to you soon.</p>
+          <p>{`message sent! ${ownerName} will get back to you soon.`}</p>
         </div>
         <div className='mt-1 space-y-1 text-xs opacity-80'>
           <p>
@@ -103,7 +104,7 @@ export function ContactForm({
     return (
       <div className='flex flex-col gap-2 bg-muted/40 p-3 text-muted-foreground text-sm'>
         <div className='flex items-center gap-2'>
-          <Icons.success className='size-4 shrink-0' />
+          <Icons.info className='size-4 shrink-0' />
           <p>message canceled. you can keep chatting.</p>
         </div>
       </div>
@@ -129,9 +130,10 @@ export function ContactForm({
         onSubmit={handleSubmitWithAction}
       >
         <p className='text-muted-foreground text-xs'>
-          fill this out and i&apos;ll send it to anirudh for you!
+          {`fill this out and i'll send it to ${ownerName} for you!`}
         </p>
 
+        {/* TODO(slopradar): duplication: three near-identical FormField blocks, and the same name/email/message fields exist in app/(home)/contact/_components/contact-form.tsx, drive both from one field config */}
         <FormField
           control={form.control}
           name='name'
@@ -181,7 +183,7 @@ export function ContactForm({
                 <Textarea
                   className='min-h-20 resize-none text-sm'
                   disabled={isExecuting}
-                  placeholder='what would you like to tell anirudh?'
+                  placeholder={`what would you like to tell ${ownerName}?`}
                   {...field}
                 />
               </FormControl>

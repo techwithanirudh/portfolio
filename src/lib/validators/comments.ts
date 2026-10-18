@@ -18,9 +18,6 @@ const CommentMentionContentSchema = z.object({
   type: z.literal('mention'),
 })
 
-export type CommentImageContent = z.infer<typeof CommentImageContentSchema>
-export type CommentMentionContent = z.infer<typeof CommentMentionContentSchema>
-
 export const parseCommentImageNode = (node: unknown) => {
   const result = CommentImageContentSchema.safeParse(node)
   return result.success ? result.data : null

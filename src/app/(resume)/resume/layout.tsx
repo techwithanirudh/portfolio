@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 // `@page { margin: 0 }` leaves Chrome no margin box to draw its own
 // header and footer (date, title, URL, page number) in. On paper the resume
 // is always light, whatever theme the site is in.
+// TODO(slopradar): magic-string: the light primary hsl(226, 55%, 45%) is copied here and in og/_lib/template.tsx, export the light tokens once (src/lib/theme-color) and read them in both
 const resumeCss = `
 @page { margin: 0; }
 

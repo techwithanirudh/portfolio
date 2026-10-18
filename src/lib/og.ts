@@ -9,20 +9,22 @@ import {
 
 const PORTRAIT_PATH = path.join(process.cwd(), 'public/images/portrait.svg')
 
+const SVG_OPEN_TAG = /<svg\b[^>]*>/
+
 const EYES = `<g fill="${PORTRAIT_EYE_FILL}">${PORTRAIT_EYE_PATHS.map((d) => `<path d="${d}"/>`).join('')}</g>`
 
 const loadPortrait = async (): Promise<string | null> => {
   try {
     const svg = await readFile(PORTRAIT_PATH, 'utf8')
-    // Cropped to the head like the site's face chip
     const chip = svg
       .replace(
-        'width="947" height="1160" viewBox="0 0 947 1160"',
-        `width="730" height="730" viewBox="${PORTRAIT_CHIP_VIEW_BOX}"`
+        SVG_OPEN_TAG,
+        `<svg xmlns="http://www.w3.org/2000/svg" width="730" height="730" viewBox="${PORTRAIT_CHIP_VIEW_BOX}">`
       )
       .replace('</svg>', `${EYES}</svg>`)
     return `data:image/svg+xml;base64,${Buffer.from(chip).toString('base64')}`
-  } catch {
+  } catch (error) {
+    console.error('Could not load the OG portrait:', error)
     return null
   }
 }
@@ -33,8 +35,6 @@ export const getPortraitDataUrl = (): Promise<string | null> => {
   portrait ??= loadPortrait()
   return portrait
 }
-
-// Each path is spelled out in full so output file tracing picks the file up.
 
 // The subsets' `unicode-range`s, as Google Fonts declares them
 const LATIN: [number, number][] = [
@@ -78,6 +78,7 @@ const LATIN_EXT: [number, number][] = [
   [0xa7_20, 0xa7_ff],
 ]
 
+// Each path is spelled out in full so output file tracing picks the file up.
 const FONT_FILES = [
   {
     file: path.join(process.cwd(), 'src/app/og/_fonts/geist-latin.woff2'),
@@ -102,7 +103,8 @@ const loadFonts = async (): Promise<OgFont[]> => {
     FONT_FILES.map(async ({ file, ...font }) => {
       try {
         return { ...font, data: await readFile(file) }
-      } catch {
+      } catch (error) {
+        console.error(`Could not load the OG font ${file}:`, error)
         return null
       }
     })
@@ -129,6 +131,22 @@ const SWATCH_HEX: Record<CoverSwatch, string> = {
 const BLOB_SPREAD_FACTOR = 1.1
 const BLOB_RADIUS_FACTOR = 0.9
 
+const WASH_GRADIENT =
+  '<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".55" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
+
+const GRAIN_ALPHA_MATRIX = '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -0.8'
+
+const grainFilter = ({
+  height,
+  seed,
+  width,
+}: {
+  height: number
+  seed: number
+  width: number
+}) =>
+  `<filter id="grain" x="0" y="0" width="${width}" height="${height}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="${seed % 1000}"/><feColorMatrix values="${GRAIN_ALPHA_MATRIX}"/><feComposite in="SourceAlpha" operator="arithmetic" k2="1" k3="-1" k4="0.5"/><feComponentTransfer result="mask"><feFuncA type="linear" slope="3" intercept="-1"/></feComponentTransfer><feComponentTransfer in="SourceGraphic"><feFuncA type="linear" slope="24"/></feComponentTransfer><feComposite in2="mask" operator="in"/></filter>`
+
 export const getCoverDataUrl = (
   seed: string,
   { height, width }: { height: number; width: number }
@@ -147,6 +165,6 @@ export const getCoverDataUrl = (
       return `<ellipse cx="${cx}" cy="${cy}" rx="${blob.rx * BLOB_RADIUS_FACTOR}" ry="${blob.ry * BLOB_RADIUS_FACTOR}" fill="url(#g${i})" transform="rotate(${rotate} ${cx} ${cy})"/>`
     })
     .join('')
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".55" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><filter id="grain" x="0" y="0" width="${width}" height="${height}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="${cover.seed % 1000}"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -0.8"/><feComposite in="SourceAlpha" operator="arithmetic" k2="1" k3="-1" k4="0.5"/><feComponentTransfer result="mask"><feFuncA type="linear" slope="3" intercept="-1"/></feComponentTransfer><feComponentTransfer in="SourceGraphic"><feFuncA type="linear" slope="24"/></feComponentTransfer><feComposite in2="mask" operator="in"/></filter></defs><rect width="${width}" height="${height}" fill="#fff"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${WASH_GRADIENT}${grainFilter({ height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="#fff"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
 }

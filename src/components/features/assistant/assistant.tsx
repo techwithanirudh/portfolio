@@ -11,6 +11,8 @@ import { MascotProvider } from './mascot'
 import { AssistantPanel } from './panel'
 import { AssistantTrigger } from './trigger'
 
+const transport = new DefaultChatTransport<MyUIMessage>({ api: '/api/chat' })
+
 export function Assistant() {
   const isMobile = useIsMobile()
   const playError = useSound(errorSound)
@@ -28,9 +30,7 @@ export function Assistant() {
         playSuccess()
       }
     },
-    transport: new DefaultChatTransport({
-      api: '/api/chat',
-    }),
+    transport,
   })
 
   return (

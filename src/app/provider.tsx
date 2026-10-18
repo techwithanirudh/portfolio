@@ -53,7 +53,6 @@ export function Provider({
 }: {
   children: ReactNode
 }): React.ReactElement {
-  // Animated components use the slim `m` and load these features once, here
   return (
     <LazyMotion features={domAnimation}>
       {/* Motion's JS animations skip the CSS reduced-motion rule, so opt in here */}

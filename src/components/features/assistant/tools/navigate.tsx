@@ -5,17 +5,13 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useEffectEvent, useRef } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
-import { Shimmer } from '@/components/ai-elements/shimmer'
 import { useAssistantContext } from '@/components/features/assistant/context'
 import { Icons } from '@/components/icons/icons'
-import type { MyUIMessage } from '@/lib/ai/chat/types'
+import { scrollToTarget } from '@/components/layout/lenis'
 import { MEDIA } from '@/lib/media'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
-
-type NavigateToolPart = Extract<
-  MyUIMessage['parts'][number],
-  { type: 'tool-navigate' }
->
+import { ToolPendingLine, ToolWarningLine } from './status-line'
+import type { ToolPart } from './types'
 
 const HASH_WAIT_MS = 10_000
 const HASH_POLL_MS = 50
@@ -30,7 +26,7 @@ const isScrollLocked = () =>
     LOCKED_OVERFLOW.test(getComputedStyle(element).overflowY)
   )
 
-export function NavigatePart({ part }: { part: NavigateToolPart }) {
+export function NavigatePart({ part }: { part: ToolPart<'navigate'> }) {
   const router = useRouter()
   const lenis = useLenis()
   const lenisRef = useRef(lenis)
@@ -40,6 +36,7 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
   const output = part.state === 'output-available' ? part.output : null
   const href = output?.success ? output.href : null
 
+  // TODO(slopradar): mirrored-state: lenisRef and mountedRef are synced by effects so a 10s setTimeout poll can read them, and the hash scroll duplicates search/dialog.tsx navigateToUrl; share one scrollToHash helper that waits on the route instead of polling
   useEffect(() => {
     lenisRef.current = lenis
   }, [lenis])
@@ -73,13 +70,8 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
         !(awaitingLenis || isScrollLocked())
 
       if (ready || (timedOut && target)) {
-        const immediate = prefersReducedMotion()
-        if (current) {
-          current.resize()
-          current.scrollTo(target, { immediate })
-        } else {
-          target.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth' })
-        }
+        current?.resize()
+        scrollToTarget(current, target, { immediate: prefersReducedMotion() })
         return
       }
       if (!timedOut) {
@@ -113,20 +105,14 @@ export function NavigatePart({ part }: { part: NavigateToolPart }) {
 
   if (!output) {
     return (
-      <p className='flex items-center gap-2 text-muted-foreground text-sm'>
-        <Icons.compass aria-hidden className='size-4 shrink-0' />
-        <Shimmer>{`taking you to ${part.input?.path ?? 'the page'}...`}</Shimmer>
-      </p>
+      <ToolPendingLine icon={Icons.compass}>
+        {`taking you to ${part.input?.path ?? 'the page'}…`}
+      </ToolPendingLine>
     )
   }
 
   if (!output.success) {
-    return (
-      <p className='flex items-center gap-2 text-muted-foreground text-xs'>
-        <Icons.warning aria-hidden className='size-3.5' />
-        couldn&apos;t find that page
-      </p>
-    )
+    return <ToolWarningLine>couldn&apos;t find that page</ToolWarningLine>
   }
 
   return (

@@ -24,7 +24,8 @@ export function Mermaid({ chart }: { chart: string }) {
         tabIndex={0}
       />
     )
-  } catch {
+  } catch (error) {
+    console.error('Failed to render Mermaid diagram:', error)
     return (
       <CodeBlock title='Mermaid'>
         <Pre>{chart}</Pre>

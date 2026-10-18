@@ -2,24 +2,18 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { ActionError, actionClient } from '@/lib/safe-action/client'
-import { userMiddleware } from '@/lib/safe-action/middleware'
+import { ActionError, userActionClient } from '@/lib/safe-action'
 import { RevokeSessionSchema } from '@/lib/validators/session'
 import { getSession, revokeSession } from '@/server/auth'
 
-export const revokeSessionAction = actionClient
-  .use(userMiddleware)
+export const revokeSessionAction = userActionClient
   .inputSchema(RevokeSessionSchema)
   .action(async ({ parsedInput: { token } }) => {
     const session = await getSession()
     const currentToken = session?.session.token
 
-    try {
-      const result = await revokeSession(token)
-      if (!result.status) {
-        throw new ActionError('Failed to revoke session.')
-      }
-    } catch {
+    const result = await revokeSession(token)
+    if (!result.status) {
       throw new ActionError('Failed to revoke session.')
     }
 

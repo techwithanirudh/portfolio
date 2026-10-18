@@ -1,19 +1,12 @@
 import { Feed } from 'feed'
-import { baseUrl } from '@/constants'
 import { description, owner, title } from '@/constants/site'
-import { getBlogPageImage } from '@/lib/metadata'
+import { baseUrl, getBlogPageImage } from '@/lib/metadata'
 import { getSortedByDatePosts } from '@/lib/source'
+import { url } from '@/lib/url'
 
 export const dynamic = 'force-static'
-export const revalidate = false
 
-const escapeForXML = (str: string): string =>
-  str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;')
+const feedUrl = url('/blog/rss.xml')
 
 export const GET = () => {
   const feed = createFeed()
@@ -32,11 +25,11 @@ function createFeed(): Feed {
   const feed = new Feed({
     copyright: `All rights reserved ${new Date().getFullYear()}, ${owner}`,
     description,
-    favicon: new URL('/icon.png', baseUrl).href,
-    feed: new URL('/blog/rss.xml', baseUrl).href,
-    feedLinks: { rss: new URL('/blog/rss.xml', baseUrl).href },
+    favicon: url('/icon.png'),
+    feed: feedUrl,
+    feedLinks: { rss: feedUrl },
     id: baseUrl.href,
-    image: new URL('/banner.png', baseUrl).href,
+    image: url('/banner.png'),
     language: 'en',
     link: baseUrl.href,
     title,
@@ -48,7 +41,6 @@ function createFeed(): Feed {
       author: [
         {
           name: post.data.author,
-          // link: new URL('/about', baseUrl).href,
         },
       ],
       category: post.data.tags?.map((name) => ({ name })),
@@ -57,11 +49,9 @@ function createFeed(): Feed {
       image: {
         title: post.data.title,
         type: 'image/webp',
-        url: escapeForXML(
-          new URL(getBlogPageImage(post).url, baseUrl.href).href
-        ),
+        url: url(getBlogPageImage(post).url),
       },
-      link: new URL(post.url, baseUrl).href,
+      link: url(post.url),
       published: post.data.date,
       title: post.data.title,
     })

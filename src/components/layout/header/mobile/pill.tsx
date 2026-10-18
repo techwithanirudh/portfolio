@@ -15,6 +15,7 @@ export function FloatingPill({
   onMenuToggle: () => void
   onSearchOpen: () => void
 }) {
+  // TODO(slopradar): duplication: Home/About/Projects hrefs and labels restate linkItems in constants/navigation, derive them from there
   const primaryLinks = [
     { href: '/', icon: <Icons.home className='size-4' />, label: 'Home' },
     {
@@ -31,12 +32,13 @@ export function FloatingPill({
 
   return (
     <div
-      className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-[32] flex justify-center md:hidden'
+      className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-32 flex justify-center md:hidden'
       data-mobile-nav-pill=''
     >
       <div className='flex items-center gap-1.5 rounded-full border bg-background p-1.5 shadow-lg'>
         <button
           aria-label='Search'
+          // TODO(slopradar): duplication: the same round icon button classes are spelled out here, on the menu toggle below and in mobile/item.tsx, share one cva or class constant (x3)
           className='relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-[0.96]'
           onClick={onSearchOpen}
           type='button'

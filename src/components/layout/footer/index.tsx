@@ -10,7 +10,7 @@ import { Links } from './links'
 
 export const Footer = () => (
   <>
-    <GuestbookBand before='since you read all the way down, leave proof you were here in the' />
+    <GuestbookBand />
     <footer
       className={cn(
         'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
@@ -38,6 +38,7 @@ export const Footer = () => (
           <SoundToggle />
           <ThemeToggle mode='light-dark-system' />
         </ViewAnimation>
+        {/* TODO(slopradar): duplication: UserButton, Clock, SoundToggle and ThemeToggle render twice (desktop row and this sm:hidden row), mounting two clocks and two session readers, lay out one set with responsive grid/order classes */}
         <div className='flex flex-wrap items-center justify-between gap-3 sm:hidden'>
           <ViewAnimation className='w-min' delay={0.1}>
             <UserButton className='size-9' />

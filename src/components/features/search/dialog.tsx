@@ -16,6 +16,7 @@ import {
   buildSearchTagGroups,
 } from '@/components/features/search/utils/groups'
 import { Icons } from '@/components/icons/icons'
+import { scrollToTarget } from '@/components/layout/lenis'
 import {
   CommandDialog,
   CommandEmpty,
@@ -34,6 +35,36 @@ import type { CommandItem as SearchCommandItem } from '@/types/search'
 
 const NAV_SOUND_THROTTLE_MS = 60
 
+function useSearchSounds(open: boolean) {
+  const playOpen = useSound(notification)
+  const playConfirm = useSound(click)
+  const playCollapse = useSound(collapse)
+  const playNavigate = useSound(keyPress)
+  const lastNavSoundAtRef = useRef(0)
+
+  useEffect(() => {
+    if (!open) {
+      return
+    }
+
+    playOpen()
+  }, [open, playOpen])
+
+  const playNavigationSound = () => {
+    const now = performance.now()
+
+    if (now - lastNavSoundAtRef.current < NAV_SOUND_THROTTLE_MS) {
+      return
+    }
+
+    lastNavSoundAtRef.current = now
+    playNavigate()
+  }
+
+  return { playCollapse, playConfirm, playNavigationSound }
+}
+
+// TODO(slopradar): long-function: account items, group building and navigation still live in this one component, extract a useCommandActions hook
 export default function SearchDialog({
   open,
   onOpenChange,
@@ -45,24 +76,13 @@ export default function SearchDialog({
   const router = useRouter()
   const lenis = useLenis()
   const { setTheme, theme } = useTheme()
-  const playOpen = useSound(notification)
-  const playConfirm = useSound(click)
-  const playCollapse = useSound(collapse)
-  const playNavigate = useSound(keyPress)
-  const lastNavSoundAtRef = useRef(0)
 
-  // Lets the lazy wrapper open it only after it has mounted closed
   useEffect(() => {
     onMount?.()
   }, [onMount])
 
-  useEffect(() => {
-    if (!open) {
-      return
-    }
-
-    playOpen()
-  }, [open, playOpen])
+  const { playCollapse, playConfirm, playNavigationSound } =
+    useSearchSounds(open)
 
   const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
@@ -131,17 +151,6 @@ export default function SearchDialog({
     setSearch('')
   }
 
-  const playNavigationSound = () => {
-    const now = performance.now()
-
-    if (now - lastNavSoundAtRef.current < NAV_SOUND_THROTTLE_MS) {
-      return
-    }
-
-    lastNavSoundAtRef.current = now
-    playNavigate()
-  }
-
   const handleKeyDown = (event: React.KeyboardEvent) => {
     // Keep typing away from page shortcuts, but let Escape through: Base UI
     // dismisses on a bubbling document listener (Radix listened in capture)
@@ -159,18 +168,12 @@ export default function SearchDialog({
     }
   }
 
-  const scrollToHashTarget = (target: Element, immediate: boolean) => {
-    if (lenis) {
-      lenis.scrollTo(target as HTMLElement, { immediate })
-    } else {
-      target.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth' })
-    }
-  }
-
   const navigateToUrl = (url: string) => {
     const hashIndex = url.indexOf('#')
     const hash = hashIndex === -1 ? null : url.slice(hashIndex)
-    const sameRouteTarget = hash ? document.querySelector(hash) : null
+    const sameRouteTarget = hash
+      ? document.querySelector<HTMLElement>(hash)
+      : null
 
     router.push(url)
 
@@ -179,7 +182,9 @@ export default function SearchDialog({
     }
 
     if (sameRouteTarget) {
-      scrollToHashTarget(sameRouteTarget, prefersReducedMotion())
+      scrollToTarget(lenis, sameRouteTarget, {
+        immediate: prefersReducedMotion(),
+      })
     }
   }
 
@@ -195,7 +200,6 @@ export default function SearchDialog({
     }
 
     if (action === 'signin') {
-      onOpenChange(false)
       openSignIn(pathname)
       return
     }
@@ -258,6 +262,18 @@ export default function SearchDialog({
     </CommandItem>
   )
 
+  const renderGroup = (
+    { group, items }: (typeof allGroups)[number],
+    { separated }: { separated: boolean }
+  ) => (
+    <Fragment key={group}>
+      {separated && <CommandSeparator />}
+      <CommandGroup heading={group}>
+        {items.map(renderCommandItem)}
+      </CommandGroup>
+    </Fragment>
+  )
+
   return (
     <CommandDialog
       commandProps={{
@@ -288,14 +304,7 @@ export default function SearchDialog({
           className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-[min(20rem,50dvh)] [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-[min(20rem,60dvh)]'
           data-lenis-prevent
         >
-          {groups.map(({ group, items }, i) => (
-            <Fragment key={group}>
-              {i > 0 && <CommandSeparator />}
-              <CommandGroup heading={group}>
-                {items.map(renderCommandItem)}
-              </CommandGroup>
-            </Fragment>
-          ))}
+          {groups.map((group, i) => renderGroup(group, { separated: i > 0 }))}
 
           {!isEmpty && query.isLoading && (
             <div className='flex items-center justify-center py-6'>
@@ -307,22 +316,9 @@ export default function SearchDialog({
             <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
           )}
 
-          {isEmpty ? (
-            <SearchResultsList groups={tagGroups} onSelect={go} />
-          ) : null}
+          <SearchResultsList groups={tagGroups} onSelect={go} />
 
-          {afterGroups.map(({ group, items }) => (
-            <Fragment key={group}>
-              <CommandSeparator />
-              <CommandGroup heading={group}>
-                {items.map(renderCommandItem)}
-              </CommandGroup>
-            </Fragment>
-          ))}
-
-          {isEmpty ? null : (
-            <SearchResultsList groups={tagGroups} onSelect={go} />
-          )}
+          {afterGroups.map((group) => renderGroup(group, { separated: true }))}
         </CommandList>
       </div>
 

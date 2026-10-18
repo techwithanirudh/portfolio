@@ -81,14 +81,11 @@ function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
 
 export function MobileNav() {
   const pathname = usePathname()
-  // The path the menu was opened on, or null while it is closed
   const [openPath, setOpenPath] = useState<string | null>(null)
   const { setOpenSearch } = useSearchContext()
   const { open: assistantOpen, setOpen: setOpenAssistant } =
     useAssistantContext()
 
-  // Navigating or opening the assistant closes the menu. Adjusting state
-  // while rendering saves the extra commit a syncing effect would cost
   if (openPath !== null && (openPath !== pathname || assistantOpen)) {
     setOpenPath(null)
   }
@@ -99,6 +96,7 @@ export function MobileNav() {
   const tintGeneration = useRemountAfterThemeApplied()
   useCloseMenuOnOutsideClick(open, closeMenu)
 
+  // TODO(slopradar): library-exists: hand-written Tab focus trap with an activeElement cast; Base UI Dialog takes modal='trap-focus' (AssistantPanel already uses it) without the scroll lock or backdrop Safari tints from, owner call since the pill toggle sits outside the popup
   useEffect(() => {
     if (!open) {
       return
@@ -123,7 +121,7 @@ export function MobileNav() {
     <>
       <div
         aria-hidden
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-[30] md:hidden'
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 md:hidden'
         key={`fade-${tintGeneration}`}
       >
         <div className='mask-linear-[to_top,var(--background)_25%,transparent] h-24 bg-linear-to-b from-transparent to-background backdrop-blur-[1px]' />

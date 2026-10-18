@@ -1,15 +1,11 @@
 'use client'
 
-import type { UseChatHelpers } from '@ai-sdk/react'
-import { isToolUIPart } from 'ai'
+import { type ChatStatus, isToolUIPart } from 'ai'
 import { useOn } from '@/hooks/use-on'
 import type { MyUIMessage } from '@/lib/ai/chat/types'
 import { type AnimationName, animations } from './constants'
 import { pick, type SimbaController } from './controller'
 
-type ChatStatus = UseChatHelpers<MyUIMessage>['status']
-
-// What Simba acts out while he works on a reply
 const activityFor = (
   status: ChatStatus,
   messages: MyUIMessage[]
@@ -28,11 +24,6 @@ const activityFor = (
     return animations.tool
   }
   return animations.writing
-}
-
-// Reacts the moment a message is sent, before the chat status catches up
-export const playSubmitAnimation = (mascot: SimbaController | undefined) => {
-  mascot?.setActivity(animations.submit)
 }
 
 export function useMascotPanel({

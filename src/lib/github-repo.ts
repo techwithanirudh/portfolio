@@ -18,7 +18,7 @@ export interface GitHubRepoDetails extends GitHubRepoInput {
   license: string | null
   name: string
   openIssues: number
-  pushedAt: string | null
+  pushedAt: string
   stars: number
   topics: string[]
   url: string
@@ -76,13 +76,11 @@ export const getGitHubRepoDetails = unstable_cache(
       name: response.data.full_name,
       openIssues: response.data.open_issues_count,
       owner: parsed.owner,
-      pushedAt: response.data.pushed_at ?? null,
+      pushedAt: response.data.pushed_at,
       repo: parsed.repo,
       stars: response.data.stargazers_count,
       topics: response.data.topics ?? [],
-      url: parsed.branch
-        ? getGitHubRepoUrl(parsed)
-        : (response.data.html_url ?? getGitHubRepoUrl(parsed)),
+      url: parsed.branch ? getGitHubRepoUrl(parsed) : response.data.html_url,
       visibility: response.data.visibility ?? 'public',
       watchers: response.data.watchers_count,
     }

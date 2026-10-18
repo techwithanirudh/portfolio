@@ -1,6 +1,10 @@
 import { tool } from 'ai'
 import { z } from 'zod'
-import { getSitePages, type SitePage } from '@/app/(llms)/utils/site-pages'
+import {
+  getSitePages,
+  LEADING_HASH,
+  type SitePage,
+} from '@/app/(llms)/utils/site-pages'
 import { baseUrl } from '@/lib/metadata'
 
 export const navigateOutputSchema = z.discriminatedUnion('success', [
@@ -17,10 +21,9 @@ export const navigateOutputSchema = z.discriminatedUnion('success', [
   }),
 ])
 
-export type NavigateOutput = z.infer<typeof navigateOutputSchema>
+type NavigateOutput = z.infer<typeof navigateOutputSchema>
 
 const TRAILING_SLASHES = /\/+$/
-const LEADING_HASH = /^#/
 const WORK_PREFIX = /^\/work(?=\/|$)/
 
 const parseTarget = (target: string) => {
@@ -40,6 +43,11 @@ const toPathAndHash = (parsed: URL) => {
   }
 }
 
+export const parseSitePath = (target: string) => {
+  const parsed = parseTarget(target)
+  return parsed ? toPathAndHash(parsed) : null
+}
+
 const suggest = (pages: SitePage[], path: string) => {
   const needle = path.split('/').filter(Boolean).at(-1)?.toLowerCase() ?? ''
   return pages
@@ -54,10 +62,10 @@ const suggest = (pages: SitePage[], path: string) => {
 }
 
 export const resolveNavigation = (target: string): NavigateOutput => {
-  const parsed = parseTarget(target)
+  const sitePath = parseSitePath(target)
   const pages = getSitePages()
 
-  if (!parsed) {
+  if (!sitePath) {
     return {
       reason: `${target} is not a valid path.`,
       success: false,
@@ -65,7 +73,7 @@ export const resolveNavigation = (target: string): NavigateOutput => {
     }
   }
 
-  const { hash, path, sameOrigin } = toPathAndHash(parsed)
+  const { hash, path, sameOrigin } = sitePath
 
   if (!sameOrigin) {
     return {
