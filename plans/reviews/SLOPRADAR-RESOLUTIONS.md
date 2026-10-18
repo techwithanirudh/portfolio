@@ -1,0 +1,823 @@
+# Slopradar resolutions
+
+## Round 1: the 11 real bugs
+
+| # | File | Rule | What changed |
+|---|------|------|--------------|
+| 1 | `src/app/api/chat/route.ts` (convertDataPart), `src/lib/ai/chat/types.ts` | bug | `data-context` (the visitor's selected text) was dropped by `convertToModelMessages`; it is now converted to a text part like `data-client`, and `client` is declared in `ChatDataTypes`. |
+| 2 | `src/app/(home)/about/_components/feed/event.tsx` (PullRequestEvent) | bug | Every PR event read "Merged". Wording now follows `payload.action` and `pull_request.merged`: Opened, Reopened, Merged, Closed, otherwise Updated. Caveat found by the verifier: GitHub's public Events API sends `pull_request` without `merged` (and without title/user), so a merged PR also reads "Closed"; "Merged" appears only if a payload ever carries `merged: true`. Telling merged from closed needs an extra API call (owner decision). |
+| 3 | `src/app/(home)/guestbook/actions/utils/moderation.ts` | bug | The signature instruction was appended to the visitor's message after `. `. It is now its own text part, sent only when a signature is attached. |
+| 4 | `src/app/(auth)/account/actions/revoke-session.ts` | inconsistent | Hand-composed `actionClient.use(userMiddleware)` skipped BotID; now `userActionClient` from `@/lib/safe-action`. |
+| 5 | `scripts/lint.ts` | stale-route | Route key `(home)/(blog)/blog/[slug]` -> `(home)/blog/[slug]`, and `(home)/blog/tags/[tag]` populated from `getTags()`. `check:links` goes from 2 fallbacks to 0, 32 URLs collected. |
+| 6 | `scripts/link-previews/utils.ts` | bug | Exclusion used `hostname.includes(d)`; now `hostname === d \|\| hostname.endsWith('.' + d)`. |
+| 7 | `src/lib/auth-client.ts` | type erasure | Dropped the `ReturnType<typeof createAuthClient>` annotations on `authClient` and `signIn`/`signOut`/`useSession`; plugin types (admin, multiSession, inferAdditionalFields) are inferred again. tsc is clean. |
+| 8 | `src/server/comments/moderation.ts` | dead code | Removed the unreachable `if (!output)` (`result.output` throws `NoOutputGeneratedError`, default-generate-text-result.ts:122); that error already lands in the existing catch. |
+| 9 | `src/components/features/search/results.tsx` | bug | Tag `other` was labelled "Projects" with the work icon. Heading and icon now come from a `tagMeta` record; unknown tags read "Pages" with the page icon. |
+| 10 | `src/components/layout/header/theme-toggle.tsx` | error handling | A non-AbortError no longer rethrows (unhandled rejection from the click handler); it falls back to `update()`. AbortError is still ignored. |
+| 11 | `src/lib/github-contributions.ts`, `feed/data.ts` | swallowed error | Failures were cached ([] for 24h and 5 min). The cached functions now throw on failure and a thin wrapper (`getGitHubContributions`, `getActivityItems`) catches and returns [], so a failure is not cached. Success cache times unchanged. The activity failure is now logged. |
+
+Checks: `tsc --noEmit` clean, `bun run check` clean, `bun run check:links` 0 errors / 0 fallbacks, `/`, `/about`, `/blog`, `/guestbook`, `/account`, `/projects` return 200 on :3111. Uncommitted.
+
+# Round 1: resolve pass
+
+Per-scope logs, merged verbatim. Skipped and declined annotations stay in the code with their reason listed.
+
+## src/app
+
+# Slopradar resolutions: `src/app`
+
+Paths are relative to `src/app`. Line numbers are the line of the `TODO(slopradar)` comment before this round. Band 1 (bugs) was resolved in Round 1 of `SLOPRADAR-RESOLUTIONS.md`.
+
+## Band 2: dead fallbacks and redundant config
+
+| # | file:line | rule | what changed |
+|---|-----------|------|--------------|
+| 1 | (home)/blog/[slug]/page.tsx:32 | redundant-conversion | `lastModified` and `date` are already `Date` (`.source` types, `dateSchema`). Dropped the `new Date` wrappers in the page and in `generateMetadata` (`(lastModified ?? date).toISOString()`); same in `projects/[slug]/page.tsx` `generateMetadata`. |
+| 2 | (home)/blog/[slug]/page.tsx:39 | dead-fallback | `author` is `z.string()` in the blog schema. Dropped `?? 'Unknown'` and `?? owner` (and the now unused `owner` import). |
+| 3 | (home)/blog/[slug]/page.tsx:59 | dead-fallback | `title` is required by `pageSchema` (fumadocs-core `source/schema.js`). Dropped both `?? 'Untitled'`. |
+| 4 | (home)/projects/[slug]/page.tsx:58 | dead-fallback | Dropped `?? 'Project cover image'` and `?? 'Untitled'`. |
+| 5 | (home)/blog/[slug]/_components/header.tsx:38 | dead-fallback | Dropped `?? 'Blog cover image'` and `?? 'Untitled'`. |
+| 6 | (llms)/utils/site-pages.ts:63 | dead-fallback | Dropped both `?? 'Untitled'`. |
+| 7 | api/page-preview/route.ts:24 | dead-fallback | Dropped `?? 'Untitled'`. |
+| 8 | og/_lib/route.tsx:44 | dead-fallback | `title={page.data.title}`. |
+| 9 | api/search/route.ts:6 | duplicate-logic, dead-fallback | One `toIndex(tag)` mapper over posts and work pages, typed `BlogPage \| WorkPage`; the two `?? 'Untitled'` are gone. Same rows, same order. (`getPageEntries` lacks `structuredData`, so it could not be reused as is.) |
+| 10 | api/chat/utils/tools/search-docs.ts:23 | redundant-check | `getText` is on the page type (`includeProcessedMarkdown`); dropped the guard, the `null` returns and the null filtering. |
+| 11 | api/chat/utils/tools/search-docs.ts:34 | unchecked-cast, dead-fallback | `as CustomDocument` -> `satisfies CustomDocument` (x2), dropped `?? 'Untitled'` (x2). |
+| 12 | api/chat/utils/tools/search-docs.ts:70 | duplicate-logic | `z.union` of literals -> `z.enum(['all', 'blog', 'projects'])`. The reuse in `tools/index.ts` is part of the skipped tool-typing item below. |
+| 13 | api/chat/utils/tools/search-docs.ts:91 | unchecked-cast | Dropped the `raw as Array<{ doc }>` and `as Record<string, string>` casts: `searchAsync({ enrich: true, merge: true })` now infers `MergedDocumentSearchResults<CustomDocument>`; the loop skips a missing `doc`, which `store: true` never produces. Return value unchanged. |
+| 14 | api/chat/utils/tools/search-docs.ts:115 | dead-code | Dropped the never-read `locale` input. |
+| 15 | (home)/guestbook/actions/guestbook.ts:30 | dead-fallback | `users.name` is `notNull` and better-auth types it `string`; inserts `user.name` directly. |
+| 16 | (home)/guestbook/_components/form.tsx:100 | redundant-check | `isPending` already returned above, so `!(user \|\| isPending)` -> `!user`; `user` is narrowed, so `Posting as {user?.name ?? 'Guest'}` -> `{user.name}` (the form.tsx half of #15). |
+| 17 | (home)/guestbook/_components/form.tsx:64 | redundant-reset | Kept `form.reset` (form state lives above the keyed `<form>`) and the key remount (it recreates `SignaturePad`, canvas and history included); dropped `signaturePad.current?.clear()`, the ref and the `SignaturePadHandle` import. |
+| 18 | (llms)/colophon.md/route.ts:4, (llms)/contact.md/route.ts:4 | redundant-config | `revalidate = false` is the default (`caching-without-cache-components.md`, route segment config). Dropped at all 10 sites: colophon, contact, experience, skills, testimonials, uses, llms.txt, blog.mdx, work.mdx, blog/rss.xml. `dynamic = 'force-static'` kept. |
+| 19 | api/chat/route.ts:163 | redundant-config | Dropped `toolChoice: 'auto'`; `prepareToolChoice` maps `undefined` to `{ type: 'auto' }` (ai `dist/index.js`). |
+| 20 | (home)/blog/_components/newsletter-form.tsx:39, (home)/contact/_components/contact-form.tsx:52 | redundant-config | Dropped `errorMapProps: {}` in the three forms (guestbook too); the adapter only reads `props?.joinBy`. |
+| 21 | (home)/colophon/page.tsx:72, (home)/uses/page.tsx:20, (auth)/account/page.tsx:12 | inconsistent, unnecessary-async | Static `generateMetadata` -> `export const metadata: Metadata = createMetadata(...)` on colophon, uses, account and resume. `createMetadata` is pure. |
+| 22 | (home)/blog/page.tsx:59 | dead-code | Dropped the unused `_parent: ResolvingMetadata` (blog, blog/tags/[tag], projects). |
+| 23 | (home)/blog/page.tsx:70 | redundant-check | `parsePageParam` maps a missing param to 1 and `''` to 0 (404 above), so `\|\| !searchParams.page` was dead (x3); `isFirstPage ? 1 : pageIndex` collapsed to `pageIndex` for the same reason. |
+| 24 | (home)/blog/page.tsx:52 | duplicate-type | One `Props` for `Page` and `generateMetadata` (blog and projects). |
+| 25 | (home)/page.tsx:25 | unnecessary-async | `Home` awaits nothing; dropped `async`. |
+| 26 | (auth)/account/_components/account-settings.tsx:87 | redundant | `zodResolver` (non-raw) hands `onSubmit` the parsed values and `AccountSchema` trims; dropped `.trim()`. |
+| 27 | (home)/blog/[slug]/page.tsx:129, (home)/projects/[slug]/page.tsx:162 | duplicate-logic | OpenGraph `url` -> `page.url` (the loaders' `baseUrl` is `/blog` and `/projects`, so the string is identical). |
+| 28 | og/_lib/template.tsx:150 | magic-string | `'#ffffff'` -> `colors.white`, added to the token map. |
+
+## Band 3: owned types instead of local mirrors
+
+| # | file:line | rule | what changed |
+|---|-----------|------|--------------|
+| 29 | sitemap.ts:6 | duplicate-type | Local `Page` interface -> `type Page = BlogPage \| WorkPage` from `@/lib/source`. |
+| 30 | og/_lib/route.tsx:6 | duplicate-type | `OgPage` (with optional title and date) -> `BlogPage \| WorkPage`. |
+| 31 | (home)/_components/testimonials.tsx:16 | duplicate-type | Imports `Testimonial` from `@/types`. |
+| 32 | layout.tsx:11 | pass-through | `baseUrl` now comes from its owner `@/lib/metadata` in every `src/app` file (layout, blog/[slug], rss.xml, resume, (llms)/utils/about.ts). The `@/constants` re-export itself is the constants scope's to delete. |
+
+## Band 4: local cleanups (round 2)
+
+Line numbers are the line of the `TODO(slopradar)` comment before this round.
+
+| # | file:line | rule | what changed |
+|---|-----------|------|--------------|
+| 33 | (home)/contact/_components/contact-form.tsx:45 | dead-fallback | The action always returns `{ message, success: true }`; the toast and the success Alert now show `data.message` directly. The fallback copy lives only in `contact.ts`. |
+| 34 | (home)/contact/_components/hero.tsx:34 | redundant-key | Dropped the `key` on the `render` anchor (the keyed `ViewAnimation` is the list item). |
+| 35 | (home)/contact/actions/contact.ts:10 | comment-rule | Deleted the narrating comment above `sentAtFormat`. |
+| 36 | (home)/colophon/page.tsx:45 | dead-code | Every colophon section has a title: dropped the title guard and the ternary delays (`baseDelay`, `baseDelay + 0.05`, same values). The uses page keeps its guard, since its first section has no title; no shared component was extracted for that reason. |
+| 37 | (home)/colophon/_components/typography.tsx:16 | duplicate-logic | `colophonCardBorderClasses(index, columns = 3)`; Typography calls it with 2 columns, so the same classes apply (the lg classes only when 3). |
+| 38 | (home)/about/_components/feed/event.tsx:47 | duplicate-logic | `EventDate` uses `formatDate`. It prints in UTC, the old call used the server's zone (identical on Vercel, which runs in UTC; only a non-UTC dev machine near midnight UTC differs). |
+| 39 | (home)/about/_components/feed/event.tsx:288 | unclear-name | Component renamed `GitHubEventRow`; the import alias in `feed/index.tsx` is gone. |
+| 40 | (home)/about/_components/feed/event.tsx:296 | redundant-check | Dropped the `isSupportedEvent` guard (data.ts already filters) and the unused import; the switch default still returns null. |
+| 41 | (home)/uses/_components/software.tsx:39 | js-tosorted-immutable | `items.toSorted(...)`. |
+| 42 | (home)/blog/rss.xml/route.ts:8 | library-exists | Dropped `escapeForXML`: `feed` sanitizes URLs itself (`sanitizeUrl`). Verified the served RSS is byte-identical before and after. |
+| 43 | (home)/blog/rss.xml/route.ts:50 | commented-out-code | Deleted the commented-out author link. |
+| 44 | (home)/blog/actions/newsletter.ts:35 | redundant-check | `splitName(session?.user.name)` once; `splitName` returns `firstName ?? ''` so the empty-name result is unchanged. |
+| 45 | (home)/blog/[slug]/page.client.tsx:91 | env-access | `!isProduction` from `@/constants` (a shared env value, already used by client-side components). |
+| 46 | (home)/blog/[slug]/_components/header.tsx:3 | bundle | `motion/react-client` `motion.div` -> `motion/react-m` `m.div` under the existing `LazyMotion`. Checked in the browser: the same SSR `opacity:0` and the fade still ends at `opacity: 1`. |
+| 47 | (home)/_components/portrait.tsx:65 | magic-string | `aria-label={\`Portrait of ${owner}\`}`; same string. |
+| 48 | (home)/_components/writing.tsx:8 | magic-string | `href` reads `pages.blog.path`. The title ('Writing') and description are different copy from `pages.blog`, so they stay (changing them is visible). |
+| 49 | (home)/guestbook/_components/entries.tsx:12 | derivable-prop | Dropped `isSignedIn` from the page, `GuestbookEntries` and the card; the card uses `!!currentUserId`. |
+| 50 | (home)/guestbook/_components/entry-card/index.tsx:97 | cn-misuse | Plain `className` string; dropped the `cn` import. |
+| 51 | (home)/_components/contributions.tsx:172 | unused-export | `ContributionsFallback` no longer exported. |
+| 52 | api/comments/[...comment]/route.ts:6 | commented-out-code | Deleted the commented-out `role` option. |
+| 53 | api/chat/utils/llms.ts:8 | unclear-name | `getLLMsTxt` -> `getAssistantContext` (one importer, the chat route). The file keeps its path. |
+| 54 | api/link-preview/route.ts:3 | duplicate-logic | Both preview routes read `previewCacheControl` from the new `api/_lib/cache-control.ts`. Header value unchanged. |
+| 55 | (auth)/account/_components/active-sessions.tsx:40 | duplicate-logic | `isPlatformType` guard over `Object.hasOwn(PLATFORM_ICONS, value)` replaces the hand-listed keys. |
+| 56 | (auth)/account/_components/active-sessions.tsx:85 | js-tosorted-immutable | `sessions.toSorted(...)`. |
+| 57 | (auth)/account/actions/revoke-session.ts:20 | swallowed-error | Removed the try/catch; `result.status` is checked directly. Unexpected throws now reach the safe-action handler, and the button's `getActionErrorMessage` fallback turns them into the same 'Failed to revoke session.' toast. |
+| 58 | (auth)/account/_components/revoke-session-button.tsx:15 | inconsistent-error-handling | `getActionErrorMessage(error, 'Failed to revoke session.')`. |
+| 59 | (llms)/utils/experience.ts:16, (llms)/utils/profile.ts:57 | magic-string | One `DEFAULT_EMPLOYMENT_TYPE = 'Research'` exported from `profile.ts`, used in both. |
+
+## Skipped or declined (annotation left in place)
+
+| file:line | reason |
+|-----------|--------|
+| layout.tsx:73 | Needs a typed component in `src/components/json-ld.tsx` (outside `src/app`). |
+| layout.tsx:81 | `jobTitle` and `knowsAbout` are not in the constants; adding them is a constants-scope edit. |
+| (home)/contact/_components/contact-form.tsx:141, (auth)/account/_components/account-settings.tsx:137 | Need exported limits in `src/lib/validators` (outside). |
+| (home)/contact/actions/contact.ts:7 | Needs a `tsconfig` path alias (config). |
+| (home)/contact/actions/contact.ts:15 | Declined: `timeZoneName: 'short'` prints `GMT+5:30` for `Asia/Kolkata` in en-US, not 'IST', so the email text would change. |
+| (home)/about/_components/feed/data.ts:30 | Declined: Octokit types `payload` loosely; a typed payload map is the same casts moved, and a zod schema per event adds runtime validation. Needs its own change. |
+| (home)/about/_components/feed/data.ts:60, (llms)/utils/index.ts:1 | Owner decisions 4 and 5. |
+| (home)/uses/_components/logo.tsx:16, (home)/_components/testimonials.tsx:42 | `getInitials` belongs in `src/lib/utils` (outside). |
+| (home)/_components/testimonials.tsx:64 | New dependency (`embla-carousel-autoplay`) and carousel is a standing exception. |
+| (home)/blog/page.tsx:23, (home)/blog/tags/[tag]/page.tsx:22, (home)/blog/[slug]/page.tsx:94 | Need helpers in `src/lib` (outside). |
+| (home)/uses/_components/software.tsx:17 | Needs a `globals.css` utility (outside). |
+| (home)/blog/actions/newsletter.ts:67 | Declined: the rewrap is what gives the visitor 'Something went wrong while subscribing...'; an unhandled throw would show the generic unexpected-error text instead. |
+| (home)/blog/_components/newsletter-form.tsx:34 | Declined: dropping the toast or the Alert is a visible change. |
+| (home)/blog/[slug]/page.client.tsx:122, (home)/_components/portrait.tsx:20 | Move files into `src/components` (cross-scope). |
+| (home)/blog/[slug]/_components/header.tsx:1 | Owner decision 6 (attribution). |
+| (home)/blog/[slug]/_components/header.tsx:11 | Needs a long variant in `@/lib/format-date` (outside). |
+| (home)/search/_components/search-client.tsx:126 | Declined: `useDocsSearch` owns the search state and has no initial value option, so the effect is the only way to seed it from `?q=`. |
+| (home)/_components/portrait.tsx:144 | Declined: the `bonked` effect does not restart its timer on repeat bonks (the state does not change); an event-started timeout would need a guard to keep that timing. Animation-sensitive, left alone. |
+| (home)/_components/hero.tsx:66 | Declined: `{first} <Chip /> {last}` makes SSR emit extra text nodes and comment markers, a DOM change. |
+| (home)/guestbook/_components/entry-card/index.tsx:60 | Declined: disabling Save or dropping the 'No changes' toast is a visible change. |
+| (home)/guestbook/actions/guestbook.ts:72 | The tag constant lives in `src/server/db/queries` (outside). |
+| (resume)/resume/page.tsx:25, (llms)/utils/profile.ts:38 | `groupStack` belongs in `constants/portfolio/skills` (outside). |
+| (resume)/resume/page.tsx:51 | Needs a flag in the socials data (constants). |
+| (resume)/resume/layout.tsx:6 | Needs a shared token in `src/lib/theme-color` (outside). |
+| api/chat/route.ts:51 | Needs a helper in `src/lib` (outside). |
+| api/chat/route.ts:70 | Declined: `safeValidateUIMessages` is async and validates tool parts and data schemas, so it can reject conversations that pass today. Behaviour change. |
+| api/chat/route.ts:163, api/chat/utils/tools/index.ts:7 | `src/lib/ai/chat/types.ts` imports the `tools` value for `ChatTools`; the factory needs that file edited (outside). |
+| api/chat/utils/tools/get-page-content.ts:20 | Declined: changes the text the model reads (visible in assistant answers). |
+| api/chat/utils/tools/get-page-content.ts:24 | The alias lives in `navigate.ts` and `next.config.ts` redirects; one place means editing config. |
+| api/chat/utils/tools/search-docs.ts:7 | Declined: swapping the search engine can change which pages the assistant finds. |
+| (auth)/layout.tsx:7 | Needs a `SiteShell` option in `src/components`. |
+| (llms)/utils/contact.ts:5, experience.ts:5, skills.ts:4, uses.ts:15, colophon.ts:8 | Shared copy constants live in `src/constants` and the page components; colophon also changes the (llms) text (owner decision 16). |
+| (llms)/utils/content-index.ts:13 | Declined: unifying the fallback changes (llms) text for pages without a description. |
+| (llms)/utils/site-pages.ts:17 | Needs ids exported from four section components in `(home)`; larger cross-file change. |
+| (llms)/utils/github-commits.ts:1 | Moves `feed/data.ts` to `src/lib` (outside). |
+| (llms)/utils/profile.ts:10 | Needs exports from `@/lib/employment-period` (outside). |
+| (llms)/utils/create-llm-route.ts:24 | Declined: adding a charset changes the response header on the `.mdx` routes. |
+
+Verification: `bunx tsc --noEmit` and `bun run check` clean; `/`, `/blog`, `/blog/vscode-setup`, `/contact`, `/colophon`, `/uses`, `/about`, `/guestbook`, `/account`, `/resume`, `/projects`, `/search`, `/llms.txt`, `/blog/rss.xml` and `/api/page-preview` return 200 on localhost:3111.
+
+## src/components
+
+# Slopradar resolutions: `src/components` (except `ui/`)
+
+Phase 3 for the components scope, worked band by band in the order of section 5 of the scope report. Line numbers are the lines of the `TODO(slopradar)` comment before this pass. Every resolved row is behaviour-preserving: the server-rendered HTML of `/`, `/about`, `/blog`, `/blog/hello-world`, `/blog/gorkie-sandboxes`, `/blog/tags/intro`, `/projects`, `/projects/portfolio`, `/contact`, `/guestbook`, `/uses`, `/colophon`, `/search`, `/account` and a 404 was captured on :3111 before the first edit and diffed (scripts and generated ids stripped) after each band; the JSON-LD blocks were compared byte for byte.
+
+## Band 1: orphans and dead flexibility
+
+| File:line | Rule | What changed |
+| --- | --- | --- |
+| `features/blog/post-card.tsx:13` | orphan | Deleted `post-card.tsx` and its line in `features/blog/index.ts` (the barrel still exports `TagCard`, which `blog/[slug]/_components/header.tsx` imports). |
+| `content/mdx/layout.tsx:57` | orphan | Deleted `MdxLayout`, `MdxLayoutProps` and the `Section`/`SectionBody` imports only it used. |
+| `icons/utils.ts:7` | orphan-export | Deleted the `Icon` type alias and its re-export from `icons.tsx`. |
+| `content/mdx/components.tsx:33` | duplicate-alias | Dropped the `GitHubRepo` registration and the `export { GithubRepo as GitHubRepo }` alias; `content/` only uses `<GithubRepo`. |
+| `smooth-cursor.tsx:13` | dead-props | Removed `SmoothCursorProps` (`cursor`, `cursorType`, `disableRotation`, `disableSmooth`), `SNAPPY_SPRING` and the `'pointer'`/rotation branches; `SmoothCursor` takes no props, as its only caller renders it. |
+| `smooth-cursor.tsx:155` | cn-rule | The inner ring's template literal became a plain string (its only conditional was the dead rotation class) and the outer `m.div` uses `cn()`; the resulting class strings were checked equal for both `visible` states. |
+| `copy-button.tsx:10` | dead-props | Dropped `doneIcon`/`errorIcon`/`idleIcon`; the icon map is a module constant. Renamed the file to `copy-state-icon.tsx` to match its export (only `page-actions.tsx` imports it). |
+| `copy-button.tsx:28` | no-comments | Deleted the false React Compiler comment with the fallbacks. |
+| `features/auth/user-button.tsx:23` | dead-api | Removed `UserButtonClassNames` and the `classNames` prop and every `classNames?.…` merge; `className` stays. Props interfaces are no longer exported (nothing imported them). |
+| `features/auth/user-avatar.tsx:8` | dead-api | Removed `UserAvatarClassNames` and the `classNames` prop. |
+| `json-ld.tsx:117` | dead-prop | Dropped `breadcrumbs` from `PageJsonLdProps` and the `extraCrumbs ??` branch. |
+| `numbered-pagination.tsx:58` | dead-prop | Dropped `paginationItemsToDisplay`; `itemsToDisplay: 5` is inline. |
+| `features/blog/tag-card.tsx:8` | dead-prop | Dropped `displayCount`, the per-card `getPostsByTag` lookup, the count span and the `className = ''` default. |
+| `layout/sections/header.tsx:15` | dead-props | Dropped `titleClassName` and `descriptionClassName`. |
+| `layout/sections/header.tsx:10` | redundant-type | `description` and `title` are `ReactNode`; same for `caption`, `description` and `title` in `sections/hero.tsx`. |
+| `layout/sections/header.tsx:62` | redundant-key | Dropped the manual key derivation and its comment; `Children.map` keys each element from the child's own key. `toArray` and the truthiness guard stay so the stagger index and the skipped `''`/`0` children are unchanged. |
+| `layout/lenis.tsx:13` | dead-config | `Lenis` takes no props; `root` and the options (`anchors`, `autoRaf: false`, `lerp: 0.18`, `prevent`) are inline. |
+| `layout/wrapper.tsx:9` | dead-config | Dropped the `lenis` prop and its union; `Wrapper` renders `<Lenis />`. |
+| `layout/footer/active-link.tsx:9` | duplicate-type | Props are `ComponentProps<typeof Link> & { href: string }`; dropped `nested` and pass `false` to `isActive` (whose default is `true`), as before. |
+| `layout/footer/links.tsx:18` | dead-fields | Dropped `ListItem.external`/`href` and the dead `<Link>` title branch; the title renders as `<p>` as it always did. |
+| `features/assistant/tools/contact-form.tsx:68` | dead-config | Deleted `errorMapProps: {}`; the adapter only reads `errorMapProps?.joinBy`. |
+| `page-actions.tsx:70` | unused-export | `LLMCopyButton` and `ViewOptions` are no longer exported. |
+| `page-actions.tsx:110` | dead-alias | Inlined `fullMarkdownUrl`. |
+
+## Band 2: small fixes (second pass)
+
+| File:line | Rule | What changed |
+| --- | --- | --- |
+| `tailwind-indicator.tsx:2` | env-rule | Reads `isProduction` from `@/constants` instead of `process.env.NODE_ENV`. |
+| `ui-sounds.tsx:31` | duplication | One `afterClickHandlers` helper and a named `CLICK_SETTLE_DELAY` (16 ms) replace the two `setTimeout(..., 16)` blocks; the "read it a tick later" comment lives once, in the helper. |
+| `layout/footer/clock.tsx:33` | magic-string | `timeZone: profile.timeZone` (same `'Asia/Kolkata'`). |
+| `preview-link.tsx:28` | unchecked-cast | `createJsonFetcher<T>()` gives each endpoint its own typed cache; the `request as Promise<T \| null>` cast is gone (one `response.json() as Promise<T>` remains at the fetch boundary). |
+| `layout/sections/split.tsx:98` | over-abstraction | `SplitSectionContent` uses `cn(inset && 'px-6 py-8', className)`; the one-variant cva is gone. The sidebar cva stays: it has two variants (`background`, `inset`). |
+| `features/not-found/not-found-content.tsx:9` | no-comments | Deleted the PR #108 provenance comment. |
+| `layout/header/index.tsx:68` | dead-code | `renderNavTitle` only renders string titles (`baseOptions.nav.title` is a string in both callers); the function branch and the `title as ReactNode` branch are removed. Output is identical. |
+| `features/search/results.tsx:15` | weak-type | `rehypeCustomElements` is typed with hast `Root`/`Element` and `visit(tree, 'element', ...)`. |
+| `features/search/results.tsx:73` | duplication | The `mark`/`p` component map is one hoisted `markdownComponents` constant (same JSX, used twice). |
+| `ai-elements/markdown.tsx:115` | unbounded-cache | The text cache is capped at 200 entries (oldest evicted, hits refreshed); the current text is always the newest entry, so rendering is unchanged. |
+| `content/mdx/github-code.tsx:83` | env-rule | `!isProduction` instead of `process.env.NODE_ENV !== 'production'`. |
+| `content/mdx/github-repo.tsx:107` | duplication | `repoLinkClassName` and `externalLinkProps` are shared by the fallback link and the hover-card trigger (identical class string, `rel`, `target`). Dropped the trigger's `aria-label`, which repeated its visible text (the accessible name is unchanged). |
+| `icons/icons.tsx:144` | no-comments | Deleted the stale "mix the site had before" comment. |
+
+## Skipped or declined (annotation left in place)
+
+| File:line | Verdict | Reason |
+| --- | --- | --- |
+| `theme-provider.tsx:6` | skip, cross-scope | The fix edits `src/app/layout.tsx`. |
+| `layout/sections/body.tsx:10` | skip, cross-scope | Three call sites are in `src/app`. |
+| `blur-image.tsx:4` | skip, owner decision 6 | Attribution and `THIRD_PARTY_NOTICES.md`. |
+| `blur-image.tsx:16` | skip, cross-scope | `lazy` is passed from `src/app` (projects, uses, blog header). |
+| `inline-markdown.tsx:4` | decline | react-markdown wraps text in a `<p>` and parses `*`/`_`, so DOM and copy would change. |
+| `guestbook-cue.tsx:19` | skip, cross-scope | Rendering it from the home page edits `src/app`, and moving the band changes where it sits relative to the footer. |
+| `page-actions.tsx:21` | skip, cross-scope | Needs a `Promise<string>` overload in `src/hooks/use-copy-to-clipboard.ts`. |
+| `page-actions.tsx:166` | skip | Unifying `rel` to `noopener noreferrer` changes what the browser sends (Referer) to ChatGPT, Claude and GitHub. |
+| `search-redirect-input.tsx:51` | skip | `next/form` changes the DOM and no-JS behaviour. |
+| `json-ld.tsx:152` | skip, cross-scope | Every page call site is in `src/app`. |
+| `ui/dropdown-menu.tsx:109` | skip | `ui/` is excluded from this scope. |
+| `layout/footer/index.tsx:41` | skip | One responsive set changes the DOM, and the order of the controls on mobile. |
+| `layout/footer/sound-toggle.tsx:24` | skip | `<Button variant='outline' size='icon'>` has different classes (visible). |
+| `layout/footer/clock.tsx:22` | skip | Theme tokens change the colours (visible). |
+| `layout/footer/links.tsx:77` | skip, cross-scope | The data would move into `src/constants/navigation`. |
+| `layout/header/mobile/index.tsx:99` | skip, owner decision 8 | Mobile menu focus trap. |
+| `layout/header/index.tsx:37`, `features/toc/popover.tsx:15` | skip, owner decision 6 | Attribution. |
+| `layout/header/index.tsx:160` | skip, cross-scope | The slots are removed by changing the two `Header` callers in `src/app` (`site-shell` is in scope, `(auth)/layout.tsx` is not). |
+| `layout/header/index.tsx:263`, `features/toc/popover.tsx:37` | decline | The three dismissals differ: `pointerdown` plus Escape on the header, `click` on `window` in the TOC popover, capture-phase `click` with `preventDefault` plus a desktop media query in the mobile menu. One hook would change behaviour. |
+| `layout/header/index.tsx:499` | skip | A `mobile` variant in `navItemVariants` changes the class strings. |
+| `layout/header/mobile/pill.tsx:18` | skip, cross-scope | Needs `src/constants/navigation`, whose labels and icons differ from the pill's. |
+| `layout/header/mobile/pill.tsx:41` | skip | Sharing a class constant across pill, toggle and `item.tsx` reorders the class strings. |
+| `features/contributions.tsx:3`, `:353` | skip, owner decision 7 | Registry component placement. |
+| `features/assistant/input.tsx:58` | decline | `useLocalStorage` JSON-serialises and would not read the existing raw `simba:draft` strings, and it changes SSR hydration. |
+| `features/assistant/input.tsx:206` | skip | A hit-area pseudo-element adds classes to the button (visible/behavioural change). |
+| `features/assistant/mascot/constants.ts:35` | decline | The `Record<PoseName, Pose>` / `Record<AnimationName, Frame[]>` annotations widen the `satisfies` literals so consumers can narrow the `Pose` union; the second name carries the type. |
+| `features/assistant/text-selection-popup.tsx:75` | skip | Base UI Popover with a virtual anchor changes focus and dismissal behaviour; owner call. |
+| `features/not-found/simba-loop.tsx:30` | decline | `SimbaController` has no loop-with-pause and shows the rest pose, not frame 0, under reduced motion. |
+| `features/assistant/tools/contact-form.tsx:6`, `features/blog/author-byline.tsx:1`, `content/mdx/layout.tsx:2`, `:11` | skip, cross-scope | The layering band moves code out of `src/app`. |
+| `features/assistant/tools/navigate.tsx:44` | decline | The refs feed a 10 s poll that has to read the live Lenis instance; `scrollToTarget` is already shared with the search dialog, and replacing the poll changes scroll timing. |
+| `features/work/experience-timeline.tsx:152` | skip | Omitting the label is visible; requiring the field edits `src/types`. |
+| `content/mdx/heading.tsx:9` | skip | fumadocs-ui `Heading` renders a different anchor and icon (visible). |
+| `content/mdx/github-code.tsx:28` | skip | `buttonVariants` has different classes (visible). |
+| `ai-elements/tool.tsx:37` | skip | Status tokens change the colours (visible). |
+| `icons/brands/claude.tsx:4`, `github.tsx:6`, `github.tsx:8` | skip | The eight brand files differ in `focusable`, `preserveAspectRatio`, fill and path count, so a shared factory or the `aria-hidden` check changes the SVG attributes; the Font Awesome `data-*` attributes are DOM attributes. |
+
+## Checks after this pass
+
+`bunx tsc --noEmit` is clean. `bun run check` reports two format errors, both in `src/app` (`about/_components/feed/event.tsx`, `guestbook/_components/entry-card/index.tsx`), files other agents are editing. `src/components` is clean. `/`, `/about`, `/blog`, `/blog/hello-world`, `/projects`, `/contact`, `/guestbook`, `/uses`, `/colophon` and `/search` return 200 on :3111 and a bad path returns 404.
+
+## src/lib, src/server, src/hooks, src/contexts, src/constants, src/types, src/env.ts, src/styles
+
+# Slopradar resolutions: `src/lib, src/server, src/hooks, src/contexts, src/constants, src/types, src/env.ts, src/styles`
+
+Phase 3, worked band by band in the order of the scope report's structural verdict. Line numbers are the current lines after the change (the annotation lines no longer exist). 53 annotations resolved, 14 skipped, 2 declined (left in place). Not committed.
+
+## Band 1: dead code
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/lib/ai/chat/confirmation.ts:3` | unused export | Deleted `ToolName` (no importers; equals `keyof ChatTools`). |
+| `src/lib/source/blog.ts:11` | unused export | Deleted `Post`. |
+| `src/lib/validators/comments.ts:21` | unused exports | Deleted `CommentImageContent`, `CommentMentionContent`. |
+| `src/lib/validators/guestbook.ts` (end) | unused exports | Deleted `GuestbookEntry`, `GuestbookReaction`, `GuestbookEdit`, `GuestbookDelete`, `GuestbookBanUser`, `GuestbookModerationResult` (grepped `src emails scripts`, including the `@/lib/validators` barrel). |
+| `src/lib/validators/newsletter.ts:6` | unused export | Deleted `Newsletter`. |
+| `src/lib/validators/session.ts:6` | unused export | Deleted `RevokeSession`. |
+| `src/lib/link-preview.ts:6` | unused export | Deleted the type re-export; all importers read `link-preview.shared`. |
+| `src/lib/link-preview.ts:21` | redundant guard | Dropped `existsSync`; a missing file (ENOENT) still returns null in the catch. |
+| `src/lib/safe-action/index.ts:4` | unused re-exports | Dropped the middleware and `ActionContext` re-exports; `ActionError`/`actionClient` and the three clients stay. |
+| `src/lib/ai/prompts/moderation/index.ts:5` | dead code | Dropped `.filter(Boolean)` and the outer `.trim()`; all three parts are already trimmed, so the string is byte-identical. |
+| `src/lib/ai/prompts/chat/index.ts:24` | dead code | Dropped `.filter(Boolean)` and the outer `.trim()`; added `.trim()` to `core.ts`, `directives.ts`, `tools.ts` like the other parts. The system prompt now has a uniform blank line between parts (was two blank lines after core, directives and tools). |
+| `src/lib/github-code.ts:38` | redundant checks | Dropped both `Number.isNaN` guards (the regex captures `\d+` only). |
+| `src/lib/source/pages.ts:11` | dead fallback + duplication | Dropped `?? 'Untitled'` x2 (tsc confirms `title` is `string`) and replaced the two identical map blocks with one `toPageEntry(tag)` helper; entry key order unchanged. |
+| `src/server/db/queries/guestbook.ts:67` | redundant fallback | `row.signature ?? null` -> `row.signature`. |
+| `src/server/db/queries/guestbook.ts:137` | verbose | `deleted.length > 0 ? deleted[0] : null` -> `deleted[0] ?? null`. |
+| `src/styles/globals.css:392` | dead rule | Deleted `.dark ::selection` (identical declarations; no other `::selection` rule in our CSS or the imported presets). |
+
+## Band 2: comments
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/env.ts:6` | no-comments | Deleted the remaining `// App` banner (the other banners were already gone). |
+| `src/lib/validators/guestbook.ts:1` | no-comments | Deleted the remaining `// Input schemas` banner. |
+| `src/lib/employment-period.ts:20` | no-comments | Deleted the narrating comment. |
+| `src/styles/globals.css` (`@theme`) | no-comments | Deleted `/* fonts */`. |
+| `src/lib/og.ts:81` | comment placement | Moved the output-file-tracing comment directly above `FONT_FILES`. |
+
+## Band 3: moderation
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/server/comments/moderation.ts:74` | ai-sdk | Single text part now goes through `prompt:`; dropped the `UserContent` array, the `messages` wrapper and the `UserContent` import. Same user text. |
+| `src/lib/validators/moderation.ts:3` (was `validators/guestbook.ts:39`) | misplaced | Moved `ModerationResultSchema` to its own `validators/moderation.ts`, re-exported from the `validators/index.ts` barrel, so both importers (`@/lib/validators`) keep working unchanged. The shared `moderate()` helper is not done (see skipped). |
+
+## Band 5: one owner per fact
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/server/db/schema/table.ts:3`, `auth.ts:2`, `comments.ts:11`, `guestbook.ts:11` | duplication (x2 annotations) | One `createTable` in `schema/table.ts` (not re-exported from `schema/index.ts`). Verified by dumping every table, column, index, PK and FK name before and after: identical. No migration. |
+| `src/server/db/index.ts:9` | dead config | Dropped `casing: 'snake_case'`. Verified every column in the schema has an explicit name (`keyAsName` false for all), so runtime casing never applied. |
+| `src/constants/site.ts:7`, `src/lib/metadata.ts:89`, `src/constants/navigation/social.tsx:17` | magic string | Added `xHandle`; the Twitter `creator` and the X social URL derive from it. Output strings identical. The link-preview scanner's regex no longer sees the X URL in `social.tsx`, but `x.com` is excluded from previews and absent from the manifest, so nothing changes. |
+| `src/constants/config/github.ts:3`, `src/lib/get-llm-text.ts:35` | magic string | Added `githubBranch = 'main'`, used in the llms Source URL. `src/app/(home)/blog/[slug]/page.tsx:52` still hard-codes `main` (app scope). |
+| `src/lib/get-llm-text.ts:7` | dead option | `{ page: '#', section: '##' }` record, `level` typed as its keys, switch and `'subsection'` removed. Callers only pass `'section'`. |
+| `src/types/themed-image.ts:1`, `src/types/skill.ts:6`, `src/types/uses.ts:3` | duplicate type | One `ThemedImage` type, used by `TechStackItem['icon']` and `SoftwareItem['logo']`; exported from the `@/types` barrel. `Logo` stays as an alias of it because `src/app/(home)/uses/_components/logo.tsx` imports `Logo` (app scope can switch to `ThemedImage` and then the alias goes). |
+| `src/constants/search.tsx:14` | duplication | Page command titles and URLs come from `pages.<key>.title/path` (Experience uses `${pages.about.path}#experience`). Strings identical. |
+| `src/constants/search.tsx` (`commandKinds`) | unclear mapping | `Record<CommandItem['kind'], CommandKind>` lookup replaces let-and-overwrite. The map is still keyed by title because `src/components/features/search/footer.tsx` reads it by `state.value` (components scope). |
+| `src/lib/resend.ts:3` | two import paths (partial) | The only in-scope `@/constants` importer of `baseUrl` now imports from `@/lib/metadata`. Annotation left in place (see skipped). |
+
+## Band 6: types
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/env.ts:6` | redundant assertion | `z.url().min(1)` -> `z.url()` (checked: `z.url()` rejects `''`). |
+| `src/lib/ai/providers.ts:18` | duplicate type | `onError` typed with ai-retry's `ModelRetryContext<LanguageModel>`. |
+| `src/lib/toast.ts:7` | redundant assertion + duplication (x2 annotations) | Dropped `as SonnerToast`; the three branches are one `variantSounds` record lookup behind an `isVariant` guard. The variant method is read when the property is accessed, not when it is called; sonner's methods are arrow-function fields, so this is equivalent. |
+| `src/lib/link-preview.shared.ts:34`, `src/lib/link-preview.ts:21` | unchecked cast | The manifest goes through `linkPreviewManifestSchema` (in `link-preview.shared.ts`, `satisfies z.ZodType<LinkPreviewManifest>`). The current manifest parses (159 entries). A missing file still returns null without a log; a malformed file now logs `console.error` and returns null. It does not throw, so visitors see the same result as before. |
+| `src/lib/validators/guestbook.ts:37` | type-only schema | `GuestbookReactionItemSchema`/`GuestbookEntryItemSchema` (never parsed, never imported) became plain `GuestbookReactionItem`/`GuestbookEntryItem` interfaces with the same names and shape. |
+| `src/lib/github-code.ts:24` | duplicate type | `parseLineRange` returns `ParsedGitHubFileUrl['lineRange']`. |
+
+## Band 7: error handling
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/lib/og.ts:27`, `:107` | swallowed error (x2 annotations) | Both catches log the error (`console.error`) and still return null, so OG output is unchanged. |
+| `src/lib/og.ts:12` | magic string | The root `<svg ...>` tag is replaced by pattern (`SVG_OPEN_TAG`) instead of matching the exact `width/height/viewBox` string. Verified the generated portrait data URL is byte-identical before and after. |
+| `src/lib/resend.ts:33` | bad error message | Branches on `error` first (not_found -> null); missing `data` without an error now throws `Resend returned no data.` instead of `undefined`. |
+| `src/lib/validators/contact.ts:16` | duplicated literal | Message interpolates `CONTACT_MESSAGE_MAX_LENGTH.toLocaleString('en-US')`; verified it still reads "Message must be under 5,000 characters." |
+
+## Band 9: renames
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/hooks/use-mobile.ts`, `src/hooks/use-theme-shortcut.ts` | wrong extension | Renamed from `.tsx` (no JSX); importers use extensionless paths. `experiences.tsx` and `skills.tsx` stay `.tsx` (see skipped). |
+| `src/constants/portfolio/skills.tsx:4` | unclear names | `s`/`t` -> `stackIcon`/`themedStackIcon`. |
+| `src/constants/portfolio/skills.tsx:165` | spread in accumulator | Push into the existing group array. |
+| `src/constants/portfolio/uses.ts:3` | unclear names | `hw`/`sw`/`swt` -> `hardwareImage`/`softwareLogo`/`themedSoftwareLogo`. Verified `technologies`, `groupTechnologies()` and every `uses` export serialize byte-identically before and after. |
+
+## Band 10: CSS
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/styles/globals.css:78` | fragmented layer | The three `@layer base` blocks are merged into the first, in their original order. Only unlayered rules and `@theme` blocks sat between them, and neither depends on source order relative to `base`. |
+| `src/styles/simba.css:1` | magic numbers | `--simba-base-origin` / `--simba-head-origin` on `.simba-rig`; the 5 uses read them. All five elements are descendants of the `.simba-rig` svg (`mascot/rig.tsx`). |
+
+## Band 8 and other server items
+
+| File:line | Rule | What changed |
+|---|---|---|
+| `src/server/auth/index.ts:38`, `:43` | redundant async/await | Dropped the outer `await` in `listSessions` and `revokeSession`. `async` stays because `await headers()` is still needed. |
+| `src/lib/files.ts:6` | magic number | `DATA_URL_PREFIX = 'data:'`, used for both the check and the slice. |
+| `src/lib/source/blog.ts:32` | duplication | `getPostsByTag` = `getSortedByDatePosts().filter(...)` (same order, because `toSorted` is stable). |
+
+## Skipped (annotation left in place)
+
+| File:line | Rule | Reason |
+|---|---|---|
+| `src/lib/is-active.ts:8` | attribution | Owner decision 6 (attribution policy: in-file headers for code adapted from MIT deps). The JSDoc drop goes with the header. |
+| `src/lib/metadata.ts:7` | fallback shaping | Owner decision 12 (`NEXT_PUBLIC_BASE_URL` required in production). |
+| `src/lib/auth-client.ts:7` | inconsistent toast | Routing the 429 toast through `@/lib/toast` makes it play a sound, which visitors hear. That is a visitor-facing change, so it goes to the owner (decision 15 class). |
+| `src/lib/ai/chat/types.ts:4` | layering | Cross-scope: moving the tools out of `src/app/api/chat`, or moving these types next to the route, crosses scopes (lead named it). |
+| `src/lib/ai/chat/types.ts:18` | unclear name `MyUIMessage` | Cross-scope rename: the 9 importers are in `src/app` and `src/components`. Keeping both names would add a second name for one type. |
+| `src/lib/ai/chat/types.ts:21` | misplaced `CustomDocument` | Cross-scope: the target is `src/app/api/chat/utils/tools/search-docs.ts`. |
+| `src/lib/github-contributions.ts:5` | layering | Cross-scope: the fix is "lib exports the inferred `Activity`, the component imports it", and `src/components/features/contributions` has to change in the same step. Otherwise the type is duplicated and the `satisfies` link is lost. |
+| `src/lib/reveal-script.ts:7` | duplicated selector | CSS cannot import a TS constant. The two single-source options are a data attribute on the first section (a `src/components`/`src/app` edit) or injecting the hidden-state CSS from the inline script (moves a render-critical rule out of the stylesheet and risks a flash before the script runs). Skipped as cross-scope or visitor-risk. |
+| `src/lib/audio/preferences.ts:76` | two sound gates | Cross-scope: `SoundProvider` is in `src/app/provider.tsx` and `useSound` callers are in `src/app` and `src/components`. Picking one gate also changes when sounds play (the imperative path has its own `unlocked` gate), which visitors hear. |
+| `src/server/comments/moderation.ts:66` | duplication with guestbook moderation | Cross-scope: the other copy is `src/app/(home)/guestbook/actions/utils/moderation.ts`. A shared `moderate()` with one in-scope caller would be premature. `ModerationResultSchema` is already in `validators/moderation.ts`, ready for it. |
+| `src/server/db/queries/guestbook.ts:116` | boolean parameter | Cross-scope signature change: the caller is `src/app/(home)/guestbook/actions/guestbook.ts`. |
+| `src/constants/portfolio/experiences.tsx:1` (and `skills.tsx`, from the x4 note) | wrong extension | `scripts/link-previews/config.ts:16-17` lists both files by their `.tsx` path, so renaming them would silently drop them from the link-preview scan. That needs a coordinated scripts edit. |
+| `src/constants/index.ts:3` | two import paths for `baseUrl` | The remaining `@/constants` importers (`src/components/json-ld.tsx`, plus the app layout and rss per the note) are cross-scope. Every in-scope importer now uses `@/lib/metadata`; once the others move, delete the re-export. |
+| `src/styles/globals.css:326` | shadowed `border-border` | Changing the token changes the light-mode border colour everywhere `--color-border` is read (`bg-dashed`, scrollbar thumb, `* { border-border }`). Renaming the utility needs every component call site changed. Both are visitor-visible or cross-scope. |
+
+## Declined (annotation left in place, reason written)
+
+| File:line | Rule | Why declined |
+|---|---|---|
+| `src/env.ts:36` | env default in caller | With `SKIP_ENV_VALIDATION`, `createEnv` returns the raw runtime env, so a zod `.default()` never applies. Moving the default into the schema would make `new URL(path, undefined)` throw and the contributions graph fall back to `[]` in skip-validation environments. The caller fallback is the one that always holds. |
+| `src/hooks/use-reduced-motion.ts:10` | library exists | Motion's `useReducedMotion` (`framer-motion/dist/es/utils/reduced-motion/use-reduced-motion.mjs`) reads the preference once into `useState` and does not react to changes ("TODO See if people miss automatically updating"). It returns `null` on the server, so the first render animates. The local hook follows changes via `useSyncExternalStore` and uses `true` as the server snapshot. Renaming it to say so is an exported-symbol rename with 9 importers in `src/app`/`src/components`. |
+
+## Notes for other scopes
+
+- `scripts/link-previews/utils.ts:154` keeps its own copy of the manifest schema; it can import `linkPreviewManifestSchema` from `@/lib/link-preview.shared`.
+- `src/app/(home)/blog/[slug]/page.tsx:52` can use `githubBranch` from `@/constants/config`.
+- `src/app/(home)/uses/_components/logo.tsx` can import `ThemedImage`, after which `Logo` in `src/types/uses.ts` can be deleted.
+
+Checks after the last band: `bunx tsc --noEmit` clean, `bun run check` clean (402 files, 0 errors). Earlier bands showed format errors only in `src/app` and `src/components` files edited by other agents; they cleared by the final run.
+
+## emails, scripts, root config
+
+# Slopradar resolutions: `emails/`, `scripts/`, root config
+
+Line numbers are the `TODO(slopradar)` lines as they stood before this round (after the lead's round 1 fixes to `scripts/lint.ts` and `scripts/link-previews/utils.ts`).
+
+## Band 1: link checker
+
+| # | File | Rule | What changed |
+|---|------|------|--------------|
+| 1 | `scripts/lint.ts:1` | unclear-name | Renamed to `scripts/check-links.ts`; `check:links` in `package.json` points at it. No other reference to the old path outside `plans/reviews`. |
+| 2 | `scripts/lint.ts:30` | duplication | The blog and projects `populate` entries share a `toParams(pages)` mapper; the two `await Promise.all` calls over plain objects are gone. `check:links` still reports 32 URLs, 0 fallbacks, 0 errors. |
+
+## Band 2: link-preview correctness
+
+| # | File | Rule | What changed |
+|---|------|------|--------------|
+| 3 | `scripts/link-previews/utils.ts:153` | swallowed-errors | `loadManifest` returns `null` only for `ENOENT`; any other read error, malformed JSON or a manifest that fails the new zod schema now throws, so `generate` can no longer rebuild from `{}` and overwrite it. The schemas live beside `loadManifest` (not in `src/lib/link-preview.shared.ts`, which is outside this scope) and are tied to the interfaces with `satisfies z.ZodType<LinkPreviewEntry>` / `<LinkPreviewManifest>`, so they cannot drift. The current manifest (159 entries) parses. |
+| 4 | `scripts/link-previews/utils.ts:193` | floating-promise | The route handler returns `route.abort()` / `route.continue()`. |
+| 5 | `scripts/link-previews/utils.ts:202` | swallowed-errors | The `networkidle` error is kept: if the `domcontentloaded` fallback also fails, the first error is what the entry records. The extra 3000 ms is `screenshot.waitAfterFallback` in config. One edge: a `goto` that resolves `null` without throwing no longer triggers the fallback; that only happens for same-document navigations, never on a fresh page. |
+
+## Band 3: `next.config.ts`
+
+Verified by loading the old and new config through Next's own `loadConfig` (dev and build phases) in a scratch copy of the project, then diffing the resolved values; only the intended keys changed. The dev server on :3111 reloaded itself once when the file was written (Next restarts on a config change; it was not killed or restarted by hand), and `/`, `/blog`, `/projects`, `/about` and `/blog/hello-world` return 200 on the new process.
+
+| # | File | Rule | What changed |
+|---|------|------|--------------|
+| 6 | `next.config.ts:8` | platform-api | `jiti` and the dynamic import are gone; `import './src/env'` at the top. Next's legacy `next.config.ts` loader compiles it to `require('./src/env')` and its require hook transpiles `env.ts` (Node 24 can `require` the ESM-only `@t3-oss/env-nextjs`). Checked: with no env the new config fails with "Invalid environment variables" exactly like the old one, with `.env` it loads, and `SKIP_ENV_VALIDATION=true` still skips. `jiti` removed from `dependencies` with `bun remove`; it stays installed transitively (`@tailwindcss/node`, `react-doctor`), and `bun install --frozen-lockfile` reports no changes. |
+| 7 | `next.config.ts:23` | dead-config | Removed `experimental.useTypeScriptCli` and its TS7 comment. `config-shared.js` defaults it to `true` and `useTypeScriptCli.md` says the CLI checker is the default; the resolved config still reports `true`. |
+| 8 | `next.config.ts:31` | dead-config | `images.qualities` is `[75, 85]`. Only `IMAGE_QUALITY = 85` (`blur-image.tsx`, `work-card.tsx`) and the default 75 are requested in `src` and `content`. |
+| 9 | `next.config.ts:33` | dead-config | Partly declined. Removed the `avatars.githubusercontent.com` and `fumadocs.dev` patterns: no `next/image` src uses them (user and testimonial avatars go through the Base UI `Avatar`, a plain `img`; the only remote image in `content` is on `raw.githubusercontent.com/techwithanirudh`). Kept `port: ''`, which is not the default: `match-remote-pattern.js` skips the port check only when `port` is undefined, so `''` limits the pattern to the default port and dropping it would let any port match. |
+| 10 | `next.config.ts:80` | duplication | Removed the `/work` redirect. Next's `getPathMatch('/work/:path*')` matches `/work` with an empty `path` and `prepareDestination` gives `/projects`; on :3111 `/work` still answers 308 to `/projects` and `/work/gorkie` 308 to `/projects/gorkie`. |
+| 11 | `next.config.ts:115` | dead-config | Declined. The built-in list (`next/dist/lib/server-external-packages.jsonc`) is only read by `build/webpack-config.js`. This app builds with Turbopack, and neither Next's JS nor the Turbopack binary (`next-swc.darwin-arm64.node`, byte search) contains that list, so nothing shows Turbopack would externalize `ts-morph`, `typescript` or `shiki` without these entries. Annotation removed, entries kept. |
+| 12 | `next.config.ts:131` | undeclared-dependency | `framer-motion` declared as `14.2.0` (exact, the same version `motion@14.2.0` depends on per `bun.lock`) with `bun add --exact`. The alias comment stays. |
+| 13 | `next.config.ts:151` | indirection | Without jiti nothing in the config is async, so `createNextConfig`, the `NextApp` wrapper and the reduce are gone: `export default withBotId(mdxPlugin(bundleAnalyzerPlugin(nextConfig)))`, the same order the reduce applied. The LAN `allowedDevOrigins` entries are kept as they were. |
+
+## Band 4: emails, scripts, source.config
+
+Checked by rendering `NewsletterWelcomeEmail` with its PreviewProps before and after and diffing the HTML.
+
+| # | File | Rule | What changed |
+|---|------|------|--------------|
+| 14 | `emails/newsletter-welcome.tsx:21` | duplicate-types | `posts` is `(Pick<BlogPage['data'], 'title' \| 'description' \| 'image'> & { url: string })[]` (type-only import from `@/lib/source`, erased at compile). `sendWelcomeEmail` still type-checks. |
+| 15 | `emails/newsletter-welcome.tsx:45` | a11y | The post image `alt` is the post title. The only HTML diff is the three `alt` values. |
+| 16 | `emails/newsletter-welcome.tsx:152` | stale-fixture | PreviewProps use the three real posts in `content/blog` (`/blog/<slug>` URLs, their real images and descriptions). Deleted `public/images/blog/{pages,markdown-examples,using-mdx}.png`; nothing else referenced them. |
+| 17 | `emails/contact-notification.tsx:69` | narration-comment | Deleted the comment and the line it annotated. |
+| 18 | `source.config.ts:52` | library-exists | `transformerEscape` replaced by `transformerRemoveNotationEscape` from `@shikijs/transformers`, added with `bun add --exact` at shiki's version (4.5.0). The implementation and name string are identical to the removed copy. |
+
+### Declined (annotation removed, reason)
+
+| File | Rule | Why |
+|------|------|-----|
+| `emails/newsletter-welcome.tsx:40` | inconsistent-scale | Rendering shows scale classes emit `rem` (`1rem`, `1.5rem`) while the arbitrary classes emit `px`. Clients that ignore `rem` (Outlook) would lose the spacing, and the markup would change. The arbitrary values are kept on purpose. |
+| `scripts/link-previews/utils.ts:140` | magic-string | `devices['Desktop Chrome']` is a Windows UA on a newer Chrome with extra context options, so sites could serve different pages and previews would change on regeneration (owner decision 15). Kept the explicit UA. |
+| `scripts/generate-portrait.ts:11` | library-exists | `portrait.svg` has no `style`, `xlink` or multi-hyphen attributes, so the regexes are correct for the only input. `@svgr/core` and `svgo` would add two dependencies and rewrite the generated `src/.../portrait-face.tsx` (outside this scope). |
+| `source.config.ts:14` | redundant-schema | Not equivalent: `z.coerce.date()` also accepts `null`, numbers and booleans, so an empty `date:` in frontmatter would silently become 1970. The string\|Date union is what rejects those. |
+
+### Skipped (annotation left in place)
+
+| File | Reason |
+|------|--------|
+| `emails/contact-notification.tsx:25` | Shared email palette and fonts change how emails look (owner decision 15). |
+| `emails/newsletter-welcome.tsx:66` | Same: shared `emails/theme.ts` fonts. |
+| `emails/newsletter-welcome.tsx:36` | Fix is in `src/lib/resend.ts` (outside scope, other agents edit `src/`). Once `image` is passed through, the placeholder fallback can go. |
+| `next.config.ts:99` | Build gate, owner decision 1. |
+
+## Verifier findings
+
+- Bug 2 (PR wording): GitHub's public Events API omits `merged`, so merged PRs also read "Closed".
+- Bug 4 (revoke-session): now has the BotID check like every other user action (behaviour change).
+- `scripts/link-previews/config.ts`: frontmatter schema fields made independent again (`.catch(undefined)`), restoring the old per-field check.
+- `scripts/link-previews/{generate,fix,types}.ts` were merged into `index.ts` and the `fix-previews` script removed (`--all` is now `--retry-failed`).
+- `searchDocs` tool lost its unused `locale` input (the schema the model sees changed).
+- Chat system prompt parts are separated by one blank line instead of two.
+
+# Round 2 fixes
+
+| File | Rule | What changed |
+|------|------|--------------|
+| `src/lib/resend.ts` | bug | Newsletter links were `https://host//blog/...` (baseUrl is a URL object); built with `url()`; a post without an image passes `undefined` so the template placeholder shows. Removes the `emails/newsletter-welcome.tsx` dead-fallback annotation too. |
+| `src/lib/ai/prompts/chat/tools.ts`, `directives.ts` | stale-prompt | Removed the `locale` input from the searchDocs prompt; selected-context directive now describes the real `[Selected Context: {json}]` and `[Client Context: {json}]` blocks. |
+| `src/components/features/auth/sign-in-modal.tsx` | swallowed-error | `signIn.social` resolves `{ error }` instead of throwing; the result is now checked, so buttons re-enable and a toast shows on an API failure. |
+| `src/components/features/assistant/tools/contact-form.tsx` | wrong-icon | Canceled state shows `Icons.info` instead of the success check. |
+
+# Perf pass (production build, Lighthouse mobile, 6 pages)
+
+Before -> after: home 73 -> 73, about 74 -> 74, projects 80 -> 80, blog 80 -> 80, post 76 -> 76, contact 79 -> 79. Home page weight 1592 KB -> 1459 KB (others unchanged). LCP/FCP differences are within run noise.
+
+Applied (behaviour-preserving):
+- `public/images/testimonials/{1,2,3}.jpg`: were 400px/240px images (two were PNGs named .jpg, 77 KB, 46 KB, 21 KB) shown at 24px; replaced with 96x96 progressive JPEGs (2.7 KB, 2.5 KB, 3.7 KB), 4x the displayed size. Saves 133 KB on the home page. Originals are in the session scratchpad.
+
+# Bug 2 follow-up: merged PRs read Merged
+
+GitHub's public Events API omits `merged`, so `src/app/(home)/about/_components/feed/data.ts` now makes one extra request per feed fetch: `search.issuesAndPullRequests` with `is:pr is:merged author:<githubUser>` (100 newest by update), cached with the same 5 minute revalidate under its own key. Closed `PullRequestEvent`s whose `owner/repo#number` is in that set get `merged: true` and `event.tsx` reads "Merged"; otherwise "Closed". The search runs only when the feed contains a closed PR event, never per PR. On a search failure the error is logged, an empty set is used (so rows read "Closed") and, because the cached function throws, the failure is not cached.
+
+Verification: tsc clean. In the current public events none of the 11 closed PR events (#97-#109) is merged (checked with `gh pr view`), so /about correctly shows "Closed" for #109 and "Opened" for #111; no merged PR is in the feed window to show "Merged" in the browser. The key format (`techwithanirudh/portfolio#95`) was checked to match between the events payload and the search results.
+
+# Incident: source.config.ts export
+
+During the Opus resolve round an agent exported a shared `workLinks` zod object from `source.config.ts`. fumadocs-mdx treats every export of that file as a collection and throws `Unknown export "workLinks", you can only export collections from source configuration file`, which put a Build Error on the dev server (content/blog/gorkie-sandboxes.mdx). Fixed within minutes: `source.config.ts` exports only `blog`, `work` and the default config, `github`/`website` use `z.url().optional()` inline, and the `scripts/link-previews/config.ts` duplicate-schema annotation was restored (skipped). Rule for all resolves: `source.config.ts` may only export collections.
+
+# Incident: "Simba lost the scent" over the LAN address
+
+Cause: the BotID client script (`botid/client`, rendered in `src/app/layout.tsx`) patches `fetch` for POST routes and signs requests with `crypto.subtle.importKey`. `http://192.168.0.100:3111` is not a secure context, so `crypto.subtle` is undefined there and every POST `fetch` threw `TypeError: Cannot read properties of undefined (reading 'importKey')` before any request left the browser. Simba's useChat saw a failed send and showed the error state; no request ever reached the server, which is why the dev log had no /api/chat error. The same break hit every other POST (guestbook, contact, sign-in) on that address. localhost is a secure context, which is why headless and localhost runs passed.
+
+Fix: `<BotIdClient>` renders only when `isProduction`. Production is https, so its behaviour is unchanged; in development the server-side `checkBotId` already returns HUMAN without a bypass setting. Verified: POST /api/chat from http://192.168.0.100:3111 now returns a response (400 for an empty body, 200 with a full stream for "render his las t5 proejct", cards rendered, no error).
+
+# Round 3: Opus resolve pass
+
+Per-scope logs merged verbatim. Skipped and declined annotations stay in the code with their reasons listed.
+
+## src/app
+
+# Slopradar resolutions: `src/app`, round 3
+
+Paths are relative to `src/app`. Line numbers are the lines of the `TODO(slopradar)` comment before this pass. 111 annotations at the start, 57 left at the end: 53 resolved, 1 declined with the annotation removed, the rest skipped (left in place). Nothing outside `src/app` was edited. Not committed.
+
+## Band 1: Opus-round findings
+
+| # | file:line | rule | what changed |
+|---|-----------|------|--------------|
+| 1 | api/chat/utils/tools/render-portfolio.ts:54 | unused-export | `RenderPortfolioOutput` is no longer exported. |
+| 2 | api/chat/utils/tools/render-portfolio.ts:60 | duplicate-logic | `navigate.ts` exports `parseSitePath(target)` (its own `parseTarget` + `toPathAndHash`: trims, drops trailing slashes, maps `/work` to `/projects`), and `resolveNavigation` uses it. `render-portfolio` `toSlugs(value, section)` and `get-page-content` `getText` split its `path`. The `/work` alias is now written once (`WORK_PREFIX`); `findWork` matches only `projects`, `getText` drops `section === 'work'` and its own `QUERY_OR_HASH` regex. Same results for bare slugs, `/projects/x`, `/work/x`, trailing slashes, `?`/`#`. Edge: `getPageContent` now also accepts a full URL (`https://host/blog/x`), where before the scheme became the "section" and returned "Page not found". |
+| 3 | api/chat/utils/tools/get-page-content.ts:24 | duplicate-logic | Resolved by #2 (the code copies of the alias are one; the `next.config` redirect is the visitor-facing one and stays). |
+| 4 | api/chat/utils/tools/render-portfolio.ts:120 | dead-fallback | Dropped both `?? 'Untitled'`. |
+| 5 | api/chat/utils/tools/render-portfolio.ts:229 | pass-through | `execute: buildSpec`. |
+| 6 | api/chat/route.ts:78 | magic-string | The tool map is built once per request as `tools` (passed to `streamText`); `toolsAfterNavigation = Object.keys(tools).filter(name !== 'navigate')` with a type guard. Same four names in the same order. The `:168` annotation moved with the map (still skipped, see below). |
+| 7 | sitemap.ts:14 | duplicate-logic | Local `url` removed; imports `url` from `@/lib/url` (`toString()` equals `href`). |
+| 8 | sitemap.ts:46 | magic-string | Static entries read `pages.<key>.path` (home, blog, projects, about, contact, resume, uses, colophon, guestbook) and tag URLs `${pages.blog.path}/tags/...`; order, frequency and priority kept. Local array renamed `staticEntries` (it shadowed nothing but read like `pages`). |
+| 9 | robots.ts (no own annotation, named by sitemap.ts:14) | duplicate-logic | `sitemap: url('/sitemap.xml')`. |
+| 10 | (home)/blog/rss.xml/route.ts:25 | duplicate-logic | All six `new URL(x, baseUrl).href` -> `url(x)`; `/blog/rss.xml` is one module constant `feedUrl`. `id`/`link` stay `baseUrl.href`. |
+| 11 | (home)/blog/[slug]/page.tsx:51 | magic-string | GitHub link interpolates `githubBranch`. |
+| 12 | (home)/blog/[slug]/page.tsx:53 | duplicate-logic | `markdownUrl={url(['blog.mdx', params.slug])}`, `ShareMenu url={url(page.url)}`; `baseUrl` import dropped. |
+| 13 | (home)/blog/[slug]/page.tsx:134 | inconsistent | `generateStaticParams` uses the same `flatMap` form as projects. |
+| 14 | (home)/search/_components/search-client.tsx:214 | nested-component | Hoisted to module-level `SearchResultItem` (typed with fumadocs' `SearchItemType`), same markup. Correction to the finding: fumadocs calls `Item(props)` and `Empty()` as plain functions (`dialog/search.js:293-297`), not as elements, so nothing remounted; this is a readability change only. |
+| 15 | (home)/search/_components/search-client.tsx:74 | duplicate-logic | `emptyLinkByScope` table (`all: null`, `blog: undefined` = the default link, `projects: {...}`) and one `Empty` wrapping `CenteredEmpty`/`PostEmpty`. |
+| 16 | (home)/uses/_components/setup.tsx:17 | dead-class | Deleted the dead `transition-filter` class instead of the suggested `transition-[filter]`. On closer look the hover fade already works: `BlurImage` puts `transition-[filter,scale]` on the image, and the `duration-300` here wins via tailwind-merge. `transition-[filter]` would have made tailwind-merge drop `transition-[filter,scale]`, so the load-in `scale-[1.02]` -> 1 would snap. Checked with `cn()`; the served class string only loses `transition-filter`. No visible change. |
+| 17 | (home)/uses/_components/logo.tsx:3 | duplicate-type | Imports `ThemedImage` from `@/types`. The `Logo` alias in `src/types/uses.ts` can now be deleted (types scope; its annotation is there). |
+| 18 | (home)/projects/[slug]/page.tsx:19 | unclear-name | `WorkPage` imported under its own name; same for `BlogPage` in `blog/[slug]/_components/header.tsx`. |
+| 19 | (home)/projects/[slug]/page.tsx:84 | dead-fallback | `{page.data.description}` here and in the blog header (`?? ''` rendered nothing either way). |
+| 20 | (home)/contact/actions/contact.ts:10 | no-comments | Deleted the narration above `sentAtFormat`. |
+| 21 | (auth)/account/_components/account-settings.tsx:177 | redundant-conversion | `formatAccountDate(date: Date)`, no `new Date`. The user comes from the server session (drizzle `Date`, no cookie cache) and React Flight keeps `Date`. |
+| 22 | (auth)/account/_components/account-settings.tsx:55 | dead-fallback | `<EditNameDialog name={user.name} />`. |
+| 23 | (auth)/account/_components/active-sessions.tsx:62 | redundant-conversion | `b.updatedAt.getTime() - a.updatedAt.getTime()` and `format(session.updatedAt, ...)` in `SessionCard`. |
+| 24 | (auth)/account/_components/active-sessions.tsx:73 | swallowed-error | `console.error('Failed to list sessions:', error)` before the same fallback card. |
+| 25 | (auth)/account/_components/active-sessions-skeleton.tsx:4 | dead-prop | `count` prop removed; `const items = [1, 2, 3]`. |
+| 26 | (home)/about/_components/feed/data.ts:17 | unused-export | `ActivityEventItem` no longer exported. |
+| 27 | (home)/guestbook/actions/utils/moderation.ts:7 | unused-export | `ModerateGuestbookEntryInput` no longer exported. |
+| 28 | (llms)/utils/site-pages.ts:5 | unused-export | `SiteSection` no longer exported. |
+| 29 | (llms)/utils/markdown-pages.ts:9 | unused-export | `MarkdownPage` no longer exported. |
+
+## Band 2: older leftovers
+
+| # | file:line | rule | what changed |
+|---|-----------|------|--------------|
+| 30 | (home)/contact/_components/contact-form.tsx:78 | library-exists | `action.isExecuting` / `action.hasSucceeded` instead of comparing `status` (contact-form, newsletter-form). In next-safe-action 8.7.3 these are exactly `status === 'executing'` / `'hasSucceeded'` (`getActionShorthandStatusObject`). |
+| 31 | (home)/guestbook/_components/reactions.tsx (named by #30) | library-exists | `useOptimisticAction` `isExecuting` replaces `status === 'executing'` (x2). |
+| 32 | (home)/guestbook/_components/form.tsx:118 | library-exists | `const { isExecuting } = action`; `action.hasSucceeded`. |
+| 33 | (home)/guestbook/_components/entry-card/use-entry-actions.ts:65 | library-exists | `isBusy = edit.isExecuting \|\| remove.isExecuting \|\| ban.isExecuting`. |
+| 34 | (home)/guestbook/_components/reactions.tsx:109 | redundant-annotation | Dropped `: GuestbookReactionItem` on the map callback. |
+| 35 | (home)/colophon/_components/technology.tsx:10 | magic-number | `COLOPHON_COLUMNS = 3` exported from `colophon-grid.tsx`, used for the default `columns`, the lg border math and the filler count. `lg:grid-cols-3` stays literal (Tailwind needs it). |
+| 36 | (home)/about/_components/story-track.tsx:41 | unchecked-cast | `node.offsetParent instanceof HTMLElement ? node.offsetParent : null`. |
+| 37 | (home)/about/_components/story-track.tsx:54 | unchecked-cast | `for (const [index, current] of rest.entries())` and `if (!(previous && next))`; `previous` is always defined, so the path string is unchanged. |
+| 38 | (home)/about/_components/feed/data.ts:86 | swallowed-error | `console.error('GitHub compare commits failed:', error)`, still returns `[]`. The merged-PR search added by the other agent is untouched. |
+| 39 | (home)/about/_components/feed/event.tsx:6 | misplaced-type | `GitHubEvent` and `PushCommit` moved into `feed/event-types.ts` (the non-view file `data.ts` already imports); `event.tsx` and `data.ts` import them from there. |
+| 40 | (home)/about/_components/feed/event.tsx:82 | duplicate-logic | The twelve wrapper components and the JSX switch became `describeEvent(event, commits, merged)` returning `{ description, icon }` (helpers for push, PR, issue, issue comment, create, delete; one-liners inline), and `GitHubEventRow` renders one `EventRow`. Every description string and icon is the same as before; the PR wording annotation (`:134`, owner call) moved with `describePullRequest`. The payload-type reuse the note mentions is left with the declined `data.ts:60` typed-payload item. Checked `/about`: the feed rows read the same ("Pushed 1 commit to ...", "Opened pull request #111 on ..."). |
+| 41 | (home)/blog/[slug]/_components/header.tsx:86 | duplicate-logic | The eight corner ticks map over a `cornerTicks` table of `[position, size]`; class strings are built in the original token order, so the SSR markup is byte-identical (checked). |
+| 42 | (home)/_components/portrait.tsx:108 | duplicate-logic | One `BlinkingEyes({ fill })` group used by `Portrait` (no fill, the outer group sets it) and the still chip (`fill={PORTRAIT_EYE_FILL}`). Same markup. |
+| 43 | (home)/_components/hero.tsx:80 | magic-string | `href={pages.projects.path}`; the other route literals it lists: `_components/about.tsx` and `resume/page.tsx` `pages.about.path`, `_components/experience.tsx` `${pages.about.path}#experience`, `about/_components/experience.tsx` `pages.resume.path`. (`stack.tsx` had none left.) Served hrefs unchanged. |
+| 44 | (home)/_components/cta.tsx:34 | magic-string | `href={pages.contact.path}`. |
+| 45 | (home)/guestbook/_components/entries.tsx:46 | duplicate-logic | `EntriesNotice({ children })` used by the empty state and `GuestbookEntriesError`. |
+| 46 | (home)/_components/contributions.tsx:45 | unchecked-cast | `event.target instanceof Element ? event.target.closest(...) : null`. |
+| 47 | (resume)/resume/page.tsx:166 | redundant-conversion | `project.data.date.getFullYear()`. |
+| 48 | api/chat/utils/llms.ts:8 | unclear-name | Renamed to `api/chat/utils/context.ts`; the chat route imports it. |
+| 49 | og/_lib/route.tsx:15 | unclear-name | Renamed to `og/_lib/create-og-route.tsx`; both OG routes import it. `/og/blog/<slug>/image.webp` and `/og/work/<slug>/image.webp` still 200 `image/webp`. |
+| 50 | (home)/guestbook/_components/entry-card/actions/index.tsx:56 | unclear-name | Flattened to `entry-card/card-actions.tsx` (folder removed); `entry-card/index.tsx` imports `./card-actions`. |
+| 51 | (llms)/utils/profile-text.ts:4 | unclear-name | `getProfileText` -> `getSiteText`, file `site-text.ts`; barrel line, `llms-full.txt` and `api/chat/utils/context.ts` updated. The `about.md` annotation's path reference updated. |
+| 52 | (llms)/utils/profile.ts:76 | nested-logic | `experienceLength` and `firstRoleStart` computed beside `sinceFirst` and interpolated; `/about.md` still reads "about 4 years since the first role in Apr 2022 (...)". |
+| 53 | (llms)/utils/site-pages.ts:57 | duplicate-logic | One `toSitePage(page: BlogPage \| WorkPage)` for both lists. |
+| 54 | api/chat/utils/tools/search-docs.ts:20 | duplicate-logic | `toDocument(tag)` mapper over `blogSource` and `workSource` (`Promise<CustomDocument>` return type replaces `satisfies`). Same documents, same order. |
+| 55 | (auth)/account/_components/account-settings.tsx:42 | duplicate-logic | New `account-field.tsx` `AccountField({ label, children })` (the label/value column) used by the four rows of `AccountSettings` and of `AccountSettingsSkeleton`; the differing outer row wrappers stay. Same markup. |
+
+## Declined (annotation removed)
+
+| file:line | reason |
+|-----------|--------|
+| (home)/blog/[slug]/page.client.tsx:110 | `Promise.withResolvers()` is Safari 17.4+/Chrome 119+/Firefox 121+, while Next 16 targets Safari 16.4 and Chrome/Firefox 111 (`docs/03-architecture/supported-browsers.md`) and SWC does not polyfill built-ins. The call runs at module load, so the blog post page would throw on Safari 16.4-17.3. |
+
+## Skipped (annotation left in place)
+
+| file:line | reason |
+|-----------|--------|
+| api/chat/route.ts:168 (now :130), api/chat/utils/tools/index.ts:8 | `src/lib/ai/chat/types.ts` does `import type { tools }` and `typeof tools`; a `createChatTools(writer)` factory or dropping the stub needs that lib file changed. |
+| api/chat/utils/tools/search-docs.ts:83 | Changes what the model reads back from `searchDocs` (assistant answers), same class as the declined `get-page-content.ts:20`. Owner call. |
+| (llms)/about.md/route.ts:12 | The three compositions differ (`about.md`: facts + about + commits; `site-text`: about + commits, no facts; `getPageContent('about')`: facts + about, no commits). One helper changes the text the model or the `.md` route serves (round-2 flag). Owner call. |
+| (llms)/utils/markdown-pages.ts:35 | Picking one name changes either the `/skills.md` route or the names `getPageContent` advertises to the model. Visible. |
+| (home)/_components/portrait.tsx:94 | The only `still` caller is `src/components/features/blog/author-byline.tsx` (components scope). |
+| All other remaining annotations | Unchanged reasons from the round 1 log: owner decisions (unstable_cache `feed/data.ts:91`, `(llms)/utils/index.ts` barrel, attribution `header.tsx:1`, PR wording `event.tsx:134`, `(llms)` text items), needs edits outside `src/app` (`@/lib` helpers for pagination, tags, metadata, format-date, initials, error log, theme tokens, validators limits, constants for socials/profile/copy, queries module, `SiteShell`, tsconfig alias, file moves to `src/components`/`src/lib`), or declined then (`contact.ts:15`, `feed/data.ts:60`, `newsletter.ts:63`, `newsletter-form.tsx:34`, `search-client.tsx:127`, `portrait.tsx:146`, `hero.tsx:66`, `entry-card/index.tsx:57`, `route.ts:71`, `get-page-content.ts:20`, `search-docs.ts:7`, `content-index.ts:13`, `create-llm-route.ts:24`, `testimonials.tsx:64`). |
+
+## Verification
+
+- `bunx tsc --noEmit`: no errors in `src/app`. At the last runs, errors appeared only in `src/components/search-redirect-input.tsx` and `src/components/ui-sounds.tsx` (another agent's work in progress).
+- `bun run check`: clean for `src/app`. The only findings were in `src/components` (other agents).
+- `/sitemap.xml`, `/robots.txt`, `/blog/rss.xml`, `/llms.txt` and `/blog.mdx/vscode-setup` are byte-identical to what they served before the first edit.
+- With scripts and dev stack traces stripped, the SSR HTML of `/blog/vscode-setup`, `/projects/anikode` and `/search` is identical before and after. `/uses` differs only by the removed `transition-filter` token. The remaining blog diff is `z-[100]` -> `z-100` from `src/components` edits.
+- `/`, `/about`, `/blog`, `/projects`, `/uses`, `/search`, `/guestbook`, `/contact`, `/llms.txt`, `/llms-full.txt`, `/about.md`, `/blog/rss.xml`, `/sitemap.xml`, `/robots.txt`, `/resume`, `/colophon`, `/account`, a blog post, a project and both OG images return 200 on :3111.
+
+## src/components
+
+# Slopradar resolutions, round 3: `src/components` (except `ui/`)
+
+Line numbers are the `TODO(slopradar)` lines before this pass. Paths are relative to `src/components`. 133 annotations at the start, 72 at the end: 61 resolved and removed, one rewritten after a partial fix (`search/dialog.tsx`), and the rest skipped or declined below.
+
+How it was checked: `bunx tsc --noEmit` and `bun run check` after each band (both clean at the end). Playwright (headless shell) against :3111 compared the body HTML of `/`, `/about`, `/blog` and `/projects` and the Simba experience card before and after, ignoring the live clock. The only differences are the intended z-index class names and a new live GitHub event on /about. It also checked the theme toggle, the search dialog (empty, typed, cleared, "theme" queries give the same groups, counts and first selection), the Simba panel ("where has he worked" renders the experience card, plus project and post cards), the mobile header z-indexes and skip link (computed 30/32/100), the JSON-LD on a post, a project and a tag page, and the 404 links.
+
+## Band 1: Simba tool parts (Opus round)
+
+| File:line | Rule | What changed |
+| --- | --- | --- |
+| `features/assistant/tools/navigate.tsx:115`, `tools/portfolio.tsx:112` | invalid-nesting | The pending line renders `Shimmer as='span'`, so the `<p>` inside `<p>` hydration warning is gone (checked in the console). The ellipsis is now `…`, like the other Simba lines. The span is a flex item, so it gets blockified like the old `<p>`: computed display, margin and height are unchanged. |
+| `features/assistant/message-list.tsx:126`, `tools/portfolio.tsx:24` | duplication | New `tools/types.ts` with `ToolPart<Name extends keyof ChatTools>`. It is used for `showContactForm` (x2), `navigate` and `renderPortfolio`. |
+| `tools/portfolio.tsx:99` | duplication | New `tools/status-line.tsx` with `ToolPendingLine` (icon plus Shimmer) and `ToolWarningLine`. The markup is class for class what both tools had. The navigate success line differs, so it stays inline. |
+| `tools/portfolio.tsx:50` | unchecked-cast | One overloaded `usePortfolioState(collection, key?)`, typed on `PortfolioState[C]` / `PortfolioState[C][string]`, is the only `useStateValue` call. Items still go through `statePath`, and `'/experience'` is now `` `/${collection}` ``. |
+| `features/assistant/message-metadata.tsx:40` | dead-code | `toolStatus` is a `Record<Exclude<keyof ChatTools, ToolWithOwnStatus>, …>`, so a new tool fails typecheck. The unreachable camelCase fallback is gone. A `hasOwnStatus` type guard replaces the `Set`. |
+| `features/blog/post-row.tsx:8` | unused-export | `PostRowPost` is no longer exported. |
+| `features/blog/post-row.tsx:20` | dead-prop | The `heading` prop is gone and the row always renders `<h3>`, as before. |
+| `features/work/work-card.tsx:28` | boolean-prop | `viewTransition` and `slugs` are replaced by an optional `transitionName`. `WorkGrid` passes `slugs.join('/')`, while Simba's panel passes nothing and lists the card fields explicitly. `SharedTransition` still renders no `<ViewTransition>` when there is no name, so the panel gets no unnamed boundary. |
+| `features/search/utils/groups.ts:58` | library-exists | `bucketByTag` uses `Map.groupBy`, which keeps the same first-seen key order. |
+| `features/search/utils/groups.ts:24` | unchecked-assertion | `orderTagGroups` stable-sorts the map entries by their `TAG_ORDER` rank, and unknown tags keep insertion order after the known ones. The `!` is gone. |
+| `features/search/utils/groups.ts:98` | duplication | Named `matchesSearch`. |
+| `features/search/results.tsx:51` | duplication | One `getTagMeta(tag)`. The `as keyof` casts are gone. |
+| `features/search/results.tsx:81` | redundant-conversion | Dropped `String()` x2 here and in `groups.ts` (`SortedResult<Content = string>`). |
+
+## Band 2: arbitrary values, root files, layout
+
+| File:line | Rule | What changed |
+| --- | --- | --- |
+| `layout/header/mobile/index.tsx:124` | arbitrary-value | `z-[30]` became `z-30`, `z-[32]` became `z-32` (pill, menu), `z-[25]` became `z-25` (text-selection popup) and `focus:z-[100]` became `focus:z-100` (skip link). The computed z-index was checked in the browser: 30, 32, 32, 100. |
+| `view-animation.tsx:10` | magic-number | Exported `staggerDelay(index, offset = 0)` (`offset + 0.05 * index`) and named the 0.2 cap `MAX_DELAY`. The seven in-scope callers use it. `offset + step * index` is the same float expression as before, so the `--reveal-delay` strings are unchanged. Callers in `src/app` still spell the step out. |
+| `ui-sounds.tsx:117` | duplication | Module-level `pressTarget(target)` is shared by `onPointerDown` and `onClick`. |
+| `search-redirect-input.tsx:37` | magic-string | The route comes from `pages.search.path`. |
+| `json-ld.tsx:18` | weak-type | `JsonLd` takes `Graph`, and `makeGraph(...nodes: Thing[]): Graph` (schema-dts). |
+| `json-ld.tsx:68` | redundant-conversion | `(lastModified ?? date).toISOString()` and `date.toISOString()`. |
+| `json-ld.tsx:96` | magic-string | Section names and paths and the tag breadcrumb read `pages.blog` / `pages.projects`. The tag URL uses `tagPath`. Checked on /blog/hello-world, /projects/portfolio and /blog/tags/intro: same names and URLs. |
+| `features/blog/tag-card.tsx:17`, `post-filters.tsx:53` | duplication | New `features/blog/tag-path.ts` `tagPath(tag)`, used by tag-card, post-filters and json-ld. |
+| `layout/lenis.tsx:14` | boolean-parameter | `scrollToTarget(lenis, target, { immediate })`, with both callers updated. |
+| `layout/page-fill.tsx:19` | duplication | `CrossPair` in `layout/sections/index.tsx` is used by `Section` and `PageFill`. Same DOM. |
+| `layout/footer/index.tsx:13` | dead-prop | `GuestbookBand` takes no props. The sentence is baked in before the same `{' '}` (same text nodes), and the unused `className` merge and the `cn`/`ReactNode` imports are gone. |
+| `layout/footer/clock.tsx:71` | duplication | One `CLOCK_BUTTON_PROPS` (className, size, variant) is spread on the skeleton and the live button. |
+| `layout/sections/hero.tsx:4` | inconsistent-imports | hero, list-section and separator import `@/components/layout/sections` (the same module as `./index`). |
+| `layout/header/link-item.tsx:32` | redundant | `<Link … />` self-closing, with children coming through `props`. |
+| `layout/header/theme-toggle.tsx:34` | unclear-name | `themeOptions` (`Icon`, `label`, `value`) `satisfies` a typed shape. The light-dark branch filters out `system`, and the labels are stored ("Light theme", "Dark theme", "System theme", the same strings as before). |
+| `layout/header/theme-toggle.tsx:94` | needless-expression | `aria-label='Toggle theme'`. |
+| `layout/header/mobile/menu.tsx:81` | duplication | One `footerIconClassName` for the social links and the assistant button. |
+| `layout/footer/links.tsx:17` | unclear-name | `ListItem` renamed to `LinkGroup`. |
+| `layout/footer/links.tsx:55` | duplication | New `layout/split-link-items.ts` `splitLinkItems(items)`, used by the header's `useMemo` and the footer (the footer reads `navItems`, which is `on` nav/all, the same set as before). |
+| `layout/header/index.tsx:264` | unchecked-cast | `event.target instanceof Node` / `instanceof Element` replace the two casts. A null target or missing ref still closes the menu, as before. |
+| `layout/sections/split.tsx:89` | redundant-type | `SectionHeaderProps` is used directly (`align` was already optional). |
+| `features/assistant/assistant.tsx:31` | magic-structure | `transport` is a module constant (`DefaultChatTransport<MyUIMessage>`). |
+| `features/assistant/mascot/use-look.ts:37` | library-exists | `clamp` comes from `motion/react`, and the tuning values are named (`LOOK_RANGE_PX`, `LOOK_SHIFT_X_PX`, `LOOK_SHIFT_Y_PX`, `LOOK_TILT_DEG`). The arithmetic is the same. |
+| `features/toc/popover.tsx:138` | library-exists | `clamp(0, 1, value)` is computed once and used for the arc and for `aria-valuenow`. |
+| `features/assistant/mascot/hooks.ts:29` | pass-through-helper | `playSubmitAnimation` is inlined in `input.tsx` as `mascot?.setActivity(animations.submit)`. |
+| `features/assistant/input.tsx:56` | inconsistent-naming | `MaxSourcePreviewChars` renamed to `MAX_SOURCE_PREVIEW_CHARS`. |
+| `features/assistant/input.tsx:107` | duplication | One `canSend`. `onStart` returns on `isLoading \|\| !canSend`, and the submit button's `disabled={!(isStreaming \|\| (canSend && !hasPendingToolInput))}` is the same boolean as before (De Morgan). |
+| `features/assistant/mascot/controller.ts:9` | unchecked-cast | `pick` takes `readonly [T, ...T[]]` and returns `items[i] ?? items[0]`. Both callers pass non-empty `as const` tuples. |
+| `features/auth/sign-in-modal.tsx:119` | magic-structure | `providers` is a module constant. |
+| `features/auth/user-button.tsx:38` | needless-expression | `aria-label='User menu'`. |
+| `features/work/experience-timeline.tsx:37` | boolean-parameter | `toEntries(experiences, variant)`. |
+| `features/work/experience-timeline.tsx:110` | unclear-name | `Node` renamed to `NodeComponent`. |
+| `content/mdx/mermaid.tsx:28` | swallowed-error | `catch (error)` logs `console.error('Failed to render Mermaid diagram:', error)`. The code-block fallback is unchanged. |
+| `content/mdx/github-repo.tsx:124` | inconsistent | The anchor spreads `externalLinkProps`. |
+| `preview-link.tsx:49` | duplication | New `external-link.ts` `externalLinkProps` (a plain module, so the server components `github-repo` and `github-code` can import it). Used by preview-link, github-repo (local copy deleted), github-code and the mobile menu socials. Same `rel`/`target` values. `ai-elements/sources.tsx` (`'noreferrer noopener'`, a different attribute value) and `page-actions.tsx` (`rel='noopener'`, its own annotation) are left alone. |
+| `content/mdx/embed.tsx:19` | duplication | One `FrameOutline` for the ring overlay, used by `IframeEmbed` and `FramedImage`. The two wrappers differ (`div` vs `figure` with `[&_img]:rounded-xl`), so they stay. |
+| `icon-swap.tsx:19` | dead-config | `IconSwapItem` always renders `m.span`. Dropped the `as` prop, the `MotionElement` union and the `as={m.span}` in both callers. |
+| `icons/icons.tsx:155`, `:163`, `:172` | unused-export | Deleted `Icons.calendar`, `Icons.code` and `Icons.ellipsis` and their imports. Grepped `src content emails scripts`, including the dynamic `Icons[chapter.icon]` (story chapters use `wrench` and `codeXml`). This does not touch the icon-mix standing exception. |
+| `features/assistant/message-list.tsx:99` | magic-string | New `features/assistant/owner-name.ts` (`ownerName`, the lowercased first name of `owner`). The empty state and the three contact-form strings (sent, intro, placeholder) are template literals, so each stays one text node with the same text (checked in the panel). |
+| `features/not-found/not-found-content.tsx:9` | duplication | `href`/`label` come from `pages.about/projects/blog/guestbook`, and only the descriptions stay local. Checked on a 404: same links and labels. |
+| `ai-elements/markdown.tsx:134` | unchecked-cast | `processCached(text)` holds the LRU. The oldest key is read from the iterator result with a `done` check, so there is no `as string`. |
+| `features/search/utils/groups.ts:18` | duplication | One table in new `features/search/utils/tags.ts` (`heading`, `icon` and `path` from `pages`). `TAG_ORDER`, `tagFromUrl` and `getTagMeta` derive from it. The local tables in `groups.ts` and `results.tsx` are gone. |
+| `features/search/dialog.tsx:304` | duplication | `SearchResultsList` renders once, between the main and the "after" groups. `afterGroups` is `[]` whenever there is a query, so the order is the same in both states (checked: same group order, option counts and first selection for empty, typed, cleared and "theme"). The two Fragment/CommandGroup blocks are one `renderGroup(group, { separated })`. |
+| `features/search/dialog.tsx:38` | long-function (partial) | Extracted `useSearchSounds(open)` (four sounds, the open effect and the throttled navigation sound). It is called after the `onMount` effect, so the effect order is unchanged. The annotation was rewritten to the remaining half (a `useCommandActions` hook). |
+
+## Skipped (annotation left in place)
+
+| File:line | Reason |
+| --- | --- |
+| `smooth-cursor.tsx:125` | Declined: `size-6` is `1.5rem`, which equals 24px only at a 16px root. The site never sets the root font size, so a visitor with a larger default font would get a larger cursor. The computed values are not identical. |
+| `features/work/work-card.tsx:92` | Changing `sizes` changes the DOM attribute and which image the browser downloads. That is a perf decision for the owner, not behaviour-preserving. |
+| `features/work/work-card.tsx:11` | The card type and `toWorkCard` need `lib/ai/chat/catalog.ts` and `render-portfolio.ts` (outside). Note for the lib scope: `ProjectItem.slugs` is no longer read by the client, now that `WorkCard` takes `transitionName`. |
+| `features/work/experience-timeline.tsx:27` | `periodYear` must be exported from `src/lib/employment-period.ts` (outside). |
+| `features/assistant/tools/portfolio.tsx:60` | The tool would have to ship `PostRowPost`'s shape (`src/app`/`src/lib`). |
+| `features/blog/post-row.tsx:23` | Splitting `meta` into a child or `PostRowCompact` changes the API of the hand-merged json-render row. Left for the owner. |
+| `ai-elements/shimmer.tsx:6`, `sources.tsx:12`, `tool.tsx:13`, `conversation.tsx:9`, `prompt-input.tsx:20`, `message.tsx:8` | Owner decision (round 2): keep or remove the unused `*Props` exports in the ai-elements registry slice. |
+| `ai-elements/sources.tsx:61` | Needs an option on `ui/collapsible` (excluded scope). |
+| `ai-elements/message.tsx:17` | Moving to `group-data-[role=…]` changes the class list. |
+| `ai-elements/markdown.tsx:22` | Merging the three markdown stacks changes the rendering pipeline (output risk). That is a change of its own. |
+| `layout/footer/clock.tsx:26` | Moving `transformOrigin` from inline style to `origin-top-left` changes the DOM (the style and class attributes). |
+| `layout/header/mobile/menu.tsx:65` | Removing the deferral changes when the menu closes relative to navigation, and explaining it needs a new comment, which this pass does not add. |
+| `layout/sections/hero.tsx:67` | Sharing `SectionHeader`'s helper would drop the empty `ViewAnimation` wrappers for null children (DOM change). |
+| `layout/footer/active-link.tsx:16` | `isActive`'s signature is in `src/lib/is-active.ts` (outside). |
+| `layout/sections/separator.tsx:9` | Four of the five callers are in `src/app`, and the rename changes an import used outside. |
+| `features/auth/user-button.tsx:82` | `DropdownMenuIconItem` wraps the icon in a `size-7` muted tile with different item padding (visible). There is no `pages.account` entry for the route (constants). |
+| `features/blog/index.ts:1` | Owner decision 5 (barrels), and its importer is in `src/app`. |
+| `features/search/dialog.tsx` (`useCommandActions`) | The rest of the long-function item. The actions close over router, lenis, theme, sign-in and `close`, so a hook would move most of the component. Left as the rewritten annotation. |
+| Carried over from rounds 1 and 2, unchanged reasons | `theme-provider.tsx:6`, `layout/wrapper.tsx:7`, `layout/sections/body.tsx:10`, `json-ld.tsx:155`, `blur-image.tsx:16`, `guestbook-cue.tsx:19`, `layout/header/index.tsx:151`, `features/assistant/tools/contact-form.tsx:6`, `:135`, `features/blog/author-byline.tsx:1`, `content/mdx/layout.tsx:2`, `:11`, `features/auth/user-avatar.tsx:52`, `layout/footer/links.tsx:79`, `layout/header/mobile/pill.tsx:18`, `layout/site-shell.tsx:32`, `features/work/experience-rail.tsx:34`, `page-actions.tsx:21` (cross-scope); `blur-image.tsx:4`, `layout/header/index.tsx:37`, `features/toc/popover.tsx:15` (owner decision 6); `features/contributions.tsx:3`, `:353` (owner decision 7); `layout/header/mobile/index.tsx:99` (owner decision 8); `layout/header/index.tsx:255`, `features/toc/popover.tsx:37`, `features/assistant/input.tsx:59`, `features/assistant/mascot/constants.ts:35`, `features/not-found/simba-loop.tsx:30`, `features/assistant/tools/navigate.tsx:44`, `inline-markdown.tsx:4` (declined earlier); `page-actions.tsx:166`, `search-redirect-input.tsx:52`, `layout/footer/index.tsx:42`, `layout/footer/sound-toggle.tsx:24`, `layout/footer/clock.tsx:23`, `layout/footer/links.tsx:119`, `layout/header/index.tsx:164`, `:492`, `layout/header/mobile/pill.tsx:41`, `features/assistant/input.tsx:208`, `features/assistant/text-selection-popup.tsx:75`, `features/work/experience-timeline.tsx:160`, `content/mdx/heading.tsx:9`, `content/mdx/github-code.tsx:29`, `ai-elements/tool.tsx:38`, `icons/brands/claude.tsx:4`, `icons/brands/github.tsx:6`, `:8` (visible or DOM change). |
+
+## src/lib, src/server, src/hooks, src/contexts, src/constants, src/types, src/env.ts, src/styles
+
+# Slopradar round 3 resolutions: `src/lib, src/server, src/hooks, src/contexts, src/constants, src/types, src/env.ts, src/styles`
+
+## Resolved
+
+| file:line | rule | what changed |
+| --- | --- | --- |
+| `src/lib/media.ts:8` | dead code | Deleted the `hoverFinePointer` and `reducedMotion` keys and the `REDUCED_MOTION_QUERY` import. No `MEDIA[...]` lookups exist; every `MEDIA.*` read uses the five keys that remain. |
+| `src/styles/globals.css:357` | dead CSS | Deleted `.divider-bottom-dashed`. Grepped `src content emails scripts next.config.ts source.config.ts`: no other uses. |
+| `src/styles/globals.css:408` | dead CSS | Deleted the `[data-hide-on-theme]` rule. Nothing sets the attribute (same grep). |
+| `src/styles/scroll-fade-effect.css:81` | dead CSS | Deleted `scroll-fade-effect-x`, the `show-left-mask`/`hide-right-mask` keyframes and the `--left-mask-width`/`--right-mask-width` `@property` rules. Only `scroll-fade-effect-y` is used (blog TOC, search dialog, Simba message list). |
+| `src/styles/globals.css:488` | duplication | Merged the two global `prefers-reduced-motion: reduce` blocks into the later one. The `::view-transition-*` rules moved down: only the `no-preference` block (which can never match at the same time) and rules for other elements sat between, and `*` does not match pseudo-elements, so the cascade is unchanged. `simba.css` keeps its own block (a different file). |
+| `src/lib/github-repo.ts:79` | dead fallback (x2) | Dropped `pushed_at ?? null` and `html_url ?? getGitHubRepoUrl(parsed)`. `full-repository` types both as `string` (`@octokit/openapi-types`). `pushedAt` narrowed to `string`; `formatPushedAt(string \| null)` in components still accepts it. |
+| `src/lib/github-contributions.ts:41` | swallowed error | The catch logs `console.error('GitHub contributions fetch failed:', error)` (same shape as `getActivityItems`) and still returns `[]`. A failure is still not cached. |
+| `src/lib/audio/preferences.ts:55` | unused export | `setSoundEnabled` is module-private; `toggleSound` is its only caller. |
+| `src/lib/cover.ts:1` | unused exports | `coverSwatches` and `CoverBlob` are module-private; `CoverSwatch` and `createCover` stay exported (`og.ts`). |
+| `src/lib/safe-action/middleware.ts:6` | unused export | `ActionContext` is module-private. |
+| `src/lib/metadata.ts:13` | unused export | `getSimpleOgImage` is module-private. |
+| `src/lib/metadata.ts:31` | shadowing | `clampOgParams(title, ...)` parameter renamed to `ogTitle`; the returned key is still `title`, so `src/app/og/route.tsx` is unchanged. |
+| `src/contexts/pages.tsx:15` | React 19 | `<PagesContext value={pages}>` instead of `<PagesContext.Provider>`. |
+| `src/lib/get-llm-text.ts:21` | redundant conversion | `format(page.data.lastModified, ...)` without `new Date(...)` (the generated type is `Date`, and fumadocs-mdx emits a `Date`); the two exports return the promise directly instead of `async`/`return await`. Same text. |
+| `src/lib/github-code.ts:45` | redundant work | `parseLineRange(parsed.hash)` instead of the whole URL. The regex is anchored on `#L...$` and the hash is always the end of the URL, so the result is identical. |
+| `src/lib/resend.ts:133` | unchecked cast | `isRateLimitError` narrows with `'name' in error` / `'statusCode' in error`; the `ResendError` interface and the `as` cast are gone. Same truth table. |
+| `src/lib/link-preview.shared.ts:4` | duplicate type | The zod schemas are the source; `LinkPreviewEntry` and `LinkPreviewManifest` are `z.infer` of them, so the `satisfies` links are no longer needed. `LinkPreviewImage` is unchanged. `scripts/link-previews` already imports these names from this file, so nothing there changes. |
+| `src/lib/ai/chat/catalog.ts:76` | duplicate type | `PostItem` = `Pick<BlogPage, 'url'> & Pick<BlogPage['data'], 'author' \| 'description' \| 'tags' \| 'title'> & { date: string }` (same fields and optionality). `ProjectItem` derives `slugs`/`url`/`title` from `WorkPage`; `description: string` and `image: string \| null` stay written out on purpose, because the page data has them optional and the tool normalises them (`?? ''`, `?? null`) for the JSON spec. Deriving those would change the shape the tool and the card share. |
+| `src/lib/ai/chat/catalog.ts:7` | comment rule | The six-line JSDoc that retold the renderPortfolio lookup is one line of intent. The JSDoc is not sent to the model; component `description` strings are unchanged. |
+| `src/lib/validators/guestbook.ts:28` | deprecated API | `.merge` replaced by `GuestbookEntrySchema.extend({ entryId })`. Same keys, same order, same strip behaviour. |
+| `src/lib/validators/guestbook.ts:33` | pass-through | The private `GuestbookEntryIdSchema` and its alias are gone; one `entryId` field schema is shared by the reaction, edit and delete schemas, and `GuestbookDeleteSchema` is defined directly. The name the action imports (`src/app/(home)/guestbook/actions/guestbook.ts`) is unchanged. |
+| `src/lib/validators/guestbook.ts:8` | magic number (in-scope half) | `GUESTBOOK_MESSAGE_MAX_LENGTH = 500`, and `ACCOUNT_NAME_MAX_LENGTH = 32` in `validators/account.ts`, interpolated into the messages, which read the same. The form `maxLength` call sites are in `src/app` (see cross-scope). |
+| `src/types/uses.ts:3` | pass-through | Deleted the `Logo` alias. `src/app/(home)/uses/_components/logo.tsx` now imports `ThemedImage`, so nothing imports the alias. `SoftwareItem.logo` is typed `ThemedImage`. |
+| `src/constants/navigation/links.tsx:8` | duplication (x5) | Each nav item reads `pages.<key>.title` and `.path`. Strings are identical (About, Projects, Blog, Contact, Guestbook and their paths). |
+| `src/constants/portfolio/faq.ts:13` | magic string (partial) | One `email` constant in `src/constants/site.ts`, used by the FAQ answer and the `mailto:` social link. Both strings are identical. `profile.obfuscatedEmail` stays a literal on purpose: deriving it with `btoa(email)` would put the plain address into every bundle that imports `profile`, which is what the obfuscation avoids. |
+| `src/lib/og.ts:152` | long function | `WASH_GRADIENT`, `GRAIN_ALPHA_MATRIX` and `grainFilter({ height, seed, width })` are split out of the template. Checked that the data URLs for four seeds at 1200x630 are byte-identical before and after. |
+
+## Skipped (owner decision)
+
+| file:line | reason |
+| --- | --- |
+| `src/lib/github-code.ts:96`, `src/server/db/queries/guestbook.ts:81` | Owner decision 4 (`unstable_cache` vs `'use cache'`). |
+| `src/lib/metadata.ts:7` | Owner decision 12 (`NEXT_PUBLIC_BASE_URL` required in production). |
+| `src/lib/is-active.ts:8` | Owner decision 6 (attribution). |
+| `src/lib/validators/index.ts:1` | Owner decision 5 (barrels). |
+| `src/lib/resend.ts:116` | Owner decision 3 (`useErrorCause`). Also, the premise is only partly right: Resend's `error` is a plain `ErrorResponse` object (`{ message, name, statusCode }`), so `JSON.stringify` does print its fields; only a thrown `Error` would print `{}`. |
+| `src/server/db/schema/comments.ts:14`, `:23`, `:41` | Drizzle schema, column and index changes are owner decisions (decision 11, plus any rename needs a migration). |
+| `src/lib/auth-client.ts:7` | The 429 toast would start playing a sound (visitors hear it); decision 15 class. |
+| `src/lib/ai/prompts/chat/directives.ts:1`, `src/lib/ai/prompts/chat/tools.ts:1` | Consolidating prompt text changes what the model reads; not done in a behaviour-preserving band. |
+| `src/styles/globals.css:320` | Converting the `@layer utilities` classes to `@utility` changes where Tailwind sorts them among the other utilities and makes them emit only when the scanner finds them, so the cascade could change for visitors. Needs a visual check. |
+
+## Skipped (cross-scope or blocked)
+
+| file:line | reason |
+| --- | --- |
+| `src/lib/validators/guestbook.ts:40` | The DTOs are imported by six `src/app/(home)/guestbook` files. Moving them would need those imports changed, or a re-export from `validators`, which is a second import path (the same slop as the `Logo` alias and the `@/constants` `baseUrl` re-export). Typing the columns from `$inferSelect` also does not fit as is: `users.banned` is nullable while the DTO's `banned` is `boolean` (the query coalesces it). |
+| `src/lib/source/blog.ts:5` | Renaming `post` to `blogSource`: all three importers are in `src/app` (`search-docs.ts`, `get-page-content.ts`, `(llms)/blog.mdx/.../route.ts`). |
+| `src/constants/site.ts:6` | `handle` is also imported by `emails/contact-notification.tsx`. |
+| `src/constants/index.ts:3` | `src/components/json-ld.tsx` still imports `baseUrl` from `@/constants`. After it switches to `@/lib/metadata`, delete the re-export. |
+| `src/constants/portfolio/experiences.tsx:1` | `scripts/link-previews/config.ts` lists the file by its `.tsx` path (unchanged from the earlier pass). |
+| `src/lib/github-contributions.ts:5`, `src/lib/ai/chat/types.ts:4`, `:18`, `:21`, `src/lib/audio/preferences.ts:77`, `src/server/comments/moderation.ts:66`, `src/server/db/queries/guestbook.ts:117`, `src/lib/reveal-script.ts:7`, `src/hooks/use-reduced-motion.ts:10`, `src/styles/globals.css:336` | Unchanged from the earlier skips in SLOPRADAR-RESOLUTIONS.md (cross-scope, or something a visitor would see or hear). |
+
+## Declined
+
+| file:line | reason |
+| --- | --- |
+| `src/constants/search.tsx:123` | `/rss.xml` is a next.config **rewrite** (not a redirect), and the footer links to it too, so it is a deliberate short public URL. `/blog/rss.xml` is the route itself. Pointing the command palette at `/blog/rss.xml` would change the URL the visitor sees. One constant would also need edits in the footer (`src/components`) and in `next.config.ts`. |
+| `src/constants/portfolio/intro.ts:3` | Only the company name and URL could be read from `experiences`; the prose around them ("software engineering intern", "AI products with Next.js...", the story's company description) changes with any job change anyway. A `find(isCurrentEmployer)` would also need fallback copy for when there is none, which is the owner's copy decision. |
+| `src/env.ts:36` | Declined in the earlier pass (with `SKIP_ENV_VALIDATION` the zod default never applies). The reason still holds. |
+
+## Cross-scope follow-ups for other agents
+
+- `src/app/(home)/guestbook/**` form `maxLength={500}` and `src/app/(auth)/account/_components/account-settings.tsx:140` `maxLength={32}` can import `GUESTBOOK_MESSAGE_MAX_LENGTH` / `ACCOUNT_NAME_MAX_LENGTH` from `@/lib/validators/guestbook` and `@/lib/validators/account`.
+- `src/components/json-ld.tsx`: import `baseUrl` from `@/lib/metadata`, then the re-export in `src/constants/index.ts` can go.
+- `src/components/layout/footer/links.tsx` and `src/constants/search.tsx` both write `/rss.xml`. If the owner wants one constant, it belongs next to `pages` and the rewrite stays.
+
+## Noticed, not annotated
+
+- `src/styles/scroll-fade-effect.css` (`scroll-fade-effect-y`, `mask-image`): a stray second `linear-gradient(black, black);` line follows the declaration. The browser drops it as an invalid declaration; left alone because it was not annotated.
+
+## emails, scripts, root config
+
+# Slopradar resolutions, round 3: `emails/`, `scripts/`, root config
+
+Line numbers are the `TODO(slopradar)` lines as they stood before this pass.
+
+## Band 1: emails
+
+Checked by rendering both templates with `@react-email/render` (PreviewProps, plus the newsletter with every `image` removed so the placeholder shows) before and after, then diffing the HTML. The only differences are URLs.
+
+| File | Rule | What changed |
+|------|------|--------------|
+| `emails/contact-notification.tsx:75` | bug | Footer link is `url('/contact')` from `@/lib/url`. Bug fix: the href changes from `https://host//contact` to `https://host/contact`. The template no longer imports `baseUrl` from `@/constants`. |
+| `emails/newsletter-welcome.tsx:41` | bug | Placeholder `src` and the PreviewProps image and post URLs use `url()` from `@/lib/url` (imported as `siteUrl`, because `PostCard` has a `url` prop). Bug fix: the placeholder `src` changes from `https://host//images/placeholder.png` to `https://host/images/placeholder.png`. The PreviewProps URLs lose the `//` too. The template no longer imports `baseUrl` from `@/constants`. |
+| `emails/newsletter-welcome.tsx:27` | unclear-name | The site title import is `title as siteTitle`, so the `title` prop no longer shadows it. `PostCard` props are `NewsletterWelcomeEmailProps['posts'][number]`. No HTML change. |
+
+## Band 2: scripts
+
+`check:links` still reports 32 URLs, 0 fallbacks and 0 errors. A probe of `collectUrls()` gives the same 159 URLs as `public/previews/manifest.json`: none added, none dropped.
+
+| File | Rule | What changed |
+|------|------|--------------|
+| `scripts/check-links.ts:61` | redundant-check | Partly declined. Dropped `?.` on `_exports`, which is present on all 21 pages at runtime. `toc` keeps `?.` and `?? []`: at runtime it is `undefined` on all 21 pages despite its type, and without the guard `check:links` throws `undefined is not an object (evaluating 'toc.map')`. |
+| `scripts/check-links.ts:72` | await-in-loop | `getFiles` is `Promise.all(pages.map(async (page) => ({ ... })))` with a `Promise<FileObject[]>` return type. Order is kept. |
+| `scripts/link-previews/utils.ts:27` | platform-api | `shouldGeneratePreview` uses `URL.parse(url)` and checks `protocol` for `http:`/`https:`. Edge case: `URL.parse` lowercases the scheme, so `HTTP://…` now passes where the `startsWith('http://')` check rejected it. No such URL exists in `content/` or `src/`. |
+| `scripts/link-previews/utils.ts:137` | dead-default | `captureScreenshot`'s `timeout` parameter is required. Its only caller already passes the mode's timeout. |
+| `scripts/link-previews/utils.ts:140` | duplication | `main()` in `index.ts` creates `public/previews` once, before capturing. The `mkdir` calls in `captureScreenshot` and `writeManifest` are gone. |
+| `scripts/link-previews/utils.ts:157` | nested-catch | New `gotoWithFallback(page, url, timeout)` uses try/catch. It tries `networkidle` first, then `domcontentloaded`. If both fail it rethrows the first error. It waits `waitAfterFallback` only after the fallback succeeds, as before. |
+| `scripts/link-previews/utils.ts:175` | swallowed-errors | The callback is now `async () => { await document.fonts.ready }`, so it no longer returns the FontFaceSet. A failure is logged with `console.warn` instead of being dropped. It does not reach the outer catch, so a page that navigates during the evaluate still gets its screenshot, as before. |
+| `scripts/link-previews/utils.ts:207` | swallowed-errors | `removeOrphans` calls `readdir` with no try/catch. `main()` creates the directory first, so ENOENT can no longer happen, and any other error now reaches `main().catch` (exit code 1). |
+| `scripts/link-previews/utils.ts:224` | implicit-type | New `CaptureResult` (`{ success: true } \| { error: string; success: false }`) is the return type of `captureScreenshot` and the input to `createEntry`. `errorMessage` is `result.success ? undefined : result.error`, the same values as before. |
+| `scripts/link-previews/config.ts:24` | dead-config | `public/previews` holds 158 `.jpeg` files and the manifest, and no png. `imageFormats` and the union-typed `imageFormat` are removed, and `screenshot.image` is `{ format: 'jpeg', quality: 92 } as const`. The `quality` ternary is gone, and orphans are matched on `.${screenshot.image.format}`. |
+| `scripts/link-previews/config.ts:8` | drift-prone-list | `previewLinkSourceGlobs` globs `src/constants/**/*.{ts,tsx}` (via `fs.glob`) plus the three component files. The run reads 44 files instead of 29 and finds the same 159 URLs. |
+| `scripts/link-previews/index.ts:103` | inconsistent-error-handling | A missing required manifest now throws `Error('No manifest found. Run bun run generate-previews first.')`. `main().catch` prints it and sets exit code 1. Before, the script logged and exited 0. |
+
+## Band 3: root config
+
+| File | Rule | What changed |
+|------|------|--------------|
+| `source.config.ts:38` | weak-schema | `github` and `website` on `work` are `z.url().optional()`. All 23 frontmatter values in `content/work` are absolute https URLs, and zod 4's `z.url()` returns the input string unchanged, so the types and data are the same. `fumadocs-mdx`, typecheck and build pass. |
+| `next.config.ts:40` | dead-config | Removed `reactStrictMode: true`. `define-env.js` sets `__NEXT_STRICT_MODE_APP` to `true` when the option is `null`, which is its default. The only other read is `__NEXT_STRICT_MODE` in the pages-router client, and this repo has no `pages/` directory. |
+| `next.config.ts:101` | stale wording | The `ignoreBuildErrors` annotation no longer mentions `useTypeScriptCli`, which was removed in round 1. The annotation stays (owner decision 1). |
+| `biome.jsonc:73` | stale-reason | `rg '\btw='` finds no `tw` prop in `src` or `emails`. Removed `"noUnknownAttribute": "off"` and its comment, so the ultracite react preset's `error` level applies. `biome lint --only=suspicious/noUnknownAttribute .` reports nothing. |
+| `biome.jsonc:12` | redundant-config | Partly declined. Removed `!**/.next`, `!**/dist`, `!.vercel`, `!pnpm-lock.yaml`, `!bun.lock` and `!**/*.grit`. Adding any one of them back leaves the checked-file count unchanged. Kept `!.github`: it is the only entry that matters, because without it biome also checks `.github/hooks/ultracite.json` (408 -> 409). The final list checks 408 files, the same as before. |
+| `package.json` | misplaced-dependency | `remark-mdx` (imported only by `scripts/link-previews/utils.ts`) and `schema-dts` (only `import type` in `src/app/layout.tsx` and `src/components/json-ld.tsx`) moved to `devDependencies`. `bun install` reports no package changes, and `bun install --frozen-lockfile` passes on the updated `bun.lock`. |
+| `package.json` | loose-pin | `motion` is pinned to `14.2.0`, next to `framer-motion` `14.2.0`. The lock already resolved `motion@14.2.0`, so no package changes, and the frozen install passes. |
+
+## Skipped (annotation left in place)
+
+| File | Reason |
+|------|--------|
+| `scripts/link-previews/config.ts:77` | duplicate-schema. `fumadocs-mdx` rejects any export from `source.config.ts` that is not a collection ("Unknown export … you can only export collections"). Exporting a shared `workLinks` broke the dev server on :3111 for a moment, so the export was reverted. A shared module under `scripts/` imported by `source.config.ts` would make content config depend on tooling. Left for an owner call on where the shape should live. |
+| `scripts/generate-portrait.ts:5` | Checking the change means regenerating `src/app/(home)/_components/portrait-face.tsx`, and `src/` is off limits this pass. |
+| `emails/contact-notification.tsx:25`, `emails/newsletter-welcome.tsx:67` | Email theme unification changes how emails look (owner decision 15). |
+| `biome.jsonc:35` | The disabled rules need an owner-written reason, or a separate change that turns them on. |
+| `next.config.ts:38` | `SOURCE_MAPS`/`ANALYZE` env move is an owner decision and needs an edit to `src/env.ts`. |
+| `next.config.ts:101` | Build gate, owner decision 1. |
