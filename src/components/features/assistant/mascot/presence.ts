@@ -33,3 +33,18 @@ export const usePageSimba = () =>
     () => pageSimbaCount > 0,
     () => false
   )
+
+/**
+ * The trigger steps aside for a page's own Simba while the panel is closed,
+ * and for the expanded panel
+ */
+export const useTriggerAway = ({
+  expanded,
+  open,
+}: {
+  expanded: boolean
+  open: boolean
+}) => {
+  const pageSimba = usePageSimba()
+  return (pageSimba && !open) || (open && expanded)
+}

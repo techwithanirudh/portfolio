@@ -6,10 +6,13 @@ type Watcher = (x: number, y: number) => void
 
 const watchers = new Set<Watcher>()
 let frame = 0
-let pointer = { x: 0, y: 0 }
+let pointer: { x: number; y: number } | null = null
 
 const flush = () => {
   frame = 0
+  if (!pointer) {
+    return
+  }
   for (const watch of watchers) {
     watch(pointer.x, pointer.y)
   }
@@ -25,6 +28,10 @@ const watch = (watcher: Watcher) => {
     window.addEventListener('pointermove', onPointerMove, { passive: true })
   }
   watchers.add(watcher)
+  // Picks up where the pointer is, e.g. when he stops reading
+  if (pointer) {
+    watcher(pointer.x, pointer.y)
+  }
   return () => {
     watchers.delete(watcher)
     if (watchers.size === 0) {

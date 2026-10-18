@@ -2,19 +2,17 @@
 
 import { useAssistantContext } from './context'
 import { useMascot } from './mascot'
-import { usePageSimba } from './mascot/presence'
+import { useTriggerAway } from './mascot/presence'
 import { MascotSprite } from './mascot/sprite'
 
 export function AssistantTrigger() {
   const { expanded, open, setOpen } = useAssistantContext()
   const mascot = useMascot()
-  const pageSimba = usePageSimba()
+  const away = useTriggerAway({ expanded, open })
 
   if (!mascot) {
     return null
   }
-
-  const away = (pageSimba && !open) || (open && expanded)
 
   return (
     <button

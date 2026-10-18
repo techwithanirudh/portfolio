@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { type RefObject, useEffect, useRef, useState } from 'react'
 import { pick } from './controller'
 import type { SpriteName } from './rig-art'
 
@@ -109,7 +109,8 @@ const PANT: Beat = [
   hold('restPant1', 240),
 ]
 
-const between = (min: number, max: number) => min + Math.random() * (max - min)
+export const between = (min: number, max: number) =>
+  min + Math.random() * (max - min)
 
 /**
  * A syllable: the mouth eases half open, sometimes on to open, and shuts, about
@@ -173,47 +174,141 @@ interface Run {
   index: number
   /** Bumps on every change that has no in-between frames */
   pop: number
+  /** The last pop eases in softly instead of springing, see settle */
+  soft: boolean
   steps: readonly Step[]
   /** He talks on rest's sit instead of his idle beats */
   talking: boolean
   target: Shown
 }
 
+interface RunOptions {
+  animate: boolean
+  settle: boolean
+  talking: boolean
+}
+
+/**
+ * The run for a new target or a change in talking, or null when the current
+ * one still holds. A null target (he's hidden) drops the frames under way
+ */
+const rerun = (
+  run: Run,
+  target: Shown | null,
+  { animate, settle, talking }: RunOptions
+): Run | null => {
+  if (!target) {
+    return run.steps.length > 0 ? { ...run, index: 0, steps: [] } : null
+  }
+  if (run.target.sprite !== target.sprite || run.target.flip !== target.flip) {
+    const steps = animate ? tween(run.target, target) : []
+    const pops = steps.length === 0 && !sameBody(run.target, target)
+    return {
+      index: 0,
+      pop: pops ? run.pop + 1 : run.pop,
+      // Only with a new pop, so the running one keeps its animation
+      soft: pops ? settle : run.soft,
+      steps,
+      talking,
+      target,
+    }
+  }
+  if (run.talking !== talking) {
+    // Starting or stopping drops the beat or phrase under way, so he shuts
+    // his mouth as soon as the answer ends
+    return { ...run, index: 0, steps: [], talking }
+  }
+  return null
+}
+
+const advance = (current: Run): Run => ({
+  ...current,
+  index: current.index + 1,
+})
+
+const play =
+  (steps: Beat) =>
+  (current: Run): Run => ({ ...current, index: 0, steps })
+
+interface Cue {
+  ms: number
+  /** Called when the cue is due, for the update to the run */
+  next: () => (current: Run) => Run
+}
+
+/**
+ * What comes next and when: the next frame of the steps under way, else on
+ * rest's sit the next phrase while he talks or the next beat (a pant once it's
+ * due). Nothing while he holds any other pose
+ */
+const cueFor = (
+  step: Step | undefined,
+  {
+    pantAt,
+    resting,
+    talking,
+  }: { pantAt: RefObject<number>; resting: boolean; talking: boolean }
+): Cue | null => {
+  if (step) {
+    return { ms: step.duration, next: () => advance }
+  }
+  if (!resting) {
+    return null
+  }
+  if (talking) {
+    // A full wait before the next pant, so his mouth doesn't open wide
+    // straight after he stops talking
+    pantAt.current = 0
+    return {
+      ms: between(PHRASE_GAP_MIN_MS, PHRASE_GAP_MAX_MS),
+      next: () => play(phrase()),
+    }
+  }
+  pantAt.current ||= nextPant()
+  return {
+    ms: BEAT_MIN_MS + Math.random() * BEAT_JITTER_MS,
+    next: () => {
+      const pant = Date.now() >= pantAt.current
+      if (pant) {
+        pantAt.current = nextPant()
+      }
+      return play(pant ? PANT : pick(BEATS))
+    },
+  }
+}
+
 /**
  * Steps through the in-between frames on the way to a sprite, and through a
  * small beat every few seconds while he rests (a pant every 10 to 20 s), or
  * phrase after phrase of mouth movement while he talks. Without animate it
- * shows the target straight away
+ * shows the target straight away. A null target (he's hidden) holds the
+ * sprite he had, with no beats, so he fades out as he was. settle makes a
+ * change with no in-between frames ease in softly instead of popping
  */
 export function useSpriteFrames(
-  target: Shown,
-  animate: boolean,
-  talking = false
+  target: Shown | null,
+  {
+    animate,
+    settle = false,
+    talking = false,
+  }: {
+    animate: boolean
+    settle?: boolean
+    talking?: boolean
+  }
 ) {
   const [run, setRun] = useState<Run>({
     index: 0,
     pop: 0,
+    soft: false,
     steps: [],
     talking,
-    target,
+    target: target ?? { flip: false, sprite: 'rest' },
   })
 
-  if (run.target.sprite !== target.sprite || run.target.flip !== target.flip) {
-    const steps = animate ? tween(run.target, target) : []
-    setRun({
-      index: 0,
-      pop:
-        steps.length > 0 || sameBody(run.target, target)
-          ? run.pop
-          : run.pop + 1,
-      steps,
-      talking,
-      target,
-    })
-  } else if (run.talking !== talking) {
-    // Starting or stopping drops the beat or phrase under way, so he shuts
-    // his mouth as soon as the answer ends
-    setRun({ ...run, index: 0, steps: [], talking })
+  const next = rerun(run, target, { animate, settle, talking })
+  if (next) {
+    setRun(next)
   }
 
   const step = animate ? run.steps[run.index] : undefined
@@ -221,51 +316,23 @@ export function useSpriteFrames(
   // Due time of the next pant, kept across the poses in between
   const pantAt = useRef(0)
 
+  const hidden = !target
   useEffect(() => {
-    if (!animate) {
+    if (!animate || hidden) {
       return
     }
-    if (step) {
-      const timer = setTimeout(
-        () => setRun((current) => ({ ...current, index: current.index + 1 })),
-        step.duration
-      )
-      return () => clearTimeout(timer)
-    }
-    if (!resting) {
+    const cue = cueFor(step, { pantAt, resting, talking })
+    if (!cue) {
       return
     }
-    if (talking) {
-      // A full wait before the next pant, so his mouth doesn't open wide
-      // straight after he stops talking
-      pantAt.current = 0
-      const timer = setTimeout(
-        () => setRun((current) => ({ ...current, index: 0, steps: phrase() })),
-        between(PHRASE_GAP_MIN_MS, PHRASE_GAP_MAX_MS)
-      )
-      return () => clearTimeout(timer)
-    }
-    pantAt.current ||= nextPant()
-    const timer = setTimeout(
-      () => {
-        const pant = Date.now() >= pantAt.current
-        if (pant) {
-          pantAt.current = nextPant()
-        }
-        setRun((current) => ({
-          ...current,
-          index: 0,
-          steps: pant ? PANT : pick(BEATS),
-        }))
-      },
-      BEAT_MIN_MS + Math.random() * BEAT_JITTER_MS
-    )
+    const timer = setTimeout(() => setRun(cue.next()), cue.ms)
     return () => clearTimeout(timer)
-  }, [animate, resting, step, talking])
+  }, [animate, hidden, resting, step, talking])
 
   return {
     chest: step?.chest ?? false,
     pop: run.pop,
     shown: step ?? run.target,
+    soft: run.soft,
   }
 }

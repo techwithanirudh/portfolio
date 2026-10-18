@@ -12,10 +12,16 @@ export const pick = <T>(items: readonly [T, ...T[]]): T =>
 const restCycles = () => 3 + Math.floor(Math.random() * 4)
 
 export const REST: Frame = { duration: 0, pose: 'rest' }
+const HIDDEN: Frame = { duration: 0, pose: 'hidden' }
 const SLEEP: Frame = { duration: 0, pose: 'sleeping' }
 
 export class SimbaController {
   private activity: AnimationName | null = null
+  /**
+   * Set by setAway(): he holds hidden with no timer, and what he's asked to
+   * play waits in the queue until he's back
+   */
+  private away = false
   private current: { frames: Frame[]; index: number } | null = null
   /** Set by nap(): he dozes off once he's back on rest, until wake() or play() */
   private drowsy = false
@@ -100,8 +106,28 @@ export class SimbaController {
     }
   }
 
-  stop() {
-    this.queue = []
+  /**
+   * Hides while his spot is gone (the trigger is away). He comes back with
+   * Show, or straight into what was asked of him meanwhile
+   */
+  setAway(away: boolean) {
+    if (away === this.away) {
+      return
+    }
+    this.away = away
+    if (away) {
+      this.queue = []
+    } else if (this.queue.length === 0) {
+      this.queue = [animations.show]
+    }
+    this.stopCurrent()
+  }
+
+  /** Drops what he's doing, his activity too, and settles on rest */
+  settle() {
+    this.activity = null
+    this.queue = this.away ? [] : [animations.settle]
+    this.rests = 0
     this.stopCurrent()
   }
 
@@ -118,6 +144,11 @@ export class SimbaController {
   }
 
   private next() {
+    if (this.away) {
+      this.current = null
+      this.show(HIDDEN)
+      return
+    }
     if (this.still) {
       // Holds what he's doing as one still pose, and rests otherwise
       this.current = null

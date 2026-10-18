@@ -1,12 +1,12 @@
 'use client'
 
 import { type ChatStatus, getToolName, isToolUIPart } from 'ai'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useOn } from '@/hooks/use-on'
 import type { MyUIMessage } from '@/lib/ai/chat/types'
 import { type AnimationName, animations, toolAnimations } from './constants'
 import { pick, type SimbaController } from './controller'
-import { usePageSimba } from './presence'
+import { usePageSimba, useTriggerAway } from './presence'
 
 /** He naps after this long with no input from the visitor */
 export const NAP_AFTER_MS = 60_000
@@ -27,10 +27,16 @@ type Part = MyUIMessage['parts'][number]
 const showsProgress = (part: Part) =>
   part.type === 'text' || part.type === 'reasoning' || isToolUIPart(part)
 
+// Only while the panel is open: once it closes he stops answering, though the
+// answer keeps streaming in for when it opens again
 const activityFor = (
+  open: boolean,
   status: ChatStatus,
   messages: MyUIMessage[]
 ): AnimationName | null => {
+  if (!open) {
+    return null
+  }
   if (status === 'submitted') {
     return animations.submit
   }
@@ -109,34 +115,46 @@ function useNap(mascot: SimbaController | undefined, allowed: boolean) {
 }
 
 export function useMascotPanel({
+  expanded,
   mascot,
   messages,
   open,
   status,
 }: {
+  expanded: boolean
   mascot: SimbaController | undefined
   messages: MyUIMessage[]
   open: boolean
   status: ChatStatus
 }) {
+  const activity = activityFor(open, status, messages)
+
+  // Ahead of the greeting, so on reopening mid-answer he greets and then
+  // talks again
+  useOn(activity, () => {
+    mascot?.setActivity(activity)
+  })
+
+  const wasOpen = useRef(open)
   useOn(open, () => {
+    const closing = wasOpen.current && !open
+    wasOpen.current = open
     if (!mascot) {
       return
     }
     if (open) {
       mascot.play(pick(animations.open), { interrupt: true })
-      return
+    } else if (closing) {
+      mascot.settle()
     }
-    mascot.stop()
-    mascot.play(animations.bye)
-    mascot.play(animations.show)
   })
 
-  const activity = activityFor(status, messages)
-
-  useOn(activity, () => {
-    mascot?.setActivity(activity)
-  })
+  // He hides only while the trigger he sits in is away. After the greeting
+  // and the settle, so a greeting asked for as he comes back plays then
+  const away = useTriggerAway({ expanded, open })
+  useEffect(() => {
+    mascot?.setAway(away)
+  }, [away, mascot])
 
   // Never while the panel is open or answering, or while he's away for a
   // page's own Simba

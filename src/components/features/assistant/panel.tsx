@@ -116,6 +116,7 @@ export function AssistantPanel() {
   const contentRef = useMorph()
 
   useMascotPanel({
+    expanded,
     mascot,
     messages: chat.messages,
     open,

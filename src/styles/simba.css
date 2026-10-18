@@ -27,6 +27,12 @@
   animation: simba-pop 340ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
+/* Settling back on rest as the panel closes: a small squash that eases out,
+   with no spring past rest */
+.simba-pop[data-soft] {
+  animation: simba-settle 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .simba-rig[data-chest] .simba-pop {
   scale: 1 1.02;
 }
@@ -84,6 +90,12 @@
   }
   55% {
     transform: scale(0.98, 1.03);
+  }
+}
+
+@keyframes simba-settle {
+  from {
+    transform: scale(1.03, 0.95);
   }
 }
 

@@ -12,6 +12,8 @@ export type Pose =
   | {
       flip?: boolean
       motion?: Motion
+      /** He eases onto this sprite with a soft squash instead of the pop */
+      settle?: boolean
       sprite: SpriteName
       /** His mouth opens and shuts as he talks (rest's front sit only) */
       talking?: boolean
@@ -30,6 +32,8 @@ const poses = {
   pleased: { sprite: 'happy' },
   reading: { sprite: 'books' },
   rest: { sprite: 'rest' },
+  // Rest, reached from whatever he was doing when the panel closed
+  settling: { settle: true, sprite: 'rest' },
   // Curled up with the z marks, when the page sits idle (controller nap)
   sleeping: { sprite: 'sleeping' },
   surprised: { sprite: 'surprised' },
@@ -65,12 +69,12 @@ const ANIMATIONS = {
   Embarrassed: seq(['bashful', 1800]),
   Flower: seq(['curious', 700], ['pleased', 1000]),
   Greet: seq(['nodding', 1500], ['pleased', 500]),
-  Hide: seq(['hidden', 450]),
   Idle: seq(['rest', 2600]),
   LookUp: seq(['lookUp', 1400]),
   Play: seq(['hopping', 1600]),
   Pleased: seq(['pleased', 1400]),
   Reading: seq(['reading', 2400]),
+  Settle: seq(['settling', 300]),
   Show: seq(['hidden', 120], ['rest', 450]),
   Sniffing: seq(['curious', 900], ['curiousRight', 900], ['thinking', 1100]),
   Writing: seq(['talking', 2400]),
@@ -81,7 +85,6 @@ export type AnimationName = keyof typeof ANIMATIONS
 export const SIMBA_ANIMATIONS: Record<AnimationName, Frame[]> = ANIMATIONS
 
 export const animations = {
-  bye: 'Hide',
   // No thinking beat while he idles, which reads as loading
   idle: [
     'Butterfly',
@@ -94,6 +97,8 @@ export const animations = {
   ],
   open: ['ClickedOn', 'Pleased'],
   rest: 'Idle',
+  /** When the panel closes and he stays on screen */
+  settle: 'Settle',
   show: 'Show',
   submit: 'Reading',
   thinking: 'Reading',
