@@ -11,7 +11,7 @@ type SectionProps = {
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
-export const Cross = ({ className }: { className?: string }) => (
+const Cross = ({ className }: { className?: string }) => (
   <div
     className={cn(
       'pointer-events-none absolute -bottom-2 z-10 hidden size-[15px] sm:block',

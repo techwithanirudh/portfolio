@@ -1,5 +1,44 @@
 # Slopradar report
 
+## Final report (rounds 1 to 4)
+
+Four review rounds (round 2 was a sonnet round; rounds 1, 3 and 4 were Opus and are comparable), four resolve passes and verifier passes over `src`, `emails` and `scripts`. Nothing is committed beyond what is in PR #112; everything after commit 523862a is uncommitted on the `slopradar-cleanup` checkout.
+
+### Score table (0 to 10, 10 worst)
+
+| Scope | Round 1 (Opus) | Round 2 (sonnet) | Round 3 (Opus) | Round 4 (Opus) |
+| --- | --- | --- | --- | --- |
+| src/app | 5 | 3.5 | 4 | 4 |
+| src/components | 5 | 4 | 4 | 4 |
+| lib, server, hooks, contexts, constants, types, env, styles | 4 | 4 | 3 | 3 |
+| emails, scripts, config | 4 | 2.5 | 3 | 2 |
+
+`TODO(slopradar)` annotations: 340 after round 1, 328 before the first resolve pass, about 168 after resolve 1, about 256 after the round-4 review (it added 35, 31, 17 and 6 new ones), about 188 now. The scores stopped improving because each Opus review finds a fresh layer of small items (duplication, hand-typed paths, unused exports) rather than regressions. Verifiers found no behavior regressions in rounds 3 and 4 (one in round 2, fixed).
+
+### Bugs fixed
+
+Round 1 (the 11): selected-text context reaches the model; PR events read Opened/Reopened/Merged/Closed/Updated (merged is looked up with one cached search); guestbook signature instruction no longer glued onto the visitor's text; revoke-session behind BotID; check-links covers the blog and tag routes; link-preview exclusion matches whole hosts; auth client keeps its plugin types; search "other" tag label; theme toggle no longer rethrows; unreachable branch in comment moderation; GitHub failures are not cached.
+
+Later: sign-in modal handles a failed provider; the canceled contact form shows the right icon; both email templates no longer build `//` links; `Shimmer` no longer nests a `<p>` in a `<p>`; BotID mounts only in production (its client script needs `crypto.subtle`, which a plain-http LAN address lacks, so every POST failed there); comment moderation rejects every image node shape; navigating while Simba is expanded shrinks or closes the panel; GithubRepo error path no longer rethrows; header scroll-to-top respects reduced motion; the first expand morph now animates; the panel resets to its small size after closing; ActionErrors that signal a missing server config are logged again.
+
+Features added during the loop: Simba expand toggle (full screen, 720px column, FLIP morph), the confetti tool, json-render (supersedes draft #111).
+
+### Open owner decisions
+
+The 16 listed under "Owner decisions" below still stand. New ones from rounds 2 to 4:
+
+- `unstable_cache` versus `'use cache'` (now 4 more call sites found).
+- Index names without the `portfolio_` prefix and camelCase columns in `schema/comments.ts`; any change needs a migration.
+- Shared `emails/theme.ts` (changes how emails look).
+- Where the shared work-links schema lives (`source.config.ts` may only export collections).
+- `SOURCE_MAPS` and `ANALYZE` read in `next.config.ts` outside `src/env.ts`; `ignoreBuildErrors`; reasons for disabled biome rules.
+- Whether prompt text counts as "what a visitor sees or hears" (blocks prompt consolidation and the `searchDocs` full-text output).
+- `getPageContent('about')` omits the commit history that `/about.md` and `llms-full.txt` include.
+- Resume role with no `employmentType` shows nothing, while the timeline and llms routes say "Research".
+- Dropping the redundant `router.refresh()` calls in the guestbook and revoke-session needs a signed-in browser check first.
+- The ai-elements registry slice's unused `*Props` exports; `page-actions` `rel`; mobile menu focus trap; press scale; `contributions.tsx` placement.
+- Merged PR labels depend on GitHub's search API; no merged PR was in the feed window to see "Merged" on the live page.
+
 Phase 1 (annotate) and phase 2 (compile) of the slopradar pass on `portfolio-improvements` (HEAD `477673f0` plus the uncommitted sign-in modal, hero fade and About copy edits). Four reviewer agents (opus) read every file in their scope and added `TODO(slopradar)` comments; they changed no code. Phase 3 (resolve) has not started. Nothing here is committed or pushed.
 
 Baseline and after, for the whole repo: `bun run typecheck` clean, `bun run check` clean (400 files) before and after the annotations.
@@ -50,7 +89,7 @@ A grep for `TODO(slopradar)` across `src`, `emails` and `scripts` finds 340 comm
 3. **`useErrorCause` (parked off)** versus descriptive errors that keep causes. Which wins?
 4. **`unstable_cache` versus `'use cache'`.** Next 16 docs recommend `'use cache'`, which needs `cacheComponents`; enabling it would remove the `dynamic` and `revalidate` segment config on about 12 routes. Adopt it or record why not?
 5. **Barrels.** `noBarrelFile` is off and `cn` in `src/lib/utils.ts` is a one-line re-export of the `cn` package, while `bundle-barrel-imports` says avoid barrels. Remove `(llms)/utils/index.ts`, import `cn` directly, and turn the rule on?
-6. **Attribution policy.** Should code adapted from MIT dependencies and registries (fumadocs-ui, Kibo, Delba) get `THIRD_PARTY_NOTICES.md` entries and in-file headers? Also decide whether `blog/[slug]/_components/header.tsx` is still adapted code.
+6. **Attribution policy.** Should code adapted from MIT dependencies and registries (fumadocs-ui, Kibo, Delba) get `THIRD_PARTY_NOTICES.md` entries and in-file headers? Also decide whether `blog/[slug]/_components/header.tsx` is still adapted code. (Later: the owner deleted `THIRD_PARTY_NOTICES.md`; credit now lives only in the in-file headers. See SLOPRADAR-RESOLUTIONS.md.)
 7. **Registry components outside `ui/`.** The Kibo contribution graph lives in `features/` and is linted as owned code. Move it into `ui/` (vendored) or own and trim it?
 8. **Mobile menu focus trap.** Hand-written to avoid Safari tinting its bars, with the pill toggle outside the popup. Move to Base UI `modal='trap-focus'` (the toggle leaves the Tab cycle) or keep it and record the reason?
 9. **Press scale.** The skill suggests a `static` prop on `Button`; the repo overrides with `active:scale-none` per call site. Keep the override or add a prop?

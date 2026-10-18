@@ -7,6 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     host: baseUrl.origin,
     rules: {
       allow: '/',
+      // TODO(slopradar): magic-string: '/search' and '/account' are typed by hand while sitemap.ts reads pages.<key>.path, use pages.search.path (and pages.account once the account/page.tsx annotation adds it)
       disallow: ['/api/', '/account', '/login', '/search'],
       userAgent: '*',
     },

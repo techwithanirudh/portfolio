@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
+import { staggerDelay } from '@/lib/stagger'
 
 export const Hero = () => (
   <div className='flex flex-col gap-2'>
@@ -23,7 +24,7 @@ export const Hero = () => (
     />
     <div className='mt-4 flex w-min flex-row gap-4 rounded-full bg-card p-1.5 text-card-foreground'>
       {socials.map((social, index) => (
-        <ViewAnimation delay={0.05 * index} key={social.url}>
+        <ViewAnimation delay={staggerDelay(index)} key={social.url}>
           <Tooltip>
             <TooltipTrigger
               render={
@@ -31,6 +32,7 @@ export const Hero = () => (
                   aria-label={social.name}
                   className='icon-pop relative flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors after:absolute after:-inset-0.5 hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
                   href={social.url}
+                  // TODO(slopradar): duplicate-logic: rel and target restate externalLinkProps from @/components/external-link (same values, also uses/hardware.tsx and uses/software.tsx), spread it
                   rel='noopener noreferrer'
                   target='_blank'
                 />

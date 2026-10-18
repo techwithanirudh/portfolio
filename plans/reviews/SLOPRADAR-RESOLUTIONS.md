@@ -821,3 +821,305 @@ Checked by rendering both templates with `@react-email/render` (PreviewProps, pl
 | `biome.jsonc:35` | The disabled rules need an owner-written reason, or a separate change that turns them on. |
 | `next.config.ts:38` | `SOURCE_MAPS`/`ANALYZE` env move is an owner decision and needs an edit to `src/env.ts`. |
 | `next.config.ts:101` | Build gate, owner decision 1. |
+
+# Logged after the round-3 verification
+
+- **Sign-in modal URL.** The sign-in modal is URL-driven: opening it pushes `?signin=<path>` (sanitized by `sanitizeRedirect`), Escape or Back closes it, a direct `/?signin=/blog` link opens it, and `/login` redirects to `/?signin=%2F`. This predates the slopradar passes (made after the guestbook report that sign-in should live in a query parameter) and is visible to visitors.
+- **`.dark ::selection` removal** (src/styles/globals.css, round 1): the dark-mode rule had declarations identical to the plain `::selection` rule, so removing it changes nothing.
+- **Search highlight check.** The verifier doubted that a row is highlighted after server results arrive. Compared against production (https://www.imanirudh.com, the #107 state) with the same queries on localhost:3111 ("hello", "gork", "portfolio", each typed after a clear, 3.5 seconds of settle time): both highlight the first row identically (Hello world / How we taught a Slack bot to run code / Portfolio). Not a regression.
+
+# Round 4: Opus resolve pass
+
+Per-scope logs merged verbatim (bug fixes are called out inside them).
+
+## src/app
+
+# Slopradar resolutions, round 4: `src/app`
+
+Paths are relative to `src/app`. Line numbers are the `TODO(slopradar)` line before this round. Annotations: 92 before, 67 after (25 resolved, 1 narrowed and kept).
+
+## Resolved
+
+| # | file:line | rule | what changed |
+|---|-----------|------|--------------|
+| 1 | (home)/contact/_components/faq.tsx:38 | magic-number | `delay={staggerDelay(index)}` from `@/lib/stagger` (`offset + 0.05 * index`, offset 0). `0 + x === x` for every non-negative float, so the `--reveal-delay` strings are unchanged. |
+| 2 | (home)/contact/_components/hero.tsx:26 | magic-number | `staggerDelay(index)`. |
+| 3 | (home)/about/_components/stack.tsx:25 | magic-number | `staggerDelay(index)`. |
+| 4 | (home)/blog/[slug]/_components/header.tsx:56 | magic-number | `0.1 + index * 0.05` -> `staggerDelay(index, 0.1)` (`0.1 + 0.05 * index`; IEEE multiplication is commutative, same float). |
+| 5 | (home)/_components/testimonials.tsx:28 | magic-number | Same as #4. |
+| 6 | (home)/_components/experience.tsx:26 | magic-number | `staggerDelay(recent.length)`. |
+| 7 | (home)/_components/work.tsx:11 | magic-number | `staggerDelay(works.length)`. |
+| 8 | (home)/_components/writing.tsx:11 | magic-number | `staggerDelay(posts.length)`. |
+| 9 | (home)/contact/_components/faq.tsx:33 | dead-class | Dropped the four `[&>[data-slot=accordion-item]]` selectors; `Accordion` keeps `w-full`. In the browser the accordion's direct children are the ViewAnimation divs, and their bottom borders (1px dashed x3, 0px on the last) and the items' borders (0px) are identical before and after. |
+| 10 | (home)/contact/_components/faq.tsx:46 | dead-class | `!h-auto p-4` -> `p-4` on `AccordionContent`; the class lands on the panel's inner div (`ui/accordion.tsx`), whose height is auto anyway. Open panel inner div measured 132px / 16px padding before and after. |
+| 11 | (home)/blog/[slug]/_components/header.tsx:20 | derivable-prop | `Header` reads `const { image, tags } = page.data`; dropped the `tags` prop, `tags={tags}` and the now unused `tags` destructure in `page.tsx`. Tag cards still render on /blog/hello-world. |
+| 12 | (home)/blog/[slug]/_components/header.tsx:48 | inconsistent | `bg-gradient-to-t` -> `bg-linear-to-t`. Computed `background-image` and `--tw-gradient-stops` on /blog/hello-world are identical before and after (`linear-gradient(to top, oklab(0 0 0 / 0.7) 0%, oklab(0 0 0 / 0.3) 50%, rgba(0, 0, 0, 0) 100%)`). |
+| 13 | (auth)/account/_components/revoke-session-button.tsx:14 | library-exists | `const { execute, isExecuting }`; both `status === 'executing'` read `isExecuting` (same shorthand as round 3, next-safe-action `getActionShorthandStatusObject`). |
+| 14 | (home)/guestbook/_components/entry-card/index.tsx:111 | library-exists | `isSaving={edit.isExecuting}`. |
+| 15 | (home)/guestbook/actions/guestbook.ts:120 | dead-arg | `moderateEntry({ message: parsedInput.message })`; `signature` is optional in `ModerateGuestbookEntryInput` and only read behind `if (signature)`. |
+| 16 | (home)/about/_components/stack.tsx:17 | magic-string | `href: pages.uses.path`. |
+| 17 | (home)/guestbook/_components/form.tsx:108 | magic-string | `openSignIn(pages.guestbook.path)`. |
+| 18 | (home)/search/_components/search-client.tsx:36 | magic-string | `getItemTag` checks `pages.projects.path` / `pages.blog.path` (both `/projects`, `/blog`). |
+| 19 | (home)/about/_components/feed/data.ts:130 | unclear-name | The `closedPullRequests` Set of whole items is gone: `isClosedPullRequest(item)` predicate, `items.some(isClosedPullRequest)` for the early return and the same predicate in the map. Same condition, same merged lookup, so the merged-PR behavior is unchanged. |
+| 20 | api/chat/utils/tools/navigate.ts:29 | pass-through | `parseTarget` and `toPathAndHash` folded into `parseSitePath`; the `try` still wraps only `new URL`, and the returned `{ hash, path, sameOrigin }` is the same. |
+| 21 | api/chat/route.ts:160 | redundant-validation | `prepareStep` narrows with `!result.dynamic && result.toolName === 'navigate' && result.output.success`; dropped the `navigateOutputSchema` import from the route. Checked that `result.output` is typed as the navigate output union (a probe property fails tsc with that union in the message), so this is not `any`. The celebrate tool and the rest of the tool map are untouched. |
+| 22 | (home)/guestbook/_components/reactions.tsx:40 | duplicate-type | `payload: z.infer<typeof GuestbookReactionSchema>` (type-only imports). |
+| 23 | (home)/_components/portrait.tsx:146 | effect-mirrors-state | Both reset effects are gone. `bonk()` starts the sulk timer when it sets `sulking`, and starts the bonked timer only when none is pending (`??=`), so `bonked` still clears BONK_MS after the first bonk of a run, as the old `[bonked]` effect did. The unmount effect clears all three timers. Browser check on `/`: `data-bonked` cleared about 253ms after the first click even with a second click at 100ms, and sulking held `aria-disabled` for about 5000ms. |
+| 24 | (llms)/utils/create-llm-route.ts:24 | inconsistent | The `.mdx` routes return `markdownResponse(...)`, so they send `text/markdown;charset=utf-8` like the other llms routes. Body unchanged (checked /blog.mdx/hello-world). |
+| 25 | (home)/_components/hero.tsx:67 | magic-string | `const [firstName, lastName] = owner.split(' ')` from `@/constants/site`. The h1 `textContent` is `Anirudh  Sriram.` before and after. |
+
+## Narrowed (annotation kept)
+
+| file:line | rule | what changed |
+|-----------|------|--------------|
+| (home)/contact/actions/contact.ts:13 | magic-string | The time zone now reads `profile.timeZone`. The ' IST' suffix stays: `timeZoneName` cannot be combined with `dateStyle`/`timeStyle`, and en-US prints `GMT+5:30`, so printing it through Intl changes the notification email text (owner call). The annotation is rewritten to cover only the suffix. |
+
+## Skipped (annotation left)
+
+| file:line | rule | reason |
+|-----------|------|--------|
+| (home)/guestbook/_components/form.tsx:60, entry-card/use-entry-actions.ts:32 (x3), (auth)/account/_components/revoke-session-button.tsx:20 | redundant-refresh | The brief says to drop `router.refresh()` only after confirming in the browser that the UI still updates. The browser pane is signed out, and signing in goes through Google or GitHub OAuth, which I cannot do. The claim checks out on paper (Next docs `02-guides/server-actions.md`: `updateTag` and `revalidatePath` re-render the current route in the action response), but it is not verified, so the calls stay. |
+| (auth)/account/page.tsx:14 | magic-string | `pages.account` lives in src/constants (cross-scope, per brief). |
+| api/chat/utils/tools/index.ts:9, api/chat/route.ts:131 | duplicate-type / duplicate-logic | `src/lib/ai/chat/types.ts` (cross-scope) takes `typeof tools` from a value export. Inferring `searchDocs` from `ReturnType<typeof createSearchDocsTool>` needs a writer, or a type export that types.ts would have to read. The other agent also touched both files for the celebrate tool. |
+| (home)/blog/actions/newsletter.ts:63 | inconsistent-error-handling | If the catch goes and unexpected errors reach `handleServerError`, the visitor sees `UNEXPECTED_ACTION_ERROR` instead of "Something went wrong while subscribing…" (visible). |
+| (home)/blog/[slug]/page.client.tsx:147 | magic-string | `PostComments` is called by `src/components/content/mdx/layout.tsx`. Passing the URL in means editing that cross-scope caller. |
+| (home)/not-found.tsx:11 | duplicate-logic | The shared metadata belongs beside `NotFoundContent` in src/components (cross-scope). Importing one route file from another repeats the misplaced-module pattern. |
+| (home)/search/_components/search-client.tsx:131 | effect-mirrors-state | fumadocs `useDocsSearch` owns its `search` state and takes no initial value (`UseSearchOptions` is only `delayMs`/`allowEmpty`), so dropping the effect means switching to a lower-level hook and re-testing back/forward. Not a small band. |
+| layout.tsx:82, contact-form.tsx:136, account-settings.tsx:134, (llms)/utils/profile.ts:10 and :40, resume/page.tsx:25 and :51, resume/layout.tsx:6, guestbook/actions/guestbook.ts:72/84/128, route.ts:53, uses/logo.tsx:16, testimonials.tsx:43, software.tsx:17, stack.tsx:64, blog/page.tsx:23, tags/[tag]/page.tsx:22, blog/[slug]/page.tsx:92, page.client.tsx:19 and :123, header.tsx:10, portrait.tsx:32/35/102, projects/[slug]/page.tsx:22, error.tsx:4, layout.tsx:74, (auth)/layout.tsx:7, contact.ts:7, github-commits.ts:1, the llms-parity rows (contact, colophon x2, experience, skills, testimonials, uses, site-pages) | various | Each needs a new or changed export in src/lib, src/server, src/constants, src/components, src/hooks, tsconfig or styles (cross-scope this round). portrait.tsx:102's other caller is `components/features/blog/author-byline.tsx`. |
+| feed/data.ts:62 | unchecked-cast | It spans 8 casts in event.tsx plus a typed payload map. That is a larger band than this pass; it is not blocked and is left for the next round. |
+| feed/data.ts:93, (llms)/utils/index.ts:1, header.tsx:1, testimonials.tsx:65 | owner decision | unstable_cache vs use cache, barrels, attribution, autoplay plugin (needs a package.json dependency). |
+| resume/page.tsx:123, event.tsx:117, newsletter-form.tsx:34, contributions.tsx:151, entry-card/index.tsx:57, content-index.ts:13, markdown-pages.ts:34 | visible | Changes what a visitor sees (wording, feedback, Save state, hover label, llms text or route names). |
+| api/chat/route.ts:72, get-page-content.ts:18, search-docs.ts:12 and :75, about.md/route.ts:12 | behavior | Each changes what the model receives or which messages pass validation (prompt-facing behavior), so it is not a behavior-preserving band. |
+
+## Declined
+
+None.
+
+## Checks
+
+- `bunx tsc --noEmit`: clean (one run showed errors only in `src/components/features/assistant/{header,panel}.tsx` while another agent was mid-edit; clean on re-run, none in src/app at any point).
+- `bun run check`: 420 files, no fixes. `bun run check:spelling`: clean.
+- sitemap.xml, robots.txt, blog/rss.xml and llms.txt on :3111 are byte-identical before and after.
+- `/`, `/about`, `/blog`, `/contact`, `/guestbook`, `/projects`, `/uses`, `/account`, `/search`, `/blog/hello-world`, `/resume`, `/colophon`, `/projects/portfolio` and `/blog.mdx/hello-world` all return 200.
+
+## src/components
+
+# Slopradar resolutions, round 4: `src/components` (except `ui/`)
+
+Line numbers are the `TODO(slopradar)` lines before this pass. Paths are relative to `src/components`. 104 annotations at the start (one in `ui/`), 80 at the end: 24 resolved and removed. Nothing outside `src/components` was edited.
+
+How it was checked: `bunx tsc --noEmit`, `bun run check` and `bun run check:spelling` after each band (all clean at the end). A Playwright script (headless shell, :3111) captured the Simba panel before the first edit and after each band: popup, backdrop, conversation column and input boxes plus computed position, size, border, radius, shadow, transform-origin and z-index, at 1440x900, 1440x600, 800x900 and 375x812, docked, expanded, after Esc and after backdrop and mascot clicks, plus focus return after Esc and the close button. Apart from the fixes below, the only differences are the new `data-expanded`/`data-narrow` attributes on the Popup and the toggle's label. All runs after the third band also show an 11px shift because the page no longer has a classic scrollbar in the headless shell (`clientWidth` 1440 with the panel closed). That comes from the concurrent `src/styles` edits, not this pass.
+
+## Band 1: bug fixes
+
+| File:line | Rule | What changed |
+| --- | --- | --- |
+| `features/assistant/tools/navigate.tsx:91` | stale-condition (bug) | **Fix.** Navigating while the panel is expanded used to leave the full-screen panel over the new page. Now a docked viewport collapses the panel to its docked size (with the shrink morph), and a narrower viewport closes it, as the sheet did before. Checked: "take me to the projects page" from an expanded panel at 1440x900 lands on /projects with the panel at 360x500, the toggle unpressed, the mascot back and page scroll unlocked. At 800x900 the same request lands on /blog with the panel closed. The `isScrollLocked` comment now says the sheet and expanded panels lock scroll, not only the mobile one. `isDocked` comes from `AssistantProvider` (see band 2). |
+| `content/mdx/github-repo.tsx:185` | error-path-throws (bug) | **Fix.** `parseGitHubRepoInput` runs once, before the fetch, and only the fetch is caught (`.catch` logs the same message and returns `null`, and the fallback link gets the parsed repo). A malformed `repo` prop now fails loudly at render time, where before the catch rethrew from the log line. /blog/gorkie-sandboxes renders the same repo link. |
+| `layout/header/index.tsx:91` | reduced-motion (bug) | **Fix.** Scroll-to-top on the nav title passes `behavior: prefersReducedMotion() ? 'auto' : 'smooth'` to `window.scrollTo`. Lenis is unmounted under reduced motion, so those visitors always got the native smooth scroll (the JS option overrides the CSS `scroll-behavior: auto !important`). Checked with reduced motion: `scrollY` is 0 within 50 ms of the click. With Lenis mounted nothing changes. `scrollToTarget` (in `src/lib`) was not extended, since it takes an element and lives outside this scope. |
+| `features/assistant/panel.tsx:70` | forced-layout (and a bug) | `useMorph` runs only when `[expanded, open]` change, so streamed chunks no longer force a `getBoundingClientRect` per render. The "first" rect is taken by `setExpanded` in `AssistantProvider` just before the state change, and the effect consumes and clears it. **Fix:** before, the first grow after opening had no rect (the popup mounts after the panel's last render) and jumped to full screen with no morph. Now it plays the 380 ms grow (`cubic-bezier(0.2, 0, 0, 1)`, 360x500 to 1440x900, sampled every frame). The 300 ms shrink is unchanged, and reduced motion still skips both. |
+
+## Band 2: Simba panel structure
+
+| File:line | Rule | What changed |
+| --- | --- | --- |
+| `features/assistant/panel.tsx:163` | duplicate-ref | One `popupRef`, created in `AssistantProvider`, is passed to the Popup's `ref` and read by `useReturnFocus` and `useMorph`. The callback ref that wrote two refs is gone. |
+| `features/assistant/panel.tsx:132` | duplicated-predicate | `AssistantProvider` derives `mode` (`'docked' \| 'expanded' \| 'sheet'`) from `expanded` and the one `useMediaQuery(MEDIA.docked)` (moved here from the panel and the navigate tool). The panel reads it for `modal`, `PageScrollLock`, `disablePointerDismissal` and the backdrop. The backdrop's `!expanded && 'lg:hidden'` became `mode === 'docked' && 'hidden'` (lg is 64rem, the same as `MEDIA.docked`). It is computed `display: none` in the same cases, checked at 1440 and 800 wide. |
+| `features/assistant/panel.tsx:150` | split-dismissal | One `onOpenChange` owns the policy: Esc or an outside press collapses an expanded panel, and anything else sets `open`. The backdrop `onClick` is gone. `disablePointerDismissal={mode === 'docked'}` keeps the docked panel open while the visitor clicks or tabs around the page (Base UI would otherwise close a non-modal popup on outside press and focus-out). In the modal modes Base UI only counts presses on the backdrop itself. Checked: a page click with the panel docked keeps it open. A backdrop click at 800 wide closes the sheet. A mascot click closes it. Esc shrinks an expanded panel, then closes it. |
+| `features/assistant/panel.tsx:157` | override-cascade | The Popup sets `data-expanded`, and the expanded geometry is `sm:data-expanded:*` (inset-0, h-dvh, w-dvw, origin-center, rounded-none, border-0, shadow-none). The attribute selector outranks the docked `sm:` and `sm:[@media(max-height:640px)]:` classes, so the re-declared max-height variants and the `cn` merge are gone. Computed styles match the old ones at 1440x900, 1440x600 (the max-height branch) and 800x900: full screen 1440x900 or 1440x600 when expanded, 360x500 or 360x568 when docked. |
+| `features/assistant/message-list.tsx:97` | duplication | New `features/assistant/class-names.ts` `expandedColumn` (`in-data-expanded:mx-auto in-data-expanded:w-full in-data-expanded:max-w-[720px]`), used by the conversation column and the input wrapper. The list no longer reads the assistant context. Both are 720px wide and centered when expanded (x 360 at 1440), and unchanged when docked. |
+| `features/assistant/tools/portfolio.tsx:110` | layout-state-leak | `data-narrow` is set once on the Popup (`!expanded`), and the tool part's context read and its comment are gone. The `wide` variant matches any `[data-narrow]` ancestor, so the experience card still keeps its phone layout in the docked panel. |
+| `features/assistant/panel.tsx:33` | library-exists | Kept `useReturnFocus` and gave it a one-line reason. Playwright with Base UI's default `finalFocus` returned focus to `<body>` in every case (Esc after a mascot open, Esc after opening with Ctrl+/ from a focused link, close button after expanding, backdrop close). With the hook, focus goes back to the mascot or the link. Nothing opens the panel through a `Dialog.Trigger`, so Base UI has no trigger to go back to. |
+| `features/assistant/header.tsx:42` | a11y-toggle | One label, `aria-label='Expand chat'` with `aria-pressed`, so a screen reader hears "Expand chat, toggle button, pressed". Only the accessible name changes, and nothing visible. The click is `setExpanded(!expanded)`, since `setExpanded` now takes a boolean. |
+
+## Band 3: classes, contexts, types
+
+| File:line | Rule | What changed |
+| --- | --- | --- |
+| `features/assistant/trigger.tsx:24` | dead-class | Deleted `motion-reduce:transition-none` from all nine places in scope: trigger, `blur-image.tsx`, `layout/header/index.tsx`, `features/toc/popover.tsx`, `features/blog/post-row.tsx`, `features/blog/post-filters.tsx`, `ai-elements/tool.tsx` (x2) and `ai-elements/sources.tsx`. The global reduced-motion rule sets `transition-property` with `!important`, so the utility never applied. Checked under reduced motion: the trigger's computed `transition-property` is the global list in both runs. `ui/accordion.tsx` was left alone (excluded scope). |
+| `features/assistant/trigger.tsx:23` | arbitrary-value | `active:scale-[0.96]` became `active:scale-96` in all six places (trigger, `layout/footer/sound-toggle.tsx`, `layout/header/theme-toggle.tsx`, `layout/header/mobile/item.tsx`, `mobile/pill.tsx` x2). The computed `scale` while pressed is `0.96`, checked on the mascot (CSS converts `96%` to the number). `ui/button-variants.ts` was left alone. |
+| `json-ld.tsx:69` | library-exists | The seven `new URL(x, baseUrl.href).href` became `siteUrl(x)` (`url` from `@/lib/url`), which is the same `new URL(path, baseUrl)` string. `baseUrl` (still used for the `#person`/`#website` ids and the home crumb) is imported from `@/lib/metadata`, not the `@/constants` re-export. Checked: the JSON-LD on /blog/hello-world, /about, /blog/tags/intro and /projects/portfolio has the same ids, URLs and key order. |
+| `json-ld.tsx:179` | duplication | `ProfilePageJsonLd` passes `mainEntity: personRef`, which serializes the same as the old literal. |
+| `features/auth/sign-in-modal.tsx:61` | inconsistent | `<SignInModalContext value={value}>`. |
+| `features/assistant/mascot/provider.tsx:16` | inconsistent | `use(MascotContext)`. |
+| `layout/sections/index.tsx:14` | unused-export | `Cross` is module-private, because only `CrossPair` uses it. The og template's `Cross` is its own function. |
+| `features/search/utils/groups.ts:46` | over-conversion | `bucketByTag` maps the `Map.groupBy` entries straight to `{ pages, tag }` and stable-sorts once by `tagRank`. `orderTagGroups` is folded in. Same group order: checked "hello" and the empty dialog, which have the same headings and item counts as round 3. |
+| `features/search/utils/tags.ts:11` | weak-type | The table is `satisfies Record<string, SearchTag>`. `getTagMeta` looks tags up through an `Object.hasOwn` type guard (so `constructor` and other inherited keys no longer count as tags), and `tagFromUrl` drops the `meta &&` guard. |
+| `features/search/dialog.tsx:132` | duplicate-type | The local `CommandItemData` and the `(typeof groups)[number]['items'][number]` spelling were both `CommandItem` from `@/types/search` (already imported as `SearchCommandItem`). Both use it now, and no new export was needed. |
+| `features/assistant/tools/contact-form.tsx:28` | boolean-prop | New `ContactFormSent({ data })` and `ContactFormCanceled()`. `ContactForm` takes only `prefill` and `toolCallId`. `ContactFormBody` in `message-list.tsx` picks sent, canceled, the skeleton or the form from the part state. Same markup and text nodes (`name`, ` (`, `email`, `)` and the space before the message). |
+| `features/assistant/message-list.tsx:207` | duplication | `eyebrow` in `class-names.ts` is the 11px uppercase label class set, used by the selected-context label (`cn('mb-1', eyebrow)`) and StackGroup's heading (`cn('px-3 py-2', eyebrow)`). Same classes in a different order. |
+
+## Skipped (annotation left in place)
+
+| File:line | Reason |
+| --- | --- |
+| `numbered-pagination.tsx:86` | `PaginationEllipsis` renders the `moreHorizontal` icon plus an sr-only "More pages" where the page shows three periods. Visible. |
+| `smooth-cursor.tsx:143` | The query belongs in `MEDIA` in `src/lib/media.ts` (outside). |
+| `ai-elements/prompt-input.tsx:201` | `isChatBusy` would move to `src/lib/ai/chat` (outside). |
+| `features/assistant/header.tsx:52` | `IconSwap` cross-fades where the icons swap today. Visible. |
+| `features/assistant/text-selection-popup.tsx:72` | The cap has to be enforced on `contextDataSchema` in `src/lib/ai/chat/types.ts` (outside). |
+| `json-ld.tsx:159` | Every page call site is in `src/app`. |
+| Carried over from rounds 1 to 3, unchanged reasons | The 16 owner decisions (attribution headers, `contributions.tsx` placement, mobile menu focus trap, press scale, barrels, parked rules), cross-scope moves, and the visible or DOM changes listed in SLOPRADAR-RESOLUTIONS.md round 3. |
+
+## Notes for other scopes
+
+- `src/constants/index.ts`: `json-ld.tsx` no longer imports `baseUrl` from `@/constants`. Only `src/app` importers (layout, rss) remain before the re-export can go.
+- `src/lib/scroll-to-target.ts`: the header's scroll-to-top still hand-rolls the Lenis-or-native branch, because `scrollToTarget` takes an element. Reading `prefersReducedMotion()` inside it (its own annotation) would let both share it.
+- `useAssistantContext().setExpanded` now takes a boolean (not a `SetStateAction`). Nothing outside `src/components` calls it.
+
+## src/lib, src/server, src/hooks, src/contexts, src/constants, src/types, src/env.ts, src/styles
+
+# Slopradar round 4 resolutions: `src/lib, src/server, src/hooks, src/contexts, src/constants, src/types, src/env.ts, src/styles`
+
+Line numbers are the line of the `TODO(slopradar)` comment before this round. 48 annotations in scope before, 34 after.
+
+## Band 1: real bug
+
+| file:line | rule | what changed |
+| --- | --- | --- |
+| `src/server/comments/moderation.ts:27` | bug | The no-images rule only counted nodes that passed `CommentImageContentSchema` (numeric `width`/`height`, `src` starting with `http`), and fuma-comment's content schema is loose (`{ type: string, text?: string }`, `$loose`), so an image node without a size or with a `data:` or relative `src` got through. `extractContent` now sets `hasImage` on `node.type === 'image'` at any depth, and `moderateComment` rejects on it before any model call. `parseCommentImageNode` and its schema in `src/lib/validators/comments.ts` had no other caller and are deleted. Checked with a `bun test` harness that imports the real `moderateComment` (only `ai`, the provider and the prompt mocked): image nodes with full attrs, without width/height, with a `data:` src, with a relative src and with no attrs are each rejected with "Images are not allowed in comments." both at the top level and nested in a paragraph, without calling `generateText`; a text-plus-mention comment passes and calls `generateText` once. 6 pass, 0 fail. |
+
+## Band 2: library APIs
+
+| file:line | rule | what changed |
+| --- | --- | --- |
+| `src/lib/is-active.ts:28` | library-exists | The local `isLinkItemActive` and `WithHref` are gone; the file re-exports `isLinkItemActive` from `fumadocs-ui/layouts/shared` (in its exports map). Library source (`dist/layouts/shared/index.js:92`): `type === 'custom'` or no `url` returns false, `active === 'none'` returns false, else `isActive(url, pathname, active === 'nested-url')`, with the same `normalize` and the same match as the local `isActive`. The two callers (`header/link-item.tsx`, `header/mobile/menu.tsx`) only pass items that have a `url` and no `type: 'custom'` (`WithHref`, and `linkItems` plus Home filtered on `'url' in item`), with `active` `'url'` or `'nested-url'`, so every call returns the same value. The callers keep importing from `@/lib/is-active` (they are in `src/components`); once they import from fumadocs-ui directly, the re-export can go. `isActive` stays (used by `mobile/item.tsx` and `footer/active-link.tsx`, with a `nested = true` default the library's lacks). |
+| `src/server/db/queries/guestbook.ts:21` | library-exists | `count(guestbookReactions.emoji)` from drizzle-orm replaces `sql<number>\`count(...)\`.mapWith(Number)`; the `sql` import is gone. Checked with `PgDialect.sqlToQuery`: both give `count("portfolio_guestbook_reactions"."emoji")` with no params, both type `SQL<number>`, both decode `'3'` to `3`. |
+
+## Band 3: dead exports, parameters and logging
+
+| file:line | rule | what changed |
+| --- | --- | --- |
+| `src/lib/reduced-motion.ts:1` | unused export | `REDUCED_MOTION_QUERY` is module-private. |
+| `src/lib/ai/chat/types.ts:13` | unused export | `ChatDataTypes` is module-private. |
+| `src/lib/og.ts:95` | unused export | `OgFont` is module-private. |
+| `src/lib/github-repo.ts:12` | unused export | `GitHubRepoDetails` is module-private. |
+| `src/lib/github-code.ts:12` | unused export | `ParsedGitHubFileUrl` is module-private. |
+| `src/hooks/use-copy-to-clipboard.ts:13` | unused export | `UseCopyToClipboardOptions` is module-private. |
+| `src/lib/github-code.ts:151` | dead parameter | `resolveLanguage(path)` returns `'txt'` inline; the one caller (`content/mdx/github-code.tsx`) never passed `fallback`. |
+| `src/constants/portfolio/skills.tsx:158` | dead parameter | `groupTechnologies()` reads `technologies` directly; all three callers already called it bare. |
+| `src/lib/safe-action/client.ts:8` | inconsistent error handling | `ActionError` messages are returned without logging; any other error is logged whole (`console.error('Failed to execute action:', e)`, so the stack is kept) and the visitor still gets `UNEXPECTED_ACTION_ERROR`. Same return values. Note: the `ActionError`s thrown for "unavailable right now" (contact and newsletter with missing env) and "Failed to revoke session." were logged before and are not now; the send and subscribe failures still log at their throw sites. |
+
+## Band 4: CSS and file names
+
+| file:line | rule | what changed |
+| --- | --- | --- |
+| `src/styles/globals.css:149` | fragmented theme | The second plain `@theme` block (fd primary, primary foreground and ring overrides, `--animate-blink`, `--animate-shimmer` and their keyframes) is merged into the end of the first `@theme` block; `@theme static` stays separate. Compiled `globals.css` with `@tailwindcss/postcss` right before and right after the edit: the output is byte-identical (338,777 bytes, empty diff). `bun run build` passes; on localhost:3111 the computed `--color-fd-primary` is `#3451b2`, `--color-fd-primary-foreground` `#fafafa`, `--color-fd-ring` `color-mix(in oklab, #3451b2 55%, black)`, `--animate-blink`/`--animate-shimmer` set, and both `@keyframes` present. |
+| `src/constants/portfolio/experiences.tsx:1` | wrong extension | Renamed to `experiences.ts`, and `skills.tsx` to `skills.ts` (the same finding; neither has JSX). The earlier blocker is gone: `scripts/link-previews/config.ts` now scans `src/constants/**/*.{ts,tsx}` instead of listing the files. All importers use extensionless paths; nothing else names the old paths. |
+
+## Skipped (annotation left in place)
+
+| file:line | reason |
+| --- | --- |
+| `src/hooks/use-near-viewport.ts:3` | Cross-scope. usehooks-ts `useIntersectionObserver` returns a callback ref and owns the element, while this hook takes a `RefObject`, so the hook cannot wrap it; the one caller (`src/app/(home)/blog/[slug]/page.client.tsx`) has to switch to `const { ref, isIntersecting } = useIntersectionObserver({ freezeOnceVisible: true, rootMargin: '100% 0px' })` in the same change that deletes this file. |
+| `src/lib/ai/chat/catalog.ts:70` | Cross-scope. `render-portfolio.ts` writes `slugs` in a fresh object literal, so dropping it from `ProjectItem` fails tsc there; making it optional would type a field that is still always written. Drop it from the tool first, then from the Pick. |
+| `src/lib/scroll-to-target.ts:6` | Cross-scope. Both callers (`src/components`) pass `{ immediate }`; the only backward-compatible form is an optional option with a default, which adds a second calling shape instead of removing one. Do it together with the callers. |
+| `src/types/story.ts:1` | The `IconName` type has to be exported from `src/components/icons/icons.tsx` (out of scope). |
+| `src/lib/is-active.ts:10`, `src/lib/github-code.ts:96`, `src/server/db/queries/guestbook.ts:82`, `src/lib/metadata.ts:7`, `src/lib/resend.ts:116`, `src/lib/validators/index.ts:1`, `src/server/db/schema/comments.ts:14`, `:23`, `:41` | Owner decisions 6, 4, 4, 12, 3, 5 and 11 / schema changes (unchanged). |
+| `src/lib/auth-client.ts:7`, `src/lib/audio/preferences.ts:76`, `src/styles/globals.css:321`, `:337`, `src/lib/reveal-script.ts:7` | Visitor-visible or audible, or cross-scope (unchanged reasons from round 3). |
+| `src/lib/ai/prompts/chat/directives.ts:1`, `src/lib/ai/prompts/chat/tools.ts:1` | Prompt text consolidation (changes what the model reads). |
+| `src/lib/github-contributions.ts:5`, `src/lib/ai/chat/types.ts:4`, `:19`, `:22`, `src/lib/source/blog.ts:5`, `src/server/comments/moderation.ts:67`, `src/server/db/queries/guestbook.ts:118`, `src/lib/validators/guestbook.ts:38`, `src/constants/index.ts:3`, `src/constants/site.ts:6` | Cross-scope (unchanged). `src/components/json-ld.tsx` still imports `baseUrl` from `@/constants`; `handle` is still imported by `emails/`. |
+| `src/hooks/use-reduced-motion.ts:10`, `src/env.ts:36`, `src/constants/search.tsx:123`, `src/constants/portfolio/intro.ts:3` | Declined in earlier rounds; reasons still hold. |
+
+## Follow-ups for other scopes
+
+- `src/components/layout/header/link-item.tsx`, `mobile/menu.tsx`: import `isLinkItemActive` from `fumadocs-ui/layouts/shared`, then delete the re-export in `src/lib/is-active.ts`.
+- `src/app/(home)/blog/[slug]/page.client.tsx`: switch to usehooks-ts `useIntersectionObserver` (above), then delete `src/hooks/use-near-viewport.ts`.
+- `src/app/api/chat/utils/tools/render-portfolio.ts:110`: stop writing `slugs`, then drop it from `ProjectItem`.
+- `src/components/features/search/dialog.tsx`, `features/assistant/tools/navigate.tsx`: once `scrollToTarget` reads `prefersReducedMotion()` itself, drop the `{ immediate }` argument.
+
+Checks after the last band: `bunx tsc --noEmit` clean, `bun run check` clean (419 files), `bun run check:spelling` clean, `bun run build` passes. Nothing committed.
+
+## emails, scripts, root config
+
+## Round 4: emails, scripts, root config
+
+Line numbers are the line of the `TODO(slopradar)` comment before this pass. Checks after each band: `bunx tsc --noEmit` clean, `bun run check:spelling` clean (also run with `--no-cache`), `bun run check:links` 32 URLs, 0 fallbacks, 0 errors. `biome check` is clean on every file in this scope. `bun run check` fails only on `src/app/(home)/contact/_components/faq.tsx` (format), which another agent is editing; this pass did not touch it.
+
+### Band 1: `.cspell.jsonc`
+
+| File | Rule | What changed |
+|------|------|--------------|
+| `.cspell.jsonc:5` | dead-config | Removed `pnpm-lock.yaml` and `bun.lockb` from `ignorePaths`; neither file exists. `bun.lock` (tracked) and `plans/reviews/**` stay. Biome collapsed the list onto one line. |
+| `.cspell.jsonc:20` | duplication | Removed the exact duplicates `Chánh`, `Camargo` and `Salaja`. For the case pairs `Clippy`, `Daytona`, `Devarsh`, `Gorkie`, `Hugeicons`, `MITTLED` and `Nuqs` only the lowercase entry is left (cspell is case-insensitive by default). `Chanh` is removed as well: matching also ignores accents, so `Chánh` covers it (checked by removing `Chanh` and running cspell: still clean). The list is sorted case-insensitively. |
+| `.cspell.jsonc:21` | dead-config | Removed 19 words that `rg -i -F --hidden` (excluding node_modules, bun.lock, .next, .git, plans/reviews and the config itself) finds nowhere: `highp`, `wizardy`, `backflip`, `unrs`, `scira`, `sandboxing`, `Keras`, `Vernie`, `theatrejs`, `Gollum`, `Eververse`, `rebindable`, `corercd`, `trackpad`, `Oiia`, `COOLDOWN`, `HITBOX`, `boing`, `Boing`. `wizardy` was deleted, not corrected: `wizardry` does not appear in the repo either. Also removed 15 words that do appear but that cspell does not flag with an empty `words` list, because its dictionaries or ignore rules already cover them: `apos`, `autoremove`, `chsh`, `devcontainers`, `fract`, `geistmono`, `lefthook`, `mcps`, `nums`, `orama`, `Qwik`, `remark`, `shadcn`, `Turborepo`, `Zaid`. Method: one cspell run with `"words": []` and `--words-only`; every word left in the list is reported as unknown by that run, and every unknown word is covered by the list. 214 entries -> 169. To confirm the run really checks files, removing `gorkie` makes it fail on `content/blog/gorkie-sandboxes.mdx`. |
+
+### Band 2: `next.config.ts`
+
+The LAN `allowedDevOrigins` entries (`'192.168.0.100'`, `'*.local'`) are unchanged. The dev server on :3111 reloaded the config on its own and still serves `/` (200).
+
+| File | Rule | What changed |
+|------|------|--------------|
+| `next.config.ts:24` | dead-config | Deleted the `raw.githubusercontent.com/Meeting-BaaS/**` remote pattern. `rg -i 'meeting-baas\|githubusercontent' src content emails scripts`: Meeting-BaaS appears only as `github:` frontmatter links and in the previews manifest (github.com URLs). The only raw URL used as an image is `raw.githubusercontent.com/techwithanirudh/...` (`content/work/coolify_tweaks.mdx`), which keeps its pattern. `src/lib/github-code.ts` fetches raw files with `fetch`, not `next/image`. |
+| `next.config.ts:53` | stale-comment | Comment reads "Tags are inline filters on /blog, so the tag index redirects there" (no "now", and it names the real destination). `/blog/tags` still answers 308 to `/blog` on :3111. |
+
+### Band 3: scripts
+
+| File | Rule | What changed |
+|------|------|--------------|
+| `scripts/link-previews/utils.ts:128` | unused-export | `CaptureResult` is no longer exported; it is used only inside `utils.ts`. Biome put the union on one line. tsc is clean. |
+
+### Skipped (annotation left in place)
+
+| File | Reason |
+|------|--------|
+| `emails/contact-notification.tsx:25`, `emails/newsletter-welcome.tsx:65` | Shared email theme changes how the emails look (owner decision). |
+| `scripts/generate-portrait.ts:5` | Portrait output path; the check means regenerating a file in `src/`, which is off limits (owner/cross-scope). |
+| `scripts/link-previews/config.ts:67` | Where the shared work links schema lives is an owner call; `source.config.ts` may only export collections. |
+| `next.config.ts:39` | `SOURCE_MAPS`/`ANALYZE` env move is an owner decision and needs an edit to `src/env.ts`. |
+| `next.config.ts:101` | Build gate (`ignoreBuildErrors`), owner decision 1. |
+| `biome.jsonc:28` | Disabled rules need an owner-written reason, or a separate change that turns them on. |
+
+Counts: 6 resolved (3 in `.cspell.jsonc`, 2 in `next.config.ts`, 1 in `scripts`), 6 skipped, 0 declined. `lefthook.yml` has no annotations.
+
+# Bugs found after round 4: focus ring
+
+| File | Cause | Fix |
+|------|-------|-----|
+| `src/components/layout/sections/more-link.tsx` (SectionMoreLink: "View all posts", "View all projects", Simba's MoreLink card) | The keyboard focus ring was a 3px `ring-inset` box shadow in `primary-foreground`. That color matches the page instead of the bar: rgb(26, 26, 30) in dark mode against the dark page, rgb(250, 250, 250) in light mode against the rgb(245, 245, 245) page. Drawn flush at the bar's edge, it read as the bar getting smaller, not as focus (checked with keyboard Tab in both color schemes). | Replaced `ring-inset focus-visible:ring-primary-foreground` with `focus-visible:ring-0 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-primary-foreground focus-visible:-outline-offset-6`: a 2px outline 6px inside the bar, painted above the gradient layers. Contrast against the bar fill: about 8.6:1 in dark mode (rgb(26, 26, 30) on rgb(168, 177, 255)) and 6.8:1 in light mode (rgb(250, 250, 250) on rgb(52, 81, 178)). The box stays 1278x64 at 1440px, and hover and active classes are unchanged. |
+
+# Bugs found after round 4: stack chip rings
+
+| File | Cause | Fix |
+|------|-------|-----|
+| `src/components/ui/badge.tsx` (Stack chips on `/about`, which render Badge as an `<a>`) | On keyboard focus the chips drew two rings at once. Badge's base classes added `focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50` (a 3px box-shadow ring flush with the border, and the 1px border recolored to the ring color), and the global `:where(a[href], ...):focus-visible` rule in `globals.css` also drew its 2px outline at a 2px offset. Measured with keyboard Tab at 1440x900, 2x: border 1px, box-shadow `0 0 0 3px` ring/50, outline 2px solid at offset 2px. The two bands overlap, so the focus ring looked about twice as thick as on every other link. At rest the chip is a normal 1px border with no shadow and no outline, so the resting outline was not doubled. | Removed `focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50` from the Badge base and `focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40` from the destructive variant. A focusable Badge now gets only the site's global 2px outline, like every other link. The `aria-invalid` ring classes are unchanged. Focus does not change the box size, so the layout does not shift. The chips keep their pill shape on focus because `rounded-full` overrides the zero-specificity `:where` border-radius. |
+
+# Owner decision: THIRD_PARTY_NOTICES.md deleted
+
+| File | What changed |
+|------|--------------|
+| `THIRD_PARTY_NOTICES.md` | Deleted by owner decision. The in-file "adapted from" and copyright headers stay as the only credit. |
+| `.agents/skills/slopradar/SKILL.md`, `reviewer-brief.md` | Reviewers no longer read the notices file; the repo rules are `.claude/CLAUDE.md` and `biome.jsonc`. |
+| `blog/[slug]/_components/header.tsx:1`, `blur-image.tsx:4`, `layout/header/index.tsx:39`, `features/toc/popover.tsx:16` | Dropped the "add a THIRD_PARTY_NOTICES.md entry" part of each `TODO(slopradar)` attribution note. The header.tsx note asked only for that entry, so it is gone; the other three still ask for an in-file source header or a header move (owner decision 6). The braydoncoyer, Delba and other credit lines are unchanged. |
+| `plans/reviews/SLOPRADAR.md` | History kept as written; owner question 6 notes the deletion. |
+
+# Bug: "Could not load sessions" on /account
+
+Cause: better-auth 1.7.10's `/list-sessions` (and revoke) run behind `freshSessionMiddleware`: a session is "fresh" for `freshAge` (24 hours by default) after it was created. Normal use extends a session's expiry but never resets its creation time, so any signed-in session older than a day got a 403 `SESSION_NOT_FRESH` and the Active sessions card fell into its generic error state. A read-only DB check showed 3 active sessions at 16.8h, 51.9h and 120.6h.
+
+Fix: `src/server/auth/index.ts` exports `isSessionNotFreshError` (an `isAPIError` check on `body.code === 'SESSION_NOT_FRESH'`, not message text); `active-sessions.tsx` now shows "For security, sign in again to view your sessions" with a Sign in link (`/account?signin=%2Faccount`) for that case and keeps the generic card, with its log line, for every other failure. `freshAge` stays at the default so revoking sessions keeps its protection. Verified the detector against a real `APIError` (SESSION_NOT_FRESH true, another code false, a plain Error with the same message false, status 403); the card itself was not rendered with a stale session because that needs a signed-in account.
+
+# Bugs found after round 4: search gap and stuck preview card
+
+| File | Cause | Fix |
+|------|-------|-----|
+| `src/app/(home)/search/_components/search-client.tsx` | `[&>div]:!pt-2` gave the result list 8px of top padding, so the first row sat 8px under the tab row, and the skeleton's `p-1` made it jump 4px when the results replaced it. An interrupted edit had also lost a space, so `[&>div]:!p-0` and `max-h-none` merged into one class that did nothing. | Dropped `!pt-2` and the skeleton's `p-1`, restored the space, and changed CenteredEmpty to `min-h-[100cqh]` because its `-0.5rem` was there only to offset the padding. Measured at 1440x900 and 2x: the skeleton's first row and the first result both start at 367, flush with the tab row (before: 371 and 375). The empty state is centered, and the top fade mask still runs from 0 to 40px when the list scrolls. |
+| `src/components/preview-link.tsx` (HoverPreviewLink) | The popup is rendered only once the page preview fetch has resolved. When focus or hover opened the Root and left before that, the Root closed with no popup element. Base UI 1.9.0's `useAnimationsFinished` returns early for a null element, so the close never completed (`onOpenChangeComplete(false)` never fired) and the Root stayed mounted in its ending state. When the fetch landed, the popup mounted into that state as `data-closed data-ending-style`. Its exit animation does not hold its final frame, so the card stayed visible at full opacity. Depensa was the slow first request. A failed fetch also stayed cached as null for the whole session. | The Root is controlled with `open={wantsOpen && Boolean(popup)}`, so it opens only once there is a popup to animate. A fetch that lands after blur or mouse leave mounts nothing. Network errors and non-404 failures are now removed from the cache and resolve to undefined, so the next open retries. A 404 still caches as null, meaning "no preview". |
+
+# Simba mascot art
+
+The mascot now draws the QuiverAI sheet (`simba-states/simba-spritesheet-more-states-v2-idle-tweens-anchored.svg`) instead of the older hand-rigged parts. The old `rig-art.ts` shared no paths with the sheet, so the redrawn poses could not be added on their own: Rest, the in-between frames and the idle frames are all drawn from the sheet's side-sit Rest, so every pose now comes from the sheet. Which pose plays when is unchanged; only the sprite behind each pose name changed.
+
+| File | What changed |
+|------|--------------|
+| `mascot/rig-art.ts` | Generated from the sheet: `RIG_DEFS` (70 shared parts, prefix `r_r_au__` dropped) and `SPRITES` (23 sprites). Dropped the sheet's `<style>`, every `class`/`style` animation hook, the frames that start hidden (`opacity:0`), the frame dots, labels, ground ellipses and "z" text. Numbers with more than 3 decimals are rounded to 3; path data was already 1 decimal. Each sprite is moved so it stands on the rig's ground point (69, 220). The sheet's 1.1x display scale on the later sections and the anchored file's extra offsets (9.16, 6.68, -3.96 and so on) are dropped: the parts are drawn at the first row's scale, and with those offsets Rest no longer lined up with its own idle and in-between frames. The eye part gets a clip and a `--look-x/--look-y` pupil shift, so the pointer look still moves the pupils. Attribution header kept. |
+| `mascot/constants.ts` | `Pose` is now `{ sprite, flip? }` or `{ hidden }`. rest=RestPose, attention=GetAttention (new raised paw), bashful=Embarrassed, curiousRight=CuriousTilt, curious=CuriousTilt mirrored, focus=Show.. (presenting arm), greet=Waving, lookUp=IdleLookAround, playful=Excited, pleased=Happy, searching=Searching, surprised=Surprised, thinking=Thinking. Animations and triggers are unchanged. |
+| `mascot/use-sprite-frames.ts` (new) | Steps through the sheet's in-between frames, 80 ms each: Rest to Happy (1, 2), Rest to Waving (1, 2), Rest to CuriousTilt (1, 2), and back the other way on return to rest. While the pose is rest, it plays an idle loop every 4 to 9 s (random): breath in then out (700 ms each, about 1.4 units of chest lift and 1.5 units of head lift), an ear twitch twice, a weight shift (1.2 s) or a slow blink (450 ms). Each loop ends on Rest. There is no idle loop and there are no in-between frames with reduced motion or on `still` copies (chips). |
+| `mascot/rig.tsx` | Renders the scoped defs plus the current sprite. The head is wrapped in `.simba-look`, which follows `--look-tilt`. Changes without in-between frames keep the old squash "pop", and `hidden` keeps the old fade and scale-out. The `muzzles` TODO no longer applies: the muzzle tuple is gone. |
+| `styles/simba.css` | Removed the old part classes (hair, silk, earline, toe, fade, head, tilt, ears, the infinite breathe, blink and twitch). Added `.simba-look` and `.simba-wave` (Waving's arm keeps the old 0.45 s wave). The reduced motion block is unchanged. |
+
+Not wired: Sad and Sleeping (with RestToSleeping 1 to 3). No existing pose or trigger means sad or asleep, and the task was not to change what triggers when. Wiring either one takes a pose entry plus an animation that uses it; the extractor (kept outside the repo) can add their sprites.
+
+Not seamless: RestToWaving-2 still has the side-sit body and neutral head, so the step to the final Waving pose (front sit, relaxed head) moves the head about 9 units (about 4 px at the 88 px trigger) and swaps the body. The in-between frames only lead to the unmirrored tilt; mirrored `curious` swaps straight over with the pop. Rest's side sit sits about 10 units left of the front-sit poses, so swaps without in-between frames (Rest to Thinking, for example) still shift sideways, as they did before.
+
+Sizes of `rig-art.ts`: 26,106 B (8,811 B gzip) before, 44,155 B (11,156 B gzip) after. The new file holds 23 sprites (12 poses, 5 idle frames, 6 in-between frames) against 3 full poses plus parts before.

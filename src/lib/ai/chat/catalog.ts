@@ -67,6 +67,7 @@ export const portfolioCatalog = defineCatalog(schema, {
 
 export type PortfolioComponent = keyof typeof portfolioCatalog.data.components
 
+// TODO(slopradar): dead-field: `slugs` is written by render-portfolio.ts and shipped in every spec, but nothing reads it since WorkCard takes transitionName; drop it from the Pick and from the tool's state entry
 export type ProjectItem = Pick<WorkPage, 'slugs' | 'url'> &
   Pick<WorkPage['data'], 'title'> & {
     description: string

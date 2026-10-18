@@ -11,6 +11,7 @@ import { ActiveSessionsSkeleton } from './_components/active-sessions-skeleton'
 
 export const metadata: Metadata = createMetadata({
   alternates: {
+    // TODO(slopradar): magic-string: '/account' is typed 4 times (canonical, openGraph url, _lib/session.ts, revalidatePath in actions/revoke-session.ts) and has no pages entry, add pages.account to src/constants/pages and read its path
     canonical: '/account',
   },
   description: 'Manage your account information and active sessions.',

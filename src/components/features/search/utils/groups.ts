@@ -11,14 +11,6 @@ const tagRank = (tag: string) => {
   return rank === -1 ? TAG_ORDER.length : rank
 }
 
-function orderTagGroups(
-  tagMap: Map<string, SearchPageGroup[]>
-): SearchTagGroup[] {
-  return Array.from(tagMap, ([tag, pages]) => ({ pages, tag })).toSorted(
-    (a, b) => tagRank(a.tag) - tagRank(b.tag)
-  )
-}
-
 function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
   const grouped: SearchPageGroup[] = []
   let current: SearchPageGroup | null = null
@@ -46,15 +38,13 @@ function groupSearchResultsByPage(results: SortedResult[]): SearchPageGroup[] {
 function bucketByTag(
   entries: { page: SearchPageGroup; tag: string }[]
 ): SearchTagGroup[] {
-  const buckets = Map.groupBy(entries, (entry) => entry.tag)
-  return orderTagGroups(
-    new Map(
-      Array.from(buckets, ([tag, tagEntries]) => [
-        tag,
-        tagEntries.map((entry) => entry.page),
-      ])
-    )
-  )
+  return Array.from(
+    Map.groupBy(entries, (entry) => entry.tag),
+    ([tag, tagEntries]) => ({
+      pages: tagEntries.map((entry) => entry.page),
+      tag,
+    })
+  ).toSorted((a, b) => tagRank(a.tag) - tagRank(b.tag))
 }
 
 export function buildCommandGroups(

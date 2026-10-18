@@ -26,6 +26,9 @@ export const subscribe = publicActionClient
     const audienceId = env.RESEND_AUDIENCE_ID
 
     if (!(resend && audienceId && env.EMAIL_FROM)) {
+      console.error(
+        'Newsletter unavailable: Resend or the audience env is not configured'
+      )
       throw new ActionError(
         'The newsletter is unavailable right now. Please try again later.'
       )

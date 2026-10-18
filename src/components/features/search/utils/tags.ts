@@ -8,22 +8,26 @@ interface SearchTag {
   path: string
 }
 
-const searchTags: Partial<Record<string, SearchTag>> = {
+const searchTags = {
   blog: { heading: pages.blog.title, icon: Icons.blog, path: pages.blog.path },
   projects: {
     heading: pages.projects.title,
     icon: Icons.work,
     path: pages.projects.path,
   },
-}
+} satisfies Record<string, SearchTag>
 
 const otherTag: Omit<SearchTag, 'path'> = { heading: 'Pages', icon: Icons.page }
 
+const isSearchTag = (tag: string): tag is keyof typeof searchTags =>
+  Object.hasOwn(searchTags, tag)
+
 export const TAG_ORDER = Object.keys(searchTags)
 
-export const getTagMeta = (tag: string) => searchTags[tag] ?? otherTag
+export const getTagMeta = (tag: string) =>
+  isSearchTag(tag) ? searchTags[tag] : otherTag
 
 export const tagFromUrl = (url: string) =>
   Object.entries(searchTags).find(
-    ([, meta]) => meta && (url === meta.path || url.startsWith(`${meta.path}/`))
+    ([, meta]) => url === meta.path || url.startsWith(`${meta.path}/`)
   )?.[0] ?? 'other'

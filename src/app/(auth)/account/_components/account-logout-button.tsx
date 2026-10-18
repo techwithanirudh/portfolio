@@ -12,6 +12,7 @@ export function AccountLogoutButton() {
     <Button
       className='self-start'
       onClick={async () => {
+        // TODO(slopradar): swallowed-error: better-auth's signOut resolves { error } instead of throwing (the round 2 sign-in fix), so a failed sign-out still navigates home as if it worked, check the result and toast on error
         await signOut()
         router.push('/')
         router.refresh()

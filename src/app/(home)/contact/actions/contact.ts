@@ -1,5 +1,6 @@
 'use server'
 
+import { profile } from '@/constants/portfolio/profile'
 import { env } from '@/env'
 import { resend } from '@/lib/resend'
 import { ActionError, publicActionClient } from '@/lib/safe-action'
@@ -10,8 +11,7 @@ import ContactNotificationEmail from '../../../../../emails/contact-notification
 const sentAtFormat = new Intl.DateTimeFormat('en-US', {
   dateStyle: 'medium',
   timeStyle: 'short',
-  // TODO(slopradar): magic-string: the owner's time zone and the ' IST' suffix are typed here, read the zone from src/constants/portfolio/profile and let Intl print timeZoneName
-  timeZone: 'Asia/Kolkata',
+  timeZone: profile.timeZone,
 })
 
 export const contact = publicActionClient
@@ -21,11 +21,15 @@ export const contact = publicActionClient
     const to = env.EMAIL_TO
 
     if (!(resend && from && to)) {
+      console.error(
+        'Contact form unavailable: Resend or the email env is not configured'
+      )
       throw new ActionError(
         'The contact form is unavailable right now. Please try again later.'
       )
     }
 
+    // TODO(slopradar): magic-string: the ' IST' suffix still restates profile.timeZone; timeZoneName cannot be combined with dateStyle/timeStyle and en-US prints 'GMT+5:30', so printing it from Intl changes the email text (owner call)
     const sentAt = `${sentAtFormat.format(new Date())} IST`
 
     // Resend returns API failures and throws on network ones. Either way the

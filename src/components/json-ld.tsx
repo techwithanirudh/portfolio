@@ -6,12 +6,12 @@ import type {
   Thing,
 } from 'schema-dts'
 import { tagPath } from '@/components/features/blog/tag-path'
-import { baseUrl } from '@/constants'
 import { pages } from '@/constants/pages'
 import { title as homeTitle } from '@/constants/site'
-import { getBlogPageImage, getWorkPageImage } from '@/lib/metadata'
+import { baseUrl, getBlogPageImage, getWorkPageImage } from '@/lib/metadata'
 import type { BlogPage } from '@/lib/source'
 import type { WorkPage } from '@/lib/source/work'
+import { url as siteUrl } from '@/lib/url'
 
 const personRef = {
   '@id': `${baseUrl.href}#person`,
@@ -66,7 +66,7 @@ function ArticleJsonLd({
   section: { name: string; path: string }
   type: 'Article' | 'BlogPosting'
 }) {
-  const url = new URL(page.url, baseUrl.href).href
+  const url = siteUrl(page.url)
 
   const article: Article = {
     '@id': `${url}#article`,
@@ -85,7 +85,7 @@ function ArticleJsonLd({
 
   const breadcrumbs = makeBreadcrumbs([
     { name: homeTitle, url: baseUrl.href },
-    { name: section.name, url: new URL(section.path, baseUrl.href).href },
+    { name: section.name, url: siteUrl(section.path) },
     { name: page.data.title, url },
   ])
 
@@ -95,7 +95,7 @@ function ArticleJsonLd({
 export const PostJsonLd = ({ page }: { page: BlogPage }) => (
   <ArticleJsonLd
     author={{ '@type': 'Person', name: page.data.author }}
-    image={new URL(getBlogPageImage(page).url, baseUrl.href).href}
+    image={siteUrl(getBlogPageImage(page).url)}
     page={page}
     section={{ name: pages.blog.title, path: pages.blog.path }}
     type='BlogPosting'
@@ -105,7 +105,7 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => (
 export const WorkJsonLd = ({ page }: { page: WorkPage }) => (
   <ArticleJsonLd
     author={personRef}
-    image={new URL(getWorkPageImage(page).url, baseUrl.href).href}
+    image={siteUrl(getWorkPageImage(page).url)}
     page={page}
     section={{ name: pages.projects.title, path: pages.projects.path }}
     type='Article'
@@ -132,10 +132,11 @@ function PageJsonLdBase({
 }: {
   type: WebPageType
   props: PageJsonLdProps
+  // TODO(slopradar): weak-type: extra?: object lets any field into the graph unchecked, and the page node is an untyped literal while ArticleJsonLd types its node as schema-dts Article; type the node as WebPage and extra as Partial<WebPage>
   extra?: object
 }) {
   const { title, description, path } = props
-  const url = new URL(path, baseUrl.href).href
+  const url = siteUrl(path)
 
   const page = {
     '@id': `${url}#webpage`,
@@ -175,7 +176,7 @@ export const AboutPageJsonLd = (props: PageJsonLdProps) => (
 export const ProfilePageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase
     extra={{
-      mainEntity: { '@id': `${baseUrl.href}#person`, '@type': 'Person' },
+      mainEntity: personRef,
     }}
     props={props}
     type='ProfilePage'
@@ -183,8 +184,8 @@ export const ProfilePageJsonLd = (props: PageJsonLdProps) => (
 )
 
 export const TagJsonLd = ({ tag }: { tag: string }) => {
-  const tagUrl = new URL(tagPath(tag), baseUrl.href).href
-  const blogUrl = new URL(pages.blog.path, baseUrl.href).href
+  const tagUrl = siteUrl(tagPath(tag))
+  const blogUrl = siteUrl(pages.blog.path)
 
   const page: CollectionPage = {
     '@id': `${tagUrl}#webpage`,

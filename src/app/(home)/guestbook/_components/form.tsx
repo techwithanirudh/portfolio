@@ -21,6 +21,7 @@ import { Label } from '@/components/ui/label'
 import { SignaturePad } from '@/components/ui/signature-pad'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
+import { pages } from '@/constants/pages'
 import { useSession } from '@/lib/auth-client'
 import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
@@ -57,6 +58,7 @@ export const GuestbookForm = () => {
           })
           setStep(1)
           setFormKey((current) => current + 1)
+          // TODO(slopradar): redundant-refresh: the action calls updateTag, which already re-renders the route in the action response (next docs 02-guides/server-actions.md), so router.refresh() is a second round trip, drop it (x3 in use-entry-actions.ts)
           router.refresh()
         },
       },
@@ -104,7 +106,10 @@ export const GuestbookForm = () => {
             You need an account to post.
           </p>
         </div>
-        <Button className='w-full' onClick={() => openSignIn('/guestbook')}>
+        <Button
+          className='w-full'
+          onClick={() => openSignIn(pages.guestbook.path)}
+        >
           <span>Sign in to post</span>
           <Icons.arrowRight
             className='icon-arrow-button size-4'

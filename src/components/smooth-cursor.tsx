@@ -140,6 +140,7 @@ function DefaultCursor({ isOverPointer }: { isOverPointer: boolean }) {
 }
 
 export function SmoothCursor() {
+  // TODO(slopradar): magic-string: an inline media query beside MEDIA in lib/media.ts (whose finePointer omits hover), add it to MEDIA and read it from there
   const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
   const reducedMotion = useReducedMotion()
   const enabled = finePointer && !reducedMotion

@@ -51,7 +51,7 @@ export const PostRow = ({ date = 'full', meta = true, post }: PostRowProps) => {
           {title}
           <Icons.arrowRight
             aria-hidden
-            className='size-4 shrink-0 -translate-x-1 opacity-0 transition-[opacity,translate] duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100 motion-reduce:transition-none'
+            className='size-4 shrink-0 -translate-x-1 opacity-0 transition-[opacity,translate] duration-200 ease-out group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100'
           />
         </h3>
         {description && (

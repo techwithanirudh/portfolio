@@ -3,6 +3,7 @@ import { PortraitChip } from '@/app/(home)/_components/portrait'
 import { owner } from '@/constants/site'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): duplication: the same first-name split is features/assistant/owner-name.ts (which only lowercases it), export the first name once from constants/site and derive both
 const ownerFirstName = owner.split(' ')[0] ?? owner
 const coAuthorSeparator = /\s*(?:&|,|\band\b)\s*/
 

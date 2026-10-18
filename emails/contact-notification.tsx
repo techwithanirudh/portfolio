@@ -46,6 +46,7 @@ export default function ContactNotificationEmail({
           }}
         />
       </Head>
+      {/* TODO(slopradar): redundant-truncation: `<Preview>` already cuts its text at PREVIEW_MAX_LENGTH (150) in @react-email/preview, so this unexplained 120 is a second limit; pass `message` as is (the inbox snippet grows by 30 characters, owner call) or name the constant */}
       <Preview>{message.slice(0, 120)}</Preview>
       <Tailwind>
         <Body className='m-0 bg-white py-8 font-sans'>

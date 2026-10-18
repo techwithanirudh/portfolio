@@ -118,6 +118,10 @@ const getCachedActivityItems = unstable_cache(
   { revalidate: 5 * 60 }
 )
 
+const isClosedPullRequest = ({ event }: ActivityEventItem) =>
+  event.type === 'PullRequestEvent' &&
+  (event.payload as { action?: string }).action === 'closed'
+
 export const getActivityItems = async (): Promise<ActivityEventItem[]> => {
   let items: ActivityEventItem[]
   try {
@@ -127,14 +131,7 @@ export const getActivityItems = async (): Promise<ActivityEventItem[]> => {
     return []
   }
 
-  const closedPullRequests = new Set(
-    items.filter(
-      ({ event }) =>
-        event.type === 'PullRequestEvent' &&
-        (event.payload as { action?: string }).action === 'closed'
-    )
-  )
-  if (closedPullRequests.size === 0) {
+  if (!items.some(isClosedPullRequest)) {
     return items
   }
 
@@ -145,7 +142,7 @@ export const getActivityItems = async (): Promise<ActivityEventItem[]> => {
       item.event.payload as { pull_request?: { number?: number } }
     ).pull_request?.number
     const repoName = item.event.repo?.name
-    return closedPullRequests.has(item) && repoName && number
+    return isClosedPullRequest(item) && repoName && number
       ? { ...item, merged: merged.has(pullRequestKey(repoName, number)) }
       : item
   })

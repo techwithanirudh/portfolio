@@ -108,7 +108,7 @@ export const GuestbookEntryCard = ({
         <EntryEditForm
           draft={draftMessage}
           isBusy={isBusy}
-          isSaving={edit.status === 'executing'}
+          isSaving={edit.isExecuting}
           onCancel={cancelEditing}
           onChange={setDraftMessage}
           onSave={submitEdit}

@@ -198,6 +198,7 @@ export const PromptInputSubmit = ({
   children,
   ...props
 }: PromptInputSubmitProps) => {
+  // TODO(slopradar): duplication: restates isChatBusy from features/assistant/chat-context.tsx, move that predicate to src/lib/ai/chat so this slice and the assistant share it
   const isBusy = status === 'submitted' || status === 'streaming'
   const filled =
     'border-primary bg-primary text-primary-foreground hover:bg-primary/80 data-[disabled]:bg-primary data-[disabled]:opacity-50'

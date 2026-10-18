@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { markdownResponse } from './markdown-response'
 
 interface LLMSource<Page> {
   generateParams: () => { slug: string[] }[]
@@ -19,12 +20,7 @@ export function createLLMRoute<Page>(
       notFound()
     }
 
-    return new Response(await getText(page), {
-      headers: {
-        // TODO(slopradar): inconsistent: the .mdx routes send text/markdown without the charset every other llms route sets, share one header constant with the other routes
-        'Content-Type': 'text/markdown',
-      },
-    })
+    return markdownResponse(await getText(page))
   }
 
   const generateStaticParams = () => source.generateParams()

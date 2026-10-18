@@ -19,6 +19,7 @@ const withOccurrenceKeys = (lines: string[]) => {
 }
 
 interface ErrorPageProps {
+  // TODO(slopradar): unchecked-type: Next 16 types `error` as unknown (file-conventions/error.md: a value thrown in a Client Component arrives as-is and may not be an Error), type it unknown and narrow with instanceof Error before reading name, message, stack and digest
   error: Error & { digest?: string }
   retry: () => void
 }
@@ -85,6 +86,7 @@ const ErrorPage = ({ error, retry }: ErrorPageProps) => {
               <Link
                 className='link-underline'
                 href={ISSUE_URL}
+                // TODO(slopradar): duplicate-logic: rel and target restate externalLinkProps from @/components/external-link (same values), which no src/app file uses (x10 in src/app), spread it on a plain <a> since this is an external URL
                 rel='noopener noreferrer'
                 target='_blank'
               >

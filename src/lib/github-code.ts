@@ -9,7 +9,7 @@ const SHIKI_LANG_KEYS = new Set([
 ])
 const LINE_RANGE_REGEX = /#L(\d+)(?:-L(\d+))?$/
 
-export interface ParsedGitHubFileUrl {
+interface ParsedGitHubFileUrl {
   lineRange: {
     startLine?: number
     endLine?: number
@@ -147,16 +147,16 @@ export const getCodeTitle = (
   return filename
 }
 
-export const resolveLanguage = (path: string, fallback = 'txt'): string => {
+export const resolveLanguage = (path: string): string => {
   const filename = path.split('/').pop() ?? ''
   const extension = filename.includes('.')
     ? filename.split('.').pop()?.toLowerCase()
     : ''
 
   if (!extension) {
-    return fallback
+    return 'txt'
   }
 
   const normalized = extension === 'htm' ? 'html' : extension
-  return SHIKI_LANG_KEYS.has(normalized) ? normalized : fallback
+  return SHIKI_LANG_KEYS.has(normalized) ? normalized : 'txt'
 }

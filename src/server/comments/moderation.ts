@@ -4,7 +4,6 @@ import { moderationPrompt } from '@/lib/ai/prompts/moderation'
 import { provider } from '@/lib/ai/providers'
 import {
   ModerationResultSchema,
-  parseCommentImageNode,
   parseCommentMentionNode,
 } from '@/lib/validators'
 
@@ -17,16 +16,15 @@ const normalizeWhitespace = (value: string) =>
 
 const extractContent = (content: Content) => {
   const textParts: string[] = []
-  const images: string[] = []
+  let hasImage = false
 
   const visit = (node: Content) => {
     if (node.type === 'text' && typeof node.text === 'string') {
       textParts.push(node.text)
     }
 
-    const parsedImage = parseCommentImageNode(node)
-    if (parsedImage) {
-      images.push(parsedImage.attrs.src)
+    if (node.type === 'image') {
+      hasImage = true
     }
 
     const parsedMention = parseCommentMentionNode(node)
@@ -48,15 +46,15 @@ const extractContent = (content: Content) => {
   visit(content)
 
   return {
-    images,
+    hasImage,
     text: normalizeWhitespace(textParts.join('')),
   }
 }
 
 export const moderateComment = async (content: Content) => {
-  const { text, images } = extractContent(content)
+  const { hasImage, text } = extractContent(content)
 
-  if (images.length > 0) {
+  if (hasImage) {
     throw new RouteError({
       message: 'Images are not allowed in comments.',
       statusCode: 400,
@@ -84,6 +82,7 @@ export const moderateComment = async (content: Content) => {
       throw error
     }
 
+    // TODO(slopradar): inconsistent-error-handling: logs only name and message, so the stack, cause and NoObjectGeneratedError.text are lost, while safe-action/client.ts logs the error whole; log `error` itself (same in the guestbook moderation copy)
     console.error('Comment moderation failed:', {
       error:
         error instanceof Error

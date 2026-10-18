@@ -10,7 +10,7 @@ SCOPE: {SCOPE}. Nothing outside it; you may read other files to understand calle
 
 FIRST, in this order:
 1. Invoke the Skill tool for `desloppify` (review mode), then `no-comments`, then `ultracite`, then {SKILLS}. Follow their process.
-2. Read fully: `.claude/CLAUDE.md`, `biome.jsonc`, `THIRD_PARTY_NOTICES.md`, {READS}.
+2. Read fully: `.claude/CLAUDE.md`, `biome.jsonc`, {READS}.
 3. Record a baseline: `bun run typecheck` and `bunx biome check {scope paths}`. Report exact counts. Run heavy commands one at a time.
 
 GIT RULES (absolute): never run git stash, checkout, reset, restore, clean, commit or push, and change nothing beyond the comments you add.

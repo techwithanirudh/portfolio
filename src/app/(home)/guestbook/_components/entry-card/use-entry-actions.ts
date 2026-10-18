@@ -29,6 +29,7 @@ export function useEntryActions(
     },
     onSuccess: () => {
       closeEditor()
+      // TODO(slopradar): redundant-refresh: updateTag in the action already re-renders the route, drop router.refresh() and useRouter (x3 in this file)
       router.refresh()
       toast.success('Guestbook entry updated.')
     },

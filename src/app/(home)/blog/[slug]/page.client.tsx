@@ -16,6 +16,7 @@ import { useNearViewport } from '@/hooks/use-near-viewport'
 import { toast } from '@/lib/toast'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): duplicate-logic: the noop-subscribe useSyncExternalStore client snapshot is copied in components/layout/header/theme-toggle.tsx, add one hook in src/hooks (for example useClientValue(getSnapshot, serverValue))
 const subscribeNoop = () => () => undefined
 
 export function ShareMenu({ title, url }: { title: string; url: string }) {
@@ -143,6 +144,7 @@ export function PostComments({
         <Comments
           auth={{
             signIn: () => {
+              // TODO(slopradar): magic-string: rebuilds the post URL from the slug, pass page.url (or url) in from page.tsx
               openSignIn(`/blog/${slug}`)
             },
             type: 'api',

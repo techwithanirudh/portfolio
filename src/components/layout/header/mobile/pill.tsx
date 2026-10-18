@@ -39,7 +39,7 @@ export function FloatingPill({
         <button
           aria-label='Search'
           // TODO(slopradar): duplication: the same round icon button classes are spelled out here, on the menu toggle below and in mobile/item.tsx, share one cva or class constant (x3)
-          className='relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-[0.96]'
+          className='relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 active:scale-96'
           onClick={onSearchOpen}
           type='button'
         >
@@ -65,7 +65,7 @@ export function FloatingPill({
           aria-expanded={open}
           aria-label='Toggle menu'
           className={cn(
-            'relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 active:scale-[0.96]',
+            'relative flex size-8 touch-manipulation select-none items-center justify-center rounded-full transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-1.5 active:scale-96',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50',
             open
               ? 'bg-primary/10 text-primary'

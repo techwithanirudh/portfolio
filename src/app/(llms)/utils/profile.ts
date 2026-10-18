@@ -75,6 +75,7 @@ export function getProfileFactsText(now = new Date()) {
   const firstRoleStart = format(periodDate(earliest.start, 'start'), 'MMM yyyy')
   const inRoles = roles.reduce((total, role) => total + role.months, 0)
   const current = roles.filter((role) => role.current)
+  // TODO(slopradar): duplicate-logic: finds the address by scanning socials for 'mailto:' and stripping the scheme while `email` is exported from @/constants/site, import it and filter otherSocials on it
   const email = socials.find((social) => social.url.startsWith('mailto:'))
   const otherSocials = socials.filter((social) => social !== email)
 

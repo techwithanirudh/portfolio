@@ -23,6 +23,7 @@ export function MenuPanel({
   onClose: () => void
 }) {
   const pathname = usePathname()
+  // TODO(slopradar): duplication: a hand-written Home item ('Home', '/') is prepended here and again in footer/links.tsx and mobile/pill.tsx (x3) while constants/pages has pages.home; build it once from pages.home next to linkItems in constants/navigation
   const menuItems = [
     {
       active: 'url' as const,

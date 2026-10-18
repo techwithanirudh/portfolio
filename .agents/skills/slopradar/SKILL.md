@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Adapted from the slopradar skill in techwithanirudh/depensa.
 
-A slopradar pass has three phases: annotate, compile, resolve. It measures code against this repo's own rules (`.claude/CLAUDE.md`, `biome.jsonc` and the comments that explain its parked rules, `THIRD_PARTY_NOTICES.md`) and the `desloppify` (review mode), `no-comments` and `ultracite` skills.
+A slopradar pass has three phases: annotate, compile, resolve. It measures code against this repo's own rules (`.claude/CLAUDE.md`, `biome.jsonc` and the comments that explain its parked rules) and the `desloppify` (review mode), `no-comments` and `ultracite` skills.
 
 ## Phase 1: annotate
 
@@ -23,7 +23,7 @@ Spawn one `general-purpose` agent per scope below, in parallel. Each gets the re
 
 `src/components/ui` is shadcn/ui: review it only for local edits that should have been extensions, never for upstream style. `.source/` is generated and out of scope.
 
-Every reviewer also reads `.claude/CLAUDE.md`, `biome.jsonc` and `THIRD_PARTY_NOTICES.md`.
+Every reviewer also reads `.claude/CLAUDE.md` and `biome.jsonc`.
 
 ## Phase 2: compile
 

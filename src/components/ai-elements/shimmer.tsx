@@ -21,6 +21,7 @@ const ShimmerComponent = ({
 }: TextShimmerProps) => (
   <Component
     className={cn(
+      // TODO(slopradar): dead-class: motion-reduce:animate-none is a no-op, the global reduced-motion rule (animation-duration 0.01ms !important, one iteration) already beats the inline animationDuration and leaves the base background-position, delete it
       'relative inline-block animate-shimmer bg-[length:250%_100%,auto] bg-clip-text text-transparent [background-position:100%_center] motion-reduce:animate-none',
       '[--bg:linear-gradient(90deg,#0000_calc(50%-var(--spread)),var(--color-background),#0000_calc(50%+var(--spread)))] [background-repeat:no-repeat,padding-box]',
       className

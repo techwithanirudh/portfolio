@@ -1,5 +1,6 @@
 import { type RefObject, useEffect, useState } from 'react'
 
+// TODO(slopradar): library-exists: usehooks-ts (a dependency) ships useIntersectionObserver({ rootMargin, freezeOnceVisible: true }), which is this hook; use it at the one caller (blog/[slug]/page.client.tsx) and delete this file
 /**
  * Flips to true once the element comes within `rootMargin` of the viewport
  * and stays there, so heavy below-the-fold work can wait until it's needed

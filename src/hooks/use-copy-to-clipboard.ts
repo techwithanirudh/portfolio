@@ -10,7 +10,7 @@ import {
 
 export type CopyState = 'idle' | 'done' | 'error'
 
-export interface UseCopyToClipboardOptions {
+interface UseCopyToClipboardOptions {
   onCopyError?: (error: Error) => void
   onCopySuccess?: (text: string) => void
   resetDelay?: number
@@ -34,6 +34,7 @@ export function useCopyToClipboard({
   )
 
   const { trigger: haptic } = useWebHaptics()
+  // TODO(slopradar): double-sound: blog/[slug]/page.client.tsx passes onCopySuccess/onCopyError that call toast.success/toast.error from @/lib/toast, which play the same success and error sounds, so one copy plays each sound twice; let one layer own the sound (an opt-out here, or the plain sonner toast there)
   const playSuccess = useSound(successSound)
   const playError = useSound(errorSound)
 

@@ -80,7 +80,7 @@ export const ToolHeader = ({
       </span>
       <Icons.chevronDown
         aria-hidden
-        className='size-3.5 text-muted-foreground transition-transform duration-200 group-data-panel-open/tool-trigger:rotate-180 motion-reduce:transition-none'
+        className='size-3.5 text-muted-foreground transition-transform duration-200 group-data-panel-open/tool-trigger:rotate-180'
       />
     </span>
   </CollapsibleTrigger>
@@ -91,7 +91,7 @@ export type ToolContentProps = ComponentProps<typeof CollapsibleContent>
 export const ToolContent = ({ className, ...props }: ToolContentProps) => (
   <CollapsibleContent
     className={cn(
-      'h-(--collapsible-panel-height) overflow-hidden border-t border-dashed transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none',
+      'h-(--collapsible-panel-height) overflow-hidden border-t border-dashed transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0',
       className
     )}
     {...props}

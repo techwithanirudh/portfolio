@@ -4,6 +4,7 @@ import { SectionHeader } from '@/components/layout/sections/header'
 import { SectionMoreLink } from '@/components/layout/sections/more-link'
 import { pages } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
+import { staggerDelay } from '@/lib/stagger'
 
 const previewCount = 3
 
@@ -23,7 +24,7 @@ export default function ExperiencePreview() {
         <div>
           <ExperienceTimeline experiences={recent} />
           <SectionMoreLink
-            delay={0.05 * recent.length}
+            delay={staggerDelay(recent.length)}
             href={`${pages.about.path}#experience`}
           >
             View full timeline

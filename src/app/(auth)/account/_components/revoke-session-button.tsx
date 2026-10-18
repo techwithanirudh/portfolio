@@ -11,11 +11,12 @@ import { revokeSessionAction } from '../actions/revoke-session'
 export function RevokeSessionButton(props: { token: string }) {
   const { token } = props
   const router = useRouter()
-  const { execute, status } = useAction(revokeSessionAction, {
+  const { execute, isExecuting } = useAction(revokeSessionAction, {
     onError: ({ error }) => {
       toast.error(getActionErrorMessage(error, 'Failed to revoke session.'))
     },
     onSuccess: () => {
+      // TODO(slopradar): redundant-refresh: revalidatePath('/account') in the action already re-renders the route in its response, drop router.refresh() and useRouter
       router.refresh()
       toast.success('Session revoked.')
     },
@@ -23,7 +24,7 @@ export function RevokeSessionButton(props: { token: string }) {
 
   return (
     <Button
-      disabled={status === 'executing'}
+      disabled={isExecuting}
       onClick={() => {
         execute({ token })
       }}
@@ -31,9 +32,7 @@ export function RevokeSessionButton(props: { token: string }) {
       size='sm'
       variant='destructive'
     >
-      {status === 'executing' ? (
-        <Icons.spinner className='size-4 animate-spin' />
-      ) : null}
+      {isExecuting ? <Icons.spinner className='size-4 animate-spin' /> : null}
       Revoke
     </Button>
   )

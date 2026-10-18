@@ -7,6 +7,7 @@ import { baseUrl } from '@/lib/metadata'
 import { absoluteMarkdownLinks, url } from '@/lib/url'
 
 export function getAboutText() {
+  // TODO(slopradar): magic-string: route paths are typed by hand ('/about', '/about#story', '/resume' here, and in colophon, contact, experience, skills, testimonials, uses and profile.ts) while sitemap.ts reads pages.<key>.path, interpolate the pages constant
   return `# About
 Route: ${url('/about')}
 

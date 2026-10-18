@@ -138,6 +138,7 @@ function ViewOptions({
         render={
           <Button
             aria-label='View options'
+            // TODO(slopradar): redundant-class: size-8 is exactly what size='icon-sm' already sets, drop it
             className='size-8 border-none shadow-none active:scale-none'
             disabled={disabled}
             size='icon-sm'

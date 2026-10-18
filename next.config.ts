@@ -18,12 +18,6 @@ const nextConfig: NextConfig = {
         port: '',
         protocol: 'https',
       },
-      {
-        hostname: 'raw.githubusercontent.com',
-        pathname: '/Meeting-BaaS/**',
-        port: '',
-        protocol: 'https',
-      },
     ],
   },
   logging: {
@@ -46,7 +40,7 @@ const nextConfig: NextConfig = {
         permanent: true,
         source: '/resume.pdf',
       },
-      // Tags are inline filters on the blog now, so the old index goes home
+      // Tags are inline filters on /blog, so the tag index redirects there
       {
         destination: '/blog',
         permanent: true,

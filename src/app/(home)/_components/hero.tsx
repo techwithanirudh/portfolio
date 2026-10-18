@@ -7,7 +7,7 @@ import { buttonVariants } from '@/components/ui/button-variants'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
 import { heroIntro } from '@/constants/portfolio/intro'
-import { baseOptions } from '@/constants/site'
+import { baseOptions, owner } from '@/constants/site'
 import heroGradient640 from '@/public/images/hero-gradient/640.avif'
 import heroGradient750 from '@/public/images/hero-gradient/750.avif'
 import heroGradient828 from '@/public/images/hero-gradient/828.avif'
@@ -16,6 +16,8 @@ import heroGradient1200 from '@/public/images/hero-gradient/1200.avif'
 import heroGradient1408 from '@/public/images/hero-gradient/1408.avif'
 import heroGradient from '@/public/images/hero-gradient.png'
 import { PortraitChip } from './portrait'
+
+const [firstName, lastName] = owner.split(' ')
 
 const gradientSizes =
   '(min-width: 1024px) 1004px, (min-width: 768px) 900px, (min-width: 640px) 720px, 560px'
@@ -64,8 +66,8 @@ const Hero = () => (
     </picture>
     <ViewAnimation delay={0.05}>
       <h1 className='mb-5 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'>
-        {/* TODO(slopradar): magic-string: owner name typed around the chip, split owner from @/constants/site */}
-        Anirudh <PortraitChip /> Sriram<span className='text-primary'>.</span>
+        {firstName} <PortraitChip /> {lastName}
+        <span className='text-primary'>.</span>
       </h1>
     </ViewAnimation>
     <ViewAnimation delay={0.1}>
@@ -97,6 +99,7 @@ const Hero = () => (
             variant: 'ghost',
           })}
           href={baseOptions.githubUrl}
+          // TODO(slopradar): inconsistent: rel='noreferrer' here and in about/_components/activity.tsx and stack.tsx while externalLinkProps says 'noopener noreferrer' (noreferrer already implies noopener, so the browser behaves the same), spread externalLinkProps
           rel='noreferrer'
           target='_blank'
         >

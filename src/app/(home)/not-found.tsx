@@ -8,6 +8,7 @@ export default function NotFound() {
   return <NotFoundContent />
 }
 
+// TODO(slopradar): duplicate-logic: the same title, description and robots as src/app/not-found.tsx, export the metadata once (beside NotFoundContent) and reuse it
 export const metadata: Metadata = createMetadata({
   description: "This page doesn't exist.",
   robots: { follow: false, index: false },

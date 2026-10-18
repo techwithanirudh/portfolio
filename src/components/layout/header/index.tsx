@@ -29,13 +29,14 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
 import { SearchToggle } from './search-toggle'
 import { ThemeToggle } from './theme-toggle'
 
-// TODO(slopradar): attribution: this navbar (navItemVariants, renderNavTitle, both LinkItem renderers) is adapted from fumadocs-ui layouts/home/slots/header.js (MIT), add a source header and a THIRD_PARTY_NOTICES.md entry like the other adapted files
+// TODO(slopradar): attribution: this navbar (navItemVariants, renderNavTitle, both LinkItem renderers) is adapted from fumadocs-ui layouts/home/slots/header.js (MIT), add a source header like the other adapted files
 const navItemVariants = cva('[&_svg]:size-4', {
   defaultVariants: {
     variant: 'main',
@@ -91,7 +92,10 @@ function NavTitleLink({ href, onClick, ...props }: ComponentProps<'a'>) {
         if (lenis) {
           lenis.scrollTo(0)
         } else {
-          window.scrollTo({ behavior: 'smooth', top: 0 })
+          window.scrollTo({
+            behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+            top: 0,
+          })
         }
       }}
       {...props}
@@ -303,7 +307,7 @@ const HeaderNavigationMenu = ({
           {children}
         </NavigationMenu.List>
         <CollapsibleContent
-          className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none lg:hidden'
+          className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0 lg:hidden'
           onClick={(event) => {
             if (event.target instanceof Element && event.target.closest('a')) {
               setMenuOpen(false)

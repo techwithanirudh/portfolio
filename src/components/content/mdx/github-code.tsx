@@ -78,6 +78,7 @@ export async function GitHubCode({
       </div>
     )
   } catch (error) {
+    // TODO(slopradar): inconsistent-error-handling: this fallback never logs, so in production the reason is lost, while github-repo.tsx and mermaid.tsx console.error theirs; log the error here the same way
     return (
       <p>
         Unable to load source snippet from <code>{url}</code>

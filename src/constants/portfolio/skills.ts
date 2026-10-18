@@ -155,10 +155,10 @@ export const technologies: TechStackItem[] = [
 ]
 
 /** The stack by category, in first seen order. An item is listed under every category it has */
-export const groupTechnologies = (items: TechStackItem[] = technologies) => {
+export const groupTechnologies = () => {
   const grouped = new Map<string, TechStackItem[]>()
 
-  for (const item of items) {
+  for (const item of technologies) {
     for (const category of item.categories) {
       const group = grouped.get(category)
       if (group) {

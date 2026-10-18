@@ -84,7 +84,7 @@ export function ThemeToggle({
   }
 
   const container = cn(
-    'inline-flex items-center rounded-lg border bg-background p-1 transition-[scale] duration-150 ease-out-strong active:scale-[0.96]',
+    'inline-flex items-center rounded-lg border bg-background p-1 transition-[scale] duration-150 ease-out-strong active:scale-96',
     className
   )
 

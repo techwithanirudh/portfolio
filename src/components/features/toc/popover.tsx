@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
-// TODO(slopradar): attribution: the popover trigger and ProgressCircle follow fumadocs-ui layouts/docs/page/slots/toc.js (MIT), add a source header and a THIRD_PARTY_NOTICES.md entry
+// TODO(slopradar): attribution: the popover trigger and ProgressCircle follow fumadocs-ui layouts/docs/page/slots/toc.js (MIT), add a source header
 export function TOCPopover({
   className,
   items,
@@ -105,7 +105,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
           />
         </CollapsibleTrigger>
 
-        <CollapsibleContent className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none'>
+        <CollapsibleContent className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0'>
           <div className='flex max-h-[50vh] flex-col px-4 md:px-6'>
             <TOCScrollArea>
               <TOCItems>

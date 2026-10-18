@@ -148,6 +148,7 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
                     />
                   </svg>
                   <span className='sr-only'>Level {level}</span>
+                  {/* TODO(slopradar): inconsistent: the legend's hover label is a hand-rolled group-hover span while the calendar above uses the Tooltip component, use Tooltip here too */}
                   <span
                     aria-hidden
                     className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'

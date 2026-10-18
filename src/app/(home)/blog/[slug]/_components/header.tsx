@@ -1,4 +1,3 @@
-// TODO(slopradar): attribution: this port is not listed in THIRD_PARTY_NOTICES.md, which names each braydoncoyer file, add it there and name the source file like story.tsx does
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as m from 'motion/react-m'
 import { BlurImage } from '@/components/blur-image'
@@ -6,6 +5,7 @@ import { TagCard } from '@/components/features/blog'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
 import type { BlogPage } from '@/lib/source'
+import { staggerDelay } from '@/lib/stagger'
 
 // TODO(slopradar): duplicate-logic: hand-rolled date formatting without timeZone UTC while the page sidebar uses formatDate, add a long variant to @/lib/format-date
 const formatPostDate = (date: Date) =>
@@ -17,11 +17,10 @@ const formatPostDate = (date: Date) =>
 
 interface HeaderProps {
   page: BlogPage
-  tags?: string[]
 }
 
-export const Header = ({ page, tags }: HeaderProps) => {
-  const image = page.data.image
+export const Header = ({ page }: HeaderProps) => {
+  const { image, tags } = page.data
   const formattedDate = formatPostDate(page.data.date)
 
   return (
@@ -44,14 +43,14 @@ export const Header = ({ page, tags }: HeaderProps) => {
             />
           )}
           <div
-            className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent'
+            className='absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent'
             style={{ viewTransitionName: 'none' }}
           />
           <div className='relative z-5 mt-auto p-8 md:p-16'>
             {tags?.length ? (
               <div className='mb-4 hidden gap-2 md:flex md:flex-wrap'>
                 {tags.map((tag, index) => (
-                  <ViewAnimation delay={0.1 + index * 0.05} key={tag}>
+                  <ViewAnimation delay={staggerDelay(index, 0.1)} key={tag}>
                     <TagCard
                       className='border border-white/60 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
                       name={tag}

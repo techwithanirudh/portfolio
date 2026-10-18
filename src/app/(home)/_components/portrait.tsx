@@ -3,6 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { AnimatePresence, m, useAnimate } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
+// TODO(slopradar): inconsistent: the only src/app file that imports toast from sonner directly instead of @/lib/toast, route the bonk toasts through @/lib/toast or record why they stay silent (owner call: the wrapper adds a sound)
 import { toast } from 'sonner'
 import { owner } from '@/constants/site'
 import { error as errorSound, pop } from '@/lib/audio/minimal'
@@ -32,6 +33,7 @@ const BlinkingEyes = ({ fill }: { fill?: string }) => (
 // TODO(slopradar): misplaced-module: PortraitChip is imported by src/components/features/blog/author-byline.tsx and the about hero, move this file to src/components and drop the export on Portrait
 export function Portrait({
   className,
+  // TODO(slopradar): magic-number: the 947x1160 artwork size is typed here, in the JSDoc and on the still chip's <image>, export it beside PORTRAIT_CHIP_VIEW_BOX in @/lib/portrait-eyes
   viewBox = '0 0 947 1160',
 }: {
   className?: string
@@ -139,25 +141,17 @@ function BonkChip({ className }: { className?: string }) {
   const playError = useSound(errorSound)
   const streak = useRef(0)
   const streakTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const bonkedTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const sulkTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
-  useEffect(() => () => clearTimeout(streakTimer.current), [])
-
-  // TODO(slopradar): effect-mirrors-state: sulking and bonked are each reset by an effect watching themselves, start the timeout in bonk() as streakTimer already does (rerender-move-effect-to-event, x2)
-  useEffect(() => {
-    if (!sulking) {
-      return
-    }
-    const timer = setTimeout(() => setSulking(false), SULK_MS)
-    return () => clearTimeout(timer)
-  }, [sulking])
-
-  useEffect(() => {
-    if (!bonked) {
-      return
-    }
-    const timer = setTimeout(() => setBonked(false), BONK_MS)
-    return () => clearTimeout(timer)
-  }, [bonked])
+  useEffect(
+    () => () => {
+      clearTimeout(streakTimer.current)
+      clearTimeout(bonkedTimer.current)
+      clearTimeout(sulkTimer.current)
+    },
+    []
+  )
 
   const bonk = () => {
     if (sulking) {
@@ -174,6 +168,11 @@ function BonkChip({ className }: { className?: string }) {
     playPop()
     setBonks((count) => count + 1)
     setBonked(true)
+    // The flag clears BONK_MS after the first bonk of a run, not the last
+    bonkedTimer.current ??= setTimeout(() => {
+      bonkedTimer.current = undefined
+      setBonked(false)
+    }, BONK_MS)
 
     streak.current += 1
     clearTimeout(streakTimer.current)
@@ -187,6 +186,7 @@ function BonkChip({ className }: { className?: string }) {
     if (streak.current >= SULK_AT) {
       streak.current = 0
       setSulking(true)
+      sulkTimer.current = setTimeout(() => setSulking(false), SULK_MS)
       toast('you bonked me unconscious. happy?', { id: 'bonk' })
       return
     }

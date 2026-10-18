@@ -120,6 +120,7 @@ export default function ResumePage() {
                     </h3>
                     <span className='font-mono text-[0.6875rem] text-muted-foreground tabular-nums'>
                       {[
+                        // TODO(slopradar): inconsistent: a position without employmentType reads 'Research' in the experience timeline and the (llms) routes but shows nothing here, use DEFAULT_EMPLOYMENT_TYPE or make the field required in src/types
                         position.employmentType,
                         formatPeriod(
                           position.employmentPeriod.start,

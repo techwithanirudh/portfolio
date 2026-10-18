@@ -1,4 +1,4 @@
-import { and, desc, eq, sql } from 'drizzle-orm'
+import { and, count, desc, eq } from 'drizzle-orm'
 import { unstable_cache } from 'next/cache'
 
 import type {
@@ -18,7 +18,7 @@ const fetchSharedGuestbookEntries = async (): Promise<
   const rows = await db
     .select({
       banned: users.banned,
-      count: sql<number>`count(${guestbookReactions.emoji})`.mapWith(Number),
+      count: count(guestbookReactions.emoji),
       createdAt: guestbookEntries.createdAt,
       editedAt: guestbookEntries.editedAt,
       emoji: guestbookReactions.emoji,

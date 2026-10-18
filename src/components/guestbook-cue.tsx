@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 
+// TODO(slopradar): magic-string: restates pages.guestbook.path from constants/pages (not-found-content.tsx reads it from there), import pages and use pages.guestbook.path
 const GUESTBOOK_PATH = '/guestbook'
 
 export function GuestbookBand() {

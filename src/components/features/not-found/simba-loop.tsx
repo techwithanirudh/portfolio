@@ -12,6 +12,7 @@ import { useReducedMotion } from '@/hooks/use-reduced-motion'
 export function SimbaLoop({
   animation,
   className,
+  // TODO(slopradar): dead-prop: the only caller (not-found-content.tsx) never passes pause, so it is a constant behind a prop; make it a named module constant (LOOP_PAUSE_MS)
   pause = 1200,
   size,
 }: {

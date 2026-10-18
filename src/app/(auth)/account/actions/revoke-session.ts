@@ -14,6 +14,7 @@ export const revokeSessionAction = userActionClient
 
     const result = await revokeSession(token)
     if (!result.status) {
+      console.error('Failed to revoke session')
       throw new ActionError('Failed to revoke session.')
     }
 

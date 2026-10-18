@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 export type CommandKind = 'command' | 'page' | 'link'
+// TODO(slopradar): unused export: nothing imports AccountAction (only CommandItem uses it), make it module-private
 export type AccountAction = 'account' | 'logout' | 'signin'
 
 interface BaseItem {

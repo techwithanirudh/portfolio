@@ -27,7 +27,7 @@ export default async function Page(props: {
   if (!page) {
     notFound()
   }
-  const { body: Mdx, toc, tags, lastModified } = page.data
+  const { body: Mdx, toc, lastModified } = page.data
 
   const pageActions = (
     <>
@@ -49,6 +49,7 @@ export default async function Page(props: {
       )}
       <div className='flex flex-col gap-2'>
         <LLMCopyButtonWithViewOptions
+          // TODO(slopradar): duplicate-logic: rebuilds the source file path as content/blog/${slug}.mdx while lib/get-llm-text.ts derives it from page.path, build it from page.path with one shared helper
           githubUrl={`${githubRepoUrl}/blob/${githubBranch}/content/blog/${params.slug}.mdx`}
           markdownUrl={url(['blog.mdx', params.slug])}
         />
@@ -59,7 +60,7 @@ export default async function Page(props: {
 
   return (
     <TOCProvider toc={toc}>
-      <Header page={page} tags={tags} />
+      <Header page={page} />
 
       <SectionBody className='flex'>
         <TOCMinimap items={toc} />

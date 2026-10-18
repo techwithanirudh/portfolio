@@ -19,6 +19,7 @@ import { createMetadata, getWorkPageImage } from '@/lib/metadata'
 import { getWork, getWorkPages, type WorkPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
 
+// TODO(slopradar): duplicate-logic: the share map and the `${slug}-image/-title/-description` names restate the view transition protocol in components/features/work/work-card.tsx, export the map and a name helper from features/work and use them on both sides
 const transition = { default: 'none', 'work-card': 'via-blur' } as const
 
 function Header(props: { page: WorkPage }) {

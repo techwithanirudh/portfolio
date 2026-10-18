@@ -47,6 +47,7 @@ export function NotFoundContent() {
           <Button
             className='shrink-0'
             nativeButton={false}
+            // TODO(slopradar): magic-string: '/' sits beside destinations built from pages, use pages.home.path
             render={<Link href='/' />}
           >
             Take me home

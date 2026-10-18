@@ -92,7 +92,7 @@ const FONT_FILES = [
   },
 ]
 
-export interface OgFont {
+interface OgFont {
   data: Buffer
   name: string
   unicodeRange: [number, number][]

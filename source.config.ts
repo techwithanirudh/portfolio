@@ -94,6 +94,7 @@ export default defineConfig({
     }
   },
   plugins: [
+    // TODO(slopradar): dead-config: both collections are `doc`, and `insert` only stamps `$schema` into new meta JSON files, so this only writes `.source/json-schema/*.json`, which nothing references; drop the plugin and its import
     jsonSchema({
       insert: true,
     }),

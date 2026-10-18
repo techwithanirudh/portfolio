@@ -3,6 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
+import type { z } from 'zod'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,7 +19,10 @@ import {
 } from '@/components/ui/popover'
 import { error, pop } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
-import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
+import type {
+  GuestbookReactionItem,
+  GuestbookReactionSchema,
+} from '@/lib/validators/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 
 const reactionCountFormat = new Intl.NumberFormat('en', {
@@ -37,7 +41,7 @@ interface OptimisticState {
 
 const updateOptimisticReactions = (
   state: OptimisticState,
-  payload: { entryId: number; emoji: string }
+  payload: z.infer<typeof GuestbookReactionSchema>
 ) => {
   const { emoji } = payload
   const existing = state.reactions.find((item) => item.emoji === emoji)

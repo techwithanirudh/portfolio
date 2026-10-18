@@ -70,6 +70,34 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-hand: var(--font-caveat);
+
+  --color-fd-primary-foreground: hsl(0, 0%, 98%);
+  --color-fd-primary: hsl(226, 55%, 45%);
+  /* The primary, darkened so the half strength halo on buttons and inputs
+     still reaches 3:1 on the light background. Dark sets its own below */
+  --color-fd-ring: color-mix(in oklab, var(--color-fd-primary) 55%, black);
+
+  --animate-blink: blink 4.5s ease-in-out infinite;
+
+  --animate-shimmer: shimmer 2s linear infinite;
+  @keyframes blink {
+    0%,
+    94%,
+    100% {
+      scale: 1 1;
+    }
+    97% {
+      scale: 1 0.1;
+    }
+  }
+  @keyframes shimmer {
+    from {
+      background-position: 100% center;
+    }
+    to {
+      background-position: 0% center;
+    }
+  }
 }
 
 html {
@@ -143,36 +171,6 @@ html > body[data-scroll-locked] {
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
-  }
-}
-
-@theme {
-  --color-fd-primary-foreground: hsl(0, 0%, 98%);
-  --color-fd-primary: hsl(226, 55%, 45%);
-  /* The primary, darkened so the half strength halo on buttons and inputs
-     still reaches 3:1 on the light background. Dark sets its own below */
-  --color-fd-ring: color-mix(in oklab, var(--color-fd-primary) 55%, black);
-
-  --animate-blink: blink 4.5s ease-in-out infinite;
-
-  --animate-shimmer: shimmer 2s linear infinite;
-  @keyframes blink {
-    0%,
-    94%,
-    100% {
-      scale: 1 1;
-    }
-    97% {
-      scale: 1 0.1;
-    }
-  }
-  @keyframes shimmer {
-    from {
-      background-position: 100% center;
-    }
-    to {
-      background-position: 0% center;
-    }
   }
 }
 
@@ -338,6 +336,7 @@ html > body[data-scroll-locked] {
     @apply border-border/70 dark:border-border;
   }
 
+  /* TODO(slopradar): shadowed utility: the same override as .border-border above, for Tailwind's generated divide-border (dashed-stack repeats it inline); fix the two together */
   .divide-border {
     @apply divide-border/70 dark:divide-border;
   }

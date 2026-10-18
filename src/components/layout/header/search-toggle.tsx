@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 
 interface SearchToggleProps
   extends Pick<ComponentProps<typeof Button>, 'className' | 'size'> {
+  // TODO(slopradar): dead-prop: both call sites (layout/header/index.tsx x2) pass hideIfDisabled, so the flag is always true; drop it and always return null when search is disabled
   hideIfDisabled?: boolean
 }
 

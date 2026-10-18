@@ -1,6 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { octokit } from '@/lib/github'
 
+// TODO(slopradar): duplication: the same constant is defined in github-code.ts, and nothing overrides it, so `DEFAULT_` names nothing; export one GITHUB_REVALIDATE_SECONDS from lib/github.ts
 const DEFAULT_REVALIDATE_SECONDS = 60 * 60
 
 export interface GitHubRepoInput {
@@ -9,7 +10,7 @@ export interface GitHubRepoInput {
   repo: string
 }
 
-export interface GitHubRepoDetails extends GitHubRepoInput {
+interface GitHubRepoDetails extends GitHubRepoInput {
   defaultBranch: string
   description: string | null
   forks: number

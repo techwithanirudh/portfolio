@@ -243,6 +243,7 @@ const postTitleSizes: readonly TitleSizeStep[] = [
   { maxChars: 140, size: 48 },
 ]
 
+// TODO(slopradar): dead-parameter: both callers pass 44 as `smallest`, drop the parameter and name the size once (like BALANCE_MIN_TITLE_SIZE)
 function getTitleSize(
   title: string,
   steps: readonly TitleSizeStep[],

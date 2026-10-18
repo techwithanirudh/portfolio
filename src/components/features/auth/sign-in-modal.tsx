@@ -58,12 +58,12 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
   const value = useMemo(() => ({ openSignIn }), [openSignIn])
 
   return (
-    <SignInModalContext.Provider value={value}>
+    <SignInModalContext value={value}>
       {children}
       <Suspense>
         <SignInDialog pushedHref={pushedHref} />
       </Suspense>
-    </SignInModalContext.Provider>
+    </SignInModalContext>
   )
 }
 
@@ -115,6 +115,7 @@ function SignInDialog({
         toast.error('Sign in failed. Please try again.')
         setLoadingProvider(null)
       }
+      // TODO(slopradar): swallowed-error: the catch drops the thrown error without logging it and repeats the result.error branch word for word; log it (console.error like mermaid.tsx) and route both paths through one failure handler
     } catch {
       toast.error('Sign in failed. Please try again.')
       setLoadingProvider(null)

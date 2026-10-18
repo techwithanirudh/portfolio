@@ -80,6 +80,7 @@ export function ExperienceTimeline({
             delay={staggerDelay(index)}
             key={`year-${entry.year}`}
           >
+            {/* TODO(slopradar): arbitrary-value: off-scale pixel literals (text-[12.5px], size-[9px], -mt-[7px], text-[17px], text-[13px]) where text-xs, size-2.5, text-base and the spacing scale exist, use the scale or name the odd sizes as theme tokens (x5 in this file) */}
             <p className='col-start-2 wide:col-start-1 row-start-1 font-mono text-[12.5px] text-foreground tracking-wide'>
               {entry.year}
             </p>
@@ -166,6 +167,7 @@ function TimelineRow({
         {position.description && (
           <p
             className={cn(
+              // TODO(slopradar): token-rule: max-w-[60ch] restates the typography-body utility (--typography-body-width: 60ch in globals.css) that the pages use, use typography-body
               'mt-2 max-w-[60ch] text-pretty text-muted-foreground leading-relaxed',
               variant === 'preview' && 'wide:line-clamp-1'
             )}

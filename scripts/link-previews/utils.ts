@@ -20,6 +20,8 @@ import {
   screenshot,
 } from './config'
 
+// TODO(slopradar): library-exists: re-globs and re-parses every MDX file with remark to find links, while source.config.ts already sets `extractLinkReferences` (whose `data.extractedReferences` nothing reads); load pages
+// from `@/lib/source` as check-links.ts does and read `extractedReferences` plus `github`/`website`, then drop `contentGlobs`, `readFiles`, these processors and the `remark-mdx` devDependency (confirm the same 159 URLs)
 const mdProcessor = remark().use(remarkGfm)
 const mdxProcessor = remark().use(remarkMdx).use(remarkGfm)
 
@@ -125,9 +127,7 @@ export async function writeManifest(
   )
 }
 
-export type CaptureResult =
-  | { success: true }
-  | { error: string; success: false }
+type CaptureResult = { success: true } | { error: string; success: false }
 
 async function gotoWithFallback(
   page: Page,

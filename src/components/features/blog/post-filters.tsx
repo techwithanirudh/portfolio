@@ -56,7 +56,7 @@ export const PostFilters = ({ activeTag }: { activeTag?: string }) => (
     </nav>
     <div className='shrink-0 px-6 pb-2 md:p-0 md:pr-3'>
       <SearchRedirectInput
-        className='transition-[width] duration-200 ease-out motion-reduce:transition-none md:w-44 focus-within:md:w-72'
+        className='transition-[width] duration-200 ease-out md:w-44 focus-within:md:w-72'
         placeholder='Search posts'
         tag='blog'
       />

@@ -10,7 +10,7 @@ export const contextDataSchema = z.object({
   text: z.string().trim().min(1),
 })
 
-export type ChatDataTypes = UIDataTypes & {
+type ChatDataTypes = UIDataTypes & {
   client: { location: string }
   context: z.infer<typeof contextDataSchema>
 }

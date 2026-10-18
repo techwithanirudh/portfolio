@@ -72,6 +72,7 @@ export const createGuestbookEntry = userActionClient
     // TODO(slopradar): magic-string: the 'guestbook' cache tag is repeated 5 times here and again in the query's cacheTag, export one constant from @/server/db/queries/guestbook
     updateTag('guestbook')
 
+    // TODO(slopradar): dead-field: no caller reads `success` (x5 in this file, also revoke-session.ts and beside `message` in contact.ts and newsletter.ts), next-safe-action already reports success through onSuccess and hasSucceeded, return nothing or only what the client reads
     return { success: true }
   })
 
@@ -115,10 +116,7 @@ export const editGuestbookEntry = userActionClient
     const { user } = ctx
     const isAdmin = user.role === 'admin'
 
-    const moderation = await moderateEntry({
-      message: parsedInput.message,
-      signature: undefined,
-    })
+    const moderation = await moderateEntry({ message: parsedInput.message })
 
     if (!moderation.allowed) {
       throw new ActionError(moderation.reason)

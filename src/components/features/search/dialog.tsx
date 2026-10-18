@@ -129,7 +129,6 @@ export default function SearchDialog({
   const afterGroups = isEmpty
     ? allGroups.filter((g) => g.position === 'after')
     : []
-  type CommandItemData = (typeof allGroups)[number]['items'][number]
 
   const tagGroups = useMemo(() => {
     if (isEmpty) {
@@ -209,9 +208,7 @@ export default function SearchDialog({
     router.refresh()
   }
 
-  const handleSelect = async (
-    item: (typeof groups)[number]['items'][number]
-  ) => {
+  const handleSelect = async (item: SearchCommandItem) => {
     if (item.kind === 'account') {
       await handleAccountAction(item.action)
       return
@@ -247,7 +244,7 @@ export default function SearchDialog({
     navigateToUrl(url)
   }
 
-  const renderCommandItem = (item: CommandItemData) => (
+  const renderCommandItem = (item: SearchCommandItem) => (
     <CommandItem
       data-checked={
         item.kind === 'theme' && theme === item.theme ? true : undefined
