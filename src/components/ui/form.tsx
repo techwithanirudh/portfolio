@@ -141,17 +141,22 @@ function FormControl({
   } = useFormField()
   const { submitCount } = useFormState()
 
-  // Every failed submit shakes each invalid field again, even one that was
-  // already invalid. Typing never triggers it
-  React.useEffect(() => {
-    if (submitCount === 0 || !error || prefersReducedMotion()) {
+  const replayShake = React.useEffectEvent(() => {
+    if (!error || prefersReducedMotion()) {
       return
     }
     const control = document.getElementById(formItemId)
     if (control) {
       shake(control)
     }
-    // biome-ignore lint/correctness/useExhaustiveDependencies: only a new submit replays the shake, not a change of the error
+  })
+
+  // Every failed submit shakes each invalid field again, even one that was
+  // already invalid. Typing never triggers it
+  React.useEffect(() => {
+    if (submitCount > 0) {
+      replayShake()
+    }
   }, [submitCount])
 
   return React.cloneElement(

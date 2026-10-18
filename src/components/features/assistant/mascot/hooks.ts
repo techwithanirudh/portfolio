@@ -62,10 +62,11 @@ function useNap(mascot: SimbaController | undefined, allowed: boolean) {
     }
     let lastInput = Date.now()
     let timer: ReturnType<typeof setTimeout> | undefined
+    let cancelled = false
     const doze = () => {
       clearTimeout(timer)
       timer = undefined
-      if (document.visibilityState !== 'visible') {
+      if (cancelled || document.visibilityState !== 'visible') {
         return
       }
       const idle = Date.now() - lastInput
@@ -92,8 +93,11 @@ function useNap(mascot: SimbaController | undefined, allowed: boolean) {
       window.addEventListener(type, onInput, options)
     }
     document.addEventListener('visibilitychange', onVisibilityChange)
-    doze()
+    if (document.visibilityState === 'visible') {
+      timer = setTimeout(doze, NAP_AFTER_MS)
+    }
     return () => {
+      cancelled = true
       clearTimeout(timer)
       for (const type of WAKE_EVENTS) {
         window.removeEventListener(type, onInput, options)

@@ -61,7 +61,7 @@ export const ProjectRow = ({
       <Image
         // The title beside it already names the link
         alt=''
-        className='h-10 wide:h-14 w-16 wide:w-24 shrink-0 rounded-[8px] border object-cover shadow-xs transition-[rotate,scale,box-shadow] duration-300 ease-out will-change-transform group-hover:-rotate-3 group-hover:scale-[1.06] group-hover:shadow-md motion-reduce:transition-none'
+        className='h-10 wide:h-14 w-16 wide:w-24 shrink-0 rounded-[8px] border object-cover shadow-xs transition-[rotate,scale,box-shadow] duration-300 ease-out group-hover:-rotate-3 group-hover:scale-[1.06] group-hover:shadow-md motion-reduce:transition-none'
         height={56}
         sizes='96px'
         src={image}

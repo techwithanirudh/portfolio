@@ -1,12 +1,10 @@
 'use client'
 
-import { getImageProps } from 'next/image'
 import Link from 'next/link'
 import { type ReactNode, ViewTransition } from 'react'
-import { preload } from 'react-dom'
-import { BlurImage, IMAGE_QUALITY } from '@/components/blur-image'
+import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
-import { WORK_COVER_SIZES } from './cover'
+import { preloadCover } from './cover'
 
 // TODO(slopradar): duplicate-type: description/image/slugs/title/url restate ProjectItem in lib/ai/chat/catalog.ts, and work-grid.tsx and render-portfolio.ts each map a WorkPage into it (description ?? '', image ?? null); define the card data once and one toWorkCard(page) mapper
 interface WorkCardProps {
@@ -39,22 +37,6 @@ const SharedTransition = ({
   ) : (
     children
   )
-
-/** Warms the case study's cover while the pointer or focus is on a link to it */
-export const preloadCover = (src: string, alt: string) => {
-  const { props } = getImageProps({
-    alt,
-    fill: true,
-    quality: IMAGE_QUALITY,
-    sizes: WORK_COVER_SIZES,
-    src,
-  })
-  preload(props.src, {
-    as: 'image',
-    imageSizes: props.sizes,
-    imageSrcSet: props.srcSet,
-  })
-}
 
 export const WorkCard = ({
   title,
