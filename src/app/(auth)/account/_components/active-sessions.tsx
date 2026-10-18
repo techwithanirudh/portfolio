@@ -1,9 +1,12 @@
 import Bowser from 'bowser'
 import { format } from 'date-fns'
+import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Badge } from '@/components/ui/badge'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { Card } from '@/components/ui/card'
-import { listSessions } from '@/server/auth'
+import { SIGN_IN_PARAM } from '@/lib/auth-url'
+import { isSessionNotFreshError, listSessions } from '@/server/auth'
 
 import { RevokeSessionButton } from './revoke-session-button'
 
@@ -69,6 +72,21 @@ export async function ActiveSessions(props: { currentToken: string }) {
   try {
     sessions = await listSessions()
   } catch (error) {
+    if (isSessionNotFreshError(error)) {
+      return (
+        <Card className='rounded-none border-0' variant='flat'>
+          <div className='flex flex-col gap-3 p-4 text-muted-foreground text-sm sm:flex-row sm:items-center sm:justify-between sm:p-6'>
+            <p>For security, sign in again to view your sessions.</p>
+            <Link
+              className={buttonVariants({ size: 'sm', variant: 'outline' })}
+              href={`/account?${SIGN_IN_PARAM}=${encodeURIComponent('/account')}`}
+            >
+              Sign in
+            </Link>
+          </div>
+        </Card>
+      )
+    }
     console.error('Failed to list sessions:', error)
     return (
       <Card className='rounded-none border-0' variant='flat'>

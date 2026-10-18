@@ -16,16 +16,26 @@ import { getPagePreviewPath, type PagePreview } from '@/lib/page-preview'
 
 type Preview = LinkPreviewImage | null
 
+// Resolves null when there is no preview (404) and undefined when the request
+// failed, which is evicted so the next open retries
 function createJsonFetcher<T>() {
-  const requests = new Map<string, Promise<T | null>>()
+  const requests = new Map<string, Promise<T | null | undefined>>()
   return (url: string) => {
     let request = requests.get(url)
     if (!request) {
       request = fetch(url)
-        .then((response) =>
-          response.ok ? (response.json() as Promise<T>) : null
-        )
-        .catch(() => null)
+        .then((response) => {
+          if (response.ok) {
+            return response.json() as Promise<T>
+          }
+          if (response.status === 404) {
+            return null
+          }
+          throw new Error(`${response.status} ${url}`)
+        })
+        .catch((): undefined => {
+          requests.delete(url)
+        })
       requests.set(url, request)
     }
     return request
@@ -85,6 +95,7 @@ function HoverPreviewLink({
   const [fetchedPreview, setFetchedPreview] = useState<Preview>()
   const preview = knownPreview === undefined ? fetchedPreview : knownPreview
   const [pagePreview, setPagePreview] = useState<PagePreview | null>()
+  const [wantsOpen, setWantsOpen] = useState(false)
 
   const load = () => {
     if (pagePath) {
@@ -96,8 +107,22 @@ function HoverPreviewLink({
     }
   }
 
+  const popup = pagePath
+    ? pagePreview && <PagePreviewPopup href={href} preview={pagePreview} />
+    : preview && <LinkPreviewPopup href={href} preview={preview} />
+
   return (
-    <HoverCard onOpenChange={(open) => open && load()}>
+    // Open only once the popup exists: a Root that opens and closes with no
+    // popup never finishes closing, so a late fetch would mount a stuck card
+    <HoverCard
+      onOpenChange={(open) => {
+        setWantsOpen(open)
+        if (open) {
+          load()
+        }
+      }}
+      open={wantsOpen && Boolean(popup)}
+    >
       <HoverCardTrigger
         closeDelay={120}
         delay={300}
@@ -114,10 +139,7 @@ function HoverPreviewLink({
       >
         {children}
       </HoverCardTrigger>
-      {pagePreview && <PagePreviewPopup href={href} preview={pagePreview} />}
-      {!pagePath && preview && (
-        <LinkPreviewPopup href={href} preview={preview} />
-      )}
+      {popup}
     </HoverCard>
   )
 }

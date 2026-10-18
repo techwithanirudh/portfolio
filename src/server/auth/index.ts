@@ -1,5 +1,6 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { isAPIError } from 'better-auth/api'
 import { admin, multiSession } from 'better-auth/plugins'
 import { headers } from 'next/headers'
 import { cache } from 'react'
@@ -33,6 +34,9 @@ export const getSession = cache(async () =>
 
 export type Session = NonNullable<Awaited<ReturnType<typeof getSession>>>
 export type SessionUser = Session['user']
+
+export const isSessionNotFreshError = (error: unknown) =>
+  isAPIError(error) && error.body?.code === 'SESSION_NOT_FRESH'
 
 export const listSessions = async () =>
   auth.api.listSessions({

@@ -34,10 +34,10 @@ const ItemBadge = ({ label }: { label: string }) => (
 )
 
 const getItemTag = (url: string) => {
-  if (url.startsWith('/projects')) {
+  if (url.startsWith(pages.projects.path)) {
     return 'projects'
   }
-  if (url.startsWith('/blog')) {
+  if (url.startsWith(pages.blog.path)) {
     return 'blog'
   }
   return 'page'
@@ -47,7 +47,7 @@ const excerptWidths = [['w-3/5'], ['w-4/5', 'w-2/5'], ['w-1/2']]
 const bar = 'bg-foreground/10'
 
 const ResultsSkeleton = () => (
-  <div aria-busy className='flex w-full flex-col p-1' role='status'>
+  <div aria-busy className='flex w-full flex-col' role='status'>
     <span className='sr-only'>Searching</span>
     {excerptWidths.map((lines) => (
       <div key={lines.join()}>
@@ -67,9 +67,7 @@ const ResultsSkeleton = () => (
 )
 
 const CenteredEmpty = ({ children }: { children: ReactNode }) => (
-  <div className='flex min-h-[calc(100cqh-0.5rem)] flex-col justify-center'>
-    {children}
-  </div>
+  <div className='flex min-h-[100cqh] flex-col justify-center'>{children}</div>
 )
 
 const emptyLinkByScope = {
@@ -212,7 +210,7 @@ export function SearchClient() {
             {pending && <ResultsSkeleton />}
             <SearchDialogList
               // Let the scroll area own the height instead of fumadocs' 460px cap
-              className='!h-auto [&>div]:!p-0 [&>div]:!pt-2 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
+              className='!h-auto [&>div]:!p-0 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'
               Empty={() => (
                 <CenteredEmpty>
                   <PostEmpty link={emptyLinkByScope[scopeParam]} />
