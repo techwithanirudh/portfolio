@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { ListSection } from '@/components/layout/sections/list-section'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   Carousel,
   type CarouselApi,
@@ -55,29 +56,42 @@ const TestimonialCard = ({
   </ViewAnimation>
 )
 
+const AUTOPLAY_INTERVAL_MS = 5000
+
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
+  // `paused` is the visitor's choice and sticks until they press play.
+  // Hovering or focusing the carousel pauses it only while they stay, unless
+  // they pressed play from inside it (`resumed`), which wins until they leave
+  const [paused, setPaused] = useState(false)
+  const [resumed, setResumed] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
   const prefersReducedMotion = useReducedMotion()
-  const paused = hovered || focused
+  const playing =
+    !(prefersReducedMotion || paused) && (resumed || !(hovered || focused))
+
+  const scrollBy = (step: number) => {
+    if (!api) {
+      return
+    }
+    const count = api.scrollSnapList().length
+    api.scrollTo((api.selectedScrollSnap() + step + count) % count)
+  }
 
   // TODO(slopradar): library-exists: hand-rolled autoplay plus hovered/focused pause state, use embla-carousel-autoplay (stopOnMouseEnter, stopOnFocusIn) as a Carousel plugin
   useEffect(() => {
-    if (!api || prefersReducedMotion || paused) {
+    if (!(api && playing)) {
       return
     }
 
     const timer = setInterval(() => {
-      if (api.canScrollNext()) {
-        api.scrollNext()
-      } else {
-        api.scrollTo(0)
-      }
-    }, 2500)
+      const count = api.scrollSnapList().length
+      api.scrollTo((api.selectedScrollSnap() + 1) % count)
+    }, AUTOPLAY_INTERVAL_MS)
 
     return () => clearInterval(timer)
-  }, [api, paused, prefersReducedMotion])
+  }, [api, playing])
 
   return (
     <ListSection
@@ -85,21 +99,68 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
       title='What others are saying'
     >
       <ViewAnimation>
+        {/* The region is a tab stop so its arrow keys work (the slides hold
+            nothing focusable); the controls show on hover or focus within */}
         <Carousel
-          className='divider-top-dashed'
+          aria-label='Testimonials'
+          className='group/testimonials divider-top-dashed'
           onBlur={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget)) {
               setFocused(false)
+              if (!hovered) {
+                setResumed(false)
+              }
             }
           }}
           onFocus={() => setFocused(true)}
           onPointerEnter={() => setHovered(true)}
-          onPointerLeave={() => setHovered(false)}
+          onPointerLeave={() => {
+            setHovered(false)
+            if (!focused) {
+              setResumed(false)
+            }
+          }}
           setApi={setApi}
+          tabIndex={0}
         >
+          <div className='absolute top-6 right-6 z-10 flex gap-1 opacity-0 pointer-coarse:opacity-60 transition-opacity duration-150 ease-out-strong group-focus-within/testimonials:opacity-100 group-hover/testimonials:opacity-100 sm:top-8 sm:right-8'>
+            {prefersReducedMotion ? null : (
+              <Button
+                aria-label={paused ? 'Play testimonials' : 'Pause testimonials'}
+                className='rounded-full'
+                onClick={() => {
+                  setPaused(!paused)
+                  setResumed(paused)
+                }}
+                size='icon-sm'
+                variant='outline'
+              >
+                {paused ? <Icons.play /> : <Icons.pause />}
+              </Button>
+            )}
+            <Button
+              aria-label='Previous testimonial'
+              className='rounded-full'
+              onClick={() => scrollBy(-1)}
+              size='icon-sm'
+              variant='outline'
+            >
+              <Icons.arrowLeft />
+            </Button>
+            <Button
+              aria-label='Next testimonial'
+              className='rounded-full'
+              onClick={() => scrollBy(1)}
+              size='icon-sm'
+              variant='outline'
+            >
+              <Icons.arrowRight />
+            </Button>
+          </div>
           <CarouselContent className='ml-0 divide-x divide-dashed divide-border'>
             {testimonials.map((item, index) => (
               <CarouselItem
+                aria-label={`${index + 1} of ${testimonials.length}`}
                 className='pl-0 md:basis-1/2'
                 key={`${item.title}-${item.author.name}`}
               >

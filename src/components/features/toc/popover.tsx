@@ -51,6 +51,26 @@ function TOCPopoverContent({ className }: { className?: string }) {
     return () => window.removeEventListener('click', onClickOutside)
   }, [open])
 
+  // The open list covers the article like a popover, so Escape closes it, and
+  // focus goes back to the trigger rather than staying on a link being hidden
+  useEffect(() => {
+    const header = ref.current
+    if (!(open && header)) {
+      return
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return
+      }
+      setOpen(false)
+      header.querySelector('button')?.focus()
+    }
+
+    header.addEventListener('keydown', onKeyDown)
+    return () => header.removeEventListener('keydown', onKeyDown)
+  }, [open])
+
   return (
     <Collapsible
       className={cn(
@@ -139,15 +159,13 @@ function ProgressCircle({
   const clamped = clamp(0, 1, value)
   const progress = clamped * circumference
 
+  // Decorative: inside the trigger a progressbar's value ("0.1666…") was read
+  // as part of the button's name
   return (
     <svg
-      aria-label='Table of contents progress'
-      aria-valuemax={1}
-      aria-valuemin={0}
-      aria-valuenow={clamped}
+      aria-hidden
       className={className}
       height={size}
-      role='progressbar'
       viewBox={`0 0 ${size} ${size}`}
       width={size}
     >
