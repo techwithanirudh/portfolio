@@ -56,7 +56,8 @@ function Header(props: { page: WorkPage }) {
             share={transition}
           >
             <BlurImage
-              alt={page.data.title}
+              // Decorative: the h1 beside it already says what it is
+              alt=''
               blur={false}
               className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
               fill

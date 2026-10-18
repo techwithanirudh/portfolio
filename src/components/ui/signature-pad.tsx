@@ -28,6 +28,8 @@ export interface SignaturePadHandle {
 }
 
 interface SignaturePadProps {
+  /** Names the canvas, which a <label> cannot (it is not labelable) */
+  'aria-label'?: string
   className?: string
   disabled?: boolean
   onChange?: (dataUrl: string) => void
@@ -83,6 +85,7 @@ function exportCanvas(source: HTMLCanvasElement): string {
 }
 
 export function SignaturePad({
+  'aria-label': ariaLabel = 'Signature',
   onChange,
   onClear,
   strokeWidth = 2,
@@ -313,6 +316,7 @@ export function SignaturePad({
       ref={containerRef}
     >
       <canvas
+        aria-label={ariaLabel}
         className={cn(
           'size-full rounded-md border border-input bg-background shadow-xs',
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-crosshair'
@@ -322,6 +326,7 @@ export function SignaturePad({
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         ref={canvasRef}
+        role='img'
         style={{ touchAction: 'none' }}
       />
       <div className='absolute top-2 left-2 flex gap-1'>

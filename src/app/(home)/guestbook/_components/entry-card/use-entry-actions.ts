@@ -24,27 +24,27 @@ export function useEntryActions(
   const edit = useAction(editGuestbookEntry, {
     onError: ({ error }) => {
       toast.error(
-        getActionErrorMessage(error, "Your message wasn't updated. Try again.")
+        getActionErrorMessage(error, "Your entry wasn't updated. Try again.")
       )
     },
     onSuccess: () => {
       closeEditor()
       // TODO(slopradar): redundant-refresh: updateTag in the action already re-renders the route, drop router.refresh() and useRouter (x3 in this file)
       router.refresh()
-      toast.success('Guestbook entry updated.')
+      toast.success('Guestbook entry updated')
     },
   })
   const remove = useAction(removeGuestbookEntry, {
     onError: ({ error }) => {
       toast.error(
-        getActionErrorMessage(error, "The message wasn't deleted. Try again.")
+        getActionErrorMessage(error, "The entry wasn't deleted. Try again.")
       )
     },
     onSuccess: () => {
       closeEditor()
       closeDeleteModal()
       router.refresh()
-      toast.success('Guestbook entry deleted.')
+      toast.success('Guestbook entry deleted')
     },
   })
   const ban = useAction(banGuestbookUser, {
@@ -58,7 +58,7 @@ export function useEntryActions(
       closeBanModal()
       router.refresh()
       toast.success(
-        entry.banned ? `Unbanned ${entry.name}.` : `Banned ${entry.name}.`
+        entry.banned ? `Unbanned ${entry.name}` : `Banned ${entry.name}`
       )
     },
   })

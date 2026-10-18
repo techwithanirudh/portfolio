@@ -31,7 +31,9 @@ export function FloatingPill({
   ]
 
   return (
-    <div
+    // Named like the desktop header's nav, which is hidden whenever this shows
+    <nav
+      aria-label='Main'
       className='fixed inset-x-0 bottom-[calc(1rem+env(safe-area-inset-bottom))] z-32 flex justify-center md:hidden'
       data-mobile-nav-pill=''
     >
@@ -81,6 +83,6 @@ export function FloatingPill({
           )}
         </button>
       </div>
-    </div>
+    </nav>
   )
 }

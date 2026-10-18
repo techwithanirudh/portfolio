@@ -13,18 +13,25 @@ export function RevokeSessionButton(props: { token: string }) {
   const router = useRouter()
   const { execute, isExecuting } = useAction(revokeSessionAction, {
     onError: ({ error }) => {
-      toast.error(getActionErrorMessage(error, 'Failed to revoke session.'))
+      toast.error(
+        getActionErrorMessage(
+          error,
+          "That session wasn't revoked. Check your connection and try again."
+        )
+      )
     },
     onSuccess: () => {
       // TODO(slopradar): redundant-refresh: revalidatePath('/account') in the action already re-renders the route in its response, drop router.refresh() and useRouter
       router.refresh()
-      toast.success('Session revoked.')
+      toast.success('Session revoked')
     },
   })
 
   return (
     <Button
+      aria-label='Revoke session'
       disabled={isExecuting}
+      focusableWhenDisabled
       onClick={() => {
         execute({ token })
       }}

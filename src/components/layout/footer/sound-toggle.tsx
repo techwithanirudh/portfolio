@@ -18,8 +18,9 @@ export function SoundToggle() {
       <TooltipTrigger
         render={
           <button
+            // The label names the action, so no aria-pressed: "Mute sounds,
+            // pressed" read as already muted while sound was on
             aria-label={label}
-            aria-pressed={enabled}
             // TODO(slopradar): copied-variant: hand-rolls an outline icon button (border, size-9, hover, active scale) beside Clock which uses <Button>, render <Button size='icon' variant='outline'> instead
             className='relative inline-flex size-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong after:absolute after:-inset-0.5 hover:bg-accent hover:text-foreground active:scale-96'
             data-sound='off'

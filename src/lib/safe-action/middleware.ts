@@ -10,7 +10,7 @@ interface ActionContext {
 export const botIdMiddleware = createMiddleware().define(async ({ next }) => {
   if (await isBotRequest()) {
     throw new ActionError(
-      'Bot protection blocked this request. Please refresh and try again.'
+      'Bot protection blocked this request. Refresh the page and try again.'
     )
   }
 
@@ -22,7 +22,7 @@ export const userMiddleware = createMiddleware().define(async ({ next }) => {
   const user = session?.user
 
   if (!user) {
-    throw new ActionError('You must be signed in to do that.')
+    throw new ActionError('Sign in to do that.')
   }
 
   return next({ ctx: { user } satisfies ActionContext })

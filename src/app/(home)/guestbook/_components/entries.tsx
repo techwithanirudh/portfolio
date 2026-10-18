@@ -25,12 +25,20 @@ export const GuestbookEntries = ({
   isAdmin,
 }: GuestbookEntriesProps) => {
   if (entries.length === 0) {
-    return <EntriesNotice>No messages yet.</EntriesNotice>
+    return (
+      <EntriesNotice>
+        No entries yet. Sign the guestbook to leave the first one.
+      </EntriesNotice>
+    )
   }
 
   return (
     <div className='min-h-0 flex-1'>
-      <ScrollArea className='h-full w-full' data-lenis-prevent>
+      <ScrollArea
+        className='h-full w-full'
+        data-lenis-prevent
+        viewportProps={{ 'aria-label': 'Guestbook entries', role: 'region' }}
+      >
         <div className='dashed-stack'>
           {entries.map((entry) => (
             <GuestbookEntryCard
@@ -48,6 +56,6 @@ export const GuestbookEntries = ({
 
 export const GuestbookEntriesError = () => (
   <EntriesNotice>
-    Couldn't load the entries right now. Try again in a bit.
+    Couldn't load the entries right now. Refresh the page in a bit.
   </EntriesNotice>
 )

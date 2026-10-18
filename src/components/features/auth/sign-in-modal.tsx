@@ -44,9 +44,14 @@ export function useSignInModal(): SignInModalContextValue {
 export function SignInModalProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const pushedHref = useRef<string | null>(null)
+  const opener = useRef<HTMLElement | null>(null)
 
   const openSignIn = useCallback(
     (target?: string) => {
+      opener.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null
       const url = new URL(window.location.href)
       url.searchParams.set(SIGN_IN_PARAM, sanitizeRedirect(target ?? pathname))
       pushedHref.current = url.href
@@ -61,7 +66,7 @@ export function SignInModalProvider({ children }: { children: ReactNode }) {
     <SignInModalContext value={value}>
       {children}
       <Suspense>
-        <SignInDialog pushedHref={pushedHref} />
+        <SignInDialog opener={opener} pushedHref={pushedHref} />
       </Suspense>
     </SignInModalContext>
   )
@@ -73,8 +78,10 @@ const providers: { id: Provider; label: string; icon: ReactNode }[] = [
 ]
 
 function SignInDialog({
+  opener,
   pushedHref,
 }: {
+  opener: RefObject<HTMLElement | null>
   pushedHref: RefObject<string | null>
 }) {
   const searchParams = useSearchParams()
@@ -103,6 +110,20 @@ function SignInDialog({
     )
   }
 
+  // Opened from a link or a ?signin= URL there is no trigger to go back to
+  // (focus would drop to <body>), so land at the start of the page instead.
+  // Focused by hand: handed an element that is not tabbable, Base UI moves
+  // on to its first tabbable descendant (the hero's portrait)
+  const returnFocus = () => {
+    const target = opener.current
+    opener.current = null
+    if (target?.isConnected && target !== document.body) {
+      return target
+    }
+    document.getElementById('main-content')?.focus()
+    return false
+  }
+
   const signInWithProvider = async (provider: Provider) => {
     if (loadingProvider || redirectTo === null) {
       return
@@ -112,12 +133,14 @@ function SignInDialog({
       setLoadingProvider(provider)
       const result = await signIn.social({ callbackURL: redirectTo, provider })
       if (result?.error) {
-        toast.error('Sign in failed. Please try again.')
+        toast.error(
+          "Couldn't sign you in. Try again or use the other provider."
+        )
         setLoadingProvider(null)
       }
       // TODO(slopradar): swallowed-error: the catch drops the thrown error without logging it and repeats the result.error branch word for word; log it (console.error like mermaid.tsx) and route both paths through one failure handler
     } catch {
-      toast.error('Sign in failed. Please try again.')
+      toast.error("Couldn't sign you in. Try again or use the other provider.")
       setLoadingProvider(null)
     }
   }
@@ -131,7 +154,10 @@ function SignInDialog({
       }}
       open={redirectTo !== null}
     >
-      <DialogContent className='max-sm:data-closed:slide-out-to-bottom-[30%] max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
+      <DialogContent
+        className='max-sm:data-closed:slide-out-to-bottom-[30%] max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'
+        finalFocus={returnFocus}
+      >
         <DialogHeader>
           <DialogTitle className='text-lg'>Sign in</DialogTitle>
           <DialogDescription>
@@ -143,6 +169,7 @@ function SignInDialog({
             <Button
               className='w-full gap-2'
               disabled={loadingProvider !== null}
+              focusableWhenDisabled
               key={id}
               onClick={() => signInWithProvider(id)}
               variant='outline'

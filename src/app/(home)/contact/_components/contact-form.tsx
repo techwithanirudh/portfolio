@@ -98,7 +98,7 @@ export const ContactForm = () => {
                 <Input
                   autoComplete='email'
                   className='bg-background'
-                  placeholder='jane@acme.com'
+                  placeholder='jane@example.com'
                   {...field}
                   disabled={action.isExecuting}
                   type='email'
@@ -134,13 +134,18 @@ export const ContactForm = () => {
               ) : (
                 <FormDescription>
                   {/* TODO(slopradar): magic-string: 30 duplicates the min in ContactSchema, export CONTACT_MESSAGE_MIN_LENGTH beside the max constants and use it in both */}
-                  Please include at least 30 characters.
+                  Use at least 30 characters.
                 </FormDescription>
               )}
             </FormItem>
           )}
         />
-        <Button className='w-full' disabled={action.isExecuting} type='submit'>
+        <Button
+          className='w-full'
+          disabled={action.isExecuting}
+          focusableWhenDisabled
+          type='submit'
+        >
           <span>Send message</span>
           {action.isExecuting ? (
             <Icons.spinner

@@ -115,9 +115,13 @@ export const GuestbookReactions = ({
             aria-pressed={reaction.reacted}
             className={cn(
               'gap-2 px-3 text-xs',
-              reaction.reacted && 'border-primary text-primary'
+              // A solid, doubled border as well as the color (1.4.1)
+              reaction.reacted &&
+                'border-primary border-solid text-primary shadow-[inset_0_0_0_1px_var(--color-primary)]'
             )}
             disabled={!canReact || isExecuting}
+            // Signed out, they stay out of the tab order; busy, they keep focus
+            focusableWhenDisabled={canReact}
             key={`${entryId}-${reaction.emoji}`}
             onClick={() => handleReaction(reaction.emoji)}
             shape='square'
@@ -137,6 +141,7 @@ export const GuestbookReactions = ({
               <Button
                 className='gap-2 px-3 text-xs'
                 disabled={!canReact || isExecuting}
+                focusableWhenDisabled={canReact}
                 shape='square'
                 size='sm'
                 type='button'
@@ -145,7 +150,7 @@ export const GuestbookReactions = ({
             }
           >
             <Icons.add className='size-3' />
-            Add
+            React
           </PopoverTrigger>
           <PopoverContent className='w-fit p-0'>
             <EmojiPicker

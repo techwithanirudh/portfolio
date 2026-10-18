@@ -63,11 +63,12 @@ export async function GitHubCode({
         <GitHubSourceLink sourceUrl={resolved.source} />
         <ServerCodeBlock
           code={snippet}
+          // No `lang` in codeblock: it lands on the <figure> as an HTML lang
+          // attribute, and "json" is not a human language
           codeblock={{
             allowCopy,
             icon,
             keepBackground,
-            lang,
             title: codeTitle,
             viewportProps: {
               className: 'max-w-full',
@@ -81,8 +82,11 @@ export async function GitHubCode({
     // TODO(slopradar): inconsistent-error-handling: this fallback never logs, so in production the reason is lost, while github-repo.tsx and mermaid.tsx console.error theirs; log the error here the same way
     return (
       <p>
-        Unable to load source snippet from <code>{url}</code>
-        {!isProduction && error instanceof Error && ` (${error.message})`}.
+        Couldn&apos;t load this snippet
+        {!isProduction && error instanceof Error && ` (${error.message})`}.{' '}
+        <a className='link-underline' href={url} {...externalLinkProps}>
+          View it on GitHub
+        </a>
       </p>
     )
   }

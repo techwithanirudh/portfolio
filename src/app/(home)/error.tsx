@@ -53,7 +53,7 @@ const ErrorPage = ({ error, retry }: ErrorPageProps) => {
               render={<Link href='/' />}
               variant='secondary'
             >
-              Go home
+              Take me home
             </Button>
           </div>
           <details className='mt-6 w-full rounded-md border border-border text-left'>

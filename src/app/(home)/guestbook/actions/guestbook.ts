@@ -33,7 +33,9 @@ export const createGuestbookEntry = userActionClient
       parsedSignature = parseB64File(parsedInput.signature)
 
       if (parsedSignature?.mediaType !== 'image/png') {
-        throw new ActionError('Signature must be a PNG data URL.')
+        throw new ActionError(
+          "Your signature couldn't be read. Clear it and sign again."
+        )
       }
     }
 
@@ -140,7 +142,9 @@ export const editGuestbookEntry = userActionClient
       .returning({ id: guestbookEntries.id })
 
     if (updated.length === 0) {
-      throw new ActionError('Unable to edit this message.')
+      throw new ActionError(
+        "Couldn't update this entry. Refresh the page and try again."
+      )
     }
 
     updateTag('guestbook')
@@ -160,7 +164,9 @@ export const removeGuestbookEntry = userActionClient
     )
 
     if (!removed) {
-      throw new ActionError('Unable to delete this message.')
+      throw new ActionError(
+        "Couldn't delete this entry. Refresh the page and try again."
+      )
     }
 
     if (removed.signature) {
@@ -202,7 +208,9 @@ export const banGuestbookUser = adminActionClient
       .limit(1)
 
     if (!targetUser) {
-      throw new ActionError('User not found.')
+      throw new ActionError(
+        "That account doesn't exist anymore. Refresh the page."
+      )
     }
 
     if (targetUser.role === 'admin') {

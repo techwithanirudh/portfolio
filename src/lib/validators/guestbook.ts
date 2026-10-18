@@ -8,16 +8,19 @@ export const GuestbookEntrySchema = z.object({
   message: z
     .string()
     .trim()
-    .min(3, { message: 'Message must be at least 3 characters.' })
+    .min(3, { message: 'Write a message with at least 3 characters.' })
     .max(GUESTBOOK_MESSAGE_MAX_LENGTH, {
-      message: `Message must be under ${GUESTBOOK_MESSAGE_MAX_LENGTH} characters.`,
+      message: `Shorten your message to ${GUESTBOOK_MESSAGE_MAX_LENGTH} characters or fewer.`,
     }),
   signature: z
     .string()
     .startsWith('data:image/png;base64,', {
-      message: 'Signature must be a PNG data URL.',
+      message: "Your signature couldn't be read. Clear it and sign again.",
     })
-    .max(200_000, { message: 'Signature is too large.' })
+    .max(200_000, {
+      message:
+        'Your signature is too detailed to save. Clear it and sign with fewer strokes.',
+    })
     .optional(),
 })
 

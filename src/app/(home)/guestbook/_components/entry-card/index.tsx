@@ -63,12 +63,15 @@ export const GuestbookEntryCard = ({
     })
 
     if (!validation.success) {
-      toast.error(validation.error.issues[0]?.message ?? 'Invalid message.')
+      toast.error(
+        validation.error.issues[0]?.message ??
+          'Check your message and try again.'
+      )
       return
     }
 
     if (isBusy || disabled) {
-      toast.error('No changes to save or message is empty.')
+      toast.error('No changes to save')
       setIsEditing(false)
       return
     }
@@ -139,7 +142,7 @@ export const GuestbookEntryCard = ({
       <ConfirmDialog
         busyLabel='Deleting…'
         confirmLabel='Delete entry'
-        description={`This will remove ${entry.name}'s guestbook entry permanently.`}
+        description={`This permanently deletes ${entry.name}'s entry. You can't undo this.`}
         isBusy={isBusy}
         isOpen={isDeleteModalOpen}
         onConfirm={deleteEntry}

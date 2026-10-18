@@ -15,7 +15,9 @@ export const revokeSessionAction = userActionClient
     const result = await revokeSession(token)
     if (!result.status) {
       console.error('Failed to revoke session')
-      throw new ActionError('Failed to revoke session.')
+      throw new ActionError(
+        "Couldn't revoke that session. Refresh the page and try again."
+      )
     }
 
     revalidatePath('/account')

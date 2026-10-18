@@ -93,7 +93,7 @@ export function UserButton({ className }: UserButtonProps) {
               }}
             >
               <Icons.logOut className='size-4' />
-              Log out
+              Sign out
             </DropdownMenuItem>
           </>
         ) : (

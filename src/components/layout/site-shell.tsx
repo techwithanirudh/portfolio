@@ -2,6 +2,7 @@ import { HomeLayout } from 'fumadocs-ui/layouts/home'
 import type { ReactNode } from 'react'
 import { Footer } from '@/components/layout/footer'
 import { Header } from '@/components/layout/header'
+import { LayoutContainer } from '@/components/layout/layout-container'
 import { PageFill } from '@/components/layout/page-fill'
 import { SkipLink } from '@/components/layout/skip-link'
 import { linkItems } from '@/constants/navigation'
@@ -23,6 +24,7 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
           />
         ),
       }}
+      slots={{ container: LayoutContainer }}
     >
       {/*
         Clicking the page focuses this skip-link target, and the next key press
@@ -34,7 +36,7 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
         id='main-content'
         tabIndex={-1}
       >
-        <div className='flex min-h-[calc(100dvh-3.5rem)] flex-col'>
+        <main className='flex min-h-[calc(100dvh-3.5rem)] flex-col'>
           {/*
             `contents` keeps this wrapper out of the layout, but it is still a
             DOM child, so a `divide-y` on the column would see one child and
@@ -47,7 +49,7 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
             {children}
           </div>
           <PageFill />
-        </div>
+        </main>
         <Footer />
       </div>
     </HomeLayout>

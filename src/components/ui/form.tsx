@@ -13,7 +13,17 @@ import {
 } from 'react-hook-form'
 
 import { Label } from '@/components/ui/label'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
+
+const SHAKE_MS = 380
+const SHAKE_OFFSETS = [0, -6, 5, -4, 3, -2, 0]
+
+const shake = (element: HTMLElement) =>
+  element.animate(
+    { transform: SHAKE_OFFSETS.map((x) => `translateX(${x}px)`) },
+    { duration: SHAKE_MS, easing: 'ease-out' }
+  )
 
 const Form = FormProvider
 
@@ -54,10 +64,12 @@ const useFormField = () => {
     throw new Error('useFormField should be used within <FormField>')
   }
 
-  const { id } = itemContext
+  const { hasDescription, id, setHasDescription } = itemContext
 
   return {
+    hasDescription,
     id,
+    setHasDescription,
     name: fieldContext.name,
     formItemId: `${id}-form-item`,
     formDescriptionId: `${id}-form-item-description`,
@@ -67,7 +79,10 @@ const useFormField = () => {
 }
 
 interface FormItemContextValue {
+  /** Whether a FormDescription is mounted, so aria-describedby only names ids that exist */
+  hasDescription: boolean
   id: string
+  setHasDescription: (mounted: boolean) => void
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>(
@@ -76,7 +91,11 @@ const FormItemContext = React.createContext<FormItemContextValue>(
 
 function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   const id = React.useId()
-  const value = React.useMemo(() => ({ id }), [id])
+  const [hasDescription, setHasDescription] = React.useState(false)
+  const value = React.useMemo(
+    () => ({ hasDescription, id, setHasDescription }),
+    [hasDescription, id]
+  )
 
   return (
     <FormItemContext.Provider value={value}>
@@ -113,15 +132,36 @@ function FormControl({
   children: React.ReactElement
   className?: string
 }) {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+  const {
+    error,
+    formItemId,
+    formDescriptionId,
+    formMessageId,
+    hasDescription,
+  } = useFormField()
+  const { submitCount } = useFormState()
+
+  // Every failed submit shakes each invalid field again, even one that was
+  // already invalid. Typing never triggers it
+  React.useEffect(() => {
+    if (submitCount === 0 || !error || prefersReducedMotion()) {
+      return
+    }
+    const control = document.getElementById(formItemId)
+    if (control) {
+      shake(control)
+    }
+    // biome-ignore lint/correctness/useExhaustiveDependencies: only a new submit replays the shake, not a change of the error
+  }, [submitCount])
 
   return React.cloneElement(
     children,
     mergeProps(
       {
-        'aria-describedby': error
-          ? `${formDescriptionId} ${formMessageId}`
-          : `${formDescriptionId}`,
+        'aria-describedby':
+          [hasDescription && formDescriptionId, error && formMessageId]
+            .filter(Boolean)
+            .join(' ') || undefined,
         'aria-invalid': !!error,
         className,
         'data-slot': 'form-control',
@@ -133,7 +173,12 @@ function FormControl({
 }
 
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
-  const { formDescriptionId } = useFormField()
+  const { formDescriptionId, setHasDescription } = useFormField()
+
+  React.useLayoutEffect(() => {
+    setHasDescription(true)
+    return () => setHasDescription(false)
+  }, [setHasDescription])
 
   return (
     <p

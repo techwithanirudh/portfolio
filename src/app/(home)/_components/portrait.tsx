@@ -2,7 +2,7 @@
 
 import { useSound } from '@web-kits/audio/react'
 import { AnimatePresence, m, useAnimate } from 'motion/react'
-import { useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 // TODO(slopradar): inconsistent: the only src/app file that imports toast from sonner directly instead of @/lib/toast, route the bonk toasts through @/lib/toast or record why they stay silent (owner call: the wrapper adds a sound)
 import { toast } from 'sonner'
 import { owner } from '@/constants/site'
@@ -117,6 +117,42 @@ export function PortraitChip({
         <BlinkingEyes fill={PORTRAIT_EYE_FILL} />
       </svg>
     </span>
+  )
+}
+
+/**
+ * A heading with the bonk chip set into its text. The chip is a button, so it
+ * stays out of the heading (its name would join the heading's): the heading
+ * keeps a same-size gap where the chip sits, and a hidden copy of the line with
+ * only the chip visible is stacked over it in the same grid cell, so the chip
+ * lands in the gap wherever the line wraps
+ */
+export function PortraitHeading({
+  after,
+  before,
+  className,
+}: {
+  after: ReactNode
+  before: ReactNode
+  className?: string
+}) {
+  return (
+    <div className='grid *:col-start-1 *:row-start-1'>
+      <h1 className={className}>
+        {before}{' '}
+        <span className='relative inline-block'>
+          <span className={cn(chipClassName, 'invisible')} />
+        </span>{' '}
+        {after}
+      </h1>
+      <div className={cn(className, 'pointer-events-none invisible')}>
+        {before}{' '}
+        <span className='pointer-events-auto visible'>
+          <BonkChip />
+        </span>{' '}
+        {after}
+      </div>
+    </div>
   )
 }
 

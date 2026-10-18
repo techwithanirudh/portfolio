@@ -6,9 +6,9 @@ export const AccountSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, { message: 'Name is required.' })
+    .min(1, { message: 'Enter a display name.' })
     .max(ACCOUNT_NAME_MAX_LENGTH, {
-      message: `Name must not be longer than ${ACCOUNT_NAME_MAX_LENGTH} characters.`,
+      message: `Shorten your display name to ${ACCOUNT_NAME_MAX_LENGTH} characters or fewer.`,
     }),
 })
 

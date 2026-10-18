@@ -102,8 +102,9 @@ export default function SearchDialog({
             {
               action: 'logout',
               icon: <Icons.logOut className='size-4' />,
+              keywords: ['log out', 'logout'],
               kind: 'account',
-              title: 'Log out',
+              title: 'Sign out',
             },
           ]
         : [
@@ -144,6 +145,25 @@ export default function SearchDialog({
     !(isEmpty || query.isLoading) &&
     tagGroups.length === 0 &&
     groups.length === 0
+
+  // Typing keeps focus in the input, so the spinner, the result list and the
+  // empty message are announced through a status region instead
+  const optionCount =
+    groups.reduce((count, group) => count + group.items.length, 0) +
+    tagGroups.reduce(
+      (count, group) =>
+        count +
+        group.pages.reduce((sum, page) => sum + 1 + page.children.length, 0),
+      0
+    )
+  let searchStatus = ''
+  if (!isEmpty && query.isLoading) {
+    searchStatus = 'Searching…'
+  } else if (hasNoResults) {
+    searchStatus = 'No results'
+  } else if (!isEmpty) {
+    searchStatus = `${optionCount} ${optionCount === 1 ? 'result' : 'results'}`
+  }
 
   const close = () => {
     onOpenChange(false)
@@ -310,7 +330,11 @@ export default function SearchDialog({
           )}
 
           {hasNoResults && (
-            <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
+            // Text alone in a listbox is invalid (cmdk keeps this inside it);
+            // the status region below reads "No results" instead
+            <CommandEmpty aria-hidden>
+              No results for &ldquo;{search}&rdquo;
+            </CommandEmpty>
           )}
 
           <SearchResultsList groups={tagGroups} onSelect={go} />
@@ -318,6 +342,9 @@ export default function SearchDialog({
           {afterGroups.map((group) => renderGroup(group, { separated: true }))}
         </CommandList>
       </div>
+      <p className='sr-only' role='status'>
+        {searchStatus}
+      </p>
 
       <CommandMenuFooter />
     </CommandDialog>

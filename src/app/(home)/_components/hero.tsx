@@ -15,7 +15,7 @@ import heroGradient1080 from '@/public/images/hero-gradient/1080.avif'
 import heroGradient1200 from '@/public/images/hero-gradient/1200.avif'
 import heroGradient1408 from '@/public/images/hero-gradient/1408.avif'
 import heroGradient from '@/public/images/hero-gradient.png'
-import { PortraitChip } from './portrait'
+import { PortraitHeading } from './portrait'
 
 const [firstName, lastName] = owner.split(' ')
 
@@ -65,10 +65,16 @@ const Hero = () => (
       />
     </picture>
     <ViewAnimation delay={0.05}>
-      <h1 className='mb-5 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'>
-        {firstName} <PortraitChip /> {lastName}
-        <span className='text-primary'>.</span>
-      </h1>
+      <PortraitHeading
+        after={
+          <>
+            {lastName}
+            <span className='text-primary'>.</span>
+          </>
+        }
+        before={firstName}
+        className='mb-5 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'
+      />
     </ViewAnimation>
     <ViewAnimation delay={0.1}>
       <p className='max-w-[52ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>

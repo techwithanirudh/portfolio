@@ -9,9 +9,10 @@ import { cn } from '@/lib/utils'
 import { Links } from './links'
 
 export const Footer = () => (
-  <>
+  // One contentinfo landmark for the home page's guestbook band and the links
+  <footer className='flex flex-col'>
     <GuestbookBand />
-    <footer
+    <div
       className={cn(
         'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
         'border-border border-b border-dashed',
@@ -53,6 +54,6 @@ export const Footer = () => (
           </ViewAnimation>
         </div>
       </div>
-    </footer>
-  </>
+    </div>
+  </footer>
 )

@@ -91,6 +91,8 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
           blockSize={blockSize}
           className='w-full'
           data={data}
+          // A plain div can't carry a name, so the label above was dropped
+          role='figure'
         >
           <ContributionGraphCalendar
             aria-hidden

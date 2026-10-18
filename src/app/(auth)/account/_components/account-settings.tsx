@@ -85,11 +85,13 @@ function EditNameDialog({ name }: { name: string }) {
     })
 
     if (error) {
-      toast.error('Failed to update name.')
+      toast.error(
+        "Your display name wasn't saved. Check your connection and try again."
+      )
       return
     }
 
-    toast.success('Name updated.')
+    toast.success('Display name updated')
     setOpen(false)
     router.refresh()
   }
@@ -105,13 +107,20 @@ function EditNameDialog({ name }: { name: string }) {
       open={open}
     >
       <AlertDialogTrigger
-        render={<Button shape='square' size='sm' variant='secondary' />}
+        render={
+          <Button
+            aria-label='Edit display name'
+            shape='square'
+            size='sm'
+            variant='secondary'
+          />
+        }
       >
         Edit
       </AlertDialogTrigger>
       <AlertDialogContent className='dashed-frame rounded-none shadow-none ring-0'>
         <AlertDialogHeader>
-          <AlertDialogTitle>Edit name</AlertDialogTitle>
+          <AlertDialogTitle>Edit display name</AlertDialogTitle>
           <AlertDialogDescription>
             Enter your full name, or a display name you are comfortable with.
           </AlertDialogDescription>
@@ -127,13 +136,14 @@ function EditNameDialog({ name }: { name: string }) {
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Display name</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete='nickname'
                       className='rounded-none'
                       // TODO(slopradar): magic-string: 32 duplicates AccountSchema's max, export the limit like CONTACT_NAME_MAX_LENGTH
                       maxLength={32}
-                      placeholder='Your name'
+                      placeholder='Jane Smith'
                       {...field}
                       disabled={form.formState.isSubmitting}
                     />
@@ -154,6 +164,7 @@ function EditNameDialog({ name }: { name: string }) {
           </AlertDialogCancel>
           <Button
             disabled={form.formState.isSubmitting}
+            focusableWhenDisabled
             form='edit-name-form'
             shape='square'
             type='submit'

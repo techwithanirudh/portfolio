@@ -94,7 +94,7 @@ export function MenuPanel({
         </div>
         <div className='flex items-center gap-1'>
           <button
-            aria-label='Open assistant'
+            aria-label='Ask Simba'
             className={footerIconClassName}
             onClick={onAssistantOpen}
             type='button'

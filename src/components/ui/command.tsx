@@ -146,7 +146,9 @@ function CommandSeparator({
   ...props
 }: React.ComponentProps<typeof CommandPrimitive.Separator>) {
   return (
+    // cmdk renders it inside the listbox, where a separator is not an allowed child
     <CommandPrimitive.Separator
+      aria-hidden
       data-slot="command-separator"
       className={cn("-mx-1 h-px w-auto bg-border", className)}
       {...props}

@@ -33,7 +33,8 @@ export const Header = ({ page }: HeaderProps) => {
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image && (
             <BlurImage
-              alt={page.data.title}
+              // Decorative: the h1 beside it already says what it is
+              alt=''
               className='absolute inset-0 h-full w-full'
               fill
               imageClassName='object-cover'

@@ -54,7 +54,9 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
         align='start'
         className='w-(--anchor-width) gap-0.5 rounded-xl p-1.5'
         collisionPadding={8}
-        finalFocus={false}
+        // Only a keyboard close returns focus to the trigger, otherwise
+        // Escape dropped keyboard users on <body>
+        finalFocus={(closeType) => closeType === 'keyboard'}
       >
         <DropdownMenuIconItem icon={Icons.link} onClick={() => copy(url)}>
           Copy link

@@ -6,10 +6,16 @@ import {
   SearchDialogList,
   SearchDialogListItem,
   type SearchItemType,
+  useSearch,
 } from 'fumadocs-ui/components/dialog/search'
 import { useI18n } from 'fumadocs-ui/contexts/i18n'
 import { parseAsString, parseAsStringLiteral, useQueryState } from 'nuqs'
-import { type ComponentProps, type ReactNode, useEffect } from 'react'
+import {
+  type ComponentProps,
+  type ReactNode,
+  useEffect,
+  useSyncExternalStore,
+} from 'react'
 import { PostEmpty } from '@/components/features/blog/post-empty'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
@@ -93,6 +99,28 @@ const SearchResultItem = ({
   </div>
 )
 
+// fumadocs moves the highlighted result with the arrow keys from a document
+// listener, so the input carries the combobox wiring its own SearchDialogInput
+// has; without it a screen reader never hears which result is highlighted
+const SearchComboboxInput = (props: ComponentProps<typeof InputGroupInput>) => {
+  const { getActive, subscribeActive } = useSearch()
+  const active = useSyncExternalStore(subscribeActive, getActive, getActive)
+
+  return (
+    <InputGroupInput
+      aria-activedescendant={
+        active === null ? undefined : `fd-search-option-${active}`
+      }
+      aria-autocomplete='list'
+      aria-controls='fd-search-list'
+      aria-expanded={active !== null}
+      aria-label='Search posts and projects'
+      role='combobox'
+      {...props}
+    />
+  )
+}
+
 const tagValues = tags
   .map((tag) => tag.value)
   .filter((value): value is Exclude<typeof value, undefined> => Boolean(value))
@@ -134,6 +162,8 @@ export function SearchClient() {
 
   const hasQuery = search.trim().length > 0
   const pending = hasQuery && query.data === 'empty'
+  const showCount = search.length > 0 && !pending
+  const countLabel = `${resultCount} ${resultCount === 1 ? 'result' : 'results'}`
 
   return (
     <SearchDialog
@@ -150,7 +180,7 @@ export function SearchClient() {
               <InputGroupAddon className='border-0 pl-3 text-muted-foreground'>
                 <Icons.search className='icon-turn size-4' />
               </InputGroupAddon>
-              <InputGroupInput
+              <SearchComboboxInput
                 className='text-sm'
                 onChange={(event) => {
                   handleSearchChange(event.target.value)
@@ -158,15 +188,21 @@ export function SearchClient() {
                 placeholder='Search posts and projects…'
                 value={search}
               />
-              {search.length > 0 && !pending && (
+              {showCount && (
                 <InputGroupAddon
                   align='inline-end'
+                  aria-hidden
                   className='pr-3 tabular-nums'
                 >
-                  {resultCount} {resultCount === 1 ? 'result' : 'results'}
+                  {countLabel}
                 </InputGroupAddon>
               )}
             </InputGroup>
+            {/* Rendered empty first so the count is announced as it changes;
+                with no results the empty state's own status speaks instead */}
+            <p className='sr-only' role='status'>
+              {showCount && resultCount > 0 ? countLabel : ''}
+            </p>
           </ViewAnimation>
           <ViewAnimation delay={0.05}>
             <div className='flex w-full flex-wrap justify-between divide-x divide-dashed divide-border border-border border-y border-dashed'>
@@ -199,6 +235,7 @@ export function SearchClient() {
           <ScrollArea
             className='h-full w-full [&>[data-slot=scroll-area-scrollbar]]:py-1.5 [&>[data-slot=scroll-area-scrollbar]]:pr-1 [&>[data-slot=scroll-area-viewport]]:[container-type:size] [&>[data-slot=scroll-area-viewport]]:[mask-image:linear-gradient(to_bottom,transparent,#000_min(2.5rem,var(--scroll-area-overflow-y-start,0px)))]'
             data-lenis-prevent
+            viewportProps={{ 'aria-label': 'Search results', role: 'region' }}
           >
             {!hasQuery && (
               <ViewAnimation delay={0.1}>

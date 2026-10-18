@@ -75,6 +75,7 @@ export const NewsletterForm = () => {
             aria-label='Subscribe'
             className='size-auto w-15 rounded-md rounded-l-none px-3'
             disabled={action.isExecuting}
+            focusableWhenDisabled
             size='icon'
             type='submit'
           >

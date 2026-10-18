@@ -91,7 +91,7 @@ export async function ActiveSessions(props: { currentToken: string }) {
     return (
       <Card className='rounded-none border-0' variant='flat'>
         <div className='p-4 text-muted-foreground text-sm sm:p-6'>
-          Could not load sessions.
+          Couldn't load your sessions. Refresh the page to try again.
         </div>
       </Card>
     )

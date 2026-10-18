@@ -14,7 +14,7 @@ export const authClient = createAuthClient({
   fetchOptions: {
     onError(e) {
       if (e.error.status === 429) {
-        toast.error('Too many requests. Please try again later.')
+        toast.error('Too many attempts. Wait a moment, then try again.')
       }
     },
   },

@@ -51,7 +51,7 @@ export const GuestbookForm = () => {
           toast.error(getActionErrorMessage(error, postFailedMessage))
         },
         onSuccess: () => {
-          toast.success('Guestbook entry posted.')
+          toast.success('Guestbook entry posted')
           form.reset({
             message: '',
             signature: undefined,
@@ -99,7 +99,7 @@ export const GuestbookForm = () => {
           <Label>Message</Label>
           <div className='flex h-40 items-center justify-center rounded-md border border-input bg-background px-4 text-center'>
             <p className='text-muted-foreground text-sm'>
-              Sign in to leave a guestbook message.
+              Sign in to leave a guestbook entry.
             </p>
           </div>
           <p className='text-muted-foreground text-sm'>
@@ -189,11 +189,16 @@ export const GuestbookForm = () => {
                   <Icons.arrowLeft className='size-4' />
                   Back
                 </Button>
-                <Button className='flex-1' disabled={isExecuting} type='submit'>
+                <Button
+                  className='flex-1'
+                  disabled={isExecuting}
+                  focusableWhenDisabled
+                  type='submit'
+                >
                   {isExecuting ? (
                     <Icons.spinner className='size-4 animate-spin' />
                   ) : null}
-                  Submit
+                  Post entry
                 </Button>
               </div>
             </div>

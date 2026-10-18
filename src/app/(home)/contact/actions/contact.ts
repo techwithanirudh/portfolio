@@ -1,6 +1,7 @@
 'use server'
 
 import { profile } from '@/constants/portfolio/profile'
+import { email as ownerEmail } from '@/constants/site'
 import { env } from '@/env'
 import { resend } from '@/lib/resend'
 import { ActionError, publicActionClient } from '@/lib/safe-action'
@@ -25,7 +26,7 @@ export const contact = publicActionClient
         'Contact form unavailable: Resend or the email env is not configured'
       )
       throw new ActionError(
-        'The contact form is unavailable right now. Please try again later.'
+        `The contact form is unavailable right now. Email me at ${ownerEmail} instead.`
       )
     }
 
@@ -48,7 +49,7 @@ export const contact = publicActionClient
     if (error) {
       console.error('Failed to send contact email:', error)
       throw new ActionError(
-        'Failed to send your message. Please try again later.'
+        `Your message didn't send. Try again in a few minutes, or email me at ${ownerEmail}.`
       )
     }
 

@@ -151,6 +151,12 @@ html > body[data-scroll-locked] {
     @apply scroll-smooth scroll-pt-16 accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border max-md:scroll-pb-24 dark:scrollbar-track-transparent;
   }
 
+  /* Below 2xl the sticky "On this page" bar adds 40px under the header, and
+     a focused link scrolled to the top would sit hidden behind it */
+  html:has([data-toc-popover]) {
+    @apply scroll-pt-26 2xl:scroll-pt-16;
+  }
+
   [id] {
     @apply scroll-mt-4;
   }
@@ -180,9 +186,23 @@ html > body[data-scroll-locked] {
 }
 
 /* Fumadocs' light muted text sits at 4.35:1 on the background; a touch darker
-   clears WCAG AA. Zero specificity root so .dark still wins */
+   clears WCAG AA, also on the accent fill of a highlighted row (#e3e3e3,
+   4.68:1, the search page's "projects" badge). Zero specificity root so .dark
+   still wins */
 :where(:root):not(.dark) {
-  --color-fd-muted-foreground: hsl(0, 0%, 40%);
+  --color-fd-muted-foreground: hsl(0, 0%, 39%);
+}
+
+/* github-light and github-dark both color comments #6A737D, 4.26:1 on the
+   light code block (#f1f1f1) and 3.65:1 on the dark one (#191919). Nudged
+   just past 4.5:1 each way (4.64:1 and 4.63:1). Here and not in the theme,
+   since source.config.ts may only export collections; !important because
+   shiki sets the variables inline */
+.shiki code span[style*="--shiki-light:#6A737D" i] {
+  --shiki-light: #656d77 !important;
+}
+.shiki code span[style*="--shiki-dark:#6A737D" i] {
+  --shiki-dark: #7a8490 !important;
 }
 
 .dark {

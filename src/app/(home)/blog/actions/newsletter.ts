@@ -30,7 +30,7 @@ export const subscribe = publicActionClient
         'Newsletter unavailable: Resend or the audience env is not configured'
       )
       throw new ActionError(
-        'The newsletter is unavailable right now. Please try again later.'
+        'The newsletter is unavailable right now. Try again later.'
       )
     }
 
@@ -87,7 +87,7 @@ export const subscribe = publicActionClient
         throw error
       }
       throw new ActionError(
-        'Something went wrong while subscribing. Please try again.'
+        "You're not subscribed yet. Try again in a few minutes."
       )
     }
   })

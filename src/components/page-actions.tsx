@@ -82,6 +82,7 @@ function LLMCopyButton({
       className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
       data-sound-press='off'
       disabled={isCopying}
+      focusableWhenDisabled
       onClick={onClick}
       size='sm'
       type='button'
@@ -155,7 +156,9 @@ function ViewOptions({
           'max-w-none gap-0.5 rounded-xl p-1.5',
           anchor && 'w-(--anchor-width)'
         )}
-        finalFocus={false}
+        // Only a keyboard close returns focus to the trigger, otherwise
+        // Escape dropped keyboard users on <body>
+        finalFocus={(closeType) => closeType === 'keyboard'}
       >
         {items.map(({ title, href, icon }) => (
           <DropdownMenuIconItem

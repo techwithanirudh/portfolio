@@ -57,7 +57,7 @@ export const moderateEntry = async (input: ModerateGuestbookEntryInput) => {
 
     return {
       allowed: false,
-      reason: 'Could not verify content safety. Please try again.',
+      reason: "Couldn't run the safety check on your entry. Try again.",
     }
   }
 }

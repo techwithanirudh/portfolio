@@ -20,7 +20,7 @@ export function AccountLogoutButton() {
       shape='square'
       variant='destructive'
     >
-      <span>Log out</span>
+      <span>Sign out</span>
       <Icons.logOut
         className='icon-arrow-button size-4'
         data-icon='inline-end'
