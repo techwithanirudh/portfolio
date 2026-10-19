@@ -1,5 +1,6 @@
 'use client'
 
+import { Dialog } from '@base-ui/react/dialog'
 import { useDocsSearch } from 'fumadocs-core/search/client'
 import {
   SearchDialog,
@@ -53,7 +54,11 @@ const excerptWidths = [['w-3/5'], ['w-4/5', 'w-2/5'], ['w-1/2']]
 const bar = 'bg-foreground/10'
 
 const ResultsSkeleton = () => (
-  <div aria-busy className='flex w-full flex-col' role='status'>
+  <div
+    aria-busy
+    className='flex w-full animate-delayed-show flex-col'
+    role='status'
+  >
     <span className='sr-only'>Searching</span>
     {excerptWidths.map((lines) => (
       <div key={lines.join()}>
@@ -62,7 +67,10 @@ const ResultsSkeleton = () => (
           <Skeleton className={cn('mr-2 h-5 w-14 rounded-full', bar)} />
         </div>
         {lines.map((width) => (
-          <div className='relative p-3 ps-7' key={width}>
+          <div
+            className='relative box-content flex h-lh items-center p-3 ps-7 text-sm'
+            key={width}
+          >
             <div className='absolute inset-y-0 start-3 w-px bg-border' />
             <Skeleton className={cn('h-3.5', width, bar)} />
           </div>
@@ -99,9 +107,8 @@ const SearchResultItem = ({
   </div>
 )
 
-// fumadocs moves the highlighted result with the arrow keys from a document
-// listener, so the input carries the combobox wiring its own SearchDialogInput
-// has; without it a screen reader never hears which result is highlighted
+// fumadocs moves the highlight from a document listener, so the input needs the combobox
+// wiring SearchDialogInput has, or a screen reader never hears the highlighted result
 const SearchComboboxInput = (props: ComponentProps<typeof InputGroupInput>) => {
   const { getActive, subscribeActive } = useSearch()
   const active = useSyncExternalStore(subscribeActive, getActive, getActive)
@@ -126,6 +133,10 @@ const tagValues = tags
   .filter((value): value is Exclude<typeof value, undefined> => Boolean(value))
 
 const scopeParser = parseAsStringLiteral(['all', ...tagValues])
+
+// Its own handle, kept closed: an open Base UI Dialog.Root locks page scroll even with
+// no popup rendered, and the page only needs SearchDialog's search context
+const pageDialogHandle = Dialog.createHandle()
 
 export function SearchClient() {
   const { locale } = useI18n()
@@ -153,7 +164,6 @@ export function SearchClient() {
     setQueryParam(value.length > 0 ? value : null)
   }
 
-  // TODO(slopradar): effect-mirrors-state: copies the q param into the fumadocs search state after mount, so the query lives in two places, drive one from the other without an effect (rerender-derived-state-no-effect)
   useEffect(() => {
     if (queryParam) {
       setSearch(queryParam)
@@ -167,10 +177,11 @@ export function SearchClient() {
 
   return (
     <SearchDialog
+      dialogHandle={pageDialogHandle}
       isLoading={query.isLoading}
       onOpenChange={() => null}
       onSearchChange={handleSearchChange}
-      open
+      open={false}
       search={search}
     >
       <Section fill='contain'>
@@ -244,7 +255,9 @@ export function SearchClient() {
                 </p>
               </ViewAnimation>
             )}
-            {pending && <ResultsSkeleton />}
+            {/* Keyed by the query so its show delay restarts on every
+                keystroke: it only appears when results lag behind typing */}
+            {pending && <ResultsSkeleton key={search} />}
             <SearchDialogList
               // Let the scroll area own the height instead of fumadocs' 460px cap
               className='!h-auto [&>div]:!p-0 [&_#fd-search-list]:max-h-none [&_#fd-search-list]:overflow-visible'

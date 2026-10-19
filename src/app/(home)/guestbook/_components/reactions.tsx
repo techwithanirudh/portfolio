@@ -19,10 +19,8 @@ import {
 } from '@/components/ui/popover'
 import { error, pop } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
-import type {
-  GuestbookReactionItem,
-  GuestbookReactionSchema,
-} from '@/lib/validators/guestbook'
+import type { GuestbookReactionSchema } from '@/lib/validators/guestbook'
+import type { GuestbookReactionItem } from '@/types/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 
 const reactionCountFormat = new Intl.NumberFormat('en', {
@@ -120,7 +118,6 @@ export const GuestbookReactions = ({
                 'border-primary border-solid text-primary shadow-[inset_0_0_0_1px_var(--color-primary)]'
             )}
             disabled={!canReact || isExecuting}
-            // Signed out, they stay out of the tab order; busy, they keep focus
             focusableWhenDisabled={canReact}
             key={`${entryId}-${reaction.emoji}`}
             onClick={() => handleReaction(reaction.emoji)}

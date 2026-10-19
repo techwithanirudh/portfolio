@@ -5,6 +5,7 @@ import { Icons } from '@/components/icons/icons'
 import { Badge } from '@/components/ui/badge'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { Card } from '@/components/ui/card'
+import { pages } from '@/constants/pages'
 import { SIGN_IN_PARAM } from '@/lib/auth-url'
 import { isSessionNotFreshError, listSessions } from '@/server/auth'
 
@@ -53,18 +54,6 @@ function parseUserAgent(ua?: string | null): {
   }
 }
 
-const compareSessionsByRecency =
-  (currentToken: string) => (a: Session, b: Session) => {
-    const aIsCurrent = a.token === currentToken
-    const bIsCurrent = b.token === currentToken
-
-    if (aIsCurrent !== bIsCurrent) {
-      return aIsCurrent ? -1 : 1
-    }
-
-    return b.updatedAt.getTime() - a.updatedAt.getTime()
-  }
-
 export async function ActiveSessions(props: { currentToken: string }) {
   const { currentToken } = props
 
@@ -79,7 +68,7 @@ export async function ActiveSessions(props: { currentToken: string }) {
             <p>For security, sign in again to view your sessions.</p>
             <Link
               className={buttonVariants({ size: 'sm', variant: 'outline' })}
-              href={`/account?${SIGN_IN_PARAM}=${encodeURIComponent('/account')}`}
+              href={`${pages.account.path}?${SIGN_IN_PARAM}=${encodeURIComponent(pages.account.path)}`}
             >
               Sign in
             </Link>
@@ -97,9 +86,16 @@ export async function ActiveSessions(props: { currentToken: string }) {
     )
   }
 
-  const sortedSessions = sessions.toSorted(
-    compareSessionsByRecency(currentToken)
-  )
+  const sortedSessions = sessions.toSorted((a, b) => {
+    const aIsCurrent = a.token === currentToken
+    const bIsCurrent = b.token === currentToken
+
+    if (aIsCurrent !== bIsCurrent) {
+      return aIsCurrent ? -1 : 1
+    }
+
+    return b.updatedAt.getTime() - a.updatedAt.getTime()
+  })
 
   if (sortedSessions.length === 0) {
     return (

@@ -4,15 +4,12 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
-
-// TODO(slopradar): magic-string: restates pages.guestbook.path from constants/pages (not-found-content.tsx reads it from there), import pages and use pages.guestbook.path
-const GUESTBOOK_PATH = '/guestbook'
+import { pages } from '@/constants/pages'
 
 export function GuestbookBand() {
-  // TODO(slopradar): misplaced-logic: a client component reads the pathname only to render on '/', render the band from the home page (server) and drop usePathname, 'use client' and the null branch (check it still sits above the footer); file guestbook-cue vs export GuestbookBand also disagree
   const pathname = usePathname()
 
-  if (pathname !== '/') {
+  if (pathname !== pages.home.path) {
     return null
   }
 
@@ -30,7 +27,7 @@ export function GuestbookBand() {
           since you read all the way down, leave proof you were here in the{' '}
           <Link
             className='text-primary underline decoration-2 decoration-wavy underline-offset-6 transition-colors hover:text-foreground'
-            href={GUESTBOOK_PATH}
+            href={pages.guestbook.path}
           >
             guestbook
           </Link>

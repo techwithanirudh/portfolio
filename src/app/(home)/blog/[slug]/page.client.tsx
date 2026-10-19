@@ -1,7 +1,6 @@
 'use client'
 
-import { lazy, Suspense, useEffect, useRef, useSyncExternalStore } from 'react'
-import { useSignInModal } from '@/components/features/auth/sign-in-modal'
+import { useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,16 +11,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { isProduction } from '@/constants'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
-import { useNearViewport } from '@/hooks/use-near-viewport'
 import { toast } from '@/lib/toast'
-import { cn } from '@/lib/utils'
 
-// TODO(slopradar): duplicate-logic: the noop-subscribe useSyncExternalStore client snapshot is copied in components/layout/header/theme-toggle.tsx, add one hook in src/hooks (for example useClientValue(getSnapshot, serverValue))
 const subscribeNoop = () => () => undefined
 
 export function ShareMenu({ title, url }: { title: string; url: string }) {
-  // The server can't know whether the browser has the Web Share API, so it
-  // renders without it and the client snapshot takes over on hydration
   const canShare = useSyncExternalStore(
     subscribeNoop,
     () => 'share' in navigator,
@@ -54,8 +48,7 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
         align='start'
         className='w-(--anchor-width) gap-0.5 rounded-xl p-1.5'
         collisionPadding={8}
-        // Only a keyboard close returns focus to the trigger, otherwise
-        // Escape dropped keyboard users on <body>
+        // Return focus only on a keyboard close, or Escape leaves keyboard users on <body>
         finalFocus={(closeType) => closeType === 'keyboard'}
       >
         <DropdownMenuIconItem icon={Icons.link} onClick={() => copy(url)}>
@@ -103,58 +96,5 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
         )}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
-
-// The comment widget ships a whole editor plus highlight.js (about 200KB
-// gzipped) and sits at the very end of the post. The server still renders it,
-// but on the client its code waits until it's a screen away, and React keeps
-// the server markup on screen until then
-let wantComments: (() => void) | undefined
-const commentsWanted = new Promise<void>((resolve) => {
-  wantComments = resolve
-})
-const loadComments = () =>
-  import('@fuma-comment/react').then((mod) => ({ default: mod.Comments }))
-const Comments = lazy(() =>
-  typeof window === 'undefined'
-    ? loadComments()
-    : commentsWanted.then(loadComments)
-)
-
-// TODO(slopradar): misplaced-module: PostComments is imported by src/components/content/mdx/layout.tsx, so components depend on a route file, move it beside that layout
-export function PostComments({
-  slug,
-  className,
-}: {
-  slug: string
-  className?: string
-}) {
-  const { openSignIn } = useSignInModal()
-  const ref = useRef<HTMLDivElement>(null)
-  const near = useNearViewport(ref)
-
-  useEffect(() => {
-    if (near) {
-      wantComments?.()
-    }
-  }, [near])
-
-  return (
-    <div ref={ref}>
-      <Suspense>
-        <Comments
-          auth={{
-            signIn: () => {
-              // TODO(slopradar): magic-string: rebuilds the post URL from the slug, pass page.url (or url) in from page.tsx
-              openSignIn(`/blog/${slug}`)
-            },
-            type: 'api',
-          }}
-          className={cn('w-full', className)}
-          page={slug}
-        />
-      </Suspense>
-    </div>
   )
 }

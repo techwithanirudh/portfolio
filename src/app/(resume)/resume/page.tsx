@@ -5,28 +5,19 @@ import { socials } from '@/constants/navigation'
 import { pages } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
 import { profile } from '@/constants/portfolio/profile'
-import { groupTechnologies } from '@/constants/portfolio/skills'
+import { groupStack } from '@/constants/portfolio/skills'
 import { description, owner } from '@/constants/site'
 import { formatPeriod } from '@/lib/employment-period'
 import { baseUrl, createMetadata } from '@/lib/metadata'
-import { getSortedWork } from '@/lib/source'
+import { getSortedProjects } from '@/lib/source'
 import { PrintButton } from './print-button'
 
-const PROJECT_COUNT = 6
-
 const markdownLink = /\[([^\]]+)\]\([^)]+\)/g
-const plainText = (markdown: string) => markdown.replace(markdownLink, '$1')
 
 const urlPrefix = /^(https?:\/\/|mailto:)(www\.)?/
 const trailingSlash = /\/$/
 const prettyUrl = (url: string) =>
   url.replace(urlPrefix, '').replace(trailingSlash, '')
-
-// TODO(slopradar): duplicate-logic: second copy of groupStack in (llms)/utils/profile.ts, share one
-const stack = groupTechnologies().map(([category, items]) => ({
-  category,
-  labels: items.map((item) => item.label),
-}))
 
 const linkClass =
   'text-primary underline-offset-2 hover:underline print:no-underline'
@@ -47,9 +38,8 @@ const ResumeSection = ({
 )
 
 export default function ResumePage() {
-  const projects = getSortedWork().slice(0, PROJECT_COUNT)
-  // TODO(slopradar): magic-string: filters socials by display name, add a flag to the socials data (for example onResume)
-  const links = socials.filter((social) => social.name !== 'YouTube')
+  const projects = getSortedProjects().slice(0, 6)
+  const links = socials.filter((social) => !social.hideOnResume)
 
   return (
     <main
@@ -120,7 +110,6 @@ export default function ResumePage() {
                     </h3>
                     <span className='font-mono text-[0.6875rem] text-muted-foreground tabular-nums'>
                       {[
-                        // TODO(slopradar): inconsistent: a position without employmentType reads 'Research' in the experience timeline and the (llms) routes but shows nothing here, use DEFAULT_EMPLOYMENT_TYPE or make the field required in src/types
                         position.employmentType,
                         formatPeriod(
                           position.employmentPeriod.start,
@@ -133,7 +122,7 @@ export default function ResumePage() {
                   </div>
                   {position.description && (
                     <p className='text-foreground/80'>
-                      {plainText(position.description)}
+                      {position.description.replace(markdownLink, '$1')}
                     </p>
                   )}
                   {position.skills?.length ? (
@@ -178,7 +167,7 @@ export default function ResumePage() {
 
         <ResumeSection title='Stack'>
           <dl className='grid grid-cols-[auto_1fr] gap-x-4 gap-y-1'>
-            {stack.map(({ category, labels }) => (
+            {groupStack().map(([category, labels]) => (
               <div className='contents' key={category}>
                 <dt className='font-mono text-[0.6875rem] text-muted-foreground leading-relaxed'>
                   {category}

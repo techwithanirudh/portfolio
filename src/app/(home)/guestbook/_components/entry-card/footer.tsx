@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
+import type { GuestbookEntryItem } from '@/types/guestbook'
 import { GuestbookReactions } from '../reactions'
 
 export const EntryFooter = ({

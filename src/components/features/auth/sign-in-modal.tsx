@@ -110,10 +110,8 @@ function SignInDialog({
     )
   }
 
-  // Opened from a link or a ?signin= URL there is no trigger to go back to
-  // (focus would drop to <body>), so land at the start of the page instead.
-  // Focused by hand: handed an element that is not tabbable, Base UI moves
-  // on to its first tabbable descendant (the hero's portrait)
+  // With no trigger to return to (a link or ?signin= URL), focus the page start by hand:
+  // Base UI moves a non-tabbable target on to its first tabbable descendant
   const returnFocus = () => {
     const target = opener.current
     opener.current = null
@@ -129,20 +127,18 @@ function SignInDialog({
       return
     }
 
+    setLoadingProvider(provider)
     try {
-      setLoadingProvider(provider)
       const result = await signIn.social({ callbackURL: redirectTo, provider })
-      if (result?.error) {
-        toast.error(
-          "Couldn't sign you in. Try again or use the other provider."
-        )
-        setLoadingProvider(null)
+      if (!result?.error) {
+        return
       }
-      // TODO(slopradar): swallowed-error: the catch drops the thrown error without logging it and repeats the result.error branch word for word; log it (console.error like mermaid.tsx) and route both paths through one failure handler
-    } catch {
-      toast.error("Couldn't sign you in. Try again or use the other provider.")
-      setLoadingProvider(null)
+      console.error('Sign-in failed:', result.error)
+    } catch (error) {
+      console.error('Sign-in failed:', error)
     }
+    toast.error("Couldn't sign you in. Try again or use the other provider.")
+    setLoadingProvider(null)
   }
 
   return (

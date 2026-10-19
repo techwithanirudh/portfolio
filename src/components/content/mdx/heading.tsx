@@ -6,7 +6,6 @@ type HeadingTag = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 type HeadingProps<T extends HeadingTag> = ComponentProps<T> & { as?: T }
 
-// TODO(slopradar): library-exists: re-implements fumadocs-ui's Heading (anchor plus hover link icon, what defaultMdxComponents h1-h6 already render), use Heading from 'fumadocs-ui/components/heading' and drop the casts below (check the look matches)
 export function Heading<T extends HeadingTag = 'h1'>({
   as,
   className,

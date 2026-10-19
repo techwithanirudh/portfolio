@@ -7,6 +7,7 @@ const subscribe = (onChange: () => void) => {
   return () => query.removeEventListener('change', onChange)
 }
 
-// TODO(slopradar): library exists: motion/react exports useReducedMotion (motion is a dependency); adopt it, or if the `true` server snapshot is the reason to keep this, name that in the hook
+// Not motion/react's useReducedMotion: this server snapshot is `true`, so SSR
+// and hydration render the still state before the media query is known
 export const useReducedMotion = () =>
   useSyncExternalStore(subscribe, prefersReducedMotion, () => true)

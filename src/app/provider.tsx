@@ -7,13 +7,14 @@ import dynamic from 'next/dynamic'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import type { ReactNode } from 'react'
 import { AssistantProvider } from '@/components/features/assistant'
+import { HashLinkHistory } from '@/components/hash-link-history'
 import { MobileNav } from '@/components/layout/header/mobile'
 import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { UiSounds } from '@/components/ui-sounds'
 import { useThemeShortcut } from '@/hooks/use-theme-shortcut'
-import { useSoundEnabled } from '@/lib/audio/preferences'
+import { useCanPlaySound } from '@/lib/audio/preferences'
 
 const Assistant = dynamic(
   () =>
@@ -37,10 +38,8 @@ export function SoundsProvider({
 }: {
   children: ReactNode
 }): React.ReactElement {
-  const soundEnabled = useSoundEnabled()
-
   return (
-    <SoundProvider enabled={soundEnabled}>
+    <SoundProvider enabled={useCanPlaySound()}>
       <UiSounds />
       <ThemeShortcut />
       {children}
@@ -75,6 +74,7 @@ export function Provider({
           <Assistant />
           <MobileNav />
         </AssistantProvider>
+        <HashLinkHistory />
         <Toaster position='top-center' />
         <TailwindIndicator />
         <SmoothCursor />

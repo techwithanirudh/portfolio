@@ -3,14 +3,22 @@ import type {
   BreadcrumbList,
   CollectionPage,
   Graph,
+  ProfilePage,
   Thing,
+  WebPage,
 } from 'schema-dts'
 import { tagPath } from '@/components/features/blog/tag-path'
+import { socials } from '@/constants/navigation'
 import { pages } from '@/constants/pages'
-import { title as homeTitle } from '@/constants/site'
-import { baseUrl, getBlogPageImage, getWorkPageImage } from '@/lib/metadata'
+import { profile } from '@/constants/portfolio/profile'
+import {
+  description as homeDescription,
+  title as homeTitle,
+  owner,
+} from '@/constants/site'
+import { baseUrl, getBlogPageImage, getProjectPageImage } from '@/lib/metadata'
 import type { BlogPage } from '@/lib/source'
-import type { WorkPage } from '@/lib/source/work'
+import type { ProjectPage } from '@/lib/source/projects'
 import { url as siteUrl } from '@/lib/url'
 
 const personRef = {
@@ -53,6 +61,33 @@ function makeGraph(...nodes: Thing[]): Graph {
   return { '@context': 'https://schema.org', '@graph': nodes }
 }
 
+export const SiteJsonLd = () => (
+  <JsonLd
+    graph={makeGraph(
+      {
+        '@id': personRef['@id'],
+        '@type': 'Person',
+        description: homeDescription,
+        jobTitle: profile.jobTitle,
+        knowsAbout: profile.knowsAbout,
+        name: owner,
+        sameAs: socials
+          .map((social) => social.url)
+          .filter((url) => url.startsWith('http')),
+        url: baseUrl.href,
+      },
+      {
+        '@id': websiteRef['@id'],
+        '@type': 'WebSite',
+        description: homeDescription,
+        name: homeTitle,
+        publisher: { '@id': personRef['@id'] },
+        url: baseUrl.href,
+      }
+    )}
+  />
+)
+
 function ArticleJsonLd({
   author,
   image,
@@ -62,7 +97,7 @@ function ArticleJsonLd({
 }: {
   author: Article['author']
   image: string
-  page: BlogPage | WorkPage
+  page: BlogPage | ProjectPage
   section: { name: string; path: string }
   type: 'Article' | 'BlogPosting'
 }) {
@@ -102,10 +137,10 @@ export const PostJsonLd = ({ page }: { page: BlogPage }) => (
   />
 )
 
-export const WorkJsonLd = ({ page }: { page: WorkPage }) => (
+export const ProjectJsonLd = ({ page }: { page: ProjectPage }) => (
   <ArticleJsonLd
     author={personRef}
-    image={siteUrl(getWorkPageImage(page).url)}
+    image={siteUrl(getProjectPageImage(page).url)}
     page={page}
     section={{ name: pages.projects.title, path: pages.projects.path }}
     type='Article'
@@ -132,13 +167,12 @@ function PageJsonLdBase({
 }: {
   type: WebPageType
   props: PageJsonLdProps
-  // TODO(slopradar): weak-type: extra?: object lets any field into the graph unchecked, and the page node is an untyped literal while ArticleJsonLd types its node as schema-dts Article; type the node as WebPage and extra as Partial<WebPage>
-  extra?: object
+  extra?: Pick<ProfilePage, 'mainEntity'>
 }) {
   const { title, description, path } = props
   const url = siteUrl(path)
 
-  const page = {
+  const page: WebPage = {
     '@id': `${url}#webpage`,
     '@type': type,
     name: title,
@@ -156,7 +190,6 @@ function PageJsonLdBase({
   return <JsonLd graph={makeGraph(page, makeBreadcrumbs(crumbs))} />
 }
 
-// TODO(slopradar): pass-through-wrapper: five one-line wrappers only pin `type`, export PageJsonLdBase as PageJsonLd with a type prop and pass the type at each page
 export const WebPageJsonLd = (props: PageJsonLdProps) => (
   <PageJsonLdBase props={props} type='WebPage' />
 )

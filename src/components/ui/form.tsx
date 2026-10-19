@@ -16,15 +16,6 @@ import { Label } from '@/components/ui/label'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 
-const SHAKE_MS = 380
-const SHAKE_OFFSETS = [0, -6, 5, -4, 3, -2, 0]
-
-const shake = (element: HTMLElement) =>
-  element.animate(
-    { transform: SHAKE_OFFSETS.map((x) => `translateX(${x}px)`) },
-    { duration: SHAKE_MS, easing: 'ease-out' }
-  )
-
 const Form = FormProvider
 
 interface FormFieldContextValue<
@@ -146,13 +137,12 @@ function FormControl({
       return
     }
     const control = document.getElementById(formItemId)
-    if (control) {
-      shake(control)
-    }
+    control?.animate(
+      { transform: [0, -6, 5, -4, 3, -2, 0].map((x) => `translateX(${x}px)`) },
+      { duration: 380, easing: 'ease-out' }
+    )
   })
 
-  // Every failed submit shakes each invalid field again, even one that was
-  // already invalid. Typing never triggers it
   React.useEffect(() => {
     if (submitCount > 0) {
       replayShake()

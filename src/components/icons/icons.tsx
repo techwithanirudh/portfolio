@@ -92,7 +92,6 @@ import {
 } from 'lucide-react'
 import {
   ClaudeIcon,
-  GitHubIcon,
   GoogleIcon,
   LinkedInIcon,
   MarkdownIcon,
@@ -101,25 +100,13 @@ import {
   YouTubeIcon,
 } from './brands'
 import type { IconProps, SvgIcon } from './utils'
-import { getSvgSizeProps } from './utils'
-
-const DEFAULT_STROKE_WIDTH = 2
+import { getSvgSizeProps, isLabelled } from './utils'
 
 const toStrokeWidth = (value: IconProps['strokeWidth']) => {
   const parsed = typeof value === 'string' ? Number.parseFloat(value) : value
 
-  return typeof parsed === 'number' && Number.isFinite(parsed)
-    ? parsed
-    : DEFAULT_STROKE_WIDTH
+  return typeof parsed === 'number' && Number.isFinite(parsed) ? parsed : 2
 }
-
-const isLabelled = (props: IconProps) =>
-  Object.keys(props).some(
-    (key) =>
-      (key.startsWith('aria-') && key !== 'aria-hidden') ||
-      key === 'role' ||
-      key === 'title'
-  )
 
 const hugeIcon = (icon: IconSvgElement): SvgIcon => {
   const Huge = ({ height, size, strokeWidth, width, ...props }: IconProps) => (
@@ -175,8 +162,7 @@ export const Icons = {
   feedPublic: FeedPublicIcon,
   gitBranch: GitBranchIcon,
   gitCommit: GitCommitIcon,
-  github: GitHubIcon,
-  githubMark: MarkGithubIcon,
+  github: MarkGithubIcon,
   gitPullRequest: GitPullRequestIcon,
   gitTag: TagIcon,
   globe: hugeIcon(Globe02Icon),

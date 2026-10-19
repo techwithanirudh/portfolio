@@ -3,9 +3,8 @@ export const UNEXPECTED_ACTION_ERROR =
   "That didn't go through. Check your connection and try again."
 
 /**
- * The action's own message, or the form's fallback when it has none. The
- * fallback also wins over the generic unexpected error, since it can say
- * what failed
+ * The action's own message, else the form's fallback, which also beats the generic
+ * unexpected error since it can say what failed
  */
 export const getActionErrorMessage = (
   error: { serverError?: unknown },

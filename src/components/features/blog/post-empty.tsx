@@ -9,11 +9,9 @@ interface EmptyLink {
   label: string
 }
 
-const everyPost: EmptyLink = { href: pages.blog.path, label: 'See every post' }
-
 export const PostEmpty = ({
   className,
-  link = everyPost,
+  link = { href: pages.blog.path, label: 'See every post' },
   tag,
 }: {
   className?: string
@@ -39,10 +37,7 @@ export const PostEmpty = ({
         href={link.href}
       >
         {link.label}
-        <Icons.arrowRight
-          aria-hidden
-          className='size-4 transition-transform group-hover:translate-x-0.5'
-        />
+        <Icons.arrowRight aria-hidden className='icon-arrow size-4' />
       </Link>
     )}
   </div>

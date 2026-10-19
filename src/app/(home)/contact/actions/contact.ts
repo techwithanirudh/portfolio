@@ -2,12 +2,11 @@
 
 import { profile } from '@/constants/portfolio/profile'
 import { email as ownerEmail } from '@/constants/site'
+import ContactNotificationEmail from '@/emails/contact-notification'
 import { env } from '@/env'
 import { resend } from '@/lib/resend'
 import { ActionError, publicActionClient } from '@/lib/safe-action'
 import { ContactSchema } from '@/lib/validators/contact'
-// TODO(slopradar): path-alias: five-level relative import into emails/, add an @/emails path alias
-import ContactNotificationEmail from '../../../../../emails/contact-notification'
 
 const sentAtFormat = new Intl.DateTimeFormat('en-US', {
   dateStyle: 'medium',
@@ -30,7 +29,6 @@ export const contact = publicActionClient
       )
     }
 
-    // TODO(slopradar): magic-string: the ' IST' suffix still restates profile.timeZone; timeZoneName cannot be combined with dateStyle/timeStyle and en-US prints 'GMT+5:30', so printing it from Intl changes the email text (owner call)
     const sentAt = `${sentAtFormat.format(new Date())} IST`
 
     // Resend returns API failures and throws on network ones. Either way the
@@ -55,6 +53,5 @@ export const contact = publicActionClient
 
     return {
       message: "Thanks, I got your message. I'll reply soon.",
-      success: true,
     }
   })

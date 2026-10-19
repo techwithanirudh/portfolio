@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Skeleton } from '@/components/ui/skeleton'
+import { pages } from '@/constants/pages'
 import { signOut, useSession } from '@/lib/auth-client'
 import { cn } from '@/lib/utils'
 
@@ -78,8 +79,7 @@ export function UserButton({ className }: UserButtonProps) {
 
         {user ? (
           <>
-            {/* TODO(slopradar): duplication: icon plus label are placed by hand, DropdownMenuIconItem icon={...} (page-actions.tsx uses it) does it, and '/account' restates the route (x3 in this file) */}
-            <DropdownMenuItem render={<Link href='/account' />}>
+            <DropdownMenuItem render={<Link href={pages.account.path} />}>
               <Icons.user className='size-4' />
               Account
             </DropdownMenuItem>

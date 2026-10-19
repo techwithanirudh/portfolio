@@ -13,8 +13,7 @@ export const ActiveLink = ({
   ...props
 }: ComponentProps<typeof Link> & { href: string }) => {
   const pathname = usePathname()
-  // TODO(slopradar): boolean-parameter: a bare `false` for nested says nothing at the call site, name the option or add a variant to isActive
-  const active = isActive(href, pathname, false)
+  const active = isActive(href, pathname, { nested: false })
 
   return (
     <Link

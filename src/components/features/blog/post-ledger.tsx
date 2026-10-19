@@ -23,9 +23,8 @@ export const PostLedger = ({ posts }: { posts: BlogPage[] }) => {
           className='grid md:grid-cols-[10rem_minmax(0,1fr)]'
           key={year}
         >
-          {/* The year is bigger type than the row titles, so on the same top
-              padding its baseline lands 10px low. 22px puts it on the first
-              title's baseline, so it moves with the rows' sm:py-8 */}
+          {/* The year's bigger type sits 10px low on the same padding; pt-5.5 lines it up with
+              the first title's baseline under the rows' sm:py-8 */}
           <div className='border-border border-b border-dashed px-6 py-3 md:border-r md:border-b-0 md:pt-5.5 md:pb-8'>
             <h2
               className='font-mono text-muted-foreground text-xl tabular-nums tracking-tight md:sticky md:top-20 md:text-2xl'

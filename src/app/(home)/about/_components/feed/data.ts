@@ -10,8 +10,6 @@ import {
 
 const { limit } = activity
 
-const OVER_FETCH_FACTOR = 3
-
 interface PushEventPayload {
   before?: string
   head?: string
@@ -51,15 +49,9 @@ const getMergedPullRequests = async (): Promise<Set<string>> => {
   }
 }
 
-const getFirstLine = (message: string) => {
-  const [firstLine] = message.split('\n')
-  return firstLine ?? message
-}
-
 const getPushEventCommits = async (
   event: GitHubEvent
 ): Promise<PushCommit[]> => {
-  // TODO(slopradar): unchecked-cast: payload casts here and in event.tsx (x8) bypass the Octokit types, narrow on event.type with one typed payload map or a zod schema per event
   const payload = event.payload as PushEventPayload
   const repoName = event.repo?.name
 
@@ -81,7 +73,7 @@ const getPushEventCommits = async (
     })
 
     return comparison.data.commits.slice(0, 3).map((commit) => ({
-      message: getFirstLine(commit.commit.message),
+      message: commit.commit.message.split('\n')[0] ?? commit.commit.message,
       sha: commit.sha,
     }))
   } catch (error) {
@@ -90,7 +82,6 @@ const getPushEventCommits = async (
   }
 }
 
-// TODO(slopradar): deprecated-api: unstable_cache is replaced by 'use cache' in Next 16 (functions/unstable_cache docs), adopt it with cacheComponents or record why not (owner decision)
 const getCachedActivityItems = unstable_cache(
   async (): Promise<ActivityEventItem[]> => {
     if (!env.GITHUB_TOKEN) {
@@ -98,7 +89,8 @@ const getCachedActivityItems = unstable_cache(
     }
 
     const activity = await octokit.rest.activity.listPublicEventsForUser({
-      per_page: limit * OVER_FETCH_FACTOR,
+      // The filter drops event types the feed doesn't show, so fetch extra
+      per_page: limit * 3,
       username: githubUser,
     })
 

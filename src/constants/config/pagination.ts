@@ -1,2 +1,2 @@
 export const postsPerPage = 5
-export const worksPerPage = 6
+export const projectsPerPage = 6

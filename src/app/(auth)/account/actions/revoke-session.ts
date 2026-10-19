@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { pages } from '@/constants/pages'
 import { ActionError, userActionClient } from '@/lib/safe-action'
 import { RevokeSessionSchema } from '@/lib/validators/session'
 import { getSession, revokeSession } from '@/server/auth'
@@ -20,11 +21,9 @@ export const revokeSessionAction = userActionClient
       )
     }
 
-    revalidatePath('/account')
+    revalidatePath(pages.account.path)
 
     if (currentToken && token === currentToken) {
       redirect('/')
     }
-
-    return { success: true }
   })

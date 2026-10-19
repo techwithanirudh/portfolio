@@ -15,7 +15,7 @@ export const guestbookEntries = createTable('guestbook_entries', {
     .defaultNow()
     .notNull(),
   editedAt: timestamp('edited_at', { withTimezone: true }),
-  id: serial('id').primaryKey().notNull(),
+  id: serial('id').primaryKey(),
   message: text('message').notNull(),
   name: text('name').notNull(),
   signature: text('signature'),

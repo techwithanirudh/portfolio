@@ -1,3 +1,4 @@
+import { externalLinkProps } from '@/components/external-link'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { TitleDot } from '@/components/layout/sections/hero'
 import {
@@ -7,6 +8,7 @@ import {
 } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
 import { socials } from '@/constants/navigation'
+import { contactIntro } from '@/constants/portfolio/intro'
 import { staggerDelay } from '@/lib/stagger'
 
 export const Hero = () => (
@@ -14,7 +16,7 @@ export const Hero = () => (
     <SectionHeader
       align='left'
       as='h1'
-      description="Have a question or want to work together? Send a message and I'll reply within a week."
+      description={contactIntro}
       title={
         <>
           Contact
@@ -30,11 +32,9 @@ export const Hero = () => (
               render={
                 <a
                   aria-label={social.name}
-                  className='icon-pop relative flex items-center justify-center rounded-full p-2 text-muted-foreground transition-colors after:absolute after:-inset-0.5 hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
+                  className='icon-pop relative flex items-center justify-center rounded-full p-2 text-muted-foreground after:absolute after:-inset-0.5 hover:bg-accent hover:text-accent-foreground [&_svg]:size-5'
                   href={social.url}
-                  // TODO(slopradar): duplicate-logic: rel and target restate externalLinkProps from @/components/external-link (same values, also uses/hardware.tsx and uses/software.tsx), spread it
-                  rel='noopener noreferrer'
-                  target='_blank'
+                  {...externalLinkProps}
                 />
               }
             >

@@ -1,8 +1,6 @@
-// TODO(slopradar): layering: src/types depends on a component module for `keyof typeof Icons`, export an IconName type from icons.tsx and import that (same class as the github-contributions.ts layering note)
 import type { Icons } from '@/components/icons/icons'
 
-// TODO(slopradar): unused export: nothing imports StoryPhoto (only StoryChapter uses it), make it module-private
-export interface StoryPhoto {
+interface StoryPhoto {
   alt: string
   caption: string
   /** Logos sit on white with some breathing room instead of filling the frame */

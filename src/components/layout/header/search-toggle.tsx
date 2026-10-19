@@ -6,20 +6,13 @@ import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-interface SearchToggleProps
-  extends Pick<ComponentProps<typeof Button>, 'className' | 'size'> {
-  // TODO(slopradar): dead-prop: both call sites (layout/header/index.tsx x2) pass hideIfDisabled, so the flag is always true; drop it and always return null when search is disabled
-  hideIfDisabled?: boolean
-}
-
 export const SearchToggle = ({
   className,
-  hideIfDisabled,
   size = 'icon-sm',
-}: SearchToggleProps) => {
+}: Pick<ComponentProps<typeof Button>, 'className' | 'size'>) => {
   const { setOpenSearch, enabled } = useSearchContext()
 
-  if (hideIfDisabled && !enabled) {
+  if (!enabled) {
     return null
   }
 

@@ -2,10 +2,8 @@
 
 import { useState } from 'react'
 import { toast } from '@/lib/toast'
-import {
-  type GuestbookEntryItem,
-  GuestbookEntrySchema,
-} from '@/lib/validators/guestbook'
+import { GuestbookEntrySchema } from '@/lib/validators/guestbook'
+import type { GuestbookEntryItem } from '@/types/guestbook'
 import { EntryByline } from './byline'
 import { EntryCardActions } from './card-actions'
 import { ConfirmDialog } from './confirm-dialog'
@@ -54,7 +52,6 @@ export const GuestbookEntryCard = ({
 
     const trimmedMessage = draftMessage.trim()
     const originalMessage = message.trim()
-    // TODO(slopradar): inconsistent: validates with GuestbookEntrySchema, then rechecks emptiness by hand and closes the editor on a no-op, validate with GuestbookEditSchema once and disable Save while the draft is unchanged
     const disabled =
       trimmedMessage.length === 0 || trimmedMessage === originalMessage
 

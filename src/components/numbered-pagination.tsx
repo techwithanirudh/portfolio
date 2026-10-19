@@ -83,7 +83,6 @@ function NumberedPagination({
 
         <PaginationItem className='justify-self-center'>
           <ul className='inline-flex items-center gap-1 -space-x-px rtl:space-x-reverse'>
-            {/* TODO(slopradar): shadcn-extend: both ellipsis items hand-roll a span with three periods while ui/pagination exports PaginationEllipsis, use it (x2 in this file) */}
             {showLeftEllipsis && (
               <PaginationItem>
                 <span aria-hidden='true' className={ellipsisClassName}>

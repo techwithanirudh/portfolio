@@ -19,11 +19,8 @@ interface TimeStyles extends React.CSSProperties {
   '--time-seconds': number
 }
 
-// TODO(slopradar): token-rule: clock hands and centre dot use raw neutral-400/500/600 instead of theme tokens, use bg-muted-foreground or bg-foreground/60 (x3 in this file)
 const HAND_BASE_CLASSES =
-  'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
-// TODO(slopradar): inline-style: this is Tailwind's origin-top-left (the hands already use classes), drop HAND_ORIGIN and add the class to HAND_BASE_CLASSES
-const HAND_ORIGIN = { transformOrigin: '0px 0px' }
+  'absolute left-1/2 top-1/2 origin-top-left rounded-full bg-neutral-600 dark:bg-neutral-400'
 const FACE_CLASSES =
   'relative block size-9 rotate-180 rounded-md border border-border bg-background'
 const FORMATTER = new Intl.DateTimeFormat('en-US', {
@@ -100,7 +97,6 @@ export function Clock({ className }: ClockProps) {
         <div
           className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
           style={{
-            ...HAND_ORIGIN,
             transform:
               'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
           }}
@@ -109,7 +105,6 @@ export function Clock({ className }: ClockProps) {
         <div
           className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
           style={{
-            ...HAND_ORIGIN,
             transform:
               'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
           }}
@@ -121,7 +116,6 @@ export function Clock({ className }: ClockProps) {
             'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
           )}
           style={{
-            ...HAND_ORIGIN,
             transform:
               'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
           }}

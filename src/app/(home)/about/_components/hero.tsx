@@ -1,9 +1,9 @@
-import { PortraitHeading } from '@/app/(home)/_components/portrait'
 import {
   HeroSection,
   heroTitleClassName,
   TitleDot,
 } from '@/components/layout/sections/hero'
+import { PortraitHeading } from '@/components/portrait/portrait-heading'
 import { pages } from '@/constants/pages'
 
 export default function Hero(): React.ReactElement {

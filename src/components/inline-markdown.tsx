@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { PreviewLink } from '@/components/preview-link'
 
-// TODO(slopradar): library-exists: a regex link parser beside react-markdown, which experience-timeline.tsx already uses with the same a to PreviewLink mapping; reuse that renderer (check copy with * or _ still reads the same)
 const linkPattern = /\[([^\]]+)\]\(([^)\s]+)\)/g
 
 interface InlineMarkdownProps {

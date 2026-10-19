@@ -1,5 +1,4 @@
-// TODO(slopradar): unused export: nothing imports Author (only Testimonial uses it), make it module-private
-export interface Author {
+interface Author {
   image: string
   name: string
 }
@@ -7,5 +6,7 @@ export interface Author {
 export interface Testimonial {
   author: Author
   description: string
+  /** Names the testimonial in Simba's chat cards */
+  id: string
   title: string
 }

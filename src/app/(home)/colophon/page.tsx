@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { HeroSection } from '@/components/layout/sections/hero'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
@@ -39,7 +39,7 @@ export default function ColophonPage() {
   return (
     <Wrapper>
       <HeroSection description={description} title={title} />
-      <Separator />
+      <SectionDivider />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
         const contentDelay = baseDelay + 0.05
@@ -56,7 +56,9 @@ export default function ColophonPage() {
                 {section.content}
               </ViewAnimation>
             </Section>
-            {index < sections.length - 1 && <Separator variant='transparent' />}
+            {index < sections.length - 1 && (
+              <SectionDivider variant='transparent' />
+            )}
           </Fragment>
         )
       })}

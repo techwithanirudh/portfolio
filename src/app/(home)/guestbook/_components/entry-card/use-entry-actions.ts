@@ -1,8 +1,7 @@
-import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
 import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
-import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
+import type { GuestbookEntryItem } from '@/types/guestbook'
 import {
   banGuestbookUser,
   editGuestbookEntry,
@@ -19,8 +18,6 @@ export function useEntryActions(
   entry: GuestbookEntryItem,
   { closeBanModal, closeDeleteModal, closeEditor }: EntryActionHandlers
 ) {
-  const router = useRouter()
-
   const edit = useAction(editGuestbookEntry, {
     onError: ({ error }) => {
       toast.error(
@@ -29,8 +26,6 @@ export function useEntryActions(
     },
     onSuccess: () => {
       closeEditor()
-      // TODO(slopradar): redundant-refresh: updateTag in the action already re-renders the route, drop router.refresh() and useRouter (x3 in this file)
-      router.refresh()
       toast.success('Guestbook entry updated')
     },
   })
@@ -43,7 +38,6 @@ export function useEntryActions(
     onSuccess: () => {
       closeEditor()
       closeDeleteModal()
-      router.refresh()
       toast.success('Guestbook entry deleted')
     },
   })
@@ -56,7 +50,6 @@ export function useEntryActions(
     onSuccess: () => {
       closeEditor()
       closeBanModal()
-      router.refresh()
       toast.success(
         entry.banned ? `Unbanned ${entry.name}` : `Banned ${entry.name}`
       )

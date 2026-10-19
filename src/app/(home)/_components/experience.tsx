@@ -1,18 +1,16 @@
-import { ExperienceTimeline } from '@/components/features/work'
+import { ExperienceTimeline } from '@/components/features/experience/experience-timeline'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
 import { SectionMoreLink } from '@/components/layout/sections/more-link'
-import { pages } from '@/constants/pages'
+import { pages, sectionIds } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
 import { staggerDelay } from '@/lib/stagger'
 
-const previewCount = 3
-
 export default function ExperiencePreview() {
-  const recent = experiences.slice(0, previewCount)
+  const recent = experiences.slice(0, 3)
 
   return (
-    <Section className='relative w-full pt-10' id='experience'>
+    <Section className='relative w-full pt-10' id={sectionIds.experience}>
       <div className='flex flex-col gap-10'>
         <SectionHeader
           align='left'

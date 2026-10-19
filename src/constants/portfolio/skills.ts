@@ -7,6 +7,8 @@ const themedStackIcon = (light: string, dark: string) => ({
   light: stackIcon(light),
 })
 
+export const stackIntro = 'The tools I reach for most.'
+
 export const technologies: TechStackItem[] = [
   {
     categories: ['Languages'],
@@ -171,3 +173,8 @@ export const groupTechnologies = () => {
 
   return [...grouped]
 }
+
+export const groupStack = () =>
+  groupTechnologies().map(
+    ([category, items]) => [category, items.map((item) => item.label)] as const
+  )

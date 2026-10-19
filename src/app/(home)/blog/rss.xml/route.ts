@@ -9,17 +9,6 @@ export const dynamic = 'force-static'
 const feedUrl = url('/blog/rss.xml')
 
 export const GET = () => {
-  const feed = createFeed()
-
-  return new Response(feed.rss2(), {
-    headers: {
-      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-      'Content-Type': 'application/rss+xml; charset=utf-8',
-    },
-  })
-}
-
-function createFeed(): Feed {
   const posts = getSortedByDatePosts()
   const latest = posts[0]?.data
   const feed = new Feed({
@@ -57,5 +46,10 @@ function createFeed(): Feed {
     })
   }
 
-  return feed
+  return new Response(feed.rss2(), {
+    headers: {
+      'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+      'Content-Type': 'application/rss+xml; charset=utf-8',
+    },
+  })
 }

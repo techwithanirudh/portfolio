@@ -11,21 +11,19 @@ import { FloatingPill } from '@/components/layout/header/mobile/pill'
 import { MEDIA } from '@/lib/media'
 
 const MENU_ID = 'mobile-navigation-menu'
-const FOCUSABLE = 'a[href], button:not([disabled])'
 const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
 
-const getToggle = () =>
-  document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`)
 const getFocusable = () => [
   ...(document
     .getElementById(MENU_ID)
-    ?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []),
-  ...[getToggle()].filter((el): el is HTMLElement => el !== null),
+    ?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? []),
+  ...[
+    document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`),
+  ].filter((el): el is HTMLElement => el !== null),
 ]
 
-// Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
-// does not re-read their color when it changes in place, but it re-samples
-// elements that are added.
+// Safari 26 tints its bottom bar from fixed elements at the bottom edge and re-samples
+// only elements that are added, not color changes in place
 function useRemountAfterThemeApplied() {
   const { resolvedTheme } = useTheme()
   const [generation, setGeneration] = useState(0)
@@ -96,7 +94,6 @@ export function MobileNav() {
   const tintGeneration = useRemountAfterThemeApplied()
   useCloseMenuOnOutsideClick(open, closeMenu)
 
-  // TODO(slopradar): library-exists: hand-written Tab focus trap with an activeElement cast; Base UI Dialog takes modal='trap-focus' (AssistantPanel already uses it) without the scroll lock or backdrop Safari tints from, owner call since the pill toggle sits outside the popup
   useEffect(() => {
     if (!open) {
       return

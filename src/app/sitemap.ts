@@ -1,16 +1,17 @@
 import type { MetadataRoute } from 'next'
+import { tagPath } from '@/components/features/blog/tag-path'
 import { pages } from '@/constants/pages'
 import {
   type BlogPage,
   getPosts,
+  getProjectPages,
   getTags,
-  getWorkPages,
-  type WorkPage,
+  type ProjectPage,
 } from '@/lib/source'
 import { url } from '@/lib/url'
 
 type Entry = MetadataRoute.Sitemap[number]
-type Page = BlogPage | WorkPage
+type Page = BlogPage | ProjectPage
 
 const modified = (page: Page) => page.data.lastModified ?? page.data.date
 
@@ -19,8 +20,8 @@ const newest = (pages: Page[]) =>
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getPosts()
-  const work = getWorkPages()
-  const lastContentUpdate = newest([...posts, ...work])
+  const projects = getProjectPages()
+  const lastContentUpdate = newest([...posts, ...projects])
 
   const staticEntries: Entry[] = [
     {
@@ -37,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       changeFrequency: 'monthly',
-      lastModified: newest(work),
+      lastModified: newest(projects),
       priority: 0.8,
       url: url(pages.projects.path),
     },
@@ -56,7 +57,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const tags: Entry[] = getTags().map((tag) => ({
     changeFrequency: 'monthly',
     priority: 0.3,
-    url: url(`${pages.blog.path}/tags/${tag}`),
+    url: url(tagPath(tag)),
   }))
 
   const postEntries: Entry[] = posts.map((post) => ({
@@ -66,12 +67,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: url(post.url),
   }))
 
-  const workEntries: Entry[] = work.map((page) => ({
+  const projectEntries: Entry[] = projects.map((page) => ({
     changeFrequency: 'monthly',
     lastModified: modified(page),
     priority: 0.7,
     url: url(page.url),
   }))
 
-  return [...staticEntries, ...postEntries, ...workEntries, ...tags]
+  return [...staticEntries, ...postEntries, ...projectEntries, ...tags]
 }

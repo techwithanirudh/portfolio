@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const CONTACT_NAME_MAX_LENGTH = 80
+export const CONTACT_MESSAGE_MIN_LENGTH = 30
 export const CONTACT_MESSAGE_MAX_LENGTH = 5000
 
 export const ContactSchema = z.object({
@@ -9,8 +10,8 @@ export const ContactSchema = z.object({
   }),
   message: z
     .string()
-    .min(30, {
-      message: 'Write a message with at least 30 characters.',
+    .min(CONTACT_MESSAGE_MIN_LENGTH, {
+      message: `Write a message with at least ${CONTACT_MESSAGE_MIN_LENGTH} characters.`,
     })
     .max(CONTACT_MESSAGE_MAX_LENGTH, {
       message: `Shorten your message to ${CONTACT_MESSAGE_MAX_LENGTH.toLocaleString('en-US')} characters or fewer.`,

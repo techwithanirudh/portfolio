@@ -30,7 +30,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { authClient, type User } from '@/lib/auth-client'
 import { toast } from '@/lib/toast'
-import { type Account, AccountSchema } from '@/lib/validators/account'
+import {
+  ACCOUNT_NAME_MAX_LENGTH,
+  type Account,
+  AccountSchema,
+} from '@/lib/validators/account'
 import { AccountField } from './account-field'
 
 interface AccountSettingsProps {
@@ -61,7 +65,9 @@ export function AccountSettings({ user }: AccountSettingsProps) {
 
       <div className='p-4 sm:p-6'>
         <AccountField label='Account created'>
-          <span className='text-sm'>{formatAccountDate(user.createdAt)}</span>
+          <span className='text-sm'>
+            {`${format(user.createdAt, 'MMMM d, yyyy')} (${formatDistanceToNow(user.createdAt, { addSuffix: true })})`}
+          </span>
         </AccountField>
       </div>
     </Card>
@@ -118,7 +124,7 @@ function EditNameDialog({ name }: { name: string }) {
       >
         Edit
       </AlertDialogTrigger>
-      <AlertDialogContent className='dashed-frame rounded-none shadow-none ring-0'>
+      <AlertDialogContent className='rounded-none border border-dashed shadow-none ring-0'>
         <AlertDialogHeader>
           <AlertDialogTitle>Edit display name</AlertDialogTitle>
           <AlertDialogDescription>
@@ -141,8 +147,7 @@ function EditNameDialog({ name }: { name: string }) {
                     <Input
                       autoComplete='nickname'
                       className='rounded-none'
-                      // TODO(slopradar): magic-string: 32 duplicates AccountSchema's max, export the limit like CONTACT_NAME_MAX_LENGTH
-                      maxLength={32}
+                      maxLength={ACCOUNT_NAME_MAX_LENGTH}
                       placeholder='Jane Smith'
                       {...field}
                       disabled={form.formState.isSubmitting}
@@ -178,11 +183,4 @@ function EditNameDialog({ name }: { name: string }) {
       </AlertDialogContent>
     </AlertDialog>
   )
-}
-
-function formatAccountDate(date: Date) {
-  const absoluteDate = format(date, 'MMMM d, yyyy')
-  const relativeDate = formatDistanceToNow(date, { addSuffix: true })
-
-  return `${absoluteDate} (${relativeDate})`
 }

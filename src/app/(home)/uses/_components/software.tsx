@@ -1,3 +1,4 @@
+import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import type { SoftwareItem } from '@/types'
 import { Logo } from './logo'
@@ -7,14 +8,12 @@ function AppIcon({ name, url, logo, featured }: SoftwareItem) {
     <a
       className='group flex flex-col items-center gap-2 bg-card/50 p-4 text-center no-underline transition-colors hover:bg-card/80 sm:gap-3 sm:p-6'
       href={url}
-      rel='noopener noreferrer'
-      target='_blank'
+      {...externalLinkProps}
     >
       <div className='relative transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-105'>
         <div
           className='grid size-20 place-items-center rounded-xl border-2 border-foreground/5 bg-muted'
           style={{
-            // TODO(slopradar): duplicate-logic: inline copy of the inset shadow that about/_components/shadow-box.tsx writes as a Tailwind class, move it to one utility in globals.css
             boxShadow: '0px 2px 1.5px 0px rgba(165,174,184,0.32) inset',
           }}
         >

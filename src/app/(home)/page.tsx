@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
 import { ProfilePageJsonLd } from '@/components/json-ld'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { pages } from '@/constants/pages'
 import { testimonials } from '@/constants/portfolio/testimonials'
 import { createMetadata } from '@/lib/metadata'
-import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
+import { getSortedByDatePosts, getSortedProjects } from '@/lib/source'
 import About from './_components/about'
 import CTA from './_components/cta'
 import ExperiencePreview from './_components/experience'
 import Hero from './_components/hero'
+import ProjectsPreview from './_components/projects'
 import Testimonials from './_components/testimonials'
-import WorkPreview from './_components/work'
 import Writing from './_components/writing'
 
 export const metadata: Metadata = createMetadata({
@@ -23,7 +23,7 @@ export const metadata: Metadata = createMetadata({
 })
 
 export default function Home() {
-  const works = getSortedWork().slice(0, 4)
+  const projects = getSortedProjects().slice(0, 4)
   const posts = getSortedByDatePosts().slice(0, 3)
 
   return (
@@ -35,17 +35,17 @@ export default function Home() {
       />
       <Wrapper>
         <Hero />
-        <Separator />
+        <SectionDivider />
         <About />
-        <Separator />
+        <SectionDivider />
         <ExperiencePreview />
-        <Separator />
-        <WorkPreview works={works} />
-        <Separator />
+        <SectionDivider />
+        <ProjectsPreview projects={projects} />
+        <SectionDivider />
         <Writing posts={posts} />
-        <Separator />
+        <SectionDivider />
         <Testimonials testimonials={testimonials} />
-        <Separator />
+        <SectionDivider />
         <CTA />
       </Wrapper>
     </>

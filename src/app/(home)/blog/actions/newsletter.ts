@@ -9,16 +9,10 @@ import {
 } from '@/lib/resend'
 import { ActionError, publicActionClient } from '@/lib/safe-action'
 import { getSortedByDatePosts } from '@/lib/source'
-import { NewsletterSchema } from '@/lib/validators'
+import { NewsletterSchema } from '@/lib/validators/newsletter'
 import { getSession } from '@/server/auth'
 
-const splitName = (name = '') => {
-  const [firstName, ...lastName] = name.split(' ').filter(Boolean)
-  return {
-    firstName: firstName ?? '',
-    lastName: lastName.join(' '),
-  }
-}
+const NOT_SUBSCRIBED = "You're not subscribed yet. Try again in a few minutes."
 
 export const subscribe = publicActionClient
   .inputSchema(NewsletterSchema)
@@ -35,7 +29,10 @@ export const subscribe = publicActionClient
     }
 
     const session = await getSession()
-    const { firstName, lastName } = splitName(session?.user.name)
+    const [firstName = '', ...lastNames] = (session?.user.name ?? '')
+      .split(' ')
+      .filter(Boolean)
+    const lastName = lastNames.join(' ')
 
     try {
       const contact = await getContact({ audienceId, email })
@@ -51,7 +48,6 @@ export const subscribe = publicActionClient
 
         return {
           message: "You're already subscribed to the newsletter.",
-          success: true,
         }
       }
 
@@ -63,11 +59,9 @@ export const subscribe = publicActionClient
         unsubscribed: false,
       })
 
-      // TODO(slopradar): inconsistent-error-handling: throws a plain Error only for its own catch to rewrap, throw ActionError here and let unexpected errors reach the safe-action handler
       if (!data || error) {
-        throw new Error(
-          `Failed to create contact: ${error?.message || 'Unknown error'}`
-        )
+        console.error('Failed to create newsletter contact:', error)
+        throw new ActionError(NOT_SUBSCRIBED)
       }
 
       const posts = getSortedByDatePosts()
@@ -79,15 +73,12 @@ export const subscribe = publicActionClient
 
       return {
         message: "You're subscribed. Thanks for signing up!",
-        success: true,
       }
     } catch (error) {
-      console.error('Failed to subscribe:', error)
       if (error instanceof ActionError) {
         throw error
       }
-      throw new ActionError(
-        "You're not subscribed yet. Try again in a few minutes."
-      )
+      console.error('Failed to subscribe:', error)
+      throw new ActionError(NOT_SUBSCRIBED)
     }
   })

@@ -1,8 +1,7 @@
 import { unstable_cache } from 'next/cache'
 import { bundledLanguages, bundledLanguagesAlias } from 'shiki'
-import { octokit } from '@/lib/github'
+import { GITHUB_REVALIDATE_SECONDS, octokit } from '@/lib/github'
 
-const DEFAULT_REVALIDATE_SECONDS = 60 * 60
 const SHIKI_LANG_KEYS = new Set([
   ...Object.keys(bundledLanguages),
   ...Object.keys(bundledLanguagesAlias),
@@ -92,7 +91,6 @@ export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
   )
 }
 
-// TODO(slopradar): deprecated-api: unstable_cache is replaced by `use cache` in Next 16, see the note in server/db/queries/guestbook.ts (x4 across src/lib and src/server)
 export const getGitHubFileContent = unstable_cache(
   async (
     parsed: Pick<ParsedGitHubFileUrl, 'owner' | 'repo' | 'ref' | 'path'>
@@ -115,7 +113,7 @@ export const getGitHubFileContent = unstable_cache(
     return Buffer.from(response.data.content, 'base64').toString('utf8')
   },
   ['github-code'],
-  { revalidate: DEFAULT_REVALIDATE_SECONDS }
+  { revalidate: GITHUB_REVALIDATE_SECONDS }
 )
 
 export const sliceLines = (

@@ -4,9 +4,7 @@ import {
   multiSessionClient,
 } from 'better-auth/client/plugins'
 import { createAuthClient } from 'better-auth/react'
-// TODO(slopradar): inconsistent: imports sonner directly, so the 429 toast skips the sound every other toast plays, import toast from @/lib/toast
-import { toast } from 'sonner'
-
+import { toast } from '@/lib/toast'
 import type { auth } from '@/server/auth'
 
 // @see https://github.com/better-auth/better-auth/issues/1391

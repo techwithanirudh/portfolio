@@ -1,8 +1,10 @@
 import { getImageProps } from 'next/image'
 import Link from 'next/link'
+import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import { InlineMarkdown } from '@/components/inline-markdown'
 import { Section } from '@/components/layout/sections'
+import { PortraitHeading } from '@/components/portrait/portrait-heading'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
@@ -15,18 +17,14 @@ import heroGradient1080 from '@/public/images/hero-gradient/1080.avif'
 import heroGradient1200 from '@/public/images/hero-gradient/1200.avif'
 import heroGradient1408 from '@/public/images/hero-gradient/1408.avif'
 import heroGradient from '@/public/images/hero-gradient.png'
-import { PortraitHeading } from './portrait'
 
 const [firstName, lastName] = owner.split(' ')
 
 const gradientSizes =
   '(min-width: 1024px) 1004px, (min-width: 768px) 900px, (min-width: 640px) 720px, 560px'
 
-// The blob's film grain is most of its weight, and the optimizer only speaks
-// WebP here (359KB at the phone size). These AVIFs (sharp, quality 80, at the
-// optimizer's widths up to the PNG's own 1408) keep as much grain at 41% less,
-// so re-export them from the PNG if it ever changes. WebP stays as the
-// fallback. Turbopack reads no size from AVIF imports, hence the widths
+// Next's optimizer only emits WebP here; these AVIFs (`bun run generate-hero-avif`) keep the grain 41% lighter.
+// Turbopack reads no size from AVIF imports, hence the widths
 const gradientAvifSet = (
   [
     [heroGradient640, 640],
@@ -42,6 +40,7 @@ const gradientAvifSet = (
 
 const { props: gradientProps } = getImageProps({
   alt: '',
+  fetchPriority: 'high',
   loading: 'eager',
   sizes: gradientSizes,
   src: heroGradient,
@@ -59,7 +58,7 @@ const Hero = () => (
         {...gradientProps}
         alt=''
         aria-hidden
-        className='fade-in-[0.1] pointer-events-none absolute right-0 bottom-0 -z-10 h-[800px] w-[560px] max-w-none translate-x-1/2 translate-y-1/2 animate-in select-none fill-mode-both opacity-80 duration-1000 ease-out motion-reduce:animate-none sm:h-[860px] sm:w-[720px] sm:translate-x-[38%] sm:translate-y-[42%] md:h-[920px] md:w-[900px] lg:h-[960px] lg:w-[1004px] dark:opacity-100'
+        className='pointer-events-none absolute right-0 bottom-0 -z-10 h-[800px] w-[560px] max-w-none translate-x-1/2 translate-y-1/2 select-none opacity-80 sm:h-[860px] sm:w-[720px] sm:translate-x-[38%] sm:translate-y-[42%] md:h-[920px] md:w-[900px] lg:h-[960px] lg:w-[1004px] dark:opacity-100'
         height={heroGradient.height}
         width={heroGradient.width}
       />
@@ -105,9 +104,7 @@ const Hero = () => (
             variant: 'ghost',
           })}
           href={baseOptions.githubUrl}
-          // TODO(slopradar): inconsistent: rel='noreferrer' here and in about/_components/activity.tsx and stack.tsx while externalLinkProps says 'noopener noreferrer' (noreferrer already implies noopener, so the browser behaves the same), spread externalLinkProps
-          rel='noreferrer'
-          target='_blank'
+          {...externalLinkProps}
         >
           <Icons.github />
         </a>

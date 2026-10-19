@@ -7,6 +7,7 @@ import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
 import { linkItems, socials } from '@/constants/navigation'
+import { pages } from '@/constants/pages'
 import { isLinkItemActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
 
@@ -23,13 +24,12 @@ export function MenuPanel({
   onClose: () => void
 }) {
   const pathname = usePathname()
-  // TODO(slopradar): duplication: a hand-written Home item ('Home', '/') is prepended here and again in footer/links.tsx and mobile/pill.tsx (x3) while constants/pages has pages.home; build it once from pages.home next to linkItems in constants/navigation
   const menuItems = [
     {
       active: 'url' as const,
       icon: <Icons.home />,
-      text: 'Home',
-      url: '/',
+      text: pages.home.title,
+      url: pages.home.path,
     },
     ...linkItems,
   ].filter(
@@ -67,7 +67,6 @@ export function MenuPanel({
                   )}
                   href={item.url}
                   key={item.url}
-                  // TODO(slopradar): magic-deferral: setTimeout(0) defers the close with no stated reason, say why (navigation must run first) or call onClose directly
                   onClick={() => setTimeout(onClose, 0)}
                 >
                   {'icon' in item ? item.icon : null}

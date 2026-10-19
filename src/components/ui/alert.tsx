@@ -32,7 +32,6 @@ function Alert({
     <div
       className={cn(alertVariants({ variant }), className)}
       data-slot='alert'
-      // A success message is announced politely; only failures interrupt
       role={variant === 'success' ? 'status' : 'alert'}
       {...props}
     />

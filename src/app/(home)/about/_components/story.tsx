@@ -5,6 +5,7 @@ import { Icons } from '@/components/icons/icons'
 import { InlineMarkdown } from '@/components/inline-markdown'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
+import { sectionIds } from '@/constants/pages'
 import { story } from '@/constants/portfolio/story'
 import { cn } from '@/lib/utils'
 import type { StoryChapter } from '@/types'
@@ -14,7 +15,7 @@ import { StoryTrack } from './story-track'
 
 export default function Story(): React.ReactElement {
   return (
-    <Section className='relative w-full' id='story'>
+    <Section className='relative w-full' id={sectionIds.story}>
       <StoryTrack className='px-6 sm:px-10'>
         <ol>
           {story.map((chapter, index) => (
@@ -57,7 +58,6 @@ function ChapterRow({
       >
         <Snapshot
           chapter={chapter}
-          // The first photo sits in the opening screen, where it's the LCP image
           eager={index === 0}
           tilt={photoLeft ? -8 : 8}
         />
@@ -127,7 +127,6 @@ function Snapshot({
               : 'object-cover',
             photo.contain && 'p-8'
           )}
-          fetchPriority={eager ? 'high' : undefined}
           fill
           loading={eager ? 'eager' : undefined}
           sizes='180px'

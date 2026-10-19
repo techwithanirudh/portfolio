@@ -73,7 +73,6 @@ export const HeroSection = ({
           </ViewAnimation>
         )}
       </div>
-      {/* TODO(slopradar): inconsistent: SectionHeader runs Children.toArray and skips falsy children, this wraps null/false children in an empty ViewAnimation, share one staggered-children helper */}
       {Children.map(children, (child, index) => (
         <ViewAnimation delay={staggerDelay(index, 0.1)}>{child}</ViewAnimation>
       ))}

@@ -4,12 +4,13 @@ import { SectionHeader } from '@/components/layout/sections/header'
 import { buttonVariants } from '@/components/ui/button-variants'
 import { ViewAnimation } from '@/components/view-animation'
 import { githubUrl } from '@/constants/config'
+import { sectionIds } from '@/constants/pages'
 
 export default function ActivityHeader(): React.ReactElement {
   return (
     <Section
       className='flex flex-wrap items-end justify-between gap-6 px-6 pt-10 pb-10'
-      id='activity'
+      id={sectionIds.activity}
     >
       <SectionHeader
         align='left'

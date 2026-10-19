@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
+import { TestimonialAuthor } from '@/components/features/testimonial-author'
 import { Icons } from '@/components/icons/icons'
 import { ListSection } from '@/components/layout/sections/list-section'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   Carousel,
@@ -12,6 +12,7 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel'
 import { ViewAnimation } from '@/components/view-animation'
+import { testimonialsIntro } from '@/constants/portfolio/testimonials'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { staggerDelay } from '@/lib/stagger'
 import type { Testimonial } from '@/types'
@@ -37,39 +38,58 @@ const TestimonialCard = ({
             {testimonial.description}
           </p>
         </div>
-        <p className='flex flex-row items-center gap-2 text-sm'>
-          <Avatar className='size-6' outlined={false}>
-            <AvatarImage alt='' src={testimonial.author.image} />
-            <AvatarFallback>
-              {/* TODO(slopradar): duplicate-logic: initials are computed again in uses/_components/logo.tsx and hardware.tsx, add one getInitials helper in src/lib/utils (x3) */}
-              {testimonial.author.name
-                .split(' ')
-                .map((n) => n[0])
-                .join('')
-                .toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          <span>{testimonial.author.name}</span>
-        </p>
+        <TestimonialAuthor author={testimonial.author} />
       </div>
     </div>
   </ViewAnimation>
 )
 
-const AUTOPLAY_INTERVAL_MS = 5000
+interface Autoplay {
+  focused: boolean
+  hovered: boolean
+  mode: 'auto' | 'paused' | 'resumed'
+}
+
+const autoplay = (
+  state: Autoplay,
+  event: 'toggle' | 'enter' | 'leave' | 'focus' | 'blur'
+): Autoplay => {
+  switch (event) {
+    case 'toggle':
+      return { ...state, mode: state.mode === 'paused' ? 'resumed' : 'paused' }
+    case 'enter':
+      return { ...state, hovered: true }
+    case 'focus':
+      return { ...state, focused: true }
+    case 'leave':
+      return {
+        ...state,
+        hovered: false,
+        mode: state.mode === 'resumed' && !state.focused ? 'auto' : state.mode,
+      }
+    case 'blur':
+      return {
+        ...state,
+        focused: false,
+        mode: state.mode === 'resumed' && !state.hovered ? 'auto' : state.mode,
+      }
+    default:
+      return state
+  }
+}
 
 const Testimonials = ({ testimonials }: TestimonialsProps) => {
   const [api, setApi] = useState<CarouselApi>()
-  // `paused` is the visitor's choice and sticks until they press play.
-  // Hovering or focusing the carousel pauses it only while they stay, unless
-  // they pressed play from inside it (`resumed`), which wins until they leave
-  const [paused, setPaused] = useState(false)
-  const [resumed, setResumed] = useState(false)
-  const [hovered, setHovered] = useState(false)
-  const [focused, setFocused] = useState(false)
+  const [{ mode, hovered, focused }, dispatch] = useReducer(autoplay, {
+    focused: false,
+    hovered: false,
+    mode: 'auto',
+  })
   const prefersReducedMotion = useReducedMotion()
+  const paused = mode === 'paused'
   const playing =
-    !(prefersReducedMotion || paused) && (resumed || !(hovered || focused))
+    !(prefersReducedMotion || paused) &&
+    (mode === 'resumed' || !(hovered || focused))
 
   const scrollBy = (step: number) => {
     if (!api) {
@@ -79,7 +99,6 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
     api.scrollTo((api.selectedScrollSnap() + step + count) % count)
   }
 
-  // TODO(slopradar): library-exists: hand-rolled autoplay plus hovered/focused pause state, use embla-carousel-autoplay (stopOnMouseEnter, stopOnFocusIn) as a Carousel plugin
   useEffect(() => {
     if (!(api && playing)) {
       return
@@ -88,50 +107,38 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
     const timer = setInterval(() => {
       const count = api.scrollSnapList().length
       api.scrollTo((api.selectedScrollSnap() + 1) % count)
-    }, AUTOPLAY_INTERVAL_MS)
+    }, 5000)
 
     return () => clearInterval(timer)
   }, [api, playing])
 
   return (
     <ListSection
-      description="I've worked with some great people. Here's what they say about working with me."
-      title='What others are saying'
+      description={testimonialsIntro.description}
+      title={testimonialsIntro.title}
     >
       <ViewAnimation>
-        {/* The region is a tab stop so its arrow keys work (the slides hold
-            nothing focusable); the controls show on hover or focus within */}
+        {/* A tab stop so its arrow keys work: the slides hold nothing focusable */}
         <Carousel
           aria-label='Testimonials'
-          className='group/testimonials divider-top-dashed'
+          className='group/testimonials w-full border-t border-dashed'
           onBlur={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget)) {
-              setFocused(false)
-              if (!hovered) {
-                setResumed(false)
-              }
+              dispatch('blur')
             }
           }}
-          onFocus={() => setFocused(true)}
-          onPointerEnter={() => setHovered(true)}
-          onPointerLeave={() => {
-            setHovered(false)
-            if (!focused) {
-              setResumed(false)
-            }
-          }}
+          onFocus={() => dispatch('focus')}
+          onPointerEnter={() => dispatch('enter')}
+          onPointerLeave={() => dispatch('leave')}
           setApi={setApi}
           tabIndex={0}
         >
-          <div className='absolute top-6 right-6 z-10 flex gap-1 opacity-0 pointer-coarse:opacity-60 transition-opacity duration-150 ease-out-strong group-focus-within/testimonials:opacity-100 group-hover/testimonials:opacity-100 sm:top-8 sm:right-8'>
+          <div className='absolute top-6 right-6 z-10 flex gap-1 opacity-0 pointer-coarse:opacity-100 transition-opacity duration-150 ease-out-strong group-focus-within/testimonials:opacity-100 group-hover/testimonials:opacity-100 sm:top-8 sm:right-8'>
             {prefersReducedMotion ? null : (
               <Button
                 aria-label={paused ? 'Play testimonials' : 'Pause testimonials'}
-                className='rounded-full'
-                onClick={() => {
-                  setPaused(!paused)
-                  setResumed(paused)
-                }}
+                className='rounded-full hover:bg-secondary dark:bg-card dark:hover:bg-secondary'
+                onClick={() => dispatch('toggle')}
                 size='icon-sm'
                 variant='outline'
               >
@@ -140,7 +147,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
             )}
             <Button
               aria-label='Previous testimonial'
-              className='rounded-full'
+              className='rounded-full hover:bg-secondary dark:bg-card dark:hover:bg-secondary'
               onClick={() => scrollBy(-1)}
               size='icon-sm'
               variant='outline'
@@ -149,7 +156,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
             </Button>
             <Button
               aria-label='Next testimonial'
-              className='rounded-full'
+              className='rounded-full hover:bg-secondary dark:bg-card dark:hover:bg-secondary'
               onClick={() => scrollBy(1)}
               size='icon-sm'
               variant='outline'

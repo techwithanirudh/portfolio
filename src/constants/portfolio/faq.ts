@@ -8,7 +8,7 @@ export const faq = [
   },
   {
     answer:
-      "I'm focused on shipping personal products, polishing this portfolio, and learning more about scalable web app architecture.",
+      "I'm shipping my own products, polishing this portfolio and learning how to build web apps that scale.",
     question: 'What are you focusing on right now?',
   },
   {

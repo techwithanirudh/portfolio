@@ -4,6 +4,7 @@ import { type MotionValue, m, useSpring } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
+import { MEDIA } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 interface Position {
@@ -122,7 +123,6 @@ function usePointerTracking(
 function DefaultCursor({ isOverPointer }: { isOverPointer: boolean }) {
   return (
     <>
-      {/* TODO(slopradar): arbitrary-value: size-[24px] is the scale's size-6 (x3 in DefaultCursor), use the scale class */}
       <div className='absolute size-[24px] dark:bg-white dark:blur-[7rem]' />
       <div
         className='pointer-events-none size-[24px] rounded-full border-2 bg-white shadow-sm transition-[opacity,scale] duration-300 ease-out'
@@ -140,8 +140,7 @@ function DefaultCursor({ isOverPointer }: { isOverPointer: boolean }) {
 }
 
 export function SmoothCursor() {
-  // TODO(slopradar): magic-string: an inline media query beside MEDIA in lib/media.ts (whose finePointer omits hover), add it to MEDIA and read it from there
-  const finePointer = useMediaQuery('(hover: hover) and (pointer: fine)')
+  const finePointer = useMediaQuery(MEDIA.hoverFinePointer)
   const reducedMotion = useReducedMotion()
   const enabled = finePointer && !reducedMotion
 
@@ -165,9 +164,8 @@ export function SmoothCursor() {
           ? 'scale-100 opacity-100 duration-300'
           : 'scale-200 opacity-0 duration-700'
       )}
-      // Positioned with left/top, not x/y: the scale-200 fade would also scale
-      // an x/y transform and fling the ring down and right instead of
-      // blooming in place
+      // left/top, not x/y: the scale-200 fade would also scale an x/y transform and fling
+      // the ring down and right instead of blooming in place
       style={{ left: cursorX, top: cursorY }}
     >
       <DefaultCursor isOverPointer={isOverPointer} />

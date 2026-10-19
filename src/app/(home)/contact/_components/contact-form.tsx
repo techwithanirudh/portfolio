@@ -20,6 +20,7 @@ import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import {
   CONTACT_MESSAGE_MAX_LENGTH,
+  CONTACT_MESSAGE_MIN_LENGTH,
   CONTACT_NAME_MAX_LENGTH,
   ContactSchema,
 } from '@/lib/validators/contact'
@@ -28,9 +29,8 @@ import { contact } from '../actions/contact'
 const sendFailedMessage =
   "Your message didn't send. Check your connection and try again."
 
-// Nothing here suspends, so no Suspense boundary: React streams any boundary
-// over 500 bytes out of line and reveals it after first paint, which pushed the
-// FAQ down the page (CLS 0.32 on mobile)
+// No Suspense boundary: React streams boundaries over 500 bytes out of line and
+// reveals them after first paint, which shifted the FAQ (CLS 0.32 on mobile)
 export const ContactForm = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
@@ -108,7 +108,7 @@ export const ContactForm = () => {
                 <FormMessage />
               ) : (
                 <FormDescription>
-                  I will never share your email with anyone else.
+                  I won't share your email with anyone.
                 </FormDescription>
               )}
             </FormItem>
@@ -133,8 +133,7 @@ export const ContactForm = () => {
                 <FormMessage />
               ) : (
                 <FormDescription>
-                  {/* TODO(slopradar): magic-string: 30 duplicates the min in ContactSchema, export CONTACT_MESSAGE_MIN_LENGTH beside the max constants and use it in both */}
-                  Use at least 30 characters.
+                  {`Use at least ${CONTACT_MESSAGE_MIN_LENGTH} characters.`}
                 </FormDescription>
               )}
             </FormItem>

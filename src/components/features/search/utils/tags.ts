@@ -17,15 +17,13 @@ const searchTags = {
   },
 } satisfies Record<string, SearchTag>
 
-const otherTag: Omit<SearchTag, 'path'> = { heading: 'Pages', icon: Icons.page }
-
 const isSearchTag = (tag: string): tag is keyof typeof searchTags =>
   Object.hasOwn(searchTags, tag)
 
 export const TAG_ORDER = Object.keys(searchTags)
 
 export const getTagMeta = (tag: string) =>
-  isSearchTag(tag) ? searchTags[tag] : otherTag
+  isSearchTag(tag) ? searchTags[tag] : { heading: 'Pages', icon: Icons.page }
 
 export const tagFromUrl = (url: string) =>
   Object.entries(searchTags).find(

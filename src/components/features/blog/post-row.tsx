@@ -17,7 +17,6 @@ interface PostRowProps {
   /** `short` drops the year ("Feb 25") for lists already grouped by year */
   date?: 'short' | 'full'
   /** Drops the author and #tags line, for short previews that only need the title and gist */
-  // TODO(slopradar): boolean-prop: PostList is the only caller passing false, split the tag/author line into a child or a PostRowCompact instead of a flag
   meta?: boolean
   post: PostRowPost
 }

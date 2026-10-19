@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { initials } from '@/lib/initials'
 import { cn } from '@/lib/utils'
 import type { ThemedImage } from '@/types'
 
@@ -13,13 +14,6 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
   const wrapper = cn('flex items-center justify-center bg-muted', className)
 
   if (!logo) {
-    // TODO(slopradar): duplicate-logic: second copy of the initials helper (see testimonials.tsx)
-    const initials = alt
-      .split(' ')
-      .map((w) => w[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase()
     return (
       <div
         aria-hidden='true'
@@ -29,7 +23,7 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
         )}
         style={{ height: size, width: size }}
       >
-        {initials}
+        {initials(alt)}
       </div>
     )
   }

@@ -5,12 +5,6 @@ import { getPostsByTag, getTags } from '@/lib/source'
 import { cn } from '@/lib/utils'
 import { tagPath } from './tag-path'
 
-const getFilterTags = () =>
-  getTags()
-    .map((tag) => ({ count: getPostsByTag(tag).length, tag }))
-    .toSorted((a, b) => b.count - a.count || a.tag.localeCompare(b.tag))
-    .map(({ tag }) => tag)
-
 const FilterLink = ({
   active,
   children,
@@ -48,11 +42,14 @@ export const PostFilters = ({ activeTag }: { activeTag?: string }) => (
       <FilterLink active={!activeTag} href={pages.blog.path}>
         Everything
       </FilterLink>
-      {getFilterTags().map((tag) => (
-        <FilterLink active={tag === activeTag} href={tagPath(tag)} key={tag}>
-          {tag}
-        </FilterLink>
-      ))}
+      {getTags()
+        .map((tag) => ({ count: getPostsByTag(tag).length, tag }))
+        .toSorted((a, b) => b.count - a.count || a.tag.localeCompare(b.tag))
+        .map(({ tag }) => (
+          <FilterLink active={tag === activeTag} href={tagPath(tag)} key={tag}>
+            {tag}
+          </FilterLink>
+        ))}
     </nav>
     <div className='shrink-0 px-6 pb-2 md:p-0 md:pr-3'>
       <SearchRedirectInput

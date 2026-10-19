@@ -1,18 +1,6 @@
 import { type Content, RouteError } from '@fuma-comment/server'
-import { generateText, Output } from 'ai'
-import { moderationPrompt } from '@/lib/ai/prompts/moderation'
-import { provider } from '@/lib/ai/providers'
-import {
-  ModerationResultSchema,
-  parseCommentMentionNode,
-} from '@/lib/validators'
-
-const normalizeWhitespace = (value: string) =>
-  value
-    .split('\n')
-    .map((line) => line.replace(/[^\S\n]+/g, ' ').trim())
-    .filter(Boolean)
-    .join('\n')
+import { parseCommentMentionNode } from '@/lib/validators/comments'
+import { moderate } from '@/server/moderation'
 
 const extractContent = (content: Content) => {
   const textParts: string[] = []
@@ -47,7 +35,12 @@ const extractContent = (content: Content) => {
 
   return {
     hasImage,
-    text: normalizeWhitespace(textParts.join('')),
+    text: textParts
+      .join('')
+      .split('\n')
+      .map((line) => line.replace(/[^\S\n]+/g, ' ').trim())
+      .filter(Boolean)
+      .join('\n'),
   }
 }
 
@@ -61,38 +54,19 @@ export const moderateComment = async (content: Content) => {
     })
   }
 
-  // TODO(slopradar): duplication: same generateText + Output.object(ModerationResultSchema) + console.error + 'Could not verify content safety' fallback as app/(home)/guestbook/actions/utils/moderation.ts, extract one shared moderate() and one message constant
-  try {
-    const { output } = await generateText({
-      instructions: moderationPrompt,
-      model: provider.languageModel('moderation-model'),
-      output: Output.object({
-        schema: ModerationResultSchema,
-      }),
-      prompt: `Moderate this comment:\n\n${text || '[no text content]'}`,
-    })
-
-    if (!output.allowed) {
-      throw new RouteError({ message: output.reason, statusCode: 400 })
-    }
-
-    return output
-  } catch (error) {
-    if (error instanceof RouteError) {
-      throw error
-    }
-
-    // TODO(slopradar): inconsistent-error-handling: logs only name and message, so the stack, cause and NoObjectGeneratedError.text are lost, while safe-action/client.ts logs the error whole; log `error` itself (same in the guestbook moderation copy)
-    console.error('Comment moderation failed:', {
-      error:
-        error instanceof Error
-          ? { message: error.message, name: error.name }
-          : String(error),
-    })
-
+  const result = await moderate(
+    `Moderate this comment:\n\n${text || '[no text content]'}`,
+    'Comment'
+  )
+  if (!result) {
     throw new RouteError({
       message: 'Could not verify content safety. Please try again.',
       statusCode: 500,
     })
   }
+  if (!result.allowed) {
+    throw new RouteError({ message: result.reason, statusCode: 400 })
+  }
+
+  return result
 }

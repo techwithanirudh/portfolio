@@ -80,7 +80,7 @@ function GithubRepoFallback({
       href={href}
       {...externalLinkProps}
     >
-      <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
+      <Icons.github className='size-4 shrink-0 text-muted-foreground' />
       <span>
         {repo.owner}/{repo.repo}
       </span>
@@ -119,13 +119,13 @@ export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
           />
         }
       >
-        <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
+        <Icons.github className='size-4 shrink-0 text-muted-foreground' />
         <span>{linkLabel}</span>
       </HoverCardTrigger>
       <HoverCardContent className='not-prose w-96 max-w-[calc(100vw-2rem)] border-dashed p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
         <div className='flex flex-col bg-card/60'>
           <div className='flex items-start gap-3 border-border border-b border-dashed p-4'>
-            <Icons.githubMark className='mt-0.5 size-5 shrink-0 text-muted-foreground' />
+            <Icons.github className='mt-0.5 size-5 shrink-0 text-muted-foreground' />
             <div className='min-w-0 flex-1'>
               <a
                 className='group/github-repo inline-flex max-w-full items-center gap-1.5 font-medium text-sm'

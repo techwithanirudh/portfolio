@@ -1,7 +1,14 @@
 import { z } from 'zod'
 
+export const MODERATION_REASON_MAX_LENGTH = 120
+
 export const ModerationResultSchema = z.object({
   allowed: z.boolean(),
-  // TODO(slopradar): magic-number: 120 is also written in prompts/moderation/directives.ts, and a model reason over it fails Output.object parsing, so a safe entry is rejected as "Could not verify content safety"; export one constant and give the limit to the model with .describe()
-  reason: z.string().min(1).max(120),
+  reason: z
+    .string()
+    .min(1)
+    .max(MODERATION_REASON_MAX_LENGTH)
+    .describe(
+      `One short, user-facing sentence on why, under ${MODERATION_REASON_MAX_LENGTH} characters.`
+    ),
 })

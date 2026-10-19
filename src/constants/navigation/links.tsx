@@ -34,3 +34,8 @@ export const linkItems: LinkItemType[] = [
     url: pages.guestbook.path,
   },
 ]
+
+export const v1Portfolio = {
+  name: 'V1 portfolio',
+  url: 'https://v1.techwithanirudh.com/',
+}

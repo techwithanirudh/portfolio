@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import { useRouter } from 'next/navigation'
 import { Activity, useState } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
@@ -19,23 +18,31 @@ import {
 } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
 import { SignaturePad } from '@/components/ui/signature-pad'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Textarea } from '@/components/ui/textarea'
 import { pages } from '@/constants/pages'
 import { useSession } from '@/lib/auth-client'
 import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
-import { GuestbookEntrySchema } from '@/lib/validators'
+import { GuestbookEntrySchema } from '@/lib/validators/guestbook'
+import type { SessionUser } from '@/server/auth'
 import { createGuestbookEntry } from '../actions/guestbook'
 
 const postFailedMessage =
   "Your entry wasn't posted. Check your connection and try again."
 
-export const GuestbookForm = () => {
-  const router = useRouter()
+export const GuestbookForm = ({
+  initialUser,
+}: {
+  initialUser: SessionUser | null
+}) => {
   const { openSignIn } = useSignInModal()
   const { data: session, isPending } = useSession()
-  const user = session?.user
+  // The server's user stands in until the client's first session check settles
+  const [checked, setChecked] = useState(false)
+  if (!(isPending || checked)) {
+    setChecked(true)
+  }
+  const user = checked ? session?.user : initialUser
   const [step, setStep] = useState<1 | 2>(1)
   const [formKey, setFormKey] = useState(0)
 
@@ -58,8 +65,6 @@ export const GuestbookForm = () => {
           })
           setStep(1)
           setFormKey((current) => current + 1)
-          // TODO(slopradar): redundant-refresh: the action calls updateTag, which already re-renders the route in the action response (next docs 02-guides/server-actions.md), so router.refresh() is a second round trip, drop it (x3 in use-entry-actions.ts)
-          router.refresh()
         },
       },
       formProps: {
@@ -77,19 +82,6 @@ export const GuestbookForm = () => {
     if (valid) {
       setStep(2)
     }
-  }
-
-  if (isPending) {
-    return (
-      <div className='w-full space-y-6'>
-        <div className='grid gap-2'>
-          <Skeleton className='h-3.5 w-16' />
-          <Skeleton className='h-40 w-full' />
-          <Skeleton className='h-5 w-36' />
-        </div>
-        <Skeleton className='h-9 w-full' />
-      </div>
-    )
   }
 
   if (!user) {

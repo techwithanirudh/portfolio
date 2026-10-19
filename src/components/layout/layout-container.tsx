@@ -3,11 +3,7 @@
 import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 
-/**
- * fumadocs' HomeLayout container, as a div: its default is a <main>, which
- * puts the header and footer inside the main landmark. The page's own <main>
- * sits inside, between the banner and the contentinfo
- */
+/** fumadocs' HomeLayout container as a div: its default <main> would wrap the header and footer */
 export const LayoutContainer = ({
   className,
   ...props

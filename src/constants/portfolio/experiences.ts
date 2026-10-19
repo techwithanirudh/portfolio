@@ -1,5 +1,7 @@
 import type { ExperienceItemType } from '@/types/experience'
 
+export const experienceIntro = 'Every role so far, newest first.'
+
 export const experiences: ExperienceItemType[] = [
   {
     companyLogo: '/images/companies/quiverai.png',

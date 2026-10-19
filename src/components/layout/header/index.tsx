@@ -1,22 +1,18 @@
 'use client'
 
+// Adapted from fumadocs-ui layouts/home/slots/header.js (MIT, (c) Fuma Nama):
+// navItemVariants, renderNavTitle and the two link item renderers
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { cva } from 'class-variance-authority'
 import Link from 'fumadocs-core/link'
 import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
-import {
-  type LinkItemType,
-  type NavOptions,
-  resolveLinkItems,
-} from 'fumadocs-ui/layouts/shared'
-import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
+import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import { useLenis } from 'lenis/react'
 import {
   type ComponentProps,
   Fragment,
   type ReactNode,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -34,9 +30,7 @@ import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
 import { SearchToggle } from './search-toggle'
-import { ThemeToggle } from './theme-toggle'
 
-// TODO(slopradar): attribution: this navbar (navItemVariants, renderNavTitle, both LinkItem renderers) is adapted from fumadocs-ui layouts/home/slots/header.js (MIT), add a source header like the other adapted files
 const navItemVariants = cva('[&_svg]:size-4', {
   defaultVariants: {
     variant: 'main',
@@ -52,6 +46,8 @@ const navItemVariants = cva('[&_svg]:size-4', {
         variant: 'ghost',
       }),
       main: 'relative inline-flex items-center gap-1 whitespace-nowrap p-2 text-muted-foreground transition-colors after:absolute after:inset-x-2 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform hover:text-foreground data-[active=true]:text-foreground data-[active=true]:after:scale-x-100',
+      mobile:
+        'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-primary',
     },
   },
 })
@@ -106,14 +102,9 @@ function NavTitleLink({ href, onClick, ...props }: ComponentProps<'a'>) {
 export const Header = ({
   nav = {},
   links,
-  themeSwitch = {},
-  searchToggle = {},
   className,
-}: HomeLayoutProps & { className?: string }) => {
-  const { navItems, menuItems } = useMemo(
-    () => splitLinkItems(resolveLinkItems({ links })),
-    [links]
-  )
+}: Pick<HomeLayoutProps, 'links' | 'nav'> & { className?: string }) => {
+  const { navItems, menuItems } = splitLinkItems(resolveLinkItems({ links }))
 
   return (
     <HeaderNavigationMenu
@@ -137,25 +128,16 @@ export const Header = ({
                 key={getItemKey(item, i)}
               />
             ))}
-            {/* TODO(slopradar): dead-code: site-shell passes themeSwitch={{ enabled: false }} and no searchToggle components or transparentMode, so these slots (x2 here, plus searchToggle.components and isTransparent) never vary; take links only and drop the HomeLayoutProps pass-through */}
-            {themeSwitch.enabled !== false &&
-              (themeSwitch.component ?? (
-                <ThemeToggle mode={themeSwitch?.mode} />
-              ))}
           </div>
         </div>
       }
-      transparentMode={nav.transparentMode}
     >
       <div className='relative flex w-full items-center'>
         <div className='flex items-center gap-2'>
-          <div>
-            {/* TODO(slopradar): dead-markup: several single-child <div> wrappers (x6 in Header) come from the fumadocs port and wrap one element each, drop them */}
-            {renderNavTitle(nav, {
-              className:
-                'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
-            })}
-          </div>
+          {renderNavTitle(nav, {
+            className:
+              'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
+          })}
           {nav.children}
         </div>
         <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-lg:hidden'>
@@ -170,78 +152,47 @@ export const Header = ({
             ))}
         </ul>
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
-          <div>
-            {searchToggle.enabled !== false &&
-              (searchToggle.components?.lg ?? (
-                <SearchToggle
-                  className='-mx-1.5 text-muted-foreground hover:text-foreground'
-                  hideIfDisabled
-                />
-              ))}
-          </div>
-          <div>
-            {themeSwitch.enabled !== false &&
-              (themeSwitch.component ?? (
-                <ThemeToggle mode={themeSwitch?.mode} />
-              ))}
-          </div>
-          <div>
-            <ul className='flex flex-row items-center gap-2 empty:hidden'>
-              {navItems.filter(isSecondary).map((item, i) => (
-                <NavigationMenuLinkItem
-                  className={cn(
-                    item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
-                  )}
-                  item={item}
-                  key={getItemKey(item, i)}
-                />
-              ))}
-            </ul>
-          </div>
+          <SearchToggle className='-ms-1.5 me-1.5 text-muted-foreground hover:text-foreground' />
+          <ul className='flex flex-row items-center gap-2 empty:hidden'>
+            {navItems.filter(isSecondary).map((item, i) => (
+              <NavigationMenuLinkItem
+                className={cn(
+                  item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
+                )}
+                item={item}
+                key={getItemKey(item, i)}
+              />
+            ))}
+          </ul>
         </div>
       </div>
       <div className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
-        {searchToggle.enabled !== false &&
-          (searchToggle.components?.sm ?? (
-            <div>
-              <SearchToggle hideIfDisabled size='icon' />
-            </div>
-          ))}
-        <div>
-          <CollapsibleTrigger
-            aria-label='Toggle menu'
-            className={buttonVariants({
-              className: 'group',
-              size: 'icon',
-              variant: 'ghost',
-            })}
-          >
-            <Icons.menu className='size-5.5 group-data-panel-open:hidden' />
-            <Icons.close className='hidden size-5.5 group-data-panel-open:block' />
-          </CollapsibleTrigger>
-        </div>
+        <SearchToggle size='icon' />
+        <CollapsibleTrigger
+          aria-label='Toggle menu'
+          className={buttonVariants({
+            className: 'group',
+            size: 'icon',
+            variant: 'ghost',
+          })}
+        >
+          <Icons.menu className='size-5.5 group-data-panel-open:hidden' />
+          <Icons.close className='hidden size-5.5 group-data-panel-open:block' />
+        </CollapsibleTrigger>
       </div>
     </HeaderNavigationMenu>
   )
 }
 
 const HeaderNavigationMenu = ({
-  transparentMode = 'none',
   menu,
   children,
   ...props
-}: ComponentProps<'header'> & {
-  menu: ReactNode
-  transparentMode?: NavOptions['transparentMode']
-}) => {
+}: ComponentProps<'header'> & { menu: ReactNode }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
-  const isTop = useIsScrollTop({ enabled: transparentMode === 'top' }) ?? true
-  const isTransparent =
-    transparentMode === 'top' ? isTop : transparentMode === 'always'
 
-  // TODO(slopradar): duplication: outside-press plus Escape dismissal is hand-written here, in toc/popover.tsx and in mobile/index.tsx, extract one useDismiss(ref, open, onClose) hook
   // A collapsible has no dismiss behavior of its own, so close the menu on
   // Escape or a press outside the header like the popup it replaces
   useEffect(() => {
@@ -290,13 +241,7 @@ const HeaderNavigationMenu = ({
       }
     >
       <NavigationMenu.Root
-        className={(state) =>
-          cn(
-            'transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
-            'container border-border border-dashed sm:border-x',
-            (!isTransparent || menuOpen || state.open) && 'bg-background/80'
-          )
-        }
+        className='container border-border border-dashed bg-background/80 transition-colors *:mx-auto *:max-w-(--fd-layout-width) sm:border-x'
         render={<div />}
       >
         <NavigationMenu.List
@@ -482,19 +427,13 @@ const MobileNavigationMenuLinkItem = ({
   return (
     <LinkItem
       aria-label={item.type === 'icon' ? item.label : undefined}
-      // TODO(slopradar): duplication: this button/icon/main class map restates navItemVariants above with small drifts, add a mobile variant to navItemVariants instead
       className={cn(
-        {
-          button: buttonVariants({
-            className: 'gap-1.5 [&_svg]:size-4',
-            variant: 'secondary',
-          }),
-          icon: buttonVariants({
-            size: 'icon',
-            variant: 'ghost',
-          }),
-          main: 'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-primary [&_svg]:size-4',
-        }[item.type ?? 'main'],
+        navItemVariants({
+          variant:
+            item.type === undefined || item.type === 'main'
+              ? 'mobile'
+              : item.type,
+        }),
         props.className
       )}
       item={item}

@@ -18,7 +18,6 @@ import { cn } from '@/lib/utils'
 
 const cache = new Map<string, string>()
 
-// TODO(slopradar): duplication: re-implements useCopyToClipboard (state machine, 1500ms reset, sound) because that hook only takes a string; extend the hook to accept a Promise<string> and use it here, which also brings its haptics and timer cleanup
 function useMarkdownCopy(markdownUrl: string) {
   const [state, setState] = useState<CopyState>('idle')
   const [isCopying, setIsCopying] = useState(false)
@@ -139,8 +138,7 @@ function ViewOptions({
         render={
           <Button
             aria-label='View options'
-            // TODO(slopradar): redundant-class: size-8 is exactly what size='icon-sm' already sets, drop it
-            className='size-8 border-none shadow-none active:scale-none'
+            className='border-none shadow-none active:scale-none'
             disabled={disabled}
             size='icon-sm'
             variant='secondary'
@@ -156,8 +154,7 @@ function ViewOptions({
           'max-w-none gap-0.5 rounded-xl p-1.5',
           anchor && 'w-(--anchor-width)'
         )}
-        // Only a keyboard close returns focus to the trigger, otherwise
-        // Escape dropped keyboard users on <body>
+        // Return focus only on a keyboard close, or Escape leaves keyboard users on <body>
         finalFocus={(closeType) => closeType === 'keyboard'}
       >
         {items.map(({ title, href, icon }) => (
@@ -165,15 +162,11 @@ function ViewOptions({
             className='group/item'
             icon={icon}
             key={href}
-            render={
-              <a
-                // TODO(slopradar): redundant-aria: aria-label repeats the visible title, and rel='noopener' differs from the 'noopener noreferrer' every other external link uses; drop aria-label and share one external-link props constant
-                aria-label={title}
-                href={href}
-                rel='noopener'
-                target='_blank'
-              />
-            }
+            render={({ children, ...props }) => (
+              <a {...props} href={href} rel='noopener' target='_blank'>
+                {children}
+              </a>
+            )}
           >
             <span className='truncate'>{title}</span>
             <Icons.arrowUpRight className='group-focus/item:translate-0 motion-reduce:translate-0 ml-auto size-3.5 -translate-x-0.5 translate-y-0.5 text-muted-foreground opacity-0 transition-[opacity,translate] duration-200 ease-out-strong group-focus/item:opacity-100' />

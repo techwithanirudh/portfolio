@@ -94,7 +94,7 @@ export async function sendWelcomeEmail({
         const { error } = await client.emails.send({
           from,
           react: NewsletterWelcomeEmail({ firstName, posts: formattedPosts }),
-          subject: 'Welcome to my newsletter!',
+          subject: 'Welcome to my newsletter',
           to,
         })
 
@@ -113,8 +113,9 @@ export async function sendWelcomeEmail({
       return { reason: 'rate_limit_exceeded' as const, sent: false }
     }
 
-    // TODO(slopradar): swallowed-error: JSON.stringify on an Error prints `{}` and drops the stack, throw new Error(message, { cause: error }) with the Resend message
-    throw new Error(`Failed to send welcome email: ${JSON.stringify(error)}`)
+    throw new Error(`Failed to send welcome email: ${JSON.stringify(error)}`, {
+      cause: error,
+    })
   }
 
   return { sent: true }

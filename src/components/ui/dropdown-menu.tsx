@@ -106,7 +106,6 @@ function DropdownMenuItem({
   )
 }
 
-// TODO(slopradar): shadcn-extend: a composite added inside the vendored shadcn file and used only by page-actions.tsx, move it out next to its caller so ui/dropdown-menu.tsx stays upstream
 function DropdownMenuIconItem({
   children,
   className,

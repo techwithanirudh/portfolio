@@ -43,14 +43,8 @@ function createJsonFetcher<T>() {
   }
 }
 
-const fetchPreviewJson = createJsonFetcher<LinkPreviewImage>()
-const fetchPagePreviewJson = createJsonFetcher<PagePreview>()
-
-const fetchPreview = (href: string) =>
-  fetchPreviewJson(`/api/link-preview?url=${encodeURIComponent(href)}`)
-
-const fetchPagePreview = (path: string) =>
-  fetchPagePreviewJson(`/api/page-preview?path=${encodeURIComponent(path)}`)
+const fetchLinkPreview = createJsonFetcher<LinkPreviewImage>()
+const fetchPagePreview = createJsonFetcher<PagePreview>()
 
 const externalHrefPattern = /^https?:\/\//
 const internalHrefPattern = /^\/(?!\/)/
@@ -102,10 +96,14 @@ function HoverPreviewLink({
   const load = () => {
     if (pagePath) {
       if (pagePreview === undefined) {
-        fetchPagePreview(pagePath).then(setPagePreview)
+        fetchPagePreview(
+          `/api/page-preview?path=${encodeURIComponent(pagePath)}`
+        ).then(setPagePreview)
       }
     } else if (preview === undefined) {
-      fetchPreview(href).then(setFetchedPreview)
+      fetchLinkPreview(
+        `/api/link-preview?url=${encodeURIComponent(href)}`
+      ).then(setFetchedPreview)
     }
   }
 

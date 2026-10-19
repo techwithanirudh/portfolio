@@ -3,9 +3,8 @@ import { cn } from '@/lib/utils'
 
 type SectionProps = {
   /**
-   * Takes the leftover screen height in place of the shell's PageFill. It
-   * still grows with taller content; `contain` holds it to exactly the
-   * leftover height so the content scrolls inside instead (guestbook)
+   * Takes the leftover screen height in place of the shell's PageFill. `contain`
+   * holds it to exactly that height so the content scrolls inside
    */
   fill?: boolean | 'contain'
   sectionClassName?: string

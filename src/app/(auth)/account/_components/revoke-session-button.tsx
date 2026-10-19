@@ -1,6 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useAction } from 'next-safe-action/hooks'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
@@ -10,7 +9,6 @@ import { revokeSessionAction } from '../actions/revoke-session'
 
 export function RevokeSessionButton(props: { token: string }) {
   const { token } = props
-  const router = useRouter()
   const { execute, isExecuting } = useAction(revokeSessionAction, {
     onError: ({ error }) => {
       toast.error(
@@ -21,8 +19,6 @@ export function RevokeSessionButton(props: { token: string }) {
       )
     },
     onSuccess: () => {
-      // TODO(slopradar): redundant-refresh: revalidatePath('/account') in the action already re-renders the route in its response, drop router.refresh() and useRouter
-      router.refresh()
       toast.success('Session revoked')
     },
   })

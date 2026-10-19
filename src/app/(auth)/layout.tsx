@@ -5,20 +5,13 @@ import { LayoutContainer } from '@/components/layout/layout-container'
 import { linkItems } from '@/constants/navigation'
 import { baseOptions } from '@/constants/site'
 
-// TODO(slopradar): duplicate-logic: copies SiteShell's HomeLayout and Header block, give SiteShell an option for this page's main and footer and use it here
 const Layout = ({ children }: { children: ReactNode }) => (
   <HomeLayout
     {...baseOptions}
     className='pt-0'
     links={linkItems}
     nav={{
-      component: (
-        <Header
-          links={linkItems}
-          {...baseOptions}
-          themeSwitch={{ enabled: false }}
-        />
-      ),
+      component: <Header links={linkItems} {...baseOptions} />,
     }}
     slots={{ container: LayoutContainer }}
   >

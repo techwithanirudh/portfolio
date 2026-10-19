@@ -1,7 +1,7 @@
 'use client'
 
-import { Suspense, use, useState } from 'react'
-
+import { useState } from 'react'
+import { contributionLevels } from '@/components/features/contribution-levels'
 import {
   type Activity,
   ContributionGraph,
@@ -11,25 +11,15 @@ import {
   ContributionGraphLegend,
   ContributionGraphTotalCount,
 } from '@/components/features/contributions'
-import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { Tooltip, TooltipContent } from '@/components/ui/tooltip'
 import { ViewAnimation } from '@/components/view-animation'
 import { baseOptions } from '@/constants/site'
-import { useIsMobile } from '@/hooks/use-mobile'
 import { cn } from '@/lib/utils'
 
 interface ContributionsProps {
-  contributions: Promise<Activity[]>
+  contributions: Activity[]
 }
-
-const LEVELS = cn(
-  'data-[level="0"]:fill-foreground/5',
-  'data-[level="1"]:fill-primary/25',
-  'data-[level="2"]:fill-primary/50',
-  'data-[level="3"]:fill-primary/75',
-  'data-[level="4"]:fill-primary'
-)
 
 interface HoveredDay {
   count: number
@@ -64,13 +54,87 @@ const useDayTooltip = () => {
   }
 }
 
-const ContributionsGraph = ({ contributions }: ContributionsProps) => {
-  const data = use(contributions)
-  const isMobile = useIsMobile()
-  const tooltip = useDayTooltip()
-  const blockSize = isMobile ? 12 : 23.5
+interface GraphProps {
+  blockMargin: number
+  blockSize: number
+  className: string
+  data: Activity[]
+  onPointerLeave: () => void
+  onPointerOver: (event: React.PointerEvent) => void
+}
 
-  if (data.length === 0) {
+const Graph = ({
+  blockMargin,
+  blockSize,
+  className,
+  data,
+  ...handlers
+}: GraphProps) => (
+  <ContributionGraph
+    aria-label='GitHub contributions graph'
+    blockMargin={blockMargin}
+    blockSize={blockSize}
+    className={cn('w-full', className)}
+    data={data}
+    role='figure'
+  >
+    <ContributionGraphCalendar
+      aria-hidden
+      className='overflow-x-auto pb-2'
+      title='GitHub contributions'
+      {...handlers}
+    >
+      {({ activity, dayIndex, weekIndex }) => (
+        <ContributionGraphBlock
+          activity={activity}
+          className={cn(contributionLevels, 'cursor-pointer')}
+          dayIndex={dayIndex}
+          weekIndex={weekIndex}
+        />
+      )}
+    </ContributionGraphCalendar>
+    <ContributionGraphFooter>
+      <ContributionGraphTotalCount>
+        {({ totalCount }) => (
+          <div className='text-muted-foreground'>
+            {totalCount.toLocaleString('en')} contributions in the past 365
+            days.
+          </div>
+        )}
+      </ContributionGraphTotalCount>
+      <ContributionGraphLegend>
+        {({ level }) => (
+          <div
+            className='group relative flex size-3 items-center justify-center'
+            data-level={level}
+          >
+            <svg aria-hidden className='size-full' viewBox='0 0 12 12'>
+              <rect
+                className={contributionLevels}
+                data-level={level}
+                height={12}
+                rx={2}
+                width={12}
+              />
+            </svg>
+            <span className='sr-only'>Level {level}</span>
+            <span
+              aria-hidden
+              className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'
+            >
+              Level {level}
+            </span>
+          </div>
+        )}
+      </ContributionGraphLegend>
+    </ContributionGraphFooter>
+  </ContributionGraph>
+)
+
+const Contributions = ({ contributions }: ContributionsProps) => {
+  const tooltip = useDayTooltip()
+
+  if (contributions.length === 0) {
     return (
       <Section className='p-6 text-muted-foreground text-sm'>
         The contribution graph is unavailable right now.{' '}
@@ -82,101 +146,44 @@ const ContributionsGraph = ({ contributions }: ContributionsProps) => {
     )
   }
 
+  // Both block sizes render and CSS shows one, so the server HTML already has
+  // the right size on phones instead of switching after hydration
   return (
     <Section className='relative w-full p-6'>
       <ViewAnimation className='relative w-full'>
-        <ContributionGraph
-          aria-label='GitHub contributions graph'
-          blockMargin={isMobile ? 3 : 2}
-          blockSize={blockSize}
-          className='w-full'
-          data={data}
-          // A plain div can't carry a name, so the label above was dropped
-          role='figure'
-        >
-          <ContributionGraphCalendar
-            aria-hidden
-            className='overflow-x-auto pb-2'
-            title='GitHub contributions'
-            {...tooltip.handlers}
+        <Graph
+          blockMargin={3}
+          blockSize={12}
+          className='md:hidden'
+          data={contributions}
+          {...tooltip.handlers}
+        />
+        <Graph
+          blockMargin={2}
+          blockSize={23.5}
+          className='hidden md:flex'
+          data={contributions}
+          {...tooltip.handlers}
+        />
+        <Tooltip open={tooltip.open}>
+          <TooltipContent
+            anchor={tooltip.day?.rect}
+            className='pointer-events-none'
           >
-            {({ activity, dayIndex, weekIndex }) => (
-              <ContributionGraphBlock
-                activity={activity}
-                className={cn(LEVELS, 'cursor-pointer')}
-                dayIndex={dayIndex}
-                weekIndex={weekIndex}
-              />
-            )}
-          </ContributionGraphCalendar>
-          <Tooltip open={tooltip.open}>
-            <TooltipContent
-              anchor={tooltip.day?.rect}
-              className='pointer-events-none'
-            >
-              {tooltip.day ? (
-                <>
-                  <p className='font-semibold'>{tooltip.day.date}</p>
-                  <p>
-                    <span className='tabular-nums'>{tooltip.day.count}</span>{' '}
-                    {tooltip.day.count === 1 ? 'contribution' : 'contributions'}
-                  </p>
-                </>
-              ) : null}
-            </TooltipContent>
-          </Tooltip>
-          <ContributionGraphFooter>
-            <ContributionGraphTotalCount>
-              {({ totalCount }) => (
-                <div className='text-muted-foreground'>
-                  {totalCount.toLocaleString('en')} contributions in the past
-                  365 days.
-                </div>
-              )}
-            </ContributionGraphTotalCount>
-            <ContributionGraphLegend>
-              {({ level }) => (
-                <div
-                  className='group relative flex size-3 items-center justify-center'
-                  data-level={level}
-                >
-                  <svg aria-hidden className='size-full' viewBox='0 0 12 12'>
-                    <rect
-                      className={LEVELS}
-                      data-level={level}
-                      height={12}
-                      rx={2}
-                      width={12}
-                    />
-                  </svg>
-                  <span className='sr-only'>Level {level}</span>
-                  {/* TODO(slopradar): inconsistent: the legend's hover label is a hand-rolled group-hover span while the calendar above uses the Tooltip component, use Tooltip here too */}
-                  <span
-                    aria-hidden
-                    className='absolute -top-8 hidden rounded bg-popover px-2 py-1 text-popover-foreground text-xs shadow-md group-hover:block'
-                  >
-                    Level {level}
-                  </span>
-                </div>
-              )}
-            </ContributionGraphLegend>
-          </ContributionGraphFooter>
-        </ContributionGraph>
+            {tooltip.day ? (
+              <>
+                <p className='font-semibold'>{tooltip.day.date}</p>
+                <p>
+                  <span className='tabular-nums'>{tooltip.day.count}</span>{' '}
+                  {tooltip.day.count === 1 ? 'contribution' : 'contributions'}
+                </p>
+              </>
+            ) : null}
+          </TooltipContent>
+        </Tooltip>
       </ViewAnimation>
     </Section>
   )
 }
-
-const Contributions = ({ contributions }: ContributionsProps) => (
-  <Suspense fallback={<ContributionsFallback />}>
-    <ContributionsGraph contributions={contributions} />
-  </Suspense>
-)
-
-const ContributionsFallback = () => (
-  <Section className='relative flex h-45 w-full items-center justify-center p-6'>
-    <Icons.spinner className='size-4 animate-spin text-muted-foreground' />
-  </Section>
-)
 
 export default Contributions

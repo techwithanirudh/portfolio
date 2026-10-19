@@ -1,6 +1,6 @@
 import { formatDistanceToNow } from 'date-fns'
 import { Icons } from '@/components/icons/icons'
-import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
+import type { GuestbookEntryItem } from '@/types/guestbook'
 
 export const EntryByline = ({ entry }: { entry: GuestbookEntryItem }) => (
   <div className='min-w-0 space-y-1'>

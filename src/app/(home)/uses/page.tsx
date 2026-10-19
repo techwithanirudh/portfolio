@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { HeroSection } from '@/components/layout/sections/hero'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
@@ -54,7 +54,7 @@ export default function UsesPage() {
   return (
     <Wrapper>
       <HeroSection description={description} title={title} />
-      <Separator />
+      <SectionDivider />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
         const headingDelay = section.title ? baseDelay : 0
@@ -75,7 +75,7 @@ export default function UsesPage() {
               </ViewAnimation>
             </Section>
             {index < sections.length - 1 && (
-              <Separator variant={index < 1 ? 'dashed' : 'transparent'} />
+              <SectionDivider variant={index < 1 ? 'dashed' : 'transparent'} />
             )}
           </Fragment>
         )

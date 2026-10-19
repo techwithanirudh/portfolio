@@ -27,12 +27,11 @@ function GitHubSourceLink({ sourceUrl }: { sourceUrl: string }) {
     <div className='absolute top-[7px] right-9 z-10 bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)'>
       <a
         aria-label='View source on GitHub'
-        // TODO(slopradar): copied-variant: a hand copy of the ghost icon button classes, including disabled: and data-checked: states an <a> never has, use buttonVariants({ size: 'icon-xs', variant: 'ghost' })
-        className='inline-flex items-center justify-center rounded-md p-1 font-medium text-muted-foreground text-sm transition-colors duration-100 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-checked:text-accent-foreground [&_svg]:size-4'
+        className='inline-flex items-center justify-center rounded-md p-1 font-medium text-muted-foreground text-sm transition-colors duration-100 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&_svg]:size-4'
         href={sourceUrl}
         {...externalLinkProps}
       >
-        <Icons.githubMark className='size-4' />
+        <Icons.github className='size-4' />
       </a>
     </div>
   )
@@ -79,7 +78,7 @@ export async function GitHubCode({
       </div>
     )
   } catch (error) {
-    // TODO(slopradar): inconsistent-error-handling: this fallback never logs, so in production the reason is lost, while github-repo.tsx and mermaid.tsx console.error theirs; log the error here the same way
+    console.error(`Failed to load GitHub snippet ${url}:`, error)
     return (
       <p>
         Couldn&apos;t load this snippet

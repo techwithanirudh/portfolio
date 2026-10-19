@@ -2,7 +2,6 @@ import 'server-only'
 
 import { unstable_cache } from 'next/cache'
 import { z } from 'zod'
-// TODO(slopradar): layering: src/lib imports a type from a component, export z.infer of the schema from here and let the component import it
 import type { Activity } from '@/components/features/contributions'
 import { githubUser } from '@/constants/config'
 import { env } from '@/env'
@@ -13,14 +12,12 @@ const contributionResponseSchema = z.object({
   ),
 }) satisfies z.ZodType<{ contributions: Activity[] }>
 
-const DEFAULT_CONTRIBUTIONS_API_URL =
-  'https://github-contributions-api.jogruber.de'
-
 const getCachedGitHubContributions = unstable_cache(
   async () => {
     const url = new URL(
       `/v4/${githubUser}?y=last`,
-      env.GITHUB_CONTRIBUTIONS_API_URL || DEFAULT_CONTRIBUTIONS_API_URL
+      env.GITHUB_CONTRIBUTIONS_API_URL ||
+        'https://github-contributions-api.jogruber.de'
     )
     const response = await fetch(url)
 

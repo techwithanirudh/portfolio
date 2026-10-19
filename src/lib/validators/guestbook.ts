@@ -37,23 +37,3 @@ export const GuestbookBanUserSchema = z.object({
   action: z.enum(['ban', 'unban']),
   userId: z.string().min(1),
 })
-
-// TODO(slopradar): misplaced: these are the read model server/db/queries/guestbook.ts builds, not validators, and `role`/`banned`/`signature` restate Drizzle columns; move them next to the query (or src/types) and type the column fields from typeof users.$inferSelect / guestbookEntries.$inferSelect
-export interface GuestbookReactionItem {
-  count: number
-  emoji: string
-  reacted: boolean
-}
-
-export interface GuestbookEntryItem {
-  banned: boolean
-  createdAt: string
-  editedAt: string | null
-  id: number
-  message: string
-  name: string
-  reactions: GuestbookReactionItem[]
-  role: string
-  signature: string | null
-  userId: string
-}

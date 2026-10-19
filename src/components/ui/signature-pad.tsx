@@ -41,10 +41,6 @@ interface SignaturePadProps {
 const OUTPUT_WIDTH = 560
 const OUTPUT_HEIGHT = 252
 
-function getStrokeColor(theme: string | undefined): string {
-  return theme === 'dark' ? '#fff' : '#000'
-}
-
 function exportCanvas(source: HTMLCanvasElement): string {
   const normalized = document.createElement('canvas')
   normalized.width = source.width
@@ -105,7 +101,7 @@ export function SignaturePad({
   const history = useRefHistory<ImageData>()
 
   useEffect(() => {
-    strokeColor.current = getStrokeColor(resolvedTheme)
+    strokeColor.current = resolvedTheme === 'dark' ? '#fff' : '#000'
 
     const canvas = canvasRef.current
     const ctx = ctxRef.current

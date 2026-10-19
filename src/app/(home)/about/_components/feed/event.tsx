@@ -106,23 +106,26 @@ const pullRequestVerb = ({ action }: PullRequestPayload, merged: boolean) => {
   }
 }
 
+// GitHub can leave the title out of the payload, so the noun lives here and
+// the label never reads "pull request a pull request"
+const pullRequestLabel = (payload: PullRequestPayload) => {
+  const title = payload.pull_request?.title
+  const number = payload.pull_request?.number
+  if (title) {
+    return number
+      ? `pull request ${title} (#${number})`
+      : `pull request ${title}`
+  }
+  return number ? `pull request #${number}` : 'a pull request'
+}
+
 const describePullRequest = (
   event: GitHubEvent,
   merged: boolean
 ): EventDescription => {
   const payload = event.payload as PullRequestPayload
-  const pullRequest = payload.pull_request
-  const repoName = getRepoName(event)
-  const number = pullRequest?.number
-  // TODO(slopradar): duplicate-logic: the title or #number or 'a pull request' fallback is pullRequestLabel below written a second time (added by the round 1 PR fix), use pullRequestLabel(payload) (visible wording change, owner call)
-  const title =
-    pullRequest?.title ??
-    (number ? `pull request #${number}` : 'a pull request')
-  const user = pullRequest?.user?.login
-  const verb = pullRequestVerb(payload, merged)
-  const description = user
-    ? `${verb} ${user}'s ${title} on ${repoName}`
-    : `${verb} ${title} on ${repoName}`
+  const user = payload.pull_request?.user?.login
+  const description = `${pullRequestVerb(payload, merged)} ${pullRequestLabel(payload)}${user ? ` by ${user}` : ''} on ${getRepoName(event)}`
 
   return { description, icon: Icons.gitPullRequest }
 }
@@ -185,19 +188,6 @@ const describeDelete = (event: GitHubEvent): EventDescription => {
     description: `Deleted a ${refType} on ${getRepoName(event)}`,
     icon: refType === 'branch' ? Icons.gitBranch : Icons.gitTag,
   }
-}
-
-// GitHub can leave the title out of the payload, so the noun lives here and
-// the label never reads "pull request a pull request"
-const pullRequestLabel = (payload: PullRequestPayload) => {
-  const title = payload.pull_request?.title
-  const number = payload.pull_request?.number
-  if (title) {
-    return number
-      ? `pull request ${title} (#${number})`
-      : `pull request ${title}`
-  }
-  return number ? `pull request #${number}` : 'a pull request'
 }
 
 const describeEvent = (

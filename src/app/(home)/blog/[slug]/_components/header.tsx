@@ -1,19 +1,12 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as m from 'motion/react-m'
 import { BlurImage } from '@/components/blur-image'
-import { TagCard } from '@/components/features/blog'
+import { TagCard } from '@/components/features/blog/tag-card'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
+import { formatLongDate } from '@/lib/format-date'
 import type { BlogPage } from '@/lib/source'
 import { staggerDelay } from '@/lib/stagger'
-
-// TODO(slopradar): duplicate-logic: hand-rolled date formatting without timeZone UTC while the page sidebar uses formatDate, add a long variant to @/lib/format-date
-const formatPostDate = (date: Date) =>
-  date.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
 
 interface HeaderProps {
   page: BlogPage
@@ -21,24 +14,21 @@ interface HeaderProps {
 
 export const Header = ({ page }: HeaderProps) => {
   const { image, tags } = page.data
-  const formattedDate = formatPostDate(page.data.date)
 
   return (
-    // `isolate` keeps the card's z-indexed, blended and composited layers in
-    // one stacking context of its own, so none of them can rise past the
-    // sticky site header in the page's root stacking context
+    // `isolate` gives the card's blended and z-indexed layers their own stacking
+    // context, so none can rise past the sticky site header
     <Section className='isolate'>
       <FrameDecoration />
       <div className='relative h-[280px] overflow-clip md:h-[420px] lg:h-[600px]'>
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image && (
             <BlurImage
-              // Decorative: the h1 beside it already says what it is
               alt=''
               className='absolute inset-0 h-full w-full'
               fill
               imageClassName='object-cover'
-              lazy={false}
+              loading='eager'
               sizes='(min-width: 1024px) 800px, 100vw'
               src={image}
             />
@@ -74,7 +64,7 @@ export const Header = ({ page }: HeaderProps) => {
               initial={{ opacity: 0 }}
               transition={{ delay: 0.3, duration: 0.3 }}
             >
-              <span>{formattedDate}</span>
+              <span>{formatLongDate(page.data.date)}</span>
             </m.div>
           </div>
         </div>

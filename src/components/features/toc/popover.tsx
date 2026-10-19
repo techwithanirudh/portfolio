@@ -1,5 +1,7 @@
 'use client'
 
+// The popover trigger and ProgressCircle are adapted from fumadocs-ui
+// layouts/docs/page/slots/toc.js (MIT, (c) Fuma Nama)
 import type { TOCItemType } from 'fumadocs-core/toc'
 import { TOCScrollArea, useItems } from 'fumadocs-ui/components/toc'
 import { TOCItem, TOCItems } from 'fumadocs-ui/components/toc/default'
@@ -13,7 +15,6 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
-// TODO(slopradar): attribution: the popover trigger and ProgressCircle follow fumadocs-ui layouts/docs/page/slots/toc.js (MIT), add a source header
 export function TOCPopover({
   className,
   items,
@@ -35,7 +36,6 @@ function TOCPopoverContent({ className }: { className?: string }) {
   const selectedIndex = items.findIndex((item) => item.active)
   const showSelectedItem = selectedIndex !== -1 && !open
 
-  // TODO(slopradar): duplication: hand-written outside-click dismissal, the same as layout/header/index.tsx and mobile/index.tsx, use the shared dismiss hook
   useEffect(() => {
     const onClickOutside = (event: MouseEvent) => {
       if (!(open && event.target instanceof HTMLElement)) {
@@ -159,8 +159,7 @@ function ProgressCircle({
   const clamped = clamp(0, 1, value)
   const progress = clamped * circumference
 
-  // Decorative: inside the trigger a progressbar's value ("0.1666…") was read
-  // as part of the button's name
+  // Hidden: a progressbar's value ("0.1666…") would join the trigger's name
   return (
     <svg
       aria-hidden

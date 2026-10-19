@@ -1,13 +1,5 @@
-// TODO(slopradar): duplicate-type: hand-copies the z.enum(['small', 'medium', 'big']) in app/api/chat/utils/tools/celebrate.ts, export the tuple from here and build both the zod enum and this type from it
-export type ConfettiIntensity = 'small' | 'medium' | 'big'
-
-const PALETTE_TOKENS = [
-  '--color-primary',
-  '--color-success',
-  '--color-destructive',
-  '--color-accent-foreground',
-  '--color-foreground',
-] as const
+export const CONFETTI_INTENSITIES = ['small', 'medium', 'big'] as const
+export type ConfettiIntensity = (typeof CONFETTI_INTENSITIES)[number]
 
 const COUNTS: Record<ConfettiIntensity, number> = {
   big: 320,
@@ -18,7 +10,6 @@ const COUNTS: Record<ConfettiIntensity, number> = {
 const GRAVITY = 1100
 const DRAG = 2.2
 const LIFETIME_MS = 4200
-const OVERLAY_Z_INDEX = 100
 
 interface Piece {
   color: string
@@ -34,14 +25,10 @@ interface Piece {
   y: number
 }
 
-const readPalette = () => {
-  const styles = getComputedStyle(document.documentElement)
-  return PALETTE_TOKENS.map((token) =>
-    styles.getPropertyValue(token).trim()
-  ).filter(Boolean)
-}
-
 const random = (min: number, max: number) => min + Math.random() * (max - min)
+
+const pickColor = (palette: string[]) =>
+  palette[Math.floor(Math.random() * palette.length)] ?? '#888'
 
 const cannon = (
   origin: { x: number; y: number },
@@ -53,8 +40,7 @@ const cannon = (
     const direction = angle + random(-0.45, 0.45)
     const speed = random(950, 2000)
     return {
-      // TODO(slopradar): duplication: this color pick and its '#888' fallback are repeated in rain() below, and the fallback never applies because launchConfetti returns on an empty palette; add one pickColor(palette) helper that owns the noUncheckedIndexedAccess fallback
-      color: palette[Math.floor(Math.random() * palette.length)] ?? '#888',
+      color: pickColor(palette),
       height: random(5, 9),
       life: 0,
       rotation: random(0, Math.PI * 2),
@@ -70,7 +56,7 @@ const cannon = (
 
 const rain = (width: number, count: number, palette: string[]): Piece[] =>
   Array.from({ length: count }, () => ({
-    color: palette[Math.floor(Math.random() * palette.length)] ?? '#888',
+    color: pickColor(palette),
     height: random(5, 9),
     life: -random(0, 900),
     rotation: random(0, Math.PI * 2),
@@ -83,9 +69,17 @@ const rain = (width: number, count: number, palette: string[]): Piece[] =>
     y: -20,
   }))
 
-// TODO(slopradar): library-exists: a hand-rolled particle engine (cannons, rain, drag, gravity, DPR canvas, rAF loop) in one 85-line function is what canvas-confetti does with confetti({ angle, origin, particleCount }); adopt it (owner decision, the look changes) or at least split the physics step from the draw
 export const launchConfetti = (intensity: ConfettiIntensity) => {
-  const palette = readPalette()
+  const styles = getComputedStyle(document.documentElement)
+  const palette = [
+    '--color-primary',
+    '--color-success',
+    '--color-destructive',
+    '--color-accent-foreground',
+    '--color-foreground',
+  ]
+    .map((token) => styles.getPropertyValue(token).trim())
+    .filter(Boolean)
   if (palette.length === 0) {
     return
   }
@@ -103,7 +97,7 @@ export const launchConfetti = (intensity: ConfettiIntensity) => {
     pointerEvents: 'none',
     position: 'fixed',
     width: '100dvw',
-    zIndex: String(OVERLAY_Z_INDEX),
+    zIndex: '100',
   })
 
   const context = canvas.getContext('2d')

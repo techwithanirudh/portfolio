@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import {
   InputGroup,
@@ -27,18 +27,15 @@ export function SearchRedirectInput({
   const [value, setValue] = useState('')
   const hasValue = value.trim().length > 0
 
-  const handleSubmit = useCallback(
-    (nextValue: string) => {
-      const trimmedValue = nextValue.trim()
-      if (!trimmedValue) {
-        return
-      }
+  const handleSubmit = (nextValue: string) => {
+    const trimmedValue = nextValue.trim()
+    if (!trimmedValue) {
+      return
+    }
 
-      const params = new URLSearchParams({ q: trimmedValue, tag })
-      router.push(`${pages.search.path}?${params.toString()}`)
-    },
-    [router, tag]
-  )
+    const params = new URLSearchParams({ q: trimmedValue, tag })
+    router.push(`${pages.search.path}?${params.toString()}`)
+  }
 
   return (
     <InputGroup className={cn('bg-background', className)}>
@@ -49,7 +46,6 @@ export function SearchRedirectInput({
         aria-label={placeholder}
         className='text-sm [&::-webkit-search-cancel-button]:hidden'
         onChange={(event) => setValue(event.target.value)}
-        // TODO(slopradar): hand-written-form: Enter handling plus router.push rebuilds a GET form, render Form from 'next/form' with action='/search' and a hidden tag input so it works without JS, and drop handleSubmit/useCallback
         onKeyDown={(event) => {
           if (event.key === 'Enter') {
             event.preventDefault()

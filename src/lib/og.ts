@@ -7,21 +7,23 @@ import {
   PORTRAIT_EYE_PATHS,
 } from '@/lib/portrait-eyes'
 
-const PORTRAIT_PATH = path.join(process.cwd(), 'public/images/portrait.svg')
-
 const SVG_OPEN_TAG = /<svg\b[^>]*>/
-
-const EYES = `<g fill="${PORTRAIT_EYE_FILL}">${PORTRAIT_EYE_PATHS.map((d) => `<path d="${d}"/>`).join('')}</g>`
 
 const loadPortrait = async (): Promise<string | null> => {
   try {
-    const svg = await readFile(PORTRAIT_PATH, 'utf8')
+    const svg = await readFile(
+      path.join(process.cwd(), 'public/images/portrait.svg'),
+      'utf8'
+    )
     const chip = svg
       .replace(
         SVG_OPEN_TAG,
         `<svg xmlns="http://www.w3.org/2000/svg" width="730" height="730" viewBox="${PORTRAIT_CHIP_VIEW_BOX}">`
       )
-      .replace('</svg>', `${EYES}</svg>`)
+      .replace(
+        '</svg>',
+        `<g fill="${PORTRAIT_EYE_FILL}">${PORTRAIT_EYE_PATHS.map((d) => `<path d="${d}"/>`).join('')}</g></svg>`
+      )
     return `data:image/svg+xml;base64,${Buffer.from(chip).toString('base64')}`
   } catch (error) {
     console.error('Could not load the OG portrait:', error)
@@ -134,8 +136,6 @@ const BLOB_RADIUS_FACTOR = 0.9
 const WASH_GRADIENT =
   '<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".55" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
 
-const GRAIN_ALPHA_MATRIX = '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -0.8'
-
 const grainFilter = ({
   height,
   seed,
@@ -145,7 +145,7 @@ const grainFilter = ({
   seed: number
   width: number
 }) =>
-  `<filter id="grain" x="0" y="0" width="${width}" height="${height}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="${seed % 1000}"/><feColorMatrix values="${GRAIN_ALPHA_MATRIX}"/><feComposite in="SourceAlpha" operator="arithmetic" k2="1" k3="-1" k4="0.5"/><feComponentTransfer result="mask"><feFuncA type="linear" slope="3" intercept="-1"/></feComponentTransfer><feComponentTransfer in="SourceGraphic"><feFuncA type="linear" slope="24"/></feComponentTransfer><feComposite in2="mask" operator="in"/></filter>`
+  `<filter id="grain" x="0" y="0" width="${width}" height="${height}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="${seed % 1000}"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -0.8"/><feComposite in="SourceAlpha" operator="arithmetic" k2="1" k3="-1" k4="0.5"/><feComponentTransfer result="mask"><feFuncA type="linear" slope="3" intercept="-1"/></feComponentTransfer><feComponentTransfer in="SourceGraphic"><feFuncA type="linear" slope="24"/></feComponentTransfer><feComposite in2="mask" operator="in"/></filter>`
 
 export const getCoverDataUrl = (
   seed: string,

@@ -1,4 +1,4 @@
-import { PreviewLink } from '@/components/preview-link'
+import { externalLinkProps } from '@/components/external-link'
 import { technology } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
@@ -33,14 +33,14 @@ export const Technology = () => {
         )
 
         return item.url ? (
-          <PreviewLink
+          <a
             className={className}
             href={item.url}
             key={item.name}
-            preview={null}
+            {...externalLinkProps}
           >
             {content}
-          </PreviewLink>
+          </a>
         ) : (
           <div className={className} key={item.name}>
             {content}

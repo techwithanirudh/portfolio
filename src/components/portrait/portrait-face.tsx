@@ -1,6 +1,3 @@
-// Generated from public/images/portrait.svg by `bun run generate-portrait`.
-// Do not edit by hand.
-
 export const PortraitFace = () => (
   <>
     <defs>

@@ -13,3 +13,11 @@ export const getSvgSizeProps = ({
   height: height ?? size ?? width ?? '1em',
   width: width ?? size ?? height ?? '1em',
 })
+
+export const isLabelled = (props: IconProps) =>
+  Object.keys(props).some(
+    (key) =>
+      (key.startsWith('aria-') && key !== 'aria-hidden') ||
+      key === 'role' ||
+      key === 'title'
+  )

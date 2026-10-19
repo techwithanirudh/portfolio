@@ -30,7 +30,6 @@ const loadEntries = async () => {
 
 async function GuestbookEntriesSection() {
   const result = await loadEntries().catch((error: unknown) => {
-    // Let Next's own signals (dynamic rendering, redirects) through
     unstable_rethrow(error)
     console.error('Failed to load guestbook entries', error)
     return null
@@ -49,7 +48,12 @@ async function GuestbookEntriesSection() {
   )
 }
 
-export default function GuestbookPage() {
+export default async function GuestbookPage() {
+  const session = await getSession().catch((error: unknown) => {
+    unstable_rethrow(error)
+    return null
+  })
+
   return (
     <Wrapper>
       <SplitSection>
@@ -71,7 +75,7 @@ export default function GuestbookPage() {
           inset
         >
           <ViewAnimation className='w-full' delay={0.1}>
-            <GuestbookForm />
+            <GuestbookForm initialUser={session?.user ?? null} />
           </ViewAnimation>
         </SplitSectionContent>
       </SplitSection>

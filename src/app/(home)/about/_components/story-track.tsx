@@ -26,10 +26,7 @@ interface Track {
   width: number
 }
 
-const CORNER_RADIUS = 16
-
 const LANE_SELECTOR = '[data-track-lane]'
-const MARKER_SELECTOR = '[data-track-marker]'
 
 const layoutOffsetWithin = (element: HTMLElement, container: HTMLElement) => {
   let x = 0
@@ -57,7 +54,7 @@ const roundedPath = (points: Point[]) => {
       break
     }
     const radius = Math.min(
-      CORNER_RADIUS,
+      16,
       Math.hypot(current.x - previous.x, current.y - previous.y) / 2,
       Math.hypot(next.x - current.x, next.y - current.y) / 2
     )
@@ -75,8 +72,6 @@ const roundedPath = (points: Point[]) => {
   return d
 }
 
-const TRACK_START_Y = -4
-
 const traceTrack = (container: HTMLElement): Track | null => {
   const lanes = [...container.querySelectorAll<HTMLElement>(LANE_SELECTOR)]
   if (lanes.length === 0) {
@@ -86,8 +81,9 @@ const traceTrack = (container: HTMLElement): Track | null => {
   const height = container.offsetHeight
   const segments = lanes.map((lane) => {
     const { x, y } = layoutOffsetWithin(lane, container)
-    const label =
-      lane.parentElement?.querySelector<HTMLElement>(MARKER_SELECTOR)
+    const label = lane.parentElement?.querySelector<HTMLElement>(
+      '[data-track-marker]'
+    )
     const marker = label
       ? layoutOffsetWithin(label, container).y + label.offsetHeight / 2
       : y + lane.offsetHeight / 2
@@ -98,7 +94,8 @@ const traceTrack = (container: HTMLElement): Track | null => {
   segments.forEach((segment, index) => {
     const previous = segments[index - 1]
     if (!previous) {
-      points.push({ x: segment.x, y: TRACK_START_Y })
+      // Starts just above the top edge, so the line runs in from off-section
+      points.push({ x: segment.x, y: -4 })
       return
     }
     if (previous.x !== segment.x) {
@@ -140,8 +137,6 @@ const markerProgress = (path: SVGPathElement, markers: Point[]) => {
   })
 }
 
-const spring = { damping: 20, mass: 0.5, stiffness: 100 }
-
 const svgClassName =
   'pointer-events-none absolute inset-0 select-none overflow-visible [mask-image:linear-gradient(black,black)] max-lg:hidden'
 
@@ -152,7 +147,7 @@ export function StoryTrack({
   children: ReactNode
   className?: string
 }) {
-  const id = useId()
+  const grooveId = useId()
   const containerRef = useRef<HTMLDivElement>(null)
   const pathRef = useRef<SVGPathElement>(null)
   const [track, setTrack] = useState<Track | null>(null)
@@ -163,7 +158,11 @@ export function StoryTrack({
     offset: ['start center', 'end center'],
     target: containerRef,
   })
-  const smoothProgress = useSpring(scrollYProgress, spring)
+  const smoothProgress = useSpring(scrollYProgress, {
+    damping: 20,
+    mass: 0.5,
+    stiffness: 100,
+  })
   const progress = reduceMotion ? scrollYProgress : smoothProgress
 
   useLayoutEffect(() => {
@@ -198,104 +197,102 @@ export function StoryTrack({
     return () => unsubscribe()
   }, [progress, track])
 
-  const grooveId = `${id}-groove`
-
   return (
     <div className={cn('relative', className)} ref={containerRef}>
       {track ? (
-        <svg
-          aria-hidden
-          className={svgClassName}
-          fill='none'
-          height={track.height}
-          viewBox={`0 0 ${track.width} ${track.height}`}
-          width={track.width}
-        >
-          <defs>
-            {/* In user space, a straight track has no width to filter by */}
-            <filter
-              colorInterpolationFilters='sRGB'
-              filterUnits='userSpaceOnUse'
-              height={track.height + 40}
-              id={grooveId}
-              width={track.width + 40}
-              x='-20'
-              y='-20'
-            >
-              <feFlood floodOpacity='0' result='BackgroundImageFix' />
-              <feBlend
-                in='SourceGraphic'
-                in2='BackgroundImageFix'
-                mode='normal'
-                result='shape'
-              />
-              <feColorMatrix
-                in='SourceAlpha'
-                result='hardAlpha'
-                type='matrix'
-                values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
-              />
-              <feOffset dy='2' />
-              <feGaussianBlur stdDeviation='0.75' />
-              <feComposite
-                in2='hardAlpha'
-                k2='-1'
-                k3='1'
-                operator='arithmetic'
-              />
-              <feColorMatrix
-                type='matrix'
-                values='0 0 0 0 0.647059 0 0 0 0 0.682353 0 0 0 0 0.721569 0 0 0 0.32 0'
-              />
-              <feBlend in2='shape' mode='normal' result='innerShadow' />
-            </filter>
-          </defs>
+        <>
+          <svg
+            aria-hidden
+            className={svgClassName}
+            fill='none'
+            height={track.height}
+            viewBox={`0 0 ${track.width} ${track.height}`}
+            width={track.width}
+          >
+            <defs>
+              {/* In user space, a straight track has no width to filter by */}
+              <filter
+                colorInterpolationFilters='sRGB'
+                filterUnits='userSpaceOnUse'
+                height={track.height + 40}
+                id={grooveId}
+                width={track.width + 40}
+                x='-20'
+                y='-20'
+              >
+                <feFlood floodOpacity='0' result='BackgroundImageFix' />
+                <feBlend
+                  in='SourceGraphic'
+                  in2='BackgroundImageFix'
+                  mode='normal'
+                  result='shape'
+                />
+                <feColorMatrix
+                  in='SourceAlpha'
+                  result='hardAlpha'
+                  type='matrix'
+                  values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+                />
+                <feOffset dy='2' />
+                <feGaussianBlur stdDeviation='0.75' />
+                <feComposite
+                  in2='hardAlpha'
+                  k2='-1'
+                  k3='1'
+                  operator='arithmetic'
+                />
+                <feColorMatrix
+                  type='matrix'
+                  values='0 0 0 0 0.647059 0 0 0 0 0.682353 0 0 0 0 0.721569 0 0 0 0.32 0'
+                />
+                <feBlend in2='shape' mode='normal' result='innerShadow' />
+              </filter>
+            </defs>
 
-          <g filter={`url(#${grooveId})`}>
-            <path
-              className='stroke-foreground/8'
+            <g filter={`url(#${grooveId})`}>
+              <path
+                className='stroke-foreground/8'
+                d={track.d}
+                ref={pathRef}
+                strokeLinejoin='round'
+                strokeWidth='8'
+              />
+            </g>
+          </svg>
+          {/* Its own layer, so redrawing the line each frame does not re-raster
+        the groove filter and the content beneath it */}
+          <svg
+            aria-hidden
+            className={cn(svgClassName, 'will-change-transform')}
+            fill='none'
+            height={track.height}
+            viewBox={`0 0 ${track.width} ${track.height}`}
+            width={track.width}
+          >
+            <m.path
+              className='stroke-primary'
               d={track.d}
-              ref={pathRef}
               strokeLinejoin='round'
-              strokeWidth='8'
+              strokeWidth='4'
+              style={{ pathLength: progress }}
             />
-          </g>
-        </svg>
-      ) : null}
-      {track ? (
-        // Its own layer, so redrawing the line each frame does not re-raster
-        // the groove filter and the content beneath it
-        <svg
-          aria-hidden
-          className={cn(svgClassName, 'will-change-transform')}
-          fill='none'
-          height={track.height}
-          viewBox={`0 0 ${track.width} ${track.height}`}
-          width={track.width}
-        >
-          <m.path
-            className='stroke-primary'
-            d={track.d}
-            strokeLinejoin='round'
-            strokeWidth='4'
-            style={{ pathLength: progress }}
-          />
 
-          {track.markers.map((marker, index) => (
-            <circle
-              className={cn(
-                'stroke-2 transition-colors duration-300',
-                index < reached
-                  ? 'fill-primary stroke-background'
-                  : 'fill-background stroke-border'
-              )}
-              cx={marker.x}
-              cy={marker.y}
-              key={`${marker.x}-${marker.y}`}
-              r='5'
-            />
-          ))}
-        </svg>
+            {track.markers.map((marker, index) => (
+              <circle
+                className={cn(
+                  'stroke-2 transition-colors duration-300',
+                  index < reached
+                    ? 'fill-primary stroke-background'
+                    : 'fill-background stroke-border'
+                )}
+                cx={marker.x}
+                cy={marker.y}
+                key={`${marker.x}-${marker.y}`}
+                r='5'
+              />
+            ))}
+          </svg>
+        </>
       ) : null}
       {children}
     </div>

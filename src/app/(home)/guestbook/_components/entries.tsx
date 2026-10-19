@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import type { GuestbookEntryItem } from '@/lib/validators/guestbook'
+import type { GuestbookEntryItem } from '@/types/guestbook'
 import { GuestbookEntryCard } from './entry-card'
 
 const EntriesNotice = ({ children }: { children: ReactNode }) => (

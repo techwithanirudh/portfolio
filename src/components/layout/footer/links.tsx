@@ -4,7 +4,8 @@ import { ActiveLink } from '@/components/layout/footer/active-link'
 import { splitLinkItems } from '@/components/layout/split-link-items'
 import { PreviewLink } from '@/components/preview-link'
 import { ViewAnimation } from '@/components/view-animation'
-import { linkItems, socials } from '@/constants/navigation'
+import { linkItems, socials, v1Portfolio } from '@/constants/navigation'
+import { pages } from '@/constants/pages'
 import { baseOptions } from '@/constants/site'
 import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
@@ -58,7 +59,7 @@ export const Links = () => {
   const lists: LinkGroup[] = [
     {
       items: [
-        { children: 'Home', href: '/' },
+        { children: pages.home.title, href: pages.home.path },
         ...navItems
           .filter(
             (item) =>
@@ -74,17 +75,16 @@ export const Links = () => {
       title: 'Navigate',
     },
     {
-      // TODO(slopradar): data-in-component: the More links (Uses, Colophon, Resume, V1, RSS) are hard-coded here while nav and socials come from constants/navigation, move them there
       items: [
         { children: 'Uses', href: '/uses' },
         { children: 'Colophon', href: '/colophon' },
         { children: 'Resume', href: '/resume' },
         {
-          children: 'V1 portfolio',
+          children: v1Portfolio.name,
           external: true,
-          href: 'https://v1.techwithanirudh.com/',
+          href: v1Portfolio.url,
         },
-        { children: 'RSS feed', href: '/rss.xml', routeHandler: true },
+        { children: 'RSS feed', href: '/blog/rss.xml', routeHandler: true },
       ],
       title: 'More',
     },
@@ -114,7 +114,6 @@ export const Links = () => {
           delay={staggerDelay(index)}
           key={list.title}
         >
-          {/* TODO(slopradar): a11y: each link group is titled by a <p> inside a <div>, use a heading (h2 or h3) or aria-labelledby on the list so the footer groups are navigable */}
           <div className='border-b pb-1 font-medium text-foreground sm:border-none sm:pb-0'>
             <p>{list.title}</p>
           </div>

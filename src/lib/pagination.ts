@@ -1,6 +1,8 @@
+import { notFound } from 'next/navigation'
+
 const PAGE_PATTERN = /^\d+$/
 
-export function parsePageParam(value: string | string[] | undefined): number {
+function parsePageParam(value: string | string[] | undefined): number {
   const raw = Array.isArray(value) ? value[0] : value
 
   if (raw === undefined) {
@@ -67,3 +69,27 @@ export function getPaginationRange({
 /** Page 1 lives at the bare path, so it matches the canonical URL */
 export const getPageHref = (path: string, page: number) =>
   page === 1 ? path : `${path}?page=${page}`
+
+/**
+ * The slice of `items` the `page` search param asks for. A page past either
+ * end is a 404
+ */
+export function paginate<T>(
+  items: readonly T[],
+  perPage: number,
+  param: string | string[] | undefined
+) {
+  const pageCount = Math.ceil(items.length / perPage)
+  const currentPage = parsePageParam(param)
+
+  if (currentPage < 1 || currentPage > pageCount) {
+    notFound()
+  }
+
+  const start = (currentPage - 1) * perPage
+  return {
+    currentPage,
+    items: items.slice(start, start + perPage),
+    pageCount,
+  }
+}

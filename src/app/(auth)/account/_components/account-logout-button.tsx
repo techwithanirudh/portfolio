@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { signOut } from '@/lib/auth-client'
+import { toast } from '@/lib/toast'
 
 export function AccountLogoutButton() {
   const router = useRouter()
@@ -12,8 +13,15 @@ export function AccountLogoutButton() {
     <Button
       className='self-start'
       onClick={async () => {
-        // TODO(slopradar): swallowed-error: better-auth's signOut resolves { error } instead of throwing (the round 2 sign-in fix), so a failed sign-out still navigates home as if it worked, check the result and toast on error
-        await signOut()
+        const { error } = await signOut()
+        if (error) {
+          if (error.status !== 429) {
+            toast.error(
+              "You're still signed in. Check your connection and try again."
+            )
+          }
+          return
+        }
         router.push('/')
         router.refresh()
       }}

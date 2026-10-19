@@ -5,31 +5,32 @@ import type { Social } from '@/types'
 
 export const socials: Social[] = [
   {
-    description: 'Check out my open source projects and contributions',
+    description: 'My code and open source contributions',
     icon: <Icons.github />,
     name: 'GitHub',
     url: githubUrl,
   },
   {
-    description: 'Follow me for tech updates and project announcements',
+    description: "Posts about what I'm building",
     icon: <Icons.x />,
     name: 'X',
     url: `https://x.com/${xHandle}`,
   },
   {
-    description: 'Connect with me professionally',
+    description: 'My work history',
     icon: <Icons.linkedin />,
     name: 'LinkedIn',
     url: 'https://linkedin.com/in/anirudhsriramb',
   },
   {
-    description: 'Subscribe for tech tutorials and project demos',
+    description: 'Tech tutorials and project demos',
+    hideOnResume: true,
     icon: <Icons.youtube />,
     name: 'YouTube',
     url: 'https://www.youtube.com/@techwithanirudh',
   },
   {
-    description: 'Get in touch via email',
+    description: 'Write to me directly',
     icon: <Icons.mail />,
     name: 'Email',
     url: `mailto:${email}`,

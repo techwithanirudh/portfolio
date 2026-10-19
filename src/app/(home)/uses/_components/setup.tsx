@@ -15,7 +15,7 @@ export function Setup() {
             className='aspect-[21/9] w-full'
             height={720}
             imageClassName='h-full w-full object-cover grayscale-75 duration-300 hover:grayscale-0'
-            lazy={false}
+            loading='eager'
             sizes='(min-width: 1400px) 1400px, 100vw'
             src='/images/uses/setup.png'
             width={1280}

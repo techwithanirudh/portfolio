@@ -29,11 +29,8 @@ import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 import { toggleSound } from '@/lib/audio/preferences'
 import { signOut, useSession } from '@/lib/auth-client'
-import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { scrollToTarget } from '@/lib/scroll-to-target'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
-
-const NAV_SOUND_THROTTLE_MS = 60
 
 function useSearchSounds(open: boolean) {
   const playOpen = useSound(notification)
@@ -53,7 +50,7 @@ function useSearchSounds(open: boolean) {
   const playNavigationSound = () => {
     const now = performance.now()
 
-    if (now - lastNavSoundAtRef.current < NAV_SOUND_THROTTLE_MS) {
+    if (now - lastNavSoundAtRef.current < 60) {
       return
     }
 
@@ -64,7 +61,6 @@ function useSearchSounds(open: boolean) {
   return { playCollapse, playConfirm, playNavigationSound }
 }
 
-// TODO(slopradar): long-function: account items, group building and navigation still live in this one component, extract a useCommandActions hook
 export default function SearchDialog({
   open,
   onOpenChange,
@@ -201,9 +197,7 @@ export default function SearchDialog({
     }
 
     if (sameRouteTarget) {
-      scrollToTarget(lenis, sameRouteTarget, {
-        immediate: prefersReducedMotion(),
-      })
+      scrollToTarget(lenis, sameRouteTarget)
     }
   }
 

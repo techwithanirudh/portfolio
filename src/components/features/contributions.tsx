@@ -1,14 +1,13 @@
 'use client'
 
-// TODO(slopradar): vendored-location: this is the Kibo UI contribution-graph registry component (components.json @kibo-ui) kept outside src/components/ui with no source header, move it to ui/ untouched or own it and drop the unused Labels/weekStart/maxLevel generality
-import type { Day as WeekDay } from 'date-fns'
+// Adapted from the Kibo UI contribution-graph component (MIT):
+// https://www.kibo-ui.com/components/contribution-graph
 import {
   differenceInCalendarDays,
   eachDayOfInterval,
   formatISO,
   getDay,
   getMonth,
-  getYear,
   nextDay,
   parseISO,
   subWeeks,
@@ -22,6 +21,7 @@ import {
   useContext,
   useMemo,
 } from 'react'
+import { contributionLevels } from '@/components/features/contribution-levels'
 import { cn } from '@/lib/utils'
 
 export interface Activity {
@@ -32,22 +32,12 @@ export interface Activity {
 
 interface Week extends Array<Activity | undefined> {}
 
-export interface Labels {
-  legend?: {
-    less?: string
-    more?: string
-  }
-  months?: string[]
-  totalCount?: string
-  weekdays?: string[]
-}
-
 interface MonthLabel {
   label: string
   weekIndex: number
 }
 
-const DEFAULT_MONTH_LABELS = [
+const MONTH_LABELS = [
   'Jan',
   'Feb',
   'Mar',
@@ -62,15 +52,7 @@ const DEFAULT_MONTH_LABELS = [
   'Dec',
 ]
 
-const DEFAULT_LABELS: Labels = {
-  legend: {
-    less: 'Less',
-    more: 'More',
-  },
-  months: DEFAULT_MONTH_LABELS,
-  totalCount: '{{count}} activities in {{year}}',
-  weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-}
+const MAX_LEVEL = 4
 
 interface ContributionGraphContextType {
   blockMargin: number
@@ -80,13 +62,9 @@ interface ContributionGraphContextType {
   fontSize: number
   height: number
   labelHeight: number
-  labels: Labels
-  maxLevel: number
   totalCount: number
-  weekStart: WeekDay
   weeks: Week[]
   width: number
-  year: number
 }
 
 const ContributionGraphContext =
@@ -140,10 +118,7 @@ const fillHoles = (activities: Activity[]): Activity[] => {
   })
 }
 
-const groupByWeeks = (
-  activities: Activity[],
-  weekStart: WeekDay = 0
-): Week[] => {
+const groupByWeeks = (activities: Activity[]): Week[] => {
   if (activities.length === 0) {
     return []
   }
@@ -151,10 +126,9 @@ const groupByWeeks = (
   const normalizedActivities = fillHoles(activities)
   const firstActivity = normalizedActivities[0] as Activity
   const firstDate = parseISO(firstActivity.date)
+  // Weeks start on Sunday (day 0)
   const firstCalendarDate =
-    getDay(firstDate) === weekStart
-      ? firstDate
-      : subWeeks(nextDay(firstDate, weekStart), 1)
+    getDay(firstDate) === 0 ? firstDate : subWeeks(nextDay(firstDate, 0), 1)
 
   const paddedActivities = [
     ...(new Array(differenceInCalendarDays(firstDate, firstCalendarDate)).fill(
@@ -172,10 +146,7 @@ const groupByWeeks = (
     )
 }
 
-const getMonthLabels = (
-  weeks: Week[],
-  monthNames: string[] = DEFAULT_MONTH_LABELS
-): MonthLabel[] =>
+const getMonthLabels = (weeks: Week[]): MonthLabel[] =>
   weeks
     .reduce<MonthLabel[]>((labels, week, weekIndex) => {
       const firstActivity = week.find((activity) => activity !== undefined)
@@ -186,7 +157,7 @@ const getMonthLabels = (
         )
       }
 
-      const month = monthNames[getMonth(parseISO(firstActivity.date))]
+      const month = MONTH_LABELS[getMonth(parseISO(firstActivity.date))]
 
       if (!month) {
         const monthName = new Date(firstActivity.date).toLocaleString('en-US', {
@@ -228,11 +199,8 @@ export interface ContributionGraphProps extends HTMLAttributes<HTMLDivElement> {
   className?: string
   data: Activity[]
   fontSize?: number
-  labels?: Labels
-  maxLevel?: number
   style?: CSSProperties
   totalCount?: number
-  weekStart?: WeekDay
 }
 
 export const ContributionGraph = ({
@@ -241,29 +209,15 @@ export const ContributionGraph = ({
   blockRadius = 2,
   blockSize = 12,
   fontSize = 14,
-  labels: labelsProp = undefined,
-  maxLevel: maxLevelProp = 4,
   style = {},
   totalCount: totalCountProp = undefined,
-  weekStart = 0,
   className,
   children,
   ...props
 }: ContributionGraphProps) => {
-  const maxLevel = Math.max(1, maxLevelProp)
-  const weeks = useMemo(() => groupByWeeks(data, weekStart), [data, weekStart])
-  const LABEL_MARGIN = 8
-
-  const labels = useMemo(
-    () => ({ ...DEFAULT_LABELS, ...labelsProp }),
-    [labelsProp]
-  )
-  const labelHeight = fontSize + LABEL_MARGIN
-
-  const firstActivity = data.at(0)
-  const year = firstActivity
-    ? getYear(parseISO(firstActivity.date))
-    : new Date().getFullYear()
+  const weeks = useMemo(() => groupByWeeks(data), [data])
+  // 8px between the month labels and the first row
+  const labelHeight = fontSize + 8
 
   const totalCount =
     typeof totalCountProp === 'number'
@@ -282,13 +236,9 @@ export const ContributionGraph = ({
       fontSize,
       height,
       labelHeight,
-      labels,
-      maxLevel,
       totalCount,
-      weekStart,
       weeks,
       width,
-      year,
     }),
     [
       blockMargin,
@@ -298,13 +248,9 @@ export const ContributionGraph = ({
       fontSize,
       height,
       labelHeight,
-      labels,
-      maxLevel,
       totalCount,
-      weekStart,
       weeks,
       width,
-      year,
     ]
   )
 
@@ -339,26 +285,18 @@ export const ContributionGraphBlock = ({
   className,
   ...props
 }: ContributionGraphBlockProps) => {
-  const { blockSize, blockMargin, blockRadius, labelHeight, maxLevel } =
+  const { blockSize, blockMargin, blockRadius, labelHeight } =
     useContributionGraph()
 
-  if (activity.level < 0 || activity.level > maxLevel) {
+  if (activity.level < 0 || activity.level > MAX_LEVEL) {
     throw new RangeError(
-      `Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${maxLevel}.`
+      `Provided activity level ${activity.level} for ${activity.date} is out of range. It must be between 0 and ${MAX_LEVEL}.`
     )
   }
 
   return (
     <rect
-      // TODO(slopradar): duplication: the level-to-fill class list repeats in ContributionGraphLegend, hoist one constant (x2 in this file)
-      className={cn(
-        'data-[level="0"]:fill-muted',
-        'data-[level="1"]:fill-muted-foreground/20',
-        'data-[level="2"]:fill-muted-foreground/40',
-        'data-[level="3"]:fill-muted-foreground/60',
-        'data-[level="4"]:fill-muted-foreground/80',
-        className
-      )}
+      className={cn(contributionLevels, className)}
       data-count={activity.count}
       data-date={activity.date}
       data-level={activity.level}
@@ -392,13 +330,10 @@ export const ContributionGraphCalendar = ({
   children,
   ...props
 }: ContributionGraphCalendarProps) => {
-  const { weeks, width, height, blockSize, blockMargin, labels } =
+  const { weeks, width, height, blockSize, blockMargin } =
     useContributionGraph()
 
-  const monthLabels = useMemo(
-    () => getMonthLabels(weeks, labels.months),
-    [weeks, labels.months]
-  )
+  const monthLabels = getMonthLabels(weeks)
 
   return (
     <div
@@ -462,81 +397,33 @@ export const ContributionGraphFooter = ({
   />
 )
 
-export interface ContributionGraphTotalCountProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
-  children?: (props: { totalCount: number; year: number }) => ReactNode
-}
-
 export const ContributionGraphTotalCount = ({
-  className,
   children,
-  ...props
-}: ContributionGraphTotalCountProps) => {
-  const { totalCount, year, labels } = useContributionGraph()
-
-  if (children) {
-    return <>{children({ totalCount, year })}</>
-  }
-
-  return (
-    <div className={cn('text-muted-foreground', className)} {...props}>
-      {labels.totalCount
-        ? labels.totalCount
-            .replace('{{count}}', String(totalCount))
-            .replace('{{year}}', String(year))
-        : `${totalCount} activities in ${year}`}
-    </div>
-  )
+}: {
+  children: (props: { totalCount: number }) => ReactNode
+}) => {
+  const { totalCount } = useContributionGraph()
+  return <>{children({ totalCount })}</>
 }
 
 export interface ContributionGraphLegendProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
-  children?: (props: { level: number }) => ReactNode
+  children: (props: { level: number }) => ReactNode
 }
 
 export const ContributionGraphLegend = ({
   className,
   children,
   ...props
-}: ContributionGraphLegendProps) => {
-  const { labels, maxLevel, blockSize, blockRadius } = useContributionGraph()
-  const levels = Array.from({ length: maxLevel + 1 }, (_, level) => level)
-
-  return (
-    <div
-      className={cn('ml-auto flex items-center gap-[3px]', className)}
-      {...props}
-    >
-      <span className='mr-1 text-muted-foreground'>
-        {labels.legend?.less || 'Less'}
-      </span>
-      {levels.map((level) =>
-        children ? (
-          <Fragment key={`level-${level}`}>{children({ level })}</Fragment>
-        ) : (
-          <svg height={blockSize} key={`level-${level}`} width={blockSize}>
-            <title>{`${level} contributions`}</title>
-            <rect
-              className={cn(
-                'stroke-[1px] stroke-border',
-                'data-[level="0"]:fill-muted',
-                'data-[level="1"]:fill-muted-foreground/20',
-                'data-[level="2"]:fill-muted-foreground/40',
-                'data-[level="3"]:fill-muted-foreground/60',
-                'data-[level="4"]:fill-muted-foreground/80'
-              )}
-              data-level={level}
-              height={blockSize}
-              rx={blockRadius}
-              ry={blockRadius}
-              width={blockSize}
-            />
-          </svg>
-        )
-      )}
-      <span className='ml-1 text-muted-foreground'>
-        {labels.legend?.more || 'More'}
-      </span>
-    </div>
-  )
-}
+}: ContributionGraphLegendProps) => (
+  <div
+    className={cn('ml-auto flex items-center gap-[3px]', className)}
+    {...props}
+  >
+    <span className='mr-1 text-muted-foreground'>Less</span>
+    {Array.from({ length: MAX_LEVEL + 1 }, (_, level) => level).map((level) => (
+      <Fragment key={`level-${level}`}>{children({ level })}</Fragment>
+    ))}
+    <span className='ml-1 text-muted-foreground'>More</span>
+  </div>
+)

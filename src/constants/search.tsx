@@ -120,8 +120,7 @@ export const commands: CommandGroup[] = [
         icon: <Icons.rss className='size-4' />,
         kind: 'link',
         title: 'RSS feed',
-        // TODO(slopradar): magic-string: '/rss.xml' only works through the next.config redirect, while metadata.ts advertises '/blog/rss.xml'; export one feed path constant and use it in both
-        url: '/rss.xml',
+        url: '/blog/rss.xml',
       },
       {
         icon: <Icons.post className='size-4' />,
