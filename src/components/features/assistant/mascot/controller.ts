@@ -9,7 +9,11 @@ import {
 export const pick = <T>(items: readonly [T, ...T[]]): T =>
   items[Math.floor(Math.random() * items.length)] ?? items[0]
 
-const restCycles = () => 3 + Math.floor(Math.random() * 4)
+/**
+ * How many Idle cycles (2.6 s of rest each, with the small beats on top) pass
+ * before a big idle animation: 5 to 9, so about every 13 to 23 s
+ */
+const restCycles = () => 5 + Math.floor(Math.random() * 5)
 
 export const REST: Frame = { duration: 0, pose: 'rest' }
 const HIDDEN: Frame = { duration: 0, pose: 'hidden' }
@@ -79,6 +83,9 @@ export class SimbaController {
     if (name) {
       this.play(name, { interrupt: true })
     } else if (previous) {
+      // He goes calm to rest after an answer, with a full stretch of it before
+      // the next idle animation
+      this.restartRests()
       this.stopCurrent()
     }
   }
@@ -100,8 +107,7 @@ export class SimbaController {
     }
     this.drowsy = false
     if (this.frame === SLEEP) {
-      // A fresh stretch of rest before the next idle animation
-      this.rests = 0
+      this.restartRests()
       this.stopCurrent()
     }
   }
@@ -127,8 +133,14 @@ export class SimbaController {
   settle() {
     this.activity = null
     this.queue = this.away ? [] : [animations.settle]
-    this.rests = 0
+    this.restartRests()
     this.stopCurrent()
+  }
+
+  /** A fresh stretch of rest before the next idle animation */
+  private restartRests() {
+    this.rests = 0
+    this.restTarget = restCycles()
   }
 
   stopCurrent() {
@@ -172,8 +184,7 @@ export class SimbaController {
     if (!name) {
       // Drowsy off another pose, he settles on rest first and naps after it
       if (this.rests >= this.restTarget && !this.drowsy) {
-        this.rests = 0
-        this.restTarget = restCycles()
+        this.restartRests()
         name = pick(animations.idle)
       } else {
         this.rests++

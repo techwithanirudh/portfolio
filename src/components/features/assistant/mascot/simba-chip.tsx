@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { type RigView, SimbaRig } from './rig'
 
-const HEAD: RigView = { height: 88, width: 88, x: 25, y: 60 }
+const HEAD: RigView = { height: 112, width: 112, x: 11, y: 42 }
 
 export function SimbaChip({ className }: { className?: string }) {
   return (

@@ -51,14 +51,6 @@
   animation: simba-hop 520ms cubic-bezier(0.3, 0, 0.4, 1) infinite;
 }
 
-.simba-rig[data-motion="nod"] .simba-look {
-  animation: simba-nod 380ms ease-in-out infinite alternate;
-}
-
-.simba-rig[data-motion="twitch"] .simba-look {
-  animation: simba-twitch 1.4s ease-out;
-}
-
 /* Sleeping's z marks drift up one after another */
 .simba-zzz path {
   animation: simba-zzz 2.4s ease-in-out infinite;
@@ -107,31 +99,6 @@
   }
   35% {
     translate: 0 -10px;
-  }
-}
-
-@keyframes simba-nod {
-  from {
-    translate: 0 0;
-  }
-  to {
-    translate: 0 2.5px;
-  }
-}
-
-/* Two quick flicks as he hears something, then he holds the tilt */
-@keyframes simba-twitch {
-  0%,
-  24%,
-  100% {
-    transform: none;
-  }
-  6%,
-  16% {
-    transform: rotate(-4deg) translateY(-1px);
-  }
-  11% {
-    transform: rotate(2deg);
   }
 }
 

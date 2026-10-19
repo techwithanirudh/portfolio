@@ -14,20 +14,42 @@ interface Step extends Shown {
   duration: number
 }
 
+type Hold = readonly [sprite: SpriteName, ms: number]
+
 interface InBetweens {
-  frames: readonly SpriteName[]
-  /** ms per frame on the way from rest */
-  into: number
-  /** ms per frame on the way back, played backwards */
-  out: number
+  /** On the way from rest */
+  into: readonly Hold[]
+  /** On the way back to rest */
+  out: readonly Hold[]
 }
 
 const IN_BETWEEN_FRAME_MS = 80
 const quick = (...frames: SpriteName[]): InBetweens => ({
-  frames,
-  into: IN_BETWEEN_FRAME_MS,
-  out: IN_BETWEEN_FRAME_MS,
+  into: frames.map((frame) => [frame, IN_BETWEEN_FRAME_MS]),
+  out: frames.toReversed().map((frame) => [frame, IN_BETWEEN_FRAME_MS]),
 })
+
+/**
+ * Dozing off from the front sit: a slow, drowsy blink, then the lids stay
+ * heavy as he sinks into the loaf (nap1, nap2, napLoaf) and close over the
+ * sheet's last two frames. He wakes back up the same way, quicker and without
+ * the blink
+ */
+const NAP_DOWN: readonly Hold[] = [
+  ['restBlink1', 600],
+  ['nap1', 280],
+  ['nap2', 280],
+  ['napLoaf', 300],
+  ['sleeping2', 340],
+  ['sleeping3', 400],
+]
+const DROWSY_BLINK: readonly Hold[] = [
+  ['restBlink1', 260],
+  ['restBlink2', 160],
+  ['restBlink3', 520],
+  ['restBlink2', 200],
+]
+const WAKE_FRAME_MS = 110
 
 /**
  * The in-between frames from rest, the sheet's and the extractor's. The
@@ -37,11 +59,9 @@ const quick = (...frames: SpriteName[]): InBetweens => ({
 const IN_BETWEENS: Partial<Record<SpriteName, InBetweens>> = {
   // He lifts the book from his paws into his lap
   books: quick('booksUp2'),
-  // He settles into a nap slowly and wakes up quicker
   sleeping: {
-    frames: ['sleeping1', 'sleeping2', 'sleeping3'],
-    into: 250,
-    out: 120,
+    into: [...DROWSY_BLINK, ...NAP_DOWN],
+    out: NAP_DOWN.toReversed().map(([frame]) => [frame, WAKE_FRAME_MS]),
   },
 }
 
@@ -50,6 +70,7 @@ const IN_BETWEENS: Partial<Record<SpriteName, InBetweens>> = {
  * moves only the eyes, the mouth or the head, so nothing pops
  */
 const REST_BODY: ReadonlySet<SpriteName> = new Set([
+  'embarrassed',
   'rest',
   'restBlink1',
   'restBlink2',
@@ -140,15 +161,15 @@ const PANT_JITTER_MS = 10_000
 
 const nextPant = () => Date.now() + PANT_MIN_MS + Math.random() * PANT_JITTER_MS
 
-const into = ({ flip, sprite }: Shown): Step[] => {
-  const run = flip ? undefined : IN_BETWEENS[sprite]
-  return run?.frames.map((frame) => hold(frame, run.into)) ?? []
-}
+const into = ({ flip, sprite }: Shown): Step[] =>
+  (flip ? undefined : IN_BETWEENS[sprite])?.into.map(([frame, ms]) =>
+    hold(frame, ms)
+  ) ?? []
 
-const outOf = ({ flip, sprite }: Shown): Step[] => {
-  const run = flip ? undefined : IN_BETWEENS[sprite]
-  return run?.frames.toReversed().map((frame) => hold(frame, run.out)) ?? []
-}
+const outOf = ({ flip, sprite }: Shown): Step[] =>
+  (flip ? undefined : IN_BETWEENS[sprite])?.out.map(([frame, ms]) =>
+    hold(frame, ms)
+  ) ?? []
 
 // The in-between frames are drawn facing one way, so a mirrored target swaps
 // straight over

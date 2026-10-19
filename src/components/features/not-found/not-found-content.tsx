@@ -33,7 +33,7 @@ export function NotFoundContent() {
             </h1>
           </div>
           <SimbaLoop
-            animation='Sniffing'
+            animation='CuriousLoop'
             className='shrink-0 translate-y-2'
             size='clamp(5.5rem,16vw,9rem)'
           />

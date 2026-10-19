@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 import { useOn } from '@/hooks/use-on'
 import type { MyUIMessage } from '@/lib/ai/chat/types'
 import { type AnimationName, animations, toolAnimations } from './constants'
-import { pick, type SimbaController } from './controller'
+import type { SimbaController } from './controller'
 import { usePageSimba, useTriggerAway } from './presence'
 
 /** He naps after this long with no input from the visitor */
@@ -143,7 +143,7 @@ export function useMascotPanel({
       return
     }
     if (open) {
-      mascot.play(pick(animations.open), { interrupt: true })
+      mascot.play(animations.open, { interrupt: true })
     } else if (closing) {
       mascot.settle()
     }
