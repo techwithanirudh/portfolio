@@ -3,11 +3,11 @@
 import { useId, useMemo, useRef } from 'react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 import { cn } from '@/lib/utils'
-import { type Motion, POSES, type PoseName } from './constants'
+import { POSES, type Pose, type PoseName } from './constants'
 import { RIG_DEFS, SPRITES } from './rig-art'
 import { useLook } from './use-look'
 import { useReadingEyes } from './use-reading-eyes'
-import { type Shown, useSpriteFrames } from './use-sprite-frames'
+import { useSpriteFrames } from './use-sprite-frames'
 
 // Each instance gets its own ids, so a hidden copy can't take the gradients
 // down with it
@@ -27,38 +27,6 @@ export interface RigView {
 const VIEW: RigView = { height: 200, width: 154, x: -8, y: 30 }
 /** Mirrors a sprite around the ground point at x 69 */
 const FLIP = 'matrix(-1 0 0 1 138 0)'
-
-interface Staging {
-  hidden: boolean
-  motion: Motion | undefined
-  settle: boolean
-  talking: boolean
-  /** null while he's hidden, so the frames hold the sprite he had */
-  target: Shown | null
-}
-
-const HIDDEN: Staging = {
-  hidden: true,
-  motion: undefined,
-  settle: false,
-  talking: false,
-  target: null,
-}
-
-/** What a pose asks of the frames and the CSS loop on top of them */
-const stagingFor = (pose: PoseName): Staging => {
-  const current = POSES[pose]
-  if ('hidden' in current) {
-    return HIDDEN
-  }
-  return {
-    hidden: false,
-    motion: current.motion,
-    settle: current.settle ?? false,
-    talking: current.talking ?? false,
-    target: { flip: current.flip ?? false, sprite: current.sprite },
-  }
-}
 
 export function SimbaRig({
   className,
@@ -81,18 +49,22 @@ export function SimbaRig({
   const prefix = `simba${useId().replaceAll(/[^\w-]/g, '')}-`
   const defs = useMemo(() => scopeIds(RIG_DEFS, prefix), [prefix])
 
-  const { hidden, motion: loop, settle, talking, target } = stagingFor(pose)
+  const current: Pose = POSES[pose]
+  const staged = 'hidden' in current ? null : current
+  const hidden = !staged
   const animate = !(still || reducedMotion)
-  const { chest, pop, shown, soft } = useSpriteFrames(target, {
-    animate,
-    settle,
-    talking,
-  })
-  // His eyes read the book while he holds it, instead of following the pointer
+  const { chest, pop, shown, soft } = useSpriteFrames(
+    staged && { flip: staged.flip ?? false, sprite: staged.sprite },
+    {
+      animate,
+      settle: staged?.settle ?? false,
+      talking: staged?.talking ?? false,
+    }
+  )
   const reading = !hidden && shown.sprite === 'books'
   useLook(ref, !(still || reading))
   useReadingEyes(ref, { reading, scan: animate })
-  const motion = animate ? loop : undefined
+  const motion = animate ? staged?.motion : undefined
   const sprite = useMemo(
     () => scopeIds(SPRITES[shown.sprite], prefix),
     [prefix, shown.sprite]

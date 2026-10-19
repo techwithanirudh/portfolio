@@ -24,17 +24,7 @@ interface InBetweens {
 }
 
 const IN_BETWEEN_FRAME_MS = 80
-const quick = (...frames: SpriteName[]): InBetweens => ({
-  into: frames.map((frame) => [frame, IN_BETWEEN_FRAME_MS]),
-  out: frames.toReversed().map((frame) => [frame, IN_BETWEEN_FRAME_MS]),
-})
 
-/**
- * Dozing off from the front sit: a slow, drowsy blink, then the lids stay
- * heavy as he sinks into the loaf (nap1, nap2, napLoaf) and close over the
- * sheet's last two frames. He wakes back up the same way, quicker and without
- * the blink
- */
 const NAP_DOWN: readonly Hold[] = [
   ['restBlink1', 600],
   ['nap1', 280],
@@ -43,32 +33,29 @@ const NAP_DOWN: readonly Hold[] = [
   ['sleeping2', 340],
   ['sleeping3', 400],
 ]
-const DROWSY_BLINK: readonly Hold[] = [
-  ['restBlink1', 260],
-  ['restBlink2', 160],
-  ['restBlink3', 520],
-  ['restBlink2', 200],
-]
-const WAKE_FRAME_MS = 110
 
 /**
- * The in-between frames from rest, the sheet's and the extractor's. The
- * sheet's frames into Happy and the curious tilt (and booksUp1) turn him from
- * the side sit, so from the front rest those poses swap straight over
+ * The sheet's frames into Happy, the curious tilt and booksUp1 turn him from the side
+ * sit, so from the front rest those poses swap straight over
  */
 const IN_BETWEENS: Partial<Record<SpriteName, InBetweens>> = {
-  // He lifts the book from his paws into his lap
-  books: quick('booksUp2'),
+  books: {
+    into: [['booksUp2', IN_BETWEEN_FRAME_MS]],
+    out: [['booksUp2', IN_BETWEEN_FRAME_MS]],
+  },
   sleeping: {
-    into: [...DROWSY_BLINK, ...NAP_DOWN],
-    out: NAP_DOWN.toReversed().map(([frame]) => [frame, WAKE_FRAME_MS]),
+    into: [
+      ['restBlink1', 260],
+      ['restBlink2', 160],
+      ['restBlink3', 520],
+      ['restBlink2', 200],
+      ...NAP_DOWN,
+    ],
+    out: NAP_DOWN.toReversed().map(([frame]) => [frame, 110]),
   },
 }
 
-/**
- * Rest's front sit and the idle frames drawn on it: changing between them
- * moves only the eyes, the mouth or the head, so nothing pops
- */
+/** Frames drawn on rest's front sit: switching between them moves only the eyes, mouth or head */
 const REST_BODY: ReadonlySet<SpriteName> = new Set([
   'embarrassed',
   'rest',
@@ -106,11 +93,9 @@ const look = (eyes: SpriteName, head: SpriteName): Beat => [
   hold(eyes, 140),
 ]
 
-/** Small beats while he rests, each ending back on rest */
 const BEATS: readonly [Beat, ...Beat[]] = [
   look('restLookLeft1', 'restLookLeft'),
   look('restLookRight1', 'restLookRight'),
-  // A slow blink: the lids drop, close for a moment and lift again
   [
     hold('restBlink1', 110),
     hold('restBlink2', 90),
@@ -121,7 +106,6 @@ const BEATS: readonly [Beat, ...Beat[]] = [
   [hold('restTilt1', 140), hold('restTilt2', 1600), hold('restTilt1', 160)],
 ]
 
-/** The mouth eases open and shut over 1.6 s, his chest rising as it opens */
 const PANT: Beat = [
   hold('restPant1', 220, true),
   hold('restPant2', 200, true),
@@ -133,10 +117,6 @@ const PANT: Beat = [
 export const between = (min: number, max: number) =>
   min + Math.random() * (max - min)
 
-/**
- * A syllable: the mouth eases half open, sometimes on to open, and shuts, about
- * 2.5 a second. Only the muzzle changes, the head and chest stay put
- */
 const syllable = (): Step[] =>
   Math.random() < 0.4
     ? [
@@ -147,46 +127,33 @@ const syllable = (): Step[] =>
       ]
     : [hold('restPant1', between(110, 190)), hold('rest', between(100, 190))]
 
-/** A few syllables run together; the pause before the next is the effect's */
 const phrase = (): Beat =>
   Array.from({ length: 3 + Math.floor(Math.random() * 4) }, syllable).flat()
 
-const PHRASE_GAP_MIN_MS = 120
-const PHRASE_GAP_MAX_MS = 420
+const nextPant = () => Date.now() + 10_000 + Math.random() * 10_000
 
-const BEAT_MIN_MS = 3000
-const BEAT_JITTER_MS = 3000
-const PANT_MIN_MS = 10_000
-const PANT_JITTER_MS = 10_000
-
-const nextPant = () => Date.now() + PANT_MIN_MS + Math.random() * PANT_JITTER_MS
-
-const into = ({ flip, sprite }: Shown): Step[] =>
-  (flip ? undefined : IN_BETWEENS[sprite])?.into.map(([frame, ms]) =>
+// The in-between frames are drawn facing one way, so a mirrored target swaps straight over
+const inBetween = ({ flip, sprite }: Shown, way: keyof InBetweens): Step[] =>
+  (flip ? undefined : IN_BETWEENS[sprite])?.[way].map(([frame, ms]) =>
     hold(frame, ms)
   ) ?? []
 
-const outOf = ({ flip, sprite }: Shown): Step[] =>
-  (flip ? undefined : IN_BETWEENS[sprite])?.out.map(([frame, ms]) =>
-    hold(frame, ms)
-  ) ?? []
-
-// The in-between frames are drawn facing one way, so a mirrored target swaps
-// straight over
 const tween = (from: Shown, to: Shown): Step[] => {
   if (from.sprite === 'rest') {
-    return into(to)
+    return inBetween(to, 'into')
   }
   if (to.sprite === 'rest') {
-    return outOf(from)
+    return inBetween(from, 'out')
   }
-  // Whatever wakes him, he gets up to rest before the next pose
   if (from.sprite === 'sleeping') {
-    return [...outOf(from), hold('rest', IN_BETWEEN_FRAME_MS), ...into(to)]
+    return [
+      ...inBetween(from, 'out'),
+      hold('rest', IN_BETWEEN_FRAME_MS),
+      ...inBetween(to, 'into'),
+    ]
   }
-  // He puts the book down before another pose, and picks it up after one
   if (from.sprite === 'books' || to.sprite === 'books') {
-    return [...outOf(from), ...into(to)]
+    return [...inBetween(from, 'out'), ...inBetween(to, 'into')]
   }
   return []
 }
@@ -198,7 +165,6 @@ interface Run {
   /** The last pop eases in softly instead of springing, see settle */
   soft: boolean
   steps: readonly Step[]
-  /** He talks on rest's sit instead of his idle beats */
   talking: boolean
   target: Shown
 }
@@ -209,10 +175,6 @@ interface RunOptions {
   talking: boolean
 }
 
-/**
- * The run for a new target or a change in talking, or null when the current
- * one still holds. A null target (he's hidden) drops the frames under way
- */
 const rerun = (
   run: Run,
   target: Shown | null,
@@ -227,7 +189,6 @@ const rerun = (
     return {
       index: 0,
       pop: pops ? run.pop + 1 : run.pop,
-      // Only with a new pop, so the running one keeps its animation
       soft: pops ? settle : run.soft,
       steps,
       talking,
@@ -235,17 +196,10 @@ const rerun = (
     }
   }
   if (run.talking !== talking) {
-    // Starting or stopping drops the beat or phrase under way, so he shuts
-    // his mouth as soon as the answer ends
     return { ...run, index: 0, steps: [], talking }
   }
   return null
 }
-
-const advance = (current: Run): Run => ({
-  ...current,
-  index: current.index + 1,
-})
 
 const play =
   (steps: Beat) =>
@@ -253,15 +207,9 @@ const play =
 
 interface Cue {
   ms: number
-  /** Called when the cue is due, for the update to the run */
   next: () => (current: Run) => Run
 }
 
-/**
- * What comes next and when: the next frame of the steps under way, else on
- * rest's sit the next phrase while he talks or the next beat (a pant once it's
- * due). Nothing while he holds any other pose
- */
 const cueFor = (
   step: Step | undefined,
   {
@@ -271,23 +219,25 @@ const cueFor = (
   }: { pantAt: RefObject<number>; resting: boolean; talking: boolean }
 ): Cue | null => {
   if (step) {
-    return { ms: step.duration, next: () => advance }
+    return {
+      ms: step.duration,
+      next: () => (current) => ({ ...current, index: current.index + 1 }),
+    }
   }
   if (!resting) {
     return null
   }
   if (talking) {
-    // A full wait before the next pant, so his mouth doesn't open wide
-    // straight after he stops talking
+    // Reset so the next pant waits a full interval after he stops talking
     pantAt.current = 0
     return {
-      ms: between(PHRASE_GAP_MIN_MS, PHRASE_GAP_MAX_MS),
+      ms: between(120, 420),
       next: () => play(phrase()),
     }
   }
   pantAt.current ||= nextPant()
   return {
-    ms: BEAT_MIN_MS + Math.random() * BEAT_JITTER_MS,
+    ms: 3000 + Math.random() * 3000,
     next: () => {
       const pant = Date.now() >= pantAt.current
       if (pant) {
@@ -299,12 +249,8 @@ const cueFor = (
 }
 
 /**
- * Steps through the in-between frames on the way to a sprite, and through a
- * small beat every few seconds while he rests (a pant every 10 to 20 s), or
- * phrase after phrase of mouth movement while he talks. Without animate it
- * shows the target straight away. A null target (he's hidden) holds the
- * sprite he had, with no beats, so he fades out as he was. settle makes a
- * change with no in-between frames ease in softly instead of popping
+ * Steps through in-between frames toward a sprite, plus idle beats on rest or mouth phrases
+ * while talking. A null target holds the last sprite so he fades out as he was
  */
 export function useSpriteFrames(
   target: Shown | null,
@@ -334,7 +280,6 @@ export function useSpriteFrames(
 
   const step = animate ? run.steps[run.index] : undefined
   const resting = run.target.sprite === 'rest'
-  // Due time of the next pant, kept across the poses in between
   const pantAt = useRef(0)
 
   const hidden = !target

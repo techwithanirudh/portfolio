@@ -9,10 +9,7 @@ import {
 export const pick = <T>(items: readonly [T, ...T[]]): T =>
   items[Math.floor(Math.random() * items.length)] ?? items[0]
 
-/**
- * How many Idle cycles (2.6 s of rest each, with the small beats on top) pass
- * before a big idle animation: 5 to 9, so about every 13 to 23 s
- */
+/** Idle cycles (2.6 s each) before a big idle animation: 5 to 9, about every 13 to 23 s */
 const restCycles = () => 5 + Math.floor(Math.random() * 5)
 
 export const REST: Frame = { duration: 0, pose: 'rest' }
@@ -21,13 +18,8 @@ const SLEEP: Frame = { duration: 0, pose: 'sleeping' }
 
 export class SimbaController {
   private activity: AnimationName | null = null
-  /**
-   * Set by setAway(): he holds hidden with no timer, and what he's asked to
-   * play waits in the queue until he's back
-   */
   private away = false
   private current: { frames: Frame[]; index: number } | null = null
-  /** Set by nap(): he dozes off once he's back on rest, until wake() or play() */
   private drowsy = false
   private frame: Frame = REST
   private readonly listeners = new Set<() => void>()
@@ -83,8 +75,6 @@ export class SimbaController {
     if (name) {
       this.play(name, { interrupt: true })
     } else if (previous) {
-      // He goes calm to rest after an answer, with a full stretch of it before
-      // the next idle animation
       this.restartRests()
       this.stopCurrent()
     }
@@ -112,10 +102,7 @@ export class SimbaController {
     }
   }
 
-  /**
-   * Hides while his spot is gone (the trigger is away). He comes back with
-   * Show, or straight into what was asked of him meanwhile
-   */
+  /** Hides while his spot is gone; comes back with Show or whatever was queued meanwhile */
   setAway(away: boolean) {
     if (away === this.away) {
       return
@@ -137,7 +124,6 @@ export class SimbaController {
     this.stopCurrent()
   }
 
-  /** A fresh stretch of rest before the next idle animation */
   private restartRests() {
     this.rests = 0
     this.restTarget = restCycles()
@@ -162,7 +148,6 @@ export class SimbaController {
       return
     }
     if (this.still) {
-      // Holds what he's doing as one still pose, and rests otherwise
       this.current = null
       this.queue = []
       const idle = this.drowsy ? SLEEP : REST
@@ -176,13 +161,11 @@ export class SimbaController {
       this.drowsy &&
       (this.frame === SLEEP || this.frame.pose === 'rest')
     ) {
-      // No timer while he sleeps, so the idle animations wait for wake()
       this.current = null
       this.show(SLEEP)
       return
     }
     if (!name) {
-      // Drowsy off another pose, he settles on rest first and naps after it
       if (this.rests >= this.restTarget && !this.drowsy) {
         this.restartRests()
         name = pick(animations.idle)

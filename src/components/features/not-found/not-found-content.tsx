@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { SimbaLoop } from '@/components/features/not-found/simba-loop'
+import { SimbaThinking } from '@/components/features/not-found/simba-thinking'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { TitleDot } from '@/components/layout/sections/hero'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Button } from '@/components/ui/button'
 import { pages } from '@/constants/pages'
 
@@ -32,8 +32,7 @@ export function NotFoundContent() {
               <TitleDot />
             </h1>
           </div>
-          <SimbaLoop
-            animation='CuriousLoop'
+          <SimbaThinking
             className='shrink-0 translate-y-2'
             size='clamp(5.5rem,16vw,9rem)'
           />
@@ -47,8 +46,7 @@ export function NotFoundContent() {
           <Button
             className='shrink-0'
             nativeButton={false}
-            // TODO(slopradar): magic-string: '/' sits beside destinations built from pages, use pages.home.path
-            render={<Link href='/' />}
+            render={<Link href={pages.home.path} />}
           >
             Take me home
             <Icons.arrowRight
@@ -58,7 +56,7 @@ export function NotFoundContent() {
           </Button>
         </div>
       </Section>
-      <Separator />
+      <SectionDivider />
       <Section>
         <ul className='dashed-grid sm:dashed-grid-2 grid sm:grid-cols-2'>
           {destinations.map((item) => (

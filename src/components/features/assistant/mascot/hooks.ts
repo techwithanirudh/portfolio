@@ -2,14 +2,12 @@
 
 import { type ChatStatus, getToolName, isToolUIPart } from 'ai'
 import { useEffect, useRef } from 'react'
-import { useOn } from '@/hooks/use-on'
-import type { MyUIMessage } from '@/lib/ai/chat/types'
+import type { ChatUIMessage } from '@/lib/ai/chat/types'
 import { type AnimationName, animations, toolAnimations } from './constants'
 import type { SimbaController } from './controller'
-import { usePageSimba, useTriggerAway } from './presence'
+import { useGutterSpot, usePageSimba, useTriggerAway } from './presence'
 
-/** He naps after this long with no input from the visitor */
-export const NAP_AFTER_MS = 60_000
+const NAP_AFTER_MS = 60_000
 
 const WAKE_EVENTS = [
   'keydown',
@@ -20,19 +18,17 @@ const WAKE_EVENTS = [
   'wheel',
 ] as const
 
-type Part = MyUIMessage['parts'][number]
+type Part = ChatUIMessage['parts'][number]
 
 // Step boundaries and the sources a search writes don't move him on, so a
 // tool's pose holds until the model writes, thinks or calls the next tool
 const showsProgress = (part: Part) =>
   part.type === 'text' || part.type === 'reasoning' || isToolUIPart(part)
 
-// Only while the panel is open: once it closes he stops answering, though the
-// answer keeps streaming in for when it opens again
 const activityFor = (
   open: boolean,
   status: ChatStatus,
-  messages: MyUIMessage[]
+  messages: ChatUIMessage[]
 ): AnimationName | null => {
   if (!open) {
     return null
@@ -48,7 +44,6 @@ const activityFor = (
     return animations.thinking
   }
   if (isToolUIPart(part)) {
-    // A failed call leaves him working out what to do next
     if (part.state === 'output-error') {
       return animations.thinking
     }
@@ -57,10 +52,6 @@ const activityFor = (
   return animations.writing
 }
 
-/**
- * Naps after NAP_AFTER_MS with no input while the tab is visible, and wakes on
- * any input or when he stops being allowed to (he wakes on cleanup)
- */
 function useNap(mascot: SimbaController | undefined, allowed: boolean) {
   useEffect(() => {
     if (!(mascot && allowed)) {
@@ -123,41 +114,31 @@ export function useMascotPanel({
 }: {
   expanded: boolean
   mascot: SimbaController | undefined
-  messages: MyUIMessage[]
+  messages: ChatUIMessage[]
   open: boolean
   status: ChatStatus
 }) {
   const activity = activityFor(open, status, messages)
+  const gutter = useGutterSpot({ expanded, open })
+  const away = useTriggerAway({ expanded, open }) && !gutter
 
-  // Ahead of the greeting, so on reopening mid-answer he greets and then
-  // talks again
-  useOn(activity, () => {
-    mascot?.setActivity(activity)
-  })
-
-  const wasOpen = useRef(open)
-  useOn(open, () => {
-    const closing = wasOpen.current && !open
-    wasOpen.current = open
-    if (!mascot) {
-      return
-    }
-    if (open) {
-      mascot.play(animations.open, { interrupt: true })
-    } else if (closing) {
-      mascot.settle()
-    }
-  })
-
-  // He hides only while the trigger he sits in is away. After the greeting
-  // and the settle, so a greeting asked for as he comes back plays then
-  const away = useTriggerAway({ expanded, open })
+  const synced = useRef<{ activity: AnimationName | null; open: boolean }>(null)
   useEffect(() => {
+    const last = synced.current
+    synced.current = { activity, open }
+    if (activity !== last?.activity) {
+      mascot?.setActivity(activity)
+    }
+    if (open !== last?.open) {
+      if (open) {
+        mascot?.play(animations.open, { interrupt: true })
+      } else if (last?.open) {
+        mascot?.settle()
+      }
+    }
     mascot?.setAway(away)
-  }, [away, mascot])
+  }, [activity, away, mascot, open])
 
-  // Never while the panel is open or answering, or while he's away for a
-  // page's own Simba
   const pageSimba = usePageSimba()
   const busy = status === 'submitted' || status === 'streaming'
   useNap(mascot, !(open || busy || pageSimba))

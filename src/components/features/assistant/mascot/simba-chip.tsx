@@ -1,7 +1,5 @@
 import { cn } from '@/lib/utils'
-import { type RigView, SimbaRig } from './rig'
-
-const HEAD: RigView = { height: 112, width: 112, x: 11, y: 42 }
+import { SimbaRig } from './rig'
 
 export function SimbaChip({ className }: { className?: string }) {
   return (
@@ -17,7 +15,8 @@ export function SimbaChip({ className }: { className?: string }) {
         pose='rest'
         size='100%'
         still
-        view={HEAD}
+        // Just the head
+        view={{ height: 108, width: 108, x: 15.5, y: 42 }}
       />
     </span>
   )

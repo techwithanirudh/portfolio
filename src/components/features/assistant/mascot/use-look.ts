@@ -28,7 +28,6 @@ const watch = (watcher: Watcher) => {
     window.addEventListener('pointermove', onPointerMove, { passive: true })
   }
   watchers.add(watcher)
-  // Picks up where the pointer is, e.g. when he stops reading
   if (pointer) {
     watcher(pointer.x, pointer.y)
   }
@@ -42,12 +41,8 @@ const watch = (watcher: Watcher) => {
   }
 }
 
-const LOOK_RANGE_PX = 360
-const LOOK_SHIFT_X_PX = 1.6
-const LOOK_SHIFT_Y_PX = 1.3
-const LOOK_TILT_DEG = 5
-
-const toLook = (offset: number) => clamp(-1, 1, offset / LOOK_RANGE_PX)
+/** -1 to 1 across 360px either side of him */
+const toLook = (offset: number) => clamp(-1, 1, offset / 360)
 
 export function useLook(ref: RefObject<SVGSVGElement | null>, enabled = true) {
   const reducedMotion = useReducedMotion()
@@ -61,9 +56,9 @@ export function useLook(ref: RefObject<SVGSVGElement | null>, enabled = true) {
       const box = svg.getBoundingClientRect()
       const dx = toLook(x - (box.left + box.width / 2))
       const dy = toLook(y - (box.top + box.height * 0.35))
-      svg.style.setProperty('--look-x', `${dx * LOOK_SHIFT_X_PX}px`)
-      svg.style.setProperty('--look-y', `${dy * LOOK_SHIFT_Y_PX}px`)
-      svg.style.setProperty('--look-tilt', `${dx * LOOK_TILT_DEG}deg`)
+      svg.style.setProperty('--look-x', `${dx * 1.6}px`)
+      svg.style.setProperty('--look-y', `${dy * 1.3}px`)
+      svg.style.setProperty('--look-tilt', `${dx * 5}deg`)
     })
   }, [enabled, ref, reducedMotion])
 }
