@@ -80,6 +80,15 @@
   --animate-blink: blink 4.5s ease-in-out infinite;
 
   --animate-shimmer: shimmer 2s linear infinite;
+
+  /* Keeps a loading placeholder transparent for its first 200ms, so a load
+     that finishes sooner never flashes it */
+  --animate-delayed-show: delayed-show 0s 200ms backwards;
+  @keyframes delayed-show {
+    from {
+      opacity: 0;
+    }
+  }
   @keyframes blink {
     0%,
     94%,
@@ -100,13 +109,22 @@
   }
 }
 
+/* `border-border` and `divide-border` draw at --border-strength (dimmer in
+   light mode); every other use of the border color stays at full strength */
+@theme inline {
+  --border-color-border: color-mix(
+    in oklab,
+    var(--color-border) var(--border-strength),
+    transparent
+  );
+}
+
 html {
   scrollbar-gutter: stable;
 }
 
-/* react-remove-scroll (used by the Radix overlays inside fumadocs-ui and
-   fuma-comment) pads the body for the scrollbar, which scrollbar-gutter
-   already reserves. Base UI overlays lock scroll without this attribute */
+/* react-remove-scroll (fuma-comment's Radix overlays) pads the body for a scrollbar
+   that scrollbar-gutter already reserves; Base UI overlays don't set this attribute */
 html > body[data-scroll-locked] {
   --removed-body-scroll-bar-size: 0px !important;
   margin-right: 0px !important;
@@ -118,6 +136,7 @@ html > body[data-scroll-locked] {
     --typography-hero-width: 56rem;
     --typography-title-width: 40rem;
     --typography-body-width: 60ch;
+    --border-strength: 70%;
   }
 
   * {
@@ -185,19 +204,14 @@ html > body[data-scroll-locked] {
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-/* Fumadocs' light muted text sits at 4.35:1 on the background; a touch darker
-   clears WCAG AA, also on the accent fill of a highlighted row (#e3e3e3,
-   4.68:1, the search page's "projects" badge). Zero specificity root so .dark
-   still wins */
+/* Fumadocs' light muted text is 4.35:1; this clears AA on the page and the accent
+   fill (#e3e3e3, 4.68:1). Zero-specificity root so .dark still wins */
 :where(:root):not(.dark) {
   --color-fd-muted-foreground: hsl(0, 0%, 39%);
 }
 
-/* github-light and github-dark both color comments #6A737D, 4.26:1 on the
-   light code block (#f1f1f1) and 3.65:1 on the dark one (#191919). Nudged
-   just past 4.5:1 each way (4.64:1 and 4.63:1). Here and not in the theme,
-   since source.config.ts may only export collections; !important because
-   shiki sets the variables inline */
+/* Shiki's #6A737D comments are 4.26:1 and 3.65:1 on our code blocks; nudged past 4.5:1.
+   Here since source.config.ts may only export collections; !important beats shiki's inline vars */
 .shiki code span[style*="--shiki-light:#6A737D" i] {
   --shiki-light: #656d77 !important;
 }
@@ -211,6 +225,7 @@ html > body[data-scroll-locked] {
   --color-fd-primary-foreground: hsl(240, 7%, 11%);
   --color-destructive: oklch(70.4% 0.191 22.216);
   --color-success: oklch(69.6% 0.17 162.48);
+  --border-strength: 100%;
 }
 
 @utility container {
@@ -226,7 +241,7 @@ html > body[data-scroll-locked] {
 
 @utility dashed-grid {
   & > * {
-    @apply border-dashed border-border/70 dark:border-border;
+    @apply border-dashed border-border;
   }
 
   & > :not(:last-child) {
@@ -335,83 +350,66 @@ html > body[data-scroll-locked] {
   }
 }
 
-/* TODO(slopradar): inconsistent: this block defines plain classes in `@layer utilities` while the rest of the file uses `@utility`, so .bg-dashed, .dashed-frame, .icon-* and .typography-* cannot take variants like hover: or md:, convert them to @utility */
-@layer utilities {
-  .bg-dashed {
-    background-image: linear-gradient(
-      45deg,
-      var(--color-border) 12.50%,
-      transparent 12.50%,
-      transparent 50%,
-      var(--color-border) 50%,
-      var(--color-border) 62.50%,
-      transparent 62.50%,
-      transparent 100%
-    );
-    background-size: 0.25rem 0.25rem;
-  }
+@utility mask-fade-bottom {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 6rem), transparent);
+}
 
-  /* TODO(slopradar): shadowed utility: redefines Tailwind's generated border-border, so the class silently means border/70 in light mode; give the 70% border its own token (--color-border) or utility name */
-  .border-border {
-    @apply border-border/70 dark:border-border;
-  }
+@utility bg-dashed {
+  background-image: linear-gradient(
+    45deg,
+    var(--color-border) 12.50%,
+    transparent 12.50%,
+    transparent 50%,
+    var(--color-border) 50%,
+    var(--color-border) 62.50%,
+    transparent 62.50%,
+    transparent 100%
+  );
+  background-size: 0.25rem 0.25rem;
+}
 
-  /* TODO(slopradar): shadowed utility: the same override as .border-border above, for Tailwind's generated divide-border (dashed-stack repeats it inline); fix the two together */
-  .divide-border {
-    @apply divide-border/70 dark:divide-border;
-  }
+@utility dashed-stack {
+  @apply divide-y divide-dashed divide-border;
+}
 
-  .dashed-frame {
-    @apply border border-border border-dashed;
-  }
+@utility icon-pop {
+  @apply transition-[color,background-color,scale] hover:scale-125;
+}
 
-  .dashed-stack {
-    @apply divide-y divide-dashed divide-border/70 dark:divide-border;
-  }
+@utility icon-tilt {
+  @apply transition-transform hover:rotate-12 hover:scale-125;
+}
 
-  .divider-top-dashed {
-    @apply w-full border-border border-t border-dashed;
-  }
+@utility icon-tilt-reverse {
+  @apply transition-transform hover:-rotate-12 hover:scale-125;
+}
 
-  .icon-pop {
-    @apply transition-transform hover:scale-125;
-  }
+@utility icon-turn {
+  @apply transition-transform hover:rotate-90 hover:scale-125;
+}
 
-  .icon-tilt {
-    @apply transition-transform hover:rotate-12 hover:scale-125;
-  }
+@utility icon-arrow {
+  @apply transition-transform group-hover:-rotate-45;
+}
 
-  .icon-tilt-reverse {
-    @apply transition-transform hover:-rotate-12 hover:scale-125;
-  }
+@utility icon-arrow-button {
+  @apply transition-transform group-hover/button:-rotate-45;
+}
 
-  .icon-turn {
-    @apply transition-transform hover:rotate-90 hover:scale-125;
-  }
+@utility icon-turn-button {
+  @apply transition-transform group-hover/button:rotate-90;
+}
 
-  .icon-arrow {
-    @apply transition-transform group-hover:-rotate-45;
-  }
+@utility typography-hero {
+  max-width: var(--typography-hero-width);
+}
 
-  .icon-arrow-button {
-    @apply transition-transform group-hover/button:-rotate-45;
-  }
+@utility typography-title {
+  max-width: var(--typography-title-width);
+}
 
-  .icon-turn-button {
-    @apply transition-transform group-hover/button:rotate-90;
-  }
-
-  .typography-hero {
-    max-width: var(--typography-hero-width);
-  }
-
-  .typography-title {
-    max-width: var(--typography-title-width);
-  }
-
-  .typography-body {
-    max-width: var(--typography-body-width);
-  }
+@utility typography-body {
+  max-width: var(--typography-body-width);
 }
 
 ::selection {
@@ -514,6 +512,24 @@ html > body[data-scroll-locked] {
     size: A4;
   }
 
+  /* No margin leaves Chrome no margin box to draw its own header and footer
+     (date, title, URL, page number) in */
+  @page resume {
+    margin: 0;
+    size: A4;
+  }
+
+  [data-resume] {
+    page: resume;
+    color-scheme: light;
+    --color-background: #fff;
+    --color-foreground: var(--color-neutral-900);
+    --color-muted-foreground: var(--color-neutral-600);
+    --color-border: var(--color-neutral-300);
+    /* The light theme's primary, so links stay readable on white */
+    --color-primary: hsl(226, 55%, 45%);
+  }
+
   html:has([data-resume]),
   body:has([data-resume]) {
     color-scheme: light;
@@ -526,9 +542,11 @@ html > body[data-scroll-locked] {
   }
 }
 
-:root[data-reveal]
-  [data-reveal-item]:not(
-    #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
-  ) {
-  opacity: 0;
+/* The first section is on screen at load, so it shows without waiting for
+   hydration to run its reveal */
+#main-content
+  [data-slot="section"]:nth-child(1 of [data-slot="section"])
+  [data-reveal-item][style*="opacity"] {
+  opacity: 1 !important;
+  transform: none !important;
 }
