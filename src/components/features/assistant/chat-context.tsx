@@ -3,9 +3,9 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import type { ChatStatus } from 'ai'
 import { createContext, use } from 'react'
-import type { MyUIMessage } from '@/lib/ai/chat/types'
+import type { ChatUIMessage } from '@/lib/ai/chat/types'
 
-export const ChatContext = createContext<UseChatHelpers<MyUIMessage> | null>(
+export const ChatContext = createContext<UseChatHelpers<ChatUIMessage> | null>(
   null
 )
 

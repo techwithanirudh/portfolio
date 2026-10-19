@@ -16,6 +16,19 @@ export const ToolPendingLine = ({
   </p>
 )
 
+export const ToolDoneLine = ({
+  children,
+  icon: Icon,
+}: {
+  children: ReactNode
+  icon: SvgIcon
+}) => (
+  <p className='flex items-center gap-2 text-sm'>
+    <Icon aria-hidden className='size-4 shrink-0 text-muted-foreground' />
+    <span>{children}</span>
+  </p>
+)
+
 export const ToolWarningLine = ({ children }: { children: ReactNode }) => (
   <p className='flex items-center gap-2 text-muted-foreground text-xs'>
     <Icons.warning aria-hidden className='size-3.5' />

@@ -1,14 +1,23 @@
 import { defineCatalog, type Spec } from '@json-render/core'
 import { schema } from '@json-render/react/schema'
 import { z } from 'zod'
+import type { Activity } from '@/components/features/contributions'
 import { experiences } from '@/constants/portfolio/experiences'
-import type { BlogPage, WorkPage } from '@/lib/source'
+import { testimonials } from '@/constants/portfolio/testimonials'
+import type { BlogPage, ProjectPage } from '@/lib/source'
+import type { Testimonial } from '@/types'
 import type { ExperienceItemType } from '@/types/experience'
 
 /** Props name items by slug or id only; no prop carries content */
 export const portfolioCatalog = defineCatalog(schema, {
   actions: {},
   components: {
+    Contributions: {
+      description:
+        "anirudh's GitHub contributions graph with his total for the past year, fetched from GitHub.",
+      props: z.object({}),
+      slots: [],
+    },
     Experience: {
       description:
         "A stretch of anirudh's experience timeline, one row per company with dates, role and logo, in timeline order.",
@@ -62,14 +71,26 @@ export const portfolioCatalog = defineCatalog(schema, {
       }),
       slots: ['default'],
     },
+    Testimonials: {
+      description:
+        'Quotes from people anirudh has worked with, each with its headline, the quote and who said it, in the order given.',
+      props: z.object({
+        ids: z
+          .array(z.string())
+          .min(1)
+          .describe(
+            `One to three testimonial ids: ${testimonials.map((item) => item.id).join(', ')}.`
+          ),
+      }),
+      slots: [],
+    },
   },
 })
 
 export type PortfolioComponent = keyof typeof portfolioCatalog.data.components
 
-// TODO(slopradar): dead-field: `slugs` is written by render-portfolio.ts and shipped in every spec, but nothing reads it since WorkCard takes transitionName; drop it from the Pick and from the tool's state entry
-export type ProjectItem = Pick<WorkPage, 'slugs' | 'url'> &
-  Pick<WorkPage['data'], 'title'> & {
+export type ProjectItem = Pick<ProjectPage, 'url'> &
+  Pick<ProjectPage['data'], 'title'> & {
     /** ISO date, since the spec travels as JSON */
     date: string
     description: string
@@ -87,9 +108,12 @@ export type PostItem = Pick<BlogPage, 'url'> &
  * name. Extends json-render's own state shape so it drops into a spec
  */
 export interface PortfolioState extends Record<string, unknown> {
+  /** The past year by day, empty when GitHub couldn't be reached */
+  contributions: Activity[]
   experience: Record<string, ExperienceItemType>
   posts: Record<string, PostItem>
   projects: Record<string, ProjectItem>
+  testimonials: Record<string, Testimonial>
 }
 
 export type PortfolioSpec = Spec & { state: PortfolioState }
@@ -99,6 +123,6 @@ const escapePointer = (token: string) =>
 
 /** The JSON Pointer json-render reads one item of the state at */
 export const statePath = (
-  collection: 'experience' | 'posts' | 'projects',
+  collection: 'experience' | 'posts' | 'projects' | 'testimonials',
   key: string
 ) => `/${collection}/${escapePointer(key)}`

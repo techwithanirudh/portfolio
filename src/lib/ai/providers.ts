@@ -22,24 +22,20 @@ const onError = (context: ModelRetryContext<LanguageModel>) => {
   )
 }
 
-const chatModel = createRetryable({
-  model: openai('gpt-6-luna'),
-  onError,
-  retries: [
-    hackclub('z-ai/glm-5.3-flash'),
-    hackclub('deepseek/deepseek-v4.1-flash'),
-  ],
-})
-
-const moderationModel = createRetryable({
-  model: hackclub('google/gemini-3-flash-preview'),
-  onError,
-  retries: [hackclub('google/gemini-2.5-flash')],
-})
-
 export const provider = customProvider({
   languageModels: {
-    'chat-model': chatModel,
-    'moderation-model': moderationModel,
+    'chat-model': createRetryable({
+      model: openai('gpt-6-luna'),
+      onError,
+      retries: [
+        hackclub('z-ai/glm-5.3-flash'),
+        hackclub('deepseek/deepseek-v4.1-flash'),
+      ],
+    }),
+    'moderation-model': createRetryable({
+      model: hackclub('google/gemini-3-flash-preview'),
+      onError,
+      retries: [hackclub('google/gemini-2.5-flash')],
+    }),
   },
 })

@@ -6,8 +6,7 @@ import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-// TODO(slopradar): unused-export: the exported *Props types in this file have no importers, un-export them (x4)
-export type ConversationProps = ComponentProps<typeof StickToBottom>
+type ConversationProps = ComponentProps<typeof StickToBottom>
 
 export const Conversation = ({ className, ...props }: ConversationProps) => (
   <StickToBottom
@@ -19,9 +18,7 @@ export const Conversation = ({ className, ...props }: ConversationProps) => (
   />
 )
 
-export type ConversationContentProps = ComponentProps<
-  typeof StickToBottom.Content
->
+type ConversationContentProps = ComponentProps<typeof StickToBottom.Content>
 
 export const ConversationContent = ({
   className,
@@ -35,7 +32,7 @@ export const ConversationContent = ({
   />
 )
 
-export type ConversationEmptyStateProps = ComponentProps<'div'> & {
+type ConversationEmptyStateProps = ComponentProps<'div'> & {
   title?: string
   description?: ReactNode
   icon?: ReactNode
@@ -68,7 +65,7 @@ export const ConversationEmptyState = ({
   </div>
 )
 
-export type ConversationScrollButtonProps = ComponentProps<typeof Button>
+type ConversationScrollButtonProps = ComponentProps<typeof Button>
 
 export const ConversationScrollButton = ({
   className,

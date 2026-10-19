@@ -5,52 +5,20 @@ import {
   InvalidToolInputError,
   isStepCount,
   NoSuchToolError,
+  safeValidateUIMessages,
   smoothStream,
   streamText,
 } from 'ai'
 import { z } from 'zod'
-import { getProfileFactsText } from '@/app/(llms)/utils'
-import type { MyUIMessage } from '@/lib/ai/chat/types'
+import { getProfileFactsText } from '@/app/(llms)/utils/profile'
+import { type ChatUIMessage, chatDataSchemas } from '@/lib/ai/chat/types'
 import { systemPrompt } from '@/lib/ai/prompts/chat'
 import { provider } from '@/lib/ai/providers'
 import { isBotRequest } from '@/server/botid'
 import { getAssistantContext } from './utils/context'
-import { celebrateTool } from './utils/tools/celebrate'
-import { getPageContent } from './utils/tools/get-page-content'
-import { navigateTool } from './utils/tools/navigate'
+import { chatTools } from './utils/tools'
 import { renderPortfolioTool } from './utils/tools/render-portfolio'
-import { createSearchDocsTool } from './utils/tools/search-docs'
-import { showContactFormTool } from './utils/tools/show-contact-form'
 
-const MAX_BODY_LENGTH = 1_000_000
-const MAX_MESSAGES = 50
-const MAX_TEXT_LENGTH = 100_000
-
-const messageSchema = z.looseObject({
-  id: z.string(),
-  parts: z.array(z.looseObject({ type: z.string() })),
-  role: z.enum(['user', 'assistant']),
-})
-
-const requestSchema = z.object({
-  messages: z
-    .array(messageSchema)
-    .min(1)
-    .max(MAX_MESSAGES)
-    .refine(
-      (messages) =>
-        messages
-          .flatMap((message) => message.parts)
-          .reduce(
-            (total, part) =>
-              total + (typeof part.text === 'string' ? part.text.length : 0),
-            0
-          ) <= MAX_TEXT_LENGTH,
-      { message: 'Conversation is too long.' }
-    ),
-})
-
-// TODO(slopradar): duplicate-logic: the error to { message, name } log shape is copied in guestbook/actions/guestbook.ts and guestbook/actions/utils/moderation.ts, move one helper to src/lib
 const logError = (label: string, error: unknown) => {
   console.error(
     label,
@@ -63,14 +31,39 @@ const logError = (label: string, error: unknown) => {
 const parseMessages = async (request: Request) => {
   const body = await request.text()
 
-  if (body.length > MAX_BODY_LENGTH) {
+  if (body.length > 1_000_000) {
     return null
   }
 
   try {
-    const result = requestSchema.safeParse(JSON.parse(body))
-    // TODO(slopradar): unchecked-cast: a loose zod shape is cast to MyUIMessage[], validate with safeValidateUIMessages({ messages, tools, dataSchemas }) from ai instead
-    return result.success ? (result.data.messages as MyUIMessage[]) : null
+    const parsed = z
+      .object({ messages: z.array(z.unknown()).min(1).max(50) })
+      .safeParse(JSON.parse(body))
+    if (!parsed.success) {
+      return null
+    }
+    const result = await safeValidateUIMessages<ChatUIMessage>({
+      dataSchemas: chatDataSchemas,
+      messages: parsed.data.messages,
+      tools: chatTools,
+    })
+    if (!result.success) {
+      return null
+    }
+    const textLength = result.data
+      .flatMap((message) => message.parts)
+      .reduce(
+        (total, part) =>
+          total +
+          (part.type === 'text' || part.type === 'reasoning'
+            ? part.text.length
+            : 0),
+        0
+      )
+    const fromVisitor = result.data.every(
+      (message) => message.role !== 'system'
+    )
+    return fromVisitor && textLength <= 100_000 ? result.data : null
   } catch {
     return null
   }
@@ -106,7 +99,7 @@ export async function POST(request: Request) {
     const stream = createUIMessageStream({
       execute: async ({ writer }) => {
         const [modelMessages, llms] = await Promise.all([
-          convertToModelMessages<MyUIMessage>(messages, {
+          convertToModelMessages<ChatUIMessage>(messages, {
             convertDataPart(part) {
               if (part.type === 'data-client') {
                 return {
@@ -128,17 +121,8 @@ export async function POST(request: Request) {
           getAssistantContext(),
         ])
 
-        // TODO(slopradar): duplicate-logic: this tool map is rebuilt in utils/tools/index.ts with a stub searchDocs just for typing, export one createChatTools(writer) and infer ChatTools from its return type
-        const tools = {
-          celebrate: celebrateTool,
-          getPageContent,
-          navigate: navigateTool,
-          renderPortfolio: renderPortfolioTool,
-          searchDocs: createSearchDocsTool(writer),
-          showContactForm: showContactFormTool,
-        }
-        const toolsAfterNavigation = Object.keys(tools).filter(
-          (name): name is Exclude<keyof typeof tools, 'navigate'> =>
+        const toolsAfterNavigation = Object.keys(chatTools).filter(
+          (name): name is Exclude<keyof typeof chatTools, 'navigate'> =>
             name !== 'navigate'
         )
 
@@ -173,7 +157,8 @@ export async function POST(request: Request) {
             },
           },
           stopWhen: isStepCount(10),
-          tools,
+          tools: chatTools,
+          toolsContext: { searchDocs: { writer } },
         })
 
         writer.merge(

@@ -17,12 +17,11 @@ import {
 } from '@/components/ui/input-group'
 import { cn } from '@/lib/utils'
 
-// TODO(slopradar): unused-export: PromptInputMessage and the eight exported *Props types in this file have no importers, un-export them (x9)
-export interface PromptInputMessage {
+interface PromptInputMessage {
   text: string
 }
 
-export type PromptInputProps = Omit<ComponentProps<'form'>, 'onSubmit'> & {
+type PromptInputProps = Omit<ComponentProps<'form'>, 'onSubmit'> & {
   onSubmit: (
     message: PromptInputMessage,
     event: FormEvent<HTMLFormElement>
@@ -36,6 +35,7 @@ export const PromptInput = ({
   children,
   ...props
 }: PromptInputProps) => (
+  // react-doctor-disable-next-line react-doctor/no-prevent-default -- the chat owns submission on the client; a form action would run it as a transition, delaying the input clear until the reply finishes streaming
   <form
     className={cn('w-full', className)}
     onSubmit={(event) => {
@@ -51,7 +51,7 @@ export const PromptInput = ({
   </form>
 )
 
-export type PromptInputBodyProps = ComponentProps<'div'>
+type PromptInputBodyProps = ComponentProps<'div'>
 
 export const PromptInputBody = ({
   className,
@@ -60,10 +60,7 @@ export const PromptInputBody = ({
   <div className={cn('flex items-start', className)} {...props} />
 )
 
-export type PromptInputTextareaProps = ComponentProps<typeof InputGroupTextarea>
-
-const supportsFieldSizing = () =>
-  typeof CSS !== 'undefined' && CSS.supports('field-sizing', 'content')
+type PromptInputTextareaProps = ComponentProps<typeof InputGroupTextarea>
 
 export const PromptInputTextarea = ({
   className,
@@ -78,7 +75,11 @@ export const PromptInputTextarea = ({
   // field-sizing grows the box natively; elsewhere, size it to its content
   useLayoutEffect(() => {
     const el = ref.current
-    if (!el || value === undefined || supportsFieldSizing()) {
+    if (
+      !el ||
+      value === undefined ||
+      (typeof CSS !== 'undefined' && CSS.supports('field-sizing', 'content'))
+    ) {
       return
     }
     el.style.height = 'auto'
@@ -90,8 +91,7 @@ export const PromptInputTextarea = ({
     if (event.defaultPrevented) {
       return
     }
-    // Enter sends, Shift+Enter breaks the line, and IME composition is
-    // left alone so CJK input can confirm a candidate with Enter
+    // IME composition is left alone so CJK input can confirm a candidate with Enter
     if (
       event.key !== 'Enter' ||
       event.shiftKey ||
@@ -128,7 +128,7 @@ export const PromptInputTextarea = ({
   )
 }
 
-export type PromptInputHeaderProps = Omit<
+type PromptInputHeaderProps = Omit<
   ComponentProps<typeof InputGroupAddon>,
   'align'
 >
@@ -144,7 +144,7 @@ export const PromptInputHeader = ({
   />
 )
 
-export type PromptInputFooterProps = Omit<
+type PromptInputFooterProps = Omit<
   ComponentProps<typeof InputGroupAddon>,
   'align'
 >
@@ -155,21 +155,12 @@ export const PromptInputFooter = ({
 }: PromptInputFooterProps) => (
   <InputGroupAddon
     align='block-end'
-    className={cn('cursor-default justify-between gap-1.5 p-2', className)}
+    className={cn('cursor-default justify-end gap-1.5 p-2', className)}
     {...props}
   />
 )
 
-export type PromptInputToolsProps = ComponentProps<'div'>
-
-export const PromptInputTools = ({
-  className,
-  ...props
-}: PromptInputToolsProps) => (
-  <div className={cn('flex items-center gap-1.5', className)} {...props} />
-)
-
-export type PromptInputButtonProps = ComponentProps<typeof Button>
+type PromptInputButtonProps = ComponentProps<typeof Button>
 
 export const PromptInputButton = ({
   className,
@@ -186,7 +177,7 @@ export const PromptInputButton = ({
   />
 )
 
-export type PromptInputSubmitProps = Omit<PromptInputButtonProps, 'type'> & {
+type PromptInputSubmitProps = Omit<PromptInputButtonProps, 'type'> & {
   status?: ChatStatus
   onStop?: () => void
 }
@@ -198,7 +189,6 @@ export const PromptInputSubmit = ({
   children,
   ...props
 }: PromptInputSubmitProps) => {
-  // TODO(slopradar): duplication: restates isChatBusy from features/assistant/chat-context.tsx, move that predicate to src/lib/ai/chat so this slice and the assistant share it
   const isBusy = status === 'submitted' || status === 'streaming'
   const filled =
     'border-primary bg-primary text-primary-foreground hover:bg-primary/80 data-[disabled]:bg-primary data-[disabled]:opacity-50'

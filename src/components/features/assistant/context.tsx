@@ -36,7 +36,7 @@ const AssistantContext = createContext<{
   popupRef: RefObject<HTMLDivElement | null>
   setContext: Dispatch<SetStateAction<string | null>>
   setExpanded: (next: boolean) => void
-  setOpen: Dispatch<SetStateAction<boolean>>
+  setOpen: (next: boolean) => void
 } | null>(null)
 
 export function useAssistantContext() {
@@ -48,23 +48,25 @@ export function useAssistantContext() {
 }
 
 export function AssistantProvider({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpenState] = useState(false)
   const [expanded, setExpandedState] = useState(false)
   const [context, setContext] = useState<string | null>(null)
   const isDocked = useMediaQuery(MEDIA.docked)
   const popupRef = useRef<HTMLDivElement>(null)
   const morphFrom = useRef<DOMRect | null>(null)
 
-  if (expanded && !open) {
-    setExpandedState(false)
-  }
-
   const mode = panelMode(expanded, isDocked)
 
-  // The panel's morph starts from the box it had before the toggle
   const setExpanded = useCallback((next: boolean) => {
     morphFrom.current = popupRef.current?.getBoundingClientRect() ?? null
     setExpandedState(next)
+  }, [])
+
+  const setOpen = useCallback((next: boolean) => {
+    if (next) {
+      setExpandedState(false)
+    }
+    setOpenState(next)
   }, [])
 
   const onKeyPress = useEffectEvent((event: KeyboardEvent) => {
@@ -92,7 +94,7 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
       setExpanded,
       setOpen,
     }),
-    [context, expanded, isDocked, mode, open, setExpanded]
+    [context, expanded, isDocked, mode, open, setExpanded, setOpen]
   )
 
   return <AssistantContext value={value}>{children}</AssistantContext>

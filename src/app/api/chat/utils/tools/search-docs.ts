@@ -1,19 +1,27 @@
 import { tool, type UIMessageStreamWriter } from 'ai'
-import { Document } from 'flexsearch'
+import { Document, type DocumentData } from 'flexsearch'
 import { z } from 'zod'
-import type { CustomDocument } from '@/lib/ai/chat/types'
 import {
   type BlogPage,
-  post as blogSource,
-  type WorkPage,
-  workSource,
+  blogSource,
+  type PageEntry,
+  type ProjectPage,
+  projectSource,
 } from '@/lib/source'
 
-// TODO(slopradar): library-exists: a second FlexSearch index over the same pages duplicates api/search/route.ts, query the fumadocs createSearchAPI server (its search method) instead
+interface SearchDocument extends DocumentData {
+  content: string
+  description: string
+  tag: PageEntry['tag']
+  title: string
+  url: string
+}
+
 const searchServer = createSearchServer()
+const WHITESPACE = /\s+/
 
 async function createSearchServer() {
-  const search = new Document<CustomDocument>({
+  const search = new Document<SearchDocument>({
     document: {
       id: 'url',
       index: ['title', 'description', 'content'],
@@ -23,8 +31,8 @@ async function createSearchServer() {
   })
 
   const toDocument =
-    (tag: CustomDocument['tag']) =>
-    async (page: BlogPage | WorkPage): Promise<CustomDocument> => ({
+    (tag: SearchDocument['tag']) =>
+    async (page: BlogPage | ProjectPage): Promise<SearchDocument> => ({
       content: await page.data.getText('processed'),
       description: page.data.description ?? '',
       tag,
@@ -32,60 +40,71 @@ async function createSearchServer() {
       url: page.url,
     })
 
-  const [blog, work] = await Promise.all([
+  const [blog, projects] = await Promise.all([
     Promise.all(blogSource.getPages().map(toDocument('blog'))),
-    Promise.all(workSource.getPages().map(toDocument('projects'))),
+    Promise.all(projectSource.getPages().map(toDocument('projects'))),
   ])
 
-  for (const page of [...blog, ...work]) {
+  for (const page of [...blog, ...projects]) {
     search.add(page)
   }
 
   return search
 }
 
-const Tag = z.enum(['all', 'blog', 'projects'])
+export const searchDocsTool = tool({
+  contextSchema: z.object({ writer: z.custom<UIMessageStreamWriter>() }),
+  description: "Search the site's blog posts and projects.",
+  execute: async ({ query, tag, limit }, { context }) => {
+    const search = await searchServer
+    const results = await search.searchAsync({
+      enrich: true,
+      limit,
+      merge: true,
+      query,
+      tag: tag === 'all' ? undefined : { tag },
+    })
+    const terms = query.toLowerCase().split(WHITESPACE).filter(Boolean)
 
-export const createSearchDocsTool = (writer: UIMessageStreamWriter) =>
-  tool({
-    description:
-      'Search the portfolio content using the internal search server.',
-    execute: async ({ query, tag: tagParam, limit }) => {
-      const tag = tagParam === 'all' ? undefined : tagParam
-      const search = await searchServer
-      const results = await search.searchAsync({
-        enrich: true,
-        limit,
-        merge: true,
-        query,
-        tag: tag ? { tag } : undefined,
-      })
-
-      for (const [index, { doc }] of results.entries()) {
-        if (doc) {
-          writer.write({
-            sourceId: `search-doc-${index}-${doc.url}`,
-            title: doc.title,
-            type: 'source-url',
-            url: doc.url,
-          })
-        }
+    return results.flatMap(({ doc }, index) => {
+      if (!doc) {
+        return []
       }
+      context.writer.write({
+        sourceId: `search-doc-${index}-${doc.url}`,
+        title: doc.title,
+        type: 'source-url',
+        url: doc.url,
+      })
+      const lower = doc.content.toLowerCase()
+      const hit = Math.min(
+        ...terms.map((term) => lower.indexOf(term)).filter((at) => at >= 0)
+      )
+      const start = Number.isFinite(hit) ? Math.max(0, hit - 200) : 0
 
-      // TODO(slopradar): ai-sdk: tool-output: every hit carries its full page text (store: true plus enrich), so the model reads whole posts that getPageContent exists to fetch, return { title, url, description } per hit or shape it with toModelOutput
-      return results
-    },
-    inputSchema: z.object({
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .describe(
-          'Maximum number of results to return (default: 10, max: 100).'
-        ),
-      query: z.string().describe('The query to search for.'),
-      tag: Tag.default('all').describe('Optional tag filter.'),
-    }),
-  })
+      return [
+        {
+          description: doc.description,
+          excerpt: doc.content.slice(start, start + 800).trim(),
+          tag: doc.tag,
+          title: doc.title,
+          url: doc.url,
+        },
+      ]
+    })
+  },
+  inputSchema: z.object({
+    limit: z
+      .number()
+      .int()
+      .min(1)
+      .max(100)
+      .default(10)
+      .describe('Maximum number of results to return (default: 10, max: 100).'),
+    query: z.string().describe('The query to search for.'),
+    tag: z
+      .enum(['all', 'blog', 'projects'])
+      .default('all')
+      .describe('Limit results to blog posts or projects. Defaults to all.'),
+  }),
+})

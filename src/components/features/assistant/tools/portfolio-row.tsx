@@ -6,12 +6,6 @@ import type { ComponentProps, ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
 
-// Simba's rows copy the an1rudh rebrand's home page lists (the project rows
-// in _components/work.tsx and blog/post-card.tsx) at their `wide` size. In
-// the docked panel and on phones they shrink to two lines, so a few fit in
-// one answer: the title and description truncate, the cover shrinks, and the
-// meta and arrow drop out the way the rebrand drops its meta column on phones
-
 const rowLink =
   'group flex gap-3 px-3 py-2.5 transition-colors hover:bg-card focus-visible:bg-card focus-visible:-outline-offset-2 wide:gap-4 wide:px-4'
 
@@ -59,7 +53,6 @@ export const ProjectRow = ({
   >
     {image ? (
       <Image
-        // The title beside it already names the link
         alt=''
         className='h-10 wide:h-14 w-16 wide:w-24 shrink-0 rounded-[8px] border object-cover shadow-xs transition-[rotate,scale,box-shadow] duration-300 ease-out group-hover:-rotate-3 group-hover:scale-[1.06] group-hover:shadow-md motion-reduce:transition-none'
         height={56}

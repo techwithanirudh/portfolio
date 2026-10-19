@@ -1,6 +1,6 @@
-import type { ChatTools, MyUIMessage } from '@/lib/ai/chat/types'
+import type { ChatTools, ChatUIMessage } from '@/lib/ai/chat/types'
 
 export type ToolPart<Name extends keyof ChatTools> = Extract<
-  MyUIMessage['parts'][number],
+  ChatUIMessage['parts'][number],
   { type: `tool-${Name}` }
 >

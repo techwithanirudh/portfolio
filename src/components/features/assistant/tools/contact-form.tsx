@@ -3,7 +3,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
 import { useSound } from '@web-kits/audio/react'
-// TODO(slopradar): layering: the shared assistant imports the server action from app/(home)/contact/actions, move contact into src/server since two features own it
 import { contact } from '@/app/(home)/contact/actions/contact'
 import { useChatContext } from '@/components/features/assistant/chat-context'
 import { Icons } from '@/components/icons/icons'
@@ -125,7 +124,6 @@ export function ContactForm({
           {`fill this out and i'll send it to ${ownerName} for you!`}
         </p>
 
-        {/* TODO(slopradar): duplication: three near-identical FormField blocks, and the same name/email/message fields exist in app/(home)/contact/_components/contact-form.tsx, drive both from one field config */}
         <FormField
           control={form.control}
           name='name'
@@ -204,8 +202,7 @@ export function ContactForm({
 
         <div className='flex items-center gap-2'>
           <Button
-            // TODO(slopradar): redundant-class: h-8 and gap-1.5 are what size='sm' sets and text-sm is in the button base, so only flex-1 does anything (x2 with the cancel button's h-8 text-sm), drop the repeats
-            className='h-8 flex-1 gap-1.5 text-sm'
+            className='flex-1'
             disabled={isExecuting}
             focusableWhenDisabled
             size='sm'
@@ -224,7 +221,6 @@ export function ContactForm({
             )}
           </Button>
           <Button
-            className='h-8 text-sm'
             disabled={isExecuting}
             onClick={handleCancel}
             size='sm'
@@ -242,22 +238,22 @@ export function ContactForm({
 export function ContactFormSkeleton() {
   return (
     <div className='flex flex-col gap-3 p-3'>
-      <Skeleton className='h-3 w-48' />
-      <div className='space-y-2'>
-        <Skeleton className='h-3 w-12' />
+      <Skeleton className='h-4 w-48' />
+      <FormItem className='space-y-1'>
+        <Skeleton className='h-4 w-12' />
         <Skeleton className='h-8 w-full' />
-      </div>
-      <div className='space-y-2'>
-        <Skeleton className='h-3 w-14' />
+      </FormItem>
+      <FormItem className='space-y-1'>
+        <Skeleton className='h-4 w-14' />
         <Skeleton className='h-8 w-full' />
-      </div>
-      <div className='space-y-2'>
-        <Skeleton className='h-3 w-16' />
+      </FormItem>
+      <FormItem className='space-y-1'>
+        <Skeleton className='h-4 w-16' />
         <Skeleton className='h-20 w-full' />
-      </div>
+      </FormItem>
       <div className='flex items-center gap-2'>
-        <Skeleton className='h-8 w-28 flex-1' />
-        <Skeleton className='h-8 w-20' />
+        <Skeleton className='h-8 flex-1' />
+        <Skeleton className='h-8 w-17' />
       </div>
     </div>
   )

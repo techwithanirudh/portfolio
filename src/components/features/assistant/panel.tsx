@@ -2,7 +2,14 @@
 
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { useLenis } from 'lenis/react'
-import { type RefObject, useEffect, useLayoutEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
+import {
+  type RefObject,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useScrollLock } from 'usehooks-ts'
 import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
@@ -26,6 +33,25 @@ function PageScrollLock() {
     lenis.stop()
     return () => lenis.start()
   }, [lenis])
+
+  return null
+}
+
+function LeaveOnRouteChange() {
+  const { isDocked, setExpanded, setOpen } = useAssistantContext()
+  const pathname = usePathname()
+  const [openedOn] = useState(pathname)
+
+  useEffect(() => {
+    if (pathname === openedOn) {
+      return
+    }
+    if (isDocked) {
+      setExpanded(false)
+    } else {
+      setOpen(false)
+    }
+  }, [isDocked, openedOn, pathname, setExpanded, setOpen])
 
   return null
 }
@@ -107,8 +133,20 @@ function useMorph() {
   return contentRef
 }
 
+const trackBandHeight = (band: HTMLDivElement) => {
+  const root = document.documentElement.style
+  const observer = new ResizeObserver(([entry]) => {
+    root.setProperty('--simba-band', `${entry?.borderBoxSize[0]?.blockSize}px`)
+  })
+  observer.observe(band)
+  return () => {
+    observer.disconnect()
+    root.removeProperty('--simba-band')
+  }
+}
+
 export function AssistantPanel() {
-  const { expanded, mode, open, popupRef, setExpanded, setOpen } =
+  const { expanded, isDocked, mode, open, popupRef, setExpanded, setOpen } =
     useAssistantContext()
   const chat = useChatContext()
   const mascot = useMascot()
@@ -125,10 +163,17 @@ export function AssistantPanel() {
 
   return (
     <DialogPrimitive.Root
-      // The docked panel stays open while the visitor uses the page
       disablePointerDismissal={mode === 'docked'}
       modal={mode === 'docked' ? false : 'trap-focus'}
-      onOpenChange={(next, { reason }) => {
+      onOpenChange={(next, { event, reason }) => {
+        // A click on him is his own reaction (the trigger)
+        if (
+          reason === 'outside-press' &&
+          event.target instanceof Element &&
+          event.target.closest('[data-simba-trigger]')
+        ) {
+          return
+        }
         const dismiss = reason === 'escape-key' || reason === 'outside-press'
         if (!next && expanded && dismiss) {
           setExpanded(false)
@@ -136,31 +181,64 @@ export function AssistantPanel() {
         }
         setOpen(next)
       }}
+      // The expanded panel fades out where it is, so it docks only once gone
+      onOpenChangeComplete={(next) => {
+        if (!next) {
+          setExpanded(false)
+        }
+      }}
       open={open}
     >
       {open && mode !== 'docked' ? <PageScrollLock /> : null}
+      {open && mode !== 'docked' ? <LeaveOnRouteChange /> : null}
       <DialogPrimitive.Portal>
         <DialogPrimitive.Backdrop
           className={cn(
             'fixed inset-0 z-30 touch-none bg-overlay backdrop-blur-xs transition-opacity duration-200 ease-out-strong data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150',
-            mode === 'docked' && 'hidden'
+            mode === 'docked' && 'hidden',
+            mode === 'expanded' && 'data-ending-style:duration-300'
           )}
         />
         <DialogPrimitive.Popup
           aria-label='Ask Simba'
-          // TODO(slopradar): utility-sprawl: one 1000-character string holds the sheet, docked, expanded and short-viewport geometry plus the enter and exit motion, name those groups as constants in class-names.ts (beside expandedColumn) and join them with cn
-          className='fixed inset-x-4 top-[max(1rem,env(safe-area-inset-top))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-50 flex origin-bottom flex-col overflow-hidden rounded-lg border border-dashed bg-popover text-popover-foreground shadow-lg outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 sm:inset-x-auto sm:top-auto sm:right-[max(1rem,env(safe-area-inset-right))] sm:bottom-28 sm:h-[min(500px,calc(100dvh-8rem))] sm:w-[360px] sm:origin-bottom-right sm:data-expanded:inset-0 sm:data-expanded:h-dvh sm:data-expanded:w-auto sm:data-expanded:origin-center sm:data-expanded:rounded-none sm:data-expanded:border-0 sm:data-expanded:shadow-none sm:[@media(max-height:640px)]:bottom-[max(1rem,env(safe-area-inset-bottom))] sm:[@media(max-height:640px)]:h-[calc(100dvh-2rem)]'
+          className='fixed inset-x-4 top-[max(1rem,env(safe-area-inset-top))] bottom-[max(1.25rem,env(safe-area-inset-bottom))] z-50 flex origin-bottom flex-col overflow-hidden rounded-lg border border-dashed bg-popover text-popover-foreground shadow-lg outline-none transition-[opacity,scale] duration-200 ease-out-strong data-ending-style:scale-96 data-starting-style:scale-96 data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 motion-reduce:data-ending-style:scale-100 motion-reduce:data-starting-style:scale-100 sm:inset-x-auto sm:top-auto sm:right-[max(1rem,env(safe-area-inset-right))] sm:bottom-28 sm:h-[min(500px,calc(100dvh-8rem))] sm:w-[360px] sm:origin-bottom-right sm:data-expanded:data-ending-style:scale-100 sm:data-expanded:data-ending-style:duration-300 sm:data-expanded:inset-0 sm:data-expanded:h-dvh sm:data-expanded:w-auto sm:data-expanded:origin-center sm:data-expanded:rounded-none sm:data-expanded:border-0 sm:data-expanded:shadow-none sm:[@media(max-height:640px)]:bottom-[max(1rem,env(safe-area-inset-bottom))] sm:[@media(max-height:640px)]:h-[calc(100dvh-2rem)]'
           data-expanded={expanded || undefined}
           // Keeps the site's components in their phone layout (the `wide` variant)
           data-narrow={!expanded || undefined}
+          data-simba-panel
           data-sound-press='off'
           finalFocus={finalFocus}
+          // Same-page hash links change no route, so a followed link docks it here too
+          onClickCapture={(event) => {
+            const link =
+              event.target instanceof Element ? event.target.closest('a') : null
+            const followed =
+              link?.origin === window.location.origin &&
+              !link.target &&
+              !(
+                event.metaKey ||
+                event.ctrlKey ||
+                event.shiftKey ||
+                event.altKey
+              )
+            if (!followed) {
+              return
+            }
+            if (!isDocked) {
+              setOpen(false)
+            } else if (expanded) {
+              setExpanded(false)
+            }
+          }}
           ref={popupRef}
         >
           <div className='dashed-stack flex h-full flex-col' ref={contentRef}>
             <AssistantHeader />
             <MessageList messages={chat.messages} status={chat.status} />
-            <div className='border-t border-dashed bg-card text-card-foreground has-focus-visible:ring-2 has-focus-visible:ring-ring'>
+            <div
+              className='border-t border-dashed bg-card text-card-foreground has-focus-visible:border-primary'
+              ref={trackBandHeight}
+            >
               <div className={expandedColumn}>
                 <AssistantInput />
               </div>

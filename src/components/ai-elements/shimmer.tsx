@@ -3,8 +3,7 @@
 import { type CSSProperties, type ElementType, memo } from 'react'
 import { cn } from '@/lib/utils'
 
-// TODO(slopradar): unused-export: TextShimmerProps has no importer, un-export it
-export interface TextShimmerProps {
+interface TextShimmerProps {
   as?: ElementType
   children: string
   className?: string
@@ -21,8 +20,7 @@ const ShimmerComponent = ({
 }: TextShimmerProps) => (
   <Component
     className={cn(
-      // TODO(slopradar): dead-class: motion-reduce:animate-none is a no-op, the global reduced-motion rule (animation-duration 0.01ms !important, one iteration) already beats the inline animationDuration and leaves the base background-position, delete it
-      'relative inline-block animate-shimmer bg-[length:250%_100%,auto] bg-clip-text text-transparent [background-position:100%_center] motion-reduce:animate-none',
+      'relative inline-block animate-shimmer bg-[length:250%_100%,auto] bg-clip-text text-transparent [background-position:100%_center]',
       '[--bg:linear-gradient(90deg,#0000_calc(50%-var(--spread)),var(--color-background),#0000_calc(50%+var(--spread)))] [background-repeat:no-repeat,padding-box]',
       className
     )}

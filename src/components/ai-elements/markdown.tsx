@@ -19,11 +19,6 @@ import { visit } from 'unist-util-visit'
 
 const WHITESPACE_LOOKAHEAD = /(?=\s)/
 
-// TODO(slopradar): over-abstraction: Processor plus createProcessor wrap one remark pipeline, and this is a third markdown stack beside fumadocs createMarkdownRenderer (features/search/results.tsx) and react-markdown (experience-timeline.tsx), keep one
-interface Processor {
-  process: (content: string) => Promise<ReactNode>
-}
-
 function rehypeWrapWords() {
   return (tree: Root) => {
     visit(tree, ['text', 'element'], (node, index, parent) => {
@@ -62,30 +57,22 @@ function rehypeWrapWords() {
   }
 }
 
-function createProcessor(): Processor {
-  const processor = remark()
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeWrapWords)
+const processor = remark().use(remarkGfm).use(remarkRehype).use(rehypeWrapWords)
 
-  return {
-    async process(content) {
-      const nodes = processor.parse({ value: content })
-      const hast = await processor.run(nodes)
+async function processMarkdown(content: string): Promise<ReactNode> {
+  const hast = await processor.run(processor.parse({ value: content }))
 
-      return toJsxRuntime(hast, {
-        components: {
-          ...defaultMdxComponents,
-          img: undefined,
-          pre: Pre,
-        },
-        development: false,
-        Fragment,
-        jsx,
-        jsxs,
-      })
+  return toJsxRuntime(hast, {
+    components: {
+      ...defaultMdxComponents,
+      img: undefined,
+      pre: Pre,
     },
-  }
+    development: false,
+    Fragment,
+    jsx,
+    jsxs,
+  })
 }
 
 function Pre(props: ComponentProps<'pre'>) {
@@ -112,26 +99,26 @@ function Pre(props: ComponentProps<'pre'>) {
   return <DynamicCodeBlock code={content.trimEnd()} lang={lang} />
 }
 
-const processor = createProcessor()
-const CACHE_LIMIT = 200
 const cache = new Map<string, Promise<ReactNode>>()
 
 export function Markdown({ text }: { text: string }) {
   const deferredText = useDeferredValue(text)
 
   return (
-    <Suspense fallback={<p className='invisible'>{text}</p>}>
+    <Suspense
+      fallback={<p className='invisible whitespace-pre-line'>{text}</p>}
+    >
       <Renderer text={deferredText} />
     </Suspense>
   )
 }
 
 const processCached = (text: string) => {
-  const result = cache.get(text) ?? processor.process(text)
+  const result = cache.get(text) ?? processMarkdown(text)
   cache.delete(text)
   cache.set(text, result)
   const oldest = cache.keys().next()
-  if (cache.size > CACHE_LIMIT && !oldest.done) {
+  if (cache.size > 200 && !oldest.done) {
     cache.delete(oldest.value)
   }
   return result

@@ -1,10 +1,10 @@
 import type { PagePreview } from '@/lib/page-preview'
-import { getPosts, getWorkPages } from '@/lib/source'
+import { getPosts, getProjectPages } from '@/lib/source'
 import { previewCacheControl } from '../_lib/cache-control'
 
 export function GET(request: Request) {
   const path = new URL(request.url).searchParams.get('path')
-  const page = [...getPosts(), ...getWorkPages()].find(
+  const page = [...getPosts(), ...getProjectPages()].find(
     (entry) => entry.url === path
   )
 

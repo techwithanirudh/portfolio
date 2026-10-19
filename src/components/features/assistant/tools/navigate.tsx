@@ -6,19 +6,13 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useEffectEvent, useRef } from 'react'
 import { useAssistantContext } from '@/components/features/assistant/context'
 import { Icons } from '@/components/icons/icons'
-import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { scrollToTarget } from '@/lib/scroll-to-target'
+import { claimToolCall } from './run-once'
 import { ToolPendingLine, ToolWarningLine } from './status-line'
 import type { ToolPart } from './types'
 
-const HASH_WAIT_MS = 10_000
-const HASH_POLL_MS = 50
-
-const handledCalls = new Set<string>()
-
 const LOCKED_OVERFLOW = /hidden|clip/
 
-// The sheet and expanded panels lock page scroll while they are open
 const isScrollLocked = () =>
   [document.documentElement, document.body].some((element) =>
     LOCKED_OVERFLOW.test(getComputedStyle(element).overflowY)
@@ -33,7 +27,6 @@ export function NavigatePart({ part }: { part: ToolPart<'navigate'> }) {
   const output = part.state === 'output-available' ? part.output : null
   const href = output?.success ? output.href : null
 
-  // TODO(slopradar): mirrored-state: lenisRef and mountedRef are synced by effects so a 10s setTimeout poll can read them, and the hash scroll duplicates search/dialog.tsx navigateToUrl; share one scrollToHash helper that waits on the route instead of polling
   useEffect(() => {
     lenisRef.current = lenis
   }, [lenis])
@@ -54,7 +47,7 @@ export function NavigatePart({ part }: { part: ToolPart<'navigate'> }) {
 
     const tick = () => {
       const target = document.getElementById(id)
-      const timedOut = Date.now() - startedAt >= HASH_WAIT_MS
+      const timedOut = Date.now() - startedAt >= 10_000
       const current = mountedRef.current ? lenisRef.current : undefined
       const awaitingLenis =
         mountedRef.current &&
@@ -68,24 +61,22 @@ export function NavigatePart({ part }: { part: ToolPart<'navigate'> }) {
 
       if (ready || (timedOut && target)) {
         current?.resize()
-        scrollToTarget(current, target, { immediate: prefersReducedMotion() })
+        scrollToTarget(current, target)
         return
       }
       if (!timedOut) {
-        window.setTimeout(tick, HASH_POLL_MS)
+        window.setTimeout(tick, 50)
       }
     }
     tick()
   }
 
   const go = useEffectEvent((target: string) => {
-    if (handledCalls.has(part.toolCallId)) {
+    if (!claimToolCall(part.toolCallId)) {
       return
     }
-    handledCalls.add(part.toolCallId)
 
     const [path = '/', id] = target.split('#')
-    // Leave the new page in view: dock an expanded panel, or close a modal one
     if (!isDocked) {
       setOpen(false)
     } else if (mode === 'expanded') {

@@ -3,21 +3,19 @@
 import { useSound } from '@web-kits/audio/react'
 import { getStaticToolName, isStaticToolUIPart } from 'ai'
 import { useState } from 'react'
-import { useDebounceCallback, useMediaQuery } from 'usehooks-ts'
+import { useMediaQuery } from 'usehooks-ts'
 import {
   PromptInput,
   PromptInputBody,
-  PromptInputButton,
   PromptInputFooter,
   PromptInputHeader,
   PromptInputSubmit,
   PromptInputTextarea,
-  PromptInputTools,
 } from '@/components/ai-elements/prompt-input'
 import { Icons } from '@/components/icons/icons'
 import { toolConfirmationMap } from '@/lib/ai/chat/confirmation'
 import type { ChatTools } from '@/lib/ai/chat/types'
-import { send, tap } from '@/lib/audio/minimal'
+import { send } from '@/lib/audio/minimal'
 import { MEDIA } from '@/lib/media'
 import { cn } from '@/lib/utils'
 import { isChatBusy, useChatContext } from './chat-context'
@@ -25,38 +23,8 @@ import { useAssistantContext } from './context'
 import { useMascot } from './mascot'
 import { animations } from './mascot/constants'
 
-function RegenerateButton() {
-  const { messages, status, regenerate } = useChatContext()
-  const isLoading = status === 'streaming'
-  const canShow =
-    !isLoading && messages.length > 0 && messages.at(-1)?.role === 'assistant'
-  const playRegenerate = useSound(tap)
-
-  return (
-    // TODO(slopradar): redundant-a11y: disabled already takes the native button out of the tab order and ignores pointer presses, so tabIndex={canShow ? 0 : -1} and pointer-events-none repeat it; keep disabled, aria-hidden and the opacity fade
-    <PromptInputButton
-      aria-hidden={!canShow}
-      aria-label='Regenerate response'
-      className={cn(
-        'transition-opacity duration-200',
-        canShow ? 'opacity-100' : 'pointer-events-none opacity-0'
-      )}
-      disabled={!canShow}
-      onClick={() => {
-        playRegenerate()
-        regenerate()
-      }}
-      tabIndex={canShow ? 0 : -1}
-    >
-      <Icons.refresh className='icon-turn-button' />
-    </PromptInputButton>
-  )
-}
-
 const assistantInputStorageKey = 'simba:draft'
-const MAX_SOURCE_PREVIEW_CHARS = 120
 
-// TODO(slopradar): library-exists: usehooks-ts (already a dependency) ships useLocalStorage, which already survives throwing storage, replace readSavedInput/writeSavedInput with it (keep the debounce)
 // Storage access throws when site data is blocked (Safari "Block all cookies")
 const readSavedInput = () => {
   try {
@@ -78,11 +46,46 @@ const writeSavedInput = (value: string | null) => {
   }
 }
 
-export function AssistantInput() {
-  const { setContext, context } = useAssistantContext()
-  const { status, sendMessage, stop, messages } = useChatContext()
+export function useAskSimba() {
+  const { sendMessage } = useChatContext()
   const mascot = useMascot()
   const playSend = useSound(send)
+
+  return (text: string, context?: string) => {
+    mascot?.setActivity(animations.submit)
+    playSend()
+
+    return sendMessage({
+      parts: [
+        {
+          data: {
+            location: window.location.href,
+          },
+          type: 'data-client',
+        },
+        {
+          text,
+          type: 'text',
+        },
+        ...(context
+          ? [
+              {
+                data: {
+                  text: context,
+                },
+                type: 'data-context' as const,
+              },
+            ]
+          : []),
+      ],
+    })
+  }
+}
+
+export function AssistantInput() {
+  const { setContext, context } = useAssistantContext()
+  const { status, stop, messages } = useChatContext()
+  const ask = useAskSimba()
   const finePointer = useMediaQuery(MEDIA.finePointer)
   const [input, setInput] = useState(readSavedInput)
   const hasPendingToolInput = messages.some((message) =>
@@ -95,10 +98,6 @@ export function AssistantInput() {
   )
   const isStreaming = isChatBusy(status)
   const isLoading = isStreaming || hasPendingToolInput
-  const saveInput = useDebounceCallback(
-    (value: string) => writeSavedInput(value),
-    300
-  )
 
   const trimmedInput = input.trim()
   const canSend = trimmedInput.length > 0 || Boolean(context)
@@ -109,46 +108,20 @@ export function AssistantInput() {
     }
 
     const contextValue = context?.trim()
-    const messageText =
-      trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.'
-
-    mascot?.setActivity(animations.submit)
-    playSend()
 
     setInput('')
     setContext(null)
-    saveInput.cancel()
     writeSavedInput(null)
 
-    await sendMessage({
-      parts: [
-        {
-          data: {
-            location: window.location.href,
-          },
-          type: 'data-client',
-        },
-        {
-          text: messageText,
-          type: 'text',
-        },
-        ...(contextValue
-          ? [
-              {
-                data: {
-                  text: contextValue,
-                },
-                type: 'data-context' as const,
-              },
-            ]
-          : []),
-      ],
-    })
+    await ask(
+      trimmedInput.length > 0 ? trimmedInput : 'Use the provided context.',
+      contextValue
+    )
   }
 
   const handleInputChange = (value: string) => {
     setInput(value)
-    saveInput(value)
+    writeSavedInput(value)
   }
 
   return (
@@ -163,17 +136,12 @@ export function AssistantInput() {
           aria-label='Ask Simba a question'
           autoFocus={finePointer}
           className={cn('min-h-16', isLoading && 'text-muted-foreground')}
-          // TODO(slopradar): dead-code: id='nd-ai-input' is a leftover from the fumadocs AI template that nothing reads (no selector, label or script references it), drop it
-          id='nd-ai-input'
           onChange={(event) => handleInputChange(event.target.value)}
           placeholder={isLoading ? 'Sniffing for answers…' : 'Ask Simba'}
           value={input}
         />
       </PromptInputBody>
       <PromptInputFooter>
-        <PromptInputTools>
-          <RegenerateButton />
-        </PromptInputTools>
         <PromptInputSubmit
           disabled={!(isStreaming || (canSend && !hasPendingToolInput))}
           onStop={stop}
@@ -199,9 +167,9 @@ function PromptContext({
       />
       <span className='line-clamp-2 flex-1 break-words'>
         <span className='sr-only'>Context: </span>
-        {context.slice(0, MAX_SOURCE_PREVIEW_CHARS)}
+        {context.slice(0, 120)}
       </span>
-      {/* The icon is 14px; the pseudo element makes the target 24px, as far as it goes before reaching the textarea below */}
+      {/* The pseudo element grows the 14px icon's target to 24px */}
       <button
         aria-label='Remove context'
         className='after:-translate-1/2 relative inline-flex items-center justify-center text-muted-foreground transition-colors after:absolute after:top-1/2 after:left-1/2 after:size-6 hover:text-foreground'

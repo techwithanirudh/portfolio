@@ -8,7 +8,9 @@ import {
 } from '@json-render/react'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { ExperienceTimeline, preloadCover } from '@/components/features/work'
+import type { Activity } from '@/components/features/contributions'
+import { ExperienceTimeline } from '@/components/features/experience/experience-timeline'
+import { preloadCover } from '@/components/features/projects/cover'
 import { Icons } from '@/components/icons/icons'
 import {
   type PortfolioState,
@@ -18,7 +20,9 @@ import {
 import { formatDate } from '@/lib/format-date'
 import { cn } from '@/lib/utils'
 import { eyebrow } from '../class-names'
+import { ContributionsCard } from './portfolio-contributions'
 import { PostRow, ProjectRow } from './portfolio-row'
+import { TestimonialQuote } from './portfolio-testimonial'
 import { ToolPendingLine, ToolWarningLine } from './status-line'
 import type { ToolPart } from './types'
 
@@ -74,7 +78,7 @@ function ProjectItemRow({ slug }: { slug: string }) {
       onFocus={warmCover}
       onPointerEnter={warmCover}
       title={title}
-      transitionTypes={['work-card']}
+      transitionTypes={['project-card']}
       url={url}
     />
   )
@@ -110,8 +114,6 @@ function PostItemRow({ slug }: { slug: string }) {
   )
 }
 
-// A slim row rather than the site's full-width SectionMoreLink bar, which
-// would be taller than the rows above it
 function MoreLinkRow({
   children,
   href,
@@ -142,10 +144,26 @@ function ExperienceItems({ ids }: { ids: string[] }) {
   ) : null
 }
 
-// Each catalog entry renders the site's own component from the data the tool
-// resolved on the server, so the model only ever picks which items to show
+function TestimonialItems({ ids }: { ids: string[] }) {
+  const testimonials = usePortfolioState('testimonials')
+  const items = ids.flatMap((id) => testimonials?.[id] ?? [])
+  return items.length > 0 ? (
+    <div className='dashed-stack'>
+      {items.map((item) => (
+        <TestimonialQuote key={item.id} testimonial={item} />
+      ))}
+    </div>
+  ) : null
+}
+
+function ContributionsItem() {
+  const contributions = useStateValue<Activity[]>('/contributions')
+  return <ContributionsCard data={contributions ?? []} />
+}
+
 const { registry } = defineRegistry(portfolioCatalog, {
   components: {
+    Contributions: () => <ContributionsItem />,
     Experience: ({ props }) => <ExperienceItems ids={props.ids} />,
     MoreLink: ({ props }) => (
       <MoreLinkRow href={props.href}>{props.label}</MoreLinkRow>
@@ -155,6 +173,7 @@ const { registry } = defineRegistry(portfolioCatalog, {
     Stack: ({ children, props }) => (
       <StackGroup title={props.title}>{children}</StackGroup>
     ),
+    Testimonials: ({ props }) => <TestimonialItems ids={props.ids} />,
   },
 })
 

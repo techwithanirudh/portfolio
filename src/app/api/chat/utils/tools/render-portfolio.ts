@@ -1,22 +1,20 @@
 import type { UIElement } from '@json-render/core'
 import { tool } from 'ai'
 import { z } from 'zod'
+import { parseSitePath, resolveNavigation } from '@/app/(llms)/utils/site-path'
 import { experiences } from '@/constants/portfolio/experiences'
+import { testimonials } from '@/constants/portfolio/testimonials'
 import {
   type PortfolioComponent,
   type PortfolioSpec,
   type PortfolioState,
   portfolioCatalog,
 } from '@/lib/ai/chat/catalog'
-import { getPost, getWork } from '@/lib/source'
-import { parseSitePath, resolveNavigation } from './navigate'
-
-const MAX_ELEMENTS = 24
+import { getGitHubContributions } from '@/lib/github-contributions'
+import { getPost, getProject } from '@/lib/source'
 
 const { components } = portfolioCatalog.data
 
-// Each element is checked against its own component's props, so the model
-// sees the exact shape of every prop in the tool's schema
 const element = <T extends PortfolioComponent, P extends z.ZodType>(
   type: T,
   { description, props }: { description: string; props: P }
@@ -33,11 +31,13 @@ const element = <T extends PortfolioComponent, P extends z.ZodType>(
     .describe(description)
 
 const elementSchema = z.discriminatedUnion('type', [
+  element('Contributions', components.Contributions),
   element('Experience', components.Experience),
   element('MoreLink', components.MoreLink),
   element('Post', components.Post),
   element('Project', components.Project),
   element('Stack', components.Stack),
+  element('Testimonials', components.Testimonials),
 ])
 
 const inputSchema = z.object({
@@ -54,15 +54,14 @@ type RenderPortfolioOutput =
   | { missing: string[]; spec: PortfolioSpec; success: true }
   | { missing: string[]; reason: string; success: false }
 
-// Accepts a bare slug or the page's path, like "ai_tutor" or "/projects/ai_tutor"
 const toSlugs = (value: string, section: string) => {
-  const segments = parseSitePath(value)?.path.split('/').filter(Boolean) ?? []
+  const segments = parseSitePath(value)?.segments ?? []
   return segments[0] === section ? segments.slice(1) : segments
 }
 
-const findWork = (slug: string) => {
+const findProject = (slug: string) => {
   const slugs = toSlugs(slug, 'projects')
-  return slugs.length > 0 ? getWork(slugs) : undefined
+  return slugs.length > 0 ? getProject(slugs) : undefined
 }
 
 const findPost = (slug: string) => {
@@ -77,14 +76,44 @@ const findExperience = (id: string) => {
   )
 }
 
-/**
- * Rebuilds the model's spec from the site's own data: every slug and id is
- * looked up, its content goes into the state, and anything that doesn't
- * exist is dropped and reported back. Only `type`, `props` and `children`
- * survive, so a spec can't carry its own state, bindings or actions.
- */
-const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
-  const state: PortfolioState = { experience: {}, posts: {}, projects: {} }
+const findTestimonial = (id: string) => {
+  const needle = id.trim().toLowerCase()
+  return testimonials.find(
+    (item) =>
+      item.id === needle ||
+      (needle !== '' && item.author.name.toLowerCase().startsWith(needle))
+  )
+}
+
+const pickTestimonials = (
+  ids: string[],
+  state: PortfolioState,
+  missing: string[]
+) => {
+  const picked = new Set<string>()
+  for (const id of ids) {
+    const found = findTestimonial(id)
+    if (!found) {
+      missing.push(`testimonial "${id}"`)
+    } else if (picked.size < 3) {
+      picked.add(found.id)
+      state.testimonials[found.id] = found
+    }
+  }
+  return [...picked]
+}
+
+const buildSpec = async (
+  input: RenderPortfolioInput
+): Promise<RenderPortfolioOutput> => {
+  const state: PortfolioState = {
+    contributions: [],
+    experience: {},
+    posts: {},
+    projects: {},
+    testimonials: {},
+  }
+  let showsContributions = false
   const elements: Record<string, UIElement> = {}
   const missing: string[] = []
   const visited = new Set<string>()
@@ -98,7 +127,7 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
           : null
       }
       case 'Project': {
-        const page = findWork(item.props.slug)
+        const page = findProject(item.props.slug)
         if (!page) {
           missing.push(`project "${item.props.slug}"`)
           return null
@@ -108,8 +137,6 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
           date: page.data.date.toISOString(),
           description: page.data.description ?? '',
           image: page.data.image ?? null,
-          // TODO(slopradar): dead-field: no client reads `slugs` since WorkCard takes transitionName, stop writing it here so the Pick in lib/ai/chat/catalog.ts (its own annotation) can drop it
-          slugs: page.slugs,
           title: page.data.title,
           url: page.url,
         }
@@ -142,7 +169,6 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
             missing.push(`experience "${id}"`)
           }
         }
-        // Timeline order, whatever order the model listed them in
         const ordered = experiences
           .map((entry) => entry.id)
           .filter((id) => ids.has(id))
@@ -150,6 +176,15 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
           ? { children: [], props: { ids: ordered }, type: item.type }
           : null
       }
+      case 'Testimonials': {
+        const ids = pickTestimonials(item.props.ids, state, missing)
+        return ids.length > 0
+          ? { children: [], props: { ids }, type: item.type }
+          : null
+      }
+      case 'Contributions':
+        showsContributions = true
+        return { children: [], props: {}, type: item.type }
       case 'MoreLink': {
         const target = resolveNavigation(item.props.href)
         if (!target.success) {
@@ -163,15 +198,13 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
         }
       }
       default:
-        // The input schema only lets catalog components through
         return null
     }
   }
 
-  // Each element renders once, which also breaks any cycle in `children`
   function visit(key: string): boolean {
     const item = input.elements[key]
-    if (!item || visited.has(key) || visited.size >= MAX_ELEMENTS) {
+    if (!item || visited.has(key) || visited.size >= 24) {
       return false
     }
     visited.add(key)
@@ -192,15 +225,23 @@ const buildSpec = (input: RenderPortfolioInput): RenderPortfolioOutput => {
     }
   }
 
+  if (showsContributions) {
+    state.contributions = await getGitHubContributions()
+  }
+
   return { missing, spec: { elements, root: input.root, state }, success: true }
 }
 
-// What the model reads back: what the visitor now sees, not the whole spec
 const summarize = (output: RenderPortfolioOutput) => {
   if (!output.success) {
     return output
   }
-  const { experience, posts, projects } = output.spec.state
+  const { contributions, experience, posts, projects, testimonials } =
+    output.spec.state
+  const showsContributions = Object.values(output.spec.elements).some(
+    (element) => element.type === 'Contributions'
+  )
+  const total = contributions.reduce((sum, day) => sum + day.count, 0)
   return {
     missing: output.missing,
     shown: [
@@ -209,6 +250,16 @@ const summarize = (output: RenderPortfolioOutput) => {
       ...Object.values(experience).map(
         (item) => `experience: ${item.companyName}`
       ),
+      ...Object.values(testimonials).map(
+        (item) => `testimonial: ${item.title}, by ${item.author.name}`
+      ),
+      ...(showsContributions
+        ? [
+            contributions.length > 0
+              ? `contributions: ${total} in the past 365 days`
+              : 'contributions: unavailable, github could not be reached',
+          ]
+        : []),
     ],
     success: true,
   }
@@ -216,7 +267,7 @@ const summarize = (output: RenderPortfolioOutput) => {
 
 export const renderPortfolioTool = tool({
   description:
-    "Show the site's own project cards, blog post rows and experience timeline in the chat, as a json-render spec. Name items by slug or id only; their content comes from the site.",
+    "Show the site's own project cards, blog post rows, experience timeline, testimonials and GitHub contributions graph in the chat, as a json-render spec. Name items by slug or id only; their content comes from the site.",
   execute: buildSpec,
   inputSchema,
   toModelOutput: ({ output }) => ({ type: 'json', value: summarize(output) }),
