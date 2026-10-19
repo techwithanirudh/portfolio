@@ -1,4 +1,4 @@
-import { getColophonText } from '../utils'
+import { getColophonText } from '../utils/colophon'
 import { markdownResponse } from '../utils/markdown-response'
 
 export const dynamic = 'force-static'

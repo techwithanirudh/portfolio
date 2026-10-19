@@ -1,11 +1,10 @@
-import type { TOCItemType } from 'fumadocs-core/toc'
-import { type PageInfo, pages } from '@/constants/pages'
+import { type PageInfo, pages, sectionIds } from '@/constants/pages'
 import {
   type BlogPage,
   getSortedByDatePosts,
-  getSortedWork,
+  getSortedProjects,
   getTags,
-  type WorkPage,
+  type ProjectPage,
 } from '@/lib/source'
 
 interface SiteSection {
@@ -20,14 +19,15 @@ export interface SitePage {
   title: string
 }
 
-// TODO(slopradar): llms-parity: section ids are typed by hand and drift silently from the ids on the pages (story, experience, stack, activity), export the ids beside the page sections and read them here
 const sectionsByPath: Record<string, SiteSection[]> = {
-  '/': [{ id: 'experience', title: 'Experience preview' }],
-  '/about': [
-    { id: 'story', title: 'Story' },
-    { id: 'experience', title: 'Experience' },
-    { id: 'stack', title: 'Stack' },
-    { id: 'activity', title: 'Activity' },
+  [pages.home.path]: [
+    { id: sectionIds.experience, title: 'Experience preview' },
+  ],
+  [pages.about.path]: [
+    { id: sectionIds.story, title: 'Story' },
+    { id: sectionIds.experience, title: 'Experience' },
+    { id: sectionIds.stack, title: 'Stack' },
+    { id: sectionIds.activity, title: 'Activity' },
   ],
 }
 
@@ -53,22 +53,19 @@ export const staticPages: SitePage[] = pageOrder.map((page) => ({
 
 export const LEADING_HASH = /^#/
 
-const tocSections = (toc: TOCItemType[]): SiteSection[] =>
-  toc.map((item) => {
-    const id = item.url.replace(LEADING_HASH, '')
-    return { id, title: typeof item.title === 'string' ? item.title : id }
-  })
-
-const toSitePage = (page: BlogPage | WorkPage): SitePage => ({
+const toSitePage = (page: BlogPage | ProjectPage): SitePage => ({
   description: page.data.description ?? '',
   path: page.url,
-  sections: tocSections(page.data.toc),
+  sections: page.data.toc.map((item) => {
+    const id = item.url.replace(LEADING_HASH, '')
+    return { id, title: typeof item.title === 'string' ? item.title : id }
+  }),
   title: page.data.title,
 })
 
 export const getSitePages = (): SitePage[] => [
   ...staticPages,
-  ...getSortedWork().map(toSitePage),
+  ...getSortedProjects().map(toSitePage),
   ...getSortedByDatePosts().map(toSitePage),
   ...getTags().map((tag) => ({
     description: `The blog filtered to posts tagged ${tag}, grouped by year.`,

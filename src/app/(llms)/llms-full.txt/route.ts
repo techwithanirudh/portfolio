@@ -1,16 +1,18 @@
 import { owner, title } from '@/constants/site'
-import { getBlogLLMText, getWorkLLMText } from '@/lib/get-llm-text'
-import { getSortedByDatePosts, getSortedWork } from '@/lib/source'
-import { getProfileFactsText, getSiteMapText, getSiteText } from '../utils'
+import { getBlogLLMText, getProjectLLMText } from '@/lib/get-llm-text'
+import { getSortedByDatePosts, getSortedProjects } from '@/lib/source'
 import { markdownResponse } from '../utils/markdown-response'
+import { getProfileFactsText } from '../utils/profile'
+import { getSiteMapText } from '../utils/site-pages'
+import { getSiteText } from '../utils/site-text'
 
 async function getFullText() {
   const allPosts = getSortedByDatePosts()
-  const allWork = getSortedWork()
+  const allProjects = getSortedProjects()
 
-  const [workContent, blogContent, profileText] = await Promise.all([
+  const [projectContent, blogContent, profileText] = await Promise.all([
     Promise.all(
-      allWork.map((item) => getWorkLLMText(item, { level: 'section' }))
+      allProjects.map((item) => getProjectLLMText(item, { level: 'section' }))
     ),
     Promise.all(
       allPosts.map((item) => getBlogLLMText(item, { level: 'section' }))
@@ -25,9 +27,9 @@ async function getFullText() {
 ${getProfileFactsText()}
 ${profileText}
 ${getSiteMapText()}
-## Work
+## Projects
 
-${workContent.join('\n\n')}
+${projectContent.join('\n\n')}
 
 ## Blog
 

@@ -1,20 +1,21 @@
-import { experiences } from '@/constants/portfolio/experiences'
+import { pages } from '@/constants/pages'
+import { experienceIntro, experiences } from '@/constants/portfolio/experiences'
+import { formatPeriod } from '@/lib/employment-period'
 import { absoluteMarkdownLinks, url } from '@/lib/url'
-import { DEFAULT_EMPLOYMENT_TYPE, toPlainPeriod } from './profile'
+import { DEFAULT_EMPLOYMENT_TYPE } from './profile'
 
-// TODO(slopradar): llms-parity: 'Every role so far, newest first.' is typed again in about/_components/experience.tsx and llms.txt, read one shared constant in all three
 export function getExperienceText() {
   return `# Experience
-Route: ${url('/about#experience')}
+Route: ${url(`${pages.about.path}#experience`)}
 
-Every role so far, newest first.
+${experienceIntro}
 
 ${experiences
   .flatMap((item) =>
     item.positions.map((position) => {
       const details = [
         `- Type: ${position.employmentType ?? DEFAULT_EMPLOYMENT_TYPE}`,
-        `- Period: ${toPlainPeriod(position.employmentPeriod.start, position.employmentPeriod.end)}`,
+        `- Period: ${formatPeriod(position.employmentPeriod.start, position.employmentPeriod.end, ' to ')}`,
         item.companyWebsite && `- Company website: ${item.companyWebsite}`,
         position.skills?.length && `- Skills: ${position.skills.join(', ')}`,
       ]

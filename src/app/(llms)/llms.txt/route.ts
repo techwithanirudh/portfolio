@@ -19,7 +19,7 @@ ${staticPages.map((page) => `- [${page.title}](${url(page.path)}): ${page.descri
 
 ${getContentIndexText({
   blog: (item) => url(['blog.mdx', ...item.slugs]),
-  work: (item) => url(['work.mdx', ...item.slugs]),
+  projects: (item) => url(['work.mdx', ...item.slugs]),
 })}`
 
 export const dynamic = 'force-static'

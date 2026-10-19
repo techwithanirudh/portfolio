@@ -2,7 +2,7 @@ import { getAboutText } from './about'
 import { getColophonText } from './colophon'
 import { getContactText } from './contact'
 import { getExperienceText } from './experience'
-import { getSkillsText } from './skills'
+import { getStackText } from './stack'
 import { getTestimonialsText } from './testimonials'
 import { getUsesText } from './uses'
 
@@ -30,10 +30,9 @@ export const markdownPages: MarkdownPage[] = [
     title: 'Experience',
   },
   {
-    getText: getSkillsText,
-    // TODO(slopradar): unclear-name: one page has three names, 'stack' here (what getPageContent accepts), /skills.md for the route and skills.ts for the builder, pick one
+    getText: getStackText,
     name: 'stack',
-    path: '/skills.md',
+    path: '/stack.md',
     summary: 'The tools I reach for most, by category',
     title: 'Stack',
   },

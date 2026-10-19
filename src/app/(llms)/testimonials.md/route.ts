@@ -1,4 +1,4 @@
-import { getTestimonialsText } from '../utils'
+import { getTestimonialsText } from '../utils/testimonials'
 import { markdownResponse } from '../utils/markdown-response'
 
 export const dynamic = 'force-static'

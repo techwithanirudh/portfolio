@@ -12,10 +12,9 @@ const listItems = (
     )
     .join('\n')
 
-// TODO(slopradar): llms-parity: 'photo of my desk setup in 2025' restates the caption in uses/_components/setup.tsx, keep the caption in src/constants/portfolio/uses and read it in both
 export function getUsesText() {
   return `# Uses
-Route: ${url('/uses')}
+Route: ${url(pages.uses.path)}
 
 ${pages.uses.description} The page opens with a photo of my desk setup in 2025.
 

@@ -1,4 +1,3 @@
-// TODO(slopradar): misplaced-module: llms reaches into a route's _components for the GitHub fetch, move feed/data.ts to src/lib (for example src/lib/github-activity.ts)
 import { getActivityItems } from '@/app/(home)/about/_components/feed/data'
 
 export const getCommitHistoryText = async () => {
