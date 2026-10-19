@@ -1511,3 +1511,78 @@ Where the grin (`happy`) can show now: the end of `ClickedOn` when the panel ope
 `rig-art.ts`: 56,251 B / 11,878 B gzip -9 before, 56,235 B / 11,864 B gzip -9 after (no new parts or sprites).
 
 Verified in headless Chromium against the dev server (scratchpad `sleep-pant/tools/verify.cjs`, per-rAF sprite log, 3x screenshots): clicking the trigger went `rest`, `surprised` (+0.5 s), `happy` (+0.9 s), `rest` (+1.7 s); `play('Embarrassed')` went `rest`, `embarrassed`, `rest` with the same sit and no pop; `/nope` looped `curiousTilt` mirrored, `curiousTilt`, `thinking` three times in 9 s. `bunx tsc --noEmit` and `bun run check` pass, `bun run doctor` stays at 83 (prompt-input.tsx:39 and carousel.tsx), `/` returns 200. The sleeping pose, nap in-betweens and pant are untouched here: new drawings for them come from QuiverAI.
+
+# Simba in the expanded panel gutter (mock)
+
+Owner: in the expanded (fullscreen) panel Simba disappears, because the trigger steps away and the controller hides him, and the right side of the sheet sits empty. He should sit in the right gutter beside the 720px reading column, with no card, and only on wide screens. Local mock, uncommitted.
+
+| Where | Change | Why |
+| --- | --- | --- |
+| `mascot/gutter.tsx` (new) | `EXPANDED_MASCOT_VARIANT: 'bottom' \| 'top'` (default `'bottom'`). `useGutterSpot({ expanded, open })` is true when the panel is open, expanded and the viewport is at least `720 + 2 × 140 = 1000px` wide (`useMediaQuery`). `GutterMascot` renders a 96px `MascotSprite` on the shared controller, placed absolutely inside the popup. `bottom` sits at `bottom-2 left-[calc(50%+384px)]`, 24px right of the column with his paws level with the send button. `top` sits at `top-16 right-5`, under the header buttons | Same rig and controller as the trigger, and no second state machine |
+| `mascot/hooks.ts` | `away = useTriggerAway(...) && !gutter` | The single controller now hides only when he has no spot at all. In the gutter he keeps his activity (reading while waiting, talking while streaming, the grin on a click) instead of going `hidden` |
+| `panel.tsx` | Renders `<GutterMascot>` as the popup's last child while `useGutterSpot` holds | Inside the popup, so a click on him isn't an outside press that would collapse the modal panel |
+
+Shared controller: `MascotSprite` subscribes to `SimbaController` through `useSyncExternalStore`, so the trigger and gutter copies get the same pose stream. Each `SimbaRig` runs its own `useSpriteFrames` (in-betweens, beats and talking phrases), `useLook` and `useReadingEyes`, so the gutter copy reads and talks without any extra wiring. The trigger copy stays mounted while it's away, at opacity 0 and behind the fullscreen popup. A click on the gutter copy calls `mascot.play(animations.open, { interrupt: true })` through a native click listener. That plays `ClickedOn` (surprised, then the grin) and doesn't toggle the panel. Once it ends he goes back to his activity.
+
+Motion: the gutter copy mounts at `starting:opacity-0` and fades in over 200ms after a 380ms delay (`GROW_MS`), once the expand morph has finished. When the panel collapses or closes, he leaves with the popup. The popup is laid out at docked size on the first frame of the shrink, so the gutter element unmounts and the trigger copy fades back. The headless run never showed more than one large Simba at once. With reduced motion the rig holds still poses and only the opacity fade remains, as with the trigger (globals.css keeps opacity transitions under `prefers-reduced-motion`).
+
+Threshold: he's hidden when the right gutter is under 140px, which means viewports under 1000px. At 1280px the gutter is 280px, so he shows there. 960px is the hidden case below.
+
+Verified in headless Chromium against :3111 with a mocked `/api/chat` stream (scratchpad `expanded-gutter/run.cjs`, per-rAF rig log):
+- Screenshots of both variants in dark and light at 2000x1100, 1600x900, 1280x800 and 1000x800 (shown) and 960x800 (hidden, with the controller `hidden` and only the faded-out trigger copy in the DOM).
+- Expand, read, talk, click, collapse at 1600x900: G fades 0 to 1 from about 340ms to 520ms after the expand click. Then `booksUp2`, `books` (reading) while waiting, `restPant1/2` phrases while streaming, `surprised` then `happy` on the click with the panel still expanded, and on collapse the trigger copy fades back on `rest`.
+- Close from expanded mid-answer: the gutter copy goes with the panel and the trigger copy settles on `rest` with nothing hidden. At most one large Simba was visible at any point.
+- Docked mode is unchanged (screenshot).
+
+`bunx tsc --noEmit` and `bun run check` pass, `bun run doctor` stays at 83 (prompt-input.tsx:39 and carousel.tsx), and `/` returns 200. Evidence is in scratchpad `expanded-gutter/`: `jpg/` holds the screenshots and `compare-bottom-vs-top-1600-dark.jpg`, plus `expand-read-talk-click-collapse.{mp4,gif}` and `close-from-expanded.{mp4,gif}`.
+
+Limits:
+- There is no separate fade-out on collapse or close, because the popup's own shrink and exit take him.
+- The 1000px threshold uses the viewport width, so the page scrollbar makes the real gutter at 1000px about 134px.
+- Before the first message, the empty state's static 64px avatar is also on screen, as it already is next to the docked trigger.
+- The top variant is far from the conversation on wide screens.
+
+Recommendation: `bottom`.
+
+## Follow-up: on the trigger's spot
+
+Owner asked whether he should sit at the full right, like the docked trigger. He does now. `GutterMascot` uses the trigger's own offsets (`right-[calc(max(1rem,env(safe-area-inset-right))-0.5rem)] bottom-[max(1rem,env(safe-area-inset-bottom))]`) and size (88px, not 96px), so expanding swaps the trigger copy for the corner copy in the same box and he doesn't jump. Matching the trigger exactly looked better than a 96px copy re-centred on the same spot. The `top` variant and its const switch are gone: with him in the corner it had no use. The fade is unchanged (380ms delay, 200ms). The 1000px threshold stays: at 1000 his left edge is 58px right of the input row, and he would reach the send button only under about 912px.
+
+Measured in headless Chromium with classic scrollbars on, docked trigger vs expanded corner copy (SVG box, x,y w×h): 2000x1100 `1913,996 68×88` both, 1600x900 `1513,796` both, 1440x900 `1353,796` both, 1280x800 `1193,696` both, 1000x800 `913,696` both, 960x800 hidden. The scroll lock keeps the 11px scrollbar gutter, so the expanded popup is as wide as the docked viewport. He sits in the input band (it starts 8px above his head), below the message list and its scrollbar, which end at the band's top. Clip at 1600: the corner copy fades in at about 570 to 770ms after the expand click, reads, talks, grins on a click without toggling, and on collapse the trigger copy fades back in the same box. At most one Simba was visible at a time. `bunx tsc --noEmit` and `bun run check` pass, and `bun run doctor` stays at 83. Evidence is in scratchpad `expanded-gutter2/`: `jpg/`, `measure.txt` and `expand-read-talk-click-collapse.{mp4,gif}`.
+
+# Testimonials and contributions cards in Simba
+
+Two new json-render components in Simba's chat catalog. As with Project, Post and Experience, the model only picks what to show and the server fills in the content.
+
+| File | Change |
+| --- | --- |
+| `src/lib/ai/chat/catalog.ts` | `Testimonials: { ids }` lists the testimonial ids in its zod description, the way Experience lists company ids. `Contributions: {}` has no props. `PortfolioState` gains `testimonials: Record<id, Testimonial>` and `contributions: Activity[]`, and `statePath` accepts `testimonials` |
+| `src/app/api/chat/utils/tools/render-portfolio.ts` | `buildSpec` is now async. Testimonials resolve by id or by the start of the author's name, keep the model's order, drop duplicates, cap at 3 and report unknown ids in `missing`. A Contributions element makes the tool call `getGitHubContributions()` once. That call is the about page's own fetcher: cached for 24h with `unstable_cache`, and it returns `[]` on failure, so the tool never throws. `shown` reports `testimonial: <title>, by <name>` and either `contributions: N in the past 365 days` or `contributions: unavailable`, so the model never has to guess a count |
+| `src/types/testimonial.ts`, `src/constants/portfolio/testimonials.ts` | Adds an `id` field (`lazare`, `vivek`, `karuppiah`). Nothing renders it, and llms text is unchanged |
+| `src/components/features/testimonial-author.tsx` (new) | The avatar and name line, moved out of the home page's `TestimonialCard` with identical JSX. The home card and the chat card both use it |
+| `src/components/features/contribution-levels.ts` (new) | The about page's `LEVELS` fill classes, moved unchanged as `contributionLevels`. The about graph and the chat graph both use them. It sits in a plain `.ts` module so React Doctor's only-export-components rule stays quiet |
+| `src/components/features/assistant/tools/portfolio-testimonial.tsx` (new) | The home card at chat size, as a `figure` > `blockquote` + `figcaption`: headline, muted quote and author line, no carousel. The quote clamps to 4 lines when docked and on phones, and shows in full when expanded (`wide:`) |
+| `src/components/features/assistant/tools/portfolio-contributions.tsx` (new) | The site's `ContributionGraph` with the same level fills, footer text ("N contributions in the past 365 days.") and `role=figure` / `aria-label`. The calendar is `aria-hidden` and the legend is aria-hidden too, since the visible total is the summary. Docked and phones show the last 20 whole weeks (11px blocks, 277px wide). Expanded shows the full year (10px blocks, 634px wide). The two variants toggle with `wide:hidden` / `hidden wide:flex`. Both show the full year's total. Each day has an SVG `<title>` for a hover tooltip. With empty data the card shows the about page's own text: "The contribution graph is unavailable right now. See it on GitHub." |
+| `src/components/features/assistant/tools/portfolio.tsx` | Adds the `Testimonials` registry entry (a `dashed-stack` of quotes) and the `Contributions` registry entry (reads `/contributions`) |
+| `src/lib/ai/prompts/chat/{tools,directives,examples}.ts` | Covers when to use each one. Testimonials is for "what do people say about him", testimonials and recommendations. Contributions is for "how active", GitHub activity and contributions, and never states a count before `shown` has one. Two new examples |
+| `src/app/(home)/_components/{testimonials,contributions}.tsx` | Now import the shared author line and level classes. The markup and classes on the site's own pages are unchanged |
+
+Verified with the real chat on :3111 (headless Chromium), asking "what do people say about him" and "how active is he on github" in the docked panel at 1280, the expanded panel at 1440 and the phone sheet at 390, in light and dark. Both cards rendered every time. Testimonials showed 3 quotes, with the first quote clamped when docked and every quote in full when expanded. Contributions showed 20 columns docked and on phones and 53 columns expanded, with no horizontal overflow, and the model replied with the total from `shown`. `/` and `/about` were captured for comparison and render as before (diff review: only shared JSX and classes moved). `bunx tsc --noEmit`, `bun run check` and `bun run check:spelling` pass. `bun run doctor` stays at 83 with only prompt-input.tsx:39 and the carousel.tsx items. Evidence is in scratchpad `testimonials-contributions/`.
+
+Limits:
+- The testimonial data has no role field, so cards show the headline, quote, name and avatar. Adding roles would mean changing the data, which this task didn't do.
+- The failed-fetch card was checked by code review only. The cache held live data, and testing failure would have meant changing env and restarting the server.
+- Docked, the quote clamps with no way to expand it in place. The expanded panel shows it in full.
+
+# Newsletter error alert below the box
+
+The newsletter form's email error used to render inside the bordered input box. The box grew, a red ring showed under the input, and a `group-has-[p]:pt-3` hack plus `ml-4 pb-2` on the message kept it in place. The error is now the same soft alert the form uses for server errors, shown below the box.
+
+| File | Change |
+| --- | --- |
+| `src/app/(home)/blog/_components/newsletter-form.tsx` | `FormItem` now wraps the whole row: the sr-only label, then the bordered box (`h-10`, the input and the submit button), then the error. The error is a local `FieldErrorAlert` that reads `useFormField()` and renders `Alert variant='destructive-soft'` with `Icons.warning` and `AlertTitle`, matching the server-error alert, with `id={formMessageId}`. `FormControl` already lists `formMessageId` in `aria-describedby` only while there is an error, so the input points at the rendered alert. The alert has `role='alert'` from `Alert`. The box shows the invalid state with `has-[[aria-invalid=true]]:border-destructive`, plus the destructive ring when focused, using the same colors as `Input` (`destructive/20` ring, and `destructive/50` border with a `destructive/40` ring in dark mode). The inner input gets `aria-invalid:ring-0` so it no longer draws its own red ring. The form gets `noValidate`, as the contact form has: without it the browser's own email check blocked submit and the zod error never showed for input like `abc` |
+
+Verified on :3111 `/blog` in headless Chromium at 1440 and 390, light and dark, at 2x. The box is 40px tall when idle, after an invalid submit and after the email is fixed. After submitting `abc`, the input has `aria-invalid="true"` and an `aria-describedby` that resolves to the `div[role=alert][data-slot=alert]` with the error text. The alert sits 8px below the box, flush with its left edge. After a valid email is typed, the alert unmounts and `aria-describedby` is removed. The shake still plays on the input for each failed submit, and doesn't play with reduced motion. `bunx tsc --noEmit`, `bun run check` and `bun run check:spelling` pass. Evidence is in scratchpad `newsletter-alert/`.
+
+## 2026-10-19 404 Simba stays on the static thinking pose
+The 404 page's Simba no longer loops `CuriousLoop` on a timer: `simba-loop.tsx` became `simba-thinking.tsx`, a static `thinking` pose, and `CuriousLoop` is gone from `mascot/constants.ts`. The owner asked for exactly that ("just keep this"), so the loop is not restored.
