@@ -2,19 +2,17 @@ import { BotIdClient } from 'botid/client'
 import { RootProvider } from 'fumadocs-ui/provider/next'
 import type { Viewport } from 'next'
 import { Caveat, Geist, Geist_Mono } from 'next/font/google'
+import { ThemeProvider } from 'next-themes'
 import type { ReactNode } from 'react'
-import type { Graph } from 'schema-dts'
 import Analytics from '@/components/analytics'
 import { SignInModalProvider } from '@/components/features/auth/sign-in-modal'
 import CustomSearchDialog from '@/components/features/search'
+import { SiteJsonLd } from '@/components/json-ld'
 import { ThemeColorSync } from '@/components/theme-color-sync'
-import { ThemeProvider } from '@/components/theme-provider'
 import { isProduction } from '@/constants'
-import { socials } from '@/constants/navigation'
 import { description as homeDescription, owner, title } from '@/constants/site'
 import { PagesProvider } from '@/contexts/pages'
 import { baseUrl, createMetadata } from '@/lib/metadata'
-import { revealScript } from '@/lib/reveal-script'
 import { getPageEntries } from '@/lib/source'
 import { themeColor } from '@/lib/theme-color'
 import '@/styles/globals.css'
@@ -31,8 +29,6 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
 })
 
-// Only the home footer and the About captions use it, so it isn't preloaded
-// on every page
 const caveat = Caveat({
   preload: false,
   subsets: ['latin'],
@@ -66,39 +62,6 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
-const baseUrlString = baseUrl.toString()
-const socialUrls = socials
-  .map((social) => social.url)
-  .filter((url) => url.startsWith('http'))
-
-// TODO(slopradar): duplicate-type: untyped hand-written JSON-LD graph while schema-dts and src/components/json-ld.tsx already own JSON-LD, move it there as a typed WithContext<Graph> component
-const jsonLd: Graph = {
-  '@context': 'https://schema.org',
-  '@graph': [
-    {
-      '@id': `${baseUrlString}#person`,
-      '@type': 'Person',
-      description: homeDescription,
-      // TODO(slopradar): magic-string: jobTitle and knowsAbout are profile facts typed into the layout, read them from src/constants/portfolio/profile so JSON-LD, resume and llms agree
-      jobTitle: 'Full-stack Developer',
-      knowsAbout: ['Next.js', 'React', 'TypeScript', 'Web Development', 'AI'],
-      name: owner,
-      sameAs: socialUrls,
-      url: baseUrlString,
-    },
-    {
-      '@id': `${baseUrlString}#website`,
-      '@type': 'WebSite',
-      description: homeDescription,
-      name: title,
-      publisher: {
-        '@id': `${baseUrlString}#person`,
-      },
-      url: baseUrlString,
-    },
-  ],
-}
-
 const RootLayout = ({ children }: { children: ReactNode }) => {
   const pages = getPageEntries()
 
@@ -110,17 +73,14 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       suppressHydrationWarning
     >
       <head>
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: our own static code, it has to run before hydration
-          dangerouslySetInnerHTML={{ __html: revealScript }}
-        />
-        <script
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD requires raw script
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
-          }}
-          type='application/ld+json'
-        />
+        <noscript>
+          <style>
+            {
+              '[style*="opacity:0"]{opacity:1!important;transform:none!important}'
+            }
+          </style>
+        </noscript>
+        <SiteJsonLd />
         {isProduction && (
           <BotIdClient
             protect={[
@@ -157,7 +117,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
             </SoundsProvider>
           </ThemeProvider>
         </PagesProvider>
-        {/* Rendered on the server so the env schema (and zod) stays out of the client bundle */}
         <Analytics />
       </body>
     </html>
