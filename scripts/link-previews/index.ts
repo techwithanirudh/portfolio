@@ -21,9 +21,6 @@ interface Mode {
   timeout: number
 }
 
-const isStale = (entry: LinkPreviewEntry) =>
-  Date.now() - new Date(entry.generatedAt).getTime() > maxScreenshotAgeMs
-
 const modes = {
   missing: {
     batchSize: 1,
@@ -35,7 +32,10 @@ const modes = {
   refresh: {
     batchSize: concurrency,
     isPending: (entry) =>
-      !entry || (entry.status !== 'failed' && isStale(entry)),
+      !entry ||
+      (entry.status !== 'failed' &&
+        Date.now() - new Date(entry.generatedAt).getTime() >
+          maxScreenshotAgeMs),
     label: 'missing and stale',
     requiresManifest: false,
     timeout: screenshot.timeout,

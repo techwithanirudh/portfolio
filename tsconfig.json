@@ -30,6 +30,7 @@
     /* Path Aliases */
     "paths": {
       "@/*": ["./src/*"],
+      "@/emails/*": ["./emails/*"],
       "@/public/*": ["./public/*"],
       "fumadocs-mdx:collections/*": ["./.source/*"]
     },

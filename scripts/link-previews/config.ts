@@ -2,15 +2,10 @@ import { z } from 'zod'
 
 export const contentGlobs = [
   'content/blog/**/*.{md,mdx}',
-  'content/work/**/*.{md,mdx}',
+  'content/projects/**/*.{md,mdx}',
 ]
 
-export const previewLinkSourceGlobs = [
-  'src/constants/**/*.{ts,tsx}',
-  'src/app/(home)/colophon/_components/attribution.tsx',
-  'src/app/(home)/uses/_components/coding.tsx',
-  'src/components/layout/footer/links.tsx',
-]
+export const previewLinkSourceGlobs = ['src/constants/**/*.{ts,tsx}']
 
 export const concurrency = 3
 
@@ -64,7 +59,6 @@ export const exclusions = {
   hostnames: ['localhost', 'www.w3.org'],
 }
 
-// TODO(slopradar): duplicate-schema: mirrors the `github` and `website` fields of the `work` collection in source.config.ts, export one shared `links` shape from there (or derive from `WorkPage['data']`) so the two cannot drift
 export const frontmatterLinks = z.object({
   github: z.string().optional().catch(undefined),
   website: z.string().optional().catch(undefined),

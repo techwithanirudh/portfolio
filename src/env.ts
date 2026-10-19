@@ -3,7 +3,8 @@ import { z } from 'zod'
 
 export const env = createEnv({
   client: {
-    NEXT_PUBLIC_BASE_URL: z.url().optional(),
+    NEXT_PUBLIC_BASE_URL:
+      process.env.NODE_ENV === 'production' ? z.url() : z.url().optional(),
     NEXT_PUBLIC_UMAMI_URL: z.url().optional(),
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: z.uuid().optional(),
   },
@@ -21,6 +22,7 @@ export const env = createEnv({
   },
 
   server: {
+    ANALYZE: z.string().optional(),
     BETTER_AUTH_SECRET:
       process.env.NODE_ENV === 'production'
         ? z.string().min(1)
@@ -33,7 +35,6 @@ export const env = createEnv({
     EMAIL_TO: z.email().optional(),
     GITHUB_CLIENT_ID: z.string().min(1),
     GITHUB_CLIENT_SECRET: z.string().min(1),
-    // TODO(slopradar): env default in caller: github-contributions.ts falls back with `||`, put the default here as z.url().default('https://github-contributions-api.jogruber.de') and drop the caller fallback
     GITHUB_CONTRIBUTIONS_API_URL: z.url().optional(),
     GITHUB_TOKEN: z.string().min(1).startsWith('github_pat_').optional(),
     GOOGLE_CLIENT_ID: z.string().min(1),
@@ -42,6 +43,7 @@ export const env = createEnv({
     OPENAI_API_KEY: z.string().min(1).startsWith('sk-proj-'),
     RESEND_API_KEY: z.string().min(1).startsWith('re_').optional(),
     RESEND_AUDIENCE_ID: z.string().min(1).optional(),
+    SOURCE_MAPS: z.string().optional(),
   },
   shared: {
     NODE_ENV: z

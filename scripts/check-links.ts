@@ -7,14 +7,14 @@ import {
 import {
   type BlogPage,
   getPosts,
+  getProjectPages,
   getTags,
-  getWorkPages,
-  type WorkPage,
+  type ProjectPage,
 } from '@/lib/source'
 
 async function checkLinks() {
   const posts = getPosts()
-  const workPages = getWorkPages()
+  const projectPages = getProjectPages()
 
   const scanned = await scanURLs({
     populate: {
@@ -22,7 +22,7 @@ async function checkLinks() {
       '(home)/blog/tags/[tag]': getTags().map((tag) => ({
         value: { tag },
       })),
-      '(home)/projects/[slug]': toParams(workPages),
+      '(home)/projects/[slug]': toParams(projectPages),
     },
   })
 
@@ -32,7 +32,7 @@ async function checkLinks() {
 
   printErrors(
     await validateFiles(
-      [...(await getFiles(workPages)), ...(await getFiles(posts))],
+      [...(await getFiles(projectPages)), ...(await getFiles(posts))],
       {
         checkRelativePaths: 'as-url',
         markdown: {
@@ -47,7 +47,7 @@ async function checkLinks() {
   )
 }
 
-function toParams(pages: BlogPage[] | WorkPage[]) {
+function toParams(pages: BlogPage[] | ProjectPage[]) {
   return pages.map((page) => ({
     hashes: getHeadings(page),
     value: {
@@ -56,7 +56,7 @@ function toParams(pages: BlogPage[] | WorkPage[]) {
   }))
 }
 
-function getHeadings({ data }: BlogPage | WorkPage): string[] {
+function getHeadings({ data }: BlogPage | ProjectPage): string[] {
   const { _exports, toc } = data
   const headings = toc?.map((item) => item.url.slice(1)) ?? []
   const elementIds = _exports.elementIds
@@ -67,7 +67,7 @@ function getHeadings({ data }: BlogPage | WorkPage): string[] {
   return headings
 }
 
-function getFiles(pages: BlogPage[] | WorkPage[]): Promise<FileObject[]> {
+function getFiles(pages: BlogPage[] | ProjectPage[]): Promise<FileObject[]> {
   return Promise.all(
     pages.map(async (page) => ({
       content: await page.data.getText('raw'),

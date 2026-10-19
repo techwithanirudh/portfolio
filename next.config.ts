@@ -2,7 +2,7 @@ import bundleAnalyzer from '@next/bundle-analyzer'
 import { withBotId } from 'botid/next/config'
 import { createMDX } from 'fumadocs-mdx/next'
 import type { NextConfig } from 'next'
-import './src/env'
+import { env } from './src/env'
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: [
@@ -26,8 +26,7 @@ const nextConfig: NextConfig = {
     },
   },
   poweredByHeader: false,
-  // TODO(slopradar): env-rule: `process.env.SOURCE_MAPS` and `process.env.ANALYZE` (below) are read outside src/env.ts and are declared nowhere, add them as optional vars to the env schema (or drop the toggles) and read them from `env`
-  productionBrowserSourceMaps: process.env.SOURCE_MAPS === 'true',
+  productionBrowserSourceMaps: env.SOURCE_MAPS === 'true',
   async redirects() {
     return [
       {
@@ -51,6 +50,16 @@ const nextConfig: NextConfig = {
         permanent: true,
         source: '/work/:path*',
       },
+      {
+        destination: '/stack.md',
+        permanent: true,
+        source: '/skills.md',
+      },
+      {
+        destination: '/blog/rss.xml',
+        permanent: true,
+        source: '/rss.xml',
+      },
     ]
   },
   async rewrites() {
@@ -62,10 +71,6 @@ const nextConfig: NextConfig = {
       {
         destination: '/work.mdx/:path*',
         source: '/projects/:path*.mdx',
-      },
-      {
-        destination: '/blog/rss.xml',
-        source: '/rss.xml',
       },
     ]
   },
@@ -87,15 +92,10 @@ const nextConfig: NextConfig = {
       'motion/react': 'framer-motion',
     },
   },
-  // TODO(slopradar): swallowed-errors: `next build` never type-checks, so only CI's `bun typecheck` catches errors; owner decision, drop this
-  // or keep it and say why in one line
-  typescript: {
-    ignoreBuildErrors: true,
-  },
 }
 
 const bundleAnalyzerPlugin = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: env.ANALYZE === 'true',
 })
 
 const mdxPlugin = createMDX()
