@@ -2,7 +2,11 @@ import Image from 'next/image'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import { PreviewLink } from '@/components/preview-link'
 import { ViewAnimation } from '@/components/view-animation'
-import { formatDuration, formatPeriod } from '@/lib/employment-period'
+import {
+  formatDuration,
+  formatPeriod,
+  periodYear,
+} from '@/lib/employment-period'
 import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 import type { ExperienceItemType } from '@/types/experience'
@@ -25,10 +29,6 @@ const markdownComponents: Components = {
 const rowClassName =
   'grid grid-cols-[40px_minmax(0,1fr)] gap-x-3.5 px-6 wide:grid-cols-[200px_64px_minmax(0,1fr)] wide:gap-x-0'
 
-// TODO(slopradar): duplicate-logic: splits the MM.yyyy / yyyy period format by hand, which lib/employment-period.ts owns (parsePeriodDate); export a periodYear(value) there and use it
-const startYear = (experience: ExperienceItemType) =>
-  experience.positions[0]?.employmentPeriod.start.split('.').at(-1) ?? ''
-
 type TimelineEntry =
   | { experience: ExperienceItemType; kind: 'role' }
   | { kind: 'year'; year: string }
@@ -41,7 +41,8 @@ const toEntries = (
   const entries: TimelineEntry[] = []
   let year: string | undefined
   for (const experience of experiences) {
-    const experienceYear = startYear(experience)
+    const start = experience.positions[0]?.employmentPeriod.start
+    const experienceYear = start ? periodYear(start) : ''
     if (withYears && experienceYear !== year) {
       year = experienceYear
       entries.push({ kind: 'year', year: experienceYear })
@@ -63,10 +64,9 @@ export function ExperienceTimeline({
   return (
     <div
       className={cn(
-        // The rail runs through the node column's center: 24px gutter + 20px on mobile, 24px + 200px + 32px from `wide`.
+        // The rail sits at the node column's center: 24px + 20px, or 24px + 200px + 32px from `wide`
         'relative border-border border-t border-dashed pt-3 pb-2 before:absolute before:inset-y-0 before:left-11 wide:before:left-64 before:w-px before:-translate-x-1/2 before:border-muted-foreground/30 before:border-l before:border-dashed',
-        variant === 'full' &&
-          'pb-16 before:[mask-image:linear-gradient(to_bottom,#000_calc(100%-6rem),transparent)]',
+        variant === 'full' && 'before:mask-fade-bottom pb-16',
         className
       )}
     >
@@ -80,7 +80,6 @@ export function ExperienceTimeline({
             delay={staggerDelay(index)}
             key={`year-${entry.year}`}
           >
-            {/* TODO(slopradar): arbitrary-value: off-scale pixel literals (text-[12.5px], size-[9px], -mt-[7px], text-[17px], text-[13px]) where text-xs, size-2.5, text-base and the spacing scale exist, use the scale or name the odd sizes as theme tokens (x5 in this file) */}
             <p className='col-start-2 wide:col-start-1 row-start-1 font-mono text-[12.5px] text-foreground tracking-wide'>
               {entry.year}
             </p>
@@ -158,7 +157,6 @@ function TimelineRow({
           {variant === 'full' && (
             <span className='block font-mono text-[13px] md:inline'>
               <span className='hidden md:inline'> · </span>
-              {/* TODO(slopradar): fallback-shaping: a missing employmentType silently renders as 'Research', make it required in types/experience or omit the label */}
               {position.employmentType ?? 'Research'}
             </span>
           )}
@@ -167,8 +165,7 @@ function TimelineRow({
         {position.description && (
           <p
             className={cn(
-              // TODO(slopradar): token-rule: max-w-[60ch] restates the typography-body utility (--typography-body-width: 60ch in globals.css) that the pages use, use typography-body
-              'mt-2 max-w-[60ch] text-pretty text-muted-foreground leading-relaxed',
+              'typography-body mt-2 text-pretty text-muted-foreground leading-relaxed',
               variant === 'preview' && 'wide:line-clamp-1'
             )}
           >

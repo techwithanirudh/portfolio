@@ -5,23 +5,17 @@ import { type ReactNode, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { preloadCover } from './cover'
+import { projectTransitionName, projectTransitionShare } from './transition'
 
-// TODO(slopradar): duplicate-type: description/image/slugs/title/url restate ProjectItem in lib/ai/chat/catalog.ts, and work-grid.tsx and render-portfolio.ts each map a WorkPage into it (description ?? '', image ?? null); define the card data once and one toWorkCard(page) mapper
-interface WorkCardProps {
+interface ProjectCardProps {
   description: string
   image?: string | null
   priority?: boolean
   title: string
-  /**
-   * The shared view transition name, left out where the same card can sit
-   * beside the page's own copy (Simba's panel), since two transitions can't
-   * share a name
-   */
+  /** Left out where the card can sit beside the page's own copy, since two transitions can't share a name */
   transitionName?: string
   url: string
 }
-
-const transition = { default: 'none', 'work-card': 'via-blur' } as const
 
 const SharedTransition = ({
   children,
@@ -31,23 +25,23 @@ const SharedTransition = ({
   name: string | undefined
 }) =>
   name ? (
-    <ViewTransition name={name} share={transition}>
+    <ViewTransition name={name} share={projectTransitionShare}>
       {children}
     </ViewTransition>
   ) : (
     children
   )
 
-export const WorkCard = ({
+export const ProjectCard = ({
   title,
   description,
   image,
   priority = false,
   transitionName,
   url,
-}: WorkCardProps) => {
-  const sharedName = (part: string) =>
-    transitionName && `${transitionName}-${part}`
+}: ProjectCardProps) => {
+  const sharedName = (part: Parameters<typeof projectTransitionName>[1]) =>
+    transitionName && projectTransitionName(transitionName, part)
 
   return (
     <Link
@@ -55,7 +49,7 @@ export const WorkCard = ({
       href={url}
       onFocus={() => image && preloadCover(image, title)}
       onPointerEnter={() => image && preloadCover(image, title)}
-      transitionTypes={['work-card']}
+      transitionTypes={['project-card']}
     >
       {image && (
         <SharedTransition name={sharedName('image')}>
@@ -65,8 +59,7 @@ export const WorkCard = ({
             className='relative aspect-video w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 dark:outline-white/10'
             fill
             imageClassName='object-cover'
-            lazy={!priority}
-            // TODO(slopradar): magic-string: sizes assumes two columns from md, but WorkGrid splits at lg by default (columnsFrom), so it over-fetches; take sizes from the caller (or derive it from columnsFrom)
+            loading={priority ? 'eager' : 'lazy'}
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}
           />

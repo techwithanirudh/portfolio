@@ -2,12 +2,11 @@ import { blog } from 'fumadocs-mdx:collections/server'
 import { loader } from 'fumadocs-core/source'
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server'
 
-// TODO(slopradar): unclear-name: `post` is the blog loader and its sibling is `workSource`, so call sites alias it (`post as blogSource` in search-docs.ts), rename to blogSource
-export const post = loader(toFumadocsSource(blog, []), {
+export const blogSource = loader(toFumadocsSource(blog, []), {
   baseUrl: '/blog',
 })
 
-export const { getPage: getPost, getPages: getPosts } = post
+export const { getPage: getPost, getPages: getPosts } = blogSource
 
 export type BlogPage = ReturnType<typeof getPosts>[number]
 

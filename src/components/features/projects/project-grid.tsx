@@ -1,8 +1,8 @@
 import { ViewAnimation } from '@/components/view-animation'
-import type { WorkPage } from '@/lib/source'
+import type { ProjectPage } from '@/lib/source'
 import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
-import { WorkCard } from './work-card'
+import { ProjectCard } from './project-card'
 
 const columns = {
   lg: 'lg:grid-cols-2 lg:dashed-grid-2',
@@ -14,21 +14,21 @@ const filler = {
   md: 'md:block',
 }
 
-interface WorkGridProps {
+interface ProjectGridProps {
   className?: string
   /** Where the grid splits into two columns */
   columnsFrom?: keyof typeof columns
   /** How many leading covers load eagerly */
-  eagerCount?: number
-  works: WorkPage[]
+  priorityCoverCount?: number
+  projects: ProjectPage[]
 }
 
-export const WorkGrid = ({
+export const ProjectGrid = ({
   className,
   columnsFrom = 'lg',
-  eagerCount = 0,
-  works,
-}: WorkGridProps) => (
+  priorityCoverCount = 0,
+  projects,
+}: ProjectGridProps) => (
   <div
     className={cn(
       'dashed-grid grid grid-cols-1 text-left',
@@ -36,19 +36,19 @@ export const WorkGrid = ({
       className
     )}
   >
-    {works.map((work, index) => (
-      <ViewAnimation delay={staggerDelay(index)} key={work.url}>
-        <WorkCard
-          description={work.data.description ?? ''}
-          image={work.data.image ?? null}
-          priority={index < eagerCount}
-          title={work.data.title}
-          transitionName={work.slugs.join('/')}
-          url={work.url}
+    {projects.map((project, index) => (
+      <ViewAnimation delay={staggerDelay(index)} key={project.url}>
+        <ProjectCard
+          description={project.data.description ?? ''}
+          image={project.data.image ?? null}
+          priority={index < priorityCoverCount}
+          title={project.data.title}
+          transitionName={project.slugs.join('/')}
+          url={project.url}
         />
       </ViewAnimation>
     ))}
-    {works.length % 2 === 1 && (
+    {projects.length % 2 === 1 && (
       <div
         aria-hidden
         className={cn('hidden bg-dashed', filler[columnsFrom])}

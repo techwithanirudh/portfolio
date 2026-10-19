@@ -5,24 +5,23 @@ import { type ReactElement, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
+import { PROJECT_COVER_SIZES } from '@/components/features/projects/cover'
+import { PreviewButton } from '@/components/features/projects/preview-button'
+import {
+  projectTransitionName,
+  projectTransitionShare,
+} from '@/components/features/projects/transition'
 import { TOCMinimap, TOCPopover } from '@/components/features/toc'
-import { WORK_COVER_SIZES } from '@/components/features/work/cover'
-import { PreviewButton } from '@/components/features/work/preview-button'
 import { Icons } from '@/components/icons/icons'
-import { WorkJsonLd } from '@/components/json-ld'
+import { ProjectJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
-import { SectionBody } from '@/components/layout/sections/body'
 import { Prose } from '@/components/prose'
 import { ViewAnimation } from '@/components/view-animation'
-import { description as homeDescription } from '@/constants/site'
-import { createMetadata, getWorkPageImage } from '@/lib/metadata'
-import { getWork, getWorkPages, type WorkPage } from '@/lib/source'
+import { createArticleMetadata, getProjectPageImage } from '@/lib/metadata'
+import { getProject, getProjectPages, type ProjectPage } from '@/lib/source'
 import { cn } from '@/lib/utils'
 
-// TODO(slopradar): duplicate-logic: the share map and the `${slug}-image/-title/-description` names restate the view transition protocol in components/features/work/work-card.tsx, export the map and a name helper from features/work and use them on both sides
-const transition = { default: 'none', 'work-card': 'via-blur' } as const
-
-function Header(props: { page: WorkPage }) {
+function Header(props: { page: ProjectPage }) {
   const { page } = props
   const links: { href: string; label: string; icon: ReactElement }[] = []
 
@@ -52,34 +51,33 @@ function Header(props: { page: WorkPage }) {
       >
         {page.data.image && (
           <ViewTransition
-            name={`${page.slugs.join('/')}-image`}
-            share={transition}
+            name={projectTransitionName(page.slugs.join('/'), 'image')}
+            share={projectTransitionShare}
           >
             <BlurImage
-              // Decorative: the h1 beside it already says what it is
               alt=''
               blur={false}
               className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
               fill
               imageClassName='object-cover'
-              lazy={false}
-              sizes={WORK_COVER_SIZES}
+              loading='eager'
+              sizes={PROJECT_COVER_SIZES}
               src={page.data.image}
             />
           </ViewTransition>
         )}
         <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
           <ViewTransition
-            name={`${page.slugs.join('/')}-title`}
-            share={transition}
+            name={projectTransitionName(page.slugs.join('/'), 'title')}
+            share={projectTransitionShare}
           >
             <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
               {page.data.title}
             </h1>
           </ViewTransition>
           <ViewTransition
-            name={`${page.slugs.join('/')}-description`}
-            share={transition}
+            name={projectTransitionName(page.slugs.join('/'), 'description')}
+            share={projectTransitionShare}
           >
             <p className='typography-body mx-auto text-pretty'>
               {page.data.description}
@@ -109,7 +107,7 @@ export default async function Page(props: {
   params: Promise<{ slug: string }>
 }) {
   const params = await props.params
-  const page = getWork([params.slug])
+  const page = getProject([params.slug])
 
   if (!page) {
     notFound()
@@ -120,7 +118,7 @@ export default async function Page(props: {
     <TOCProvider toc={toc}>
       <Header page={page} />
 
-      <SectionBody className='flex'>
+      <Section className='flex' fill>
         <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col'>
           <TOCPopover items={toc} />
@@ -128,8 +126,8 @@ export default async function Page(props: {
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </Prose>
         </article>
-      </SectionBody>
-      <WorkJsonLd page={page} />
+      </Section>
+      <ProjectJsonLd page={page} />
     </TOCProvider>
   )
 }
@@ -138,35 +136,17 @@ export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const params = await props.params
-  const page = getWork([params.slug])
+  const page = getProject([params.slug])
 
   if (!page) {
     notFound()
   }
 
-  const title = page.data.title
-  const description = page.data.description ?? homeDescription
-  const image = getWorkPageImage(page)
-
-  return createMetadata({
-    alternates: {
-      canonical: page.url,
-    },
-    description,
-    openGraph: {
-      images: image.url,
-      modifiedTime: (page.data.lastModified ?? page.data.date).toISOString(),
-      publishedTime: page.data.date.toISOString(),
-      type: 'article',
-      url: page.url,
-    },
-    title,
-    twitter: {
-      images: image.url,
-    },
-  })
+  return createArticleMetadata(page, getProjectPageImage(page))
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return getWorkPages().flatMap(({ slugs: [slug] }) => (slug ? [{ slug }] : []))
+  return getProjectPages().flatMap(({ slugs: [slug] }) =>
+    slug ? [{ slug }] : []
+  )
 }

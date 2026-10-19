@@ -31,8 +31,7 @@ export function ExperienceRail({ className }: { className?: string }) {
       ref={ref}
     >
       <m.div
-        // TODO(slopradar): duplication: the bottom-fade mask-image is repeated in experience-timeline.tsx, name it once in globals.css
-        className='absolute inset-y-0 left-0 w-px origin-top -translate-x-1/2 bg-linear-to-b from-primary/10 to-primary [mask-image:linear-gradient(to_bottom,#000_calc(100%-6rem),transparent)]'
+        className='mask-fade-bottom absolute inset-y-0 left-0 w-px origin-top -translate-x-1/2 bg-linear-to-b from-primary/10 to-primary'
         style={{ scaleY: progress }}
       />
     </div>

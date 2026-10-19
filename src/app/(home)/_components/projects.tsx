@@ -1,21 +1,28 @@
-import { WorkGrid } from '@/components/features/work/work-grid'
+import { ProjectGrid } from '@/components/features/projects/project-grid'
 import { ListSection } from '@/components/layout/sections/list-section'
 import { pages } from '@/constants/pages'
-import type { WorkPage } from '@/lib/source'
+import type { ProjectPage } from '@/lib/source'
 import { staggerDelay } from '@/lib/stagger'
 
-export default function WorkPreview({ works }: { works: WorkPage[] }) {
+export default function ProjectsPreview({
+  projects,
+}: {
+  projects: ProjectPage[]
+}) {
   return (
     <ListSection
       description={pages.projects.description}
       more={{
-        delay: staggerDelay(works.length),
+        delay: staggerDelay(projects.length),
         href: pages.projects.path,
         label: 'View all projects',
       }}
       title={pages.projects.title}
     >
-      <WorkGrid className='divider-top-dashed' works={works} />
+      <ProjectGrid
+        className='w-full border-t border-dashed'
+        projects={projects}
+      />
     </ListSection>
   )
 }

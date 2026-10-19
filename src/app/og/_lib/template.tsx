@@ -17,10 +17,6 @@ const colors = {
   white: '#ffffff',
 }
 
-// Geist comes from getOgFonts; the renderer's bundled Geist Sans covers
-// anything it doesn't
-const fontFamily = "Geist, 'Geist Sans'"
-
 const rail = { bottom: 566, left: 64, right: 1136, top: 64 }
 
 export const ogCoverSize = {
@@ -138,7 +134,9 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
         backgroundColor: colors.page,
         color: colors.foreground,
         display: 'flex',
-        fontFamily,
+        // Geist comes from getOgFonts; the renderer's bundled Geist Sans covers
+        // anything it doesn't
+        fontFamily: "Geist, 'Geist Sans'",
         height: '100%',
         position: 'relative',
         width: '100%',
@@ -170,9 +168,6 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
   )
 }
 
-const BALANCE_MIN_TITLE_SIZE = 68
-const closingMarks = new Set(['.', '!', '?', '…'])
-
 interface TitleProps {
   maxWidth?: number
   size: number
@@ -182,7 +177,7 @@ interface TitleProps {
 function Title({ maxWidth, size, title }: TitleProps): ReactElement {
   const text = title.trimEnd()
   const last = text.at(-1) ?? ''
-  const [body, mark] = closingMarks.has(last)
+  const [body, mark] = ['.', '!', '?', '…'].includes(last)
     ? [text.slice(0, -1), last]
     : [text, '.']
 
@@ -196,7 +191,7 @@ function Title({ maxWidth, size, title }: TitleProps): ReactElement {
         lineClamp: 4,
         lineHeight: 1.02,
         maxWidth,
-        textWrap: size >= BALANCE_MIN_TITLE_SIZE ? 'balance' : 'pretty',
+        textWrap: size >= 68 ? 'balance' : 'pretty',
       }}
     >
       {body}
@@ -243,15 +238,8 @@ const postTitleSizes: readonly TitleSizeStep[] = [
   { maxChars: 140, size: 48 },
 ]
 
-// TODO(slopradar): dead-parameter: both callers pass 44 as `smallest`, drop the parameter and name the size once (like BALANCE_MIN_TITLE_SIZE)
-function getTitleSize(
-  title: string,
-  steps: readonly TitleSizeStep[],
-  smallest: number
-): number {
-  return (
-    steps.find(({ maxChars }) => title.length <= maxChars)?.size ?? smallest
-  )
+function getTitleSize(title: string, steps: readonly TitleSizeStep[]): number {
+  return steps.find(({ maxChars }) => title.length <= maxChars)?.size ?? 44
 }
 
 interface PageImageProps {
@@ -265,7 +253,7 @@ export function PageImage({
   description,
   title,
 }: PageImageProps): ReactElement {
-  const size = getTitleSize(title, pageTitleSizes, 44)
+  const size = getTitleSize(title, pageTitleSizes)
   return (
     <OgFrame coverSrc={coverSrc} gap={18}>
       <Title
@@ -291,7 +279,7 @@ export function PostImage({
   portraitSrc,
   title,
 }: PostImageProps): ReactElement {
-  const size = getTitleSize(title, postTitleSizes, 44)
+  const size = getTitleSize(title, postTitleSizes)
   return (
     <OgFrame coverSrc={coverSrc} gap={28}>
       <Title

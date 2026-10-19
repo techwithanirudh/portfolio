@@ -1,3 +1,5 @@
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
 import { transformerRemoveNotationEscape } from '@shikijs/transformers'
 import {
   defineCollections,
@@ -27,8 +29,30 @@ export const blog = defineCollections({
   type: 'doc',
 })
 
-export const work = defineCollections({
-  dir: 'content/work',
+export const projects = defineCollections({
+  dir: 'content/projects',
+  // The newest commit that changed the file's lines, followed across renames,
+  // so moving content/work to content/projects (zero lines changed) doesn't
+  // reset every project's last updated date the way the plugin's git log would
+  lastModified: async (file) => {
+    const { stdout } = await promisify(execFile)('git', [
+      'log',
+      '--follow',
+      '--format=%aI',
+      '--numstat',
+      '--',
+      file,
+    ]).catch(() => ({ stdout: '' }))
+    let date: string | undefined
+    for (const line of stdout.split('\n')) {
+      const [added, deleted] = line.split('\t')
+      if (deleted === undefined) {
+        date = line || date
+      } else if (date && (added !== '0' || deleted !== '0')) {
+        return new Date(date)
+      }
+    }
+  },
   postprocess: {
     extractLinkReferences: true,
     includeProcessedMarkdown: true,
@@ -38,7 +62,7 @@ export const work = defineCollections({
     github: z.url().optional(),
     image: z.string().optional(),
     /**
-     * Pins a project to the front of the work list, lowest first. Anything
+     * Pins a project to the front of the project list, lowest first. Anything
      * without it falls in behind, newest first.
      */
     order: z.number().optional(),

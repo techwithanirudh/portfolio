@@ -2,9 +2,9 @@ import { ImageResponse } from '@takumi-rs/image-response'
 import { ogCoverSize, ogImageSize, PostImage } from '@/app/og/_lib/template'
 import { getPageImage, type OgCollection } from '@/lib/metadata'
 import { getCoverDataUrl, getOgFonts, getPortraitDataUrl } from '@/lib/og'
-import type { BlogPage, WorkPage } from '@/lib/source'
+import type { BlogPage, ProjectPage } from '@/lib/source'
 
-type OgPage = BlogPage | WorkPage
+type OgPage = BlogPage | ProjectPage
 
 interface OgRouteOptions<Page extends OgPage> {
   collection: OgCollection

@@ -1,22 +1,20 @@
-import { work } from 'fumadocs-mdx:collections/server'
+import { projects } from 'fumadocs-mdx:collections/server'
 import { loader } from 'fumadocs-core/source'
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server'
 
-export const workSource = loader(toFumadocsSource(work, []), {
+export const projectSource = loader(toFumadocsSource(projects, []), {
   baseUrl: '/projects',
 })
 
-export const { getPage: getWork, getPages: getWorkPages } = workSource
+export const { getPage: getProject, getPages: getProjectPages } = projectSource
 
-export type WorkPage = ReturnType<typeof getWorkPages>[number]
-
-const workPages = getWorkPages()
+export type ProjectPage = ReturnType<typeof getProjectPages>[number]
 
 /**
  * Pinned projects lead, in `order`; everything else follows, newest first.
  */
-export const getSortedWork = () =>
-  workPages.toSorted((a, b) => {
+export const getSortedProjects = () =>
+  getProjectPages().toSorted((a, b) => {
     const aOrder = a.data.order
     const bOrder = b.data.order
 

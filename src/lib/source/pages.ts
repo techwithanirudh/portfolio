@@ -1,5 +1,5 @@
 import { type BlogPage, getPosts } from './blog'
-import { getWorkPages, type WorkPage } from './work'
+import { getProjectPages, type ProjectPage } from './projects'
 
 export interface PageEntry {
   description?: string
@@ -10,7 +10,7 @@ export interface PageEntry {
 
 const toPageEntry =
   (tag: PageEntry['tag']) =>
-  (page: BlogPage | WorkPage): PageEntry => ({
+  (page: BlogPage | ProjectPage): PageEntry => ({
     description: page.data.description,
     tag,
     title: page.data.title,
@@ -19,5 +19,5 @@ const toPageEntry =
 
 export const getPageEntries = (): PageEntry[] => [
   ...getPosts().map(toPageEntry('blog')),
-  ...getWorkPages().map(toPageEntry('projects')),
+  ...getProjectPages().map(toPageEntry('projects')),
 ]

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { WorkGrid } from '@/components/features/work/work-grid'
+import { ProjectGrid } from '@/components/features/projects/project-grid'
 import { CollectionPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { HeroSection } from '@/components/layout/sections/hero'
@@ -8,16 +7,11 @@ import { Wrapper } from '@/components/layout/wrapper'
 import { NumberedPagination } from '@/components/numbered-pagination'
 import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { ViewAnimation } from '@/components/view-animation'
-import { worksPerPage } from '@/constants/config'
+import { projectsPerPage } from '@/constants/config'
 import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
-import { getPageHref, parsePageParam } from '@/lib/pagination'
-import { getSortedWork } from '@/lib/source'
-
-const EAGER_COVERS = 2
-
-const totalWorks = getSortedWork().length
-const pageCount = Math.ceil(totalWorks / worksPerPage)
+import { getPageHref, paginate } from '@/lib/pagination'
+import { getSortedProjects } from '@/lib/source'
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
@@ -25,16 +19,11 @@ interface Props {
 
 export default async function Page(props: Props) {
   const searchParams = await props.searchParams
-  const pageIndex = parsePageParam(searchParams.page) - 1
-
-  if (pageIndex < 0 || pageIndex >= pageCount) {
-    notFound()
-  }
-
-  const startIndex = pageIndex * worksPerPage
-  const endIndex = startIndex + worksPerPage
-  const work = getSortedWork().slice(startIndex, endIndex)
-  const currentPage = pageIndex + 1
+  const {
+    currentPage,
+    items: projects,
+    pageCount,
+  } = paginate(getSortedProjects(), projectsPerPage, searchParams.page)
   const isFirstPage = currentPage === 1
   const canonicalUrl = getPageHref(pages.projects.path, currentPage)
   const jsonLdTitle = isFirstPage
@@ -58,7 +47,11 @@ export default async function Page(props: Props) {
             tag='projects'
           />
         </ViewAnimation>
-        <WorkGrid columnsFrom='md' eagerCount={EAGER_COVERS} works={work} />
+        <ProjectGrid
+          columnsFrom='md'
+          priorityCoverCount={2}
+          projects={projects}
+        />
       </Section>
       {pageCount > 1 && (
         <Section className='bg-dashed'>
@@ -81,17 +74,17 @@ export default async function Page(props: Props) {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const searchParams = await props.searchParams
 
-  const pageIndex = parsePageParam(searchParams.page)
+  const { currentPage } = paginate(
+    getSortedProjects(),
+    projectsPerPage,
+    searchParams.page
+  )
 
-  if (pageIndex < 1 || pageIndex > pageCount) {
-    notFound()
-  }
-
-  const isFirstPage = pageIndex === 1
+  const isFirstPage = currentPage === 1
   const pageTitle = isFirstPage
     ? pages.projects.title
-    : `${pages.projects.title}, page ${pageIndex}`
-  const canonicalUrl = getPageHref(pages.projects.path, pageIndex)
+    : `${pages.projects.title}, page ${currentPage}`
+  const canonicalUrl = getPageHref(pages.projects.path, currentPage)
 
   return createMetadata({
     alternates: {
