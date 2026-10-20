@@ -170,16 +170,48 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
 
 interface TitleProps {
   maxWidth?: number
+  /** Sits after the first word, like the portrait in the page's own heading */
+  portraitSrc?: string | null
   size: number
   title: string
 }
 
-function Title({ maxWidth, size, title }: TitleProps): ReactElement {
+function Title({
+  maxWidth,
+  portraitSrc,
+  size,
+  title,
+}: TitleProps): ReactElement {
   const text = title.trimEnd()
   const last = text.at(-1) ?? ''
   const [body, mark] = ['.', '!', '?', '…'].includes(last)
     ? [text.slice(0, -1), last]
     : [text, '.']
+  const [first, ...rest] = body.split(' ')
+
+  if (portraitSrc && rest.length > 0) {
+    return (
+      <div
+        style={{
+          alignItems: 'center',
+          display: 'flex',
+          fontSize: size,
+          fontWeight: 500,
+          gap: size * 0.22,
+          letterSpacing: '-0.045em',
+          lineHeight: 1.02,
+          whiteSpace: 'nowrap',
+        }}
+      >
+        <span>{first}</span>
+        <PortraitChip size={Math.round(size * 0.82)} src={portraitSrc} />
+        <span>
+          {rest.join(' ')}
+          <span style={{ color: colors.primary }}>{mark}</span>
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div
@@ -245,12 +277,14 @@ function getTitleSize(title: string, steps: readonly TitleSizeStep[]): number {
 interface PageImageProps {
   coverSrc: string
   description?: string
+  portraitSrc?: string | null
   title: string
 }
 
 export function PageImage({
   coverSrc,
   description,
+  portraitSrc,
   title,
 }: PageImageProps): ReactElement {
   const size = getTitleSize(title, pageTitleSizes)
@@ -258,6 +292,7 @@ export function PageImage({
     <OgFrame coverSrc={coverSrc} gap={18}>
       <Title
         maxWidth={size >= 72 ? 860 : undefined}
+        portraitSrc={portraitSrc}
         size={size}
         title={title}
       />
@@ -311,17 +346,19 @@ export function PostImage({
 interface BannerImageProps {
   coverSrc: string
   description: string
+  portraitSrc?: string | null
   title: string
 }
 
 export function BannerImage({
   coverSrc,
   description,
+  portraitSrc,
   title,
 }: BannerImageProps): ReactElement {
   return (
     <OgFrame coverSrc={coverSrc} gap={18}>
-      <Title size={96} title={title} />
+      <Title portraitSrc={portraitSrc} size={96} title={title} />
       <Description>{description}</Description>
     </OgFrame>
   )
