@@ -4,19 +4,36 @@ description: A SaaS landing page template with a blog.
 date: 2026-01-10
 order: 10
 website: https://saas-landing.techwithanirudh.com/
+status: Template
+platform: Web
 github: https://github.com/techwithanirudh/shadcn-saas-landing
 image: /images/projects/shadcn_saas_landing/cover.png
 tags: ['Next.js', 'Fumadocs', 'Drizzle', 'shadcn/ui', 'TypeScript']
 ---
 
-Shadcn SaaS Landing is a template for a SaaS marketing site with a blog. It keeps the product site and its content in one project.
+A SaaS marketing site in one project: landing page, pricing, blog, newsletter and a contact form. It's branded as a made-up product called SaasCN, and the README names [next-forge](https://next-forge.com/) and RunFunRun as inspiration.
+
+It's a GitHub template.
 
 ## How it works
 
-The marketing site uses shadcn/ui and Tailwind. The blog uses Fumadocs and searchable MDX content. Drizzle and Better Auth handle app data and sign-in. React Email and Resend send the emails.
+Each landing section is its own component. Pricing plans and both billing periods live in one data file that the plan cards and the comparison table read.
 
-## Stack
+<Screens>
+  <Screen frame='wide' src='/images/projects/shadcn_saas_landing/hero-dark.webp' alt='The SaasCN home page in dark mode, with the headline The Future of Business Starts Here, Get in touch and Sign up buttons, and a row of customer logos below' caption='The home page in dark mode.' />
+  <Screen frame='wide' src='/images/projects/shadcn_saas_landing/pricing-yearly-dark.webp' alt='The Plans and Pricing page with the Yearly tab selected, showing Starter at Free, Pro at $39 and Business at $89 per user, and Enterprise at Custom' caption='Pricing, yearly tab.' />
+  <Screen frame='wide' src='/images/projects/shadcn_saas_landing/compare-plans-light.webp' alt='The Compare Plans table in light mode, listing team members, workflows, API access, SSO, support SLA and integrations for each plan' caption='The plan comparison table.' />
+</Screens>
 
-- Next.js 16, shadcn/ui, Tailwind, motion.
-- Fumadocs MDX, Shiki, and type tables.
-- Drizzle ORM, Better Auth, React Email and Resend.
+Blog posts are MDX with a date, author, tags and cover image. They feed the index, tag pages, RSS, the sitemap, a per-post Open Graph image and [Fumadocs](https://fumadocs.dev/) search. Comments use Fuma Comment with Better Auth and [Drizzle](https://orm.drizzle.team/), and the tables carry a `blog_` prefix so the template can share a database.
+
+<Screens>
+  <Screen frame='wide' src='/images/projects/shadcn_saas_landing/blog-index-dark.webp' alt='The blog index titled All 3 Posts (1-3), listing three posts with gradient cover images, author and date' caption='The blog index.' />
+  <Screen frame='wide' src='/images/projects/shadcn_saas_landing/blog-post-dark.webp' alt='A blog post titled Transform Your Business with Automated Workflows, with tags, a collapsible table of contents and a sidebar showing author, created and updated dates and a Share Post button' caption='A post with tags and a table of contents.' />
+</Screens>
+
+The contact and newsletter forms are [next-safe-action](https://next-safe-action.dev/) server actions that send through [Resend](https://resend.com/). A repeat newsletter sign-up is marked as subscribed again instead of creating a duplicate.
+
+<Screens columns={1}>
+  <Screen frame='wide' src='/images/projects/shadcn_saas_landing/search-dark.webp' alt='The search dialog with the query workflow, listing matching headings and paragraphs from two blog posts' caption='Search matches headings and paragraphs inside posts.' />
+</Screens>

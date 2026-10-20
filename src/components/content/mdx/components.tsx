@@ -16,6 +16,7 @@ import { GithubRepo } from './github-repo'
 import { Heading } from './heading'
 import { LinkPreviewAnchor } from './link-preview'
 import { Mermaid } from './mermaid'
+import { Screen, Screens } from './screens'
 
 export const mdxComponents: MDXComponents = {
   ...defaultMdxComponents,
@@ -42,6 +43,8 @@ export const mdxComponents: MDXComponents = {
   // next/image props (a static import or a sized URL)
   img: (props) => <FramedImage {...(props as FramedImageProps)} />,
   Mermaid,
+  Screen,
+  Screens,
   Step,
   Steps,
   Tab,

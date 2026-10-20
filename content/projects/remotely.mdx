@@ -4,19 +4,34 @@ description: Use a TV remote as a mouse for a Mac connected to a TV.
 date: 2026-07-30
 order: 6
 github: https://github.com/techwithanirudh/remotely
+status: Live
+platform: macOS
 image: /images/projects/remotely/cover.png
 tags: ['Swift', 'SwiftUI', 'macOS', 'HDMI-CEC', 'Accessibility']
 ---
 
-Remotely lets you use a TV remote to control the pointer on a Mac connected to a TV. The arrows move the cursor, the centre button clicks, and you don't need to buy or pair anything else.
+Remotely turns a TV remote into the mouse for a Mac connected to a TV. A TV with HDMI-CEC already passes its remote's presses to whatever is on its HDMI input, and Remotely turns them into pointer movement, clicks, scrolling and shortcuts. It's a menu bar app for macOS 15 and later. It's ad-hoc signed, not notarized, so the first launch needs right-click and Open.
 
 ## How it works
 
-Tapping an arrow moves the pointer a little. Holding it moves faster. Press Back twice to switch the arrows to scrolling. You can also rebind twenty actions, including keyboard shortcuts. Everything runs on the Mac with no account or network connection.
+Arrows move the pointer, and holding speeds it up. Centre clicks, twice double-clicks and a hold right-clicks. Back twice switches the arrows to scrolling. Setup is an HDMI cable, HDMI-CEC switched on in the TV settings and the Accessibility permission, and the first run walks you through all three.
 
-## Stack
+<Screens>
+  <Screen frame='wide' src='/images/projects/remotely/welcome.webp' alt='The first onboarding step, reading Your TV remote becomes a pointer for this Mac, with hints for Hold to move, Center to click and Back twice to scroll' caption='Onboarding goes one step at a time.' />
+  <Screen frame='wide' src='/images/projects/remotely/connect-step.webp' alt='The Connect over HDMI step with the display brand set to Samsung and the menu path to Anynet+ (HDMI-CEC)' caption='It shows where your TV brand hides HDMI-CEC.' />
+</Screens>
 
-- Swift and SwiftUI, targeting macOS 15+.
-- `RemotelyKit` core with no UI dependency, plus a menu bar app target.
-- `CGEvent` input synthesis and Accessibility permissions.
-- Swift Package Manager, with tests as a plain executable target.
+Apple's CoreRC never delivered a single press, even though the daemon received 204 button events in one test. So Remotely runs `log stream` against `corercd` and reads the raw CEC button codes out of each line. Those log lines aren't a public interface. A later rewrite back to CoreRC broke remote detection completely.
+
+Back twice scrolls, so a single Back has to wait for a second press before it acts. I cut that wait from 380ms to 300ms.
+
+<Screens>
+  <Screen frame='wide' src='/images/projects/remotely/practice-move.webp' alt='The practice step titled Hold an arrow to move the pointer, with a target to move the pointer onto' caption='Practice only counts input from the remote.' />
+  <Screen frame='wide' src='/images/projects/remotely/diagnostics-log.webp' alt='The Diagnostics pane with Remote signal awaiting input, Accessibility granted and an event log naming the connected display' caption='Diagnostics shows whether the remote is heard.' />
+</Screens>
+
+Updates come through [Sparkle](https://sparkle-project.org/), with a stable and a beta channel.
+
+<Screens columns={1}>
+  <Screen frame='wide' src='/images/projects/remotely/about-updates.webp' alt="The About pane's update settings for version 0.7.5, a release channel picker set to Stable, and a button to replay onboarding" caption='About holds the update channel and a replay of onboarding.' />
+</Screens>

@@ -4,18 +4,29 @@ description: A pixel-art platformer with levels, hazards, and coins.
 date: 2021-08-10
 order: 18
 website: https://maskio.techwithanirudh.com/
+status: Live
+platform: Browser game
 github: https://github.com/techwithanirudh/Maskio
 image: /images/projects/maskio/cover.jpg
 tags: ['KaboomJS', 'Game Development', 'Node.js']
 ---
 
-Maskio is a pixel-art platformer. Jump across platforms, avoid spikes, and collect coins across multiple worlds.
+Maskio is a small pixel-art platformer from the pandemic years. A masked hero jumps across platforms, dodges viruses and picks up a vaccine. It started from Replit's [Kaboom](https://kaboomjs.com/) template and still plays in the browser. It's open source under the AGPL-3.0.
 
 ## How it works
 
-KaboomJS scenes define the levels and sprite collisions for platforms, hazards, and coins. You play with the keyboard on desktop and with touch controls on mobile. esbuild builds it, and Express serves it in development and production.
+Each world is a text grid where every character is a tile. `=` is grass, `^` a virus, `+` the portal to the next world. Blocks you hit from below drop a coin, an apple that doubles your size for six seconds, or the vaccine. You get 20 seconds per world.
 
-## Stack
+<Screens>
+  <Screen frame='wide' src='/images/projects/maskio/title-screen.webp' alt='The Maskio start screen, with orange pixel text reading Corona Virus Superhero Game above a boy wearing a face mask' caption='The start screen, titled Corona Virus Superhero Game.' />
+  <Screen frame='wide' src='/images/projects/maskio/world-2.webp' alt='The second world, with sand ground, a wall of snow blocks on the left, a row of jump blocks and two red viruses' caption='World 2 of 12, on sand tiles.' />
+</Screens>
 
-- KaboomJS, Node.js, Express.
-- esbuild, nodemon.
+Landing on a virus mid-jump kills it, but one that walks into you ends the game. With the vaccine, space fires syringes.
+
+<Screens>
+  <Screen frame='wide' src='/images/projects/maskio/vaccine-shot.webp' alt='Maskio standing on grass blocks while a syringe flies toward a red virus' caption='With the vaccine picked up, space fires a syringe.' />
+  <Screen frame='wide' src='/images/projects/maskio/game-over.webp' alt='The Game Over screen showing the time left, a coin count of zero and the controls' caption='Game over after walking into a virus.' />
+</Screens>
+
+On a phone the hero runs right by itself. One tap jumps, two shoot and three stop the run.

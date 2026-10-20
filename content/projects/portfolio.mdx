@@ -4,19 +4,38 @@ description: My personal site with a blog, projects, guestbook, and AI chat.
 date: 2026-01-12
 order: 11
 website: https://www.imanirudh.com
+status: Live
+platform: Web
 github: https://github.com/techwithanirudh/portfolio
 image: /images/projects/portfolio/cover.png
+imageCrop:
+  x: 25
+  y: 40
+  zoom: 1.8
 tags: ['Next.js', 'Fumadocs', 'Drizzle', 'MDX', 'TypeScript']
 ---
 
-This is my personal site, where I write, share my work, and collect guestbook notes.
+This is my personal site, with a blog, my projects, a guestbook and an assistant named Simba. This page describes what's live on the main branch.
 
 ## How it works
 
-Blog posts and project pages are MDX files that Fumadocs loads and indexes for search. Drizzle and Better Auth handle the guestbook and comments. The AI chat uses the site's content to answer questions about my work. The site also generates social images and an RSS feed, and has a contact form that sends through Resend.
+Blog posts and project pages are MDX files that [Fumadocs](https://fumadocs.dev/) loads and indexes for search. [Drizzle](https://orm.drizzle.team/) and [Better Auth](https://www.better-auth.com/) handle the guestbook and comments. Entries can carry a drawn signature, and a model checks the message and the signature before saving. If that check fails for any reason, the entry is turned away.
 
-## Stack
+<Screens>
+  <Screen frame='wide' src='/images/projects/portfolio/home-hero.webp' alt='The home page hero in dark mode, with the name Anirudh Sriram, a short intro, a Browse projects button and a grain gradient on the right' caption='The home page.' />
+  <Screen frame='wide' src='/images/projects/portfolio/projects-list.webp' alt='The Projects page in light mode with a search field and cards for Depensa and the Mastra Slack Agent Template' caption='The project list is built from the MDX files.' />
+</Screens>
 
-- Next.js, TypeScript, Tailwind, Base UI.
-- Fumadocs MDX and Shiki, Zod validators.
-- Drizzle ORM, Better Auth, React Email and Resend.
+Simba is named after my dog. Before each reply he gets a plain text index of the site: my profile, the page list, every post and project. He can search the content, read a page, open one for you or show the contact form already filled in. The server checks every page he opens against the real page list and refuses off-site links. The same content is served to other models through `/llms.txt`, `/llms-full.txt` and a raw `.mdx` route for each post and project.
+
+<Screens>
+  <Screen fit='contain' src='/images/projects/portfolio/simba-panel.webp' alt='The Ask Simba panel open over the home page, with Simba the dog and a greeting saying he can answer questions about Anirudh, his work or the site' caption='Simba opens as a panel on any page.' />
+  <Screen frame='wide' fit='contain' src='/images/projects/portfolio/command-menu.webp' alt='The search menu with the query mastra, showing the Mastra Slack Agent Template project and a matching line from its page' caption='Search goes down to the matching line.' />
+</Screens>
+
+Diagrams in posts are drawn on the server, so nothing shifts when they load. The About page reads my public GitHub events, looks up the commits in each push, and caches the result for five minutes.
+
+<Screens>
+  <Screen frame='wide' fit='contain' src='/images/projects/portfolio/mermaid-diagram.webp' alt='A sequence diagram from the Gorkie sandboxes blog post with Gorkie, Subagent, Sandbox and Slack columns' caption='A diagram from a blog post.' />
+  <Screen frame='wide' src='/images/projects/portfolio/github-activity.webp' alt='The Activity section of the About page with a year of GitHub contributions in shades of blue and a list of recent pushes and branches' caption='The About page activity.' />
+</Screens>

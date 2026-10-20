@@ -1,21 +1,31 @@
 ---
 title: Speaking Meeting Bot
 description: AI agents that join Google Meet and Teams calls and speak with different personalities.
-date: 2025-06-09
+date: 2024-11-12
 order: 3
 github: https://github.com/Meeting-BaaS/speaking-meeting-bot
+status: Open source
+platform: Google Meet and Teams
 image: /images/projects/speaking_meeting_bot/cover.png
-tags: ['Python', 'FastAPI', 'Pipecat', 'MeetingBaaS', 'WebSocket']
+tags: ['Python', 'Pipecat', 'MeetingBaaS', 'WebSocket']
 ---
 
-Speaking Meeting Bot lets AI agents join Google Meet and Teams calls and speak with different personalities.
+AI agents that join a Google Meet or Teams call and talk in it, each with its own personality. I wrote the first version in November 2024, and the Meeting BaaS team added more after that. It's in the Meeting BaaS org now, MIT licensed.
 
 ## How it works
 
-Each agent's behavior, tone, and knowledge live in a Markdown file, so you can change the personality without changing code. FastAPI starts the bots, MeetingBaaS joins the calls, and Pipecat handles the audio. OpenAI handles the responses. Local development uses ngrok.
+[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio over a WebSocket. [Pipecat](https://www.pipecat.ai/) runs the voice pipeline. Silero spots speech, [Deepgram](https://deepgram.com/) transcribes it, an OpenAI model writes the reply and [Cartesia](https://cartesia.ai/) speaks it back.
 
-## Stack
+The two sides don't speak the same language. Meeting BaaS sends plain audio bytes and Pipecat wants protobuf frames, so a small proxy wraps each chunk going in and strips the frames coming out. Everything runs at 16 kHz.
 
-- FastAPI, Pipecat, Python 3.11.
-- MeetingBaaS APIs and WebSocket transport.
-- Cartesia TTS, Gladia or Deepgram STT, OpenAI.
+<Screens>
+  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/audio-proxy.webp' alt='Python code in proxy.py that wraps each raw audio message in a protobuf Frame with its sample rate and channel count before sending it to Pipecat' caption='proxy.py wraps raw call audio in a Pipecat frame.' />
+  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/bot-proxy-pairs.webp' alt='Python code in batch.py that starts a bot and a proxy on adjacent ports, opens an ngrok tunnel for the proxy and starts a MeetingBaaS process for it' caption='batch.py starts a bot and proxy pair per meeting.' />
+</Screens>
+
+My version ran each bot as three processes, and `batch.py` started as many as you asked for, each with its own [ngrok](https://ngrok.com/) tunnel. Today a Markdown file sets each agent's personality, and a FastAPI server starts the bots. Meeting BaaS hosts it as an API.
+
+<Screens>
+  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/persona-file.webp' alt='The interviewer persona README on GitHub, with sections for characteristics, voice and metadata, next to the list of persona folders' caption='A persona is a Markdown file with traits, voice and entry message.' />
+  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/api-docs.webp' alt='Swagger UI for the Speaking Meeting Bot API listing POST /bots, DELETE /bots/{bot_id}, POST /personas/generate-image, POST /webhook and GET /health' caption='The hosted API docs.' />
+</Screens>

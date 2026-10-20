@@ -4,12 +4,16 @@ import Link from 'next/link'
 import { type ReactNode, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
-import { preloadCover } from './cover'
+import { cn } from '@/lib/utils'
+import { type CoverCrop, coverCropStyle, preloadCover } from './cover'
 import { projectTransitionName, projectTransitionShare } from './transition'
 
 interface ProjectCardProps {
   description: string
   image?: string | null
+  imageCrop?: CoverCrop
+  /** Replaces the "View case study" line, such as the year */
+  meta?: string[]
   priority?: boolean
   title: string
   /** Left out where the card can sit beside the page's own copy, since two transitions can't share a name */
@@ -36,6 +40,8 @@ export const ProjectCard = ({
   title,
   description,
   image,
+  imageCrop,
+  meta,
   priority = false,
   transitionName,
   url,
@@ -45,7 +51,9 @@ export const ProjectCard = ({
 
   return (
     <Link
-      className='group flex h-full flex-col gap-4 bg-card/60 p-6 transition-colors hover:bg-card'
+      className={cn(
+        'group flex h-full flex-col gap-4 bg-card/60 p-6 transition-colors hover:bg-card focus-visible:-outline-offset-2'
+      )}
       href={url}
       onFocus={() => image && preloadCover(image, title)}
       onPointerEnter={() => image && preloadCover(image, title)}
@@ -56,30 +64,45 @@ export const ProjectCard = ({
           <BlurImage
             alt={title}
             blur={false}
-            className='relative aspect-video w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 dark:outline-white/10'
+            className={cn(
+              'relative aspect-video w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 dark:outline-white/10'
+            )}
             fill
             imageClassName='object-cover'
             loading={priority ? 'eager' : 'lazy'}
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}
+            style={coverCropStyle(imageCrop)}
           />
         </SharedTransition>
       )}
       <div className='flex flex-1 flex-col gap-3'>
         <div className='flex flex-1 flex-col gap-2'>
           <SharedTransition name={sharedName('title')}>
-            <h2 className='font-medium text-lg md:text-xl'>{title}</h2>
+            <h2 className={cn('font-medium text-lg md:text-xl')}>{title}</h2>
           </SharedTransition>
           <SharedTransition name={sharedName('description')}>
-            <p className='line-clamp-3 text-pretty text-muted-foreground text-sm'>
+            <p
+              className={cn(
+                'line-clamp-3 text-pretty text-muted-foreground',
+                meta ? 'text-base' : 'text-sm'
+              )}
+            >
               {description}
             </p>
           </SharedTransition>
         </div>
-        <span className='inline-flex items-center gap-2 text-muted-foreground text-sm transition-colors group-hover:text-foreground'>
-          View case study
-          <Icons.arrowRight className='icon-arrow size-4' />
-        </span>
+        {meta ? (
+          <span className='flex items-center gap-2 text-muted-foreground text-sm'>
+            {meta.join(' · ')}
+            <Icons.arrowRight className='icon-arrow ml-auto size-4 transition-colors group-hover:text-foreground' />
+          </span>
+        ) : (
+          <span className='inline-flex items-center gap-2 text-muted-foreground text-sm transition-colors group-hover:text-foreground'>
+            View case study
+            <Icons.arrowRight className='icon-arrow size-4' />
+          </span>
+        )}
       </div>
     </Link>
   )

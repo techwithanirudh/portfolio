@@ -4,23 +4,28 @@ description: A Slack agent template with tools, sandboxes, and GitHub access.
 date: 2026-07-15
 order: 2
 github: https://github.com/techwithanirudh/mastra-slack-agent-template
+status: Template
+platform: Slack
 image: /images/projects/mastra_slack_agent_template/cover.png
 tags: ['TypeScript', 'Mastra', 'Bun', 'Slack', 'E2B', 'PostgreSQL']
 ---
 
-This is a starting point for building a Slack agent. It handles mentions, DMs, threads, files, workspace search, and streamed replies.
+A starting point for a Slack agent that handles mentions, DMs, threads, files and streamed replies, and runs its commands in a sandbox. It's a GitHub template under the MIT license. Features get built in [Gorkie](/blog/gorkie-sandboxes) first and are ported here once they've survived a few rounds of fixes.
 
 ## How it works
 
-Each thread gets its own E2B sandbox with files, shell access, and a browser. The agent can run commands without touching the host machine. The agent can split a larger request across several smaller agents.
+Each thread gets its own [E2B](https://e2b.dev/) sandbox with files, shell access and a browser. The sandbox id is a hash of the Slack thread id, so later turns find the same files and tools waiting. The agent can hand work to three helpers that research, explore and build, and it searches the web through [Exa](https://exa.ai/). Posting to another channel is the one tool that asks you first.
 
-It also includes web research through Exa, image generation, scheduled tasks, and optional GitHub and AgentMail accounts. You can add new features as skills or MCP servers.
+<Screens>
+  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/readme-features.webp' alt="The README's Features list and Required services table, with Slack, PostgreSQL, OpenRouter, E2B and Exa" caption='Five required services; GitHub and AgentMail are optional.' />
+  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/docs-messaging.webp' alt="The Messaging guide's Steer a thread section with three example replies" caption='Each reply in a followed thread steers the same task.' />
+</Screens>
 
-OpenRouter handles model access, and PostgreSQL stores memory and state. The [configuration guide](https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md) explains how to set up the services and Slack app.
+Replies stream into Slack, and each tool call shows up as a step in a live card. A top-level mention makes the agent follow the thread. `##` at the start of a line keeps it quiet, and `!stop` cancels a running reply.
 
-## Stack
+The agent runs `gh` and git with tokens it never holds. The sandbox only gets placeholder values, and the host adds the real Authorization header to GitHub and AgentMail requests on the way out.
 
-- Mastra runtime on Bun, TypeScript, and the AI SDK.
-- Slack via the Chat SDK adapter in Socket Mode.
-- OpenRouter models, Exa search, E2B sandboxes.
-- PostgreSQL memory and state, with local observability.
+<Screens>
+  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/sandbox-network-rules.webp' alt='The network.ts source adding Authorization headers for the AgentMail and GitHub APIs' caption='The host adds the credentials, so tokens stay out of the sandbox.' />
+  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/docs-memory.webp' alt="The Memory guide's settings table, with lastMessages 20 and observational memory scoped to the thread" caption="Memory is scoped to the thread, so conversations don't leak into each other." />
+</Screens>

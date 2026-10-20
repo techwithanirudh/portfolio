@@ -4,20 +4,31 @@ description: A drag-and-drop website builder with HTML and JavaScript blocks.
 date: 2023-06-15
 order: 14
 website: https://anikode.techwithanirudh.com/
+status: Live
+platform: Web
 image: /images/projects/anikode/cover.png
 tags: ['Next.js', 'GrapesJS', 'Drizzle ORM', 'NextAuth', 'TailwindCSS']
 ---
 
-AniKode is a drag-and-drop website builder. Start with simple HTML blocks, or add custom HTML and JavaScript when you need more control. You can add pages, move blocks around, and see the changes in the preview as you edit.
+AniKode is a drag-and-drop website builder on [GrapesJS](https://grapesjs.com/). You drag blocks onto a page, add custom HTML and JavaScript when you need more control, and keep several pages in one project. I built it three times, and the latest is AniKode Studio. Its landing page and sign-in are live, and the editor needs an account.
 
 ## How it works
 
-The editor is built on GrapesJS, and you manage pages, blocks, and assets in one place. The editor saves each project as JSON, so the exported site matches what you built. Custom-code plugins let you add HTML or JavaScript when the built-in blocks are not enough.
+In the dashboard you create a project, add pages and open one in the editor. After every change the editor posts the page's GrapesJS project JSON to that page's API route, which stores it in a Postgres column through [Drizzle](https://orm.drizzle.team/). The route checks the session and only touches pages owned by the signed-in user. If a save fails, the editor says so.
 
-NextAuth handles accounts and sign-in. The editor uses Next.js, Radix, and Tailwind.
+<Screens>
+  <Screen frame='wide' src='/images/projects/anikode/studio-landing-dark.webp' alt='The AniKode Studio landing page in dark mode, with the headline Build stunning websites with ease above a screenshot of the editor' caption='The Studio landing page.' />
+  <Screen frame='wide' src='/images/projects/anikode/studio-login.webp' alt='The AniKode Studio sign-in form in dark mode, with an email field, a Sign In with Email button and a GitHub button' caption='Sign-in takes an email for a magic link, or GitHub.' />
+</Screens>
 
-## Stack
+The editor panels are React components, so the editor follows the app's light and dark theme. Blocks sit in an accordion on the left, and tabs for styles, settings, layers and pages are on the right. Sign-in uses [NextAuth](https://next-auth.js.org/), with a magic link sent through [Resend](https://resend.com/) or a GitHub account.
 
-- Next.js 14, Tailwind CSS, Radix UI, Framer Motion.
-- Drizzle ORM with Postgres adapters, NextAuth sessions.
-- React Hook Form and Zod, React Email and Resend.
+## Earlier versions
+
+The 2021 version was a GrapesJS page with more than 20 plugins that saved to IndexedDB. The 2022 version was a React app with an Express and MongoDB server.
+
+<Screens>
+  <Screen frame='wide' src='/images/projects/anikode/editor-2022.webp' alt='The AniKode editor with a page list and block panel on the left, a row of tool icons along the top, and a page with a photo of a dog on the canvas' caption='The 2022 editor.' />
+  <Screen frame='wide' src='/images/projects/anikode/component-toolbar.webp' alt='A selected heading on the editor canvas, outlined in blue, with a row of round toolbar buttons in its corner' caption='A selected component and its toolbar.' />
+  <Screen frame='wide' src='/images/projects/anikode/landing-2022.webp' alt='The 2022 AniKode landing page with the headline Simplify the way you build websites next to a photo of two people at their desks' caption='The 2022 landing page, still online.' />
+</Screens>

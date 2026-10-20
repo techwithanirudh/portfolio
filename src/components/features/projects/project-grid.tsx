@@ -4,35 +4,15 @@ import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 import { ProjectCard } from './project-card'
 
-const columns = {
-  lg: 'lg:grid-cols-2 lg:dashed-grid-2',
-  md: 'md:grid-cols-2 md:dashed-grid-2',
-}
-
-const filler = {
-  lg: 'lg:block',
-  md: 'md:block',
-}
-
 interface ProjectGridProps {
   className?: string
-  /** Where the grid splits into two columns */
-  columnsFrom?: keyof typeof columns
-  /** How many leading covers load eagerly */
-  priorityCoverCount?: number
   projects: ProjectPage[]
 }
 
-export const ProjectGrid = ({
-  className,
-  columnsFrom = 'lg',
-  priorityCoverCount = 0,
-  projects,
-}: ProjectGridProps) => (
+export const ProjectGrid = ({ className, projects }: ProjectGridProps) => (
   <div
     className={cn(
-      'dashed-grid grid grid-cols-1 text-left',
-      columns[columnsFrom],
+      'dashed-grid lg:dashed-grid-2 grid grid-cols-1 text-left lg:grid-cols-2',
       className
     )}
   >
@@ -41,7 +21,7 @@ export const ProjectGrid = ({
         <ProjectCard
           description={project.data.description ?? ''}
           image={project.data.image ?? null}
-          priority={index < priorityCoverCount}
+          imageCrop={project.data.imageCrop}
           title={project.data.title}
           transitionName={project.slugs.join('/')}
           url={project.url}
@@ -49,10 +29,7 @@ export const ProjectGrid = ({
       </ViewAnimation>
     ))}
     {projects.length % 2 === 1 && (
-      <div
-        aria-hidden
-        className={cn('hidden bg-dashed', filler[columnsFrom])}
-      />
+      <div aria-hidden className='hidden bg-dashed lg:block' />
     )}
   </div>
 )

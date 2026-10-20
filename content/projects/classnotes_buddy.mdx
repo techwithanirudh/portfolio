@@ -3,19 +3,31 @@ title: Classnotes Buddy
 description: A site for uploading and sharing class notes.
 date: 2023-01-18
 order: 15
+status: Live
+platform: Web
 website: https://notes.techwithanirudh.com/
 image: /images/projects/classnotes_buddy/cover.png
 tags: ['Turborepo', 'Supabase', 'Next.js', 'Drizzle']
 ---
 
-Classnotes Buddy is a place to upload class notes and share them with a link. Your notes stay in sync when you open them on another device.
+Upload class notes and share them with a link, so a student who misses a class can get the notes from a classmate. I built it twice. The 2022 version began as Web Dev Simplified's Google Drive clone tutorial, which I rewrote and extended. The 2024 rebuild, Notes Buddy, started from the trevorpfiz/create-t3-turbo-supabase template.
+
+The 2022 version is still up at notes-buddy.vercel.app, and the rebuild runs at notes.techwithanirudh.com. Both repos are private.
 
 ## How it works
 
-Supabase handles email and OAuth sign-in and keeps profiles synced. Drizzle manages the Postgres database. The project is a Turborepo workspace based on create-t3-turbo, with a Next.js web app and an Expo mobile app in progress.
+<Screens>
+  <Screen frame='wide' fit='contain' src='/images/projects/classnotes_buddy/classnotes-buddy-2022.webp' alt='The 2022 Classnotes Buddy landing page with the heading Simplify the way you share notes, a Get started button and a How to video button' caption='The 2022 version.' />
+  <Screen frame='wide' fit='contain' src='/images/projects/classnotes_buddy/sign-in-2022.webp' alt='The 2022 sign-in card with email and password fields, a Log in with google button and a Log in button' caption='2022 sign-in on Firebase, with email or Google.' />
+</Screens>
 
-## Stack
+The 2022 version is React on [Firebase](https://firebase.google.com/), with [Algolia](https://www.algolia.com/) search and hCaptcha on sign-up. It has a PWA that registers as a share target for image, audio and video files. New uploads wait in an approval queue for an admin app.
 
-- Turborepo, pnpm workspaces, TypeScript.
-- Supabase Auth and Postgres, Drizzle ORM.
-- Next.js web client, with an Expo mobile app in progress.
+The rebuild uses [Supabase](https://supabase.com/) for email and Google sign-in, and Drizzle for the Postgres tables of profiles, folders and files. A folder can sit inside another folder. Folders and files are served through [tRPC](https://trpc.io/). Anyone signed in can browse them, and only the uploader can rename or delete.
+
+Files go from the browser to Supabase Storage in 6MB chunks over its resumable endpoint, so a dropped connection picks up where it stopped. The Expo app never got finished.
+
+<Screens>
+  <Screen frame='wide' fit='contain' src='/images/projects/classnotes_buddy/sign-in-dark.webp' alt='The Notes Buddy sign-in form in dark mode with Continue with Email and Continue with Google buttons' caption='2024 sign-in on Supabase.' />
+  <Screen frame='wide' src='/images/projects/classnotes_buddy/features-dark.webp' alt='The Notes Buddy landing page feature grid listing Instant Uploads, Cross-Device Sync, Secure Sharing, Free Forever, Offline Access and Organizational Tools' caption='The landing page lists offline access and tags, which are not in the code yet.' />
+</Screens>

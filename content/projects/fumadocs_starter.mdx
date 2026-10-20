@@ -3,21 +3,32 @@ title: Fumadocs Starter
 description: A docs starter with AI chat, OpenAPI pages, and llms.txt built in.
 date: 2025-03-21
 order: 12
+website: https://fumadocsstarter.vercel.app
 github: https://github.com/techwithanirudh/fumadocs-starter
+status: Template
+platform: Web
 image: /images/projects/fumadocs_starter/cover.png
+imageCrop:
+  x: 55
+  y: 32
+  zoom: 2
 tags: ['Next.js', 'Fumadocs', 'AI SDK', 'OpenAPI', 'TypeScript']
 ---
 
-Fumadocs Starter is a template for documentation sites. It starts from Create Fumadocs and adds the parts most docs sites end up building by hand.
+Fumadocs Starter is a docs site with an AI assistant, API reference pages, typed code samples and Markdown copies for AI tools already wired up. It starts from Create Fumadocs and is MIT licensed.
 
 ## How it works
 
-An "Ask AI" panel answers questions from your own MDX. The model searches the docs and reads whole pages through tools, then streams an answer with its sources shown above it, so editing the docs is all it takes to keep it current.
+An "Ask AI" panel answers from your own MDX. The chat route uses [AI SDK](https://ai-sdk.dev/) with `gpt-5-mini` and two tools. `searchDocs` queries the [Fumadocs](https://www.fumadocs.dev/) search index, and `getPageContent` returns one page as Markdown. The model used to list its own sources, but the links weren't always right, so the search tool writes them into the stream now.
 
-OpenAPI specs turn into API reference pages, and Twoslash adds type-checked code samples with hovers and errors. The site also serves `llms.txt`, Markdown copies of every page, an RSS changelog, and generated Open Graph images.
+<Screens>
+  <Screen frame='wide' src='/images/projects/fumadocs_starter/page-actions.webp' alt='The Open menu on a docs page in light mode, with Open in GitHub, View as Markdown, and Open in Scira AI, ChatGPT, Claude and Cursor' caption='The Open menu hands a page to GitHub, a Markdown view or an AI chat app.' />
+  <Screen frame='wide' src='/images/projects/fumadocs_starter/twoslash-hover.webp' alt='A Twoslash hover over console in a code sample, showing its type and the Node.js docs, with an autocomplete list below' caption='Twoslash hovers and completions in a code block.' />
+</Screens>
 
-## Stack
+OpenAPI specs become API reference pages, and [Twoslash](https://twoslash.netlify.app/) type-checks the code samples. The site also serves `llms.txt`, an RSS changelog and generated Open Graph images. Add `.mdx` to a docs URL, or send an `Accept` header that prefers Markdown, and you get the page as text.
 
-- Next.js 16, Fumadocs UI and MDX, Tailwind.
-- AI SDK with OpenAI, Fumadocs OpenAPI and Twoslash.
-- Bun, Ultracite and lefthook.
+<Screens>
+  <Screen frame='wide' src='/images/projects/fumadocs_starter/api-reference.webp' alt='An API reference page for a POST endpoint, with a request playground, a Send button and cURL, JavaScript, Go, Python, Java and C# samples' caption='An API reference page from the bundled OpenAPI example.' />
+  <Screen frame='wide' src='/images/projects/fumadocs_starter/og-image.webp' alt='A dark gradient Open Graph card reading Starter Kit, HOME, OpenAPI, Generate and document your OpenAPI schema' caption='The generated Open Graph image for the OpenAPI page.' />
+</Screens>

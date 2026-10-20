@@ -1,21 +1,37 @@
 ---
 title: Solving Autonomous Driving Privacy Challenges using AI
-description: A research project that replaces faces in driving videos to protect privacy.
+description: A research project on swapping faces to protect privacy in driving footage.
 date: 2022-04-15
 order: 9
 website: https://osf.io/mtfpy/
+status: Paper
+platform: Python
 github: https://github.com/techwithanirudh/AutonomousDrivingPaperCode/
 image: /images/projects/autonomous_driving/cover.png
+imageCrop:
+  x: 68
+  y: 40
+  zoom: 2
 tags: ['Research', 'AI', 'Autonomous Driving', 'Privacy']
 ---
 
-This research project replaces faces in self-driving car videos. The goal is to hide who was recorded while keeping the footage useful for training driving models.
+This research project looks at swapping faces to hide who was recorded in self-driving car footage, while keeping the footage useful for training driving models. The demo code swaps faces on a live webcam feed.
 
 ## How it works
 
-MediaPipe Face Mesh finds landmarks on the original and replacement faces. The project splits those landmarks into triangles, and OpenCV warps each replacement triangle onto the original face. This keeps the pose and expression aligned. You can also test it live with a webcam.
+The paper tries three approaches on recorded video: an OpenCV face swap with a preset AI-generated face, [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/guide) Holistic blurring, and a MediaPipe Face Mesh swap. The OpenCV swap did not work for people far away. Face Mesh only swaps when a face covers between 2% and 50% of the frame. Blurring doesn't swap anything, but Holistic became the segmentation step of the combined approach.
 
-## Stack
+<Screens columns={1}>
+  <Screen frame='wide' fit='contain' src='/images/projects/autonomous_driving/opencv-swap-result.webp' alt='Three portraits side by side, a man in a checked shirt, a smiling person in a red top, and the first man with the second face swapped onto his head' caption='The first approach. Both input faces are AI generated, not real people.' />
+</Screens>
 
-- Python, OpenCV, MediaPipe, NumPy.
-- Python scripts for capture and mesh tooling.
+The combined approach segments each person, zooms the face to around 40% of the frame, swaps it with Face Mesh and applies the result as a mask on the segmented image. It repeats for each person and outputs an MP4 file. The paper reports it works well up to 15 feet away.
+
+<Screens>
+  <Screen frame='wide' fit='contain' src='/images/projects/autonomous_driving/opencv-pipeline.webp' alt='Hand-drawn flow from a video, to detecting faces with cv2 on a one second feed, to a preset face image, to replacing the faces with cv2 and returning the output' caption='The OpenCV face swap, from the paper.' />
+  <Screen frame='wide' fit='contain' src='/images/projects/autonomous_driving/combined-pipeline.webp' alt='Hand-drawn flow where a video goes through MediaPipe Holistic segmentation, a face zoom to about 40 percent, a Face Mesh swap and a mask step, and comes out as an MP4 file, repeated for each person' caption='The combined approach, from the paper.' />
+</Screens>
+
+The code in the repository is the Face Mesh swap. Face Mesh finds landmarks on the original and replacement faces, and the code splits them into triangles. OpenCV warps each replacement triangle onto the original face, then seamless cloning blends it into the frame. The replacement face comes from [This Person Does Not Exist](https://thispersondoesnotexist.com/), so it belongs to no real person.
+
+[AutonomousDrivingPaperCode](https://github.com/techwithanirudh/AutonomousDrivingPaperCode/) runs it on a webcam and [AutonomousDrivingPaperCodeCombined](https://github.com/techwithanirudh/AutonomousDrivingPaperCodeCombined) on a video file. The segmentation and zoom steps are in the paper but not in either repository.

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-10-17T20:07:40.583Z",
+  "generated": "2026-10-20T23:03:49.819Z",
   "previews": {
     "03addeebaebd": {
       "generatedAt": "2026-05-13T07:45:45.265Z",
@@ -375,14 +375,6 @@
       "screenshotPath": "/previews/e957b346cb8e.jpeg",
       "status": "success",
       "url": "https://chat-sdk.dev/",
-      "width": 1200
-    },
-    "976382ced949": {
-      "generatedAt": "2026-10-17T19:26:46.447Z",
-      "height": 630,
-      "screenshotPath": "/previews/976382ced949.jpeg",
-      "status": "success",
-      "url": "https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md",
       "width": 1200
     },
     "ffcdc169a659": {
@@ -1272,6 +1264,414 @@
       "screenshotPath": "/previews/129ceb3cd814.jpeg",
       "status": "success",
       "url": "https://tryklack.com",
+      "width": 1200
+    },
+    "2c4ba1027a8d": {
+      "generatedAt": "2026-10-20T21:22:54.126Z",
+      "height": 630,
+      "screenshotPath": "/previews/2c4ba1027a8d.jpeg",
+      "status": "success",
+      "url": "https://github.com/techwithanirudh/AutonomousDrivingPaperCodeCombined",
+      "width": 1200
+    },
+    "4bb5945807c2": {
+      "generatedAt": "2026-10-20T21:23:08.596Z",
+      "height": 630,
+      "screenshotPath": "/previews/4bb5945807c2.jpeg",
+      "status": "success",
+      "url": "https://fumadocsstarter.vercel.app",
+      "width": 1200
+    },
+    "665ce81d7131": {
+      "generatedAt": "2026-10-20T21:23:20.888Z",
+      "height": 630,
+      "screenshotPath": "/previews/665ce81d7131.jpeg",
+      "status": "success",
+      "url": "https://app.transcriptseeker.com",
+      "width": 1200
+    },
+    "4ce15cf94161": {
+      "generatedAt": "2026-10-20T21:23:34.024Z",
+      "height": 630,
+      "screenshotPath": "/previews/4ce15cf94161.jpeg",
+      "status": "success",
+      "url": "https://www.apple.com/app-store/",
+      "width": 1200
+    },
+    "224322efbf02": {
+      "generatedAt": "2026-10-20T21:23:46.907Z",
+      "height": 630,
+      "screenshotPath": "/previews/224322efbf02.jpeg",
+      "status": "success",
+      "url": "https://sidestore.io/",
+      "width": 1200
+    },
+    "84bf01216396": {
+      "generatedAt": "2026-10-20T21:23:59.442Z",
+      "height": 630,
+      "screenshotPath": "/previews/84bf01216396.jpeg",
+      "status": "success",
+      "url": "https://altstore.io/",
+      "width": 1200
+    },
+    "ddc1c63c17b1": {
+      "generatedAt": "2026-10-20T21:24:12.006Z",
+      "height": 630,
+      "screenshotPath": "/previews/ddc1c63c17b1.jpeg",
+      "status": "success",
+      "url": "https://www.convex.dev/",
+      "width": 1200
+    },
+    "9ffd1aaccfcc": {
+      "generatedAt": "2026-10-20T22:51:45.111Z",
+      "height": 630,
+      "screenshotPath": "/previews/9ffd1aaccfcc.jpeg",
+      "status": "success",
+      "url": "https://fumadocs.dev/",
+      "width": 1200
+    },
+    "4350554459a1": {
+      "generatedAt": "2026-10-20T22:52:06.181Z",
+      "height": 630,
+      "screenshotPath": "/previews/4350554459a1.jpeg",
+      "status": "success",
+      "url": "https://resend.com/",
+      "width": 1200
+    },
+    "e16dfddc1a4b": {
+      "generatedAt": "2026-10-20T22:52:19.054Z",
+      "height": 630,
+      "screenshotPath": "/previews/e16dfddc1a4b.jpeg",
+      "status": "success",
+      "url": "https://developers.cloudflare.com/turnstile/",
+      "width": 1200
+    },
+    "212d8970014c": {
+      "generatedAt": "2026-10-20T22:52:31.593Z",
+      "height": 630,
+      "screenshotPath": "/previews/212d8970014c.jpeg",
+      "status": "success",
+      "url": "https://www.better-auth.com/",
+      "width": 1200
+    },
+    "d4df17160d60": {
+      "generatedAt": "2026-10-20T22:52:52.525Z",
+      "height": 630,
+      "screenshotPath": "/previews/d4df17160d60.jpeg",
+      "status": "success",
+      "url": "https://orm.drizzle.team/",
+      "width": 1200
+    },
+    "fd76801b3f50": {
+      "generatedAt": "2026-10-20T22:53:06.929Z",
+      "height": 630,
+      "screenshotPath": "/previews/fd76801b3f50.jpeg",
+      "status": "success",
+      "url": "https://turbo.build/repo",
+      "width": 1200
+    },
+    "34b615cddf04": {
+      "generatedAt": "2026-10-20T22:53:22.838Z",
+      "height": 630,
+      "screenshotPath": "/previews/34b615cddf04.jpeg",
+      "status": "success",
+      "url": "https://firebase.google.com/",
+      "width": 1200
+    },
+    "9c8af2852c4a": {
+      "generatedAt": "2026-10-20T22:53:45.648Z",
+      "height": 630,
+      "screenshotPath": "/previews/9c8af2852c4a.jpeg",
+      "status": "success",
+      "url": "https://www.algolia.com/",
+      "width": 1200
+    },
+    "41531850c10d": {
+      "generatedAt": "2026-10-20T22:54:00.106Z",
+      "height": 630,
+      "screenshotPath": "/previews/41531850c10d.jpeg",
+      "status": "success",
+      "url": "https://supabase.com/",
+      "width": 1200
+    },
+    "96deec3a1a21": {
+      "generatedAt": "2026-10-20T22:54:15.379Z",
+      "height": 630,
+      "screenshotPath": "/previews/96deec3a1a21.jpeg",
+      "status": "success",
+      "url": "https://trpc.io/",
+      "width": 1200
+    },
+    "997a34b74bce": {
+      "generatedAt": "2026-10-20T22:54:30.900Z",
+      "height": 630,
+      "screenshotPath": "/previews/997a34b74bce.jpeg",
+      "status": "success",
+      "url": "https://ai.google.dev/edge/mediapipe/solutions/guide",
+      "width": 1200
+    },
+    "8e4792e40832": {
+      "generatedAt": "2026-10-20T22:54:43.412Z",
+      "height": 630,
+      "screenshotPath": "/previews/8e4792e40832.jpeg",
+      "status": "success",
+      "url": "https://thispersondoesnotexist.com/",
+      "width": 1200
+    },
+    "4e5366f94fed": {
+      "generatedAt": "2026-10-20T22:55:41.898Z",
+      "height": 630,
+      "screenshotPath": "/previews/4e5366f94fed.jpeg",
+      "status": "success",
+      "url": "https://exa.ai/",
+      "width": 1200
+    },
+    "fcb34ecb89c3": {
+      "generatedAt": "2026-10-20T22:56:35.168Z",
+      "height": 630,
+      "screenshotPath": "/previews/fcb34ecb89c3.jpeg",
+      "status": "success",
+      "url": "https://github.com/firebase/firebaseui-web",
+      "width": 1200
+    },
+    "bdf2de105ea2": {
+      "generatedAt": "2026-10-20T22:56:46.759Z",
+      "height": 630,
+      "screenshotPath": "/previews/bdf2de105ea2.jpeg",
+      "status": "success",
+      "url": "https://next-auth.js.org/",
+      "width": 1200
+    },
+    "f3fa5d061781": {
+      "generatedAt": "2026-10-20T22:57:00.052Z",
+      "height": 630,
+      "screenshotPath": "/previews/f3fa5d061781.jpeg",
+      "status": "success",
+      "url": "https://firebase.google.com/docs/firestore",
+      "width": 1200
+    },
+    "67e7f515b7bb": {
+      "generatedAt": "2026-10-20T22:57:11.306Z",
+      "height": 630,
+      "screenshotPath": "/previews/67e7f515b7bb.jpeg",
+      "status": "success",
+      "url": "https://duckduckgo.com/",
+      "width": 1200
+    },
+    "0f16f83f3f6e": {
+      "generatedAt": "2026-10-20T22:57:23.673Z",
+      "height": 630,
+      "screenshotPath": "/previews/0f16f83f3f6e.jpeg",
+      "status": "success",
+      "url": "https://www.fumadocs.dev/",
+      "width": 1200
+    },
+    "ee62bd8b5279": {
+      "generatedAt": "2026-10-20T22:57:36.296Z",
+      "height": 630,
+      "screenshotPath": "/previews/ee62bd8b5279.jpeg",
+      "status": "success",
+      "url": "https://twoslash.netlify.app/",
+      "width": 1200
+    },
+    "5db691231d9a": {
+      "generatedAt": "2026-10-20T22:57:49.579Z",
+      "height": 630,
+      "screenshotPath": "/previews/5db691231d9a.jpeg",
+      "status": "success",
+      "url": "https://vercel.com/templates/next.js/nextjs-ai-chatbot",
+      "width": 1200
+    },
+    "0c06728ffe7f": {
+      "generatedAt": "2026-10-20T22:58:01.286Z",
+      "height": 630,
+      "screenshotPath": "/previews/0c06728ffe7f.jpeg",
+      "status": "success",
+      "url": "https://ai.hackclub.com/",
+      "width": 1200
+    },
+    "860dcf065a3c": {
+      "generatedAt": "2026-10-20T22:58:15.219Z",
+      "height": 630,
+      "screenshotPath": "/previews/860dcf065a3c.jpeg",
+      "status": "success",
+      "url": "https://livekit.io/agents",
+      "width": 1200
+    },
+    "eabe664722a7": {
+      "generatedAt": "2026-10-20T22:58:29.169Z",
+      "height": 630,
+      "screenshotPath": "/previews/eabe664722a7.jpeg",
+      "status": "success",
+      "url": "https://mem0.ai/",
+      "width": 1200
+    },
+    "21c36a6ace24": {
+      "generatedAt": "2026-10-20T22:58:41.863Z",
+      "height": 630,
+      "screenshotPath": "/previews/21c36a6ace24.jpeg",
+      "status": "success",
+      "url": "https://upstash.com/",
+      "width": 1200
+    },
+    "85f857ea039b": {
+      "generatedAt": "2026-10-20T22:59:00.302Z",
+      "height": 630,
+      "screenshotPath": "/previews/85f857ea039b.jpeg",
+      "status": "success",
+      "url": "https://deepgram.com/",
+      "width": 1200
+    },
+    "944fcc9d4fe8": {
+      "generatedAt": "2026-10-20T22:59:13.938Z",
+      "height": 630,
+      "screenshotPath": "/previews/944fcc9d4fe8.jpeg",
+      "status": "success",
+      "url": "https://www.meetingbaas.com/",
+      "width": 1200
+    },
+    "d1997db21389": {
+      "generatedAt": "2026-10-20T22:59:30.520Z",
+      "height": 630,
+      "screenshotPath": "/previews/d1997db21389.jpeg",
+      "status": "success",
+      "url": "https://www.gladia.io/",
+      "width": 1200
+    },
+    "ac303e13b283": {
+      "generatedAt": "2026-10-20T22:59:44.985Z",
+      "height": 630,
+      "screenshotPath": "/previews/ac303e13b283.jpeg",
+      "status": "success",
+      "url": "https://www.assemblyai.com/",
+      "width": 1200
+    },
+    "b1a3c8b84b52": {
+      "generatedAt": "2026-10-20T23:00:02.049Z",
+      "height": 630,
+      "screenshotPath": "/previews/b1a3c8b84b52.jpeg",
+      "status": "success",
+      "url": "https://pglite.dev/",
+      "width": 1200
+    },
+    "1919781c31d1": {
+      "generatedAt": "2026-10-20T23:00:16.332Z",
+      "height": 630,
+      "screenshotPath": "/previews/1919781c31d1.jpeg",
+      "status": "success",
+      "url": "https://turborepo.dev/",
+      "width": 1200
+    },
+    "65242f9d51f8": {
+      "generatedAt": "2026-10-20T23:00:28.230Z",
+      "height": 630,
+      "screenshotPath": "/previews/65242f9d51f8.jpeg",
+      "status": "success",
+      "url": "https://nitro.build/",
+      "width": 1200
+    },
+    "0674e1a25398": {
+      "generatedAt": "2026-10-20T23:00:39.267Z",
+      "height": 630,
+      "screenshotPath": "/previews/0674e1a25398.jpeg",
+      "status": "success",
+      "url": "https://hono.dev/",
+      "width": 1200
+    },
+    "8dacdfa08529": {
+      "generatedAt": "2026-10-20T23:00:54.399Z",
+      "height": 630,
+      "screenshotPath": "/previews/8dacdfa08529.jpeg",
+      "status": "success",
+      "url": "https://grapesjs.com/",
+      "width": 1200
+    },
+    "8adb6cd22922": {
+      "generatedAt": "2026-10-20T23:01:07.590Z",
+      "height": 630,
+      "screenshotPath": "/previews/8adb6cd22922.jpeg",
+      "status": "success",
+      "url": "https://coolify.io/",
+      "width": 1200
+    },
+    "3e66335f6a67": {
+      "generatedAt": "2026-10-20T23:01:20.695Z",
+      "height": 630,
+      "screenshotPath": "/previews/3e66335f6a67.jpeg",
+      "status": "success",
+      "url": "https://tweakcn.com/",
+      "width": 1200
+    },
+    "e4b25ab8a96d": {
+      "generatedAt": "2026-10-20T23:01:46.141Z",
+      "height": 630,
+      "screenshotPath": "/previews/e4b25ab8a96d.jpeg",
+      "status": "success",
+      "url": "https://github.com/openstyles/stylus",
+      "width": 1200
+    },
+    "ae02566fdadb": {
+      "generatedAt": "2026-10-20T23:02:02.315Z",
+      "height": 630,
+      "screenshotPath": "/previews/ae02566fdadb.jpeg",
+      "status": "success",
+      "url": "https://traefik.io/",
+      "width": 1200
+    },
+    "eef9e1ae389f": {
+      "generatedAt": "2026-10-20T23:02:17.077Z",
+      "height": 630,
+      "screenshotPath": "/previews/eef9e1ae389f.jpeg",
+      "status": "success",
+      "url": "https://next-forge.com/",
+      "width": 1200
+    },
+    "868b53c778c9": {
+      "generatedAt": "2026-10-20T23:02:30.620Z",
+      "height": 630,
+      "screenshotPath": "/previews/868b53c778c9.jpeg",
+      "status": "success",
+      "url": "https://next-safe-action.dev/",
+      "width": 1200
+    },
+    "2a1cc7a9ba8c": {
+      "generatedAt": "2026-10-20T23:02:44.586Z",
+      "height": 630,
+      "screenshotPath": "/previews/2a1cc7a9ba8c.jpeg",
+      "status": "success",
+      "url": "https://kaboomjs.com/",
+      "width": 1200
+    },
+    "42144207f1cc": {
+      "generatedAt": "2026-10-20T23:02:59.376Z",
+      "height": 630,
+      "screenshotPath": "/previews/42144207f1cc.jpeg",
+      "status": "success",
+      "url": "https://www.pipecat.ai/",
+      "width": 1200
+    },
+    "ce1a846ec4f3": {
+      "generatedAt": "2026-10-20T23:03:24.647Z",
+      "height": 630,
+      "screenshotPath": "/previews/ce1a846ec4f3.jpeg",
+      "status": "success",
+      "url": "https://cartesia.ai/",
+      "width": 1200
+    },
+    "bbc842f2d46c": {
+      "generatedAt": "2026-10-20T23:03:37.721Z",
+      "height": 630,
+      "screenshotPath": "/previews/bbc842f2d46c.jpeg",
+      "status": "success",
+      "url": "https://ngrok.com/",
+      "width": 1200
+    },
+    "d2282c4cef6a": {
+      "generatedAt": "2026-10-20T23:03:49.772Z",
+      "height": 630,
+      "screenshotPath": "/previews/d2282c4cef6a.jpeg",
+      "status": "success",
+      "url": "https://sparkle-project.org/",
       "width": 1200
     }
   }

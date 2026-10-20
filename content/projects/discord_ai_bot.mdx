@@ -4,18 +4,22 @@ description: A Discord bot that can chat, search the web, and talk in voice chan
 date: 2025-10-21
 order: 13
 github: https://github.com/techwithanirudh/discord-ai-bot
+status: Inactive
+platform: Discord
 image: /images/projects/discord_ai_bot/cover.png
+imageCrop:
+  x: 70
+  y: 40
+  zoom: 1.8
 tags: ['Discord', 'AI', 'Bun', 'TypeScript']
 ---
 
-Discord AI Bot answers questions in text channels and can join voice channels to listen and talk.
+A Discord bot that talks in a server like another member instead of answering every message like an assistant. It chats, searches the web with [Exa](https://exa.ai/) and can join voice channels. It started from Fellipe Utaka's Discord bot template.
 
 ## How it works
 
-Slash commands handle text messages. The Vercel AI SDK connects the bot to OpenAI, Anthropic, OpenRouter, or Google. Voice uses a speech-to-text and text-to-speech pipeline. The bot also has web search and memory. Upstash Redis handles rate limits.
+It always replies when you ping it, DM it or use one of its keywords. For everything else, `gpt-4.1-nano` guesses how likely the message is about the bot, and it answers above 0.5. Replies come from `gpt-4.1-mini`, which sees the last 50 messages and what [Mem0](https://mem0.ai/) remembers about you.
 
-## Stack
+To keep it from being annoying, [Upstash](https://upstash.com/) Redis caps it at 7 messages per 30 seconds. Replies are split into sentences, and each one waits a random 5 to 15 seconds with the typing indicator on.
 
-- Bun, TypeScript, discord.js.
-- OpenAI, Anthropic, OpenRouter, and Google providers.
-- Upstash Redis, Pino, ESLint, Prettier.
+In voice channels, each speaker's audio goes to [Deepgram](https://deepgram.com/), and talking over the bot cuts it off. One tool lets a second agent write and run discord.js code, so only the bot owner can use it.

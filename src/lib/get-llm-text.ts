@@ -17,6 +17,7 @@ interface LLMTextOptions {
 }
 
 interface ContentMeta {
+  facts?: Record<string, string | undefined>
   tags?: string[]
   type: ContentType
 }
@@ -31,11 +32,14 @@ async function getLLMText(
 
   const tagsLine =
     meta.type === 'blog' ? `Tags: ${meta.tags?.join(', ') ?? ''}\n` : ''
+  const factLines = Object.entries(meta.facts ?? {})
+    .flatMap(([label, value]) => (value ? [`${label}: ${value}\n`] : []))
+    .join('')
 
   return `${headingPrefix[level]} ${page.data.title}
 URL: ${page.url}
 Source: https://raw.githubusercontent.com/${githubUser}/${githubRepo}/refs/heads/${githubBranch}/${getContentSourcePath(meta.type, page)}
-${tagsLine}
+${tagsLine}${factLines}
 ${page.data.description ?? ''}
 
 ${processed}
@@ -51,5 +55,12 @@ export function getProjectLLMText(
   page: ProjectPage,
   options: LLMTextOptions = {}
 ) {
-  return getLLMText(page, { type: 'projects' }, options)
+  return getLLMText(
+    page,
+    {
+      facts: { Platform: page.data.platform, Status: page.data.status },
+      type: 'projects',
+    },
+    options
+  )
 }
