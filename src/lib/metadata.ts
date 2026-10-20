@@ -59,6 +59,7 @@ export function createMetadata(override: Metadata): Metadata {
       locale: 'en_US',
       siteName: title,
       title: override.title ?? undefined,
+      type: 'website',
       url: baseUrl.href,
       ...override.openGraph,
     },
