@@ -34,11 +34,6 @@ const nextConfig: NextConfig = {
         permanent: false,
         source: '/login',
       },
-      {
-        destination: '/resume',
-        permanent: true,
-        source: '/resume.pdf',
-      },
       // Tags are inline filters on /blog, so the tag index redirects there
       {
         destination: '/blog',
