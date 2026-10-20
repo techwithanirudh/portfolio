@@ -231,6 +231,9 @@ export function AssistantPanel() {
             }
           }}
           ref={popupRef}
+          // Named only while mounted so a view transition (a project card morph)
+          // keeps it above the shared images, see globals.css
+          style={{ viewTransitionName: 'simba-panel' }}
         >
           <div className='dashed-stack flex h-full flex-col' ref={contentRef}>
             <AssistantHeader />

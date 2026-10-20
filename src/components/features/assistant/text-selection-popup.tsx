@@ -134,11 +134,7 @@ export function TextSelectionPopup() {
           sideOffset={coarsePointer ? 28 : 8}
         >
           {/* Focus stays in the page so the selection survives */}
-          <Popover.Popup
-            data-native-cursor
-            finalFocus={false}
-            initialFocus={false}
-          >
+          <Popover.Popup finalFocus={false} initialFocus={false}>
             <Button
               className='shadow-lg'
               onClick={() => {

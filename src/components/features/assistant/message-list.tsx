@@ -195,7 +195,7 @@ export function MessageList({
               size={64}
             />
             <p>
-              {`heya! im simba, ${ownerName}'s dog. i can answer questions about him, his work, or the site.`}
+              {`hey, i'm simba, ${ownerName}'s dog. i can answer questions about him, his work, or the site.`}
             </p>
             <SuggestedQuestions />
           </ConversationEmptyState>
