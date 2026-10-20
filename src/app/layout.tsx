@@ -30,6 +30,7 @@ const geistMono = Geist_Mono({
 })
 
 const caveat = Caveat({
+  display: 'optional',
   preload: false,
   subsets: ['latin'],
   variable: '--font-caveat',

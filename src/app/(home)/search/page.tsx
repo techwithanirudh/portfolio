@@ -4,7 +4,6 @@ import { HeroSection } from '@/components/layout/sections/hero'
 import { Wrapper } from '@/components/layout/wrapper'
 import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
-import { BackButton } from './_components/back-button'
 import { SearchClient } from './_components/search-client'
 
 export default async function Page() {
@@ -14,7 +13,7 @@ export default async function Page() {
 
   return (
     <Wrapper>
-      <HeroSection caption={<BackButton />} title={pages.search.title} />
+      <HeroSection title={pages.search.title} />
       <SearchClient />
     </Wrapper>
   )

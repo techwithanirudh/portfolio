@@ -113,8 +113,8 @@ function Snapshot({
       <div
         className={cn(
           'absolute top-0 left-0 h-[270px] w-[180px] overflow-hidden rounded-xl shadow-black/15 shadow-lg dark:shadow-black/50',
-          'transition-transform duration-300 ease-out hover:rotate-0 group-data-reached/chapter:rotate-0 motion-reduce:transition-none',
-          tilt < 0 ? '-rotate-8' : 'rotate-8',
+          'motion-reduce:transition-none lg:transition-transform lg:duration-300 lg:ease-out lg:group-data-reached/chapter:rotate-0 lg:hover:rotate-0',
+          tilt < 0 ? 'lg:-rotate-8' : 'lg:rotate-8',
           photo.contain && 'bg-white',
           photo.letterbox
         )}

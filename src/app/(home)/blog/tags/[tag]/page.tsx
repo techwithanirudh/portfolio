@@ -1,13 +1,10 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { PostIndex } from '@/app/(home)/blog/_components/post-index'
 import { tagPath } from '@/components/features/blog/tag-path'
-import { Icons } from '@/components/icons/icons'
 import { TagJsonLd } from '@/components/json-ld'
 import { HeroSection } from '@/components/layout/sections/hero'
 import { Wrapper } from '@/components/layout/wrapper'
 import { postsPerPage } from '@/constants/config'
-import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
 import { getPageHref, paginate } from '@/lib/pagination'
 import { getPostsByTag, getTags } from '@/lib/source'
@@ -39,18 +36,6 @@ export default async function Page(props: Props) {
   return (
     <Wrapper>
       <HeroSection
-        action={
-          <Link
-            className='group inline-flex items-center gap-1.5 text-muted-foreground text-sm transition-colors hover:text-foreground'
-            href={pages.blog.path}
-          >
-            <Icons.arrowLeft
-              aria-hidden
-              className='size-4 transition-transform group-hover:-translate-x-0.5'
-            />
-            All posts
-          </Link>
-        }
         caption={<span className='font-mono text-sm'>{caption}</span>}
         title={tag}
       />

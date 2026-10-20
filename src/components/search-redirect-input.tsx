@@ -14,6 +14,8 @@ import { cn } from '@/lib/utils'
 
 interface SearchRedirectInputProps {
   className?: string
+  /** Lets the page filter its own list as the person types */
+  onValueChange?: (value: string) => void
   placeholder?: string
   tag: string
 }
@@ -22,9 +24,14 @@ export function SearchRedirectInput({
   tag,
   placeholder = 'Search...',
   className,
+  onValueChange,
 }: SearchRedirectInputProps) {
   const router = useRouter()
-  const [value, setValue] = useState('')
+  const [value, setValueState] = useState('')
+  const setValue = (nextValue: string) => {
+    setValueState(nextValue)
+    onValueChange?.(nextValue)
+  }
   const hasValue = value.trim().length > 0
 
   const handleSubmit = (nextValue: string) => {

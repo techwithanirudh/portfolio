@@ -109,7 +109,6 @@ export function BonkChip() {
           'origin-bottom cursor-pointer align-baseline aria-disabled:cursor-not-allowed'
         )}
         data-bonked={bonked || sulking || undefined}
-        data-native-cursor
         onClick={bonk}
         ref={scope}
         type='button'

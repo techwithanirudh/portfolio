@@ -417,6 +417,23 @@ html > body[data-scroll-locked] {
   background-color: var(--color-accent);
 }
 
+/* The Ask Simba panel and dog are named only while open. Their groups sit above
+   the shared project images and stay put instead of fading or morphing */
+::view-transition-group(simba-panel) {
+  z-index: 2;
+}
+
+::view-transition-group(simba-trigger) {
+  z-index: 3;
+}
+
+::view-transition-old(simba-panel),
+::view-transition-new(simba-panel),
+::view-transition-old(simba-trigger),
+::view-transition-new(simba-trigger) {
+  animation: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   ::view-transition-new(theme-transition) {
     clip-path: inset(0 0 100% 0);
@@ -435,7 +452,7 @@ html > body[data-scroll-locked] {
 
   @keyframes via-blur {
     30% {
-      filter: blur(8px);
+      filter: blur(4px);
     }
   }
 
@@ -444,19 +461,19 @@ html > body[data-scroll-locked] {
   }
 
   ::view-transition-old(.via-blur) {
-    animation-duration: 150ms;
+    animation-duration: 100ms;
     animation-timing-function: var(--ease-out-strong);
   }
 
   ::view-transition-new(.via-blur) {
-    animation-duration: 300ms;
+    animation-duration: 200ms;
     animation-timing-function: var(--ease-out-strong);
-    animation-delay: 100ms;
+    animation-delay: 60ms;
   }
 
   ::view-transition-group(.via-blur) {
-    animation-duration: 400ms;
-    animation-timing-function: var(--ease-in-out-strong);
+    animation-duration: 250ms;
+    animation-timing-function: var(--ease-out-strong);
   }
 
   ::view-transition-old(root),
@@ -549,4 +566,9 @@ html > body[data-scroll-locked] {
   [data-reveal-item][style*="opacity"] {
   opacity: 1 !important;
   transform: none !important;
+}
+
+/* The zoomed blog image keeps the radius FramedImage gives it in the page, so it stays rounded through the zoom */
+[data-rmiz-modal-img] {
+  border-radius: var(--radius-xl);
 }

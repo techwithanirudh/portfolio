@@ -23,10 +23,6 @@ const Assistant = dynamic(
     ),
   { ssr: false }
 )
-const SmoothCursor = dynamic(
-  () => import('@/components/smooth-cursor').then((mod) => mod.SmoothCursor),
-  { ssr: false }
-)
 
 function ThemeShortcut() {
   useThemeShortcut()
@@ -77,7 +73,6 @@ export function Provider({
         <HashLinkHistory />
         <Toaster position='top-center' />
         <TailwindIndicator />
-        <SmoothCursor />
       </MotionConfig>
     </LazyMotion>
   )

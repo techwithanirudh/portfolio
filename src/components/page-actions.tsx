@@ -138,14 +138,14 @@ function ViewOptions({
         render={
           <Button
             aria-label='View options'
-            className='border-none shadow-none active:scale-none'
+            className='group/trigger border-none shadow-none active:scale-none'
             disabled={disabled}
             size='icon-sm'
             variant='secondary'
           />
         }
       >
-        <Icons.chevronDown className='mt-0.5 size-4' />
+        <Icons.chevronDown className='mt-0.5 size-4 transition-transform duration-200 ease-out group-data-popup-open/trigger:rotate-180 motion-reduce:transition-none' />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'

@@ -15,11 +15,19 @@ import Hero from './_components/hero'
 import Stack from './_components/stack'
 import Story from './_components/story'
 
+// Reads "About me" with the portrait between the words, like the page heading
+const aboutOgImage = `/og?${new URLSearchParams({
+  description: profileDescription,
+  portrait: '1',
+  title: 'About me',
+})}`
+
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: pages.about.path },
   description: profileDescription,
-  openGraph: { url: pages.about.path },
+  openGraph: { images: aboutOgImage, url: pages.about.path },
   title: pages.about.title,
+  twitter: { images: aboutOgImage },
 })
 
 export default async function AboutPage() {
