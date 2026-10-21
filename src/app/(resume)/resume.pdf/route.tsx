@@ -1,8 +1,19 @@
 // biome-ignore-all lint/suspicious/noUnknownAttribute: `tw` is takumi's Tailwind prop
-import { render } from 'takumi-pdf/next'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { initSync, render } from 'takumi-pdf/no-init'
 import { getResume } from '@/lib/resume'
 
 export const dynamic = 'force-static'
+
+// takumi-pdf/next loads the wasm through a Turbopack loader that makes the
+// route trace the whole project into its function. Reading the one file by
+// its exact path keeps the trace to that file.
+initSync({
+  module: readFileSync(
+    join(process.cwd(), 'node_modules/takumi-pdf/pkg/takumi_pdf_wasm_bg.wasm')
+  ),
+})
 
 const geist =
   'https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFWNOITd.woff2'
