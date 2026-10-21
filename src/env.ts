@@ -11,11 +11,13 @@ export const env = createEnv({
   emptyStringAsUndefined: true,
 
   experimental__runtimeEnv: {
+    // Previews have no NEXT_PUBLIC_BASE_URL, and the browser cannot see
+    // VERCEL_PROJECT_PRODUCTION_URL, so the last fallback keeps the client schema satisfied
     NEXT_PUBLIC_BASE_URL:
       process.env.NEXT_PUBLIC_BASE_URL ??
       (process.env.VERCEL_PROJECT_PRODUCTION_URL
         ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-        : undefined),
+        : 'https://www.imanirudh.com'),
     NEXT_PUBLIC_UMAMI_URL: process.env.NEXT_PUBLIC_UMAMI_URL,
     NEXT_PUBLIC_UMAMI_WEBSITE_ID: process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID,
     NODE_ENV: process.env.NODE_ENV,
