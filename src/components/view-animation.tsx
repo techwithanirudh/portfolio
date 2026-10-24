@@ -57,23 +57,27 @@ export const ViewAnimation = ({
       element.style.transform = ''
     }
 
+    let animation: ReturnType<typeof animate> | undefined
     element.style.opacity = '0'
     element.style.transform = `translateY(${SHIFT_PX}px)`
     reveals.set(element, () => {
-      animate(
+      animation = animate(
         element,
         {
           opacity: [0, 1],
           transform: [`translateY(${SHIFT_PX}px)`, 'none'],
         },
         { delay: Math.min(delay, 0.2), duration: DURATION_S, ease: EASE }
-      ).finished.then(clear, clear)
+      )
+      animation.finished.then(clear, clear)
     })
-    getObserver().observe(element)
+    const io = getObserver()
+    io.observe(element)
 
     return () => {
-      observer?.unobserve(element)
+      io.unobserve(element)
       reveals.delete(element)
+      animation?.stop()
       clear()
     }
   }, [delay])
