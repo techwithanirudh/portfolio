@@ -8,9 +8,8 @@ const buttonGroupVariants = cva(
   {
     variants: {
       orientation: {
-        // Matches [data-slot] children, not :first-child/:last-child, because an
-        // open Base UI menu drops focus-guard spans next to its trigger, which
-        // squared off the trigger's outer corners while the menu was open
+        // Matches [data-slot] children, not :first/:last-child: an open Base UI menu inserts
+        // focus-guard spans beside its trigger
         horizontal:
           '[&>[data-slot]~[data-slot]]:rounded-l-none [&>[data-slot]~[data-slot]]:border-l-0 [&>[data-slot]:has(~[data-slot])]:rounded-r-none',
         vertical:
@@ -57,4 +56,4 @@ function ButtonGroupSeparator({
   )
 }
 
-export { ButtonGroup, ButtonGroupSeparator, buttonGroupVariants }
+export { ButtonGroup, ButtonGroupSeparator }

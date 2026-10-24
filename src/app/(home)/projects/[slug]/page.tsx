@@ -1,105 +1,67 @@
 import { TOCProvider } from 'fumadocs-ui/components/toc'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { type ReactElement, ViewTransition } from 'react'
+import { ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
-import { TOCMinimap, TOCPopover } from '@/components/features/toc'
-import { WORK_COVER_SIZES } from '@/components/features/work/cover'
-import { PreviewButton } from '@/components/features/work/preview-button'
-import { Icons } from '@/components/icons/icons'
-import { WorkJsonLd } from '@/components/json-ld'
+import { PROJECT_COVER_SIZES } from '@/components/features/projects/cover'
+import { ProjectFacts } from '@/components/features/projects/project-facts'
+import { ProjectStatus } from '@/components/features/projects/project-status'
+import {
+  projectTransitionName,
+  projectTransitionShare,
+} from '@/components/features/projects/transition'
+import { TOCPopover } from '@/components/features/toc'
+import { ProjectJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
-import { SectionBody } from '@/components/layout/sections/body'
+import { heroTitleClassName, TitleDot } from '@/components/layout/sections/hero'
 import { Prose } from '@/components/prose'
-import { ViewAnimation } from '@/components/view-animation'
-import { description as homeDescription } from '@/constants/site'
-import { createMetadata, getWorkPageImage } from '@/lib/metadata'
-import { getWork, getWorkPages, type WorkPage as MDXPage } from '@/lib/source'
-import { cn } from '@/lib/utils'
+import { createArticleMetadata, getProjectPageImage } from '@/lib/metadata'
+import { hasStatusStrip } from '@/lib/project-links'
+import { getProject, getProjectPages, type ProjectPage } from '@/lib/source'
 
-const transition = { default: 'none', 'work-card': 'via-blur' } as const
-
-function Header(props: { page: MDXPage }) {
-  const { page } = props
-  const links: { href: string; label: string; icon: ReactElement }[] = []
-
-  if (page.data.website) {
-    links.push({
-      href: page.data.website,
-      icon: <Icons.globe className='size-4' />,
-      label: 'Visit website',
-    })
-  }
-
-  if (page.data.github) {
-    links.push({
-      href: page.data.github,
-      icon: <Icons.github className='size-4' />,
-      label: 'View source',
-    })
-  }
+function Header({ page }: { page: ProjectPage }) {
+  const slug = page.slugs.join('/')
 
   return (
-    <Section className='p-4 lg:p-6'>
-      <div
-        className={cn(
-          'flex flex-col items-start justify-center gap-4 py-8 md:gap-6',
-          'sm:items-center sm:rounded-lg sm:border sm:bg-card sm:p-10 sm:shadow-xs'
-        )}
+    <header className='flex flex-col gap-4 px-6 pt-8 pb-6 lg:pt-12'>
+      <ViewTransition
+        name={projectTransitionName(slug, 'title')}
+        share={projectTransitionShare}
       >
-        {page.data.image && (
-          <ViewTransition
-            name={`${page.slugs.join('/')}-image`}
-            share={transition}
-          >
-            <BlurImage
-              alt={page.data.title ?? 'Project cover image'}
-              blur={false}
-              className='relative aspect-video w-full overflow-hidden rounded-xl border border-border bg-card/50 sm:mx-auto'
-              fill
-              imageClassName='object-cover'
-              lazy={false}
-              sizes={WORK_COVER_SIZES}
-              src={page.data.image}
-            />
-          </ViewTransition>
-        )}
-        <div className='flex flex-col gap-2 sm:text-center md:gap-4'>
-          <ViewTransition
-            name={`${page.slugs.join('/')}-title`}
-            share={transition}
-          >
-            <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tight sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight lg:text-6xl'>
-              {page.data.title ?? 'Untitled'}
-            </h1>
-          </ViewTransition>
-          <ViewTransition
-            name={`${page.slugs.join('/')}-description`}
-            share={transition}
-          >
-            <p className='typography-body mx-auto text-pretty'>
-              {page.data.description ?? ''}
-            </p>
-          </ViewTransition>
-        </div>
-        {links.length > 0 && (
-          <ViewAnimation delay={0.1}>
-            <div className='flex flex-wrap gap-3'>
-              {links.map((link) => (
-                <PreviewButton
-                  href={link.href}
-                  icon={link.icon}
-                  key={link.href}
-                  label={link.label}
-                />
-              ))}
-            </div>
-          </ViewAnimation>
-        )}
-      </div>
-    </Section>
+        <h1 className={heroTitleClassName}>
+          {page.data.title}
+          <TitleDot />
+        </h1>
+      </ViewTransition>
+      <ViewTransition
+        name={projectTransitionName(slug, 'description')}
+        share={projectTransitionShare}
+      >
+        <p className='text-pretty text-lg text-muted-foreground leading-relaxed tracking-tight'>
+          {page.data.description}
+        </p>
+      </ViewTransition>
+      {hasStatusStrip(page) && <ProjectStatus page={page} />}
+      {page.data.image && (
+        <ViewTransition
+          name={projectTransitionName(slug, 'image')}
+          share={projectTransitionShare}
+        >
+          <BlurImage
+            alt=''
+            blur={false}
+            className='relative mt-4 aspect-video w-full overflow-hidden rounded-xl bg-card outline outline-black/10 -outline-offset-1 dark:outline-white/10'
+            fill
+            imageClassName='object-contain object-top'
+            loading='eager'
+            sizes={PROJECT_COVER_SIZES}
+            src={page.data.image}
+          />
+        </ViewTransition>
+      )}
+    </header>
   )
 }
 
@@ -107,7 +69,7 @@ export default async function Page(props: {
   params: Promise<{ slug: string }>
 }) {
   const params = await props.params
-  const page = getWork([params.slug])
+  const page = getProject([params.slug])
 
   if (!page) {
     notFound()
@@ -116,18 +78,24 @@ export default async function Page(props: {
 
   return (
     <TOCProvider toc={toc}>
-      <Header page={page} />
-
-      <SectionBody className='flex'>
-        <TOCMinimap items={toc} />
-        <article className='flex min-h-full min-w-0 flex-1 flex-col'>
-          <TOCPopover items={toc} />
-          <Prose className='min-w-0 flex-1 p-4'>
+      <Section
+        className='grid grid-rows-[auto_auto_1fr] md:grid-cols-[minmax(0,1fr)_20rem] md:grid-rows-[auto_1fr]'
+        fill
+      >
+        <Header page={page} />
+        <aside className='border-t border-dashed px-6 py-8 md:col-start-2 md:row-span-2 md:row-start-1 md:border-t-0 md:border-l md:px-7 lg:py-12'>
+          <div className='md:sticky md:top-20'>
+            <ProjectFacts page={page} />
+          </div>
+        </aside>
+        <article className='flex min-w-0 flex-col border-t border-dashed md:col-start-1 md:border-t-0'>
+          <TOCPopover className='md:hidden!' items={toc} />
+          <Prose className='prose-h2:mt-10 prose-h2:mb-3.5 px-6 pt-6 pb-12 prose-h2:text-[1.375rem] md:pt-2'>
             <Mdx components={{ ...mdxComponents, GitHubCode }} />
           </Prose>
         </article>
-      </SectionBody>
-      <WorkJsonLd page={page} />
+      </Section>
+      <ProjectJsonLd page={page} />
     </TOCProvider>
   )
 }
@@ -136,37 +104,17 @@ export async function generateMetadata(props: {
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const params = await props.params
-  const page = getWork([params.slug])
+  const page = getProject([params.slug])
 
   if (!page) {
     notFound()
   }
 
-  const title = page.data.title
-  const description = page.data.description ?? homeDescription
-  const image = getWorkPageImage(page)
-
-  return createMetadata({
-    alternates: {
-      canonical: page.url,
-    },
-    description,
-    openGraph: {
-      images: image.url,
-      modifiedTime: page.data.lastModified
-        ? new Date(page.data.lastModified).toISOString()
-        : new Date(page.data.date).toISOString(),
-      publishedTime: new Date(page.data.date).toISOString(),
-      type: 'article',
-      url: `/projects/${page.slugs.join('/')}`,
-    },
-    title,
-    twitter: {
-      images: image.url,
-    },
-  })
+  return createArticleMetadata(page, getProjectPageImage(page))
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return getWorkPages().flatMap(({ slugs: [slug] }) => (slug ? [{ slug }] : []))
+  return getProjectPages().flatMap(({ slugs: [slug] }) =>
+    slug ? [{ slug }] : []
+  )
 }

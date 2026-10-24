@@ -1,0 +1,34 @@
+---
+title: Maskio
+description: A pixel-art platformer with levels, hazards, and coins.
+date: 2021-08-10
+order: 18
+website: https://maskio.techwithanirudh.com/
+status: Live
+platform: Browser game
+github: https://github.com/techwithanirudh/Maskio
+image: /images/projects/maskio/cover.jpg
+tags: ['KaboomJS', 'Game Development', 'Node.js']
+---
+
+Maskio is a small pixel-art platformer from the pandemic years. A masked hero jumps across platforms, dodges viruses and picks up a vaccine. It started from Replit's [Kaboom](https://kaboomjs.com/) template and is open source under the AGPL-3.0.
+
+The game is live, and the site still loads and plays in the browser.
+
+## What it does
+
+You get 20 seconds to reach the portal in each of 12 worlds. Hit blocks from below for coins, an apple that makes you twice as big, or the vaccine. Landing on a virus kills it, and walking into one ends the game. With the vaccine, space fires syringes.
+
+<Screens>
+  <Screen frame='wide' height={900} src='/images/projects/maskio/title-screen.webp' width={1600} alt='The Maskio start screen, with orange pixel text reading Corona Virus Superhero Game above a boy wearing a face mask' caption='The start screen, titled Corona Virus Superhero Game.' />
+  <Screen frame='wide' height={631} src='/images/projects/maskio/world-2.webp' width={1600} alt='The second world, with sand ground, a wall of snow blocks on the left, a row of jump blocks and two red viruses' caption='World 2 of 12, on sand tiles.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={330} src='/images/projects/maskio/vaccine-shot.webp' width={760} alt='Maskio standing on grass blocks while a syringe flies toward a red virus' caption='With the vaccine picked up, space fires a syringe.' />
+  <Screen frame='wide' height={900} src='/images/projects/maskio/game-over.webp' width={1600} alt='The Game Over screen showing the time left, a coin count of zero and the controls' caption='Game over after walking into a virus.' />
+</Screens>
+
+## How it works
+
+Each world is a text grid where every character is a tile. On a phone the hero runs right by itself, one tap jumps, two shoot and three stop the run.

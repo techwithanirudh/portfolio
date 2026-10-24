@@ -2,8 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useHookFormAction } from '@next-safe-action/adapter-react-hook-form/hooks'
-import { useRouter } from 'next/navigation'
-import { Activity, useRef, useState } from 'react'
+import { Activity, useState } from 'react'
 import { useSignInModal } from '@/components/features/auth/sign-in-modal'
 import { Icons } from '@/components/icons/icons'
 import { Alert, AlertTitle } from '@/components/ui/alert'
@@ -18,26 +17,34 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Label } from '@/components/ui/label'
-import {
-  SignaturePad,
-  type SignaturePadHandle,
-} from '@/components/ui/signature-pad'
-import { Skeleton } from '@/components/ui/skeleton'
+import { SignaturePad } from '@/components/ui/signature-pad'
 import { Textarea } from '@/components/ui/textarea'
+import { pages } from '@/constants/pages'
 import { useSession } from '@/lib/auth-client'
 import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
-import { GuestbookEntrySchema } from '@/lib/validators'
+import { GuestbookEntrySchema } from '@/lib/validators/guestbook'
+import type { SessionUser } from '@/server/auth'
 import { createGuestbookEntry } from '../actions/guestbook'
 
-export const GuestbookForm = () => {
-  const router = useRouter()
+const postFailedMessage =
+  "Your entry wasn't posted. Check your connection and try again."
+
+export const GuestbookForm = ({
+  initialUser,
+}: {
+  initialUser: SessionUser | null
+}) => {
   const { openSignIn } = useSignInModal()
   const { data: session, isPending } = useSession()
-  const user = session?.user
+  // The server's user stands in until the client's first session check settles
+  const [checked, setChecked] = useState(false)
+  if (!(isPending || checked)) {
+    setChecked(true)
+  }
+  const user = checked ? session?.user : initialUser
   const [step, setStep] = useState<1 | 2>(1)
   const [formKey, setFormKey] = useState(0)
-  const signaturePad = useRef<SignaturePadHandle>(null)
 
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     createGuestbookEntry,
@@ -48,23 +55,18 @@ export const GuestbookForm = () => {
           if (form.formState.errors.message) {
             setStep(1)
           }
-          toast.error(
-            getActionErrorMessage(error, 'Failed to post guestbook entry.')
-          )
+          toast.error(getActionErrorMessage(error, postFailedMessage))
         },
         onSuccess: () => {
-          toast.success('Guestbook entry posted.')
+          toast.success('Guestbook entry posted')
           form.reset({
             message: '',
             signature: undefined,
           })
           setStep(1)
-          signaturePad.current?.clear()
           setFormKey((current) => current + 1)
-          router.refresh()
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           message: '',
@@ -82,34 +84,24 @@ export const GuestbookForm = () => {
     }
   }
 
-  if (isPending) {
-    return (
-      <div className='w-full space-y-6'>
-        <div className='grid gap-2'>
-          <Skeleton className='h-3.5 w-16' />
-          <Skeleton className='h-40 w-full' />
-          <Skeleton className='h-5 w-36' />
-        </div>
-        <Skeleton className='h-9 w-full' />
-      </div>
-    )
-  }
-
-  if (!(user || isPending)) {
+  if (!user) {
     return (
       <div className='w-full space-y-6'>
         <div className='grid gap-2'>
           <Label>Message</Label>
           <div className='flex h-40 items-center justify-center rounded-md border border-input bg-background px-4 text-center'>
             <p className='text-muted-foreground text-sm'>
-              Sign in to leave a guestbook message.
+              Sign in to leave a guestbook entry.
             </p>
           </div>
           <p className='text-muted-foreground text-sm'>
             You need an account to post.
           </p>
         </div>
-        <Button className='w-full' onClick={() => openSignIn('/guestbook')}>
+        <Button
+          className='w-full'
+          onClick={() => openSignIn(pages.guestbook.path)}
+        >
           <span>Sign in to post</span>
           <Icons.arrowRight
             className='icon-arrow-button size-4'
@@ -120,7 +112,7 @@ export const GuestbookForm = () => {
     )
   }
 
-  const isExecuting = action.status === 'executing'
+  const { isExecuting } = action
 
   return (
     <div className='w-full'>
@@ -142,16 +134,14 @@ export const GuestbookForm = () => {
                       <Textarea
                         className='min-h-[10rem] resize-y bg-background'
                         disabled={isExecuting}
-                        placeholder='Say hello...'
+                        placeholder='Say hello…'
                         {...field}
                       />
                     </FormControl>
                     {form.formState.errors.message ? (
                       <FormMessage />
                     ) : (
-                      <FormDescription>
-                        Posting as {user?.name ?? 'Guest'}.
-                      </FormDescription>
+                      <FormDescription>Posting as {user.name}.</FormDescription>
                     )}
                   </FormItem>
                 )}
@@ -178,7 +168,6 @@ export const GuestbookForm = () => {
                   disabled={isExecuting}
                   onChange={(dataUrl) => form.setValue('signature', dataUrl)}
                   onClear={() => form.setValue('signature', undefined)}
-                  ref={signaturePad}
                 />
               </FormItem>
               <div className='flex gap-2'>
@@ -192,16 +181,21 @@ export const GuestbookForm = () => {
                   <Icons.arrowLeft className='size-4' />
                   Back
                 </Button>
-                <Button className='flex-1' disabled={isExecuting} type='submit'>
+                <Button
+                  className='flex-1'
+                  disabled={isExecuting}
+                  focusableWhenDisabled
+                  type='submit'
+                >
                   {isExecuting ? (
                     <Icons.spinner className='size-4 animate-spin' />
                   ) : null}
-                  Submit
+                  Post entry
                 </Button>
               </div>
             </div>
           </Activity>
-          {action.status === 'hasSucceeded' && (
+          {action.hasSucceeded && (
             <Alert className='mt-6' variant='success'>
               <Icons.success size={16} />
               <AlertTitle className='mb-0 leading-normal'>
@@ -213,7 +207,7 @@ export const GuestbookForm = () => {
             <Alert className='mt-6' variant='destructive-soft'>
               <Icons.warning className='size-4' />
               <AlertTitle className='mb-0 leading-normal'>
-                {action.result.serverError}
+                {getActionErrorMessage(action.result, postFailedMessage)}
               </AlertTitle>
             </Alert>
           )}

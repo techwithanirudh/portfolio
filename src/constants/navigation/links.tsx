@@ -1,35 +1,41 @@
 import type { LinkItemType } from 'fumadocs-ui/layouts/shared'
 import { Icons } from '@/components/icons/icons'
+import { pages } from '@/constants/pages'
 
 export const linkItems: LinkItemType[] = [
   {
     active: 'url',
     icon: <Icons.user />,
-    text: 'About',
-    url: '/about',
+    text: pages.about.title,
+    url: pages.about.path,
   },
   {
     active: 'nested-url',
     icon: <Icons.work />,
-    text: 'Projects',
-    url: '/projects',
+    text: pages.projects.title,
+    url: pages.projects.path,
   },
   {
     active: 'nested-url',
     icon: <Icons.blog />,
-    text: 'Blog',
-    url: '/blog',
+    text: pages.blog.title,
+    url: pages.blog.path,
   },
   {
     active: 'url',
     icon: <Icons.mail />,
-    text: 'Contact',
-    url: '/contact',
+    text: pages.contact.title,
+    url: pages.contact.path,
   },
   {
     active: 'url',
     icon: <Icons.messageSquare />,
-    text: 'Guestbook',
-    url: '/guestbook',
+    text: pages.guestbook.title,
+    url: pages.guestbook.path,
   },
 ]
+
+export const v1Portfolio = {
+  name: 'V1 portfolio',
+  url: 'https://v1.techwithanirudh.com/',
+}

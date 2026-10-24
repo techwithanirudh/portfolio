@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button-variants'
 import {
   Pagination,
   PaginationContent,
@@ -14,8 +14,6 @@ const ellipsisClassName =
 
 const linkClassName = 'shadow-none hover:z-10 focus-visible:z-10'
 
-// Both arrows always render, greyed out at the ends, so the page numbers
-// stay centered and the bar doesn't jump between pages
 function StepLink({
   children,
   href,
@@ -27,7 +25,6 @@ function StepLink({
 }) {
   if (!href) {
     return (
-      // Just a placeholder for sighted users; there's nowhere to go
       <span
         aria-hidden
         className={buttonVariants({
@@ -58,19 +55,17 @@ function StepLink({
 interface NumberedPaginationProps {
   currentPage: number
   getHref: (page: number) => string
-  paginationItemsToDisplay?: number
   totalPages: number
 }
 
 function NumberedPagination({
   currentPage,
   totalPages,
-  paginationItemsToDisplay = 5,
   getHref,
 }: NumberedPaginationProps) {
   const { pages, showLeftEllipsis, showRightEllipsis } = getPaginationRange({
     currentPage,
-    itemsToDisplay: paginationItemsToDisplay,
+    itemsToDisplay: 5,
     totalPages,
   })
 

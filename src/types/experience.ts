@@ -1,4 +1,4 @@
-export interface ExperiencePositionItemType {
+interface ExperiencePositionItemType {
   description?: string
   employmentPeriod: {
     start: string

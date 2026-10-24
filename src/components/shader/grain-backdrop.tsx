@@ -58,8 +58,6 @@ export function GrainBackdrop({
       aria-hidden
       className={cn(
         'pointer-events-none absolute inset-0 opacity-80 dark:opacity-100',
-        // Eases in from nothing to its own opacity while WebGL spins up,
-        // instead of popping in on the first frame it draws
         'fade-in animate-in fill-mode-both delay-150 duration-1400 ease-out motion-reduce:animate-none',
         FADES[fade],
         className

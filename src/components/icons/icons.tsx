@@ -1,14 +1,14 @@
 import {
   AiChat02Icon,
   Alert02Icon,
+  ArrowExpand01Icon,
+  ArrowShrink01Icon,
   BrainIcon,
   Briefcase01Icon,
   Briefcase02Icon,
-  Calendar03Icon,
   Cancel01Icon,
   CheckmarkBadge02Icon,
   CheckmarkCircle01Icon,
-  CodeIcon,
   Copy01Icon,
   Delete02Icon,
   DiscoverCircleIcon,
@@ -28,10 +28,12 @@ import {
   Message01Icon,
   Moon02Icon,
   MoreHorizontalCircle01Icon,
-  MoreVerticalIcon,
   MultiplicationSignCircleIcon,
   Notebook01Icon,
+  PartyIcon,
+  PauseIcon,
   PencilEdit01Icon,
+  PlayIcon,
   PlusSignIcon,
   QuoteUpIcon,
   Redo03Icon,
@@ -90,7 +92,6 @@ import {
 } from 'lucide-react'
 import {
   ClaudeIcon,
-  GitHubIcon,
   GoogleIcon,
   LinkedInIcon,
   MarkdownIcon,
@@ -99,28 +100,13 @@ import {
   YouTubeIcon,
 } from './brands'
 import type { IconProps, SvgIcon } from './utils'
-import { getSvgSizeProps } from './utils'
-
-export type { Icon } from './utils'
-
-const DEFAULT_STROKE_WIDTH = 2
+import { getSvgSizeProps, isLabelled } from './utils'
 
 const toStrokeWidth = (value: IconProps['strokeWidth']) => {
   const parsed = typeof value === 'string' ? Number.parseFloat(value) : value
 
-  return typeof parsed === 'number' && Number.isFinite(parsed)
-    ? parsed
-    : DEFAULT_STROKE_WIDTH
+  return typeof parsed === 'number' && Number.isFinite(parsed) ? parsed : 2
 }
-
-// Decorative unless the caller labels it
-const isLabelled = (props: IconProps) =>
-  Object.keys(props).some(
-    (key) =>
-      (key.startsWith('aria-') && key !== 'aria-hidden') ||
-      key === 'role' ||
-      key === 'title'
-  )
 
 const hugeIcon = (icon: IconSvgElement): SvgIcon => {
   const Huge = ({ height, size, strokeWidth, width, ...props }: IconProps) => (
@@ -144,10 +130,6 @@ const lucideIcon = (Icon: LucideIcon): SvgIcon => {
   return Lucide
 }
 
-// The mix the site had before everything got routed through one set:
-// Hugeicons by default, Lucide for arrows, chevrons, paw and volume, and
-// Primer Octicons for the GitHub activity feed
-
 export const Icons = {
   add: hugeIcon(PlusSignIcon),
   aiChat: hugeIcon(AiChat02Icon),
@@ -159,14 +141,12 @@ export const Icons = {
   ban: hugeIcon(UnavailableIcon),
   blog: hugeIcon(Notebook01Icon),
   brain: hugeIcon(BrainIcon),
-  calendar: hugeIcon(Calendar03Icon),
   check: hugeIcon(Tick02Icon),
   chevronDown: lucideIcon(ChevronDown),
   chevronLeft: lucideIcon(ChevronLeft),
   chevronRight: lucideIcon(ChevronRight),
   claude: ClaudeIcon,
   close: hugeIcon(Cancel01Icon),
-  code: hugeIcon(CodeIcon),
   codeXml: hugeIcon(SourceCodeSquareIcon),
   comment: CommentIcon,
   compass: hugeIcon(DiscoverCircleIcon),
@@ -174,16 +154,15 @@ export const Icons = {
   cornerDownLeft: lucideIcon(CornerDownLeft),
   desktop: hugeIcon(Tv02Icon),
   download: hugeIcon(Download01Icon),
-  ellipsis: hugeIcon(MoreVerticalIcon),
   eraser: hugeIcon(EraserIcon),
   error: hugeIcon(MultiplicationSignCircleIcon),
+  expand: hugeIcon(ArrowExpand01Icon),
   experience: hugeIcon(Briefcase01Icon),
   featured: hugeIcon(StarIcon),
   feedPublic: FeedPublicIcon,
   gitBranch: GitBranchIcon,
   gitCommit: GitCommitIcon,
-  github: GitHubIcon,
-  githubMark: MarkGithubIcon,
+  github: MarkGithubIcon,
   gitPullRequest: GitPullRequestIcon,
   gitTag: TagIcon,
   globe: hugeIcon(Globe02Icon),
@@ -208,8 +187,11 @@ export const Icons = {
   moreHorizontal: hugeIcon(MoreHorizontalCircle01Icon),
   openai: OpenAIIcon,
   page: hugeIcon(File01Icon),
+  party: hugeIcon(PartyIcon),
+  pause: hugeIcon(PauseIcon),
   pawPrint: lucideIcon(PawPrint),
   pencil: hugeIcon(PencilEdit01Icon),
+  play: hugeIcon(PlayIcon),
   post: hugeIcon(File02Icon),
   quote: hugeIcon(QuoteUpIcon),
   redo: hugeIcon(Redo03Icon),
@@ -220,6 +202,7 @@ export const Icons = {
   search: hugeIcon(Search01Icon),
   send: hugeIcon(SentIcon),
   share: hugeIcon(Share08Icon),
+  shrink: hugeIcon(ArrowShrink01Icon),
   spinner: hugeIcon(Loading03Icon),
   square: hugeIcon(SquareIcon),
   star: GitHubStarIcon,

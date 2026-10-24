@@ -21,7 +21,4 @@ export const systemPrompt = ({
     factsPrompt(facts),
     llmsPrompt(llms),
     examplesPrompt,
-  ]
-    .filter(Boolean)
-    .join('\n\n')
-    .trim()
+  ].join('\n\n')

@@ -1,3 +1,4 @@
+import { designNotes } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 
 const palette = [
@@ -16,10 +17,7 @@ const palette = [
 export const Design = () => (
   <div className='dashed-stack flex flex-col text-left'>
     <div className='space-y-4 bg-card/50 p-6 text-muted-foreground text-sm'>
-      <p>
-        The layout uses wide spacing and dashed borders. Geist Sans sets
-        headings and body text, and Geist Mono sets code and labels.
-      </p>
+      <p>{designNotes.layout}</p>
     </div>
     <div className='bg-card/50 p-6'>
       <div className='pb-3 font-medium text-foreground text-sm'>Palette</div>
@@ -39,9 +37,7 @@ export const Design = () => (
             </div>
           ))}
         </div>
-        <p className='text-muted-foreground text-sm'>
-          The palette is neutral, with a blue accent for focus rings and links.
-        </p>
+        <p className='text-muted-foreground text-sm'>{designNotes.palette}</p>
       </div>
     </div>
   </div>

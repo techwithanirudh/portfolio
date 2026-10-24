@@ -12,29 +12,30 @@ const contributionResponseSchema = z.object({
   ),
 }) satisfies z.ZodType<{ contributions: Activity[] }>
 
-const DEFAULT_CONTRIBUTIONS_API_URL =
-  'https://github-contributions-api.jogruber.de'
-
-export const getGitHubContributions = unstable_cache(
+const getCachedGitHubContributions = unstable_cache(
   async () => {
     const url = new URL(
       `/v4/${githubUser}?y=last`,
-      env.GITHUB_CONTRIBUTIONS_API_URL || DEFAULT_CONTRIBUTIONS_API_URL
+      env.GITHUB_CONTRIBUTIONS_API_URL ||
+        'https://github-contributions-api.jogruber.de'
     )
-    try {
-      const response = await fetch(url)
+    const response = await fetch(url)
 
-      if (!response.ok) {
-        return []
-      }
-
-      const parsed = contributionResponseSchema.safeParse(await response.json())
-
-      return parsed.success ? parsed.data.contributions : []
-    } catch {
-      return []
+    if (!response.ok) {
+      throw new Error(`Contributions request failed: ${response.status}`)
     }
+
+    return contributionResponseSchema.parse(await response.json()).contributions
   },
   ['github-contributions', githubUser],
   { revalidate: 60 * 60 * 24 }
 )
+
+export const getGitHubContributions = async () => {
+  try {
+    return await getCachedGitHubContributions()
+  } catch (error) {
+    console.error('GitHub contributions fetch failed:', error)
+    return []
+  }
+}

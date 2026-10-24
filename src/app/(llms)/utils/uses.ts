@@ -14,7 +14,7 @@ const listItems = (
 
 export function getUsesText() {
   return `# Uses
-Route: ${url('/uses')}
+Route: ${url(pages.uses.path)}
 
 ${pages.uses.description} The page opens with a photo of my desk setup in 2025.
 

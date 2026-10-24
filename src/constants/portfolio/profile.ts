@@ -14,6 +14,8 @@ export const profile = {
     'konnichiwa, sekai',
   ],
   handle: 'an1rudh',
+  jobTitle: 'Full-stack Developer',
+  knowsAbout: ['Next.js', 'React', 'TypeScript', 'Web Development', 'AI'],
   location: 'India',
   obfuscatedEmail: 'aGVsbG9AaW1hbmlydWRoLmNvbQ==',
   pronouns: 'he/him',

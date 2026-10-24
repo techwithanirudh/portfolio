@@ -1,32 +1,18 @@
 import { type Content, RouteError } from '@fuma-comment/server'
-import { generateText, Output, type UserContent } from 'ai'
-import { moderationPrompt } from '@/lib/ai/prompts/moderation'
-import { provider } from '@/lib/ai/providers'
-import {
-  ModerationResultSchema,
-  parseCommentImageNode,
-  parseCommentMentionNode,
-} from '@/lib/validators'
-
-const normalizeWhitespace = (value: string) =>
-  value
-    .split('\n')
-    .map((line) => line.replace(/[^\S\n]+/g, ' ').trim())
-    .filter(Boolean)
-    .join('\n')
+import { parseCommentMentionNode } from '@/lib/validators/comments'
+import { moderate } from '@/server/moderation'
 
 const extractContent = (content: Content) => {
   const textParts: string[] = []
-  const images: string[] = []
+  let hasImage = false
 
   const visit = (node: Content) => {
     if (node.type === 'text' && typeof node.text === 'string') {
       textParts.push(node.text)
     }
 
-    const parsedImage = parseCommentImageNode(node)
-    if (parsedImage) {
-      images.push(parsedImage.attrs.src)
+    if (node.type === 'image') {
+      hasImage = true
     }
 
     const parsedMention = parseCommentMentionNode(node)
@@ -48,70 +34,39 @@ const extractContent = (content: Content) => {
   visit(content)
 
   return {
-    images,
-    text: normalizeWhitespace(textParts.join('')),
+    hasImage,
+    text: textParts
+      .join('')
+      .split('\n')
+      .map((line) => line.replace(/[^\S\n]+/g, ' ').trim())
+      .filter(Boolean)
+      .join('\n'),
   }
 }
 
 export const moderateComment = async (content: Content) => {
-  const { text, images } = extractContent(content)
+  const { hasImage, text } = extractContent(content)
 
-  if (images.length > 0) {
+  if (hasImage) {
     throw new RouteError({
       message: 'Images are not allowed in comments.',
       statusCode: 400,
     })
   }
 
-  const userContent: UserContent = [
-    {
-      text: `Moderate this comment:\n\n${text || '[no text content]'}`,
-      type: 'text',
-    },
-  ]
-
-  try {
-    const { output } = await generateText({
-      instructions: moderationPrompt,
-      messages: [
-        {
-          content: userContent,
-          role: 'user',
-        },
-      ],
-      model: provider.languageModel('moderation-model'),
-      output: Output.object({
-        schema: ModerationResultSchema,
-      }),
-    })
-
-    if (!output) {
-      throw new RouteError({
-        message: 'Could not verify content safety. Please try again.',
-        statusCode: 500,
-      })
-    }
-
-    if (!output.allowed) {
-      throw new RouteError({ message: output.reason, statusCode: 400 })
-    }
-
-    return output
-  } catch (error) {
-    if (error instanceof RouteError) {
-      throw error
-    }
-
-    console.error('Comment moderation failed:', {
-      error:
-        error instanceof Error
-          ? { message: error.message, name: error.name }
-          : String(error),
-    })
-
+  const result = await moderate(
+    `Moderate this comment:\n\n${text || '[no text content]'}`,
+    'Comment'
+  )
+  if (!result) {
     throw new RouteError({
       message: 'Could not verify content safety. Please try again.',
       statusCode: 500,
     })
   }
+  if (!result.allowed) {
+    throw new RouteError({ message: result.reason, statusCode: 400 })
+  }
+
+  return result
 }

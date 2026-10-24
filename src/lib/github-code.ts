@@ -1,15 +1,14 @@
 import { unstable_cache } from 'next/cache'
 import { bundledLanguages, bundledLanguagesAlias } from 'shiki'
-import { octokit } from '@/lib/github'
+import { GITHUB_REVALIDATE_SECONDS, octokit } from '@/lib/github'
 
-const DEFAULT_REVALIDATE_SECONDS = 60 * 60
 const SHIKI_LANG_KEYS = new Set([
   ...Object.keys(bundledLanguages),
   ...Object.keys(bundledLanguagesAlias),
 ])
 const LINE_RANGE_REGEX = /#L(\d+)(?:-L(\d+))?$/
 
-export interface ParsedGitHubFileUrl {
+interface ParsedGitHubFileUrl {
   lineRange: {
     startLine?: number
     endLine?: number
@@ -21,9 +20,7 @@ export interface ParsedGitHubFileUrl {
   source: string
 }
 
-const parseLineRange = (
-  value?: string
-): { startLine?: number; endLine?: number } => {
+const parseLineRange = (value?: string): ParsedGitHubFileUrl['lineRange'] => {
   if (!value) {
     return {}
   }
@@ -37,14 +34,14 @@ const parseLineRange = (
   const end = match[2] ? Number(match[2]) : undefined
 
   return {
-    endLine: end !== undefined && !Number.isNaN(end) ? end : undefined,
-    startLine: Number.isNaN(start) ? undefined : start,
+    endLine: end,
+    startLine: start,
   }
 }
 
 export const parseGitHubURL = (url: string): ParsedGitHubFileUrl => {
   const parsed = new URL(url)
-  const lineRange = parseLineRange(parsed.toString())
+  const lineRange = parseLineRange(parsed.hash)
   parsed.hash = ''
 
   const segments = parsed.pathname.split('/').filter(Boolean)
@@ -116,7 +113,7 @@ export const getGitHubFileContent = unstable_cache(
     return Buffer.from(response.data.content, 'base64').toString('utf8')
   },
   ['github-code'],
-  { revalidate: DEFAULT_REVALIDATE_SECONDS }
+  { revalidate: GITHUB_REVALIDATE_SECONDS }
 )
 
 export const sliceLines = (
@@ -148,16 +145,16 @@ export const getCodeTitle = (
   return filename
 }
 
-export const resolveLanguage = (path: string, fallback = 'txt'): string => {
+export const resolveLanguage = (path: string): string => {
   const filename = path.split('/').pop() ?? ''
   const extension = filename.includes('.')
     ? filename.split('.').pop()?.toLowerCase()
     : ''
 
   if (!extension) {
-    return fallback
+    return 'txt'
   }
 
   const normalized = extension === 'htm' ? 'html' : extension
-  return SHIKI_LANG_KEYS.has(normalized) ? normalized : fallback
+  return SHIKI_LANG_KEYS.has(normalized) ? normalized : 'txt'
 }

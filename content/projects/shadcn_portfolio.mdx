@@ -1,0 +1,39 @@
+---
+title: Shadcn Portfolio
+description: A Next.js portfolio template with a blog and shadcn/ui.
+date: 2026-01-12
+order: 5
+website: https://shadcn-portfoliox.vercel.app
+status: Template
+platform: Web
+github: https://github.com/techwithanirudh/shadcn-portfolio
+image: /images/projects/shadcn_portfolio/cover.png
+tags: ['Next.js', 'TurboRepo', 'MDX', 'shadcn/ui', 'Framer Motion']
+---
+
+A portfolio template with work sections, a blog and shadcn/ui. You swap in your own details and write the content in MDX. It's a GitHub template under the MIT license, and the live demo is up. The demo runs as John Doe, a made-up developer.
+
+Yeom-JinHo sent two fixes in PRs #56 and #57, a dialog scroll-lock cleanup and a compact-header menu fix.
+
+## What it does
+
+The homepage has sections for projects, testimonials and a contact form, and most come in cozy, modern and compact layouts. Visitors can sign in with Google or GitHub through [Better Auth](https://www.better-auth.com/) to comment on blog posts, and comments are saved to Postgres with [Drizzle](https://orm.drizzle.team/).
+
+<Screens>
+  <Screen frame='wide' height={900} src='/images/projects/shadcn_portfolio/hero-light.webp' width={1600} alt='The demo homepage in light mode with the headline A developer who loves to code above a portrait photo' caption='The modern hero, in light mode.' />
+  <Screen frame='wide' height={900} src='/images/projects/shadcn_portfolio/projects-carousel.webp' width={1600} alt='A carousel of three project cards, each with an image, a title, a short description and tech tags' caption='Projects come from MDX files.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={787} src='/images/projects/shadcn_portfolio/blog-comments.webp' width={1400} alt='The end of the Hello World blog post followed by a comment box and one comment with a reply' caption='Blog posts end with a comment thread.' />
+  <Screen frame='wide' height={675} src='/images/projects/shadcn_portfolio/sign-in-card.webp' width={1200} alt='A Sign In card with buttons for Google and GitHub' caption='Sign-in offers Google and GitHub.' />
+</Screens>
+
+## How it works
+
+You start a copy with `create-next-app` pointed at the repository. Blog posts and work pages are MDX files that [Fumadocs](https://fumadocs.dev/) renders, and each section reads its text from its own config file. The contact form sends through [Resend](https://resend.com/) and checks a [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) token on the server. In March 2025 I moved it into a [Turborepo](https://turbo.build/repo). The single-app version stays on the `tailwind-v4` branch.
+
+<Screens>
+  <Screen frame='wide' height={900} src='/images/projects/shadcn_portfolio/menu-open.webp' width={1600} alt='The full-screen menu with Home, About, Projects and Blog links, a user button and a theme toggle' caption='The menu opens over the page.' />
+  <Screen frame='wide' height={900} src='/images/projects/shadcn_portfolio/testimonials-rows.webp' width={1600} alt='Two rows of testimonial cards scrolling sideways under the heading My Testimonials' caption='Testimonials scroll in two rows.' />
+</Screens>

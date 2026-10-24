@@ -2,7 +2,9 @@ import Image from 'next/image'
 import { ListSection } from '@/components/layout/sections/list-section'
 import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
-import { groupTechnologies } from '@/constants/portfolio/skills'
+import { pages, sectionIds } from '@/constants/pages'
+import { groupTechnologies, stackIntro } from '@/constants/portfolio/skills'
+import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 import type { TechStackItem } from '@/types'
 
@@ -12,16 +14,16 @@ const iconClassName =
 export default function Stack(): React.ReactElement {
   return (
     <ListSection
-      description='The tools I reach for most.'
-      id='stack'
-      more={{ delay: 0.1, href: '/uses', label: 'Everything I use' }}
+      description={stackIntro}
+      id={sectionIds.stack}
+      more={{ delay: 0.1, href: pages.uses.path, label: 'Everything I use' }}
       title='Stack'
     >
       <div className='dashed-stack border-border border-y border-dashed'>
         {groupTechnologies().map(([category, items], index) => (
           <ViewAnimation
             className='grid items-center gap-y-3 py-6 md:grid-cols-[16rem_1fr]'
-            delay={0.05 * index}
+            delay={staggerDelay(index)}
             key={category}
           >
             <h3 className='px-6 font-medium'>{category}</h3>

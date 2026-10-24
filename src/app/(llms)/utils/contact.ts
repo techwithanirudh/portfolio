@@ -1,12 +1,14 @@
 import { socials } from '@/constants/navigation'
+import { pages } from '@/constants/pages'
 import { faq } from '@/constants/portfolio/faq'
+import { contactIntro } from '@/constants/portfolio/intro'
 import { url } from '@/lib/url'
 
 export function getContactText() {
   return `# Contact
-Route: ${url('/contact')}
+Route: ${url(pages.contact.path)}
 
-Have a question or want to work together? Send a message through the contact form and I'll reply within a week. Visitors can also leave a public note in the [guestbook](${url('/guestbook')}).
+${contactIntro}
 
 ## Links
 

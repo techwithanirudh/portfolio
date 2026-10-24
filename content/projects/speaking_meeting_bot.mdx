@@ -1,0 +1,28 @@
+---
+title: Speaking Meeting Bot
+description: AI agents that join Google Meet and Teams calls and speak with different personalities.
+date: 2024-11-12
+order: 3
+github: https://github.com/Meeting-BaaS/speaking-meeting-bot
+status: Open source
+platform: Google Meet and Teams
+image: /images/projects/speaking_meeting_bot/cover.png
+tags: ['Python', 'Pipecat', 'MeetingBaaS', 'WebSocket']
+---
+
+AI agents that join a Google Meet or Teams call and talk in it, each with its own personality. I wrote the first version in November 2024, and the Meeting BaaS team added more after that. It's open source under the MIT license and lives in the Meeting BaaS org now.
+
+The hosted API still runs, and its docs page loads.
+
+## What it does
+
+You give it a meeting link and a persona, and the agent joins and holds a spoken conversation. A persona is a Markdown file that sets the agent's traits, voice and first line.
+
+<Screens>
+  <Screen frame='wide' height={1158} src='/images/projects/speaking_meeting_bot/persona-file.webp' width={1600} alt='The interviewer persona README on GitHub, with sections for characteristics, voice and metadata, next to the list of persona folders' caption='A persona is a Markdown file with traits, voice and entry message.' />
+  <Screen frame='wide' height={1151} src='/images/projects/speaking_meeting_bot/api-docs.webp' width={1600} alt='Swagger UI for the Speaking Meeting Bot API listing POST /bots, DELETE /bots/{bot_id}, POST /personas/generate-image, POST /webhook and GET /health' caption='The hosted API docs.' />
+</Screens>
+
+## How it works
+
+[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio. [Pipecat](https://www.pipecat.ai/) runs the voice pipeline, so [Deepgram](https://deepgram.com/) transcribes speech, an OpenAI model writes the reply and [Cartesia](https://cartesia.ai/) speaks it back. My version started each bot by script, each with its own [ngrok](https://ngrok.com/) tunnel. Today a FastAPI server starts them.

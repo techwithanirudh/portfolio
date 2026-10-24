@@ -12,7 +12,7 @@ export function NewsletterSection() {
     <SplitSection>
       <SplitSectionSidebar>
         <SplitSectionHeader
-          description='Get notified when I publish new posts. No spam, unsubscribe anytime.'
+          description='An email when I publish a new post. Unsubscribe anytime.'
           title='Subscribe to the newsletter'
         />
       </SplitSectionSidebar>

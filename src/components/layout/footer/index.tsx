@@ -1,5 +1,5 @@
 import { UserButton } from '@/components/features/auth'
-import { GuestbookBand } from '@/components/guestbook-cue'
+import { GuestbookBand } from '@/components/guestbook-band'
 import { Clock } from '@/components/layout/footer/clock'
 import { SoundToggle } from '@/components/layout/footer/sound-toggle'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
@@ -9,9 +9,9 @@ import { cn } from '@/lib/utils'
 import { Links } from './links'
 
 export const Footer = () => (
-  <>
-    <GuestbookBand before='since you read all the way down, leave proof you were here in the' />
-    <footer
+  <footer className='flex flex-col'>
+    <GuestbookBand />
+    <div
       className={cn(
         'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
         'border-border border-b border-dashed',
@@ -52,6 +52,6 @@ export const Footer = () => (
           </ViewAnimation>
         </div>
       </div>
-    </footer>
-  </>
+    </div>
+  </footer>
 )

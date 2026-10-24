@@ -1,9 +1,13 @@
 import Bowser from 'bowser'
 import { format } from 'date-fns'
+import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
 import { Badge } from '@/components/ui/badge'
+import { buttonVariants } from '@/components/ui/button-variants'
 import { Card } from '@/components/ui/card'
-import { listSessions } from '@/server/auth'
+import { pages } from '@/constants/pages'
+import { SIGN_IN_PARAM } from '@/lib/auth-url'
+import { isSessionNotFreshError, listSessions } from '@/server/auth'
 
 import { RevokeSessionButton } from './revoke-session-button'
 
@@ -18,6 +22,9 @@ const PLATFORM_ICONS = {
 } as const
 
 type PlatformType = keyof typeof PLATFORM_ICONS
+
+const isPlatformType = (value?: string): value is PlatformType =>
+  value !== undefined && Object.hasOwn(PLATFORM_ICONS, value)
 
 function parseUserAgent(ua?: string | null): {
   os: string
@@ -37,13 +44,7 @@ function parseUserAgent(ua?: string | null): {
   const parsed = Bowser.parse(ua)
   const platformType = parsed.platform.type
 
-  const platform: PlatformType =
-    platformType === 'desktop' ||
-    platformType === 'mobile' ||
-    platformType === 'tablet' ||
-    platformType === 'tv'
-      ? platformType
-      : 'unknown'
+  const platform = isPlatformType(platformType) ? platformType : 'unknown'
 
   return {
     browser: parsed.browser.name ?? 'Unknown',
@@ -53,8 +54,39 @@ function parseUserAgent(ua?: string | null): {
   }
 }
 
-const compareSessionsByRecency =
-  (currentToken: string) => (a: Session, b: Session) => {
+export async function ActiveSessions(props: { currentToken: string }) {
+  const { currentToken } = props
+
+  let sessions: Session[]
+  try {
+    sessions = await listSessions()
+  } catch (error) {
+    if (isSessionNotFreshError(error)) {
+      return (
+        <Card className='rounded-none border-0' variant='flat'>
+          <div className='flex flex-col gap-3 p-4 text-muted-foreground text-sm sm:flex-row sm:items-center sm:justify-between sm:p-6'>
+            <p>For security, sign in again to view your sessions.</p>
+            <Link
+              className={buttonVariants({ size: 'sm', variant: 'outline' })}
+              href={`${pages.account.path}?${SIGN_IN_PARAM}=${encodeURIComponent(pages.account.path)}`}
+            >
+              Sign in
+            </Link>
+          </div>
+        </Card>
+      )
+    }
+    console.error('Failed to list sessions:', error)
+    return (
+      <Card className='rounded-none border-0' variant='flat'>
+        <div className='p-4 text-muted-foreground text-sm sm:p-6'>
+          Couldn't load your sessions. Refresh the page to try again.
+        </div>
+      </Card>
+    )
+  }
+
+  const sortedSessions = sessions.toSorted((a, b) => {
     const aIsCurrent = a.token === currentToken
     const bIsCurrent = b.token === currentToken
 
@@ -62,28 +94,8 @@ const compareSessionsByRecency =
       return aIsCurrent ? -1 : 1
     }
 
-    return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-  }
-
-export async function ActiveSessions(props: { currentToken: string }) {
-  const { currentToken } = props
-
-  let sessions: Session[]
-  try {
-    sessions = await listSessions()
-  } catch {
-    return (
-      <Card className='rounded-none border-0' variant='flat'>
-        <div className='p-4 text-muted-foreground text-sm sm:p-6'>
-          Could not load sessions.
-        </div>
-      </Card>
-    )
-  }
-
-  const sortedSessions = sessions
-    .slice()
-    .sort(compareSessionsByRecency(currentToken))
+    return b.updatedAt.getTime() - a.updatedAt.getTime()
+  })
 
   if (sortedSessions.length === 0) {
     return (
@@ -115,7 +127,7 @@ function SessionCard(props: { session: Session; currentToken: string }) {
   const parsed = parseUserAgent(session.userAgent)
   const PlatformIcon = PLATFORM_ICONS[parsed.platform]
 
-  const lastActive = format(new Date(session.updatedAt), 'MMM d, yyyy, h:mm a')
+  const lastActive = format(session.updatedAt, 'MMM d, yyyy, h:mm a')
 
   return (
     <Card className='rounded-none border-0' variant='flat'>

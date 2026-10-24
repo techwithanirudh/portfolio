@@ -2,7 +2,7 @@
 
 import { useSound } from '@web-kits/audio/react'
 import { type RefObject, useMemo, useRef, useState } from 'react'
-import { CopyStateIcon } from '@/components/copy-button'
+import { CopyStateIcon } from '@/components/copy-state-icon'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
@@ -66,7 +66,7 @@ function useMarkdownCopy(markdownUrl: string) {
   return { handleCopy, isCopying, state }
 }
 
-export function LLMCopyButton({
+function LLMCopyButton({
   state,
   isCopying,
   onClick,
@@ -81,6 +81,7 @@ export function LLMCopyButton({
       className='min-w-0 flex-1 justify-start border-none shadow-none active:scale-none'
       data-sound-press='off'
       disabled={isCopying}
+      focusableWhenDisabled
       onClick={onClick}
       size='sm'
       type='button'
@@ -92,7 +93,7 @@ export function LLMCopyButton({
   )
 }
 
-export function ViewOptions({
+function ViewOptions({
   anchor,
   markdownUrl,
   githubUrl,
@@ -105,13 +106,11 @@ export function ViewOptions({
   disabled?: boolean
 }) {
   const items = useMemo(() => {
-    const fullMarkdownUrl = markdownUrl
-
-    const q = `Read ${fullMarkdownUrl}, I want to ask questions about it.`
+    const q = `Read ${markdownUrl}, I want to ask questions about it.`
 
     return [
       {
-        href: fullMarkdownUrl,
+        href: markdownUrl,
         icon: Icons.markdown,
         title: 'View as Markdown',
       },
@@ -139,14 +138,14 @@ export function ViewOptions({
         render={
           <Button
             aria-label='View options'
-            className='size-8 border-none shadow-none active:scale-none'
+            className='group/trigger border-none shadow-none active:scale-none'
             disabled={disabled}
             size='icon-sm'
             variant='secondary'
           />
         }
       >
-        <Icons.chevronDown className='mt-0.5 size-4' />
+        <Icons.chevronDown className='mt-0.5 size-4 transition-transform duration-200 ease-out group-data-popup-open/trigger:rotate-180 motion-reduce:transition-none' />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align='end'
@@ -155,24 +154,22 @@ export function ViewOptions({
           'max-w-none gap-0.5 rounded-xl p-1.5',
           anchor && 'w-(--anchor-width)'
         )}
-        finalFocus={false}
+        // Return focus only on a keyboard close, or Escape leaves keyboard users on <body>
+        finalFocus={(closeType) => closeType === 'keyboard'}
       >
         {items.map(({ title, href, icon }) => (
           <DropdownMenuIconItem
             className='group/item'
             icon={icon}
             key={href}
-            render={
-              <a
-                aria-label={title}
-                href={href}
-                rel='noopener'
-                target='_blank'
-              />
-            }
+            render={({ children, ...props }) => (
+              <a {...props} href={href} rel='noopener' target='_blank'>
+                {children}
+              </a>
+            )}
           >
             <span className='truncate'>{title}</span>
-            <Icons.arrowUpRight className='group-focus/item:translate-0 motion-reduce:translate-0 ml-auto size-3.5 -translate-x-0.5 translate-y-0.5 text-muted-foreground opacity-0 transition-[opacity,transform] duration-200 ease-out group-focus/item:opacity-100' />
+            <Icons.arrowUpRight className='group-focus/item:translate-0 motion-reduce:translate-0 ml-auto size-3.5 -translate-x-0.5 translate-y-0.5 text-muted-foreground opacity-0 transition-[opacity,translate] duration-200 ease-out-strong group-focus/item:opacity-100' />
           </DropdownMenuIconItem>
         ))}
       </DropdownMenuContent>

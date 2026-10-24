@@ -1,19 +1,13 @@
 'use client'
 
-import {
-  createContext,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import { createContext, type ReactNode, use, useEffect, useState } from 'react'
 import { SimbaController } from './controller'
 
 const MascotContext = createContext<SimbaController | undefined>(undefined)
 
 /** Simba's controller, or undefined where he isn't shown (mobile) */
 export function useMascot() {
-  return useContext(MascotContext)
+  return use(MascotContext)
 }
 
 interface MascotProviderProps {

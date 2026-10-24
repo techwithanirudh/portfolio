@@ -1,0 +1,31 @@
+---
+title: AniKode Website Builder
+description: A drag-and-drop website builder with HTML and JavaScript blocks.
+date: 2023-06-15
+order: 14
+website: https://anikode.techwithanirudh.com/
+status: Live
+platform: Web
+image: /images/projects/anikode/cover.png
+tags: ['Next.js', 'GrapesJS', 'Drizzle ORM', 'NextAuth', 'TailwindCSS']
+---
+AniKode is a drag-and-drop website builder on [GrapesJS](https://grapesjs.com/). You drag blocks onto a page, add custom HTML and JavaScript when you need more control, and keep several pages in one project. I built it three times, and the latest is AniKode Studio. Its landing page and sign-in are live, and the editor needs an account. The 2022 landing page is still online too.
+
+## What it does
+
+You create a project, add pages and open one in the editor. Blocks sit on the left, and styles, settings, layers and pages are on the right. Every change is saved as you go, and the editor tells you if a save fails. Sign-in is an emailed link or GitHub, through [NextAuth](https://next-auth.js.org/) and [Resend](https://resend.com/), and pages are saved to Postgres with [Drizzle](https://orm.drizzle.team/).
+
+<Screens>
+  <Screen frame='wide' height={1133} src='/images/projects/anikode/studio-landing-dark.webp' width={1600} alt='The AniKode Studio landing page in dark mode, with the headline Build stunning websites with ease above a screenshot of the editor' caption='The Studio landing page.' />
+  <Screen frame='wide' height={733} src='/images/projects/anikode/studio-login.webp' width={1100} alt='The AniKode Studio sign-in form in dark mode, with an email field, a Sign In with Email button and a GitHub button' caption='Sign-in takes an email for a magic link, or GitHub.' />
+</Screens>
+
+## Earlier versions
+
+The 2021 version was a GrapesJS page with more than 20 plugins that saved to your browser. The 2022 version was a React app with its own server and database.
+
+<Screens>
+  <Screen frame='wide' height={817} src='/images/projects/anikode/editor-2022.webp' width={1695} alt='The AniKode editor with a page list and block panel on the left, a row of tool icons along the top, and a page with a photo of a dog on the canvas' caption='The 2022 editor.' />
+  <Screen frame='wide' height={475} src='/images/projects/anikode/component-toolbar.webp' width={760} alt='A selected heading on the editor canvas, outlined in blue, with a row of round toolbar buttons in its corner' caption='A selected component and its toolbar.' />
+  <Screen frame='wide' height={1000} src='/images/projects/anikode/landing-2022.webp' width={1600} alt='The 2022 AniKode landing page with the headline Simplify the way you build websites next to a photo of two people at their desks' caption='The 2022 landing page, still online.' />
+</Screens>

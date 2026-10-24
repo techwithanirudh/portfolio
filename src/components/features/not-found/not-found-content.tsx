@@ -1,20 +1,23 @@
 import Link from 'next/link'
-import { SimbaLoop } from '@/components/features/not-found/simba-loop'
+import { SimbaThinking } from '@/components/features/not-found/simba-thinking'
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { TitleDot } from '@/components/layout/sections/hero'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Button } from '@/components/ui/button'
+import { pages } from '@/constants/pages'
 
-// Ported from the an1rudh rebrand prototype (PR #108)
 const destinations = [
-  { description: 'Who I am and what I do', href: '/about', label: 'About' },
-  { description: 'Things I have built', href: '/projects', label: 'Projects' },
-  { description: 'Notes and write ups', href: '/blog', label: 'Blog' },
-  { description: 'Leave a note', href: '/guestbook', label: 'Guestbook' },
-]
+  { description: 'Who I am and what I do', page: pages.about },
+  { description: 'Things I have built', page: pages.projects },
+  { description: 'Notes and write-ups', page: pages.blog },
+  { description: 'Leave a note', page: pages.guestbook },
+].map(({ description, page }) => ({
+  description,
+  href: page.path,
+  label: page.title,
+}))
 
-/** The 404 page's body, shared by the root and the (home) not-found pages */
 export function NotFoundContent() {
   return (
     <>
@@ -29,8 +32,7 @@ export function NotFoundContent() {
               <TitleDot />
             </h1>
           </div>
-          <SimbaLoop
-            animation='Sniffing'
+          <SimbaThinking
             className='shrink-0 translate-y-2'
             size='clamp(5.5rem,16vw,9rem)'
           />
@@ -44,14 +46,17 @@ export function NotFoundContent() {
           <Button
             className='shrink-0'
             nativeButton={false}
-            render={<Link href='/' />}
+            render={<Link href={pages.home.path} />}
           >
             Take me home
-            <Icons.arrowRight className='icon-arrow-button size-4' />
+            <Icons.arrowRight
+              className='icon-arrow-button size-4'
+              data-icon='inline-end'
+            />
           </Button>
         </div>
       </Section>
-      <Separator />
+      <SectionDivider />
       <Section>
         <ul className='dashed-grid sm:dashed-grid-2 grid sm:grid-cols-2'>
           {destinations.map((item) => (

@@ -4,10 +4,12 @@ import { usePathname, useSearchParams } from 'next/navigation'
 import {
   createContext,
   type ReactNode,
+  type RefObject,
   Suspense,
   use,
   useCallback,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
@@ -41,45 +43,60 @@ export function useSignInModal(): SignInModalContextValue {
 
 export function SignInModalProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  // Where to send people after signing in, while the modal is open
-  const [request, setRequest] = useState<string | null>(null)
+  const pushedHref = useRef<string | null>(null)
+  const opener = useRef<HTMLElement | null>(null)
 
   const openSignIn = useCallback(
-    (target?: string) => setRequest(sanitizeRedirect(target ?? pathname)),
+    (target?: string) => {
+      opener.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null
+      const url = new URL(window.location.href)
+      url.searchParams.set(SIGN_IN_PARAM, sanitizeRedirect(target ?? pathname))
+      pushedHref.current = url.href
+      window.history.pushState(null, '', url)
+    },
     [pathname]
   )
 
   const value = useMemo(() => ({ openSignIn }), [openSignIn])
 
   return (
-    <SignInModalContext.Provider value={value}>
+    <SignInModalContext value={value}>
       {children}
       <Suspense>
-        <SignInDialog onClose={() => setRequest(null)} request={request} />
+        <SignInDialog opener={opener} pushedHref={pushedHref} />
       </Suspense>
-    </SignInModalContext.Provider>
+    </SignInModalContext>
   )
 }
 
-// Server pages send people to /?signin=<path>, so the modal also opens from
-// that param; it's read while rendering and dropped once the modal closes
+const providers: { id: Provider; label: string; icon: ReactNode }[] = [
+  { icon: <Icons.google />, id: 'google', label: 'Sign in with Google' },
+  { icon: <Icons.github />, id: 'github', label: 'Sign in with GitHub' },
+]
+
 function SignInDialog({
-  onClose,
-  request,
+  opener,
+  pushedHref,
 }: {
-  onClose: () => void
-  request: string | null
+  opener: RefObject<HTMLElement | null>
+  pushedHref: RefObject<string | null>
 }) {
   const searchParams = useSearchParams()
   const param = searchParams.get(SIGN_IN_PARAM)
-  const redirectTo =
-    request ?? (param === null ? null : sanitizeRedirect(param))
+  const redirectTo = param === null ? null : sanitizeRedirect(param)
   const [loadingProvider, setLoadingProvider] = useState<Provider | null>(null)
 
   const close = () => {
-    onClose()
     setLoadingProvider(null)
     if (param === null) {
+      return
+    }
+    if (pushedHref.current === window.location.href) {
+      pushedHref.current = null
+      window.history.back()
       return
     }
     const next = new URLSearchParams(searchParams.toString())
@@ -93,24 +110,36 @@ function SignInDialog({
     )
   }
 
+  // With no trigger to return to (a link or ?signin= URL), focus the page start by hand:
+  // Base UI moves a non-tabbable target on to its first tabbable descendant
+  const returnFocus = () => {
+    const target = opener.current
+    opener.current = null
+    if (target?.isConnected && target !== document.body) {
+      return target
+    }
+    document.getElementById('main-content')?.focus()
+    return false
+  }
+
   const signInWithProvider = async (provider: Provider) => {
     if (loadingProvider || redirectTo === null) {
       return
     }
 
+    setLoadingProvider(provider)
     try {
-      setLoadingProvider(provider)
-      await signIn.social({ callbackURL: redirectTo, provider })
-    } catch {
-      toast.error('Sign in failed. Please try again.')
-      setLoadingProvider(null)
+      const result = await signIn.social({ callbackURL: redirectTo, provider })
+      if (!result?.error) {
+        return
+      }
+      console.error('Sign-in failed:', result.error)
+    } catch (error) {
+      console.error('Sign-in failed:', error)
     }
+    toast.error("Couldn't sign you in. Try again or use the other provider.")
+    setLoadingProvider(null)
   }
-
-  const providers: { id: Provider; label: string; icon: ReactNode }[] = [
-    { icon: <Icons.google />, id: 'google', label: 'Sign in with Google' },
-    { icon: <Icons.github />, id: 'github', label: 'Sign in with GitHub' },
-  ]
 
   return (
     <Dialog
@@ -121,7 +150,10 @@ function SignInDialog({
       }}
       open={redirectTo !== null}
     >
-      <DialogContent className='max-sm:data-closed:slide-out-to-bottom max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'>
+      <DialogContent
+        className='max-sm:data-closed:slide-out-to-bottom-[30%] max-sm:data-open:slide-in-from-bottom max-sm:top-auto max-sm:bottom-0 max-sm:max-w-full max-sm:translate-y-0 max-sm:rounded-b-none max-sm:pb-8 sm:max-w-sm'
+        finalFocus={returnFocus}
+      >
         <DialogHeader>
           <DialogTitle className='text-lg'>Sign in</DialogTitle>
           <DialogDescription>
@@ -133,6 +165,7 @@ function SignInDialog({
             <Button
               className='w-full gap-2'
               disabled={loadingProvider !== null}
+              focusableWhenDisabled
               key={id}
               onClick={() => signInWithProvider(id)}
               variant='outline'

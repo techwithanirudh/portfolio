@@ -1,12 +1,12 @@
 'use client'
 
 import { useSyncExternalStore } from 'react'
-import { Button } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { profile } from '@/constants/portfolio/profile'
 import { cn } from '@/lib/utils'
 
 interface ClockProps {
@@ -20,8 +20,7 @@ interface TimeStyles extends React.CSSProperties {
 }
 
 const HAND_BASE_CLASSES =
-  'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
-const HAND_ORIGIN = { transformOrigin: '0px 0px' }
+  'absolute left-1/2 top-1/2 origin-top-left rounded-full bg-neutral-600 dark:bg-neutral-400'
 const FACE_CLASSES =
   'relative block size-9 rotate-180 rounded-md border border-border bg-background'
 const FORMATTER = new Intl.DateTimeFormat('en-US', {
@@ -29,7 +28,7 @@ const FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour12: true,
   minute: '2-digit',
   second: '2-digit',
-  timeZone: 'Asia/Kolkata',
+  timeZone: profile.timeZone,
   timeZoneName: 'short',
 })
 
@@ -64,16 +63,9 @@ export function Clock({ className }: ClockProps) {
 
   if (second === null) {
     return (
-      <Button
-        aria-label='Clock'
-        className='rounded-md'
-        size='icon'
-        variant='ghost'
-      >
-        <div className={cn(FACE_CLASSES, className)}>
-          <CenterDot />
-        </div>
-      </Button>
+      <div aria-hidden className={cn(FACE_CLASSES, className)}>
+        <CenterDot />
+      </div>
     )
   }
 
@@ -87,56 +79,50 @@ export function Clock({ className }: ClockProps) {
 
   return (
     <Tooltip>
+      {/* Not a button: it does nothing, so it is a still image of the time
+          that names itself, and the tooltip is for the pointer */}
       <TooltipTrigger
         render={
-          <Button
-            aria-label={timeString}
-            className='rounded-md'
-            size='icon'
-            variant='ghost'
+          <time
+            aria-label={`My local time: ${timeString}`}
+            className={cn(FACE_CLASSES, className)}
+            dateTime={time.toISOString()}
+            role='img'
+            style={timeStyles}
           />
         }
       >
-        <time
-          className={cn(FACE_CLASSES, className)}
-          dateTime={time.toISOString()}
-          style={timeStyles}
-        >
-          <CenterDot />
+        <CenterDot />
 
-          <div
-            className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
-            style={{
-              ...HAND_ORIGIN,
-              transform:
-                'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
-            }}
-          />
+        <div
+          className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
+          style={{
+            transform:
+              'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
+          }}
+        />
 
-          <div
-            className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
-            style={{
-              ...HAND_ORIGIN,
-              transform:
-                'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
-            }}
-          />
+        <div
+          className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
+          style={{
+            transform:
+              'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
+          }}
+        />
 
-          <div
-            className={cn(
-              HAND_BASE_CLASSES,
-              'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
-            )}
-            style={{
-              ...HAND_ORIGIN,
-              transform:
-                'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
-            }}
-          />
-        </time>
+        <div
+          className={cn(
+            HAND_BASE_CLASSES,
+            'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
+          )}
+          style={{
+            transform:
+              'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
+          }}
+        />
       </TooltipTrigger>
       <TooltipContent>
-        <p>{timeString}</p>
+        <p className='tabular-nums'>{timeString}</p>
       </TooltipContent>
     </Tooltip>
   )

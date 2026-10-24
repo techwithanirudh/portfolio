@@ -7,12 +7,16 @@ import { Step, Steps } from 'fumadocs-ui/components/steps'
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs'
 import defaultMdxComponents from 'fumadocs-ui/mdx'
 import type { MDXComponents } from 'mdx/types'
+// Math only renders inside MDX, so its styles and 20 font faces load with it
+// rather than blocking every page
+import 'katex/dist/katex.css'
 import { VideoPlayer } from '@/components/ui/video-player'
 import { FramedImage, type FramedImageProps, IframeEmbed } from './embed'
-import { GitHubRepo, GithubRepo } from './github-repo'
+import { GithubRepo } from './github-repo'
 import { Heading } from './heading'
 import { LinkPreviewAnchor } from './link-preview'
 import { Mermaid } from './mermaid'
+import { Screen, Screens } from './screens'
 
 export const mdxComponents: MDXComponents = {
   ...defaultMdxComponents,
@@ -26,7 +30,6 @@ export const mdxComponents: MDXComponents = {
   Files,
   Folder,
   FramedImage,
-  GitHubRepo,
   GithubRepo,
   h1: (props) => <Heading as='h1' {...props} />,
   h2: (props) => <Heading as='h2' {...props} />,
@@ -40,6 +43,8 @@ export const mdxComponents: MDXComponents = {
   // next/image props (a static import or a sized URL)
   img: (props) => <FramedImage {...(props as FramedImageProps)} />,
   Mermaid,
+  Screen,
+  Screens,
   Step,
   Steps,
   Tab,

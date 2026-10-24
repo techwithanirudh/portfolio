@@ -5,20 +5,24 @@ import { cva } from 'class-variance-authority'
 import { useTheme } from 'next-themes'
 import { useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
+import type { SvgIcon } from '@/components/icons/utils'
 import { toggleOn } from '@/lib/audio/minimal'
 import { MEDIA } from '@/lib/media'
 import { cn } from '@/lib/utils'
 
 type Theme = 'light' | 'dark' | 'system'
 
-const itemVariants = cva('size-6.5 rounded-sm p-1.5 text-muted-foreground', {
-  variants: {
-    active: {
-      false: 'text-muted-foreground',
-      true: 'bg-accent text-accent-foreground',
+const itemVariants = cva(
+  'size-6.5 rounded-sm p-1.5 text-muted-foreground transition-[color,background-color,scale] duration-150 ease-out-strong',
+  {
+    variants: {
+      active: {
+        false: 'text-muted-foreground hover:text-foreground',
+        true: 'bg-accent text-accent-foreground',
+      },
     },
-  },
-})
+  }
+)
 
 const lightDarkActive = {
   dark: 'dark:bg-accent dark:text-accent-foreground',
@@ -28,11 +32,11 @@ const lightDarkActive = {
 
 const subscribeNoop = () => () => undefined
 
-const full = [
-  ['light', Icons.sun] as const,
-  ['dark', Icons.moon] as const,
-  ['system', Icons.desktop] as const,
-]
+const themeOptions = [
+  { Icon: Icons.sun, label: 'Light theme', value: 'light' },
+  { Icon: Icons.moon, label: 'Dark theme', value: 'dark' },
+  { Icon: Icons.desktop, label: 'System theme', value: 'system' },
+] as const satisfies readonly { Icon: SvgIcon; label: string; value: Theme }[]
 
 const shouldSkipViewTransitionForBrowserTint = () =>
   window.matchMedia(MEDIA.coarsePointer).matches
@@ -69,7 +73,7 @@ export function ThemeToggle({
         await document.startViewTransition(update).finished
       } catch (error) {
         if (!(error instanceof DOMException) || error.name !== 'AbortError') {
-          throw error
+          update()
         }
       } finally {
         document.documentElement.style.viewTransitionName = ''
@@ -80,15 +84,18 @@ export function ThemeToggle({
   }
 
   const container = cn(
-    'inline-flex items-center rounded-md border bg-background p-1',
+    'inline-flex items-center rounded-lg border bg-background p-1 transition-[scale] duration-150 ease-out-strong active:scale-96',
     className
   )
 
   if (mode === 'light-dark') {
     return (
       <button
-        aria-label={'Toggle theme'}
-        className={container}
+        aria-label='Toggle theme'
+        className={cn(
+          container,
+          'relative after:absolute after:inset-x-0 after:-inset-y-0.5'
+        )}
         data-sound-press='off'
         data-theme-toggle=''
         onClick={() =>
@@ -96,22 +103,18 @@ export function ThemeToggle({
         }
         type='button'
       >
-        {full.map(([key, Icon]) => {
-          if (key === 'system') {
-            return null
-          }
-
-          return (
+        {themeOptions
+          .filter((option) => option.value !== 'system')
+          .map(({ Icon, value }) => (
             <Icon
               className={cn(
                 itemVariants({ active: false }),
-                lightDarkActive[key]
+                lightDarkActive[value]
               )}
               fill='currentColor'
-              key={key}
+              key={value}
             />
-          )
-        })}
+          ))}
       </button>
     )
   }
@@ -119,19 +122,23 @@ export function ThemeToggle({
   const value = mounted ? theme : null
 
   return (
-    <div className={container} data-theme-toggle=''>
-      {full.map(([key, Icon]) => (
+    <fieldset aria-label='Theme' className={container} data-theme-toggle=''>
+      {themeOptions.map(({ Icon, label, value: option }) => (
         <button
-          aria-label={key}
-          className={itemVariants({ active: value === key })}
+          aria-label={label}
+          aria-pressed={value === option}
+          className={cn(
+            itemVariants({ active: value === option }),
+            'relative after:absolute after:inset-x-0 after:-inset-y-[7px]'
+          )}
           data-sound-press='off'
-          key={key}
-          onClick={() => handleChangeTheme(key)}
+          key={option}
+          onClick={() => handleChangeTheme(option)}
           type='button'
         >
           <Icon className='size-full' fill='currentColor' />
         </button>
       ))}
-    </div>
+    </fieldset>
   )
 }

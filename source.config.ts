@@ -1,3 +1,6 @@
+import { execFile } from 'node:child_process'
+import { promisify } from 'node:util'
+import { transformerRemoveNotationEscape } from '@shikijs/transformers'
 import {
   defineCollections,
   defineConfig,
@@ -7,8 +10,6 @@ import jsonSchema from 'fumadocs-mdx/plugins/json-schema'
 import lastModified from 'fumadocs-mdx/plugins/last-modified'
 import { transformerTwoslash } from 'fumadocs-twoslash'
 import { createFileSystemTypesCache } from 'fumadocs-twoslash/cache-fs'
-import type { ElementContent } from 'hast'
-import type { ShikiTransformer } from 'shiki'
 import { z } from 'zod'
 
 const dateSchema = z.union([z.string(), z.date()]).pipe(z.coerce.date())
@@ -28,45 +29,52 @@ export const blog = defineCollections({
   type: 'doc',
 })
 
-export const work = defineCollections({
-  dir: 'content/work',
+export const projects = defineCollections({
+  dir: 'content/projects',
+  // The newest commit that changed the file's lines, followed across renames,
+  // so moving content/work to content/projects (zero lines changed) doesn't
+  // reset every project's last updated date the way the plugin's git log would
+  lastModified: async (file) => {
+    const { stdout } = await promisify(execFile)('git', [
+      'log',
+      '--follow',
+      '--format=%aI',
+      '--numstat',
+      '--',
+      file,
+    ]).catch(() => ({ stdout: '' }))
+    let date: string | undefined
+    for (const line of stdout.split('\n')) {
+      const [added, deleted] = line.split('\t')
+      if (deleted === undefined) {
+        date = line || date
+      } else if (date && (added !== '0' || deleted !== '0')) {
+        return new Date(date)
+      }
+    }
+  },
   postprocess: {
     extractLinkReferences: true,
     includeProcessedMarkdown: true,
   },
   schema: frontmatterSchema.extend({
     date: dateSchema,
-    github: z.string().optional(),
+    github: z.url().optional(),
     image: z.string().optional(),
     /**
-     * Pins a project to the front of the work list, lowest first. Anything
+     * Pins a project to the front of the project list, lowest first. Anything
      * without it falls in behind, newest first.
      */
     order: z.number().optional(),
-    website: z.string().optional(),
+    /** Where it runs, such as "iOS and Android" */
+    platform: z.string().optional(),
+    /** Where it stands, such as "Live" or "Archived" */
+    status: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    website: z.url().optional(),
   }),
   type: 'doc',
 })
-
-function transformerEscape(): ShikiTransformer {
-  return {
-    code(hast) {
-      function replace(node: ElementContent) {
-        if (node.type === 'text') {
-          node.value = node.value.replace('[\\!code', '[!code')
-        } else if ('children' in node) {
-          for (const child of node.children) {
-            replace(child)
-          }
-        }
-      }
-
-      replace(hast)
-      return hast
-    },
-    name: '@shikijs/transformers:remove-notation-escape',
-  }
-}
 
 export default defineConfig({
   mdxOptions: async () => {
@@ -99,7 +107,7 @@ export default defineConfig({
           transformerTwoslash({
             typesCache: createFileSystemTypesCache(),
           }),
-          transformerEscape(),
+          transformerRemoveNotationEscape(),
         ],
       },
       rehypePlugins: (v) => [rehypeKatex, ...v],
@@ -115,6 +123,7 @@ export default defineConfig({
     }
   },
   plugins: [
+    // TODO(slopradar): dead-config: both collections are `doc`, and `insert` only stamps `$schema` into new meta JSON files, so this only writes `.source/json-schema/*.json`, which nothing references; drop the plugin and its import
     jsonSchema({
       insert: true,
     }),
