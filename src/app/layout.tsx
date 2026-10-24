@@ -74,13 +74,6 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
       suppressHydrationWarning
     >
       <head>
-        <noscript>
-          <style>
-            {
-              '[style*="opacity:0"]{opacity:1!important;transform:none!important}'
-            }
-          </style>
-        </noscript>
         <SiteJsonLd />
         {isProduction && (
           <BotIdClient

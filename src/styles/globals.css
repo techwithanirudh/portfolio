@@ -559,15 +559,6 @@ html > body[data-scroll-locked] {
   }
 }
 
-/* The first section is on screen at load, so it shows without waiting for
-   hydration to run its reveal */
-#main-content
-  [data-slot="section"]:nth-child(1 of [data-slot="section"])
-  [data-reveal-item][style*="opacity"] {
-  opacity: 1 !important;
-  transform: none !important;
-}
-
 /* The zoomed blog image keeps the radius FramedImage gives it in the page, so it stays rounded through the zoom */
 [data-rmiz-modal-img] {
   border-radius: var(--radius-xl);

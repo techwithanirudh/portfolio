@@ -1,7 +1,7 @@
 'use client'
 
-import * as m from 'motion/react-m'
-import type { ReactNode } from 'react'
+import { animate } from 'motion/mini'
+import { type ReactNode, type Ref, useLayoutEffect, useRef } from 'react'
 
 interface ViewAnimationProps {
   as?: 'div' | 'li'
@@ -10,25 +10,79 @@ interface ViewAnimationProps {
   delay?: number
 }
 
+const SHIFT_PX = 6
+const DURATION_S = 0.45
+const EASE = [0.2, 0.7, 0.2, 1] as const
+
+const reveals = new WeakMap<Element, () => void>()
+let observer: IntersectionObserver | undefined
+
+const getObserver = () => {
+  observer ??= new IntersectionObserver(
+    (entries) => {
+      for (const { isIntersecting, target } of entries) {
+        if (!isIntersecting) {
+          continue
+        }
+        observer?.unobserve(target)
+        reveals.get(target)?.()
+        reveals.delete(target)
+      }
+    },
+    { threshold: 0.1 }
+  )
+  return observer
+}
+
 export const ViewAnimation = ({
-  as = 'div',
+  as: Tag = 'div',
   delay = 0,
   className,
   children,
 }: ViewAnimationProps) => {
-  const Tag = as === 'li' ? m.li : m.div
+  const ref = useRef<HTMLElement>(null)
+
+  useLayoutEffect(() => {
+    const element = ref.current
+    if (
+      !element ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      element.getBoundingClientRect().top < window.innerHeight
+    ) {
+      return
+    }
+
+    const clear = () => {
+      element.style.opacity = ''
+      element.style.transform = ''
+    }
+
+    element.style.opacity = '0'
+    element.style.transform = `translateY(${SHIFT_PX}px)`
+    reveals.set(element, () => {
+      animate(
+        element,
+        {
+          opacity: [0, 1],
+          transform: [`translateY(${SHIFT_PX}px)`, 'none'],
+        },
+        { delay: Math.min(delay, 0.2), duration: DURATION_S, ease: EASE }
+      ).finished.then(clear, clear)
+    })
+    getObserver().observe(element)
+
+    return () => {
+      observer?.unobserve(element)
+      reveals.delete(element)
+      clear()
+    }
+  }, [delay])
+
   return (
     <Tag
       className={className}
       data-reveal-item
-      initial={{ opacity: 0, y: 6 }}
-      transition={{
-        delay: Math.min(delay, 0.2),
-        duration: 0.45,
-        ease: [0.2, 0.7, 0.2, 1],
-      }}
-      viewport={{ amount: 0.1, once: true }}
-      whileInView={{ opacity: 1, y: 0 }}
+      ref={ref as Ref<HTMLDivElement & HTMLLIElement>}
     >
       {children}
     </Tag>
