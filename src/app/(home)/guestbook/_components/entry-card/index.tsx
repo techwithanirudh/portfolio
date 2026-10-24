@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { toast } from '@/lib/toast'
 import { GuestbookEntrySchema } from '@/lib/validators/guestbook'
 import type { GuestbookEntryItem } from '@/types/guestbook'
@@ -22,6 +22,8 @@ export const GuestbookEntryCard = ({
   currentUserId,
   isAdmin,
 }: GuestbookEntryCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const restoreFocus = useRef(false)
   const [isEditing, setIsEditing] = useState(false)
   const [draftMessage, setDraftMessage] = useState(entry.message)
   const [isBanModalOpen, setIsBanModalOpen] = useState(false)
@@ -43,9 +45,20 @@ export const GuestbookEntryCard = ({
   }
 
   const cancelEditing = () => {
+    restoreFocus.current = true
     setIsEditing(false)
     setDraftMessage(entry.message)
   }
+
+  useEffect(() => {
+    if (isEditing || !restoreFocus.current) {
+      return
+    }
+    restoreFocus.current = false
+    cardRef.current
+      ?.querySelector<HTMLButtonElement>('button[aria-label="Edit entry"]')
+      ?.focus()
+  }, [isEditing])
 
   const submitEdit = () => {
     const { message, id } = entry
@@ -90,7 +103,10 @@ export const GuestbookEntryCard = ({
   }
 
   return (
-    <div className='relative grid grid-cols-[minmax(0,1fr)] gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'>
+    <div
+      className='relative grid grid-cols-[minmax(0,1fr)] gap-4 bg-card/50 p-6 transition-colors hover:bg-card/80'
+      ref={cardRef}
+    >
       <div className='flex flex-wrap items-start justify-between gap-3'>
         <EntryByline entry={entry} />
         <EntryCardActions

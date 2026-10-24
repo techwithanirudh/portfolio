@@ -145,6 +145,38 @@ const trackBandHeight = (band: HTMLDivElement) => {
   }
 }
 
+function useRefocusPrompt(
+  expanded: boolean,
+  open: boolean,
+  popupRef: RefObject<HTMLElement | null>
+) {
+  const previous = useRef(expanded)
+  useEffect(() => {
+    if (previous.current === expanded) {
+      return
+    }
+    previous.current = expanded
+    if (!open) {
+      return
+    }
+    const timer = setTimeout(() => {
+      const popup = popupRef.current
+      const active = document.activeElement
+      const lost =
+        !active ||
+        active === document.body ||
+        active === popup ||
+        active.closest('[aria-label="Expand chat"]')
+      if (lost) {
+        popup
+          ?.querySelector<HTMLTextAreaElement>('textarea')
+          ?.focus({ preventScroll: true })
+      }
+    }, 50)
+    return () => clearTimeout(timer)
+  }, [expanded, open, popupRef])
+}
+
 export function AssistantPanel() {
   const { expanded, isDocked, mode, open, popupRef, setExpanded, setOpen } =
     useAssistantContext()
@@ -152,6 +184,8 @@ export function AssistantPanel() {
   const mascot = useMascot()
   const finalFocus = useReturnFocus(open, popupRef)
   const contentRef = useMorph()
+
+  useRefocusPrompt(expanded, open, popupRef)
 
   useMascotPanel({
     expanded,
