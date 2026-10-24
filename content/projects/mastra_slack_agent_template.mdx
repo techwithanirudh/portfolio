@@ -1,6 +1,6 @@
 ---
 title: Mastra Slack Agent Template
-description: A Slack agent template with tools, sandboxes, and GitHub access.
+description: A GitHub template for a Slack agent built on Mastra, with a sandbox for every thread.
 date: 2026-07-15
 order: 2
 github: https://github.com/techwithanirudh/mastra-slack-agent-template
@@ -10,22 +10,17 @@ image: /images/projects/mastra_slack_agent_template/cover.png
 tags: ['TypeScript', 'Mastra', 'Bun', 'Slack', 'E2B', 'PostgreSQL']
 ---
 
-A starting point for a Slack agent that handles mentions, DMs, threads, files and streamed replies, and runs its commands in a sandbox. It's a GitHub template under the MIT license. Features get built in [Gorkie](/blog/gorkie-sandboxes) first and are ported here once they've survived a few rounds of fixes.
+A customizable Slack agent built with [Mastra](https://mastra.ai/), Bun and TypeScript, published as a GitHub template under the MIT license. It's community-maintained and not an official Mastra product.
+
+## What it does
+
+Mention it, message it or reply in a thread and it answers in Slack, streaming the reply as it works. It can search the web, generate images, hand work to helpers, run scheduled tasks and use skills and MCP servers. GitHub and AgentMail accounts are optional.
+
+<Screens>
+  <Screen frame='wide' height={720} src='/images/projects/mastra_slack_agent_template/readme-features.webp' width={1280} alt="The README's Features list and Required services table, with Slack, PostgreSQL, OpenRouter, E2B and Exa" caption='Five required services; GitHub and AgentMail are optional.' />
+  <Screen frame='wide' height={720} src='/images/projects/mastra_slack_agent_template/docs-messaging.webp' width={1280} alt="The Messaging guide's Steer a thread section with three example replies" caption='Each reply in a followed thread steers the same task.' />
+</Screens>
 
 ## How it works
 
-Each thread gets its own [E2B](https://e2b.dev/) sandbox with files, shell access and a browser. The sandbox id is a hash of the Slack thread id, so later turns find the same files and tools waiting. The agent can hand work to three helpers that research, explore and build, and it searches the web through [Exa](https://exa.ai/). Posting to another channel is the one tool that asks you first.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/readme-features.webp' alt="The README's Features list and Required services table, with Slack, PostgreSQL, OpenRouter, E2B and Exa" caption='Five required services; GitHub and AgentMail are optional.' />
-  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/docs-messaging.webp' alt="The Messaging guide's Steer a thread section with three example replies" caption='Each reply in a followed thread steers the same task.' />
-</Screens>
-
-Replies stream into Slack, and each tool call shows up as a step in a live card. A top-level mention makes the agent follow the thread. `##` at the start of a line keeps it quiet, and `!stop` cancels a running reply.
-
-The agent runs `gh` and git with tokens it never holds. The sandbox only gets placeholder values, and the host adds the real Authorization header to GitHub and AgentMail requests on the way out.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/sandbox-network-rules.webp' alt='The network.ts source adding Authorization headers for the AgentMail and GitHub APIs' caption='The host adds the credentials, so tokens stay out of the sandbox.' />
-  <Screen frame='wide' src='/images/projects/mastra_slack_agent_template/docs-memory.webp' alt="The Memory guide's settings table, with lastMessages 20 and observational memory scoped to the thread" caption="Memory is scoped to the thread, so conversations don't leak into each other." />
-</Screens>
+Each thread gets its own [E2B](https://e2b.dev/) sandbox with files, a shell and a browser, and it stays around between turns, so later messages find the same files waiting. Memory is kept per thread in PostgreSQL, so conversations in a shared channel don't leak into each other. Posting to another channel is the one tool that asks you first.

@@ -13,7 +13,6 @@ export default function Page() {
     description: project.data.description ?? '',
     github: Boolean(project.data.github),
     image: project.data.image ?? null,
-    imageCrop: project.data.imageCrop,
     slug: project.slugs.join('/'),
     tags: project.data.tags ?? [],
     title: project.data.title,

@@ -10,26 +10,24 @@ github: https://github.com/techwithanirudh/coolify-tweaks
 image: https://raw.githubusercontent.com/techwithanirudh/coolify-tweaks/dev/apps/docs/public/banner.png
 tags: ['Coolify', 'Userstyle', 'Stylus', 'Nitro', 'TurboRepo']
 ---
+Coolify Tweaks is a Stylus userstyle that changes the spacing, type and layout of [Coolify](https://coolify.io/)'s dashboard. It can also apply any [TweakCN](https://tweakcn.com/) theme, with no fork and no changes to Coolify's code. It isn't affiliated with Coolify.
 
-Coolify Tweaks is a Stylus userstyle that changes the spacing, type and layout of [Coolify](https://coolify.io/)'s dashboard. It can also apply any [TweakCN](https://tweakcn.com/) theme, with no fork and no changes to Coolify's code. It isn't affiliated with Coolify. Outside contributors sent fixes for header spacing, the select box icon and the show and hide button on disabled inputs.
+It's live and maintained, and the latest release is v4.1.2. Outside contributors sent fixes for header spacing, the select box icon and the show and hide button on disabled inputs.
+
+## What it does
+
+Projects turn into a grid of rounded cards, and pages like New Resource get cleaner rows. Install it with Stylus, or add it on the server so it works in any browser without an extension.
+
+<Screens>
+  <Screen frame='wide' height={986} src='/images/projects/coolify_tweaks/dashboard-before.webp' width={1600} alt='The stock Coolify dashboard in dark mode, with projects as wide rows and a purple highlighted row' caption='The stock dashboard, on Coolify v4.0.0-beta.420.6.' />
+  <Screen frame='wide' height={986} src='/images/projects/coolify_tweaks/dashboard-after.webp' width={1600} alt='The same Coolify dashboard with Coolify Tweaks, projects shown as a grid of rounded cards' caption='The same dashboard with the style.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={994} src='/images/projects/coolify_tweaks/theme-claude-dark.webp' width={1600} alt='The Coolify dashboard with the Claude theme from TweakCN applied in dark mode' caption='The TweakCN Claude theme, dark mode.' />
+  <Screen frame='wide' height={994} src='/images/projects/coolify_tweaks/theme-bubblegum-light.webp' width={1600} alt='The Coolify dashboard with the pink and yellow Bubblegum theme from TweakCN in light mode' caption='The TweakCN Bubblegum theme, light mode.' />
+</Screens>
 
 ## How it works
 
-The style is about 2,300 lines of SCSS. A build writes `main.user.css` for [Stylus](https://github.com/openstyles/stylus) and a plain `main.css`, and each version ships as a GitHub release. Coolify's markup is Tailwind utilities and Alpine.js attributes, so my selectors anchor on structure, like the nav that holds the Dashboard link. There are 46 `:has()` selectors. Coolify updates still break some of them.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/coolify_tweaks/dashboard-before.webp' alt='The stock Coolify dashboard in dark mode, with projects as wide rows and a purple highlighted row' caption='The stock dashboard, on Coolify v4.0.0-beta.420.6.' />
-  <Screen frame='wide' src='/images/projects/coolify_tweaks/dashboard-after.webp' alt='The same Coolify dashboard with Coolify Tweaks, projects shown as a grid of rounded cards' caption='The same dashboard with the style.' />
-</Screens>
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/coolify_tweaks/project-cards.webp' alt='A close-up of the project cards, each with an add button and a settings button in the corner' caption='The project cards, with Add Resource and Settings as icon buttons.' />
-  <Screen frame='wide' src='/images/projects/coolify_tweaks/new-resource.webp' alt='The New Resource page with Coolify Tweaks, listing Git, Docker and database options as rounded rows' caption='The New Resource page.' />
-</Screens>
-
-A [Nitro](https://nitro.build/) API serves the CSS from the latest release. Pass a TweakCN theme ID and it swaps that theme's variables and Google Fonts import into the stylesheet first. You can install it with Stylus, or through a [Traefik](https://traefik.io/) `rewrite-body` plugin that injects a `<link>` before `</head>`, so it works in any browser without an extension.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/coolify_tweaks/theme-claude-dark.webp' alt='The Coolify dashboard with the Claude theme from TweakCN applied in dark mode' caption='The TweakCN Claude theme, dark mode.' />
-  <Screen frame='wide' src='/images/projects/coolify_tweaks/theme-bubblegum-light.webp' alt='The Coolify dashboard with the pink and yellow Bubblegum theme from TweakCN in light mode' caption='The TweakCN Bubblegum theme, light mode.' />
-</Screens>
+It's about 2,300 lines of SCSS that target Coolify's page structure. Coolify updates still break some selectors, and I fix them in new releases.

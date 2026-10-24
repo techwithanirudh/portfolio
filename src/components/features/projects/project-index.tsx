@@ -8,14 +8,12 @@ import { SearchRedirectInput } from '@/components/search-redirect-input'
 import { ViewAnimation } from '@/components/view-animation'
 import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
-import { type CoverCrop, coverCropStyle } from './cover'
 import { projectTransitionName, projectTransitionShare } from './transition'
 
-export interface ProjectIndexItem {
+interface ProjectIndexItem {
   description: string
   github: boolean
   image: string | null
-  imageCrop?: CoverCrop
   slug: string
   tags: string[]
   title: string
@@ -29,7 +27,6 @@ const matches = (project: ProjectIndexItem, query: string) =>
     text.toLowerCase().includes(query)
   )
 
-/** Every cover sits in the same tinted, hairline-framed 16:9 panel so uneven screenshots read as a set */
 const Cover = ({
   className,
   project,
@@ -53,10 +50,9 @@ const Cover = ({
           blur={false}
           className='absolute inset-0'
           fill
-          imageClassName='object-cover'
+          imageClassName='object-contain object-top'
           sizes='(min-width: 1024px) 480px, 100vw'
           src={project.image}
-          style={coverCropStyle(project.imageCrop)}
         />
       </ViewTransition>
     )}

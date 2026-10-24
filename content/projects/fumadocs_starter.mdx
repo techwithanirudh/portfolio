@@ -15,20 +15,24 @@ imageCrop:
 tags: ['Next.js', 'Fumadocs', 'AI SDK', 'OpenAPI', 'TypeScript']
 ---
 
-Fumadocs Starter is a docs site with an AI assistant, API reference pages, typed code samples and Markdown copies for AI tools already wired up. It starts from Create Fumadocs and is MIT licensed.
+Fumadocs Starter is a ready-made docs site you can copy and fill with your own pages. It starts from Create Fumadocs and is MIT licensed.
+
+It's a template, and the live demo is up.
+
+## What it does
+
+An "Ask AI" panel answers questions from your own docs. API pages are generated from an OpenAPI file, and code samples are type-checked. Every page also has a plain Markdown copy for AI tools, and the site serves `llms.txt`, an RSS changelog and generated social images.
+
+<Screens>
+  <Screen frame='wide' height={540} src='/images/projects/fumadocs_starter/page-actions.webp' width={960} alt='The Open menu on a docs page in light mode, with Open in GitHub, View as Markdown, and Open in Scira AI, ChatGPT, Claude and Cursor' caption='The Open menu hands a page to GitHub, a Markdown view or an AI chat app.' />
+  <Screen frame='wide' height={1060} src='/images/projects/fumadocs_starter/twoslash-hover.webp' width={1200} alt='A Twoslash hover over console in a code sample, showing its type and the Node.js docs, with an autocomplete list below' caption='Twoslash hovers and completions in a code block.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={1000} src='/images/projects/fumadocs_starter/api-reference.webp' width={1600} alt='An API reference page for a POST endpoint, with a request playground, a Send button and cURL, JavaScript, Go, Python, Java and C# samples' caption='An API reference page from the bundled OpenAPI example.' />
+  <Screen frame='wide' height={630} src='/images/projects/fumadocs_starter/og-image.webp' width={1200} alt='A dark gradient Open Graph card reading Starter Kit, HOME, OpenAPI, Generate and document your OpenAPI schema' caption='The generated Open Graph image for the OpenAPI page.' />
+</Screens>
 
 ## How it works
 
-An "Ask AI" panel answers from your own MDX. The chat route uses [AI SDK](https://ai-sdk.dev/) with `gpt-5-mini` and two tools. `searchDocs` queries the [Fumadocs](https://www.fumadocs.dev/) search index, and `getPageContent` returns one page as Markdown. The model used to list its own sources, but the links weren't always right, so the search tool writes them into the stream now.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/fumadocs_starter/page-actions.webp' alt='The Open menu on a docs page in light mode, with Open in GitHub, View as Markdown, and Open in Scira AI, ChatGPT, Claude and Cursor' caption='The Open menu hands a page to GitHub, a Markdown view or an AI chat app.' />
-  <Screen frame='wide' src='/images/projects/fumadocs_starter/twoslash-hover.webp' alt='A Twoslash hover over console in a code sample, showing its type and the Node.js docs, with an autocomplete list below' caption='Twoslash hovers and completions in a code block.' />
-</Screens>
-
-OpenAPI specs become API reference pages, and [Twoslash](https://twoslash.netlify.app/) type-checks the code samples. The site also serves `llms.txt`, an RSS changelog and generated Open Graph images. Add `.mdx` to a docs URL, or send an `Accept` header that prefers Markdown, and you get the page as text.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/fumadocs_starter/api-reference.webp' alt='An API reference page for a POST endpoint, with a request playground, a Send button and cURL, JavaScript, Go, Python, Java and C# samples' caption='An API reference page from the bundled OpenAPI example.' />
-  <Screen frame='wide' src='/images/projects/fumadocs_starter/og-image.webp' alt='A dark gradient Open Graph card reading Starter Kit, HOME, OpenAPI, Generate and document your OpenAPI schema' caption='The generated Open Graph image for the OpenAPI page.' />
-</Screens>
+The Ask AI panel searches the [Fumadocs](https://www.fumadocs.dev/) index with the [AI SDK](https://ai-sdk.dev/) and links the pages it used. Add `.mdx` to a docs URL and you get that page as Markdown.

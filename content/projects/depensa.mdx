@@ -9,25 +9,21 @@ platform: iOS and Android
 image: /images/projects/depensa/cover.png
 tags: ['Expo', 'React Native', 'Convex', 'Firecrawl', 'HeroUI Native']
 ---
+Depensa is an expense tracker that reads your order history from the shops you buy from and puts it all in one list. There's no bank account or card to link. It's live, and it runs on Android and iPhone. It's not on the [App Store](https://www.apple.com/app-store/), so on iPhone you use [SideStore](https://sidestore.io/) or [AltStore](https://altstore.io/).
 
-Depensa reads your order history from the shops you buy from and puts it in one list. There's no bank account or card to link. It runs on Android and iPhone.
+## What it does
 
-It has 100 shops across ten regions, and you can add another by its web address. It's not on the [App Store](https://www.apple.com/app-store/), so on iPhone you use [SideStore](https://sidestore.io/) or [AltStore](https://altstore.io/).
+It supports 100 shops across ten regions, and you can add another by its web address. Each order becomes an expense in your currency. It also spots repeating charges, lets you set monthly limits, and will email you a CSV if you ask.
+
+<Screens>
+  <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Adding a source.' />
+  <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Spending, with upcoming charges.' />
+</Screens>
 
 ## How it works
 
-You pick a shop and sign in on the shop's own page inside the app, MFA included. Depensa never sees your password. The backend keeps the session you get back, encrypted, for later syncs. The worker pulls its jobs from [Convex](https://www.convex.dev/), so it needs no public address.
+You sign in on the shop's own page inside the app, so Depensa never sees your password. The first time through a shop, an AI model writes a small reader for its orders, and every sync after that replays it on a schedule. If a site has no usable orders, the app says it can't read it.
 
 <Screens>
-  <Screen src='/images/projects/depensa/add-source.webp' alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Adding a source.' />
-  <Screen src='/images/projects/depensa/sources.webp' alt='The Sources screen listing connected shops and the sync state of each' caption='The sources list.' />
-</Screens>
-
-The first time through a shop, an AI model pokes around the signed-in site once and writes a reader. That's a small JSON file saying where the orders are, which fields to grab and how to page. Every sync after that just replays the reader on a schedule, and a model only comes back to fix a reader that broke. If a site has no usable orders, the app says it can't read it.
-
-Each order becomes an expense in your currency. It also spots repeating charges, lets you set monthly limits, and will email you a CSV if you ask.
-
-<Screens>
-  <Screen src='/images/projects/depensa/spending.webp' alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Spending, with upcoming charges.' />
-  <Screen src='/images/projects/depensa/insights.webp' alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights.' />
+  <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights.' />
 </Screens>

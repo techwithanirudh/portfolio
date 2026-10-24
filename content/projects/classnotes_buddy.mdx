@@ -9,25 +9,19 @@ website: https://notes.techwithanirudh.com/
 image: /images/projects/classnotes_buddy/cover.png
 tags: ['Turborepo', 'Supabase', 'Next.js', 'Drizzle']
 ---
+Classnotes Buddy lets you upload class notes and share them with a link, so a student who misses a class can get the notes from a classmate. I built it twice. The 2022 version began as Web Dev Simplified's Google Drive clone tutorial, which I rewrote and extended. The 2024 rebuild, Notes Buddy, started from the trevorpfiz/create-t3-turbo-supabase template.
 
-Upload class notes and share them with a link, so a student who misses a class can get the notes from a classmate. I built it twice. The 2022 version began as Web Dev Simplified's Google Drive clone tutorial, which I rewrote and extended. The 2024 rebuild, Notes Buddy, started from the trevorpfiz/create-t3-turbo-supabase template.
+Both are live. The 2022 version is at notes-buddy.vercel.app and the rebuild is at notes.techwithanirudh.com. Both repos are private.
 
-The 2022 version is still up at notes-buddy.vercel.app, and the rebuild runs at notes.techwithanirudh.com. Both repos are private.
+## What it does
+
+You sign in with email or Google, upload files and organize them in folders. Anyone signed in can browse, and only the uploader can rename or delete. In the 2022 version, new uploads wait for an admin to approve them.
+
+<Screens>
+  <Screen frame='wide' height={644} src='/images/projects/classnotes_buddy/classnotes-buddy-2022.webp' width={1600} alt='The 2022 Classnotes Buddy landing page with the heading Simplify the way you share notes, a Get started button and a How to video button' caption='The 2022 version.' />
+  <Screen frame='wide' height={860} src='/images/projects/classnotes_buddy/sign-in-dark.webp' width={960} alt='The Notes Buddy sign-in form in dark mode with Continue with Email and Continue with Google buttons' caption='The 2024 rebuild.' />
+</Screens>
 
 ## How it works
 
-<Screens>
-  <Screen frame='wide' fit='contain' src='/images/projects/classnotes_buddy/classnotes-buddy-2022.webp' alt='The 2022 Classnotes Buddy landing page with the heading Simplify the way you share notes, a Get started button and a How to video button' caption='The 2022 version.' />
-  <Screen frame='wide' fit='contain' src='/images/projects/classnotes_buddy/sign-in-2022.webp' alt='The 2022 sign-in card with email and password fields, a Log in with google button and a Log in button' caption='2022 sign-in on Firebase, with email or Google.' />
-</Screens>
-
-The 2022 version is React on [Firebase](https://firebase.google.com/), with [Algolia](https://www.algolia.com/) search and hCaptcha on sign-up. It has a PWA that registers as a share target for image, audio and video files. New uploads wait in an approval queue for an admin app.
-
-The rebuild uses [Supabase](https://supabase.com/) for email and Google sign-in, and Drizzle for the Postgres tables of profiles, folders and files. A folder can sit inside another folder. Folders and files are served through [tRPC](https://trpc.io/). Anyone signed in can browse them, and only the uploader can rename or delete.
-
-Files go from the browser to Supabase Storage in 6MB chunks over its resumable endpoint, so a dropped connection picks up where it stopped. The Expo app never got finished.
-
-<Screens>
-  <Screen frame='wide' fit='contain' src='/images/projects/classnotes_buddy/sign-in-dark.webp' alt='The Notes Buddy sign-in form in dark mode with Continue with Email and Continue with Google buttons' caption='2024 sign-in on Supabase.' />
-  <Screen frame='wide' src='/images/projects/classnotes_buddy/features-dark.webp' alt='The Notes Buddy landing page feature grid listing Instant Uploads, Cross-Device Sync, Secure Sharing, Free Forever, Offline Access and Organizational Tools' caption='The landing page lists offline access and tags, which are not in the code yet.' />
-</Screens>
+The 2022 version runs on [Firebase](https://firebase.google.com/) and the rebuild on [Supabase](https://supabase.com/). Uploads in the rebuild resume if your connection drops. The mobile app was never finished, and the landing page lists offline access and tags, which are not in the code yet.

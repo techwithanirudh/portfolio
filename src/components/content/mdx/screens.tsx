@@ -1,44 +1,12 @@
 import { ImageZoom, Lightbox } from 'fumadocs-ui/components/image-zoom'
-import type { ReactNode } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { cn } from '@/lib/utils'
 
-/** `phone` is a tall rounded frame for app screens, `wide` a 16:9 frame for desktop and web screenshots */
-type ScreenFrame = 'phone' | 'wide'
-
-const frames = {
-  phone: {
-    aspect: 'aspect-[390/844] rounded-3xl',
-    height: 844,
-    radius: 'rounded-3xl',
-    sizes: '(min-width: 768px) 360px, 50vw',
-    width: 390,
-  },
-  wide: {
-    aspect: 'aspect-video rounded-lg',
-    height: 630,
-    radius: 'rounded-lg',
-    sizes: '(min-width: 768px) 480px, 50vw',
-    width: 1200,
-  },
-} satisfies Record<ScreenFrame, Record<string, number | string>>
-
-/** Screens from one story, two to a row (or one when `columns` is 1), that open in a shared viewer */
-export function Screens({
-  children,
-  columns = 2,
-}: {
-  children: ReactNode
-  columns?: 1 | 2
-}) {
+export function Screens({ children }: { children: ReactNode }) {
   return (
     <Lightbox>
-      <div
-        className={cn(
-          'not-prose my-8 grid gap-3 sm:gap-5',
-          columns === 1 ? 'grid-cols-1' : 'grid-cols-2'
-        )}
-      >
+      <div className='not-prose my-8 flex flex-wrap justify-center gap-3 sm:gap-5'>
         {children}
       </div>
     </Lightbox>
@@ -48,21 +16,24 @@ export function Screens({
 export function Screen({
   alt,
   caption,
-  fit = 'cover',
-  frame = 'phone',
+  height,
   src,
+  width,
 }: {
   alt: string
   caption?: string
-  /** `contain` shows the whole image when its shape differs from the frame, such as a diagram */
-  fit?: 'contain' | 'cover'
-  frame?: ScreenFrame
+  height: number
   src: string
+  width: number
 }) {
-  const { aspect, height, radius, sizes, width } = frames[frame]
+  const ratio = width / height
+  const radius = ratio < 0.6 ? 'rounded-3xl' : 'rounded-lg'
 
   return (
-    <figure>
+    <figure
+      className='min-w-0 max-w-[calc(var(--ratio)*36rem)] grow-(--ratio) basis-[calc(var(--ratio)*8rem)]'
+      style={{ '--ratio': ratio.toFixed(3) } as CSSProperties}
+    >
       <ImageZoom
         alt={alt}
         caption={caption}
@@ -74,15 +45,12 @@ export function Screen({
         <BlurImage
           alt={alt}
           className={cn(
-            'relative w-full bg-card outline outline-black/10 -outline-offset-1 dark:outline-white/10',
-            aspect
-          )}
-          fill
-          imageClassName={cn(
-            fit === 'contain' ? 'object-contain' : 'object-cover',
+            'relative aspect-(--ratio) w-full bg-card outline outline-black/10 -outline-offset-1 dark:outline-white/10',
             radius
           )}
-          sizes={sizes}
+          fill
+          imageClassName={cn('object-cover', radius)}
+          sizes='(min-width: 768px) 480px, 100vw'
           src={src}
         />
       </ImageZoom>

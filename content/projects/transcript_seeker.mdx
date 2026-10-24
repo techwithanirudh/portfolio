@@ -13,26 +13,22 @@ tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
 
 Transcript Seeker records a meeting with a bot or takes an uploaded file, then gives you a transcript you can search and ask questions about. Lazare Rossillon at Meeting Baas started it in July 2024 and built the viewer, search and chat. I did most of the work from October 2 to November 5, 2024.
 
-It's MIT licensed and lives in the Meeting BaaS org.
+It's open source under the MIT license and lives in the Meeting BaaS org. The last change was in May 2025, and the hosted app wasn't loading when I checked on October 24, 2026.
+
+## What it does
+
+[Meeting Baas](https://www.meetingbaas.com/) sends bots into calls, and [Gladia](https://www.gladia.io/) or [AssemblyAI](https://www.assemblyai.com/) transcribe uploads. You bring your own keys, and OpenAI answers your questions. Click a word in the transcript and it jumps to that moment.
+
+<Screens>
+  <Screen frame='wide' height={1170} src='/images/projects/transcript_seeker/home.webp' width={1000} alt='The Transcript Seeker home screen with three numbered steps, Settings, Record Meeting or Upload File, and Recordings or Upcoming Meetings, under a notice that no API key is set' caption='The home screen. Nothing works until you add a key.' />
+  <Screen frame='wide' height={900} src='/images/projects/transcript_seeker/settings.webp' width={1600} alt='The settings page with empty API key fields for Meeting Baas, OpenAI, Gladia and AssemblyAI' caption='Settings keeps the keys in the browser.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={888} src='/images/projects/transcript_seeker/record-meeting.webp' width={1600} alt='The Record Meeting form with fields for the meeting URL, the bot name, its image and the message it posts when it joins' caption='Record Meeting sends a bot into a call.' />
+  <Screen frame='wide' height={1020} src='/images/projects/transcript_seeker/upload.webp' width={1150} alt='The Upload File page with a sidebar to pick Gladia or AssemblyAI, a language, and extras such as speaker diarization and summarization' caption='Upload File, with provider, language and extras.' />
+</Screens>
 
 ## How it works
 
-You bring your own keys. [Meeting Baas](https://www.meetingbaas.com/) sends the bots into calls, [Gladia](https://www.gladia.io/) or [AssemblyAI](https://www.assemblyai.com/) transcribe uploads, and OpenAI answers your questions. Click a word in the transcript and it jumps to that moment.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/transcript_seeker/home.webp' alt='The Transcript Seeker home screen with three numbered steps, Settings, Record Meeting or Upload File, and Recordings or Upcoming Meetings, under a notice that no API key is set' caption='The home screen. Nothing works until you add a key.' />
-  <Screen frame='wide' src='/images/projects/transcript_seeker/settings.webp' alt='The settings page with empty API key fields for Meeting Baas, OpenAI, Gladia and AssemblyAI' caption='Settings keeps the keys in the browser.' />
-</Screens>
-
-Keys, meetings, notes and chats live in a Postgres database inside the browser, so the basic app needs no server. I swapped Lazare's IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/transcript_seeker/record-meeting.webp' alt='The Record Meeting form with fields for the meeting URL, the bot name, its image and the message it posts when it joins' caption='Record Meeting sends a bot into a call.' />
-  <Screen frame='wide' src='/images/projects/transcript_seeker/upload.webp' alt='The Upload File page with a sidebar to pick Gladia or AssemblyAI, a language, and extras such as speaker diarization and summarization' caption='Upload File, with provider, language and extras.' />
-</Screens>
-
-A [Turborepo](https://turborepo.dev/) holds the React web app, a [Nitro](https://nitro.build/) proxy for the Meeting Baas API, and a [Hono](https://hono.dev/) API with [Better Auth](https://www.better-auth.com/) for Google sign-in and the upcoming meetings page. The web app and proxy run on [Firebase](https://firebase.google.com/), the API on Cloud Run.
-
-<Screens columns={1}>
-  <Screen fit='contain' frame='wide' src='/images/projects/transcript_seeker/architecture.webp' alt='A hand-drawn architecture diagram showing the frontend with PGLite, a proxy layer in front of the Meeting Baas REST API, and Better Auth with Turso for calendar requests' caption='The architecture diagram from the docs.' />
-</Screens>
+Keys, meetings, notes and chats are saved in a database inside your browser, so the basic app needs no server. I swapped Lazare's IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top.

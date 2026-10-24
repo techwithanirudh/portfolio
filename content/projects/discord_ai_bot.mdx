@@ -14,12 +14,14 @@ imageCrop:
 tags: ['Discord', 'AI', 'Bun', 'TypeScript']
 ---
 
-A Discord bot that talks in a server like another member instead of answering every message like an assistant. It chats, searches the web with [Exa](https://exa.ai/) and can join voice channels. It started from Fellipe Utaka's Discord bot template.
+A Discord bot that talks in a server like another member instead of answering every message like an assistant. It started from Fellipe Utaka's Discord bot template and is open source under the MIT license.
+
+It's inactive now. The last change to the main branch was in June 2025, and the code is still on GitHub.
+
+## What it does
+
+It chats in text channels, searches the web with [Exa](https://exa.ai/) and can join a voice channel to listen and talk.
 
 ## How it works
 
-It always replies when you ping it, DM it or use one of its keywords. For everything else, `gpt-4.1-nano` guesses how likely the message is about the bot, and it answers above 0.5. Replies come from `gpt-4.1-mini`, which sees the last 50 messages and what [Mem0](https://mem0.ai/) remembers about you.
-
-To keep it from being annoying, [Upstash](https://upstash.com/) Redis caps it at 7 messages per 30 seconds. Replies are split into sentences, and each one waits a random 5 to 15 seconds with the typing indicator on.
-
-In voice channels, each speaker's audio goes to [Deepgram](https://deepgram.com/), and talking over the bot cuts it off. One tool lets a second agent write and run discord.js code, so only the bot owner can use it.
+It always replies when you ping it, DM it or use one of its keywords. For other messages, a small model guesses whether they're about the bot. Replies are split into sentences with short random pauses and a typing indicator, and a rate limit keeps it from flooding a channel. One tool lets a second agent write and run discord.js code, so only the bot owner can use it.

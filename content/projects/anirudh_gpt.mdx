@@ -9,24 +9,21 @@ platform: Web
 image: /images/projects/anirudh_gpt/cover.jpg
 tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 ---
+AnirudhGPT is a chat app on top of the OpenAI API, with Google sign-in, saved conversations and optional web search. It ran on Replit in spring 2023. The Replit app is gone and the repo is archived. The code is public under AGPL.
 
-AnirudhGPT is a chat app on top of the OpenAI API, with Google sign-in, saved conversations and optional web search. It ran on Replit in spring 2023. The repo is archived now and the Replit app is gone.
+## What it does
+
+You sign in with Google, chat, and come back to your old conversations later. With web search on, it looks up a few results first and answers with links.
+
+<Screens>
+  <Screen frame='wide' height={1000} src='/images/projects/anirudh_gpt/google-sign-in.webp' width={1600} alt='A dark blue sign-in page titled TechWithAnirudh ChatGPT with a Login heading, a Sign in with Google button and an illustration of a person walking through a door' caption='Sign-in with Google as the only option, from an Internet Archive copy.' />
+</Screens>
 
 ## How it works
 
-Sign-in goes through [NextAuth](https://next-auth.js.org/) with Google, and [Firestore](https://firebase.google.com/docs/firestore) stores each user's chats and messages. The API route that calls OpenAI writes the reply into Firestore itself.
-
-<Screens columns={1}>
-  <Screen frame='wide' src='/images/projects/anirudh_gpt/google-sign-in.webp' alt='A dark blue sign-in page titled TechWithAnirudh ChatGPT with a Login heading, a Sign in with Google button and an illustration of a person walking through a door' caption='Sign-in with Google as the only option, from an Internet Archive copy.' />
-</Screens>
-
-The chat API has no memory. So before each call the server reads every message in the current chat from Firestore and sends them all with a short system prompt.
-
-With web search on, the app fetched nine results from a small [DuckDuckGo](https://duckduckgo.com/) scraper I ran on Replit. It rewrote the message into a prompt with the numbered results, the date and an instruction to cite links. The chat still showed what you typed.
+The chat API has no memory. So before each call the server loads the whole conversation from Firestore and sends it along. Search results came from a small DuckDuckGo scraper I ran on Replit.
 
 <Screens>
-  <Screen frame='wide' src='/images/projects/anirudh_gpt/welcome-march.webp' alt='A light welcome screen with the OpenAI logo, the text Welcome to TechWithAnirudh ChatGPT, and green Log in and Sign up buttons' caption='The signed-out screen in March 2023, from an Internet Archive copy.' />
-  <Screen frame='wide' src='/images/projects/anirudh_gpt/welcome-dark.webp' alt='The same welcome screen on a dark blue background with a purple chat bubble logo and teal Log in and Sign up buttons' caption='The late April version with its own logo and a dark theme, from an Internet Archive copy.' />
+  <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-march.webp' width={1600} alt='A light welcome screen with the OpenAI logo, the text Welcome to TechWithAnirudh ChatGPT, and green Log in and Sign up buttons' caption='The signed-out screen in March 2023, from an Internet Archive copy.' />
+  <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-dark.webp' width={1600} alt='The same welcome screen on a dark blue background with a purple chat bubble logo and teal Log in and Sign up buttons' caption='The late April version with its own logo and a dark theme, from an Internet Archive copy.' />
 </Screens>
-
-The repo is public under AGPL.

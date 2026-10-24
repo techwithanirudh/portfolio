@@ -10,22 +10,19 @@ image: /images/projects/speaking_meeting_bot/cover.png
 tags: ['Python', 'Pipecat', 'MeetingBaaS', 'WebSocket']
 ---
 
-AI agents that join a Google Meet or Teams call and talk in it, each with its own personality. I wrote the first version in November 2024, and the Meeting BaaS team added more after that. It's in the Meeting BaaS org now, MIT licensed.
+AI agents that join a Google Meet or Teams call and talk in it, each with its own personality. I wrote the first version in November 2024, and the Meeting BaaS team added more after that. It's open source under the MIT license and lives in the Meeting BaaS org now.
+
+The hosted API still runs, and its docs page loads.
+
+## What it does
+
+You give it a meeting link and a persona, and the agent joins and holds a spoken conversation. A persona is a Markdown file that sets the agent's traits, voice and first line.
+
+<Screens>
+  <Screen frame='wide' height={1158} src='/images/projects/speaking_meeting_bot/persona-file.webp' width={1600} alt='The interviewer persona README on GitHub, with sections for characteristics, voice and metadata, next to the list of persona folders' caption='A persona is a Markdown file with traits, voice and entry message.' />
+  <Screen frame='wide' height={1151} src='/images/projects/speaking_meeting_bot/api-docs.webp' width={1600} alt='Swagger UI for the Speaking Meeting Bot API listing POST /bots, DELETE /bots/{bot_id}, POST /personas/generate-image, POST /webhook and GET /health' caption='The hosted API docs.' />
+</Screens>
 
 ## How it works
 
-[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio over a WebSocket. [Pipecat](https://www.pipecat.ai/) runs the voice pipeline. Silero spots speech, [Deepgram](https://deepgram.com/) transcribes it, an OpenAI model writes the reply and [Cartesia](https://cartesia.ai/) speaks it back.
-
-The two sides don't speak the same language. Meeting BaaS sends plain audio bytes and Pipecat wants protobuf frames, so a small proxy wraps each chunk going in and strips the frames coming out. Everything runs at 16 kHz.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/audio-proxy.webp' alt='Python code in proxy.py that wraps each raw audio message in a protobuf Frame with its sample rate and channel count before sending it to Pipecat' caption='proxy.py wraps raw call audio in a Pipecat frame.' />
-  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/bot-proxy-pairs.webp' alt='Python code in batch.py that starts a bot and a proxy on adjacent ports, opens an ngrok tunnel for the proxy and starts a MeetingBaaS process for it' caption='batch.py starts a bot and proxy pair per meeting.' />
-</Screens>
-
-My version ran each bot as three processes, and `batch.py` started as many as you asked for, each with its own [ngrok](https://ngrok.com/) tunnel. Today a Markdown file sets each agent's personality, and a FastAPI server starts the bots. Meeting BaaS hosts it as an API.
-
-<Screens>
-  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/persona-file.webp' alt='The interviewer persona README on GitHub, with sections for characteristics, voice and metadata, next to the list of persona folders' caption='A persona is a Markdown file with traits, voice and entry message.' />
-  <Screen frame='wide' src='/images/projects/speaking_meeting_bot/api-docs.webp' alt='Swagger UI for the Speaking Meeting Bot API listing POST /bots, DELETE /bots/{bot_id}, POST /personas/generate-image, POST /webhook and GET /health' caption='The hosted API docs.' />
-</Screens>
+[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio. [Pipecat](https://www.pipecat.ai/) runs the voice pipeline, so speech is transcribed, an OpenAI model writes the reply and [Cartesia](https://cartesia.ai/) speaks it back. My version started each bot by script. Today a FastAPI server starts them.
