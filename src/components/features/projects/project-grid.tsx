@@ -21,7 +21,6 @@ export const ProjectGrid = ({ className, projects }: ProjectGridProps) => (
         <ProjectCard
           description={project.data.description ?? ''}
           image={project.data.image ?? null}
-          imageCrop={project.data.imageCrop}
           title={project.data.title}
           transitionName={project.slugs.join('/')}
           url={project.url}

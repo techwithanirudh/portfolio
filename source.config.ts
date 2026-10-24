@@ -61,10 +61,6 @@ export const projects = defineCollections({
     date: dateSchema,
     github: z.url().optional(),
     image: z.string().optional(),
-    /** Zooms the cover onto a readable detail: focus point in percent, then the zoom factor */
-    imageCrop: z
-      .object({ x: z.number(), y: z.number(), zoom: z.number() })
-      .optional(),
     /**
      * Pins a project to the front of the project list, lowest first. Anything
      * without it falls in behind, newest first.

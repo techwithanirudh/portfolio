@@ -5,13 +5,12 @@ import { type ReactNode, ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { cn } from '@/lib/utils'
-import { type CoverCrop, coverCropStyle, preloadCover } from './cover'
+import { preloadCover } from './cover'
 import { projectTransitionName, projectTransitionShare } from './transition'
 
 interface ProjectCardProps {
   description: string
   image?: string | null
-  imageCrop?: CoverCrop
   /** Replaces the "View case study" line, such as the year */
   meta?: string[]
   priority?: boolean
@@ -40,7 +39,6 @@ export const ProjectCard = ({
   title,
   description,
   image,
-  imageCrop,
   meta,
   priority = false,
   transitionName,
@@ -68,11 +66,10 @@ export const ProjectCard = ({
               'relative aspect-video w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 dark:outline-white/10'
             )}
             fill
-            imageClassName='object-cover'
+            imageClassName='object-contain object-top'
             loading={priority ? 'eager' : 'lazy'}
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}
-            style={coverCropStyle(imageCrop)}
           />
         </SharedTransition>
       )}

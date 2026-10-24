@@ -5,10 +5,7 @@ import { ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
-import {
-  coverCropStyle,
-  PROJECT_COVER_SIZES,
-} from '@/components/features/projects/cover'
+import { PROJECT_COVER_SIZES } from '@/components/features/projects/cover'
 import { ProjectFacts } from '@/components/features/projects/project-facts'
 import { ProjectStatus } from '@/components/features/projects/project-status'
 import {
@@ -57,11 +54,10 @@ function Header({ page }: { page: ProjectPage }) {
             blur={false}
             className='relative mt-4 aspect-video w-full overflow-hidden rounded-xl bg-card outline outline-black/10 -outline-offset-1 dark:outline-white/10'
             fill
-            imageClassName='object-cover'
+            imageClassName='object-contain object-top'
             loading='eager'
             sizes={PROJECT_COVER_SIZES}
             src={page.data.image}
-            style={coverCropStyle(page.data.imageCrop)}
           />
         </ViewTransition>
       )}
