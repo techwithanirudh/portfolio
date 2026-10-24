@@ -27,7 +27,7 @@ export const PostEmpty = ({
     )}
     role='status'
   >
-    <PageSimba pose='bashful' size={96} />
+    <PageSimba pose='rest' size={96} />
     <p className='font-medium'>
       {tag ? `Nothing tagged ${tag} yet.` : 'Nothing matches that yet.'}
     </p>

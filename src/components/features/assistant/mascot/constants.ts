@@ -17,13 +17,12 @@ export type Pose =
   | { hidden: true }
 
 export const POSES = {
-  bashful: { sprite: 'embarrassed' },
-  // The sheet's tilt leans to the right, so the left one is its mirror
-  curious: { flip: true, sprite: 'curiousTilt' },
-  curiousRight: { sprite: 'curiousTilt' },
   hidden: { hidden: true },
   hopping: { motion: 'hop', sprite: 'happy' },
-  lookUp: { sprite: 'lookAround' },
+  lookLeft: { sprite: 'restLookLeft' },
+  lookLeftEyes: { sprite: 'restLookLeft1' },
+  lookRight: { sprite: 'restLookRight' },
+  lookRightEyes: { sprite: 'restLookRight1' },
   pleased: { sprite: 'happy' },
   reading: { sprite: 'books' },
   rest: { sprite: 'rest' },
@@ -32,6 +31,8 @@ export const POSES = {
   surprised: { sprite: 'surprised' },
   talking: { sprite: 'rest', talking: true },
   thinking: { sprite: 'thinking' },
+  tilt: { sprite: 'restTilt2' },
+  tiltIn: { sprite: 'restTilt1' },
 } satisfies Record<string, Pose>
 
 export type PoseName = keyof typeof POSES
@@ -47,18 +48,19 @@ const seq = (...frames: [PoseName, number][]) =>
 
 export const SIMBA_ANIMATIONS = {
   Butterfly: seq(
-    ['lookUp', 600],
-    ['curious', 600],
-    ['curiousRight', 600],
-    ['lookUp', 500],
-    ['rest', 700]
+    ['lookLeftEyes', 160],
+    ['lookLeft', 520],
+    ['lookRightEyes', 160],
+    ['lookRight', 520],
+    ['lookLeftEyes', 150],
+    ['lookLeft', 460],
+    ['lookLeftEyes', 140],
+    ['rest', 500]
   ),
   Celebrate: seq(['hopping', 1600], ['pleased', 800]),
   ClickedOn: seq(['surprised', 225], ['pleased', 400]),
-  Embarrassed: seq(['bashful', 1800]),
-  Flower: seq(['curious', 1000], ['rest', 700]),
+  Flower: seq(['tiltIn', 150], ['tilt', 1400], ['tiltIn', 170], ['rest', 600]),
   Idle: seq(['rest', 2600]),
-  LookUp: seq(['lookUp', 1400]),
   Reading: seq(['reading', 2400]),
   Settle: seq(['settling', 300]),
   Show: seq(['hidden', 120], ['rest', 450]),
@@ -68,7 +70,7 @@ export const SIMBA_ANIMATIONS = {
 export type AnimationName = keyof typeof SIMBA_ANIMATIONS
 
 export const animations = {
-  idle: ['Butterfly', 'Embarrassed', 'Flower', 'LookUp'],
+  idle: ['Butterfly', 'Flower'],
   open: 'ClickedOn',
   rest: 'Idle',
   settle: 'Settle',

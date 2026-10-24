@@ -8,7 +8,6 @@ export interface Shown {
 }
 
 interface Step extends Shown {
-  /** His chest rises while this frame shows (the pant) */
   chest?: boolean
   /** ms */
   duration: number
@@ -25,18 +24,9 @@ interface InBetweens {
 
 const IN_BETWEEN_FRAME_MS = 80
 
-const NAP_DOWN: readonly Hold[] = [
-  ['restBlink1', 600],
-  ['nap1', 280],
-  ['nap2', 280],
-  ['napLoaf', 300],
-  ['sleeping2', 340],
-  ['sleeping3', 400],
-]
-
 /**
- * The sheet's frames into Happy, the curious tilt and booksUp1 turn him from the side
- * sit, so from the front rest those poses swap straight over
+ * The sheet's frames into Happy and the book turn him from the side sit, so from the
+ * front rest those poses swap straight over
  */
 const IN_BETWEENS: Partial<Record<SpriteName, InBetweens>> = {
   books: {
@@ -48,16 +38,17 @@ const IN_BETWEENS: Partial<Record<SpriteName, InBetweens>> = {
       ['restBlink1', 260],
       ['restBlink2', 160],
       ['restBlink3', 520],
-      ['restBlink2', 200],
-      ...NAP_DOWN,
     ],
-    out: NAP_DOWN.toReversed().map(([frame]) => [frame, 110]),
+    out: [
+      ['restBlink3', 140],
+      ['restBlink2', 120],
+      ['restBlink1', 120],
+    ],
   },
 }
 
 /** Frames drawn on rest's front sit: switching between them moves only the eyes, mouth or head */
 const REST_BODY: ReadonlySet<SpriteName> = new Set([
-  'embarrassed',
   'rest',
   'restBlink1',
   'restBlink2',
@@ -66,9 +57,10 @@ const REST_BODY: ReadonlySet<SpriteName> = new Set([
   'restLookLeft1',
   'restLookRight',
   'restLookRight1',
-  'restPant1',
-  'restPant2',
-  'restPant3',
+  'restPantA',
+  'restPantB',
+  'restTalkA',
+  'restTalkB',
   'restTilt1',
   'restTilt2',
 ])
@@ -106,31 +98,35 @@ const BEATS: readonly [Beat, ...Beat[]] = [
   [hold('restTilt1', 140), hold('restTilt2', 1600), hold('restTilt1', 160)],
 ]
 
-const PANT: Beat = [
-  hold('restPant1', 220, true),
-  hold('restPant2', 200, true),
-  hold('restPant3', 760, true),
-  hold('restPant2', 200),
-  hold('restPant1', 240),
+const breath = (): Step[] => [
+  hold('restPantA', between(250, 290)),
+  hold('restPantB', between(290, 330), true),
+]
+
+const pant = (): Beat => [
+  hold('restTalkA', 140),
+  ...Array.from({ length: 3 + Math.floor(Math.random() * 3) }, breath).flat(),
+  hold('restPantA', 200),
+  hold('restTalkA', 160),
 ]
 
 export const between = (min: number, max: number) =>
   min + Math.random() * (max - min)
 
+const nextPant = () => Date.now() + 10_000 + Math.random() * 10_000
+
 const syllable = (): Step[] =>
   Math.random() < 0.4
     ? [
-        hold('restPant1', between(50, 80)),
-        hold('restPant2', between(90, 150)),
-        hold('restPant1', between(50, 70)),
+        hold('restTalkA', between(50, 80)),
+        hold('restTalkB', between(90, 150)),
+        hold('restTalkA', between(50, 70)),
         hold('rest', between(90, 170)),
       ]
-    : [hold('restPant1', between(110, 190)), hold('rest', between(100, 190))]
+    : [hold('restTalkA', between(110, 190)), hold('rest', between(100, 190))]
 
 const phrase = (): Beat =>
   Array.from({ length: 3 + Math.floor(Math.random() * 4) }, syllable).flat()
-
-const nextPant = () => Date.now() + 10_000 + Math.random() * 10_000
 
 // The in-between frames are drawn facing one way, so a mirrored target swaps straight over
 const inBetween = ({ flip, sprite }: Shown, way: keyof InBetweens): Step[] =>
@@ -213,15 +209,27 @@ interface Cue {
 const cueFor = (
   step: Step | undefined,
   {
+    asleep,
     pantAt,
     resting,
     talking,
-  }: { pantAt: RefObject<number>; resting: boolean; talking: boolean }
+  }: {
+    asleep: boolean
+    pantAt: RefObject<number>
+    resting: boolean
+    talking: boolean
+  }
 ): Cue | null => {
   if (step) {
     return {
       ms: step.duration,
       next: () => (current) => ({ ...current, index: current.index + 1 }),
+    }
+  }
+  if (asleep) {
+    return {
+      ms: 1500,
+      next: () => play([hold('sleepingBreath', 1600)]),
     }
   }
   if (!resting) {
@@ -239,11 +247,11 @@ const cueFor = (
   return {
     ms: 3000 + Math.random() * 3000,
     next: () => {
-      const pant = Date.now() >= pantAt.current
-      if (pant) {
+      if (Date.now() >= pantAt.current) {
         pantAt.current = nextPant()
+        return play(pant())
       }
-      return play(pant ? PANT : pick(BEATS))
+      return play(pick(BEATS))
     },
   }
 }
@@ -281,19 +289,20 @@ export function useSpriteFrames(
   const step = animate ? run.steps[run.index] : undefined
   const resting = run.target.sprite === 'rest'
   const pantAt = useRef(0)
+  const asleep = run.target.sprite === 'sleeping'
 
   const hidden = !target
   useEffect(() => {
     if (!animate || hidden) {
       return
     }
-    const cue = cueFor(step, { pantAt, resting, talking })
+    const cue = cueFor(step, { asleep, pantAt, resting, talking })
     if (!cue) {
       return
     }
     const timer = setTimeout(() => setRun(cue.next()), cue.ms)
     return () => clearTimeout(timer)
-  }, [animate, hidden, resting, step, talking])
+  }, [animate, asleep, hidden, resting, step, talking])
 
   return {
     chest: step?.chest ?? false,
