@@ -13,7 +13,7 @@ AniKode is a drag-and-drop website builder on [GrapesJS](https://grapesjs.com/).
 
 ## What it does
 
-You create a project, add pages and open one in the editor. Blocks sit on the left, and styles, settings, layers and pages are on the right. Every change is saved as you go, and the editor tells you if a save fails. Sign-in is an emailed link or GitHub.
+You create a project, add pages and open one in the editor. Blocks sit on the left, and styles, settings, layers and pages are on the right. Every change is saved as you go, and the editor tells you if a save fails. Sign-in is an emailed link or GitHub, through [NextAuth](https://next-auth.js.org/) and [Resend](https://resend.com/), and pages are saved to Postgres with [Drizzle](https://orm.drizzle.team/).
 
 <Screens>
   <Screen frame='wide' height={1133} src='/images/projects/anikode/studio-landing-dark.webp' width={1600} alt='The AniKode Studio landing page in dark mode, with the headline Build stunning websites with ease above a screenshot of the editor' caption='The Studio landing page.' />

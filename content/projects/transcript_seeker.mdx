@@ -31,4 +31,4 @@ It's open source under the MIT license and lives in the Meeting BaaS org. The la
 
 ## How it works
 
-Keys, meetings, notes and chats are saved in a database inside your browser, so the basic app needs no server. I swapped Lazare's IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top.
+Keys, meetings, notes and chats are saved in a database inside your browser, so the basic app needs no server. I swapped Lazare's IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top. The repo is a [Turborepo](https://turborepo.dev/) that also holds a [Nitro](https://nitro.build/) proxy for the Meeting Baas API and a [Hono](https://hono.dev/) API that uses [Better Auth](https://www.better-auth.com/) for Google sign-in. The web app and proxy ran on [Firebase](https://firebase.google.com/).

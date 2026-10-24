@@ -22,7 +22,7 @@ It supports 100 shops across ten regions, and you can add another by its web add
 
 ## How it works
 
-You sign in on the shop's own page inside the app, so Depensa never sees your password. The first time through a shop, an AI model writes a small reader for its orders, and every sync after that replays it on a schedule. If a site has no usable orders, the app says it can't read it.
+You sign in on the shop's own page inside the app, so Depensa never sees your password. The first time through a shop, an AI model writes a small reader for its orders, and every sync after that replays it on a schedule. Sync jobs are queued in [Convex](https://www.convex.dev/). If a site has no usable orders, the app says it can't read it.
 
 <Screens>
   <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights.' />

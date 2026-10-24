@@ -15,7 +15,7 @@ A SaaS marketing site in one project: landing page, pricing, blog, newsletter an
 
 ## What it does
 
-Pricing has monthly and yearly tabs and a plan comparison table. The blog has tags, RSS, search and comments. The contact and newsletter forms send email through [Resend](https://resend.com/).
+Pricing has monthly and yearly tabs and a plan comparison table. The blog has tags, RSS, search and comments. The contact and newsletter forms are [next-safe-action](https://next-safe-action.dev/) server actions that send email through [Resend](https://resend.com/).
 
 <Screens>
   <Screen frame='wide' height={840} src='/images/projects/shadcn_saas_landing/hero-dark.webp' width={1440} alt='The SaasCN home page in dark mode, with the headline The Future of Business Starts Here, Get in touch and Sign up buttons, and a row of customer logos below' caption='The home page in dark mode.' />
@@ -30,7 +30,7 @@ Pricing has monthly and yearly tabs and a plan comparison table. The blog has ta
 
 ## How it works
 
-Blog posts are MDX files that [Fumadocs](https://fumadocs.dev/) indexes for search. Pricing plans live in one data file that the plan cards and the comparison table both read.
+Blog posts are MDX files that [Fumadocs](https://fumadocs.dev/) indexes for search. Comments are stored with [Drizzle](https://orm.drizzle.team/). Pricing plans live in one data file that the plan cards and the comparison table both read.
 
 <Screens>
   <Screen frame='wide' height={520} src='/images/projects/shadcn_saas_landing/search-dark.webp' width={840} alt='The search dialog with the query workflow, listing matching headings and paragraphs from two blog posts' caption='Search matches headings and paragraphs inside posts.' />

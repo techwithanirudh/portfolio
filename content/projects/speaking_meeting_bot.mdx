@@ -25,4 +25,4 @@ You give it a meeting link and a persona, and the agent joins and holds a spoken
 
 ## How it works
 
-[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio. [Pipecat](https://www.pipecat.ai/) runs the voice pipeline, so speech is transcribed, an OpenAI model writes the reply and [Cartesia](https://cartesia.ai/) speaks it back. My version started each bot by script. Today a FastAPI server starts them.
+[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio. [Pipecat](https://www.pipecat.ai/) runs the voice pipeline, so [Deepgram](https://deepgram.com/) transcribes speech, an OpenAI model writes the reply and [Cartesia](https://cartesia.ai/) speaks it back. My version started each bot by script, each with its own [ngrok](https://ngrok.com/) tunnel. Today a FastAPI server starts them.

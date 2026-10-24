@@ -13,7 +13,7 @@ AnirudhGPT is a chat app on top of the OpenAI API, with Google sign-in, saved co
 
 ## What it does
 
-You sign in with Google, chat, and come back to your old conversations later. With web search on, it looks up a few results first and answers with links.
+You sign in with Google through [NextAuth](https://next-auth.js.org/), chat, and come back to your old conversations later. With web search on, it looks up a few results first and answers with links.
 
 <Screens>
   <Screen frame='wide' height={1000} src='/images/projects/anirudh_gpt/google-sign-in.webp' width={1600} alt='A dark blue sign-in page titled TechWithAnirudh ChatGPT with a Login heading, a Sign in with Google button and an illustration of a person walking through a door' caption='Sign-in with Google as the only option, from an Internet Archive copy.' />
@@ -21,7 +21,7 @@ You sign in with Google, chat, and come back to your old conversations later. Wi
 
 ## How it works
 
-The chat API has no memory. So before each call the server loads the whole conversation from Firestore and sends it along. Search results came from a small DuckDuckGo scraper I ran on Replit.
+The chat API has no memory. So before each call the server loads the whole conversation from [Firestore](https://firebase.google.com/docs/firestore) and sends it along. Search results came from a small [DuckDuckGo](https://duckduckgo.com/) scraper I ran on Replit.
 
 <Screens>
   <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-march.webp' width={1600} alt='A light welcome screen with the OpenAI logo, the text Welcome to TechWithAnirudh ChatGPT, and green Log in and Sign up buttons' caption='The signed-out screen in March 2023, from an Internet Archive copy.' />

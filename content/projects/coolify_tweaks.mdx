@@ -10,13 +10,13 @@ github: https://github.com/techwithanirudh/coolify-tweaks
 image: https://raw.githubusercontent.com/techwithanirudh/coolify-tweaks/dev/apps/docs/public/banner.png
 tags: ['Coolify', 'Userstyle', 'Stylus', 'Nitro', 'TurboRepo']
 ---
-Coolify Tweaks is a Stylus userstyle that changes the spacing, type and layout of [Coolify](https://coolify.io/)'s dashboard. It can also apply any [TweakCN](https://tweakcn.com/) theme, with no fork and no changes to Coolify's code. It isn't affiliated with Coolify.
+Coolify Tweaks is a [Stylus](https://github.com/openstyles/stylus) userstyle that changes the spacing, type and layout of [Coolify](https://coolify.io/)'s dashboard. It can also apply any [TweakCN](https://tweakcn.com/) theme, with no fork and no changes to Coolify's code. It isn't affiliated with Coolify.
 
 It's live and maintained, and the latest release is v4.1.2. Outside contributors sent fixes for header spacing, the select box icon and the show and hide button on disabled inputs.
 
 ## What it does
 
-Projects turn into a grid of rounded cards, and pages like New Resource get cleaner rows. Install it with Stylus, or add it on the server so it works in any browser without an extension.
+Projects turn into a grid of rounded cards, and pages like New Resource get cleaner rows. Install it with Stylus, or add it on the server with a [Traefik](https://traefik.io/) plugin so it works in any browser without an extension.
 
 <Screens>
   <Screen frame='wide' height={986} src='/images/projects/coolify_tweaks/dashboard-before.webp' width={1600} alt='The stock Coolify dashboard in dark mode, with projects as wide rows and a purple highlighted row' caption='The stock dashboard, on Coolify v4.0.0-beta.420.6.' />
@@ -30,4 +30,4 @@ Projects turn into a grid of rounded cards, and pages like New Resource get clea
 
 ## How it works
 
-It's about 2,300 lines of SCSS that target Coolify's page structure. Coolify updates still break some selectors, and I fix them in new releases.
+It's about 2,300 lines of SCSS that target Coolify's page structure. Coolify updates still break some selectors, and I fix them in new releases. A small [Nitro](https://nitro.build/) API serves the CSS from the latest release.
