@@ -162,7 +162,7 @@ export const PromptInputFooter = ({
 
 type PromptInputButtonProps = ComponentProps<typeof Button>
 
-export const PromptInputButton = ({
+const PromptInputButton = ({
   className,
   variant = 'dashed',
   size = 'icon-sm',

@@ -11,7 +11,7 @@ const markdownLink = /\[([^\]]+)\]\([^)]+\)/g
 const urlPrefix = /^(https?:\/\/|mailto:)(www\.)?/
 const trailingSlash = /\/$/
 
-export const prettyUrl = (url: string) =>
+const prettyUrl = (url: string) =>
   url.replace(urlPrefix, '').replace(trailingSlash, '')
 
 export function getResume() {

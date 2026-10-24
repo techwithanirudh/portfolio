@@ -126,7 +126,6 @@ const groupByWeeks = (activities: Activity[]): Week[] => {
   const normalizedActivities = fillHoles(activities)
   const firstActivity = normalizedActivities[0] as Activity
   const firstDate = parseISO(firstActivity.date)
-  // Weeks start on Sunday (day 0)
   const firstCalendarDate =
     getDay(firstDate) === 0 ? firstDate : subWeeks(nextDay(firstDate, 0), 1)
 
@@ -191,7 +190,7 @@ const getMonthLabels = (weeks: Week[]): MonthLabel[] =>
       return true
     })
 
-export interface ContributionGraphProps extends HTMLAttributes<HTMLDivElement> {
+interface ContributionGraphProps extends HTMLAttributes<HTMLDivElement> {
   blockMargin?: number
   blockRadius?: number
   blockSize?: number
@@ -271,8 +270,7 @@ export const ContributionGraph = ({
   )
 }
 
-export interface ContributionGraphBlockProps
-  extends HTMLAttributes<SVGRectElement> {
+interface ContributionGraphBlockProps extends HTMLAttributes<SVGRectElement> {
   activity: Activity
   dayIndex: number
   weekIndex: number
@@ -311,7 +309,7 @@ export const ContributionGraphBlock = ({
   )
 }
 
-export interface ContributionGraphCalendarProps
+interface ContributionGraphCalendarProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   children: (props: {
     activity: Activity
@@ -381,8 +379,7 @@ export const ContributionGraphCalendar = ({
   )
 }
 
-export interface ContributionGraphFooterProps
-  extends HTMLAttributes<HTMLDivElement> {}
+interface ContributionGraphFooterProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ContributionGraphFooter = ({
   className,
@@ -406,7 +403,7 @@ export const ContributionGraphTotalCount = ({
   return <>{children({ totalCount })}</>
 }
 
-export interface ContributionGraphLegendProps
+interface ContributionGraphLegendProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   children: (props: { level: number }) => ReactNode
 }

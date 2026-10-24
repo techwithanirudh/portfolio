@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const GUESTBOOK_MESSAGE_MAX_LENGTH = 500
+const GUESTBOOK_MESSAGE_MAX_LENGTH = 500
 
 const entryId = z.number().int().positive()
 

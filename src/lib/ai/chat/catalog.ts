@@ -89,7 +89,7 @@ export const portfolioCatalog = defineCatalog(schema, {
 
 export type PortfolioComponent = keyof typeof portfolioCatalog.data.components
 
-export type ProjectItem = Pick<ProjectPage, 'url'> &
+type ProjectItem = Pick<ProjectPage, 'url'> &
   Pick<ProjectPage['data'], 'title'> & {
     /** ISO date, since the spec travels as JSON */
     date: string
@@ -97,7 +97,7 @@ export type ProjectItem = Pick<ProjectPage, 'url'> &
     image: string | null
   }
 
-export type PostItem = Pick<BlogPage, 'url'> &
+type PostItem = Pick<BlogPage, 'url'> &
   Pick<BlogPage['data'], 'description' | 'tags' | 'title'> & {
     /** ISO date, since the spec travels as JSON */
     date: string
