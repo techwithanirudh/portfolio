@@ -6,17 +6,30 @@
 >
   <title>Anirudh Sriram</title>
   <defs>
-    <clipPath id="disc"><circle cx="32" cy="32" r="31" /></clipPath>
+    <style>
+    .edge {
+      fill: none;
+      stroke: #000;
+      stroke-opacity: 0.1;
+      stroke-width: 1;
+    }
+    @media (prefers-color-scheme: dark) {
+      .edge {
+        stroke: #fff;
+      }
+    }
+    </style>
+    <clipPath id="disc"><circle cx="32" cy="32" r="32" /></clipPath>
   </defs>
-  <circle cx="32" cy="32" fill="#262626" r="31" />
+  <circle cx="32" cy="32" fill="#262626" r="32" />
   <g clip-path="url(#disc)">
     <svg
-      height="62"
+      height="64"
       preserveAspectRatio="xMidYMid slice"
       viewBox="110 60 730 730"
-      width="62"
-      x="1"
-      y="1"
+      width="64"
+      x="0"
+      y="0"
     >
       <defs>
         <linearGradient
@@ -299,12 +312,5 @@
       </g>
     </svg>
   </g>
-  <circle
-    cx="32"
-    cy="32"
-    fill="none"
-    r="30.75"
-    stroke="#f4f4f5"
-    stroke-width="2.5"
-  />
+  <circle class="edge" cx="32" cy="32" r="31.5" />
 </svg>
