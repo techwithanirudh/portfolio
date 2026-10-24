@@ -559,6 +559,25 @@ html > body[data-scroll-locked] {
   }
 }
 
+/* Items on screen at load fade in from the first paint, without waiting for
+   hydration. The first section shows right away, and ViewAnimation swaps this
+   for a scroll reveal on items below the fold */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-item]:not(
+    #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
+  ) {
+    animation: reveal-in 450ms cubic-bezier(0.2, 0.7, 0.2, 1)
+      var(--reveal-delay, 0s) both;
+  }
+}
+
 /* The zoomed blog image keeps the radius FramedImage gives it in the page, so it stays rounded through the zoom */
 [data-rmiz-modal-img] {
   border-radius: var(--radius-xl);

@@ -1,7 +1,13 @@
 'use client'
 
 import { animate } from 'motion/mini'
-import { type ReactNode, type Ref, useLayoutEffect, useRef } from 'react'
+import {
+  type CSSProperties,
+  type ReactNode,
+  type Ref,
+  useLayoutEffect,
+  useRef,
+} from 'react'
 
 interface ViewAnimationProps {
   as?: 'div' | 'li'
@@ -57,7 +63,9 @@ export const ViewAnimation = ({
       element.style.transform = ''
     }
 
+    // Below the fold the load fade from globals.css is swapped for a scroll reveal
     let animation: ReturnType<typeof animate> | undefined
+    element.style.animation = 'none'
     element.style.opacity = '0'
     element.style.transform = `translateY(${SHIFT_PX}px)`
     reveals.set(element, () => {
@@ -79,6 +87,7 @@ export const ViewAnimation = ({
       reveals.delete(element)
       animation?.stop()
       clear()
+      element.style.animation = ''
     }
   }, [delay])
 
@@ -87,6 +96,11 @@ export const ViewAnimation = ({
       className={className}
       data-reveal-item
       ref={ref as Ref<HTMLDivElement & HTMLLIElement>}
+      style={
+        delay
+          ? ({ '--reveal-delay': `${Math.min(delay, 0.2)}s` } as CSSProperties)
+          : undefined
+      }
     >
       {children}
     </Tag>
