@@ -54,7 +54,7 @@ function Header({ page }: { page: ProjectPage }) {
             blur={false}
             className='relative mt-4 aspect-video w-full overflow-hidden rounded-xl bg-card outline outline-black/10 -outline-offset-1 dark:outline-white/10'
             fill
-            imageClassName='object-contain object-top'
+            imageClassName='object-cover'
             loading='eager'
             sizes={PROJECT_COVER_SIZES}
             src={page.data.image}

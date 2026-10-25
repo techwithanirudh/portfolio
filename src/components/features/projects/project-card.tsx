@@ -66,7 +66,7 @@ export const ProjectCard = ({
               'relative aspect-video w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 dark:outline-white/10'
             )}
             fill
-            imageClassName='object-contain object-top'
+            imageClassName='object-cover'
             loading={priority ? 'eager' : 'lazy'}
             sizes='(min-width: 768px) 50vw, 100vw'
             src={image}

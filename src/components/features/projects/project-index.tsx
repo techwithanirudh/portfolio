@@ -50,7 +50,7 @@ const Cover = ({
           blur={false}
           className='absolute inset-0'
           fill
-          imageClassName='object-contain object-top'
+          imageClassName='object-cover'
           sizes='(min-width: 1024px) 480px, 100vw'
           src={project.image}
         />
