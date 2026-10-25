@@ -90,6 +90,12 @@
       "skillPath": "skills/find-animation-opportunities/SKILL.md",
       "computedHash": "465d087c41768e4f14ed640dd049036009f613feb55baaa5831b68b33178f9d2"
     },
+    "hydration-safe-inputs": {
+      "source": "ethanniser/hydration-test",
+      "sourceType": "github",
+      "skillPath": "skills/hydration-safe-inputs/SKILL.md",
+      "computedHash": "5786486c8f2d73c53edd29cf6f97de2c22c875f980637872e8581457013f8b99"
+    },
     "improve-animations": {
       "source": "emilkowalski/skill",
       "sourceType": "github",
