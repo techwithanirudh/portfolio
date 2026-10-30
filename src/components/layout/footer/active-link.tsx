@@ -1,29 +1,19 @@
 'use client'
 
-import Link, { type LinkProps } from 'next/link'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import type { ReactNode } from 'react'
+import type { ComponentProps } from 'react'
 import { isActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
-
-type ActiveLinkProps = LinkProps & {
-  children: ReactNode
-  href: string
-  target?: string
-  rel?: string
-  className?: string
-  nested?: boolean
-}
 
 export const ActiveLink = ({
   href,
   children,
   className,
-  nested = false,
   ...props
-}: ActiveLinkProps) => {
+}: ComponentProps<typeof Link> & { href: string }) => {
   const pathname = usePathname()
-  const active = isActive(href, pathname, nested)
+  const active = isActive(href, pathname, { nested: false })
 
   return (
     <Link

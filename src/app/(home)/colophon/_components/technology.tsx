@@ -1,13 +1,17 @@
-import { PreviewLink } from '@/components/preview-link'
+import { externalLinkProps } from '@/components/external-link'
 import { technology } from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
+  COLOPHON_COLUMNS,
   colophonCardBorderClasses,
   colophonGridClassName,
 } from './colophon-grid'
 
 export const Technology = () => {
-  const fillerCount = (3 - (technology.length % 3 || 3)) % 3
+  const fillerCount =
+    (COLOPHON_COLUMNS -
+      (technology.length % COLOPHON_COLUMNS || COLOPHON_COLUMNS)) %
+    COLOPHON_COLUMNS
   const fillerKeys = Array.from(
     { length: fillerCount },
     (_, fillerIndex) => `tech-filler-${fillerIndex + 1}`
@@ -29,15 +33,14 @@ export const Technology = () => {
         )
 
         return item.url ? (
-          <PreviewLink
+          <a
             className={className}
             href={item.url}
             key={item.name}
-            // Cards sit in a tight grid, so a hover card on every cell is noise
-            preview={null}
+            {...externalLinkProps}
           >
             {content}
-          </PreviewLink>
+          </a>
         ) : (
           <div className={className} key={item.name}>
             {content}

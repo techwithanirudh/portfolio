@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { type ComponentProps, useState } from 'react'
 import { BlurImage } from '@/components/blur-image'
+import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import {
   HoverCard,
@@ -12,37 +13,44 @@ import {
 } from '@/components/ui/hover-card'
 import type { LinkPreviewImage } from '@/lib/link-preview.shared'
 import { getPagePreviewPath, type PagePreview } from '@/lib/page-preview'
+import { cn } from '@/lib/utils'
 
 type Preview = LinkPreviewImage | null
 
-const previewRequests = new Map<string, Promise<unknown>>()
-
-function fetchJson<T>(url: string): Promise<T | null> {
-  let request = previewRequests.get(url)
-  if (!request) {
-    request = fetch(url)
-      .then((response) => (response.ok ? response.json() : null))
-      .catch(() => null)
-    previewRequests.set(url, request)
+// Resolves null when there is no preview (404) and undefined when the request
+// failed, which is evicted so the next open retries
+function createJsonFetcher<T>() {
+  const requests = new Map<string, Promise<T | null | undefined>>()
+  return (url: string) => {
+    let request = requests.get(url)
+    if (!request) {
+      request = fetch(url)
+        .then((response) => {
+          if (response.ok) {
+            return response.json() as Promise<T>
+          }
+          if (response.status === 404) {
+            return null
+          }
+          throw new Error(`${response.status} ${url}`)
+        })
+        .catch((): undefined => {
+          requests.delete(url)
+        })
+      requests.set(url, request)
+    }
+    return request
   }
-  return request as Promise<T | null>
 }
 
-const fetchPreview = (href: string) =>
-  fetchJson<LinkPreviewImage>(
-    `/api/link-preview?url=${encodeURIComponent(href)}`
-  )
-
-const fetchPagePreview = (path: string) =>
-  fetchJson<PagePreview>(`/api/page-preview?path=${encodeURIComponent(path)}`)
+const fetchLinkPreview = createJsonFetcher<LinkPreviewImage>()
+const fetchPagePreview = createJsonFetcher<PagePreview>()
 
 const externalHrefPattern = /^https?:\/\//
 const internalHrefPattern = /^\/(?!\/)/
 
 const popupClassName =
   'not-prose w-80 max-w-[calc(100vw-2rem)] overflow-hidden p-0'
-
-const externalLinkProps = { rel: 'noopener noreferrer', target: '_blank' }
 
 interface PreviewLinkProps extends Omit<ComponentProps<'a'>, 'href'> {
   href: string
@@ -73,6 +81,7 @@ export function PreviewLink({ href, preview, ...props }: PreviewLinkProps) {
 
 function HoverPreviewLink({
   children,
+  className,
   href,
   onPointerEnter,
   pagePath,
@@ -82,20 +91,43 @@ function HoverPreviewLink({
   const [fetchedPreview, setFetchedPreview] = useState<Preview>()
   const preview = knownPreview === undefined ? fetchedPreview : knownPreview
   const [pagePreview, setPagePreview] = useState<PagePreview | null>()
+  const [wantsOpen, setWantsOpen] = useState(false)
 
   const load = () => {
     if (pagePath) {
       if (pagePreview === undefined) {
-        fetchPagePreview(pagePath).then(setPagePreview)
+        fetchPagePreview(
+          `/api/page-preview?path=${encodeURIComponent(pagePath)}`
+        ).then(setPagePreview)
       }
     } else if (preview === undefined) {
-      fetchPreview(href).then(setFetchedPreview)
+      fetchLinkPreview(
+        `/api/link-preview?url=${encodeURIComponent(href)}`
+      ).then(setFetchedPreview)
     }
   }
 
+  const popup = pagePath
+    ? pagePreview && <PagePreviewPopup href={href} preview={pagePreview} />
+    : preview && <LinkPreviewPopup href={href} preview={preview} />
+
   return (
-    <HoverCard onOpenChange={(open) => open && load()}>
+    // Open only once the popup exists: a Root that opens and closes with no
+    // popup never finishes closing, so a late fetch would mount a stuck card
+    <HoverCard
+      onOpenChange={(open) => {
+        setWantsOpen(open)
+        if (open) {
+          load()
+        }
+      }}
+      open={wantsOpen && Boolean(popup)}
+    >
       <HoverCardTrigger
+        className={cn(
+          'focus-visible:rounded-[3px] focus-visible:outline-offset-1',
+          className
+        )}
         closeDelay={120}
         delay={300}
         onPointerEnter={(event) => {
@@ -111,10 +143,7 @@ function HoverPreviewLink({
       >
         {children}
       </HoverCardTrigger>
-      {pagePreview && <PagePreviewPopup href={href} preview={pagePreview} />}
-      {!pagePath && preview && (
-        <LinkPreviewPopup href={href} preview={preview} />
-      )}
+      {popup}
     </HoverCard>
   )
 }

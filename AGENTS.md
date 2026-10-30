@@ -57,7 +57,7 @@ Fight entropy. Leave the codebase better than you found it.
 - App-level icons should be sourced via `src/components/icons/icons.tsx`, which keeps the site's mix: Hugeicons (`@hugeicons/react` with `@hugeicons/core-free-icons`) by default, Lucide (`lucide-react`) for arrows, chevrons, the paw and volume icons, and Primer Octicons for the GitHub activity feed. Keep brand and other icon-specific SVGs centralized there too.
 - shadcn/ui components live in `src/components/ui`; extend them rather than copy/paste.
 - Base UI primitives (`@base-ui/react`) are used for accessible overlays, menus, and form controls; compose with the `render` prop (not `asChild`) and style state with `data-open`/`data-closed`, `data-starting-style`/`data-ending-style` and `--anchor-width`/`--available-height`/`--transform-origin`.
-- `fumadocs-ui` is still the Radix build, so its components and `fd-*` styles emit Radix markup (`data-state`); do not copy that pattern into our components.
+- `fumadocs-ui` is the Base UI build: `package.json` aliases it to `npm:@fumadocs/base-ui`, the way the Fumadocs docs install it, so imports stay `fumadocs-ui/...` and peers such as `fumadocs-twoslash` and `fumadocs-typescript` resolve to the same copy. Do not add `@fumadocs/base-ui` under its own name (a second copy splits the providers' contexts) or the Radix `fumadocs-ui`. Its components emit Base UI markup (`data-open`/`data-closed`); the Radix left in the tree comes from `@fuma-comment/react` and `cmdk`.
 
 ## Data & Email
 - Drizzle schema lives in `src/server/db/schema/index.ts` and uses the `portfolio_*` table prefix.

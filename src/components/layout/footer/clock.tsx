@@ -1,12 +1,12 @@
 'use client'
 
 import { useSyncExternalStore } from 'react'
-import { Button } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { profile } from '@/constants/portfolio/profile'
 import { cn } from '@/lib/utils'
 
 interface ClockProps {
@@ -20,8 +20,7 @@ interface TimeStyles extends React.CSSProperties {
 }
 
 const HAND_BASE_CLASSES =
-  'absolute left-1/2 top-1/2 rounded-full bg-neutral-600 dark:bg-neutral-400'
-const HAND_ORIGIN = { transformOrigin: '0px 0px' }
+  'absolute left-1/2 top-1/2 origin-top-left rounded-full bg-neutral-600 dark:bg-neutral-400'
 const FACE_CLASSES =
   'relative block size-9 rotate-180 rounded-md border border-border bg-background'
 const FORMATTER = new Intl.DateTimeFormat('en-US', {
@@ -29,7 +28,7 @@ const FORMATTER = new Intl.DateTimeFormat('en-US', {
   hour12: true,
   minute: '2-digit',
   second: '2-digit',
-  timeZone: 'Asia/Kolkata',
+  timeZone: profile.timeZone,
   timeZoneName: 'short',
 })
 
@@ -55,59 +54,74 @@ const getParts = (date: Date) => {
   }
 }
 
+/**
+ * Runs from the HTML right after the clock face, so the hands show the time on
+ * the first paint instead of popping in at hydration. Stringified, so it can
+ * only use globals. Keep the math in step with getParts
+ */
+const setHandsBeforeHydration = (timeZone: string) => {
+  const face = document.currentScript?.previousElementSibling
+  if (!(face instanceof HTMLElement)) {
+    return
+  }
+  const parts = new Intl.DateTimeFormat('en-US', {
+    hour: '2-digit',
+    hour12: true,
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone,
+  }).formatToParts(new Date())
+  const get = (type: string) =>
+    Number.parseInt(parts.find((part) => part.type === type)?.value ?? '0', 10)
+  face.style.setProperty('--time-hours', String(get('hour') % 12))
+  face.style.setProperty('--time-minutes', String(get('minute')))
+  face.style.setProperty('--time-seconds', String(get('second')))
+}
+
+const HANDS_SCRIPT = `(${setHandsBeforeHydration.toString()})(${JSON.stringify(profile.timeZone)})`
+
 const CenterDot = () => (
   <div className='absolute top-1/2 left-1/2 size-px -translate-x-1/2 -translate-y-1/2 bg-neutral-400 dark:bg-neutral-500' />
 )
 
 export function Clock({ className }: ClockProps) {
   const second = useSyncExternalStore(subscribe, getSecond, getServerSecond)
-
-  if (second === null) {
-    return (
-      <Button
-        aria-label='Clock'
-        className='rounded-md'
-        size='icon'
-        variant='ghost'
-      >
-        <div className={cn(FACE_CLASSES, className)}>
-          <CenterDot />
-        </div>
-      </Button>
-    )
-  }
-
-  const time = new Date(second)
-  const { hours, minutes, seconds, timeString } = getParts(time)
-  const timeStyles: TimeStyles = {
-    '--time-hours': hours,
-    '--time-minutes': minutes,
-    '--time-seconds': seconds,
-  }
+  const time = second === null ? null : new Date(second)
+  const parts = time && getParts(time)
+  // Until hydration the hands are set by HANDS_SCRIPT, so the face carries no
+  // time of its own and React leaves the script's values alone
+  const timeStyles: TimeStyles | undefined = parts
+    ? {
+        '--time-hours': parts.hours,
+        '--time-minutes': parts.minutes,
+        '--time-seconds': parts.seconds,
+      }
+    : undefined
 
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button
-            aria-label={timeString}
-            className='rounded-md'
-            size='icon'
-            variant='ghost'
-          />
-        }
-      >
-        <time
-          className={cn(FACE_CLASSES, className)}
-          dateTime={time.toISOString()}
-          style={timeStyles}
+    <>
+      <Tooltip>
+        {/* Not a button: it does nothing, so it is a still image of the time
+          that names itself, and the tooltip is for the pointer */}
+        <TooltipTrigger
+          render={
+            <time
+              aria-label={
+                parts ? `My local time: ${parts.timeString}` : 'My local time'
+              }
+              className={cn(FACE_CLASSES, className)}
+              dateTime={time?.toISOString()}
+              role='img'
+              style={timeStyles}
+              suppressHydrationWarning
+            />
+          }
         >
           <CenterDot />
 
           <div
             className={cn(HAND_BASE_CLASSES, 'h-1/4 w-px')}
             style={{
-              ...HAND_ORIGIN,
               transform:
                 'rotate(calc((var(--time-hours) * 30deg) + ((var(--time-minutes) / 2) * 1deg))) translate(-50%, 0%)',
             }}
@@ -116,7 +130,6 @@ export function Clock({ className }: ClockProps) {
           <div
             className={cn(HAND_BASE_CLASSES, 'h-2/5 w-px')}
             style={{
-              ...HAND_ORIGIN,
               transform:
                 'rotate(calc(var(--time-minutes) * 6deg)) translate(-50%, 0%)',
             }}
@@ -128,16 +141,19 @@ export function Clock({ className }: ClockProps) {
               'h-2/5 w-[0.5px] bg-neutral-500 dark:bg-neutral-400'
             )}
             style={{
-              ...HAND_ORIGIN,
               transform:
                 'rotate(calc(var(--time-seconds) * 6deg)) translate(-50%, 0%)',
             }}
           />
-        </time>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>{timeString}</p>
-      </TooltipContent>
-    </Tooltip>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p className='tabular-nums'>{parts?.timeString}</p>
+        </TooltipContent>
+      </Tooltip>
+      {second === null && (
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: a fixed script built from our own function
+        <script dangerouslySetInnerHTML={{ __html: HANDS_SCRIPT }} />
+      )}
+    </>
   )
 }

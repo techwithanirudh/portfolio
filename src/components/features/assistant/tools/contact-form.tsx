@@ -22,20 +22,45 @@ import { error, pop } from '@/lib/audio/minimal'
 import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import type { Contact } from '@/lib/validators/contact'
 import { ContactSchema } from '@/lib/validators/contact'
+import { ownerName } from '../owner-name'
 
-interface ContactFormProps {
-  isSubmitted: boolean
-  prefill?: Partial<Contact>
-  submittedData?: Contact
-  toolCallId: string
+export function ContactFormSent({ data }: { data: Contact }) {
+  return (
+    <div className='flex flex-col gap-2 bg-success/10 p-3 text-sm text-success'>
+      <div className='flex items-center gap-2'>
+        <Icons.success className='size-4 shrink-0' />
+        <p>{`message sent! ${ownerName} will get back to you soon.`}</p>
+      </div>
+      <div className='mt-1 space-y-1 text-xs opacity-80'>
+        <p>
+          <span className='font-medium'>from:</span> {data.name} ({data.email})
+        </p>
+        <p>
+          <span className='font-medium'>message:</span> {data.message}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+export function ContactFormCanceled() {
+  return (
+    <div className='flex flex-col gap-2 bg-muted/40 p-3 text-muted-foreground text-sm'>
+      <div className='flex items-center gap-2'>
+        <Icons.info className='size-4 shrink-0' />
+        <p>message canceled. you can keep chatting.</p>
+      </div>
+    </div>
+  )
 }
 
 export function ContactForm({
   toolCallId,
   prefill,
-  isSubmitted,
-  submittedData,
-}: ContactFormProps) {
+}: {
+  prefill?: Partial<Contact>
+  toolCallId: string
+}) {
   const { addToolOutput, sendMessage } = useChatContext()
   const playPop = useSound(pop)
   const playError = useSound(error)
@@ -64,7 +89,6 @@ export function ContactForm({
           sendMessage()
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           email: prefill?.email ?? '',
@@ -77,38 +101,6 @@ export function ContactForm({
   )
 
   const isExecuting = action.status === 'executing'
-
-  if (isSubmitted && submittedData) {
-    return (
-      <div className='flex flex-col gap-2 bg-success/10 p-3 text-sm text-success'>
-        <div className='flex items-center gap-2'>
-          <Icons.success className='size-4 shrink-0' />
-          <p>message sent! anirudh will get back to you soon.</p>
-        </div>
-        <div className='mt-1 space-y-1 text-xs opacity-80'>
-          <p>
-            <span className='font-medium'>from:</span> {submittedData.name} (
-            {submittedData.email})
-          </p>
-          <p>
-            <span className='font-medium'>message:</span>{' '}
-            {submittedData.message}
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if (isSubmitted && !submittedData) {
-    return (
-      <div className='flex flex-col gap-2 bg-muted/40 p-3 text-muted-foreground text-sm'>
-        <div className='flex items-center gap-2'>
-          <Icons.success className='size-4 shrink-0' />
-          <p>message canceled. you can keep chatting.</p>
-        </div>
-      </div>
-    )
-  }
 
   const handleCancel = () => {
     addToolOutput({
@@ -129,7 +121,7 @@ export function ContactForm({
         onSubmit={handleSubmitWithAction}
       >
         <p className='text-muted-foreground text-xs'>
-          fill this out and i&apos;ll send it to anirudh for you!
+          {`fill this out and i'll send it to ${ownerName} for you!`}
         </p>
 
         <FormField
@@ -140,6 +132,7 @@ export function ContactForm({
               <FormLabel className='text-xs'>name</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='name'
                   className='h-8 text-sm'
                   disabled={isExecuting}
                   placeholder='your name'
@@ -159,9 +152,11 @@ export function ContactForm({
               <FormLabel className='text-xs'>email</FormLabel>
               <FormControl>
                 <Input
+                  autoComplete='email'
                   className='h-8 text-sm'
                   disabled={isExecuting}
                   placeholder='you@example.com'
+                  spellCheck={false}
                   type='email'
                   {...field}
                 />
@@ -181,7 +176,7 @@ export function ContactForm({
                 <Textarea
                   className='min-h-20 resize-none text-sm'
                   disabled={isExecuting}
-                  placeholder='what would you like to tell anirudh?'
+                  placeholder={`what would you like to tell ${ownerName}?`}
                   {...field}
                 />
               </FormControl>
@@ -191,25 +186,32 @@ export function ContactForm({
         />
 
         {action.result.serverError && (
-          <div className='flex items-center gap-2 text-destructive text-xs'>
+          <div
+            className='flex items-center gap-2 text-destructive text-xs'
+            role='alert'
+          >
             <Icons.warning className='size-3.5 shrink-0' />
             <p>
-              {getActionErrorMessage(action.result, 'Failed to send message')}
+              {getActionErrorMessage(
+                action.result,
+                "Your message didn't send. Try again."
+              )}
             </p>
           </div>
         )}
 
         <div className='flex items-center gap-2'>
           <Button
-            className='h-8 flex-1 gap-1.5 text-sm'
+            className='flex-1'
             disabled={isExecuting}
+            focusableWhenDisabled
             size='sm'
             type='submit'
           >
             {isExecuting ? (
               <>
                 <Icons.spinner className='size-3.5 animate-spin' />
-                sending...
+                sending…
               </>
             ) : (
               <>
@@ -219,7 +221,6 @@ export function ContactForm({
             )}
           </Button>
           <Button
-            className='h-8 text-sm'
             disabled={isExecuting}
             onClick={handleCancel}
             size='sm'
@@ -237,22 +238,22 @@ export function ContactForm({
 export function ContactFormSkeleton() {
   return (
     <div className='flex flex-col gap-3 p-3'>
-      <Skeleton className='h-3 w-48' />
-      <div className='space-y-2'>
-        <Skeleton className='h-3 w-12' />
+      <Skeleton className='h-4 w-48' />
+      <FormItem className='space-y-1'>
+        <Skeleton className='h-4 w-12' />
         <Skeleton className='h-8 w-full' />
-      </div>
-      <div className='space-y-2'>
-        <Skeleton className='h-3 w-14' />
+      </FormItem>
+      <FormItem className='space-y-1'>
+        <Skeleton className='h-4 w-14' />
         <Skeleton className='h-8 w-full' />
-      </div>
-      <div className='space-y-2'>
-        <Skeleton className='h-3 w-16' />
+      </FormItem>
+      <FormItem className='space-y-1'>
+        <Skeleton className='h-4 w-16' />
         <Skeleton className='h-20 w-full' />
-      </div>
+      </FormItem>
       <div className='flex items-center gap-2'>
-        <Skeleton className='h-8 w-28 flex-1' />
-        <Skeleton className='h-8 w-20' />
+        <Skeleton className='h-8 flex-1' />
+        <Skeleton className='h-8 w-17' />
       </div>
     </div>
   )

@@ -8,14 +8,14 @@ import { MdxContent } from '@/components/content/mdx/layout'
 import { AuthorByline } from '@/components/features/blog/author-byline'
 import { TOCMinimap, TOCPopover } from '@/components/features/toc'
 import { PostJsonLd } from '@/components/json-ld'
-import { SectionBody } from '@/components/layout/sections/body'
+import { Section } from '@/components/layout/sections'
 import { LLMCopyButtonWithViewOptions } from '@/components/page-actions'
-import { baseUrl } from '@/constants'
-import { githubRepoUrl } from '@/constants/config'
-import { description as homeDescription, owner } from '@/constants/site'
+import { githubBranch, githubRepoUrl } from '@/constants/config'
 import { formatDate } from '@/lib/format-date'
-import { createMetadata, getBlogPageImage } from '@/lib/metadata'
+import { getContentSourcePath } from '@/lib/get-llm-text'
+import { createArticleMetadata, getBlogPageImage } from '@/lib/metadata'
 import { getPost, getPosts } from '@/lib/source'
+import { url } from '@/lib/url'
 import { Header } from './_components/header'
 
 export default async function Page(props: {
@@ -27,45 +27,41 @@ export default async function Page(props: {
   if (!page) {
     notFound()
   }
-  const { body: Mdx, toc, tags, lastModified } = page.data
+  const { body: Mdx, toc, lastModified } = page.data
 
-  const lastUpdate = lastModified ? new Date(lastModified) : undefined
   const pageActions = (
     <>
       <div>
         <p className='mb-1 text-muted-foreground text-sm'>Written by</p>
         <p className='font-medium'>
-          <AuthorByline author={page.data.author ?? 'Unknown'} />
+          <AuthorByline author={page.data.author} />
         </p>
       </div>
       <div>
         <p className='mb-1 text-muted-foreground text-sm'>Published</p>
         <p className='font-medium'>{formatDate(page.data.date)}</p>
       </div>
-      {lastUpdate && (
+      {lastModified && (
         <div>
           <p className='mb-1 text-muted-foreground text-sm'>Updated</p>
-          <p className='font-medium'>{formatDate(lastUpdate)}</p>
+          <p className='font-medium'>{formatDate(lastModified)}</p>
         </div>
       )}
       <div className='flex flex-col gap-2'>
         <LLMCopyButtonWithViewOptions
-          githubUrl={`${githubRepoUrl}/blob/main/content/blog/${params.slug}.mdx`}
-          markdownUrl={new URL(`/blog.mdx/${params.slug}`, baseUrl).toString()}
+          githubUrl={`${githubRepoUrl}/blob/${githubBranch}/${getContentSourcePath('blog', page)}`}
+          markdownUrl={url(['blog.mdx', params.slug])}
         />
-        <ShareMenu
-          title={page.data.title ?? 'Untitled'}
-          url={new URL(page.url, baseUrl).toString()}
-        />
+        <ShareMenu title={page.data.title} url={url(page.url)} />
       </div>
     </>
   )
 
   return (
     <TOCProvider toc={toc}>
-      <Header page={page} tags={tags} />
+      <Header page={page} />
 
-      <SectionBody className='flex'>
+      <Section className='flex' fill>
         <TOCMinimap items={toc} />
         <article className='flex min-h-full min-w-0 flex-1 flex-col lg:flex-row'>
           <div className='flex min-w-0 flex-1 flex-col'>
@@ -76,18 +72,17 @@ export default async function Page(props: {
                   {pageActions}
                 </aside>
               }
-              comments
               proseClassName='pt-4'
               slug={params.slug}
             >
               <Mdx components={{ ...mdxComponents, GitHubCode }} />
             </MdxContent>
           </div>
-          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y hidden flex-col gap-4 p-4 text-sm lg:sticky lg:top-14 lg:flex lg:h-[calc(100dvh-3.5rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-border lg:border-l lg:border-dashed'>
+          <div className='lg:supports-timeline-scroll:scroll-fade-effect-y hidden flex-col gap-4 p-4 text-sm lg:sticky lg:top-14 lg:flex lg:h-[calc(100dvh-3.5rem)] lg:w-[250px] lg:self-start lg:overflow-y-auto lg:border-l lg:border-dashed'>
             {pageActions}
           </div>
         </article>
-      </SectionBody>
+      </Section>
       <PostJsonLd page={page} />
     </TOCProvider>
   )
@@ -103,36 +98,12 @@ export async function generateMetadata(props: {
     notFound()
   }
 
-  const title = page.data.title ?? 'Untitled'
-  const description = page.data.description ?? homeDescription
-
-  const image = getBlogPageImage(page)
-
-  return createMetadata({
-    alternates: {
-      canonical: page.url,
-    },
-    description,
-    openGraph: {
-      authors: [page.data.author ?? owner],
-      images: image.url,
-      modifiedTime: page.data.lastModified
-        ? new Date(page.data.lastModified).toISOString()
-        : new Date(page.data.date).toISOString(),
-      publishedTime: new Date(page.data.date).toISOString(),
-      tags: page.data.tags,
-      type: 'article',
-      url: `/blog/${page.slugs.join('/')}`,
-    },
-    title,
-    twitter: {
-      images: image.url,
-    },
+  return createArticleMetadata(page, getBlogPageImage(page), {
+    authors: [page.data.author],
+    tags: page.data.tags,
   })
 }
 
 export function generateStaticParams(): { slug: string }[] {
-  return getPosts()
-    .map((page) => ({ slug: page.slugs[0] }))
-    .filter((p): p is { slug: string } => p.slug !== undefined)
+  return getPosts().flatMap(({ slugs: [slug] }) => (slug ? [{ slug }] : []))
 }

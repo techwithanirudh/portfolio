@@ -16,6 +16,15 @@
     @slot;
   }
 }
+/* `sm`, except inside a `data-narrow` surface like Simba's panel, which keeps
+   the phone layout at any viewport width. For components shown in both */
+@custom-variant wide {
+  @media (width >= 40rem) {
+    &:not(:where([data-narrow] *)) {
+      @slot;
+    }
+  }
+}
 
 @source "../../node_modules/fumadocs-ui/dist/**/*.js";
 @source "../../node_modules/@fuma-comment/react/dist/**/*.js";
@@ -42,11 +51,12 @@
   --color-accent: var(--color-fd-accent);
   --color-accent-foreground: var(--color-fd-accent-foreground);
 
-  /* --color-destructive: var(--color-fd-destructive);
-  --color-destructive-foreground: var(--color-fd-destructive-foreground); */
-  --color-destructive: hsl(0 84.2% 60.2%);
+  /* Status colors are text-safe (4.5:1 on the page and on their own tints)
+     and switch under .dark. `destructive-solid` is the fill behind a label */
+  --color-destructive: oklch(50.5% 0.213 27.518);
+  --color-destructive-solid: oklch(57.7% 0.245 27.325);
   --color-destructive-foreground: hsl(0 0% 98%);
-  --color-success: var(--color-emerald-500);
+  --color-success: oklch(43.2% 0.095 166.913);
 
   --color-border: var(--color-fd-border);
   --color-input: var(--color-fd-border);
@@ -57,89 +67,28 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  /* fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-hand: var(--font-caveat);
-}
 
-html {
-  scrollbar-gutter: stable;
-}
-
-/* react-remove-scroll (used by the Radix overlays inside fumadocs-ui and
-   fuma-comment) pads the body for the scrollbar, which scrollbar-gutter
-   already reserves. Base UI overlays lock scroll without this attribute */
-html > body[data-scroll-locked] {
-  --removed-body-scroll-bar-size: 0px !important;
-  margin-right: 0px !important;
-}
-
-@layer base {
-  :root {
-    --radius: 0.5rem;
-    --typography-hero-width: 56rem;
-    --typography-title-width: 40rem;
-    --typography-body-width: 60ch;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  :where(
-    a[href],
-    button,
-    summary,
-    [role="button"],
-    [role="tab"],
-    [role="switch"],
-    [role="checkbox"],
-    [role="radio"],
-    [tabindex]:not([tabindex="-1"])
-  ):focus-visible {
-    /* The same soft ring the buttons and inputs use, rounded so plain links
-       don't get a hard square; a radius utility on the element still wins */
-    outline: 2px solid color-mix(in oklab, var(--color-ring) 60%, transparent);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-  }
-
-  body {
-    font-synthesis-weight: none;
-    text-wrap: pretty;
-    text-rendering: optimizeLegibility;
-    @apply bg-background text-foreground antialiased;
-  }
-
-  html {
-    @apply scroll-smooth accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border dark:scrollbar-track-transparent;
-  }
-
-  [id] {
-    @apply scroll-mt-20;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    text-wrap: balance;
-  }
-}
-
-@theme {
   --color-fd-primary-foreground: hsl(0, 0%, 98%);
   --color-fd-primary: hsl(226, 55%, 45%);
-  --color-fd-ring: hsl(0, 0%, 63.9%);
+  /* The primary, darkened so the half strength halo on buttons and inputs
+     still reaches 3:1 on the light background. Dark sets its own below */
+  --color-fd-ring: color-mix(in oklab, var(--color-fd-primary) 55%, black);
 
   --animate-blink: blink 4.5s ease-in-out infinite;
 
   --animate-shimmer: shimmer 2s linear infinite;
+
+  /* Keeps a loading placeholder transparent for its first 200ms, so a load
+     that finishes sooner never flashes it */
+  --animate-delayed-show: delayed-show 0s 200ms backwards;
+  @keyframes delayed-show {
+    from {
+      opacity: 0;
+    }
+  }
   @keyframes blink {
     0%,
     94%,
@@ -160,24 +109,86 @@ html > body[data-scroll-locked] {
   }
 }
 
-@theme static {
-  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+/* `border-border` and `divide-border` draw at --border-strength (dimmer in
+   light mode); every other use of the border color stays at full strength */
+@theme inline {
+  --border-color-border: color-mix(
+    in oklab,
+    var(--color-border) var(--border-strength),
+    transparent
+  );
 }
 
-/* Fumadocs' light muted text sits at 4.35:1 on the background; a touch darker
-   clears WCAG AA. Zero specificity root so .dark still wins */
-:where(:root):not(.dark) {
-  --color-fd-muted-foreground: hsl(0, 0%, 40%);
+html {
+  scrollbar-gutter: stable;
 }
 
-.dark {
-  --color-fd-ring: hsl(234, 100%, 83%);
-  --color-fd-primary: hsl(234, 100%, 83%);
-  --color-fd-primary-foreground: hsl(240, 7%, 11%);
+/* react-remove-scroll (fuma-comment's Radix overlays) pads the body for a scrollbar
+   that scrollbar-gutter already reserves; Base UI overlays don't set this attribute */
+html > body[data-scroll-locked] {
+  --removed-body-scroll-bar-size: 0px !important;
+  margin-right: 0px !important;
 }
 
 @layer base {
+  :root {
+    --radius: 0.5rem;
+    --typography-hero-width: 56rem;
+    --typography-title-width: 40rem;
+    --typography-body-width: 60ch;
+    --border-strength: 70%;
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  :where(
+    a[href],
+    button,
+    summary,
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    [role="checkbox"],
+    [role="radio"],
+    [tabindex]:not([tabindex="-1"])
+  ):focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--color-ring) 60%, transparent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  body {
+    font-synthesis-weight: none;
+    text-wrap: pretty;
+    text-rendering: optimizeLegibility;
+    @apply bg-background text-foreground antialiased;
+  }
+
+  html {
+    @apply scroll-smooth scroll-pt-16 accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border max-md:scroll-pb-24 dark:scrollbar-track-transparent;
+  }
+
+  /* Below 2xl the sticky "On this page" bar adds 40px under the header, and
+     a focused link scrolled to the top would sit hidden behind it */
+  html:has([data-toc-popover]) {
+    @apply scroll-pt-26 2xl:scroll-pt-16;
+  }
+
+  [id] {
+    @apply scroll-mt-4;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
   a {
     @apply [overflow-wrap:anywhere];
   }
@@ -186,6 +197,35 @@ html > body[data-scroll-locked] {
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+}
+
+@theme static {
+  --ease-out-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Fumadocs' light muted text is 4.35:1; this clears AA on the page and the accent
+   fill (#e3e3e3, 4.68:1). Zero-specificity root so .dark still wins */
+:where(:root):not(.dark) {
+  --color-fd-muted-foreground: hsl(0, 0%, 39%);
+}
+
+/* Shiki's #6A737D comments are 4.26:1 and 3.65:1 on our code blocks; nudged past 4.5:1.
+   Here since source.config.ts may only export collections; !important beats shiki's inline vars */
+.shiki code span[style*="--shiki-light:#6A737D" i] {
+  --shiki-light: #656d77 !important;
+}
+.shiki code span[style*="--shiki-dark:#6A737D" i] {
+  --shiki-dark: #7a8490 !important;
+}
+
+.dark {
+  --color-fd-ring: hsl(234, 100%, 83%);
+  --color-fd-primary: hsl(234, 100%, 83%);
+  --color-fd-primary-foreground: hsl(240, 7%, 11%);
+  --color-destructive: oklch(70.4% 0.191 22.216);
+  --color-success: oklch(69.6% 0.17 162.48);
+  --border-strength: 100%;
 }
 
 @utility container {
@@ -199,14 +239,9 @@ html > body[data-scroll-locked] {
   @apply text-foreground underline decoration-primary/60 decoration-solid decoration-1 underline-offset-3 transition-colors hover:decoration-primary;
 }
 
-/*
-  Dashed rules between grid cells: under every cell but the last, and, from
-  the breakpoint `dashed-grid-2` is applied at, between the two columns with
-  none under the last row. The section's own border frames the outside.
-*/
 @utility dashed-grid {
   & > * {
-    @apply border-dashed border-border/70 dark:border-border;
+    @apply border-dashed border-border;
   }
 
   & > :not(:last-child) {
@@ -315,84 +350,66 @@ html > body[data-scroll-locked] {
   }
 }
 
-@layer utilities {
-  .bg-dashed {
-    background-image: linear-gradient(
-      45deg,
-      var(--color-border) 12.50%,
-      transparent 12.50%,
-      transparent 50%,
-      var(--color-border) 50%,
-      var(--color-border) 62.50%,
-      transparent 62.50%,
-      transparent 100%
-    );
-    background-size: 0.25rem 0.25rem;
-  }
+@utility mask-fade-bottom {
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 6rem), transparent);
+}
 
-  .border-border {
-    @apply border-border/70 dark:border-border;
-  }
+@utility bg-dashed {
+  background-image: linear-gradient(
+    45deg,
+    var(--color-border) 12.50%,
+    transparent 12.50%,
+    transparent 50%,
+    var(--color-border) 50%,
+    var(--color-border) 62.50%,
+    transparent 62.50%,
+    transparent 100%
+  );
+  background-size: 0.25rem 0.25rem;
+}
 
-  .divide-border {
-    @apply divide-border/70 dark:divide-border;
-  }
+@utility dashed-stack {
+  @apply divide-y divide-dashed divide-border;
+}
 
-  .dashed-frame {
-    @apply border border-border border-dashed;
-  }
+@utility icon-pop {
+  @apply transition-[color,background-color,scale] hover:scale-125;
+}
 
-  .dashed-stack {
-    @apply divide-y divide-dashed divide-border/70 dark:divide-border;
-  }
+@utility icon-tilt {
+  @apply transition-transform hover:rotate-12 hover:scale-125;
+}
 
-  .divider-top-dashed {
-    @apply w-full border-border border-t border-dashed;
-  }
+@utility icon-tilt-reverse {
+  @apply transition-transform hover:-rotate-12 hover:scale-125;
+}
 
-  .divider-bottom-dashed {
-    @apply border-border border-b border-dashed;
-  }
+@utility icon-turn {
+  @apply transition-transform hover:rotate-90 hover:scale-125;
+}
 
-  .icon-pop {
-    @apply transition-transform hover:scale-125 will-change-transform;
-  }
+@utility icon-arrow {
+  @apply transition-transform group-hover:-rotate-45;
+}
 
-  .icon-tilt {
-    @apply transition-transform hover:rotate-12 hover:scale-125 will-change-transform;
-  }
+@utility icon-arrow-button {
+  @apply transition-transform group-hover/button:-rotate-45;
+}
 
-  .icon-tilt-reverse {
-    @apply transition-transform hover:-rotate-12 hover:scale-125 will-change-transform;
-  }
+@utility icon-turn-button {
+  @apply transition-transform group-hover/button:rotate-90;
+}
 
-  .icon-turn {
-    @apply transition-transform hover:rotate-90 hover:scale-125 will-change-transform;
-  }
+@utility typography-hero {
+  max-width: var(--typography-hero-width);
+}
 
-  .icon-arrow {
-    @apply transition-transform group-hover:-rotate-45 will-change-transform;
-  }
+@utility typography-title {
+  max-width: var(--typography-title-width);
+}
 
-  .icon-arrow-button {
-    @apply transition-transform group-hover/button:-rotate-45 will-change-transform;
-  }
-
-  .icon-turn-button {
-    @apply transition-transform group-hover/button:rotate-90 will-change-transform;
-  }
-
-  .typography-hero {
-    max-width: var(--typography-hero-width);
-  }
-
-  .typography-title {
-    max-width: var(--typography-title-width);
-  }
-
-  .typography-body {
-    max-width: var(--typography-body-width);
-  }
+@utility typography-body {
+  max-width: var(--typography-body-width);
 }
 
 ::selection {
@@ -400,22 +417,21 @@ html > body[data-scroll-locked] {
   background-color: var(--color-accent);
 }
 
-.dark ::selection {
-  color: var(--color-foreground);
-  background-color: var(--color-accent);
+/* The Ask Simba panel and dog are named only while open. Their groups sit above
+   the shared project images and stay put instead of fading or morphing */
+::view-transition-group(simba-panel) {
+  z-index: 2;
 }
 
-.dark [data-hide-on-theme="dark"],
-.light [data-hide-on-theme="light"] {
-  display: none;
+::view-transition-group(simba-trigger) {
+  z-index: 3;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
-  }
+::view-transition-old(simba-panel),
+::view-transition-new(simba-panel),
+::view-transition-old(simba-trigger),
+::view-transition-new(simba-trigger) {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -436,7 +452,7 @@ html > body[data-scroll-locked] {
 
   @keyframes via-blur {
     30% {
-      filter: blur(8px);
+      filter: blur(4px);
     }
   }
 
@@ -445,22 +461,21 @@ html > body[data-scroll-locked] {
   }
 
   ::view-transition-old(.via-blur) {
-    animation-duration: 150ms;
+    animation-duration: 100ms;
     animation-timing-function: var(--ease-out-strong);
   }
 
   ::view-transition-new(.via-blur) {
-    animation-duration: 300ms;
+    animation-duration: 200ms;
     animation-timing-function: var(--ease-out-strong);
-    animation-delay: 100ms;
+    animation-delay: 60ms;
   }
 
   ::view-transition-group(.via-blur) {
-    animation-duration: 400ms;
-    animation-timing-function: var(--ease-in-out-strong);
+    animation-duration: 250ms;
+    animation-timing-function: var(--ease-out-strong);
   }
 
-  /* Prevent background color flash during transition */
   ::view-transition-old(root),
   ::view-transition-new(root) {
     mix-blend-mode: normal;
@@ -486,12 +501,19 @@ html > body[data-scroll-locked] {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+
   *,
   ::before,
   ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-property:
+      opacity, color, background-color, border-color, box-shadow !important;
     scroll-behavior: auto !important;
   }
 
@@ -507,6 +529,24 @@ html > body[data-scroll-locked] {
     size: A4;
   }
 
+  /* No margin leaves Chrome no margin box to draw its own header and footer
+     (date, title, URL, page number) in */
+  @page resume {
+    margin: 0;
+    size: A4;
+  }
+
+  [data-resume] {
+    page: resume;
+    color-scheme: light;
+    --color-background: #fff;
+    --color-foreground: var(--color-neutral-900);
+    --color-muted-foreground: var(--color-neutral-600);
+    --color-border: var(--color-neutral-300);
+    /* The light theme's primary, so links stay readable on white */
+    --color-primary: hsl(226, 55%, 45%);
+  }
+
   html:has([data-resume]),
   body:has([data-resume]) {
     color-scheme: light;
@@ -519,9 +559,26 @@ html > body[data-scroll-locked] {
   }
 }
 
-:root[data-reveal]
+/* Items on screen at load fade in from the first paint, without waiting for
+   hydration. The first section shows right away, and ViewAnimation swaps this
+   for a scroll reveal on items below the fold */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
   [data-reveal-item]:not(
     #main-content [data-slot="section"]:nth-child(1 of [data-slot="section"]) *
   ) {
-  opacity: 0;
+    animation: reveal-in 450ms cubic-bezier(0.2, 0.7, 0.2, 1)
+      var(--reveal-delay, 0s) both;
+  }
+}
+
+/* The zoomed blog image keeps the radius FramedImage gives it in the page, so it stays rounded through the zoom */
+[data-rmiz-modal-img] {
+  border-radius: var(--radius-xl);
 }

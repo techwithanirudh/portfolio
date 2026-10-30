@@ -1,15 +1,18 @@
+import { clamp } from 'motion/react'
 import { type RefObject, useEffect } from 'react'
 import { useReducedMotion } from '@/hooks/use-reduced-motion'
 
 type Watcher = (x: number, y: number) => void
 
-// One pointer listener feeds every Simba on the page
 const watchers = new Set<Watcher>()
 let frame = 0
-let pointer = { x: 0, y: 0 }
+let pointer: { x: number; y: number } | null = null
 
 const flush = () => {
   frame = 0
+  if (!pointer) {
+    return
+  }
   for (const watch of watchers) {
     watch(pointer.x, pointer.y)
   }
@@ -25,6 +28,9 @@ const watch = (watcher: Watcher) => {
     window.addEventListener('pointermove', onPointerMove, { passive: true })
   }
   watchers.add(watcher)
+  if (pointer) {
+    watcher(pointer.x, pointer.y)
+  }
   return () => {
     watchers.delete(watcher)
     if (watchers.size === 0) {
@@ -35,10 +41,9 @@ const watch = (watcher: Watcher) => {
   }
 }
 
-const clamp = (value: number) => Math.max(-1, Math.min(1, value))
+/** -1 to 1 across 360px either side of him */
+const toLook = (offset: number) => clamp(-1, 1, offset / 360)
 
-// Eyes and head drift toward the pointer through CSS variables, so following
-// it never re-renders
 export function useLook(ref: RefObject<SVGSVGElement | null>, enabled = true) {
   const reducedMotion = useReducedMotion()
 
@@ -49,8 +54,8 @@ export function useLook(ref: RefObject<SVGSVGElement | null>, enabled = true) {
     }
     return watch((x, y) => {
       const box = svg.getBoundingClientRect()
-      const dx = clamp((x - (box.left + box.width / 2)) / 360)
-      const dy = clamp((y - (box.top + box.height * 0.35)) / 360)
+      const dx = toLook(x - (box.left + box.width / 2))
+      const dy = toLook(y - (box.top + box.height * 0.35))
       svg.style.setProperty('--look-x', `${dx * 1.6}px`)
       svg.style.setProperty('--look-y', `${dy * 1.3}px`)
       svg.style.setProperty('--look-tilt', `${dx * 5}deg`)

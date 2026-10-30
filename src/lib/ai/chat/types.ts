@@ -1,24 +1,20 @@
-import type { InferUITools, UIDataTypes, UIMessage } from 'ai'
-import type { DocumentData } from 'flexsearch'
+import type { InferUITools, UIMessage } from 'ai'
 import { z } from 'zod'
-import type { tools } from '@/app/api/chat/utils/tools'
-import type { PageEntry } from '@/lib/source'
+import type { chatTools } from '@/app/api/chat/utils/tools'
 
-export type ChatTools = InferUITools<typeof tools>
-export const contextDataSchema = z.object({
-  text: z.string().trim().min(1),
-})
+export type ChatTools = InferUITools<typeof chatTools>
 
-export type ChatDataTypes = UIDataTypes & {
-  context: z.infer<typeof contextDataSchema>
+export const MAX_CONTEXT_LENGTH = 1200
+
+export const chatDataSchemas = {
+  client: z.object({ location: z.string() }),
+  context: z.object({ text: z.string().max(MAX_CONTEXT_LENGTH) }),
 }
 
-export type MyUIMessage = UIMessage<never, ChatDataTypes, ChatTools>
-
-export interface CustomDocument extends DocumentData {
-  content: string
-  description: string
-  tag: PageEntry['tag']
-  title: string
-  url: string
+type ChatDataTypes = {
+  [Name in keyof typeof chatDataSchemas]: z.infer<
+    (typeof chatDataSchemas)[Name]
+  >
 }
+
+export type ChatUIMessage = UIMessage<never, ChatDataTypes, ChatTools>

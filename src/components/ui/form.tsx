@@ -13,6 +13,7 @@ import {
 } from 'react-hook-form'
 
 import { Label } from '@/components/ui/label'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 
 const Form = FormProvider
@@ -33,11 +34,15 @@ const FormField = <
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   ...props
-}: ControllerProps<TFieldValues, TName>) => (
-  <FormFieldContext.Provider value={{ name: props.name }}>
-    <Controller {...props} />
-  </FormFieldContext.Provider>
-)
+}: ControllerProps<TFieldValues, TName>) => {
+  const value = React.useMemo(() => ({ name: props.name }), [props.name])
+
+  return (
+    <FormFieldContext.Provider value={value}>
+      <Controller {...props} />
+    </FormFieldContext.Provider>
+  )
+}
 
 const useFormField = () => {
   const fieldContext = React.useContext(FormFieldContext)
@@ -50,10 +55,12 @@ const useFormField = () => {
     throw new Error('useFormField should be used within <FormField>')
   }
 
-  const { id } = itemContext
+  const { hasDescription, id, setHasDescription } = itemContext
 
   return {
+    hasDescription,
     id,
+    setHasDescription,
     name: fieldContext.name,
     formItemId: `${id}-form-item`,
     formDescriptionId: `${id}-form-item-description`,
@@ -63,7 +70,10 @@ const useFormField = () => {
 }
 
 interface FormItemContextValue {
+  /** Whether a FormDescription is mounted, so aria-describedby only names ids that exist */
+  hasDescription: boolean
   id: string
+  setHasDescription: (mounted: boolean) => void
 }
 
 const FormItemContext = React.createContext<FormItemContextValue>(
@@ -72,9 +82,14 @@ const FormItemContext = React.createContext<FormItemContextValue>(
 
 function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
   const id = React.useId()
+  const [hasDescription, setHasDescription] = React.useState(false)
+  const value = React.useMemo(
+    () => ({ hasDescription, id, setHasDescription }),
+    [hasDescription, id]
+  )
 
   return (
-    <FormItemContext.Provider value={{ id }}>
+    <FormItemContext.Provider value={value}>
       <div
         className={cn('grid gap-2', className)}
         data-slot='form-item'
@@ -108,15 +123,40 @@ function FormControl({
   children: React.ReactElement
   className?: string
 }) {
-  const { error, formItemId, formDescriptionId, formMessageId } = useFormField()
+  const {
+    error,
+    formItemId,
+    formDescriptionId,
+    formMessageId,
+    hasDescription,
+  } = useFormField()
+  const { submitCount } = useFormState()
+
+  const replayShake = React.useEffectEvent(() => {
+    if (!error || prefersReducedMotion()) {
+      return
+    }
+    const control = document.getElementById(formItemId)
+    control?.animate(
+      { transform: [0, -6, 5, -4, 3, -2, 0].map((x) => `translateX(${x}px)`) },
+      { duration: 380, easing: 'ease-out' }
+    )
+  })
+
+  React.useEffect(() => {
+    if (submitCount > 0) {
+      replayShake()
+    }
+  }, [submitCount])
 
   return React.cloneElement(
     children,
     mergeProps(
       {
-        'aria-describedby': error
-          ? `${formDescriptionId} ${formMessageId}`
-          : `${formDescriptionId}`,
+        'aria-describedby':
+          [hasDescription && formDescriptionId, error && formMessageId]
+            .filter(Boolean)
+            .join(' ') || undefined,
         'aria-invalid': !!error,
         className,
         'data-slot': 'form-control',
@@ -128,7 +168,12 @@ function FormControl({
 }
 
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
-  const { formDescriptionId } = useFormField()
+  const { formDescriptionId, setHasDescription } = useFormField()
+
+  React.useLayoutEffect(() => {
+    setHasDescription(true)
+    return () => setHasDescription(false)
+  }, [setHasDescription])
 
   return (
     <p

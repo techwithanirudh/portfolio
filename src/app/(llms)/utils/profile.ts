@@ -1,25 +1,16 @@
-import { differenceInMonths, format, parse } from 'date-fns'
+import { format } from 'date-fns'
 import { socials } from '@/constants/navigation'
+import { pages } from '@/constants/pages'
 import { experiences } from '@/constants/portfolio/experiences'
 import { profile } from '@/constants/portfolio/profile'
-import { groupTechnologies } from '@/constants/portfolio/skills'
-import { owner, tagline } from '@/constants/site'
-import { formatPeriod } from '@/lib/employment-period'
+import { groupStack } from '@/constants/portfolio/skills'
+import { email, owner, tagline } from '@/constants/site'
+import {
+  formatPeriod,
+  monthsInPeriod,
+  parsePeriodDate,
+} from '@/lib/employment-period'
 import { url } from '@/lib/url'
-
-const periodDate = (value: string, edge: 'start' | 'end') =>
-  value.includes('.')
-    ? parse(value, 'MM.yyyy', new Date())
-    : parse(`${edge === 'end' ? '12' : '01'}.${value}`, 'MM.yyyy', new Date())
-
-const monthsBetween = (start: string, end: string | undefined, now: Date) =>
-  Math.max(
-    differenceInMonths(
-      end ? periodDate(end, 'end') : now,
-      periodDate(start, 'start')
-    ) + 1,
-    0
-  )
 
 const formatMonths = (total: number) => {
   const years = Math.floor(total / 12)
@@ -31,74 +22,65 @@ const formatMonths = (total: number) => {
   return parts.join(' ') || 'under a month'
 }
 
-export const toPlainPeriod = (start: string, end?: string) =>
-  formatPeriod(start, end).replace(' – ', ' to ')
-
-export const groupStack = () =>
-  groupTechnologies().map(
-    ([category, items]) => [category, items.map((item) => item.label)] as const
-  )
-
-const getRoles = (now: Date) =>
-  experiences.flatMap((experience) =>
-    experience.positions.map((position) => ({
-      company: experience.companyName,
-      current: !position.employmentPeriod.end,
-      end: position.employmentPeriod.end,
-      months: monthsBetween(
-        position.employmentPeriod.start,
-        position.employmentPeriod.end,
-        now
-      ),
-      start: position.employmentPeriod.start,
-      title: position.title,
-      type: position.employmentType ?? 'Research',
-    }))
-  )
+export const DEFAULT_EMPLOYMENT_TYPE = 'Research'
 
 export function getProfileFactsText(now = new Date()) {
-  const roles = getRoles(now)
+  const roles = experiences.flatMap((experience) =>
+    experience.positions.map(({ employmentPeriod, employmentType, title }) => ({
+      company: experience.companyName,
+      end: employmentPeriod.end,
+      months: Math.max(
+        monthsInPeriod(employmentPeriod.start, employmentPeriod.end, now),
+        0
+      ),
+      start: employmentPeriod.start,
+      title,
+      type: employmentType ?? DEFAULT_EMPLOYMENT_TYPE,
+    }))
+  )
   const earliest = roles.reduce((first, role) =>
-    periodDate(role.start, 'start') < periodDate(first.start, 'start')
+    parsePeriodDate(role.start, 'first') < parsePeriodDate(first.start, 'first')
       ? role
       : first
   )
-  const sinceFirst = monthsBetween(earliest.start, undefined, now)
-  const inRoles = roles.reduce((total, role) => total + role.months, 0)
-  const current = roles.filter((role) => role.current)
-  const email = socials.find((social) => social.url.startsWith('mailto:'))
-  const otherSocials = socials.filter((social) => social !== email)
+  const sinceFirst = Math.max(monthsInPeriod(earliest.start, undefined, now), 0)
+  const experienceLength =
+    sinceFirst >= 12
+      ? `about ${formatMonths(Math.floor(sinceFirst / 12) * 12)}`
+      : formatMonths(sinceFirst)
+  const current = roles.filter((role) => !role.end)
 
-  return `# Quick facts
-Computed from the site's own data on ${now.toISOString().slice(0, 10)}.
-
-- Name: ${owner}
-- What he does: ${tagline}
-- Current role: ${
-    current.length
-      ? current
-          .map(
-            (role) =>
-              `${role.title} at ${role.company} (${role.type}, ${toPlainPeriod(role.start)})`
-          )
-          .join('; ')
-      : 'No current role listed'
-  }
-- Location: ${profile.location} (pronouns ${profile.pronouns})
-- Years of experience: ${sinceFirst >= 12 ? `about ${formatMonths(Math.floor(sinceFirst / 12) * 12)}` : formatMonths(sinceFirst)} since the first role in ${format(periodDate(earliest.start, 'start'), 'MMM yyyy')} (${earliest.title} with ${earliest.company}). Time spent in the listed roles adds up to ${formatMonths(inRoles)}.
-- Experience breakdown, newest first:
-${roles
-  .map(
-    (role) =>
-      `  - ${role.title}, ${role.company} (${role.type}): ${toPlainPeriod(role.start, role.end)}, ${formatMonths(role.months)}`
-  )
-  .join('\n')}
-- Stack:
-${groupStack()
-  .map(([category, labels]) => `  - ${category}: ${labels.join(', ')}`)
-  .join('\n')}
-- Contact: the form at ${url('/contact')}${email ? `, email ${email.url.replace('mailto:', '')}` : ''}, or ask Simba to open the contact form in the chat
-- Elsewhere: ${otherSocials.map((social) => `${social.name} (${social.url})`).join(', ')}
-- Resume: ${url('/resume')}
-`
+  return [
+    '# Quick facts',
+    `Computed from the site's own data on ${now.toISOString().slice(0, 10)}.`,
+    '',
+    `- Name: ${owner}`,
+    `- What he does: ${tagline}`,
+    `- Current role: ${
+      current
+        .map(
+          (role) =>
+            `${role.title} at ${role.company} (${role.type}, ${formatPeriod(role.start, undefined, ' to ')})`
+        )
+        .join('; ') || 'No current role listed'
+    }`,
+    `- Location: ${profile.location} (pronouns ${profile.pronouns})`,
+    `- Years of experience: ${experienceLength} since the first role in ${format(parsePeriodDate(earliest.start, 'first'), 'MMM yyyy')} (${earliest.title} with ${earliest.company}). Time spent in the listed roles adds up to ${formatMonths(roles.reduce((total, role) => total + role.months, 0))}.`,
+    '- Experience breakdown, newest first:',
+    ...roles.map(
+      (role) =>
+        `  - ${role.title}, ${role.company} (${role.type}): ${formatPeriod(role.start, role.end, ' to ')}, ${formatMonths(role.months)}`
+    ),
+    '- Stack:',
+    ...groupStack().map(
+      ([category, labels]) => `  - ${category}: ${labels.join(', ')}`
+    ),
+    `- Contact: the form at ${url(pages.contact.path)}, email ${email}, or ask Simba to open the contact form in the chat`,
+    `- Elsewhere: ${socials
+      .filter((social) => social.url !== `mailto:${email}`)
+      .map((social) => `${social.name} (${social.url})`)
+      .join(', ')}`,
+    `- Resume: ${url(pages.resume.path)}`,
+    '',
+  ].join('\n')
 }

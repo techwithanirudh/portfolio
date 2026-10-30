@@ -1,7 +1,6 @@
 import { useEffect, useSyncExternalStore } from 'react'
+import { useMediaQuery } from 'usehooks-ts'
 
-// Where else Simba is on screen, so there is only ever one of him. A page's
-// own Simba (the 404, an empty filter) sends the corner Simba away
 let pageSimbaCount = 0
 const listeners = new Set<() => void>()
 
@@ -18,7 +17,6 @@ const emit = () => {
   }
 }
 
-/** Marks a page's own Simba as on screen for as long as the caller is mounted */
 export const useClaimPageSimba = () => {
   useEffect(() => {
     pageSimbaCount += 1
@@ -36,3 +34,33 @@ export const usePageSimba = () =>
     () => pageSimbaCount > 0,
     () => false
   )
+
+/**
+ * The trigger steps aside for a page's own Simba while the panel is closed,
+ * and for the expanded panel unless he keeps his corner (useGutterSpot)
+ */
+export const useTriggerAway = ({
+  expanded,
+  open,
+}: {
+  expanded: boolean
+  open: boolean
+}) => {
+  const pageSimba = usePageSimba()
+  return (pageSimba && !open) || (open && expanded)
+}
+
+/**
+ * Wide enough for his 88px box beside the expanded panel's 720px column, he keeps his
+ * corner over it. The trigger's min-[1000px] stacking class matches this query
+ */
+export const useGutterSpot = ({
+  expanded,
+  open,
+}: {
+  expanded: boolean
+  open: boolean
+}) => {
+  const wide = useMediaQuery('(min-width: 1000px)')
+  return open && expanded && wide
+}

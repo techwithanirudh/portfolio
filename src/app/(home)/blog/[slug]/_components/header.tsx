@@ -1,56 +1,47 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
-import * as motion from 'motion/react-client'
+import * as m from 'motion/react-m'
 import { BlurImage } from '@/components/blur-image'
-import { TagCard } from '@/components/features/blog'
+import { TagCard } from '@/components/features/blog/tag-card'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
-import type { BlogPage as MDXPage } from '@/lib/source'
-
-const formatPostDate = (date: Date) =>
-  date.toLocaleDateString('en-US', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
+import { formatLongDate } from '@/lib/format-date'
+import type { BlogPage } from '@/lib/source'
+import { staggerDelay } from '@/lib/stagger'
 
 interface HeaderProps {
-  page: MDXPage
-  tags?: string[]
+  page: BlogPage
 }
 
-export const Header = ({ page, tags }: HeaderProps) => {
-  const image = page.data.image
-  const formattedDate = formatPostDate(page.data.date)
+export const Header = ({ page }: HeaderProps) => {
+  const { image, tags } = page.data
 
   return (
-    // `isolate` keeps the card's z-indexed, blended and composited layers in
-    // one stacking context of its own, so none of them can rise past the
-    // sticky site header in the page's root stacking context
+    // `isolate` gives the card's blended and z-indexed layers their own stacking
+    // context, so none can rise past the sticky site header
     <Section className='isolate'>
       <FrameDecoration />
       <div className='relative h-[280px] overflow-clip md:h-[420px] lg:h-[600px]'>
         <div className='relative flex h-full w-full flex-col justify-end overflow-hidden rounded-2xl shadow-xl'>
           {image && (
             <BlurImage
-              alt={page.data.title ?? 'Blog cover image'}
+              alt=''
               className='absolute inset-0 h-full w-full'
               fill
               imageClassName='object-cover'
-              // The cover opens the post, so it's the LCP image
-              lazy={false}
+              loading='eager'
               sizes='(min-width: 1024px) 800px, 100vw'
               src={image}
             />
           )}
           <div
-            className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent'
+            className='absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent'
             style={{ viewTransitionName: 'none' }}
           />
           <div className='relative z-5 mt-auto p-8 md:p-16'>
             {tags?.length ? (
               <div className='mb-4 hidden gap-2 md:flex md:flex-wrap'>
                 {tags.map((tag, index) => (
-                  <ViewAnimation delay={0.1 + index * 0.05} key={tag}>
+                  <ViewAnimation delay={staggerDelay(index, 0.1)} key={tag}>
                     <TagCard
                       className='border border-white/60 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
                       name={tag}
@@ -61,20 +52,20 @@ export const Header = ({ page, tags }: HeaderProps) => {
             ) : null}
             <div className='mb-4 space-y-4 text-balance'>
               <h1 className='typography-hero max-w-2xl text-balance font-medium text-3xl text-white leading-tight tracking-tight sm:text-4xl md:text-5xl'>
-                {page.data.title ?? 'Untitled'}
+                {page.data.title}
               </h1>
               <p className='typography-body hidden max-w-3xl text-pretty text-slate-100 leading-8 md:block dark:text-foreground/85'>
-                {page.data.description ?? ''}
+                {page.data.description}
               </p>
             </div>
-            <motion.div
+            <m.div
               animate={{ opacity: 1 }}
               className='flex items-center gap-6 text-slate-200 text-xs dark:text-foreground/45'
               initial={{ opacity: 0 }}
               transition={{ delay: 0.3, duration: 0.3 }}
             >
-              <span>{formattedDate}</span>
-            </motion.div>
+              <span>{formatLongDate(page.data.date)}</span>
+            </m.div>
           </div>
         </div>
       </div>
@@ -82,19 +73,31 @@ export const Header = ({ page, tags }: HeaderProps) => {
   )
 }
 
+const horizontalTick = 'h-px w-2'
+const verticalTick = 'h-2 w-px'
+
+const cornerTicks = [
+  ['top-12 left-[44.5px]', horizontalTick],
+  ['top-[44.5px] left-[48px]', verticalTick],
+  ['top-12 right-[44.5px]', horizontalTick],
+  ['top-[44.5px] right-[48px]', verticalTick],
+  ['bottom-12 left-[44.5px]', horizontalTick],
+  ['bottom-[44.5px] left-[48px]', verticalTick],
+  ['right-[44.5px] bottom-12', horizontalTick],
+  ['right-[48px] bottom-[44.5px]', verticalTick],
+] as const
+
 const FrameDecoration = () => (
   <>
     <span className='absolute top-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:top-12 dark:bg-white/15' />
     <span className='absolute bottom-6 z-4 h-px w-full bg-zinc-500/40 mix-blend-screen md:bottom-12 dark:bg-white/15' />
     <span className='absolute left-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:left-12 dark:bg-white/15' />
     <span className='absolute right-6 z-4 h-full w-px bg-zinc-500/40 mix-blend-screen md:right-12 dark:bg-white/15' />
-    <span className='absolute top-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute top-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute top-12 right-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute top-[44.5px] right-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute bottom-12 left-[44.5px] z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute bottom-[44.5px] left-[48px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute right-[44.5px] bottom-12 z-5 hidden h-px w-2 bg-white/80 md:block dark:bg-white/40' />
-    <span className='absolute right-[48px] bottom-[44.5px] z-5 hidden h-2 w-px bg-white/80 md:block dark:bg-white/40' />
+    {cornerTicks.map(([position, size]) => (
+      <span
+        className={`absolute ${position} z-5 hidden ${size} bg-white/80 md:block dark:bg-white/40`}
+        key={position}
+      />
+    ))}
   </>
 )

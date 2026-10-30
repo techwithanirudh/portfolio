@@ -5,6 +5,7 @@ import { Icons } from '@/components/icons/icons'
 import { InlineMarkdown } from '@/components/inline-markdown'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
+import { sectionIds } from '@/constants/pages'
 import { story } from '@/constants/portfolio/story'
 import { cn } from '@/lib/utils'
 import type { StoryChapter } from '@/types'
@@ -14,7 +15,7 @@ import { StoryTrack } from './story-track'
 
 export default function Story(): React.ReactElement {
   return (
-    <Section className='relative w-full' id='story'>
+    <Section className='relative w-full' id={sectionIds.story}>
       <StoryTrack className='px-6 sm:px-10'>
         <ol>
           {story.map((chapter, index) => (
@@ -26,9 +27,6 @@ export default function Story(): React.ReactElement {
   )
 }
 
-// The original alternates photo and text across two columns with the track
-// running between them on the photo side. On phones there's no track, and the
-// photo sits centered above the text
 function ChapterRow({
   chapter,
   index,
@@ -60,7 +58,6 @@ function ChapterRow({
       >
         <Snapshot
           chapter={chapter}
-          // The first photo sits in the opening screen, where it's the LCP image
           eager={index === 0}
           tilt={photoLeft ? -8 : 8}
         />
@@ -90,9 +87,6 @@ function ChapterRow({
   )
 }
 
-// A tilted photo resting in its slot that straightens once the track reaches
-// its chapter, or the empty slot with an icon. Straight, it sits lifted 8px
-// up-left of the slot, so its corners are the slot's 20px minus that 8px
 function Snapshot({
   chapter,
   eager = false,
@@ -119,8 +113,8 @@ function Snapshot({
       <div
         className={cn(
           'absolute top-0 left-0 h-[270px] w-[180px] overflow-hidden rounded-xl shadow-black/15 shadow-lg dark:shadow-black/50',
-          'transition-transform duration-300 ease-out hover:rotate-0 group-data-reached/chapter:rotate-0 motion-reduce:transition-none',
-          tilt < 0 ? '-rotate-8' : 'rotate-8',
+          'motion-reduce:transition-none lg:transition-transform lg:duration-300 lg:ease-out lg:group-data-reached/chapter:rotate-0 lg:hover:rotate-0',
+          tilt < 0 ? 'lg:-rotate-8' : 'lg:rotate-8',
           photo.contain && 'bg-white',
           photo.letterbox
         )}
@@ -133,7 +127,6 @@ function Snapshot({
               : 'object-cover',
             photo.contain && 'p-8'
           )}
-          fetchPriority={eager ? 'high' : undefined}
           fill
           loading={eager ? 'eager' : undefined}
           sizes='180px'

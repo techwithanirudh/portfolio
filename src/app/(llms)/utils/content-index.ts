@@ -1,31 +1,29 @@
 import {
   type BlogPage,
   getSortedByDatePosts,
-  getSortedWork,
-  type WorkPage,
+  getSortedProjects,
+  type ProjectPage,
 } from '@/lib/source'
 
 interface ContentIndexLinks {
   blog: (page: BlogPage) => string
-  work: (page: WorkPage) => string
+  projects: (page: ProjectPage) => string
 }
 
-/** Every project and post as a markdown list, linked however the caller needs */
-export const getContentIndexText = (links: ContentIndexLinks) => `## Work
+const indexLine = (
+  { description, title }: { description?: string; title: string },
+  href: string
+) => `- [${title}](${href})${description ? `: ${description}` : ''}`
 
-${getSortedWork()
-  .map(
-    (item) =>
-      `- [${item.data.title}](${links.work(item)}): ${item.data.description ?? 'Project page'}`
-  )
+export const getContentIndexText = (links: ContentIndexLinks) => `## Projects
+
+${getSortedProjects()
+  .map((item) => indexLine(item.data, links.projects(item)))
   .join('\n')}
 
 ## Blog
 
 ${getSortedByDatePosts()
-  .map(
-    (item) =>
-      `- [${item.data.title}](${links.blog(item)}): ${item.data.description ?? ''}`
-  )
+  .map((item) => indexLine(item.data, links.blog(item)))
   .join('\n')}
 `

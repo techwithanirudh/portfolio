@@ -1,38 +1,35 @@
 'use client'
 
+// Adapted from fumadocs-ui layouts/home/slots/header.js (MIT, (c) Fuma Nama):
+// navItemVariants, renderNavTitle and the two link item renderers
 import { NavigationMenu } from '@base-ui/react/navigation-menu'
 import { cva } from 'class-variance-authority'
 import Link from 'fumadocs-core/link'
 import type { HomeLayoutProps } from 'fumadocs-ui/layouts/home'
-import {
-  type LinkItemType,
-  type NavOptions,
-  resolveLinkItems,
-} from 'fumadocs-ui/layouts/shared'
-import { useIsScrollTop } from 'fumadocs-ui/utils/use-is-scroll-top'
+import { type LinkItemType, resolveLinkItems } from 'fumadocs-ui/layouts/shared'
 import { useLenis } from 'lenis/react'
 import {
   type ComponentProps,
   Fragment,
   type ReactNode,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { TitleDot } from '@/components/layout/sections/hero'
-import { buttonVariants } from '@/components/ui/button'
+import { splitLinkItems } from '@/components/layout/split-link-items'
+import { buttonVariants } from '@/components/ui/button-variants'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
+import { prefersReducedMotion } from '@/lib/reduced-motion'
 import { cn } from '@/lib/utils'
 
 import { LinkItem } from './link-item'
 import { SearchToggle } from './search-toggle'
-import { ThemeToggle } from './theme-toggle'
 
 const navItemVariants = cva('[&_svg]:size-4', {
   defaultVariants: {
@@ -49,6 +46,8 @@ const navItemVariants = cva('[&_svg]:size-4', {
         variant: 'ghost',
       }),
       main: 'relative inline-flex items-center gap-1 whitespace-nowrap p-2 text-muted-foreground transition-colors after:absolute after:inset-x-2 after:bottom-0.5 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform hover:text-foreground data-[active=true]:text-foreground data-[active=true]:after:scale-x-100',
+      mobile:
+        'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-primary',
     },
   },
 })
@@ -60,26 +59,16 @@ const renderNavTitle = (
   const title = nav?.title
   const href = nav?.url ?? '/'
 
-  if (!title) {
+  if (typeof title !== 'string' || !title) {
     return null
-  }
-
-  if (typeof title === 'function') {
-    return title({ href, ...props }) as ReactNode
   }
 
   return (
     <NavTitleLink href={href} {...props}>
-      {/* The wordmark ends on the same blue full stop as the page headings,
-          wrapped so the link's gap doesn't push the dot away */}
-      {typeof title === 'string' ? (
-        <span>
-          {title}
-          <TitleDot />
-        </span>
-      ) : (
-        (title as ReactNode)
-      )}
+      <span>
+        {title}
+        <TitleDot />
+      </span>
     </NavTitleLink>
   )
 }
@@ -99,7 +88,10 @@ function NavTitleLink({ href, onClick, ...props }: ComponentProps<'a'>) {
         if (lenis) {
           lenis.scrollTo(0)
         } else {
-          window.scrollTo({ behavior: 'smooth', top: 0 })
+          window.scrollTo({
+            behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+            top: 0,
+          })
         }
       }}
       {...props}
@@ -110,30 +102,9 @@ function NavTitleLink({ href, onClick, ...props }: ComponentProps<'a'>) {
 export const Header = ({
   nav = {},
   links,
-  themeSwitch = {},
-  searchToggle = {},
   className,
-}: HomeLayoutProps & { className?: string }) => {
-  const { navItems, menuItems } = useMemo(() => {
-    const navItems: LinkItemType[] = []
-    const menuItems: LinkItemType[] = []
-
-    for (const item of resolveLinkItems({ links })) {
-      switch (item.on ?? 'all') {
-        case 'menu':
-          menuItems.push(item)
-          break
-        case 'nav':
-          navItems.push(item)
-          break
-        default:
-          navItems.push(item)
-          menuItems.push(item)
-      }
-    }
-
-    return { menuItems, navItems }
-  }, [links])
+}: Pick<HomeLayoutProps, 'links' | 'nav'> & { className?: string }) => {
+  const { navItems, menuItems } = splitLinkItems(resolveLinkItems({ links }))
 
   return (
     <HeaderNavigationMenu
@@ -157,23 +128,16 @@ export const Header = ({
                 key={getItemKey(item, i)}
               />
             ))}
-            {themeSwitch.enabled !== false &&
-              (themeSwitch.component ?? (
-                <ThemeToggle mode={themeSwitch?.mode} />
-              ))}
           </div>
         </div>
       }
-      transparentMode={nav.transparentMode}
     >
       <div className='relative flex w-full items-center'>
         <div className='flex items-center gap-2'>
-          <div>
-            {renderNavTitle(nav, {
-              className:
-                'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
-            })}
-          </div>
+          {renderNavTitle(nav, {
+            className:
+              'inline-flex items-center gap-2.5 font-semibold tracking-[-0.5px]',
+          })}
           {nav.children}
         </div>
         <ul className='absolute left-1/2 flex -translate-x-1/2 flex-row items-center gap-2 max-lg:hidden'>
@@ -188,76 +152,46 @@ export const Header = ({
             ))}
         </ul>
         <div className='ml-auto flex flex-row items-center justify-end gap-1.5 max-lg:hidden'>
-          <div>
-            {searchToggle.enabled !== false &&
-              (searchToggle.components?.lg ?? (
-                <SearchToggle
-                  className='-mx-1.5 text-muted-foreground hover:text-foreground'
-                  hideIfDisabled
-                />
-              ))}
-          </div>
-          <div>
-            {themeSwitch.enabled !== false &&
-              (themeSwitch.component ?? (
-                <ThemeToggle mode={themeSwitch?.mode} />
-              ))}
-          </div>
-          <div>
-            <ul className='flex flex-row items-center gap-2 empty:hidden'>
-              {navItems.filter(isSecondary).map((item, i) => (
-                <NavigationMenuLinkItem
-                  className={cn(
-                    item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
-                  )}
-                  item={item}
-                  key={getItemKey(item, i)}
-                />
-              ))}
-            </ul>
-          </div>
+          <SearchToggle className='-ms-1.5 me-1.5 text-muted-foreground hover:text-foreground' />
+          <ul className='flex flex-row items-center gap-2 empty:hidden'>
+            {navItems.filter(isSecondary).map((item, i) => (
+              <NavigationMenuLinkItem
+                className={cn(
+                  item.type === 'icon' && '-mx-1 first:ms-0 last:me-0'
+                )}
+                item={item}
+                key={getItemKey(item, i)}
+              />
+            ))}
+          </ul>
         </div>
       </div>
       <div className='ms-auto -me-1.5 hidden flex-row items-center md:flex lg:hidden'>
-        {searchToggle.enabled !== false &&
-          (searchToggle.components?.sm ?? (
-            <div>
-              <SearchToggle hideIfDisabled size='icon' />
-            </div>
-          ))}
-        <div>
-          <CollapsibleTrigger
-            aria-label='Toggle menu'
-            className={buttonVariants({
-              className: 'group',
-              size: 'icon',
-              variant: 'ghost',
-            })}
-          >
-            <Icons.menu className='size-5.5 group-data-panel-open:hidden' />
-            <Icons.close className='hidden size-5.5 group-data-panel-open:block' />
-          </CollapsibleTrigger>
-        </div>
+        <SearchToggle size='icon' />
+        <CollapsibleTrigger
+          aria-label='Toggle menu'
+          className={buttonVariants({
+            className: 'group',
+            size: 'icon',
+            variant: 'ghost',
+          })}
+        >
+          <Icons.menu className='size-5.5 group-data-panel-open:hidden' />
+          <Icons.close className='hidden size-5.5 group-data-panel-open:block' />
+        </CollapsibleTrigger>
       </div>
     </HeaderNavigationMenu>
   )
 }
 
 const HeaderNavigationMenu = ({
-  transparentMode = 'none',
   menu,
   children,
   ...props
-}: ComponentProps<'header'> & {
-  menu: ReactNode
-  transparentMode?: NavOptions['transparentMode']
-}) => {
+}: ComponentProps<'header'> & { menu: ReactNode }) => {
   const [menuOpen, setMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
   const listRef = useRef<HTMLUListElement>(null)
-  const isTop = useIsScrollTop({ enabled: transparentMode === 'top' }) ?? true
-  const isTransparent =
-    transparentMode === 'top' ? isTop : transparentMode === 'always'
 
   // A collapsible has no dismiss behavior of its own, so close the menu on
   // Escape or a press outside the header like the popup it replaces
@@ -267,7 +201,12 @@ const HeaderNavigationMenu = ({
     }
 
     const onPointerDown = (event: PointerEvent) => {
-      if (!headerRef.current?.contains(event.target as Node)) {
+      if (
+        !(
+          event.target instanceof Node &&
+          headerRef.current?.contains(event.target)
+        )
+      ) {
         setMenuOpen(false)
       }
     }
@@ -302,13 +241,7 @@ const HeaderNavigationMenu = ({
       }
     >
       <NavigationMenu.Root
-        className={(state) =>
-          cn(
-            'transition-colors *:mx-auto *:max-w-(--fd-layout-width)',
-            'container border-border border-dashed sm:border-x',
-            (!isTransparent || menuOpen || state.open) && 'bg-background/80'
-          )
-        }
+        className='container border-border border-dashed bg-background/80 transition-colors *:mx-auto *:max-w-(--fd-layout-width) sm:border-x'
         render={<div />}
       >
         <NavigationMenu.List
@@ -319,9 +252,9 @@ const HeaderNavigationMenu = ({
           {children}
         </NavigationMenu.List>
         <CollapsibleContent
-          className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-300 ease-out data-ending-style:h-0 data-starting-style:h-0 lg:hidden'
+          className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0 lg:hidden'
           onClick={(event) => {
-            if ((event.target as Element).closest('a')) {
+            if (event.target instanceof Element && event.target.closest('a')) {
               setMenuOpen(false)
             }
           }}
@@ -495,17 +428,12 @@ const MobileNavigationMenuLinkItem = ({
     <LinkItem
       aria-label={item.type === 'icon' ? item.label : undefined}
       className={cn(
-        {
-          button: buttonVariants({
-            className: 'gap-1.5 [&_svg]:size-4',
-            variant: 'secondary',
-          }),
-          icon: buttonVariants({
-            size: 'icon',
-            variant: 'ghost',
-          }),
-          main: 'inline-flex items-center gap-2 py-1.5 transition-colors hover:text-popover-foreground/50 data-[active=true]:font-medium data-[active=true]:text-primary [&_svg]:size-4',
-        }[item.type ?? 'main'],
+        navItemVariants({
+          variant:
+            item.type === undefined || item.type === 'main'
+              ? 'mobile'
+              : item.type,
+        }),
         props.className
       )}
       item={item}

@@ -1,5 +1,6 @@
 import { formatDistanceToNowStrict, isValid, parseISO } from 'date-fns'
 import type { ComponentType } from 'react'
+import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import {
   HoverCard,
@@ -61,6 +62,9 @@ function RepoStat({
   )
 }
 
+const repoLinkClassName =
+  'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+
 function GithubRepoFallback({
   className,
   repo,
@@ -68,132 +72,122 @@ function GithubRepoFallback({
   className?: string
   repo: GitHubRepoInput
 }) {
-  const parsed = parseGitHubRepoInput(repo)
-  const href = getGitHubRepoUrl(parsed)
+  const href = getGitHubRepoUrl(repo)
 
   return (
     <a
-      className={cn(
-        'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        className
-      )}
+      className={cn(repoLinkClassName, className)}
       href={href}
-      rel='noopener noreferrer'
-      target='_blank'
+      {...externalLinkProps}
     >
-      <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
+      <Icons.github className='size-4 shrink-0 text-muted-foreground' />
       <span>
-        {parsed.owner}/{parsed.repo}
+        {repo.owner}/{repo.repo}
       </span>
     </a>
   )
 }
 
 export async function GithubRepo({ className, label, repo }: GithubRepoProps) {
-  try {
-    const parsed = parseGitHubRepoInput(repo)
-    const details = await getGitHubRepoDetails(parsed)
-    const branch = details.branch ?? details.defaultBranch
-    const visibleTopics = details.topics.slice(0, 3)
-    const linkLabel = label ?? details.name
-
-    return (
-      <HoverCard>
-        <HoverCardTrigger
-          closeDelay={120}
-          delay={120}
-          render={
-            <a
-              aria-label={linkLabel}
-              className={cn(
-                'not-prose link-underline inline-flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                className
-              )}
-              href={details.url}
-              rel='noopener noreferrer'
-              target='_blank'
-            />
-          }
-        >
-          <Icons.githubMark className='size-4 shrink-0 text-muted-foreground' />
-          <span>{linkLabel}</span>
-        </HoverCardTrigger>
-        <HoverCardContent className='not-prose w-96 max-w-[calc(100vw-2rem)] border-dashed p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
-          <div className='flex flex-col bg-card/60'>
-            <div className='flex items-start gap-3 border-border border-b border-dashed p-4'>
-              <Icons.githubMark className='mt-0.5 size-5 shrink-0 text-muted-foreground' />
-              <div className='min-w-0 flex-1'>
-                <a
-                  className='group/github-repo inline-flex max-w-full items-center gap-1.5 font-medium text-sm'
-                  href={details.url}
-                  rel='noopener noreferrer'
-                  target='_blank'
-                >
-                  <span className='truncate'>{details.name}</span>
-                  <Icons.arrowUpRight className='size-3.5 shrink-0 text-muted-foreground transition-transform group-hover/github-repo:scale-125' />
-                </a>
-                <p className='mt-1 line-clamp-2 text-pretty text-muted-foreground text-xs leading-5'>
-                  {details.description ?? 'This repo has no description.'}
-                </p>
-              </div>
-            </div>
-
-            <div className='grid grid-cols-2 gap-x-4 gap-y-2 border-border border-b border-dashed px-4 py-3'>
-              <RepoStat
-                icon={Icons.star}
-                label='stars'
-                value={formatNumber(details.stars)}
-              />
-              <RepoStat
-                icon={Icons.repoForked}
-                label='forks'
-                value={formatNumber(details.forks)}
-              />
-              <RepoStat
-                icon={Icons.gitBranch}
-                label={details.branch ? 'branch' : 'default branch'}
-                value={branch}
-              />
-              <RepoStat
-                icon={Icons.issueOpened}
-                label='open issues'
-                value={formatNumber(details.openIssues)}
-              />
-            </div>
-
-            <div className='flex flex-wrap items-center gap-x-3 gap-y-1.5 px-4 py-3 text-muted-foreground text-xs'>
-              {details.language && (
-                <span className='font-medium text-foreground'>
-                  {details.language}
-                </span>
-              )}
-              {details.license && <span>{details.license}</span>}
-              <span>{formatPushedAt(details.pushedAt)}</span>
-            </div>
-
-            {visibleTopics.length > 0 && (
-              <div className='flex flex-wrap gap-x-2 gap-y-1.5 border-border border-t border-dashed px-4 py-3'>
-                {visibleTopics.map((topic) => (
-                  <span
-                    className='font-mono text-muted-foreground text-xs'
-                    key={topic}
-                  >
-                    #{topic}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </HoverCardContent>
-      </HoverCard>
-    )
-  } catch (error) {
+  const parsed = parseGitHubRepoInput(repo)
+  const details = await getGitHubRepoDetails(parsed).catch((error: unknown) => {
     console.error(
-      `Failed to load GitHub repo ${getGitHubRepoUrl(parseGitHubRepoInput(repo))}:`,
+      `Failed to load GitHub repo ${getGitHubRepoUrl(parsed)}:`,
       error instanceof Error ? error.message : error
     )
-    return <GithubRepoFallback className={className} repo={repo} />
-  }
-}
+    return null
+  })
 
-export { GithubRepo as GitHubRepo }
+  if (!details) {
+    return <GithubRepoFallback className={className} repo={parsed} />
+  }
+
+  const branch = details.branch ?? details.defaultBranch
+  const visibleTopics = details.topics.slice(0, 3)
+  const linkLabel = label ?? details.name
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger
+        closeDelay={120}
+        delay={120}
+        render={
+          <a
+            className={cn(repoLinkClassName, className)}
+            href={details.url}
+            {...externalLinkProps}
+          />
+        }
+      >
+        <Icons.github className='size-4 shrink-0 text-muted-foreground' />
+        <span>{linkLabel}</span>
+      </HoverCardTrigger>
+      <HoverCardContent className='not-prose w-96 max-w-[calc(100vw-2rem)] border-dashed p-0 shadow-black/5 shadow-lg dark:shadow-black/20'>
+        <div className='flex flex-col bg-card/60'>
+          <div className='flex items-start gap-3 border-border border-b border-dashed p-4'>
+            <Icons.github className='mt-0.5 size-5 shrink-0 text-muted-foreground' />
+            <div className='min-w-0 flex-1'>
+              <a
+                className='group/github-repo inline-flex max-w-full items-center gap-1.5 font-medium text-sm'
+                href={details.url}
+                {...externalLinkProps}
+              >
+                <span className='truncate'>{details.name}</span>
+                <Icons.arrowUpRight className='size-3.5 shrink-0 text-muted-foreground transition-transform group-hover/github-repo:scale-125' />
+              </a>
+              <p className='mt-1 line-clamp-2 text-pretty text-muted-foreground text-xs leading-5'>
+                {details.description ?? 'This repo has no description.'}
+              </p>
+            </div>
+          </div>
+
+          <div className='grid grid-cols-2 gap-x-4 gap-y-2 border-border border-b border-dashed px-4 py-3'>
+            <RepoStat
+              icon={Icons.star}
+              label='stars'
+              value={formatNumber(details.stars)}
+            />
+            <RepoStat
+              icon={Icons.repoForked}
+              label='forks'
+              value={formatNumber(details.forks)}
+            />
+            <RepoStat
+              icon={Icons.gitBranch}
+              label={details.branch ? 'branch' : 'default branch'}
+              value={branch}
+            />
+            <RepoStat
+              icon={Icons.issueOpened}
+              label='open issues'
+              value={formatNumber(details.openIssues)}
+            />
+          </div>
+
+          <div className='flex flex-wrap items-center gap-x-3 gap-y-1.5 px-4 py-3 text-muted-foreground text-xs'>
+            {details.language && (
+              <span className='font-medium text-foreground'>
+                {details.language}
+              </span>
+            )}
+            {details.license && <span>{details.license}</span>}
+            <span>{formatPushedAt(details.pushedAt)}</span>
+          </div>
+
+          {visibleTopics.length > 0 && (
+            <div className='flex flex-wrap gap-x-2 gap-y-1.5 border-border border-t border-dashed px-4 py-3'>
+              {visibleTopics.map((topic) => (
+                <span
+                  className='font-mono text-muted-foreground text-xs'
+                  key={topic}
+                >
+                  #{topic}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  )
+}

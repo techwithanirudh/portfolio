@@ -1,0 +1,31 @@
+---
+title: Remotely
+description: Use a TV remote as a mouse for a Mac connected to a TV.
+date: 2026-07-30
+order: 6
+github: https://github.com/techwithanirudh/remotely
+status: Live
+platform: macOS
+image: /images/projects/remotely/cover.png
+tags: ['Swift', 'SwiftUI', 'macOS', 'HDMI-CEC', 'Accessibility']
+---
+
+Remotely turns a TV remote into the mouse for a Mac connected to a TV. It's a menu bar app for macOS 15 and later, and it's live. You can download it from the GitHub releases page. It's ad-hoc signed, not notarized, so the first launch needs right-click and Open.
+
+## What it does
+
+Arrows move the pointer, and holding speeds it up. Centre clicks, twice double-clicks and a hold right-clicks. Back twice switches the arrows to scrolling. You need an HDMI cable, HDMI-CEC switched on in the TV settings and the Accessibility permission, and the first run walks you through all three.
+
+<Screens>
+  <Screen frame='wide' height={371} src='/images/projects/remotely/welcome.webp' width={660} alt='The first onboarding step, reading Your TV remote becomes a pointer for this Mac, with hints for Hold to move, Center to click and Back twice to scroll' caption='Onboarding goes one step at a time.' />
+  <Screen frame='wide' height={371} src='/images/projects/remotely/connect-step.webp' width={660} alt='The Connect over HDMI step with the display brand set to Samsung and the menu path to Anynet+ (HDMI-CEC)' caption='It shows where your TV brand hides HDMI-CEC.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={371} src='/images/projects/remotely/practice-move.webp' width={660} alt='The practice step titled Hold an arrow to move the pointer, with a target to move the pointer onto' caption='Practice only counts input from the remote.' />
+  <Screen frame='wide' height={506} src='/images/projects/remotely/diagnostics-log.webp' width={900} alt='The Diagnostics pane with Remote signal awaiting input, Accessibility granted and an event log naming the connected display' caption='Diagnostics shows whether the remote is heard.' />
+</Screens>
+
+## How it works
+
+A TV with HDMI-CEC already passes its remote's presses to whatever is on its HDMI input. Remotely reads those presses and turns them into pointer movement, clicks, scrolling and shortcuts. Updates arrive through [Sparkle](https://sparkle-project.org/).

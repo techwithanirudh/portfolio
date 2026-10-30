@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    // TODO(slopradar): narration-comment: the create-t3-app banners `Base Options:`, `Strictness`, `Bundled projects` and `Path Aliases` (x4 in this file) restate the keys below them; delete them
     /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -29,12 +30,14 @@
     /* Path Aliases */
     "paths": {
       "@/*": ["./src/*"],
+      "@/emails/*": ["./emails/*"],
       "@/public/*": ["./public/*"],
       "fumadocs-mdx:collections/*": ["./.source/*"]
     },
     "allowImportingTsExtensions": true
   },
   "include": [
+    // TODO(slopradar): dead-config: there is no `.eslintrc.cjs` (Biome lints this repo) and `tsc --listFilesOnly` finds no `.js`/`.cjs` outside node_modules, so these three globs, `checkJs` and `allowImportingTsExtensions` (no `.ts` specifier anywhere) do nothing; drop them, keep `allowJs` (Next re-adds it when missing)
     ".eslintrc.cjs",
     "next-env.d.ts",
     "**/*.ts",

@@ -18,6 +18,11 @@ export const pages = {
     path: '/about',
     title: 'About',
   },
+  account: {
+    description: 'Manage your account information and active sessions.',
+    path: '/account',
+    title: 'Account settings',
+  },
   blog: {
     description:
       'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.',
@@ -71,3 +76,11 @@ export const pages = {
     title: 'Uses',
   },
 } satisfies Record<string, PageInfo>
+
+/** Anchor ids of page sections, read by the sections and the llms site map */
+export const sectionIds = {
+  activity: 'activity',
+  experience: 'experience',
+  stack: 'stack',
+  story: 'story',
+} as const

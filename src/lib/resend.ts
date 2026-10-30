@@ -1,7 +1,7 @@
 import { Resend, type UpdateContactOptions } from 'resend'
-import { baseUrl } from '@/constants'
 import { env } from '@/env'
 import { retryWithBackoff } from '@/lib/retry'
+import { url } from '@/lib/url'
 import NewsletterWelcomeEmail from '../../emails/newsletter-welcome'
 import type { getPosts } from './source'
 
@@ -29,11 +29,15 @@ export async function updateContact({
     ...props,
   })
 
-  if (!data || error) {
-    if (error?.name === 'not_found') {
+  if (error) {
+    if (error.name === 'not_found') {
       return null
     }
-    throw new Error(`Failed to update contact: ${error?.message}`)
+    throw new Error(`Failed to update contact: ${error.message}`)
+  }
+
+  if (!data) {
+    throw new Error('Failed to update contact: Resend returned no data.')
   }
 
   return data
@@ -80,8 +84,8 @@ export async function sendWelcomeEmail({
 
   const formattedPosts = posts.map((post) => ({
     ...post.data,
-    image: `${baseUrl}${post.data.image}`,
-    url: `${baseUrl}${post.url}`,
+    image: post.data.image ? url(post.data.image) : undefined,
+    url: url(post.url),
   }))
 
   try {
@@ -90,7 +94,7 @@ export async function sendWelcomeEmail({
         const { error } = await client.emails.send({
           from,
           react: NewsletterWelcomeEmail({ firstName, posts: formattedPosts }),
-          subject: 'Welcome to my newsletter!',
+          subject: 'Welcome to my newsletter',
           to,
         })
 
@@ -109,15 +113,12 @@ export async function sendWelcomeEmail({
       return { reason: 'rate_limit_exceeded' as const, sent: false }
     }
 
-    throw new Error(`Failed to send welcome email: ${JSON.stringify(error)}`)
+    throw new Error(`Failed to send welcome email: ${JSON.stringify(error)}`, {
+      cause: error,
+    })
   }
 
   return { sent: true }
-}
-
-interface ResendError {
-  name?: string
-  statusCode?: number | null
 }
 
 const isRateLimitError = (error: unknown) => {
@@ -125,6 +126,8 @@ const isRateLimitError = (error: unknown) => {
     return false
   }
 
-  const { name, statusCode } = error as ResendError
-  return name === 'rate_limit_exceeded' || statusCode === 429
+  return (
+    ('name' in error && error.name === 'rate_limit_exceeded') ||
+    ('statusCode' in error && error.statusCode === 429)
+  )
 }

@@ -1,5 +1,9 @@
 import { PreviewLink } from '@/components/preview-link'
-import { attributions } from '@/constants/portfolio/colophon'
+import {
+  attributionIntro,
+  attributions,
+  designInspiration,
+} from '@/constants/portfolio/colophon'
 import { cn } from '@/lib/utils'
 import {
   colophonCardBorderClasses,
@@ -9,11 +13,11 @@ import {
 export const Attribution = () => (
   <div className={colophonGridClassName}>
     <div className='flex h-full flex-col gap-2 border-border border-b border-dashed bg-card/50 p-6 text-muted-foreground text-sm sm:col-span-2 lg:col-span-3'>
-      <p>I borrowed code and design ideas from these people.</p>
+      <p>{attributionIntro}</p>
       <p>
         Some design ideas also come from{' '}
-        <PreviewLink className='link-underline' href='https://godly.website/'>
-          Godly
+        <PreviewLink className='link-underline' href={designInspiration.url}>
+          {designInspiration.name}
         </PreviewLink>
         .
       </p>

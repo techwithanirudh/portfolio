@@ -1,6 +1,13 @@
-import type { GitHubEvent } from './event'
+import type { RestEndpointMethodTypes } from '@octokit/rest'
 
-// The GitHub events the feed knows how to draw
+export type GitHubEvent =
+  RestEndpointMethodTypes['activity']['listPublicEventsForUser']['response']['data'][number]
+
+export interface PushCommit {
+  message: string
+  sha: string
+}
+
 const eventTypes = [
   'CreateEvent',
   'DeleteEvent',

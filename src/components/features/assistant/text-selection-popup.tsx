@@ -1,41 +1,34 @@
 'use client'
 
-import {
-  autoUpdate,
-  flip,
-  offset,
-  shift,
-  useFloating,
-} from '@floating-ui/react-dom'
-import { useEffect, useEffectEvent, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { Popover } from '@base-ui/react/popover'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { useMediaQuery } from 'usehooks-ts'
 import { Button } from '@/components/ui/button'
+import { MAX_CONTEXT_LENGTH } from '@/lib/ai/chat/types'
 import { MEDIA } from '@/lib/media'
 import { useAssistantContext } from './context'
 import { SimbaChip } from './mascot/simba-chip'
 
 const getContainer = () => document.getElementById('main-content')
 
+// Rapid clicks on a control (the portrait bonk) extend into nearby words, which isn't
+// a deliberate selection. Links stay selectable
+const CONTROL_SELECTOR =
+  'button, input, textarea, select, summary, [role="button"], [contenteditable="true"]'
+
 interface PopupState {
+  anchor: { contextElement: Element; getBoundingClientRect: () => DOMRect }
   text: string
 }
 
-// Offers to ask Simba about text selected anywhere in the page content
 export function TextSelectionPopup() {
   const { setContext, setOpen } = useAssistantContext()
   const [popup, setPopup] = useState<PopupState | null>(null)
+  const startedOnControl = useRef(false)
   // Touch browsers draw their own Copy/Share callout above a selection, so
   // sit below it, clear of the selection handles
   const coarsePointer = useMediaQuery(MEDIA.coarsePointer, {
     initializeWithValue: false,
-  })
-
-  const { refs, floatingStyles } = useFloating({
-    middleware: [offset(coarsePointer ? 28 : 8), flip(), shift({ padding: 8 })],
-    open: popup !== null,
-    placement: coarsePointer ? 'bottom' : 'top',
-    whileElementsMounted: autoUpdate,
   })
 
   const updatePopup = useEffectEvent(() => {
@@ -52,94 +45,112 @@ export function TextSelectionPopup() {
     }
 
     const text = selection.toString().trim()
-    if (text.length === 0) {
+    if (text.length === 0 || startedOnControl.current) {
       setPopup(null)
       return
     }
 
     const range = selection.getRangeAt(0).cloneRange()
-    if (!container.contains(range.commonAncestorContainer)) {
-      setPopup(null)
-      return
-    }
-
-    refs.setReference({
-      contextElement: container,
-      getBoundingClientRect() {
-        return range.getBoundingClientRect()
-      },
-    })
-
-    setPopup({ text: text.slice(0, 1200) })
-  })
-
-  const closeOnEscape = useEffectEvent((e: KeyboardEvent) => {
-    if (popup !== null && e.key === 'Escape') {
-      setPopup(null)
-    }
-  })
-
-  const closeOnPointerDown = useEffectEvent((e: PointerEvent) => {
-    const target = e.target
-    if (popup === null || !(target instanceof Node)) {
-      return
-    }
     if (
-      refs.floating.current?.contains(target) ||
-      getContainer()?.contains(target)
+      !container.contains(range.commonAncestorContainer) ||
+      Array.from(container.querySelectorAll(CONTROL_SELECTOR)).some((control) =>
+        range.intersectsNode(control)
+      )
     ) {
+      setPopup(null)
       return
     }
-    setPopup(null)
+
+    setPopup({
+      anchor: {
+        contextElement: container,
+        getBoundingClientRect: () => range.getBoundingClientRect(),
+      },
+      text: text.slice(0, MAX_CONTEXT_LENGTH),
+    })
   })
 
   useEffect(() => {
-    let frame: number | null = null
+    let timer: number | null = null
 
     const scheduleUpdate = () => {
-      if (frame !== null) {
-        window.cancelAnimationFrame(frame)
+      if (timer !== null) {
+        window.clearTimeout(timer)
       }
-      frame = window.requestAnimationFrame(() => {
-        frame = null
+      timer = window.setTimeout(() => {
+        timer = null
         updatePopup()
-      })
+      }, 200)
+    }
+
+    const resetStart = () => {
+      startedOnControl.current = false
+    }
+    const trackStart = (e: PointerEvent) => {
+      startedOnControl.current =
+        e.target instanceof Node &&
+        Boolean(
+          (e.target instanceof Element
+            ? e.target
+            : e.target.parentElement
+          )?.closest(CONTROL_SELECTOR)
+        )
     }
 
     document.addEventListener('selectionchange', scheduleUpdate)
-    document.addEventListener('keydown', closeOnEscape)
-    document.addEventListener('pointerdown', closeOnPointerDown)
+    document.addEventListener('keydown', resetStart)
+    document.addEventListener('pointerdown', trackStart)
 
     return () => {
       document.removeEventListener('selectionchange', scheduleUpdate)
-      document.removeEventListener('keydown', closeOnEscape)
-      document.removeEventListener('pointerdown', closeOnPointerDown)
-      if (frame !== null) {
-        window.cancelAnimationFrame(frame)
+      document.removeEventListener('keydown', resetStart)
+      document.removeEventListener('pointerdown', trackStart)
+      if (timer !== null) {
+        window.clearTimeout(timer)
       }
     }
   }, [])
 
-  return popup
-    ? createPortal(
-        <div
-          className='not-prose z-[25]'
-          ref={refs.setFloating}
-          style={floatingStyles}
+  return (
+    <Popover.Root
+      onOpenChange={(open, { event, reason }) => {
+        // A press in the page starts a new selection, which moves the popup
+        const pressInPage =
+          reason === 'outside-press' &&
+          event.target instanceof Node &&
+          getContainer()?.contains(event.target)
+        if (!(open || pressInPage)) {
+          setPopup(null)
+        }
+      }}
+      open={popup !== null}
+    >
+      <Popover.Portal>
+        <Popover.Positioner
+          anchor={popup?.anchor}
+          className='not-prose z-25'
+          collisionPadding={8}
+          side={coarsePointer ? 'bottom' : 'top'}
+          sideOffset={coarsePointer ? 28 : 8}
         >
-          <Button
-            className='shadow-lg'
-            onClick={() => {
-              setContext(popup.text)
-              setOpen(true)
-              setPopup(null)
-            }}
-            size='sm'
-          >
-            Ask <SimbaChip className='translate-y-0' /> Simba
-          </Button>
-        </div>,
-        document.body
-      )
-    : null
+          {/* Focus stays in the page so the selection survives */}
+          <Popover.Popup finalFocus={false} initialFocus={false}>
+            <Button
+              className='shadow-lg'
+              onClick={() => {
+                if (popup) {
+                  setContext(popup.text)
+                }
+                setOpen(true)
+                setPopup(null)
+              }}
+              size='sm'
+            >
+              Ask <SimbaChip className='translate-y-0' /> Simba
+            </Button>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
+  )
 }

@@ -1,14 +1,6 @@
 {
-  "generated": "2026-10-15T23:04:51.033Z",
+  "generated": "2026-10-30T08:03:10.361Z",
   "previews": {
-    "ac8bc5b8d08d": {
-      "generatedAt": "2026-05-13T07:45:44.634Z",
-      "height": 630,
-      "screenshotPath": "/previews/ac8bc5b8d08d.jpeg",
-      "status": "success",
-      "url": "https://openai.com/codex/",
-      "width": 1200
-    },
     "03addeebaebd": {
       "generatedAt": "2026-05-13T07:45:45.265Z",
       "height": 630,
@@ -289,14 +281,6 @@
       "url": "https://github.com/techwithanirudh/shadcn-portfolio",
       "width": 1200
     },
-    "8831e89785a4": {
-      "generatedAt": "2026-05-13T07:51:14.191Z",
-      "height": 630,
-      "screenshotPath": "/previews/8831e89785a4.jpeg",
-      "status": "success",
-      "url": "https://www.techwithanirudh.com",
-      "width": 1200
-    },
     "252b1341a16b": {
       "generatedAt": "2026-05-13T07:51:17.172Z",
       "height": 630,
@@ -311,15 +295,6 @@
       "screenshotPath": "/previews/1c6107dec9f2.jpeg",
       "status": "success",
       "url": "https://github.com/Meeting-BaaS/speaking-meeting-bot",
-      "width": 1200
-    },
-    "18288a8a634d": {
-      "errorMessage": "goto: net::ERR_CONNECTION_RESET at https://diary.techwithanirudh.com/\nCall log:\n\u001b[2m  - navigating to \"https://diary.techwithanirudh.com/\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "generatedAt": "2026-08-02T13:07:39.842Z",
-      "height": 630,
-      "screenshotPath": "/previews/18288a8a634d.jpeg",
-      "status": "failed",
-      "url": "https://diary.techwithanirudh.com/",
       "width": 1200
     },
     "1dbb65297938": {
@@ -379,47 +354,34 @@
       "width": 1200
     },
     "0ca6bee2db41": {
-      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/techwithanirudh/mastra-slack-agent-template\nCall log:\n\u001b[2m  - navigating to \"https://github.com/techwithanirudh/mastra-slack-agent-template\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "generatedAt": "2026-08-02T13:07:07.052Z",
+      "generatedAt": "2026-10-17T19:26:33.539Z",
       "height": 630,
       "screenshotPath": "/previews/0ca6bee2db41.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://github.com/techwithanirudh/mastra-slack-agent-template",
       "width": 1200
     },
     "b9126ce9c4d1": {
-      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/imdevarsh\nCall log:\n\u001b[2m  - navigating to \"https://github.com/imdevarsh\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "generatedAt": "2026-08-02T13:06:36.854Z",
+      "generatedAt": "2026-10-17T19:26:09.717Z",
       "height": 630,
       "screenshotPath": "/previews/b9126ce9c4d1.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://github.com/imdevarsh",
       "width": 1200
     },
     "e957b346cb8e": {
-      "errorMessage": "goto: net::ERR_CONNECTION_RESET at https://chat-sdk.dev/\nCall log:\n\u001b[2m  - navigating to \"https://chat-sdk.dev/\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "generatedAt": "2026-08-02T13:07:02.535Z",
+      "generatedAt": "2026-10-17T19:26:21.007Z",
       "height": 630,
       "screenshotPath": "/previews/e957b346cb8e.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://chat-sdk.dev/",
       "width": 1200
     },
-    "976382ced949": {
-      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md\nCall log:\n\u001b[2m  - navigating to \"https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "generatedAt": "2026-08-02T13:07:10.603Z",
-      "height": 630,
-      "screenshotPath": "/previews/976382ced949.jpeg",
-      "status": "failed",
-      "url": "https://github.com/techwithanirudh/mastra-slack-agent-template/blob/main/docs/configuration.md",
-      "width": 1200
-    },
     "ffcdc169a659": {
-      "errorMessage": "goto: net::ERR_CERT_AUTHORITY_INVALID at https://github.com/techwithanirudh/remotely\nCall log:\n\u001b[2m  - navigating to \"https://github.com/techwithanirudh/remotely\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "generatedAt": "2026-08-02T13:07:14.135Z",
+      "generatedAt": "2026-10-17T19:27:24.912Z",
       "height": 630,
       "screenshotPath": "/previews/ffcdc169a659.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://github.com/techwithanirudh/remotely",
       "width": 1200
     },
@@ -461,14 +423,6 @@
       "screenshotPath": "/previews/638ef918d2a7.jpeg",
       "status": "success",
       "url": "https://nextjs.org",
-      "width": 1200
-    },
-    "c1b67562504b": {
-      "generatedAt": "2026-10-15T06:38:36.208Z",
-      "height": 630,
-      "screenshotPath": "/previews/c1b67562504b.jpeg",
-      "status": "success",
-      "url": "https://www.bosch-softwaretechnologies.com/en/",
       "width": 1200
     },
     "bf2905db04af": {
@@ -557,15 +511,6 @@
       "screenshotPath": "/previews/37a261499fe2.jpeg",
       "status": "success",
       "url": "https://tiptap.dev",
-      "width": 1200
-    },
-    "c0cd34ee1475": {
-      "errorMessage": "HTTP 404",
-      "generatedAt": "2026-10-15T06:40:22.261Z",
-      "height": 630,
-      "screenshotPath": "/previews/c0cd34ee1475.jpeg",
-      "status": "failed",
-      "url": "https://www.eververse.ai",
       "width": 1200
     },
     "f42d89f4c74b": {
@@ -670,14 +615,6 @@
       "screenshotPath": "/previews/9c83989c98dc.jpeg",
       "status": "success",
       "url": "https://victoreke.com/",
-      "width": 1200
-    },
-    "14f2faea348e": {
-      "generatedAt": "2026-10-15T06:41:43.270Z",
-      "height": 630,
-      "screenshotPath": "/previews/14f2faea348e.jpeg",
-      "status": "success",
-      "url": "https://github.com/techwithanirudh",
       "width": 1200
     },
     "8f56a6c0fdfc": {
@@ -809,11 +746,10 @@
       "width": 1200
     },
     "5502a6be3bf0": {
-      "errorMessage": "HTTP 403",
-      "generatedAt": "2026-10-15T22:51:48.411Z",
+      "generatedAt": "2026-10-17T19:27:50.528Z",
       "height": 630,
       "screenshotPath": "/previews/5502a6be3bf0.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://claude.ai",
       "width": 1200
     },
@@ -834,11 +770,10 @@
       "width": 1200
     },
     "7160d989c9c6": {
-      "errorMessage": "HTTP 403",
-      "generatedAt": "2026-10-15T22:52:08.849Z",
+      "generatedAt": "2026-10-17T19:28:06.685Z",
       "height": 630,
       "screenshotPath": "/previews/7160d989c9c6.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://chatgpt.com/codex",
       "width": 1200
     },
@@ -904,15 +839,6 @@
       "screenshotPath": "/previews/1653b7d2a45e.jpeg",
       "status": "success",
       "url": "https://www.samsung.com/in/monitors/smart/smart-monitor-m7-32-inch-smart-tv-apps-4k-uhd-ls32fm700uwxxl/",
-      "width": 1200
-    },
-    "955463da4239": {
-      "errorMessage": "HTTP 404",
-      "generatedAt": "2026-10-15T22:55:11.298Z",
-      "height": 630,
-      "screenshotPath": "/previews/955463da4239.jpeg",
-      "status": "failed",
-      "url": "https://www.logitech.com/products/mice/signature-m650.html",
       "width": 1200
     },
     "792ddd2c3fa5": {
@@ -1005,7 +931,7 @@
     },
     "40620722288f": {
       "errorMessage": "HTTP 403",
-      "generatedAt": "2026-10-15T22:58:01.730Z",
+      "generatedAt": "2026-10-17T19:28:56.150Z",
       "height": 630,
       "screenshotPath": "/previews/40620722288f.jpeg",
       "status": "failed",
@@ -1172,15 +1098,6 @@
       "url": "https://orbstack.dev",
       "width": 1200
     },
-    "8350251237b5": {
-      "errorMessage": "goto: net::ERR_CERT_DATE_INVALID at https://pictogramapp.com/\nCall log:\n\u001b[2m  - navigating to \"https://pictogramapp.com/\", waiting until \"domcontentloaded\"\u001b[22m\n",
-      "generatedAt": "2026-10-15T23:00:07.270Z",
-      "height": 630,
-      "screenshotPath": "/previews/8350251237b5.jpeg",
-      "status": "failed",
-      "url": "https://pictogramapp.com",
-      "width": 1200
-    },
     "96127608f5c8": {
       "generatedAt": "2026-10-15T23:00:19.215Z",
       "height": 630,
@@ -1214,11 +1131,10 @@
       "width": 1200
     },
     "f838d4a64981": {
-      "errorMessage": "screenshot: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - taking page screenshot\u001b[22m\n\u001b[2m  - waiting for fonts to load...\u001b[22m\n\u001b[2m  - fonts loaded\u001b[22m\n",
-      "generatedAt": "2026-10-15T23:02:06.751Z",
+      "generatedAt": "2026-10-17T19:29:19.401Z",
       "height": 630,
       "screenshotPath": "/previews/f838d4a64981.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://raycast.com",
       "width": 1200
     },
@@ -1287,12 +1203,491 @@
       "width": 1200
     },
     "feb362fd4dac": {
-      "errorMessage": "waitForTimeout: Target page, context or browser has been closed",
-      "generatedAt": "2026-10-15T23:04:50.888Z",
+      "generatedAt": "2026-10-17T19:29:31.956Z",
       "height": 630,
       "screenshotPath": "/previews/feb362fd4dac.jpeg",
-      "status": "failed",
+      "status": "success",
       "url": "https://wisprflow.ai",
+      "width": 1200
+    },
+    "bfce6b801f7f": {
+      "generatedAt": "2026-10-17T19:26:59.762Z",
+      "height": 630,
+      "screenshotPath": "/previews/bfce6b801f7f.jpeg",
+      "status": "success",
+      "url": "https://github.com/techwithanirudh/fumadocs-starter",
+      "width": 1200
+    },
+    "d827b43d2952": {
+      "generatedAt": "2026-10-17T19:27:11.541Z",
+      "height": 630,
+      "screenshotPath": "/previews/d827b43d2952.jpeg",
+      "status": "success",
+      "url": "https://www.imanirudh.com",
+      "width": 1200
+    },
+    "4b829d9e48f8": {
+      "generatedAt": "2026-10-17T19:27:36.496Z",
+      "height": 630,
+      "screenshotPath": "/previews/4b829d9e48f8.jpeg",
+      "status": "success",
+      "url": "https://base-ui.com",
+      "width": 1200
+    },
+    "c1b67562504b": {
+      "generatedAt": "2026-10-17T19:30:22.677Z",
+      "height": 630,
+      "screenshotPath": "/previews/c1b67562504b.jpeg",
+      "status": "success",
+      "url": "https://www.bosch-softwaretechnologies.com/en/",
+      "width": 1200
+    },
+    "58627092a3f4": {
+      "generatedAt": "2026-10-17T19:38:43.345Z",
+      "height": 630,
+      "screenshotPath": "/previews/58627092a3f4.jpeg",
+      "status": "success",
+      "url": "https://cmrg.me",
+      "width": 1200
+    },
+    "25cba44b0e08": {
+      "generatedAt": "2026-10-17T19:39:42.479Z",
+      "height": 630,
+      "screenshotPath": "/previews/25cba44b0e08.jpeg",
+      "status": "success",
+      "url": "https://www.logitech.com/en-us/shop/p/m650-signature-wireless-mouse",
+      "width": 1200
+    },
+    "129ceb3cd814": {
+      "generatedAt": "2026-10-17T20:07:40.562Z",
+      "height": 630,
+      "screenshotPath": "/previews/129ceb3cd814.jpeg",
+      "status": "success",
+      "url": "https://tryklack.com",
+      "width": 1200
+    },
+    "2c4ba1027a8d": {
+      "generatedAt": "2026-10-20T21:22:54.126Z",
+      "height": 630,
+      "screenshotPath": "/previews/2c4ba1027a8d.jpeg",
+      "status": "success",
+      "url": "https://github.com/techwithanirudh/AutonomousDrivingPaperCodeCombined",
+      "width": 1200
+    },
+    "4bb5945807c2": {
+      "generatedAt": "2026-10-20T21:23:08.596Z",
+      "height": 630,
+      "screenshotPath": "/previews/4bb5945807c2.jpeg",
+      "status": "success",
+      "url": "https://fumadocsstarter.vercel.app",
+      "width": 1200
+    },
+    "665ce81d7131": {
+      "generatedAt": "2026-10-20T21:23:20.888Z",
+      "height": 630,
+      "screenshotPath": "/previews/665ce81d7131.jpeg",
+      "status": "success",
+      "url": "https://app.transcriptseeker.com",
+      "width": 1200
+    },
+    "4ce15cf94161": {
+      "generatedAt": "2026-10-20T21:23:34.024Z",
+      "height": 630,
+      "screenshotPath": "/previews/4ce15cf94161.jpeg",
+      "status": "success",
+      "url": "https://www.apple.com/app-store/",
+      "width": 1200
+    },
+    "224322efbf02": {
+      "generatedAt": "2026-10-20T21:23:46.907Z",
+      "height": 630,
+      "screenshotPath": "/previews/224322efbf02.jpeg",
+      "status": "success",
+      "url": "https://sidestore.io/",
+      "width": 1200
+    },
+    "84bf01216396": {
+      "generatedAt": "2026-10-20T21:23:59.442Z",
+      "height": 630,
+      "screenshotPath": "/previews/84bf01216396.jpeg",
+      "status": "success",
+      "url": "https://altstore.io/",
+      "width": 1200
+    },
+    "ddc1c63c17b1": {
+      "generatedAt": "2026-10-20T21:24:12.006Z",
+      "height": 630,
+      "screenshotPath": "/previews/ddc1c63c17b1.jpeg",
+      "status": "success",
+      "url": "https://www.convex.dev/",
+      "width": 1200
+    },
+    "9ffd1aaccfcc": {
+      "generatedAt": "2026-10-20T22:51:45.111Z",
+      "height": 630,
+      "screenshotPath": "/previews/9ffd1aaccfcc.jpeg",
+      "status": "success",
+      "url": "https://fumadocs.dev/",
+      "width": 1200
+    },
+    "4350554459a1": {
+      "generatedAt": "2026-10-20T22:52:06.181Z",
+      "height": 630,
+      "screenshotPath": "/previews/4350554459a1.jpeg",
+      "status": "success",
+      "url": "https://resend.com/",
+      "width": 1200
+    },
+    "e16dfddc1a4b": {
+      "generatedAt": "2026-10-20T22:52:19.054Z",
+      "height": 630,
+      "screenshotPath": "/previews/e16dfddc1a4b.jpeg",
+      "status": "success",
+      "url": "https://developers.cloudflare.com/turnstile/",
+      "width": 1200
+    },
+    "212d8970014c": {
+      "generatedAt": "2026-10-20T22:52:31.593Z",
+      "height": 630,
+      "screenshotPath": "/previews/212d8970014c.jpeg",
+      "status": "success",
+      "url": "https://www.better-auth.com/",
+      "width": 1200
+    },
+    "d4df17160d60": {
+      "generatedAt": "2026-10-20T22:52:52.525Z",
+      "height": 630,
+      "screenshotPath": "/previews/d4df17160d60.jpeg",
+      "status": "success",
+      "url": "https://orm.drizzle.team/",
+      "width": 1200
+    },
+    "fd76801b3f50": {
+      "generatedAt": "2026-10-20T22:53:06.929Z",
+      "height": 630,
+      "screenshotPath": "/previews/fd76801b3f50.jpeg",
+      "status": "success",
+      "url": "https://turbo.build/repo",
+      "width": 1200
+    },
+    "34b615cddf04": {
+      "generatedAt": "2026-10-20T22:53:22.838Z",
+      "height": 630,
+      "screenshotPath": "/previews/34b615cddf04.jpeg",
+      "status": "success",
+      "url": "https://firebase.google.com/",
+      "width": 1200
+    },
+    "9c8af2852c4a": {
+      "generatedAt": "2026-10-20T22:53:45.648Z",
+      "height": 630,
+      "screenshotPath": "/previews/9c8af2852c4a.jpeg",
+      "status": "success",
+      "url": "https://www.algolia.com/",
+      "width": 1200
+    },
+    "41531850c10d": {
+      "generatedAt": "2026-10-20T22:54:00.106Z",
+      "height": 630,
+      "screenshotPath": "/previews/41531850c10d.jpeg",
+      "status": "success",
+      "url": "https://supabase.com/",
+      "width": 1200
+    },
+    "96deec3a1a21": {
+      "generatedAt": "2026-10-20T22:54:15.379Z",
+      "height": 630,
+      "screenshotPath": "/previews/96deec3a1a21.jpeg",
+      "status": "success",
+      "url": "https://trpc.io/",
+      "width": 1200
+    },
+    "997a34b74bce": {
+      "generatedAt": "2026-10-20T22:54:30.900Z",
+      "height": 630,
+      "screenshotPath": "/previews/997a34b74bce.jpeg",
+      "status": "success",
+      "url": "https://ai.google.dev/edge/mediapipe/solutions/guide",
+      "width": 1200
+    },
+    "8e4792e40832": {
+      "generatedAt": "2026-10-20T22:54:43.412Z",
+      "height": 630,
+      "screenshotPath": "/previews/8e4792e40832.jpeg",
+      "status": "success",
+      "url": "https://thispersondoesnotexist.com/",
+      "width": 1200
+    },
+    "4e5366f94fed": {
+      "generatedAt": "2026-10-20T22:55:41.898Z",
+      "height": 630,
+      "screenshotPath": "/previews/4e5366f94fed.jpeg",
+      "status": "success",
+      "url": "https://exa.ai/",
+      "width": 1200
+    },
+    "fcb34ecb89c3": {
+      "generatedAt": "2026-10-20T22:56:35.168Z",
+      "height": 630,
+      "screenshotPath": "/previews/fcb34ecb89c3.jpeg",
+      "status": "success",
+      "url": "https://github.com/firebase/firebaseui-web",
+      "width": 1200
+    },
+    "bdf2de105ea2": {
+      "generatedAt": "2026-10-20T22:56:46.759Z",
+      "height": 630,
+      "screenshotPath": "/previews/bdf2de105ea2.jpeg",
+      "status": "success",
+      "url": "https://next-auth.js.org/",
+      "width": 1200
+    },
+    "f3fa5d061781": {
+      "generatedAt": "2026-10-20T22:57:00.052Z",
+      "height": 630,
+      "screenshotPath": "/previews/f3fa5d061781.jpeg",
+      "status": "success",
+      "url": "https://firebase.google.com/docs/firestore",
+      "width": 1200
+    },
+    "67e7f515b7bb": {
+      "generatedAt": "2026-10-20T22:57:11.306Z",
+      "height": 630,
+      "screenshotPath": "/previews/67e7f515b7bb.jpeg",
+      "status": "success",
+      "url": "https://duckduckgo.com/",
+      "width": 1200
+    },
+    "0f16f83f3f6e": {
+      "generatedAt": "2026-10-20T22:57:23.673Z",
+      "height": 630,
+      "screenshotPath": "/previews/0f16f83f3f6e.jpeg",
+      "status": "success",
+      "url": "https://www.fumadocs.dev/",
+      "width": 1200
+    },
+    "ee62bd8b5279": {
+      "generatedAt": "2026-10-20T22:57:36.296Z",
+      "height": 630,
+      "screenshotPath": "/previews/ee62bd8b5279.jpeg",
+      "status": "success",
+      "url": "https://twoslash.netlify.app/",
+      "width": 1200
+    },
+    "5db691231d9a": {
+      "generatedAt": "2026-10-20T22:57:49.579Z",
+      "height": 630,
+      "screenshotPath": "/previews/5db691231d9a.jpeg",
+      "status": "success",
+      "url": "https://vercel.com/templates/next.js/nextjs-ai-chatbot",
+      "width": 1200
+    },
+    "0c06728ffe7f": {
+      "generatedAt": "2026-10-20T22:58:01.286Z",
+      "height": 630,
+      "screenshotPath": "/previews/0c06728ffe7f.jpeg",
+      "status": "success",
+      "url": "https://ai.hackclub.com/",
+      "width": 1200
+    },
+    "860dcf065a3c": {
+      "generatedAt": "2026-10-20T22:58:15.219Z",
+      "height": 630,
+      "screenshotPath": "/previews/860dcf065a3c.jpeg",
+      "status": "success",
+      "url": "https://livekit.io/agents",
+      "width": 1200
+    },
+    "eabe664722a7": {
+      "generatedAt": "2026-10-20T22:58:29.169Z",
+      "height": 630,
+      "screenshotPath": "/previews/eabe664722a7.jpeg",
+      "status": "success",
+      "url": "https://mem0.ai/",
+      "width": 1200
+    },
+    "21c36a6ace24": {
+      "generatedAt": "2026-10-20T22:58:41.863Z",
+      "height": 630,
+      "screenshotPath": "/previews/21c36a6ace24.jpeg",
+      "status": "success",
+      "url": "https://upstash.com/",
+      "width": 1200
+    },
+    "85f857ea039b": {
+      "generatedAt": "2026-10-20T22:59:00.302Z",
+      "height": 630,
+      "screenshotPath": "/previews/85f857ea039b.jpeg",
+      "status": "success",
+      "url": "https://deepgram.com/",
+      "width": 1200
+    },
+    "944fcc9d4fe8": {
+      "generatedAt": "2026-10-20T22:59:13.938Z",
+      "height": 630,
+      "screenshotPath": "/previews/944fcc9d4fe8.jpeg",
+      "status": "success",
+      "url": "https://www.meetingbaas.com/",
+      "width": 1200
+    },
+    "d1997db21389": {
+      "generatedAt": "2026-10-20T22:59:30.520Z",
+      "height": 630,
+      "screenshotPath": "/previews/d1997db21389.jpeg",
+      "status": "success",
+      "url": "https://www.gladia.io/",
+      "width": 1200
+    },
+    "ac303e13b283": {
+      "generatedAt": "2026-10-20T22:59:44.985Z",
+      "height": 630,
+      "screenshotPath": "/previews/ac303e13b283.jpeg",
+      "status": "success",
+      "url": "https://www.assemblyai.com/",
+      "width": 1200
+    },
+    "b1a3c8b84b52": {
+      "generatedAt": "2026-10-20T23:00:02.049Z",
+      "height": 630,
+      "screenshotPath": "/previews/b1a3c8b84b52.jpeg",
+      "status": "success",
+      "url": "https://pglite.dev/",
+      "width": 1200
+    },
+    "1919781c31d1": {
+      "generatedAt": "2026-10-20T23:00:16.332Z",
+      "height": 630,
+      "screenshotPath": "/previews/1919781c31d1.jpeg",
+      "status": "success",
+      "url": "https://turborepo.dev/",
+      "width": 1200
+    },
+    "65242f9d51f8": {
+      "generatedAt": "2026-10-20T23:00:28.230Z",
+      "height": 630,
+      "screenshotPath": "/previews/65242f9d51f8.jpeg",
+      "status": "success",
+      "url": "https://nitro.build/",
+      "width": 1200
+    },
+    "0674e1a25398": {
+      "generatedAt": "2026-10-20T23:00:39.267Z",
+      "height": 630,
+      "screenshotPath": "/previews/0674e1a25398.jpeg",
+      "status": "success",
+      "url": "https://hono.dev/",
+      "width": 1200
+    },
+    "8dacdfa08529": {
+      "generatedAt": "2026-10-20T23:00:54.399Z",
+      "height": 630,
+      "screenshotPath": "/previews/8dacdfa08529.jpeg",
+      "status": "success",
+      "url": "https://grapesjs.com/",
+      "width": 1200
+    },
+    "8adb6cd22922": {
+      "generatedAt": "2026-10-20T23:01:07.590Z",
+      "height": 630,
+      "screenshotPath": "/previews/8adb6cd22922.jpeg",
+      "status": "success",
+      "url": "https://coolify.io/",
+      "width": 1200
+    },
+    "3e66335f6a67": {
+      "generatedAt": "2026-10-20T23:01:20.695Z",
+      "height": 630,
+      "screenshotPath": "/previews/3e66335f6a67.jpeg",
+      "status": "success",
+      "url": "https://tweakcn.com/",
+      "width": 1200
+    },
+    "e4b25ab8a96d": {
+      "generatedAt": "2026-10-20T23:01:46.141Z",
+      "height": 630,
+      "screenshotPath": "/previews/e4b25ab8a96d.jpeg",
+      "status": "success",
+      "url": "https://github.com/openstyles/stylus",
+      "width": 1200
+    },
+    "ae02566fdadb": {
+      "generatedAt": "2026-10-20T23:02:02.315Z",
+      "height": 630,
+      "screenshotPath": "/previews/ae02566fdadb.jpeg",
+      "status": "success",
+      "url": "https://traefik.io/",
+      "width": 1200
+    },
+    "eef9e1ae389f": {
+      "generatedAt": "2026-10-20T23:02:17.077Z",
+      "height": 630,
+      "screenshotPath": "/previews/eef9e1ae389f.jpeg",
+      "status": "success",
+      "url": "https://next-forge.com/",
+      "width": 1200
+    },
+    "868b53c778c9": {
+      "generatedAt": "2026-10-20T23:02:30.620Z",
+      "height": 630,
+      "screenshotPath": "/previews/868b53c778c9.jpeg",
+      "status": "success",
+      "url": "https://next-safe-action.dev/",
+      "width": 1200
+    },
+    "2a1cc7a9ba8c": {
+      "generatedAt": "2026-10-20T23:02:44.586Z",
+      "height": 630,
+      "screenshotPath": "/previews/2a1cc7a9ba8c.jpeg",
+      "status": "success",
+      "url": "https://kaboomjs.com/",
+      "width": 1200
+    },
+    "42144207f1cc": {
+      "generatedAt": "2026-10-20T23:02:59.376Z",
+      "height": 630,
+      "screenshotPath": "/previews/42144207f1cc.jpeg",
+      "status": "success",
+      "url": "https://www.pipecat.ai/",
+      "width": 1200
+    },
+    "ce1a846ec4f3": {
+      "generatedAt": "2026-10-20T23:03:24.647Z",
+      "height": 630,
+      "screenshotPath": "/previews/ce1a846ec4f3.jpeg",
+      "status": "success",
+      "url": "https://cartesia.ai/",
+      "width": 1200
+    },
+    "bbc842f2d46c": {
+      "generatedAt": "2026-10-20T23:03:37.721Z",
+      "height": 630,
+      "screenshotPath": "/previews/bbc842f2d46c.jpeg",
+      "status": "success",
+      "url": "https://ngrok.com/",
+      "width": 1200
+    },
+    "d2282c4cef6a": {
+      "generatedAt": "2026-10-20T23:03:49.772Z",
+      "height": 630,
+      "screenshotPath": "/previews/d2282c4cef6a.jpeg",
+      "status": "success",
+      "url": "https://sparkle-project.org/",
+      "width": 1200
+    },
+    "46b7c42d1131": {
+      "generatedAt": "2026-10-30T08:02:57.862Z",
+      "height": 630,
+      "screenshotPath": "/previews/46b7c42d1131.jpeg",
+      "status": "success",
+      "url": "https://mastra.ai/",
+      "width": 1200
+    },
+    "ab410f092849": {
+      "generatedAt": "2026-10-30T08:03:10.300Z",
+      "height": 630,
+      "screenshotPath": "/previews/ab410f092849.jpeg",
+      "status": "success",
+      "url": "https://play.google.com/store/apps/details?id=com.techwithanirudh.depensa",
       "width": 1200
     }
   }
