@@ -4,8 +4,6 @@
   "files": ["**", ".vscode/**", ".github/**"],
   "ignorePaths": ["bun.lock", "plans/reviews/**"],
   "ignoreRegExpList": [
-    // TODO(slopradar): dead-config: no checked file contains `apiKey='`, so this pattern ignores nothing; delete it
-    "apiKey='[a-zA-Z0-9-]{32}'",
     "'[A-Za-z0-9+/]{24,}={0,2}'",
     "#[0-9a-fA-F]{3,8}(?![0-9a-fA-F])"
   ],
