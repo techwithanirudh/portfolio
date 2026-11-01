@@ -53,7 +53,7 @@ export function SimbaRig({
   const staged = 'hidden' in current ? null : current
   const hidden = !staged
   const animate = !(still || reducedMotion)
-  const { chest, pop, shown, soft } = useSpriteFrames(
+  const { pop, shown, soft } = useSpriteFrames(
     staged && { flip: staged.flip ?? false, sprite: staged.sprite },
     {
       animate,
@@ -74,7 +74,6 @@ export function SimbaRig({
     <svg
       aria-hidden
       className={cn('simba-rig', className)}
-      data-chest={chest || undefined}
       data-hidden={hidden || undefined}
       data-motion={motion}
       overflow='visible'

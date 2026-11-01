@@ -1,4 +1,4 @@
-import { type RefObject, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { pick } from './controller'
 import type { SpriteName } from './rig-art'
 
@@ -8,7 +8,6 @@ export interface Shown {
 }
 
 interface Step extends Shown {
-  chest?: boolean
   /** ms */
   duration: number
 }
@@ -57,8 +56,6 @@ const REST_BODY: ReadonlySet<SpriteName> = new Set([
   'restLookLeft1',
   'restLookRight',
   'restLookRight1',
-  'restPantA',
-  'restPantB',
   'restTalkA',
   'restTalkB',
   'restTilt1',
@@ -70,8 +67,7 @@ const sameBody = (from: Shown, to: Shown) =>
   REST_BODY.has(from.sprite) &&
   REST_BODY.has(to.sprite)
 
-const hold = (sprite: SpriteName, duration: number, chest = false): Step => ({
-  chest,
+const hold = (sprite: SpriteName, duration: number): Step => ({
   duration,
   flip: false,
   sprite,
@@ -98,22 +94,8 @@ const BEATS: readonly [Beat, ...Beat[]] = [
   [hold('restTilt1', 140), hold('restTilt2', 1600), hold('restTilt1', 160)],
 ]
 
-const breath = (): Step[] => [
-  hold('restPantA', between(250, 290)),
-  hold('restPantB', between(290, 330), true),
-]
-
-const pant = (): Beat => [
-  hold('restTalkA', 140),
-  ...Array.from({ length: 3 + Math.floor(Math.random() * 3) }, breath).flat(),
-  hold('restPantA', 200),
-  hold('restTalkA', 160),
-]
-
 export const between = (min: number, max: number) =>
   min + Math.random() * (max - min)
-
-const nextPant = () => Date.now() + 10_000 + Math.random() * 10_000
 
 const syllable = (): Step[] =>
   Math.random() < 0.4
@@ -210,12 +192,10 @@ const cueFor = (
   step: Step | undefined,
   {
     asleep,
-    pantAt,
     resting,
     talking,
   }: {
     asleep: boolean
-    pantAt: RefObject<number>
     resting: boolean
     talking: boolean
   }
@@ -236,23 +216,14 @@ const cueFor = (
     return null
   }
   if (talking) {
-    // Reset so the next pant waits a full interval after he stops talking
-    pantAt.current = 0
     return {
       ms: between(120, 420),
       next: () => play(phrase()),
     }
   }
-  pantAt.current ||= nextPant()
   return {
     ms: 3000 + Math.random() * 3000,
-    next: () => {
-      if (Date.now() >= pantAt.current) {
-        pantAt.current = nextPant()
-        return play(pant())
-      }
-      return play(pick(BEATS))
-    },
+    next: () => play(pick(BEATS)),
   }
 }
 
@@ -288,7 +259,6 @@ export function useSpriteFrames(
 
   const step = animate ? run.steps[run.index] : undefined
   const resting = run.target.sprite === 'rest'
-  const pantAt = useRef(0)
   const asleep = run.target.sprite === 'sleeping'
 
   const hidden = !target
@@ -296,7 +266,7 @@ export function useSpriteFrames(
     if (!animate || hidden) {
       return
     }
-    const cue = cueFor(step, { asleep, pantAt, resting, talking })
+    const cue = cueFor(step, { asleep, resting, talking })
     if (!cue) {
       return
     }
@@ -305,7 +275,6 @@ export function useSpriteFrames(
   }, [animate, asleep, hidden, resting, step, talking])
 
   return {
-    chest: step?.chest ?? false,
     pop: run.pop,
     shown: step ?? run.target,
     soft: run.soft,
