@@ -1,7 +1,6 @@
 'use server'
 
 import { del, put } from '@vercel/blob'
-import { and, eq } from 'drizzle-orm'
 import { updateTag } from 'next/cache'
 import { headers } from 'next/headers'
 import { type Base64FileParts, parseB64File } from '@/lib/files'
@@ -16,26 +15,31 @@ import {
   GuestbookEditSchema,
   GuestbookEntrySchema,
   GuestbookReactionSchema,
-} from '@/lib/validators'
+} from '@/lib/validators/guestbook'
 import { auth } from '@/server/auth'
-import { db } from '@/server/db'
-import { deleteGuestbookEntry } from '@/server/db/queries/guestbook'
-import { guestbookEntries, guestbookReactions, users } from '@/server/db/schema'
+import {
+  deleteGuestbookEntry,
+  GUESTBOOK_CACHE_TAG,
+  getGuestbookUserStatus,
+  insertGuestbookEntry,
+  toggleGuestbookEntryReaction,
+  updateGuestbookEntryMessage,
+} from '@/server/db/queries/guestbook'
 import { moderateEntry } from './utils/moderation'
 
 export const createGuestbookEntry = userActionClient
   .inputSchema(GuestbookEntrySchema)
   .action(async ({ parsedInput, ctx }) => {
     const { user } = ctx
-    const name = user.name ?? 'Guest'
-
     let parsedSignature: Base64FileParts | null = null
 
     if (parsedInput.signature) {
       parsedSignature = parseB64File(parsedInput.signature)
 
       if (parsedSignature?.mediaType !== 'image/png') {
-        throw new ActionError('Signature must be a PNG data URL.')
+        throw new ActionError(
+          "Your signature couldn't be read. Clear it and sign again."
+        )
       }
     }
 
@@ -64,16 +68,14 @@ export const createGuestbookEntry = userActionClient
       signatureUrl = blob.url
     }
 
-    await db.insert(guestbookEntries).values({
+    await insertGuestbookEntry({
       message: parsedInput.message,
-      name,
+      name: user.name,
       signature: signatureUrl,
       userId: user.id,
     })
 
-    updateTag('guestbook')
-
-    return { success: true }
+    updateTag(GUESTBOOK_CACHE_TAG)
   })
 
 export const toggleGuestbookReaction = userActionClient
@@ -82,31 +84,9 @@ export const toggleGuestbookReaction = userActionClient
     const { user } = ctx
     const { entryId, emoji } = parsedInput
 
-    const deleted = await db
-      .delete(guestbookReactions)
-      .where(
-        and(
-          eq(guestbookReactions.entryId, entryId),
-          eq(guestbookReactions.userId, user.id),
-          eq(guestbookReactions.emoji, emoji)
-        )
-      )
-      .returning({ entryId: guestbookReactions.entryId })
+    await toggleGuestbookEntryReaction(entryId, user.id, emoji)
 
-    if (deleted.length === 0) {
-      await db
-        .insert(guestbookReactions)
-        .values({
-          emoji,
-          entryId,
-          userId: user.id,
-        })
-        .onConflictDoNothing()
-    }
-
-    updateTag('guestbook')
-
-    return { success: true }
+    updateTag(GUESTBOOK_CACHE_TAG)
   })
 
 export const editGuestbookEntry = userActionClient
@@ -115,53 +95,42 @@ export const editGuestbookEntry = userActionClient
     const { user } = ctx
     const isAdmin = user.role === 'admin'
 
-    const moderation = await moderateEntry({
-      message: parsedInput.message,
-      signature: undefined,
-    })
+    const moderation = await moderateEntry({ message: parsedInput.message })
 
     if (!moderation.allowed) {
       throw new ActionError(moderation.reason)
     }
 
-    const updated = await db
-      .update(guestbookEntries)
-      .set({
-        editedAt: new Date(),
-        message: parsedInput.message,
-      })
-      .where(
-        isAdmin
-          ? eq(guestbookEntries.id, parsedInput.entryId)
-          : and(
-              eq(guestbookEntries.id, parsedInput.entryId),
-              eq(guestbookEntries.userId, user.id)
-            )
-      )
-      .returning({ id: guestbookEntries.id })
+    const updated = await updateGuestbookEntryMessage(
+      parsedInput.entryId,
+      user.id,
+      parsedInput.message,
+      isAdmin
+    )
 
-    if (updated.length === 0) {
-      throw new ActionError('Unable to edit this message.')
+    if (!updated) {
+      throw new ActionError(
+        "Couldn't update this entry. Refresh the page and try again."
+      )
     }
 
-    updateTag('guestbook')
-
-    return { success: true }
+    updateTag(GUESTBOOK_CACHE_TAG)
   })
 
 export const removeGuestbookEntry = userActionClient
   .inputSchema(GuestbookDeleteSchema)
   .action(async ({ parsedInput, ctx }) => {
     const { user } = ctx
-    const isAdmin = user.role === 'admin'
-    const removed = await deleteGuestbookEntry(
-      parsedInput.entryId,
-      user.id,
-      isAdmin
-    )
+    const removed = await deleteGuestbookEntry({
+      entryId: parsedInput.entryId,
+      isAdmin: user.role === 'admin',
+      userId: user.id,
+    })
 
     if (!removed) {
-      throw new ActionError('Unable to delete this message.')
+      throw new ActionError(
+        "Couldn't delete this entry. Refresh the page and try again."
+      )
     }
 
     if (removed.signature) {
@@ -179,9 +148,7 @@ export const removeGuestbookEntry = userActionClient
       }
     }
 
-    updateTag('guestbook')
-
-    return { success: true }
+    updateTag(GUESTBOOK_CACHE_TAG)
   })
 
 export const banGuestbookUser = adminActionClient
@@ -193,17 +160,12 @@ export const banGuestbookUser = adminActionClient
       throw new ActionError('You cannot ban your own account.')
     }
 
-    const [targetUser] = await db
-      .select({
-        banned: users.banned,
-        role: users.role,
-      })
-      .from(users)
-      .where(eq(users.id, parsedInput.userId))
-      .limit(1)
+    const targetUser = await getGuestbookUserStatus(parsedInput.userId)
 
     if (!targetUser) {
-      throw new ActionError('User not found.')
+      throw new ActionError(
+        "That account doesn't exist anymore. Refresh the page."
+      )
     }
 
     if (targetUser.role === 'admin') {
@@ -235,7 +197,5 @@ export const banGuestbookUser = adminActionClient
       })
     }
 
-    updateTag('guestbook')
-
-    return { success: true }
+    updateTag(GUESTBOOK_CACHE_TAG)
   })

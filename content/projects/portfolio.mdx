@@ -1,0 +1,37 @@
+---
+title: Portfolio
+description: My personal site with a blog, projects, guestbook, and AI chat.
+date: 2026-01-12
+order: 11
+website: https://www.imanirudh.com
+status: Live
+platform: Web
+github: https://github.com/techwithanirudh/portfolio
+image: /images/projects/portfolio/cover.png
+tags: ['Next.js', 'Fumadocs', 'Drizzle', 'MDX', 'TypeScript']
+---
+
+This is my personal site, with a blog, my projects, a guestbook and an assistant named Simba. It's live, and this page describes what's on the main branch.
+
+## What it does
+
+The blog and project pages are written in MDX. Search goes down to the matching line, and the guestbook takes a message and a drawn signature. Simba is named after my dog. He can search the site, open a page for you or show the contact form already filled in. The About page shows my recent public GitHub activity.
+
+<Screens>
+  <Screen frame='wide' height={825} src='/images/projects/portfolio/home-hero.webp' width={1600} alt='The home page hero in dark mode, with the name Anirudh Sriram, a short intro, a Browse projects button and a grain gradient on the right' caption='The home page.' />
+  <Screen frame='wide' height={1125} src='/images/projects/portfolio/projects-list.webp' width={1800} alt='The Projects page in light mode with a search field and cards for Depensa and the Mastra Slack Agent Template' caption='The project list is built from the MDX files.' />
+</Screens>
+
+<Screens>
+  <Screen fit='contain' height={1023} src='/images/projects/portfolio/simba-panel.webp' width={743} alt='The Ask Simba panel open over the home page, with Simba the dog and a greeting saying he can answer questions about Anirudh, his work or the site' caption='Simba opens as a panel on any page.' />
+  <Screen frame='wide' height={824} src='/images/projects/portfolio/command-menu.webp' width={1036} alt='The search menu with the query mastra, showing the Mastra Slack Agent Template project and a matching line from its page' caption='Search goes down to the matching line.' />
+</Screens>
+
+## How it works
+
+[Fumadocs](https://fumadocs.dev/) loads and searches the MDX files. [Drizzle](https://orm.drizzle.team/) and [Better Auth](https://www.better-auth.com/) handle the guestbook and comments, and a model checks each entry before it's saved. The same content is served to AI tools through `/llms.txt`.
+
+<Screens>
+  <Screen frame='wide' height={942} src='/images/projects/portfolio/mermaid-diagram.webp' width={1130} alt='A sequence diagram from the Gorkie sandboxes blog post with Gorkie, Subagent, Sandbox and Slack columns' caption='A diagram from a blog post.' />
+  <Screen frame='wide' height={935} src='/images/projects/portfolio/github-activity.webp' width={1800} alt='The Activity section of the About page with a year of GitHub contributions in shades of blue and a list of recent pushes and branches' caption='The About page activity.' />
+</Screens>

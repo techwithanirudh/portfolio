@@ -15,13 +15,13 @@ export const Hero = ({
       <a
         aria-label='RSS feed'
         className={buttonVariants({
-          className: 'text-muted-foreground hover:text-foreground',
+          className:
+            'relative text-muted-foreground after:absolute after:-inset-0.5 hover:text-foreground',
           size: 'icon',
           variant: 'ghost',
         })}
         href='/blog/rss.xml'
         rel='noopener'
-        // The feed is XML, not a page, so it opens on its own
         target='_blank'
       >
         <Icons.rss className='size-5' />

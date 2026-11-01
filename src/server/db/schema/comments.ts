@@ -3,14 +3,12 @@ import {
   index,
   integer,
   json,
-  pgTableCreator,
   primaryKey,
   serial,
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core'
-
-const createTable = pgTableCreator((name) => `portfolio_${name}`)
+import { createTable } from './table'
 
 export const roles = createTable('roles', {
   canDelete: boolean('canDelete').notNull(),
@@ -21,7 +19,7 @@ export const roles = createTable('roles', {
 export const comments = createTable('comments', {
   author: varchar('author', { length: 256 }).notNull(),
   content: json('content').notNull(),
-  id: serial('id').primaryKey().notNull(),
+  id: serial('id').primaryKey(),
   page: varchar('page', { length: 256 }).notNull(),
   thread: integer('thread'),
   timestamp: timestamp('timestamp', { withTimezone: true })

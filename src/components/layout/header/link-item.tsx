@@ -2,19 +2,11 @@
 
 import { usePathname } from 'fumadocs-core/framework'
 import Link from 'fumadocs-core/link'
+import type { LinkItemType } from 'fumadocs-ui/layouts/shared'
 import type { ComponentProps } from 'react'
-import { isActive } from '@/lib/is-active'
+import { isLinkItemActive } from '@/lib/is-active'
 
-interface WithHref {
-  /**
-   * When the item is marked as active
-   *
-   * @defaultValue 'url'
-   */
-  active?: 'url' | 'nested-url' | 'none'
-  external?: boolean
-  url: string
-}
+type WithHref = Extract<LinkItemType, { url: string }>
 
 export const LinkItem = ({
   ref,
@@ -22,10 +14,7 @@ export const LinkItem = ({
   ...props
 }: Omit<ComponentProps<'a'>, 'href'> & { item: WithHref }) => {
   const pathname = usePathname()
-  const activeType = item.active ?? 'url'
-  const active =
-    activeType !== 'none' &&
-    isActive(item.url, pathname, activeType === 'nested-url')
+  const active = isLinkItemActive(item, pathname)
 
   return (
     <Link
@@ -34,8 +23,6 @@ export const LinkItem = ({
       ref={ref}
       {...props}
       data-active={active}
-    >
-      {props.children}
-    </Link>
+    />
   )
 }

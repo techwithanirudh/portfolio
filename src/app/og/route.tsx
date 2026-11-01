@@ -1,7 +1,7 @@
 import { ImageResponse } from '@takumi-rs/image-response'
 import { ogCoverSize, ogImageSize, PageImage } from '@/app/og/_lib/template'
 import { clampOgParams } from '@/lib/metadata'
-import { getCoverDataUrl, getOgFonts } from '@/lib/og'
+import { getCoverDataUrl, getOgFonts, getPortraitDataUrl } from '@/lib/og'
 
 export const GET = async (
   request: Request
@@ -22,6 +22,9 @@ export const GET = async (
     <PageImage
       coverSrc={getCoverDataUrl(title, ogCoverSize)}
       description={description}
+      portraitSrc={
+        searchParams.has('portrait') ? await getPortraitDataUrl() : null
+      }
       title={title}
     />,
     {

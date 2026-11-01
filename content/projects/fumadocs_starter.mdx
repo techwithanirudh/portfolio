@@ -1,0 +1,34 @@
+---
+title: Fumadocs Starter
+description: A docs starter with AI chat, OpenAPI pages, and llms.txt built in.
+date: 2025-03-21
+order: 12
+website: https://fumadocsstarter.vercel.app
+github: https://github.com/techwithanirudh/fumadocs-starter
+status: Template
+platform: Web
+image: /images/projects/fumadocs_starter/cover.png
+tags: ['Next.js', 'Fumadocs', 'AI SDK', 'OpenAPI', 'TypeScript']
+---
+
+Fumadocs Starter is a ready-made docs site you can copy and fill with your own pages. It starts from Create Fumadocs and is MIT licensed.
+
+It's a template, and the live demo is up.
+
+## What it does
+
+An "Ask AI" panel answers questions from your own docs. API pages are generated from an OpenAPI file, and [Twoslash](https://twoslash.netlify.app/) type-checks the code samples. Every page also has a plain Markdown copy for AI tools, and the site serves `llms.txt`, an RSS changelog and generated social images.
+
+<Screens>
+  <Screen frame='wide' height={540} src='/images/projects/fumadocs_starter/page-actions.webp' width={960} alt='The Open menu on a docs page in light mode, with Open in GitHub, View as Markdown, and Open in Scira AI, ChatGPT, Claude and Cursor' caption='The Open menu hands a page to GitHub, a Markdown view or an AI chat app.' />
+  <Screen frame='wide' height={1060} src='/images/projects/fumadocs_starter/twoslash-hover.webp' width={1200} alt='A Twoslash hover over console in a code sample, showing its type and the Node.js docs, with an autocomplete list below' caption='Twoslash hovers and completions in a code block.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={1000} src='/images/projects/fumadocs_starter/api-reference.webp' width={1600} alt='An API reference page for a POST endpoint, with a request playground, a Send button and cURL, JavaScript, Go, Python, Java and C# samples' caption='An API reference page from the bundled OpenAPI example.' />
+  <Screen frame='wide' height={630} src='/images/projects/fumadocs_starter/og-image.webp' width={1200} alt='A dark gradient Open Graph card reading Starter Kit, HOME, OpenAPI, Generate and document your OpenAPI schema' caption='The generated Open Graph image for the OpenAPI page.' />
+</Screens>
+
+## How it works
+
+The Ask AI panel searches the [Fumadocs](https://www.fumadocs.dev/) index with the [AI SDK](https://ai-sdk.dev/) and links the pages it used. Add `.mdx` to a docs URL and you get that page as Markdown.

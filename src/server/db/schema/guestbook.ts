@@ -1,7 +1,6 @@
 import {
   index,
   integer,
-  pgTableCreator,
   primaryKey,
   serial,
   text,
@@ -9,15 +8,14 @@ import {
 } from 'drizzle-orm/pg-core'
 
 import { users } from './auth'
-
-const createTable = pgTableCreator((name) => `portfolio_${name}`)
+import { createTable } from './table'
 
 export const guestbookEntries = createTable('guestbook_entries', {
   createdAt: timestamp('created_at', { withTimezone: true })
     .defaultNow()
     .notNull(),
   editedAt: timestamp('edited_at', { withTimezone: true }),
-  id: serial('id').primaryKey().notNull(),
+  id: serial('id').primaryKey(),
   message: text('message').notNull(),
   name: text('name').notNull(),
   signature: text('signature'),

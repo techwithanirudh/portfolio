@@ -1,0 +1,27 @@
+---
+title: Classnotes Buddy
+description: A site for uploading and sharing class notes.
+date: 2023-01-18
+order: 15
+status: Live
+platform: Web
+website: https://notes.techwithanirudh.com/
+image: /images/projects/classnotes_buddy/cover.png
+tags: ['Turborepo', 'Supabase', 'Next.js', 'Drizzle']
+---
+Classnotes Buddy lets you upload class notes and share them with a link, so a student who misses a class can get the notes from a classmate. I built it twice. The 2022 version began as Web Dev Simplified's Google Drive clone tutorial, which I rewrote and extended. The 2024 rebuild, Notes Buddy, started from the trevorpfiz/create-t3-turbo-supabase template.
+
+Both are live. The 2022 version is at notes-buddy.vercel.app and the rebuild is at notes.techwithanirudh.com. Both repos are private.
+
+## What it does
+
+You sign in with email or Google, upload files and organize them in folders. Anyone signed in can browse, and only the uploader can rename or delete. In the 2022 version, new uploads wait for an admin to approve them.
+
+<Screens>
+  <Screen frame='wide' height={644} src='/images/projects/classnotes_buddy/classnotes-buddy-2022.webp' width={1600} alt='The 2022 Classnotes Buddy landing page with the heading Simplify the way you share notes, a Get started button and a How to video button' caption='The 2022 version.' />
+  <Screen frame='wide' height={860} src='/images/projects/classnotes_buddy/sign-in-dark.webp' width={960} alt='The Notes Buddy sign-in form in dark mode with Continue with Email and Continue with Google buttons' caption='The 2024 rebuild.' />
+</Screens>
+
+## How it works
+
+The 2022 version runs on [Firebase](https://firebase.google.com/) with [Algolia](https://www.algolia.com/) search, and the rebuild runs on [Supabase](https://supabase.com/) with [tRPC](https://trpc.io/). Uploads in the rebuild resume if your connection drops. The mobile app was never finished, and the landing page lists offline access and tags, which are not in the code yet.

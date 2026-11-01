@@ -1,4 +1,4 @@
-export const coverSwatches = [
+const coverSwatches = [
   'violet',
   'lavender',
   'azure',
@@ -9,7 +9,7 @@ export const coverSwatches = [
 
 export type CoverSwatch = (typeof coverSwatches)[number]
 
-export interface CoverBlob {
+interface CoverBlob {
   cx: number
   cy: number
   rotate: number

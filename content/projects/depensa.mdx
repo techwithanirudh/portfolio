@@ -1,0 +1,29 @@
+---
+title: Depensa
+description: The expense tracker that reads your orders for you.
+date: 2026-09-15
+order: 1
+website: https://depensa.techwithanirudh.com/
+status: Live
+platform: iOS and Android
+image: /images/projects/depensa/cover.png
+tags: ['Expo', 'React Native', 'Convex', 'Firecrawl', 'HeroUI Native']
+---
+Depensa is an expense tracker that reads your order history from the shops you buy from and puts it all in one list. There's no bank account or card to link. It's live, and it runs on Android and iPhone. On Android it's on [Google Play](https://play.google.com/store/apps/details?id=com.techwithanirudh.depensa). It's not on the [App Store](https://www.apple.com/app-store/), so on iPhone you use [SideStore](https://sidestore.io/) or [AltStore](https://altstore.io/).
+
+## What it does
+
+It supports 100 shops across ten regions, and you can add another by its web address. Each order becomes an expense in your currency. It also spots repeating charges, lets you set monthly limits, and will email you a CSV if you ask.
+
+<Screens>
+  <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Adding a source.' />
+  <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Spending, with upcoming charges.' />
+</Screens>
+
+## How it works
+
+You sign in on the shop's own page inside the app, so Depensa never sees your password. The first time through a shop, an AI model writes a small reader for its orders, and every sync after that replays it on a schedule. Sync jobs are queued in [Convex](https://www.convex.dev/). If a site has no usable orders, the app says it can't read it.
+
+<Screens>
+  <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights.' />
+</Screens>

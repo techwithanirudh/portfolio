@@ -1,0 +1,22 @@
+---
+title: Daily Diary
+description: A journal app for writing daily entries.
+date: 2022-07-30
+order: 17
+image: /images/projects/daily_diary/cover.jpg
+tags: ['ReactJS', 'Bootstrap']
+status: Offline
+platform: Web
+---
+
+Daily Diary is a journal app. Each entry is a dated page styled like a book, with prompts such as what you are thankful for or what you learned today.
+
+It lived at diary.techwithanirudh.com and is offline now. The Internet Archive kept only the login page, so that's the one screen here.
+
+## How it works
+
+You sign in with [FirebaseUI](https://github.com/firebase/firebaseui-web) on [Firebase](https://firebase.google.com/) Authentication, using Google, Facebook, GitHub, email or phone. A helper button opens a five-step intro to the app, and a microphone button reads each step aloud with the browser's speech synthesis.
+
+<Screens>
+  <Screen frame='wide' height={1000} src='/images/projects/daily_diary/login-helper.webp' width={1600} alt='The DailyDiary login page with a Welcome to DailyDiary card, sign-in buttons for Google, Facebook, GitHub, email and phone, and a helper bubble reading You can write your daily diary in the app and share it with your friends' caption='The login page, from an archived copy.' />
+</Screens>

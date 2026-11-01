@@ -1,0 +1,34 @@
+---
+title: Transcript Seeker
+description: An app for recording meetings, reading transcripts, and asking questions about them.
+date: 2025-05-02
+order: 7
+website: https://app.transcriptseeker.com
+github: https://github.com/Meeting-BaaS/transcript-seeker
+status: Open source
+platform: Web
+image: /images/projects/transcript_seeker/cover.png
+tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
+---
+
+Transcript Seeker records a meeting with a bot or takes an uploaded file, then gives you a transcript you can search and ask questions about. Lazare Rossillon at Meeting Baas started it in July 2024 and built the viewer, search and chat. I did most of the work from October 2 to November 5, 2024.
+
+It's open source under the MIT license and lives in the Meeting BaaS org. The last change was in May 2025, and the hosted app wasn't loading when I checked on October 24, 2026.
+
+## What it does
+
+[Meeting Baas](https://www.meetingbaas.com/) sends bots into calls, and [Gladia](https://www.gladia.io/) or [AssemblyAI](https://www.assemblyai.com/) transcribe uploads. You bring your own keys, and OpenAI answers your questions. Click a word in the transcript and it jumps to that moment.
+
+<Screens>
+  <Screen frame='wide' height={1170} src='/images/projects/transcript_seeker/home.webp' width={1000} alt='The Transcript Seeker home screen with three numbered steps, Settings, Record Meeting or Upload File, and Recordings or Upcoming Meetings, under a notice that no API key is set' caption='The home screen. Nothing works until you add a key.' />
+  <Screen frame='wide' height={900} src='/images/projects/transcript_seeker/settings.webp' width={1600} alt='The settings page with empty API key fields for Meeting Baas, OpenAI, Gladia and AssemblyAI' caption='Settings keeps the keys in the browser.' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={888} src='/images/projects/transcript_seeker/record-meeting.webp' width={1600} alt='The Record Meeting form with fields for the meeting URL, the bot name, its image and the message it posts when it joins' caption='Record Meeting sends a bot into a call.' />
+  <Screen frame='wide' height={1020} src='/images/projects/transcript_seeker/upload.webp' width={1150} alt='The Upload File page with a sidebar to pick Gladia or AssemblyAI, a language, and extras such as speaker diarization and summarization' caption='Upload File, with provider, language and extras.' />
+</Screens>
+
+## How it works
+
+Keys, meetings, notes and chats are saved in a database inside your browser, so the basic app needs no server. I swapped Lazare's IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top. The repo is a [Turborepo](https://turborepo.dev/) that also holds a [Nitro](https://nitro.build/) proxy for the Meeting Baas API and a [Hono](https://hono.dev/) API that uses [Better Auth](https://www.better-auth.com/) for Google sign-in. The web app and proxy ran on [Firebase](https://firebase.google.com/).

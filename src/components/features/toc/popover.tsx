@@ -1,8 +1,11 @@
 'use client'
 
+// The popover trigger and ProgressCircle are adapted from fumadocs-ui
+// layouts/docs/page/slots/toc.js (MIT, (c) Fuma Nama)
 import type { TOCItemType } from 'fumadocs-core/toc'
 import { TOCScrollArea, useItems } from 'fumadocs-ui/components/toc'
 import { TOCItem, TOCItems } from 'fumadocs-ui/components/toc/default'
+import { clamp } from 'motion/react'
 import { useEffect, useRef, useState } from 'react'
 import { Icons } from '@/components/icons/icons'
 import {
@@ -48,6 +51,26 @@ function TOCPopoverContent({ className }: { className?: string }) {
     return () => window.removeEventListener('click', onClickOutside)
   }, [open])
 
+  // The open list covers the article like a popover, so Escape closes it, and
+  // focus goes back to the trigger rather than staying on a link being hidden
+  useEffect(() => {
+    const header = ref.current
+    if (!(open && header)) {
+      return
+    }
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') {
+        return
+      }
+      setOpen(false)
+      header.querySelector('button')?.focus()
+    }
+
+    header.addEventListener('keydown', onKeyDown)
+    return () => header.removeEventListener('keydown', onKeyDown)
+  }, [open])
+
   return (
     <Collapsible
       className={cn(
@@ -60,7 +83,6 @@ function TOCPopoverContent({ className }: { className?: string }) {
     >
       <header
         className={cn(
-          // Always frosted, since the post scrolls right under it while collapsed
           'border-b bg-background/90 backdrop-blur-md transition-shadow',
           open && 'shadow-lg'
         )}
@@ -103,7 +125,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
           />
         </CollapsibleTrigger>
 
-        <CollapsibleContent>
+        <CollapsibleContent className='h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out-strong data-ending-style:h-0 data-starting-style:h-0'>
           <div className='flex max-h-[50vh] flex-col px-4 md:px-6'>
             <TOCScrollArea>
               <TOCItems>
@@ -134,17 +156,15 @@ function ProgressCircle({
   const strokeWidth = 1.5
   const radius = size / 2 - strokeWidth
   const circumference = 2 * Math.PI * radius
-  const progress = Math.min(1, Math.max(0, value)) * circumference
+  const clamped = clamp(0, 1, value)
+  const progress = clamped * circumference
 
+  // Hidden: a progressbar's value ("0.1666…") would join the trigger's name
   return (
     <svg
-      aria-label='Table of contents progress'
-      aria-valuemax={1}
-      aria-valuemin={0}
-      aria-valuenow={Math.min(1, Math.max(0, value))}
+      aria-hidden
       className={className}
       height={size}
-      role='progressbar'
       viewBox={`0 0 ${size} ${size}`}
       width={size}
     >

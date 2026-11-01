@@ -1,18 +1,25 @@
 import { Children, type ReactNode } from 'react'
+import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
+import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
-import { Section } from './index'
 
-interface HeroProps {
+type HeroProps = {
   action?: ReactNode
-  caption?: string | ReactNode | null
+  caption?: ReactNode
   children?: ReactNode
   className?: string
-  description?: string | ReactNode | null
+  description?: ReactNode
   image?: ReactNode
   sectionClassName?: string
-  title: string | ReactNode
-}
+} & (
+  | { heading?: never; title: ReactNode }
+  /** Replaces the h1, styled with heroTitleClassName (the about hero's bonk chip) */
+  | { heading: ReactNode; title?: never }
+)
+
+export const heroTitleClassName =
+  'typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight'
 
 export const TitleDot = () => <span className='text-primary'>.</span>
 
@@ -20,6 +27,7 @@ export const HeroSection = ({
   action,
   image,
   caption,
+  heading,
   title,
   description,
   children,
@@ -49,10 +57,12 @@ export const HeroSection = ({
           )}
           delay={0.1}
         >
-          <h1 className='typography-hero text-balance font-normal text-3xl leading-tight tracking-tighter sm:text-4xl sm:leading-tight md:text-5xl md:leading-tight'>
-            {title}
-            {typeof title === 'string' && <TitleDot />}
-          </h1>
+          {heading ?? (
+            <h1 className={heroTitleClassName}>
+              {title}
+              {typeof title === 'string' && <TitleDot />}
+            </h1>
+          )}
           {action}
         </ViewAnimation>
         {description && (
@@ -64,7 +74,7 @@ export const HeroSection = ({
         )}
       </div>
       {Children.map(children, (child, index) => (
-        <ViewAnimation delay={0.1 + index * 0.05}>{child}</ViewAnimation>
+        <ViewAnimation delay={staggerDelay(index, 0.1)}>{child}</ViewAnimation>
       ))}
     </div>
   </Section>

@@ -1,8 +1,13 @@
-import type { TOCItemType } from 'fumadocs-core/toc'
-import { type PageInfo, pages } from '@/constants/pages'
-import { getSortedByDatePosts, getSortedWork, getTags } from '@/lib/source'
+import { type PageInfo, pages, sectionIds } from '@/constants/pages'
+import {
+  type BlogPage,
+  getSortedByDatePosts,
+  getSortedProjects,
+  getTags,
+  type ProjectPage,
+} from '@/lib/source'
 
-export interface SiteSection {
+interface SiteSection {
   id: string
   title: string
 }
@@ -15,12 +20,14 @@ export interface SitePage {
 }
 
 const sectionsByPath: Record<string, SiteSection[]> = {
-  '/': [{ id: 'experience', title: 'Experience preview' }],
-  '/about': [
-    { id: 'story', title: 'Story' },
-    { id: 'experience', title: 'Experience' },
-    { id: 'stack', title: 'Stack' },
-    { id: 'activity', title: 'Activity' },
+  [pages.home.path]: [
+    { id: sectionIds.experience, title: 'Experience preview' },
+  ],
+  [pages.about.path]: [
+    { id: sectionIds.story, title: 'Story' },
+    { id: sectionIds.experience, title: 'Experience' },
+    { id: sectionIds.stack, title: 'Stack' },
+    { id: sectionIds.activity, title: 'Activity' },
   ],
 }
 
@@ -44,28 +51,22 @@ export const staticPages: SitePage[] = pageOrder.map((page) => ({
   title: page.title,
 }))
 
-const LEADING_HASH = /^#/
+export const LEADING_HASH = /^#/
 
-const tocSections = (toc: TOCItemType[]): SiteSection[] =>
-  toc.map((item) => {
+const toSitePage = (page: BlogPage | ProjectPage): SitePage => ({
+  description: page.data.description ?? '',
+  path: page.url,
+  sections: page.data.toc.map((item) => {
     const id = item.url.replace(LEADING_HASH, '')
     return { id, title: typeof item.title === 'string' ? item.title : id }
-  })
+  }),
+  title: page.data.title,
+})
 
 export const getSitePages = (): SitePage[] => [
   ...staticPages,
-  ...getSortedWork().map((page) => ({
-    description: page.data.description ?? '',
-    path: page.url,
-    sections: tocSections(page.data.toc),
-    title: page.data.title ?? 'Untitled',
-  })),
-  ...getSortedByDatePosts().map((page) => ({
-    description: page.data.description ?? '',
-    path: page.url,
-    sections: tocSections(page.data.toc),
-    title: page.data.title ?? 'Untitled',
-  })),
+  ...getSortedProjects().map(toSitePage),
+  ...getSortedByDatePosts().map(toSitePage),
   ...getTags().map((tag) => ({
     description: `The blog filtered to posts tagged ${tag}, grouped by year.`,
     path: `/blog/tags/${tag}`,

@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
-export type SourcesProps = ComponentProps<typeof Collapsible>
+type SourcesProps = ComponentProps<typeof Collapsible>
 
 export const Sources = ({ className, ...props }: SourcesProps) => (
   <Collapsible
@@ -18,7 +18,7 @@ export const Sources = ({ className, ...props }: SourcesProps) => (
   />
 )
 
-export type SourcesTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
+type SourcesTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
   count: number
 }
 
@@ -49,7 +49,7 @@ export const SourcesTrigger = ({
   </CollapsibleTrigger>
 )
 
-export type SourcesContentProps = ComponentProps<typeof CollapsibleContent>
+type SourcesContentProps = ComponentProps<typeof CollapsibleContent>
 
 export const SourcesContent = ({
   className,
@@ -57,14 +57,14 @@ export const SourcesContent = ({
 }: SourcesContentProps) => (
   <CollapsibleContent
     className={cn(
-      'h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none',
+      'h-(--collapsible-panel-height) overflow-hidden transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0',
       className
     )}
     {...props}
   />
 )
 
-export type SourceProps = ComponentProps<'a'>
+type SourceProps = ComponentProps<'a'>
 
 export const Source = ({
   href,

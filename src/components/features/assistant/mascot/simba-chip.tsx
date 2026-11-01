@@ -1,11 +1,6 @@
 import { cn } from '@/lib/utils'
-import { type RigView, SimbaRig } from './rig'
+import { SimbaRig } from './rig'
 
-// Just the seated rig's face, in the drawing's own coordinates
-const HEAD: RigView = { height: 88, width: 88, x: 25, y: 60 }
-
-// Simba's face as an inline chip, sized in em like the portrait chip so it
-// sits in a line of text
 export function SimbaChip({ className }: { className?: string }) {
   return (
     <span
@@ -20,7 +15,8 @@ export function SimbaChip({ className }: { className?: string }) {
         pose='rest'
         size='100%'
         still
-        view={HEAD}
+        // Just the head
+        view={{ height: 108, width: 108, x: 15.5, y: 42 }}
       />
     </span>
   )

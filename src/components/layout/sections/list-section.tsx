@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
+import { Section } from '@/components/layout/sections'
 import { SectionHeader } from './header'
-import { Section } from './index'
 import { SectionMoreLink } from './more-link'
 
 interface ListSectionProps {
@@ -11,8 +11,6 @@ interface ListSectionProps {
   title: ReactNode
 }
 
-// A left aligned section header over a full width list, with an optional
-// "view all" link closing it off
 export const ListSection = ({
   children,
   description,

@@ -1,32 +1,15 @@
-import {
-  Body,
-  Container,
-  Font,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Img,
-  Link,
-  Preview,
-  Section,
-  Tailwind,
-  Text,
-} from '@react-email/components'
-import { baseUrl } from '@/constants'
-import { title } from '@/constants/site'
+import { Heading, Img, Link, Section, Text } from '@react-email/components'
+import { title as siteTitle } from '@/constants/site'
+import type { BlogPage } from '@/lib/source'
+import { url as siteUrl } from '@/lib/url'
+import { ArrowButton, Block, EmailShell } from './components'
+import { colors, contentWidth, fonts, radius, styles } from './theme'
 
 interface NewsletterWelcomeEmailProps {
   firstName: string
-  posts: {
-    title: string
-    description?: string
-    date: Date
-    tags?: string[]
-    image?: string
-    author: string
+  posts: (Pick<BlogPage['data'], 'title' | 'description' | 'image'> & {
     url: string
-  }[]
+  })[]
 }
 
 function PostCard({
@@ -34,29 +17,57 @@ function PostCard({
   description,
   image,
   url,
-}: NewsletterWelcomeEmailProps['posts'][0]) {
+}: NewsletterWelcomeEmailProps['posts'][number]) {
   return (
-    <Section className='my-[16px]'>
+    <Block>
       <Link href={url}>
         <Img
-          alt='Post image'
-          className='w-full rounded-[12px] object-cover'
-          height='320'
-          src={image ?? `${baseUrl}/images/placeholder.png`}
+          alt={title}
+          className='em-card'
+          src={image ?? siteUrl('/images/placeholder.png')}
+          style={{
+            border: `1px solid ${colors.border}`,
+            borderRadius: radius.card,
+            height: 'auto',
+            width: '100%',
+          }}
+          width={contentWidth}
         />
       </Link>
-      <Section className='mt-[24px]'>
+      <Text style={{ margin: '20px 0 4px' }}>
         <Link
-          className='m-0 mt-[8px] font-semibold text-[32px] text-zinc-900 leading-[36px]'
+          className='em-fg'
           href={url}
+          style={{
+            color: colors.foreground,
+            fontSize: '20px',
+            fontWeight: 500,
+            letterSpacing: '-0.4px',
+            lineHeight: '28px',
+            textDecoration: 'none',
+          }}
         >
           {title}
         </Link>
-        <Text className='text-[16px] text-zinc-500 leading-[24px]'>
-          {description || 'Open the post to read more about this topic.'}
+      </Text>
+      {description ? (
+        <Text
+          className='em-muted'
+          style={{ ...styles.muted, fontSize: '15px' }}
+        >
+          {description}
         </Text>
-      </Section>
-    </Section>
+      ) : null}
+      <Text style={{ margin: '12px 0 0' }}>
+        <Link
+          className='em-link'
+          href={url}
+          style={{ ...styles.link, fontSize: '14px', fontWeight: 500 }}
+        >
+          Read post
+        </Link>
+      </Text>
+    </Block>
   )
 }
 
@@ -64,81 +75,77 @@ export default function NewsletterWelcomeEmail({
   firstName,
   posts,
 }: NewsletterWelcomeEmailProps) {
+  const host = new URL(siteUrl('/')).host
+
   return (
-    <Html>
-      <Head>
-        <Font
-          fallbackFontFamily='Georgia'
-          fontFamily='Alex Brush'
-          fontStyle='normal'
-          fontWeight={400}
-          webFont={{
-            format: 'woff2',
-            url: 'https://fonts.gstatic.com/s/alexbrush/v22/SZc83FzrJKuqFbwMKk6EhUXz7RlNiCY.woff2',
+    <EmailShell
+      label='Newsletter'
+      preview="You're subscribed. Here's what I've written so far."
+    >
+      <Block>
+        <Heading className='em-fg' style={styles.heading}>
+          Welcome
+          <span className='em-link' style={{ color: colors.primary }}>
+            .
+          </span>
+        </Heading>
+        <Text className='em-fg' style={{ ...styles.text, marginTop: '20px' }}>
+          Hey {firstName},
+        </Text>
+        <Text className='em-fg' style={styles.text}>
+          Thanks for subscribing. Expect an email every few weeks, and now and
+          then something that only goes out to the newsletter.
+        </Text>
+        <Text
+          className='em-fg'
+          style={{ ...styles.text, marginBottom: '24px' }}
+        >
+          Here&apos;s what I&apos;ve written so far, newest first.
+        </Text>
+        <ArrowButton href={siteUrl('/blog')}>Read the blog</ArrowButton>
+      </Block>
+
+      {posts.length > 0 ? (
+        posts.map((post) => <PostCard key={post.url} {...post} />)
+      ) : (
+        <Block>
+          <Text className='em-muted' style={styles.muted}>
+            No posts yet. The first one is on its way.
+          </Text>
+        </Block>
+      )}
+
+      <Block>
+        <Text className='em-fg' style={{ ...styles.text, margin: 0 }}>
+          Thanks for reading,
+        </Text>
+        <Text
+          className='em-fg'
+          style={{
+            color: colors.foreground,
+            fontFamily: fonts.hand,
+            fontSize: '30px',
+            lineHeight: '36px',
+            margin: '4px 0 0',
           }}
-        />
-        <Font
-          fallbackFontFamily='Helvetica'
-          fontFamily='Bricolage Grotesque'
-          fontStyle='normal'
-          fontWeight={400}
-          webFont={{
-            format: 'woff2',
-            url: 'https://fonts.gstatic.com/s/bricolagegrotesque/v8/3y9K6as8bTXq_nANBjzKo3IeZx8z6up5BeSl9D4dj_x9PpZBMlGIInHWVyNJ.woff2',
-          }}
-        />
-      </Head>
-      <Preview>Thanks for joining my newsletter!</Preview>
-      <Tailwind>
-        <Body className='bg-white font-sans'>
-          <Container className='mx-auto w-full max-w-[600px] p-8'>
-            <Section>
-              <Text className='mx-0 mt-4 mb-8 p-0 text-center font-normal text-2xl'>
-                <span className='font-bold tracking-tighter'>{title}</span>
-              </Text>
-              <Heading className='my-4 font-medium text-4xl leading-tight'>
-                Welcome!
-              </Heading>
-              <Text className='text-lg leading-8'>Hey {firstName},</Text>
-              <Text className='text-lg leading-8'>
-                Thanks for subscribing to my newsletter! You can expect an email
-                every few weeks. I might also send newsletter-only content now
-                and then.
-              </Text>
-              <Text className='text-lg leading-8'>
-                Here&apos;s what I&apos;ve written so far, newest first:
-              </Text>
-            </Section>
+        >
+          {siteTitle}
+        </Text>
+      </Block>
 
-            <Hr className='my-4' />
-
-            <Section className='my-[16px]'>
-              {posts.length > 0 ? (
-                posts.map((post) => <PostCard key={post.url} {...post} />)
-              ) : (
-                <Text className='text-[16px] text-zinc-500 leading-[24px]'>
-                  No posts yet. The first one is on its way.
-                </Text>
-              )}
-            </Section>
-
-            <Hr className='my-4' />
-
-            <Section>
-              <Text className='text-lg text-zinc-900 leading-8'>
-                Thanks for reading!
-              </Text>
-              <Text
-                className='select-none text-4xl text-zinc-900 leading-8'
-                style={{ fontFamily: 'Alex Brush' }}
-              >
-                {title}
-              </Text>
-            </Section>
-          </Container>
-        </Body>
-      </Tailwind>
-    </Html>
+      <Section className='em-divided' style={styles.sectionDivided}>
+        <Text
+          className='em-muted'
+          style={{ ...styles.muted, fontSize: '13px' }}
+        >
+          You&apos;re getting this because you subscribed on{' '}
+          <Link className='em-link' href={siteUrl('/')} style={styles.link}>
+            {host}
+          </Link>
+          .
+        </Text>
+      </Section>
+    </EmailShell>
   )
 }
 
@@ -146,34 +153,24 @@ NewsletterWelcomeEmail.PreviewProps = {
   firstName: 'Jane',
   posts: [
     {
-      author: 'You',
-      date: new Date('2025-03-21'),
-      description:
-        'A look at Next.js Pages, with examples, dynamic routing, pre-rendering strategies like Static Generation and SSR, and tips for building fast, SEO-friendly web apps. Includes tricks from my latest project!',
-      image: `${baseUrl}/images/blog/pages.png`,
-      tags: ['Next.js', 'Pages', 'Routing'],
-      title: 'Next.js Pages',
-      url: `${baseUrl}/posts/pages`,
+      description: 'An introduction, and what I plan to write about here.',
+      image: siteUrl('/images/blog/first-post.png'),
+      title: 'Hello world',
+      url: siteUrl('/blog/hello-world'),
     },
     {
-      author: 'You',
-      date: new Date('2025-03-22'),
       description:
-        'Learn to use Markdown to format blogs, docs, and notes. This post has examples, tips, and practical use cases for writing content that is easier to read, share, and maintain.',
-      image: `${baseUrl}/images/blog/markdown-examples.png`,
-      tags: ['Markdown', 'Docs', 'Writing'],
-      title: 'Markdown Examples',
-      url: `${baseUrl}/posts/markdown-examples`,
+        'Teaching a Slack bot to run code safely, by way of Vercel Sandboxes, E2B, and finally Daytona.',
+      image: siteUrl('/images/blog/gorkie-sandboxes.jpg'),
+      title: 'How we taught a Slack bot to run code',
+      url: siteUrl('/blog/gorkie-sandboxes'),
     },
     {
-      author: 'You',
-      date: new Date('2025-03-23'),
       description:
-        'Learn MDX in Next.js to mix Markdown with React. This guide shows setup with @next/mdx, usage tips, and examples to embed JSX in posts. It works well for blogs, docs, and interactive tutorials.',
-      image: `${baseUrl}/images/blog/using-mdx.png`,
-      tags: ['MDX', 'Next.js', 'React'],
-      title: 'Using MDX',
-      url: `${baseUrl}/posts/using-mdx`,
+        'A custom UI-styled VS Code setup, with links to my real config.',
+      image: siteUrl('/images/blog/vscode-setup.jpg'),
+      title: 'my VSCode setup',
+      url: siteUrl('/blog/vscode-setup'),
     },
   ],
 } satisfies NewsletterWelcomeEmailProps

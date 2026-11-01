@@ -12,12 +12,30 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  useFormField,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
-import { NewsletterSchema } from '@/lib/validators'
+import { NewsletterSchema } from '@/lib/validators/newsletter'
+
+const subscribeFailedMessage =
+  "You're not subscribed yet. Check your connection and try again."
+
+const FieldErrorAlert = () => {
+  const { error, formMessageId } = useFormField()
+
+  if (!error?.message) {
+    return null
+  }
+
+  return (
+    <Alert id={formMessageId} variant='destructive-soft'>
+      <Icons.warning className='size-4' />
+      <AlertTitle className='mb-0 leading-normal'>{error.message}</AlertTitle>
+    </Alert>
+  )
+}
 
 export const NewsletterForm = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
@@ -26,13 +44,9 @@ export const NewsletterForm = () => {
     {
       actionProps: {
         onError: ({ error }) => {
-          toast.error(getActionErrorMessage(error, 'Failed to subscribe.'))
-        },
-        onSuccess: ({ data }) => {
-          toast.success(data?.message ?? "You're subscribed.")
+          toast.error(getActionErrorMessage(error, subscribeFailedMessage))
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           email: '',
@@ -43,48 +57,49 @@ export const NewsletterForm = () => {
 
   return (
     <Form {...form}>
-      <form className='flex-1 space-y-4' onSubmit={handleSubmitWithAction}>
-        <div className='flex h-full min-h-10 overflow-hidden rounded-md border bg-muted p-0'>
-          <div className='flex-1'>
-            <FormField
-              control={form.control}
-              name='email'
-              render={({ field }) => (
-                <FormItem className='group h-full'>
-                  <FormLabel className='sr-only'>Email address</FormLabel>
-                  <FormControl className='h-full group-has-[p]:pt-3'>
-                    <Input
-                      {...field}
-                      autoComplete='email'
-                      className='h-full rounded-md rounded-r-none border-none px-4 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
-                      disabled={action.status === 'executing'}
-                      placeholder='Email address'
-                      type='email'
-                    />
-                  </FormControl>
-                  <FormMessage className='ml-4 pb-2 text-xs' />
-                </FormItem>
-              )}
-            />
-          </div>
+      <form
+        className='flex-1 space-y-4'
+        noValidate
+        onSubmit={handleSubmitWithAction}
+      >
+        <FormField
+          control={form.control}
+          name='email'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className='sr-only'>Email address</FormLabel>
+              <div className='flex h-10 overflow-hidden rounded-md border bg-muted transition-[color,box-shadow] has-[[aria-invalid=true]:focus-visible]:border-destructive has-[[aria-invalid=true]]:border-destructive has-[input:focus-visible]:border-ring has-[[aria-invalid=true]:focus-visible]:ring-destructive/20 has-[input:focus-visible]:ring-3 has-[input:focus-visible]:ring-ring/50 dark:has-[[aria-invalid=true]:focus-visible]:border-destructive/50 dark:has-[[aria-invalid=true]]:border-destructive/50 dark:has-[[aria-invalid=true]:focus-visible]:ring-destructive/40'>
+                <FormControl>
+                  <Input
+                    {...field}
+                    autoComplete='email'
+                    className='h-full flex-1 rounded-none border-none px-4 shadow-none focus-visible:ring-0 aria-invalid:ring-0'
+                    disabled={action.isExecuting}
+                    placeholder='Email address'
+                    type='email'
+                  />
+                </FormControl>
+                <Button
+                  aria-label='Subscribe'
+                  className='size-auto w-15 rounded-none px-3'
+                  disabled={action.isExecuting}
+                  focusableWhenDisabled
+                  size='icon'
+                  type='submit'
+                >
+                  {action.isExecuting ? (
+                    <Icons.spinner className='size-4 animate-spin' />
+                  ) : (
+                    <Icons.send className='size-4 -translate-x-[3px] rotate-45 transition-transform group-hover/button:rotate-0' />
+                  )}
+                </Button>
+              </div>
+              <FieldErrorAlert />
+            </FormItem>
+          )}
+        />
 
-          <Button
-            aria-label='Subscribe'
-            className='size-auto w-15 rounded-md rounded-l-none px-3'
-            disabled={action.status === 'executing'}
-            size='icon'
-            type='submit'
-          >
-            {action.status === 'executing' ? (
-              <Icons.spinner className='size-4 animate-spin' />
-            ) : (
-              // Turned 45deg the plane's ink sits right of its box, so pull it back to look centered
-              <Icons.send className='size-4 -translate-x-[3px] rotate-45 transition-transform group-hover/button:rotate-0' />
-            )}
-          </Button>
-        </div>
-
-        {action.status === 'hasSucceeded' && (
+        {action.hasSucceeded && (
           <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
@@ -96,7 +111,7 @@ export const NewsletterForm = () => {
           <Alert variant='destructive-soft'>
             <Icons.warning className='size-4' />
             <AlertTitle className='mb-0 leading-normal'>
-              {action.result.serverError}
+              {getActionErrorMessage(action.result, subscribeFailedMessage)}
             </AlertTitle>
           </Alert>
         )}

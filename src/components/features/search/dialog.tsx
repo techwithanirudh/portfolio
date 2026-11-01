@@ -29,18 +29,10 @@ import { usePages } from '@/contexts/pages'
 import { click, collapse, keyPress, notification } from '@/lib/audio/minimal'
 import { toggleSound } from '@/lib/audio/preferences'
 import { signOut, useSession } from '@/lib/auth-client'
-import { prefersReducedMotion } from '@/lib/reduced-motion'
+import { scrollToTarget } from '@/lib/scroll-to-target'
 import type { CommandItem as SearchCommandItem } from '@/types/search'
 
-const NAV_SOUND_THROTTLE_MS = 60
-
-export default function SearchDialog({ open, onOpenChange }: SharedProps) {
-  const { locale } = useI18n()
-  const pathname = usePathname()
-  const { openSignIn } = useSignInModal()
-  const router = useRouter()
-  const lenis = useLenis()
-  const { setTheme, theme } = useTheme()
+function useSearchSounds(open: boolean) {
   const playOpen = useSound(notification)
   const playConfirm = useSound(click)
   const playCollapse = useSound(collapse)
@@ -54,6 +46,39 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
 
     playOpen()
   }, [open, playOpen])
+
+  const playNavigationSound = () => {
+    const now = performance.now()
+
+    if (now - lastNavSoundAtRef.current < 60) {
+      return
+    }
+
+    lastNavSoundAtRef.current = now
+    playNavigate()
+  }
+
+  return { playCollapse, playConfirm, playNavigationSound }
+}
+
+export default function SearchDialog({
+  open,
+  onOpenChange,
+  onMount,
+}: SharedProps & { onMount?: () => void }) {
+  const { locale } = useI18n()
+  const pathname = usePathname()
+  const { openSignIn } = useSignInModal()
+  const router = useRouter()
+  const lenis = useLenis()
+  const { setTheme, theme } = useTheme()
+
+  useEffect(() => {
+    onMount?.()
+  }, [onMount])
+
+  const { playCollapse, playConfirm, playNavigationSound } =
+    useSearchSounds(open)
 
   const { search, setSearch, query } = useDocsSearch({ locale, type: 'fetch' })
   const allPages = usePages()
@@ -73,8 +98,9 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
             {
               action: 'logout',
               icon: <Icons.logOut className='size-4' />,
+              keywords: ['log out', 'logout'],
               kind: 'account',
-              title: 'Log out',
+              title: 'Sign out',
             },
           ]
         : [
@@ -100,7 +126,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
   const afterGroups = isEmpty
     ? allGroups.filter((g) => g.position === 'after')
     : []
-  type CommandItemData = (typeof allGroups)[number]['items'][number]
 
   const tagGroups = useMemo(() => {
     if (isEmpty) {
@@ -117,20 +142,28 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     tagGroups.length === 0 &&
     groups.length === 0
 
+  // Typing keeps focus in the input, so the spinner, the result list and the
+  // empty message are announced through a status region instead
+  const optionCount =
+    groups.reduce((count, group) => count + group.items.length, 0) +
+    tagGroups.reduce(
+      (count, group) =>
+        count +
+        group.pages.reduce((sum, page) => sum + 1 + page.children.length, 0),
+      0
+    )
+  let searchStatus = ''
+  if (!isEmpty && query.isLoading) {
+    searchStatus = 'Searching…'
+  } else if (hasNoResults) {
+    searchStatus = 'No results'
+  } else if (!isEmpty) {
+    searchStatus = `${optionCount} ${optionCount === 1 ? 'result' : 'results'}`
+  }
+
   const close = () => {
     onOpenChange(false)
     setSearch('')
-  }
-
-  const playNavigationSound = () => {
-    const now = performance.now()
-
-    if (now - lastNavSoundAtRef.current < NAV_SOUND_THROTTLE_MS) {
-      return
-    }
-
-    lastNavSoundAtRef.current = now
-    playNavigate()
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -150,18 +183,12 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
   }
 
-  const scrollToHashTarget = (target: Element, immediate: boolean) => {
-    if (lenis) {
-      lenis.scrollTo(target as HTMLElement, { immediate })
-    } else {
-      target.scrollIntoView({ behavior: immediate ? 'auto' : 'smooth' })
-    }
-  }
-
   const navigateToUrl = (url: string) => {
     const hashIndex = url.indexOf('#')
     const hash = hashIndex === -1 ? null : url.slice(hashIndex)
-    const sameRouteTarget = hash ? document.querySelector(hash) : null
+    const sameRouteTarget = hash
+      ? document.querySelector<HTMLElement>(hash)
+      : null
 
     router.push(url)
 
@@ -170,7 +197,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (sameRouteTarget) {
-      scrollToHashTarget(sameRouteTarget, prefersReducedMotion())
+      scrollToTarget(lenis, sameRouteTarget)
     }
   }
 
@@ -186,7 +213,6 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     }
 
     if (action === 'signin') {
-      onOpenChange(false)
       openSignIn(pathname)
       return
     }
@@ -196,9 +222,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     router.refresh()
   }
 
-  const handleSelect = async (
-    item: (typeof groups)[number]['items'][number]
-  ) => {
+  const handleSelect = async (item: SearchCommandItem) => {
     if (item.kind === 'account') {
       await handleAccountAction(item.action)
       return
@@ -234,7 +258,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     navigateToUrl(url)
   }
 
-  const renderCommandItem = (item: CommandItemData) => (
+  const renderCommandItem = (item: SearchCommandItem) => (
     <CommandItem
       data-checked={
         item.kind === 'theme' && theme === item.theme ? true : undefined
@@ -249,9 +273,25 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
     </CommandItem>
   )
 
+  const renderGroup = (
+    { group, items }: (typeof allGroups)[number],
+    { separated }: { separated: boolean }
+  ) => (
+    <Fragment key={group}>
+      {separated && <CommandSeparator />}
+      <CommandGroup heading={group}>
+        {items.map(renderCommandItem)}
+      </CommandGroup>
+    </Fragment>
+  )
+
   return (
     <CommandDialog
-      commandProps={{ onKeyDown: handleKeyDown, shouldFilter: false }}
+      commandProps={{
+        label: 'Search the site',
+        onKeyDown: handleKeyDown,
+        shouldFilter: false,
+      }}
       description='Search or jump to a page'
       onOpenChange={(next) => {
         if (!next) {
@@ -266,7 +306,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
         data-sound-press='off'
         enterKeyHint='search'
         onValueChange={setSearch}
-        placeholder='Type a command or search...'
+        placeholder='Type a command or search…'
         value={search}
       />
 
@@ -275,14 +315,7 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-[min(20rem,50dvh)] [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-[min(20rem,60dvh)]'
           data-lenis-prevent
         >
-          {groups.map(({ group, items }, i) => (
-            <Fragment key={group}>
-              {i > 0 && <CommandSeparator />}
-              <CommandGroup heading={group}>
-                {items.map(renderCommandItem)}
-              </CommandGroup>
-            </Fragment>
-          ))}
+          {groups.map((group, i) => renderGroup(group, { separated: i > 0 }))}
 
           {!isEmpty && query.isLoading && (
             <div className='flex items-center justify-center py-6'>
@@ -291,27 +324,21 @@ export default function SearchDialog({ open, onOpenChange }: SharedProps) {
           )}
 
           {hasNoResults && (
-            <CommandEmpty>No results for &ldquo;{search}&rdquo;</CommandEmpty>
+            // Text alone in a listbox is invalid (cmdk keeps this inside it);
+            // the status region below reads "No results" instead
+            <CommandEmpty aria-hidden>
+              No results for &ldquo;{search}&rdquo;
+            </CommandEmpty>
           )}
 
-          {isEmpty ? (
-            <SearchResultsList groups={tagGroups} onSelect={go} />
-          ) : null}
+          <SearchResultsList groups={tagGroups} onSelect={go} />
 
-          {afterGroups.map(({ group, items }) => (
-            <Fragment key={group}>
-              <CommandSeparator />
-              <CommandGroup heading={group}>
-                {items.map(renderCommandItem)}
-              </CommandGroup>
-            </Fragment>
-          ))}
-
-          {isEmpty ? null : (
-            <SearchResultsList groups={tagGroups} onSelect={go} />
-          )}
+          {afterGroups.map((group) => renderGroup(group, { separated: true }))}
         </CommandList>
       </div>
+      <p className='sr-only' role='status'>
+        {searchStatus}
+      </p>
 
       <CommandMenuFooter />
     </CommandDialog>

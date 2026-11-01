@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/accordion'
 import { ViewAnimation } from '@/components/view-animation'
 import { faq } from '@/constants/portfolio/faq'
+import { staggerDelay } from '@/lib/stagger'
 import { AskSimbaLink } from './ask-simba-link'
 
 export const FAQ = () => (
@@ -30,20 +31,18 @@ export const FAQ = () => (
     </SplitSectionSidebar>
 
     <SplitSectionContent>
-      <Accordion className='w-full [&>[data-slot=accordion-item]:last-child]:border-b-0 [&>[data-slot=accordion-item]]:border-border [&>[data-slot=accordion-item]]:border-b [&>[data-slot=accordion-item]]:border-dashed'>
+      <Accordion className='w-full'>
         {faq.map((item, index) => (
           <ViewAnimation
             className='border-border border-b border-dashed last:border-b-0'
-            delay={0.05 * index}
+            delay={staggerDelay(index)}
             key={item.question}
           >
             <AccordionItem value={`index-${index}`}>
               <AccordionTrigger className='items-center rounded-none px-4 hover:bg-card hover:no-underline focus-visible:border-transparent focus-visible:bg-card focus-visible:ring-1 focus-visible:ring-primary/60 focus-visible:ring-inset data-open:bg-card'>
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className='!h-auto p-4'>
-                {item.answer}
-              </AccordionContent>
+              <AccordionContent className='p-4'>{item.answer}</AccordionContent>
             </AccordionItem>
           </ViewAnimation>
         ))}
