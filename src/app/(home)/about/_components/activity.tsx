@@ -1,7 +1,7 @@
 import { Icons } from '@/components/icons/icons'
 import { Section } from '@/components/layout/sections'
 import { SectionHeader } from '@/components/layout/sections/header'
-import { buttonVariants } from '@/components/ui/button-variants'
+import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { githubUrl } from '@/constants/config'
 import { sectionIds } from '@/constants/pages'

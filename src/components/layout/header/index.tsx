@@ -19,7 +19,7 @@ import {
 import { Icons } from '@/components/icons/icons'
 import { TitleDot } from '@/components/layout/sections/hero'
 import { splitLinkItems } from '@/components/layout/split-link-items'
-import { buttonVariants } from '@/components/ui/button-variants'
+import { buttonVariants } from '@/components/ui/button'
 import {
   Collapsible,
   CollapsibleContent,

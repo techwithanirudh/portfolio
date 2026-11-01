@@ -8,7 +8,7 @@ import {
   SplitSectionSidebar,
 } from '@/components/layout/sections/split'
 import { Prose } from '@/components/prose'
-import { buttonVariants } from '@/components/ui/button-variants'
+import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
 import { aboutIntro } from '@/constants/portfolio/intro'
