@@ -1,6 +1,6 @@
 ---
 title: Transcript Seeker
-description: An app for recording meetings, reading transcripts, and asking questions about them.
+description: One place to manage and look through all your Meeting BaaS meetings.
 date: 2025-05-02
 order: 7
 website: https://app.transcriptseeker.com
@@ -8,10 +8,10 @@ github: https://github.com/Meeting-BaaS/transcript-seeker
 status: Open source
 platform: Web
 image: /images/projects/transcript_seeker/cover.png
-tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
+tags: ['React', 'Vite', 'PGLite', 'Drizzle', 'shadcn/ui', 'MeetingBaaS']
 ---
 
-Transcript Seeker records a meeting with a bot or takes a file you upload, then gives you a transcript you can search and ask questions about. It started at Meeting BaaS in July 2024 with the viewer, search and chat, and I did most of the work on it in October and November 2024. It's open source under MIT and lives in the Meeting BaaS org.
+Transcript Seeker is a project I did for Meeting BaaS, and I think it was my first one there. The idea was simple: one app where you can manage and look through all your Meeting BaaS meetings, read the transcripts and ask questions about them.
 
 ## What it does
 
@@ -29,4 +29,4 @@ Transcript Seeker records a meeting with a bot or takes a file you upload, then 
 
 ## How it works
 
-Keys, meetings, notes and chats are saved in a database right in your browser, so the basic app doesn't need a server. I swapped the original IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top. The repo is a [Turborepo](https://turborepo.dev/) that also holds a [Nitro](https://nitro.build/) proxy for the Meeting Baas API and a [Hono](https://hono.dev/) API that uses [Better Auth](https://www.better-auth.com/) for Google sign-in. The web app and proxy ran on [Firebase](https://firebase.google.com/).
+The fun part is the architecture. It's a fully client-side SPA with no backend of its own. Everything lives in [PGLite](https://pglite.dev/), which is Postgres running right in your browser, with [Drizzle](https://orm.drizzle.team/) on top. Your keys, meetings, notes and chats all stay on your machine. The only extra piece is a tiny [Nitro](https://nitro.build/) proxy that passes requests through to the Meeting BaaS API. The UI is built with [shadcn/ui](https://ui.shadcn.com/).
