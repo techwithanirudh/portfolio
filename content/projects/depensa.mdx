@@ -13,24 +13,18 @@ Depensa is an expense tracker that reads your order history from the shops you b
 
 ## How it started
 
-The first plan looked pretty different from what shipped. You'd sign in to a shop inside a [Firecrawl](https://www.firecrawl.dev/) cloud browser, an AI would learn how to read that shop, and bank exports would get merged in too. One idea survived every rewrite though: the AI only *learns* a shop, it doesn't do the daily syncing. A model browsing on every sync costs money every time and answers a bit differently each run, so the daily path had to be plain code.
+The first plan looked pretty different from what shipped, but one idea survived every rewrite: AI only *learns* how to read a shop, it doesn't do the daily syncing. A model browsing on every sync costs money every time and answers a bit differently each run, so the everyday part had to be plain code.
 
 ## Building it
 
-The first big change was sign-in. Now the shop's own login page opens in a <Term>WebView</Term> on your phone, you type your password and <Term>MFA</Term> yourself, and the phone hands only the session (its cookies and `localStorage`) to the backend, which stores it encrypted. Depensa never sees the password.
+Sign-in happens on your phone. The shop's own login page opens inside the app, you log in yourself, and only the session goes to the backend, where it's stored encrypted. Depensa never sees your password.
 
 <Screens>
   <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Picking a shop. The region picker covers ten regions, and any other shop can be added by its web address.' />
   <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Every order lands in one total, in your currency, with repeating charges listed as upcoming.' />
 </Screens>
 
-The second was the backend. In September I moved everything agentic out of [Convex](https://www.convex.dev/) into a separate [Mastra](https://mastra.ai/) worker that runs on my own server (I'd already played with Mastra in my [Slack agent template](/projects/mastra_slack_agent_template)). Convex stays the database and the scheduler. The worker holds a <Term>websocket</Term> to it, claims queued runs and writes results back through mutations, so it never needs an open port.
-
-The fun part is the reader. The first time you add a shop, a learner agent opens a cloud browser with your session and pokes around until it finds your orders. It tries three ways, in order, and whatever works gets saved as data, not code: versioned JSON with one [JSONata](https://jsonata.org/) expression per field. A plain runner replays that from then on, with no model in the loop.
-
-<ReaderLadder />
-
-Every order is converted to your currency when it's saved, so it all lands in one total.
+The first time you add a shop, an agent figures out where your orders live and saves what it learned. After that, syncing just replays it, with no model in the loop. Every order is converted to your currency when it's saved, so it all lands in one total.
 
 <Screens>
   <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights sums up the period, with averages and your biggest order.' />
@@ -40,4 +34,4 @@ Every order is converted to your currency when it's saved, so it all lands in on
 
 It works with 100 shops across ten regions. On top of the list you can move orders between categories, set a monthly limit for a category or a shop, and ask for an email with all your expenses as a CSV. Version 1.1.0 added home screen widgets for this month, your budget and what's coming up.
 
-Next on my list: an Expo SDK upgrade, moving the widgets onto `expo-widgets` and adding Live Activities, and learning readers for the big shops in every country ahead of time, so the first person to add one doesn't have to wait.
+Next on my list: an Expo SDK upgrade, moving the widgets onto `expo-widgets` and adding Live Activities, and having the big shops in every country ready ahead of time, so the first person to add one doesn't have to wait.

@@ -45,13 +45,6 @@ export const glossary = {
     kind: 'noun',
     term: 'MCP',
   },
-  mfa: {
-    definition:
-      'Proving it really is you with a second thing, like a code from your phone, on top of your password.',
-    expansion: 'multi-factor authentication',
-    kind: 'noun',
-    term: 'MFA',
-  },
   monorepo: {
     definition:
       'One repository that holds several related projects, like an app and its API, so they can share code and change together.',
@@ -77,18 +70,6 @@ export const glossary = {
     expansion: 'retrieval-augmented generation',
     kind: 'noun',
     term: 'RAG',
-  },
-  websocket: {
-    definition:
-      'A connection between two programs that stays open, so either side can send a message whenever it likes instead of asking over and over.',
-    kind: 'noun',
-    term: 'WebSocket',
-  },
-  webview: {
-    definition:
-      'A web page shown inside an app, so the app can load a real site without sending you off to a separate browser.',
-    kind: 'noun',
-    term: 'WebView',
   },
 } satisfies Record<string, GlossaryEntry>
 

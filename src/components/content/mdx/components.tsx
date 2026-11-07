@@ -18,7 +18,6 @@ import { GithubRepo } from './github-repo'
 import { Heading } from './heading'
 import { LinkPreviewAnchor } from './link-preview'
 import { Mermaid } from './mermaid'
-import { ReaderLadder } from './reader-ladder'
 import { Screen, Screens } from './screens'
 import { Term } from './term'
 import { ZenixDemo } from './zenix-demo'
@@ -50,7 +49,6 @@ export const mdxComponents: MDXComponents = {
   // next/image props (a static import or a sized URL)
   img: (props) => <FramedImage {...(props as FramedImageProps)} />,
   Mermaid,
-  ReaderLadder,
   Screen,
   Screens,
   Step,
