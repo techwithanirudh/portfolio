@@ -30,4 +30,6 @@ Projects turn into a grid of rounded cards, and pages like New Resource get clea
 
 ## How it works
 
-It's about 2,300 lines of SCSS that target Coolify's page structure. Coolify updates still break some selectors, and I fix them in new releases. A small [Nitro](https://nitro.build/) API serves the CSS from the latest release.
+The style is about 2,300 lines of SCSS aimed straight at Coolify's page structure. That's also its weak spot: a Coolify update every now and then breaks a few selectors, and I patch them in the next release.
+
+Releases go up on GitHub, and a small [Nitro](https://nitro.build/) API sits in front of them. Your install link points at that API instead of a fixed file, so Stylus always pulls the latest release. Add a TweakCN theme ID to the link and the API fetches that theme, drops its colors into the style's CSS variables and loads its fonts, so any theme works without me shipping it.
