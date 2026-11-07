@@ -44,9 +44,5 @@ export const getAdjacentProjects = (page: ProjectPage) => {
   return { next: at(1), previous: at(-1) }
 }
 
-/** The project after this one in the list, wrapping to the first */
-export const getNextProject = (page: ProjectPage) =>
-  getAdjacentProjects(page).next
-
 export const getProjectYear = (page: ProjectPage) =>
   page.data.date.getUTCFullYear()

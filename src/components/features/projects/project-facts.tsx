@@ -1,15 +1,13 @@
-import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { ViewAnimation } from '@/components/view-animation'
 import { hasStatusStrip, hostname, repository } from '@/lib/project-links'
-import { getNextProject, getProjectYear, type ProjectPage } from '@/lib/source'
+import { getProjectYear, type ProjectPage } from '@/lib/source'
 import { staggerDelay } from '@/lib/stagger'
 import { PreviewButton } from './preview-button'
 
 export const ProjectFacts = ({ page }: { page: ProjectPage }) => {
   const { github, tags, website } = page.data
-  const next = getNextProject(page)
   // Status, platform and the links show in the strip under the lead when the
   // page has one
   const inStrip = hasStatusStrip(page)
@@ -59,21 +57,6 @@ export const ProjectFacts = ({ page }: { page: ProjectPage }) => {
       ),
     })
   }
-  if (next) {
-    facts.push({
-      label: 'Next project',
-      value: (
-        <Link
-          className='group inline-flex items-center gap-2 text-pretty'
-          href={next.url}
-        >
-          {next.data.title}
-          <Icons.arrowRight className='icon-arrow size-4 shrink-0 text-muted-foreground' />
-        </Link>
-      ),
-    })
-  }
-
   return (
     <dl className='flex flex-col gap-6'>
       {facts.map((fact, index) => (
