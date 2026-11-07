@@ -21,6 +21,7 @@ import { Mermaid } from './mermaid'
 import { ReaderLadder } from './reader-ladder'
 import { Screen, Screens } from './screens'
 import { Term } from './term'
+import { ZenixDemo } from './zenix-demo'
 
 export const mdxComponents: MDXComponents = {
   ...defaultMdxComponents,
@@ -58,4 +59,5 @@ export const mdxComponents: MDXComponents = {
   Tabs,
   Term,
   VideoPlayer,
+  ZenixDemo,
 }

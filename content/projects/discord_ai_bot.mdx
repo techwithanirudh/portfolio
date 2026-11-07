@@ -26,13 +26,15 @@ Every conversation also starts with a few made-up messages showing the texting s
 
 ## Knowing when to talk
 
-He always replies when you ping him, DM him or say one of his keywords (zenix, zenith, gpt, llm, ai or bot). For everything else, a small model (gpt-4.1-nano) reads the last 50 messages of the channel and guesses how likely it is that the message is for him, and he only jumps in when that's above 50%.
+He always replies when you ping him, DM him or say one of his keywords (zenix, zenith, gpt, llm, ai or bot). It's a plain text match, so even "wait" counts, since it has "ai" in it. For everything else, a small model (gpt-4.1-nano) reads the last 50 messages of the channel and guesses how likely it is that the message is for him, and he only jumps in when that's above 50%.
 
 There are also a few brakes so he doesn't take over the chat. After 10 messages in a row where nobody pulled him in, he stops checking until someone talks to him again or the hour runs out. An [Upstash](https://upstash.com/) rate limit stops him from flooding a server, and a `/channels` command lets admins pick which channels he's allowed in.
 
 ## Typing like a person
 
-Sending one big block of text gives the game away, so replies get split into sentences. Before each one he waits a random 5 to 15 seconds, shows the typing indicator for a time based on how long the sentence is (plus half a second per full stop or question mark), drops the trailing full stop and then sends it. Half the time the first sentence goes out as a Discord reply to your message, and the rest just land in the channel like normal messages.
+Sending one big block of text gives the game away, so replies get split into sentences and each one goes out as its own message. Before each one he waits a random 5 to 15 seconds, then shows the typing indicator for a moment based on how long the sentence is, and the full stop or question mark at the end gets dropped. Each message also gets a coin flip to go out as a Discord reply to yours, until one does.
+
+<ZenixDemo caption="Waits are sped up 5x and the typing dots stay a bit longer so you can actually see them. The two numbers by each reply are the real wait and typing time, and the relevance scores are made-up examples." />
 
 ## Memory, search and voice
 

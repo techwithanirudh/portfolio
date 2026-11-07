@@ -2,7 +2,7 @@ import { replaceSource } from 'fumadocs-core/mdx-plugins/stringifier'
 import { visit } from 'unist-util-visit'
 import { readerLadderText } from '../../components/content/mdx/reader-ladder/data'
 
-// Live demos (DemoCard, Compare, ReaderLadder) are pure UI, so the processed Markdown that
+// Live demos (DemoCard, Compare, ReaderLadder, ZenixDemo) are pure UI, so the processed Markdown that
 // feeds llms.txt, the .md routes and Simba would otherwise get their raw JSX.
 // This swaps each one for plain Markdown saying what the demo shows. A <Term>
 // (a word with a definition card) reads as just its word, like on the page.
@@ -51,6 +51,15 @@ export function remarkDemoText() {
         )
       } else if (element.name === 'ReaderLadder') {
         replaceSource(file, node, readerLadderText())
+      } else if (element.name === 'ZenixDemo') {
+        replaceSource(
+          file,
+          node,
+          paragraphs(
+            'An interactive demo of Zenix in a mock Discord channel. Send a message and his reply arrives as a few short messages, each after a random 5 to 15 second pause and a typing indicator, with the full stop at the end dropped. A second tab shows that pings, DMs and keywords always get a reply, while anything else only does when a small model rates it above 50%.',
+            stringAttributes(element).caption
+          )
+        )
       } else if (element.name === 'DemoCard') {
         // Whatever the card wraps keeps its own text, the caption follows it
         const { caption } = stringAttributes(element)
