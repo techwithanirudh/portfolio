@@ -18,8 +18,8 @@ export const ListSection = ({
   more,
   title,
 }: ListSectionProps) => (
-  <Section className='relative w-full pt-8 sm:pt-10' id={id}>
-    <div className='flex flex-col gap-8 sm:gap-10'>
+  <Section className='relative w-full pt-10' id={id}>
+    <div className='flex flex-col gap-10'>
       <SectionHeader
         align='left'
         className='px-6'

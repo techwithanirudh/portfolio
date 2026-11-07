@@ -17,11 +17,11 @@ import { cn } from '@/lib/utils'
 export default function About(): React.ReactElement {
   return (
     <SplitSection>
-      <SplitSectionSidebar className='py-6 sm:py-8'>
+      <SplitSectionSidebar>
         <SectionHeader align='left' title='About me' />
       </SplitSectionSidebar>
 
-      <SplitSectionContent className='py-6 sm:py-8' inset>
+      <SplitSectionContent inset>
         <ViewAnimation className='relative' delay={0.1}>
           <div className='space-y-3 sm:space-y-4'>
             <Prose className='typography-body w-full space-y-4'>

@@ -24,7 +24,7 @@ export const SectionHeader = ({
 }: SectionHeaderProps) => (
   <div
     className={cn(
-      'flex flex-col gap-2 sm:gap-4',
+      'flex flex-col gap-4',
       align === 'center' ? 'items-center text-center' : 'items-start text-left',
       sticky ? 'sm:sticky sm:top-16' : null,
       className

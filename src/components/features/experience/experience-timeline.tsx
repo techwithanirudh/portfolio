@@ -111,7 +111,7 @@ function TimelineRow({
   const NodeComponent = variant === 'full' ? RailNode : 'div'
 
   return (
-    <article className={cn(rowClassName, 'py-5.5 wide:py-6 max-sm:py-4')}>
+    <article className={cn(rowClassName, 'py-5.5 wide:py-6')}>
       <p className='col-start-2 wide:col-start-1 row-start-1 mb-2 wide:mb-0 wide:pt-3 font-mono text-muted-foreground text-xs tabular-nums leading-normal'>
         {formatPeriod(start, end)}
         <span className='ml-2 wide:ml-0 wide:block'>

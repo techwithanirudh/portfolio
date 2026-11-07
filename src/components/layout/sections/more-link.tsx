@@ -18,7 +18,7 @@ export const SectionMoreLink = ({
     <Link
       className={cn(
         buttonVariants({ shape: 'square' }),
-        'w-full py-6 focus-visible:outline-2 focus-visible:outline-primary-foreground focus-visible:outline-solid focus-visible:-outline-offset-6 focus-visible:ring-0 active:scale-none active:opacity-80 sm:py-8'
+        'w-full py-8 focus-visible:outline-2 focus-visible:outline-primary-foreground focus-visible:outline-solid focus-visible:-outline-offset-6 focus-visible:ring-0 active:scale-none active:opacity-80'
       )}
       href={href}
     >
