@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useDeferredValue, useState, ViewTransition } from 'react'
+import { ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { Icons } from '@/components/icons/icons'
 import { SearchRedirectInput } from '@/components/search-redirect-input'
@@ -21,11 +21,6 @@ interface ProjectIndexItem {
   website: boolean
   year: number
 }
-
-const matches = (project: ProjectIndexItem, query: string) =>
-  [project.title, project.description, ...project.tags].some((text) =>
-    text.toLowerCase().includes(query)
-  )
 
 const Cover = ({
   className,
@@ -84,37 +79,25 @@ export const ProjectIndex = ({
 }: {
   projects: ProjectIndexItem[]
 }) => {
-  const [query, setQuery] = useState('')
-  const deferredQuery = useDeferredValue(query.trim().toLowerCase())
-  const visible = deferredQuery
-    ? projects.filter((project) => matches(project, deferredQuery))
-    : projects
-
   return (
-    <div className='border-t border-dashed'>
+    <div>
       <ViewAnimation>
         <SearchRedirectInput
           className='h-10 min-w-full rounded-none border-0 pl-1 shadow-none ring-inset'
-          onValueChange={setQuery}
           placeholder='Search projects…'
           tag='projects'
         />
       </ViewAnimation>
       <div className='dashed-grid lg:dashed-grid-2 grid grid-cols-1 border-t border-dashed text-left lg:grid-cols-2'>
-        {visible.map((project, index) => (
+        {projects.map((project, index) => (
           <ViewAnimation delay={staggerDelay(index)} key={project.url}>
             <GridCard project={project} />
           </ViewAnimation>
         ))}
-        {visible.length % 2 === 1 && (
+        {projects.length % 2 === 1 && (
           <div aria-hidden className='hidden bg-dashed lg:block' />
         )}
       </div>
-      {visible.length === 0 && (
-        <p className='border-t border-dashed px-6 py-8 text-muted-foreground'>
-          No projects match that search.
-        </p>
-      )}
     </div>
   )
 }
