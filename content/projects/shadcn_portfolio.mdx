@@ -29,7 +29,7 @@ There are blocks for the hero, about, experience, projects, testimonials, contac
 
 ## How it works
 
-It's a [Turborepo](https://turbo.build/repo) (yeah, I kinda overengineered this one): the site lives in one app, and auth, comments, the database, emails and the UI kit are their own packages. You start a copy with `create-next-app` pointed at the repo, and each section reads its text from its own config file. The contact form sends through [Resend](https://resend.com/) and checks a [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) token on the server.
+It's a [Turborepo](https://turbo.build/repo) (yeah, I kinda over-engineered this one): the site lives in one app, and auth, comments, the database, emails and the UI kit are their own packages. You start a copy with `create-next-app` pointed at the repo, and each section reads its text from its own config file. The contact form sends through [Resend](https://resend.com/) and checks a [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) token on the server.
 
 <Screens>
   <Screen frame='wide' height={900} src='/images/projects/shadcn_portfolio/menu-open.webp' width={1600} alt='The full-screen menu with Home, About, Projects and Blog links, a user button and a theme toggle' caption='The menu opens over the page.' />
