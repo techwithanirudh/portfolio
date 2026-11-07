@@ -9,6 +9,7 @@
     "ignoreUnknown": true,
     "includes": [
       "!node_modules",
+      "!.agents", // vendored agent skills, kept as their authors ship them
       "!.github",
       "!**/public",
       "!**/*.md",
