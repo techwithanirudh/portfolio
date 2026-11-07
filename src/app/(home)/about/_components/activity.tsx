@@ -9,7 +9,7 @@ import { sectionIds } from '@/constants/pages'
 export default function ActivityHeader(): React.ReactElement {
   return (
     <Section
-      className='flex flex-wrap items-end justify-between gap-6 px-6 pt-10 pb-10'
+      className='flex flex-wrap items-end justify-between gap-6 px-6 pt-10 pb-12'
       id={sectionIds.activity}
     >
       <SectionHeader

@@ -11,7 +11,7 @@ import { experienceIntro, experiences } from '@/constants/portfolio/experiences'
 export default function Experience(): React.ReactElement {
   return (
     <Section className='relative w-full pt-10' id={sectionIds.experience}>
-      <div className='flex flex-col gap-10'>
+      <div className='flex flex-col gap-12'>
         <div className='flex flex-wrap items-end justify-between gap-6 px-6'>
           <SectionHeader
             align='left'
