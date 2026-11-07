@@ -50,7 +50,7 @@ export const ProjectCard = ({
   return (
     <Link
       className={cn(
-        'group flex h-full flex-col gap-4 bg-card/60 p-6 transition-colors hover:bg-card focus-visible:-outline-offset-2'
+        'group flex h-full flex-col gap-5 bg-card/60 px-6 py-8 transition-colors hover:bg-card focus-visible:-outline-offset-2'
       )}
       href={url}
       onFocus={() => image && preloadCover(image, title)}
@@ -73,7 +73,7 @@ export const ProjectCard = ({
           />
         </SharedTransition>
       )}
-      <div className='flex flex-1 flex-col gap-3'>
+      <div className='flex flex-1 flex-col gap-4'>
         <div className='flex flex-1 flex-col gap-2'>
           <SharedTransition name={sharedName('title')}>
             <h2 className={cn('font-medium text-lg md:text-xl')}>{title}</h2>
