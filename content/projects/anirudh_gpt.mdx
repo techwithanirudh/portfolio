@@ -9,21 +9,35 @@ platform: Web
 image: /images/projects/anirudh_gpt/cover.jpg
 tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 ---
-My own ChatGPT-style app on top of the OpenAI API, with Google sign-in, saved conversations and optional web search. I ran it on Replit back in spring 2023. The Replit app is gone now, but the code is still public (archived, under AGPL).
+AnirudhGPT (which also went by ChatGPT4Real) was my own ChatGPT clone, built on the OpenAI API and Firebase back in spring 2023. It had Google sign-in, saved conversations, a model picker and optional web search, and it's the project that eventually turned into [AI Tutor](/projects/ai_tutor).
 
-## What it does
+## Why I built it
 
-You sign in with Google through [NextAuth](https://next-auth.js.org/), chat, and pick up your old conversations later. Turn on web search and it looks up a few results first, then answers with links.
-
-<Screens>
-  <Screen frame='wide' height={1000} src='/images/projects/anirudh_gpt/google-sign-in.webp' width={1600} alt='A dark blue sign-in page titled TechWithAnirudh ChatGPT with a Login heading, a Sign in with Google button and an illustration of a person walking through a door' caption='Sign-in with Google as the only option, from an Internet Archive copy.' />
-</Screens>
-
-## How it works
-
-The chat API doesn't remember anything on its own, so before each call the server loads the whole conversation from [Firestore](https://firebase.google.com/docs/firestore) and sends it along. Search results came from a little [DuckDuckGo](https://duckduckgo.com/) scraper I ran on Replit.
+When the first OpenAI models came out, I was honestly amazed by the ChatGPT UI. So naturally my first thought was: can I build that myself? This was back when I built everything on Replit (RIP), so that's where it ran.
 
 <Screens>
-  <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-march.webp' width={1600} alt='A light welcome screen with the OpenAI logo, the text Welcome to TechWithAnirudh ChatGPT, and green Log in and Sign up buttons' caption='The signed-out screen in March 2023, from an Internet Archive copy.' />
-  <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-dark.webp' width={1600} alt='The same welcome screen on a dark blue background with a purple chat bubble logo and teal Log in and Sign up buttons' caption='The late April version with its own logo and a dark theme, from an Internet Archive copy.' />
+  <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-march.webp' width={1600} alt='A light welcome screen with the OpenAI logo, the text Welcome to TechWithAnirudh ChatGPT, and green Log in and Sign up buttons' caption='March 2023. I borrowed the OpenAI logo and the green buttons, so the resemblance was very much on purpose.' />
+  <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-dark.webp' width={1600} alt='The same welcome screen on a dark blue background with a purple chat bubble logo and teal Log in and Sign up buttons' caption='By late April it had its own logo and a dark theme. Both screens come from Internet Archive copies.' />
 </Screens>
+
+## What it did
+
+You signed in with Google through [NextAuth](https://next-auth.js.org/), and from there it felt a lot like the real thing. You could pick a model (GPT-3.5 Turbo, GPT-4, or a pile of older completion models like davinci and ada), start a new chat and come back to old ones later. Typing `/` opened a library of about 150 ready-made prompts, like "act as a Linux terminal". In settings you could change the temperature, rename the bot or paste in your own OpenAI API key.
+
+That last one mattered, because everyone else was running on my key. When it ran out of credit, the error message politely asked people to donate an API key to keep the thing free. Peak student-project funding model.
+
+<Screens>
+  <Screen frame='wide' height={1000} src='/images/projects/anirudh_gpt/google-sign-in.webp' width={1600} alt='A dark blue sign-in page titled TechWithAnirudh ChatGPT with a Login heading, a Sign in with Google button and an illustration of a person walking through a door' caption='Sign-in was Google only, and every chat got saved under your email address. Also from an Internet Archive copy.' />
+</Screens>
+
+## How it worked
+
+The chat API doesn't remember anything on its own, hence the repo name, ChatGPT-With-Memory. Every chat lived in [Firestore](https://firebase.google.com/docs/firestore) under your account. Before each call, the server loaded the whole conversation, put a short system prompt in front ("You are Tech With Anirudh GPT..."), sent it all to OpenAI and then wrote the reply back into Firestore. Looking at the code now, I was sending the bot's own old replies back as system messages instead of assistant ones. Oops. It still worked, mostly.
+
+Web search was a fun little hack. Flip the toggle and the app grabbed nine results from a little [DuckDuckGo](https://duckduckgo.com/) scraper I ran as a separate Replit app. It numbered them, glued them onto your question with an instruction to cite sources as numbered links, and sent that to the model. The chat still showed just what you typed, so it looked like the bot simply knew things.
+
+## What happened next
+
+A lot of students ended up using it to ask study questions, which gave me the idea for [AI Tutor](/projects/ai_tutor). The first version of AI Tutor was literally built on top of AnirudhGPT. The name lived on for a bit too, on a Discourse bot I called AnirudhGPT for Discourse later in 2023.
+
+The Replit app is gone now (RIP Replit, again), but the code is still up on GitHub, archived, under the AGPL.
