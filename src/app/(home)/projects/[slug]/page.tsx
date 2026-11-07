@@ -27,7 +27,7 @@ import {
   type ProjectPage,
 } from '@/lib/source'
 
-const neighbour = (page?: ProjectPage) =>
+const toAdjacent = (page?: ProjectPage) =>
   page ? { title: page.data.title, url: page.url } : undefined
 
 function Header({ page }: { page: ProjectPage }) {
@@ -46,7 +46,7 @@ function Header({ page }: { page: ProjectPage }) {
             <TitleDot />
           </h1>
         </ViewTransition>
-        <ProjectNav next={neighbour(next)} previous={neighbour(previous)} />
+        <ProjectNav next={toAdjacent(next)} previous={toAdjacent(previous)} />
       </div>
       <ViewTransition
         name={projectTransitionName(slug, 'description')}

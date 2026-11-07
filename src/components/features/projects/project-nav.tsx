@@ -1,7 +1,7 @@
 'use client'
 
 // Previous/next project arrows plus ←/→ keys, adapted from chanhdai.com's doc
-// neighbour nav (https://github.com/ncdai/chanhdai.com, MIT)
+// adjacent-page nav (https://github.com/ncdai/chanhdai.com, MIT)
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -15,7 +15,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 
-interface Neighbour {
+interface AdjacentProject {
   title: string
   url: string
 }
@@ -29,8 +29,8 @@ export function ProjectNav({
   previous,
   next,
 }: {
-  previous?: Neighbour
-  next?: Neighbour
+  previous?: AdjacentProject
+  next?: AdjacentProject
 }) {
   const router = useRouter()
 
@@ -84,7 +84,7 @@ function NavButton({
 }: {
   direction: 'previous' | 'next'
   icon: React.ReactNode
-  project: Neighbour
+  project: AdjacentProject
 }) {
   const label = direction === 'previous' ? 'Previous project' : 'Next project'
 
