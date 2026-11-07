@@ -21,6 +21,7 @@ export default function ProjectsPreview({
     >
       <ProjectGrid
         className='w-full border-t border-dashed'
+        phoneLimit={3}
         projects={projects}
       />
     </ListSection>

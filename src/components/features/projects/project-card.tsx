@@ -50,7 +50,7 @@ export const ProjectCard = ({
   return (
     <Link
       className={cn(
-        'group flex h-full flex-col gap-4 bg-card/60 p-6 transition-colors hover:bg-card focus-visible:-outline-offset-2'
+        'group flex h-full flex-col gap-3.5 bg-card/60 px-6 py-5 transition-colors hover:bg-card focus-visible:-outline-offset-2 sm:gap-4 sm:p-6'
       )}
       href={url}
       onFocus={() => image && preloadCover(image, title)}
@@ -63,7 +63,7 @@ export const ProjectCard = ({
             alt={title}
             blur={false}
             className={cn(
-              'relative aspect-video w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 dark:outline-white/10'
+              'relative aspect-2/1 w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 sm:aspect-video dark:outline-white/10'
             )}
             fill
             imageClassName='object-cover'
@@ -73,15 +73,15 @@ export const ProjectCard = ({
           />
         </SharedTransition>
       )}
-      <div className='flex flex-1 flex-col gap-3'>
-        <div className='flex flex-1 flex-col gap-2'>
+      <div className='flex flex-1 flex-col gap-2.5 sm:gap-3'>
+        <div className='flex flex-1 flex-col gap-1.5 sm:gap-2'>
           <SharedTransition name={sharedName('title')}>
             <h2 className={cn('font-medium text-lg md:text-xl')}>{title}</h2>
           </SharedTransition>
           <SharedTransition name={sharedName('description')}>
             <p
               className={cn(
-                'line-clamp-3 text-pretty text-muted-foreground',
+                'line-clamp-2 text-pretty text-muted-foreground sm:line-clamp-3',
                 meta ? 'text-base' : 'text-sm'
               )}
             >

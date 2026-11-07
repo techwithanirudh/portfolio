@@ -32,7 +32,7 @@ export const PostRow = ({ date = 'full', meta = true, post }: PostRowProps) => {
   return (
     <Link
       className={cn(
-        'group grid gap-x-6 gap-y-1.5 px-6 py-6 wide:py-8 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80',
+        'group grid gap-x-6 gap-y-0.5 wide:gap-y-1.5 px-6 py-4 wide:py-8 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80',
         date === 'short'
           ? 'wide:grid-cols-[4.75rem_minmax(0,1fr)]'
           : 'wide:grid-cols-[7.5rem_minmax(0,1fr)]'
@@ -40,13 +40,13 @@ export const PostRow = ({ date = 'full', meta = true, post }: PostRowProps) => {
       href={post.url}
     >
       <time
-        className='font-mono text-muted-foreground text-xs tabular-nums leading-6 wide:leading-7'
+        className='font-mono text-muted-foreground text-xs tabular-nums leading-5 wide:leading-7'
         dateTime={published.toISOString().slice(0, 10)}
       >
         {date === 'short' ? formatMonthDay(published) : formatDate(published)}
       </time>
       <div className='min-w-0'>
-        <h3 className='flex items-center gap-2 text-pretty font-medium text-lg leading-7 tracking-tight transition-colors duration-150 group-hover:text-primary group-focus-visible:text-primary'>
+        <h3 className='flex items-center gap-2 text-pretty font-medium text-base wide:text-lg leading-6 wide:leading-7 tracking-tight transition-colors duration-150 group-hover:text-primary group-focus-visible:text-primary'>
           {title}
           <Icons.arrowRight
             aria-hidden
@@ -54,7 +54,13 @@ export const PostRow = ({ date = 'full', meta = true, post }: PostRowProps) => {
           />
         </h3>
         {description && (
-          <p className='mt-1 max-w-[70ch] text-pretty text-muted-foreground leading-relaxed'>
+          <p
+            className={cn(
+              'mt-1 max-w-[70ch] text-pretty text-muted-foreground text-sm wide:text-base leading-relaxed',
+              // Previews keep phones to the gist; the full list shows it all
+              !meta && 'line-clamp-2 wide:line-clamp-none'
+            )}
+          >
             {description}
           </p>
         )}

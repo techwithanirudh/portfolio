@@ -29,7 +29,7 @@ const TestimonialCard = ({
   index: number
 }) => (
   <ViewAnimation className='h-full' delay={staggerDelay(index, 0.1)}>
-    <div className='flex h-full flex-col justify-between gap-28 p-6 transition-colors duration-300 hover:bg-card sm:gap-34 sm:p-8 lg:gap-40'>
+    <div className='flex h-full flex-col gap-6 p-6 transition-colors duration-300 hover:bg-card sm:justify-between sm:gap-34 sm:p-8 lg:gap-40'>
       <Icons.user className='icon-tilt size-8 shrink-0' strokeWidth={1} />
       <div className='flex flex-col gap-4'>
         <div className='flex flex-col'>

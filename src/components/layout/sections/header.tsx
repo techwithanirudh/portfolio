@@ -24,7 +24,7 @@ export const SectionHeader = ({
 }: SectionHeaderProps) => (
   <div
     className={cn(
-      'flex flex-col gap-4',
+      'flex flex-col gap-2 sm:gap-4',
       align === 'center' ? 'items-center text-center' : 'items-start text-left',
       sticky ? 'sm:sticky sm:top-16' : null,
       className
@@ -33,7 +33,7 @@ export const SectionHeader = ({
     <ViewAnimation>
       <Heading
         className={cn(
-          'typography-title text-balance font-normal text-3xl leading-tight tracking-tighter',
+          'typography-title text-balance font-normal text-[1.75rem] leading-tight tracking-tighter sm:text-3xl',
           'md:text-5xl'
         )}
       >
@@ -42,7 +42,7 @@ export const SectionHeader = ({
     </ViewAnimation>
     {description && (
       <ViewAnimation delay={0.1}>
-        <p className='text-pretty text-base text-muted-foreground'>
+        <p className='text-pretty text-[0.95rem] text-muted-foreground sm:text-base'>
           {description}
         </p>
       </ViewAnimation>

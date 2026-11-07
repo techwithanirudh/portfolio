@@ -10,8 +10,11 @@ export default function ExperiencePreview() {
   const recent = experiences.slice(0, 3)
 
   return (
-    <Section className='relative w-full pt-10' id={sectionIds.experience}>
-      <div className='flex flex-col gap-10'>
+    <Section
+      className='relative w-full pt-8 sm:pt-10'
+      id={sectionIds.experience}
+    >
+      <div className='flex flex-col gap-6 sm:gap-10'>
         <SectionHeader
           align='left'
           className='px-6'

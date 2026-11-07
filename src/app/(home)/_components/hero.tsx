@@ -2,13 +2,11 @@ import { getImageProps } from 'next/image'
 import Link from 'next/link'
 import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
-import { InlineMarkdown } from '@/components/inline-markdown'
 import { Section } from '@/components/layout/sections'
 import { PortraitHeading } from '@/components/portrait/portrait-heading'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
-import { heroIntro } from '@/constants/portfolio/intro'
 import { baseOptions, owner } from '@/constants/site'
 import heroGradient640 from '@/public/images/hero-gradient/640.avif'
 import heroGradient750 from '@/public/images/hero-gradient/750.avif'
@@ -17,6 +15,7 @@ import heroGradient1080 from '@/public/images/hero-gradient/1080.avif'
 import heroGradient1200 from '@/public/images/hero-gradient/1200.avif'
 import heroGradient1408 from '@/public/images/hero-gradient/1408.avif'
 import heroGradient from '@/public/images/hero-gradient.png'
+import { HeroIntro } from './hero-intro'
 
 const [firstName, lastName] = owner.split(' ')
 
@@ -47,7 +46,7 @@ const { props: gradientProps } = getImageProps({
 })
 
 const Hero = () => (
-  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-20 pb-24 sm:px-12 sm:pt-28 sm:pb-32'>
+  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-14 pb-16 sm:px-12 sm:pt-28 sm:pb-32'>
     <picture>
       <source
         sizes={gradientSizes}
@@ -72,16 +71,14 @@ const Hero = () => (
           </>
         }
         before={firstName}
-        className='mb-5 text-balance font-medium text-[2.4rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'
+        className='mb-4 text-balance font-medium text-[2.15rem] leading-[1.02] tracking-[-0.04em] sm:mb-6 sm:text-[3.4rem]'
       />
     </ViewAnimation>
     <ViewAnimation delay={0.1}>
-      <p className='max-w-[52ch] text-pretty text-base text-foreground/85 leading-relaxed sm:text-[1.09rem]'>
-        <InlineMarkdown linkClassName='link-underline' text={heroIntro} />
-      </p>
+      <HeroIntro />
     </ViewAnimation>
 
-    <div className='mt-7 flex flex-wrap items-center gap-2.5 sm:mt-9'>
+    <div className='mt-6 flex flex-wrap items-center gap-2.5 sm:mt-9'>
       <ViewAnimation className='flex' delay={0.15}>
         <Link
           className={buttonVariants({ size: 'lg', variant: 'default' })}
