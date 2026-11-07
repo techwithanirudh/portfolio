@@ -11,11 +11,11 @@ image: /images/projects/shadcn_portfolio/cover.png
 tags: ['Next.js', 'TurboRepo', 'MDX', 'shadcn/ui', 'Framer Motion']
 ---
 
-A portfolio template with work sections, a blog and shadcn/ui. You swap in your own details and write the content in MDX. It's a GitHub template under the MIT license, and the live demo is up. The demo runs as John Doe, a made-up developer.
+A good-looking portfolio template built on shadcn/ui. To make it easy to make your own, every section of the site comes as a few blocks (cozy, modern, compact and a couple more), so you pick a layout per section and swap in your details. It's a GitHub template under MIT, and the live demo runs as John Doe, a made-up developer.
 
 ## What it does
 
-The homepage has sections for projects, testimonials and a contact form, and most come in cozy, modern and compact layouts. Visitors can sign in with Google or GitHub through [Better Auth](https://www.better-auth.com/) to comment on blog posts, and comments are saved to Postgres with [Drizzle](https://orm.drizzle.team/).
+There are blocks for the hero, about, experience, projects, testimonials, contact and more. The blog runs on [Fumadocs](https://fumadocs.dev/) MDX, and with [Fuma Comment](https://github.com/fuma-nama/fuma-comment) readers can sign in with Google or GitHub through [Better Auth](https://www.better-auth.com/) and leave comments right under a post, saved to Postgres with [Drizzle](https://orm.drizzle.team/).
 
 <Screens>
   <Screen frame='wide' height={900} src='/images/projects/shadcn_portfolio/hero-light.webp' width={1600} alt='The demo homepage in light mode with the headline A developer who loves to code above a portrait photo' caption='The modern hero, in light mode.' />
@@ -29,7 +29,7 @@ The homepage has sections for projects, testimonials and a contact form, and mos
 
 ## How it works
 
-You start a copy with `create-next-app` pointed at the repository. Blog posts and work pages are MDX files that [Fumadocs](https://fumadocs.dev/) renders, and each section reads its text from its own config file. The contact form sends through [Resend](https://resend.com/) and checks a [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) token on the server. In March 2025 I moved it into a [Turborepo](https://turbo.build/repo). The single-app version stays on the `tailwind-v4` branch.
+It's a [Turborepo](https://turbo.build/repo) (yeah, I kinda overengineered this one): the site lives in one app, and auth, comments, the database, emails and the UI kit are their own packages. You start a copy with `create-next-app` pointed at the repo, and each section reads its text from its own config file. The contact form sends through [Resend](https://resend.com/) and checks a [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) token on the server.
 
 <Screens>
   <Screen frame='wide' height={900} src='/images/projects/shadcn_portfolio/menu-open.webp' width={1600} alt='The full-screen menu with Home, About, Projects and Blog links, a user button and a theme toggle' caption='The menu opens over the page.' />
