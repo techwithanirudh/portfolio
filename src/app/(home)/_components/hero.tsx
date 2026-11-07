@@ -46,7 +46,7 @@ const { props: gradientProps } = getImageProps({
 })
 
 const Hero = () => (
-  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-14 pb-16 sm:px-12 sm:pt-28 sm:pb-32'>
+  <Section className='relative isolate flex flex-col overflow-hidden px-6 pt-8 pb-20 sm:px-12 sm:pt-28 sm:pb-32'>
     <picture>
       <source
         sizes={gradientSizes}
