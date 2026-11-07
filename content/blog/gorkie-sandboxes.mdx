@@ -108,7 +108,7 @@ export const sandboxSessions = pgTable('sandbox_sessions', {
 });
 ```
 
-As usage grew, we realized the provider wasn't the issue. Our tool loop architecture was. It handled short tasks but fell apart under skills, MCP plumbing, orchestration, and stateful session handling. We were slowly building our own runtime by accident.
+As usage grew, we realized the provider wasn't the issue. Our tool loop architecture was. It handled short tasks but fell apart under skills, <Term>MCP</Term> plumbing, orchestration, and stateful session handling. We were slowly building our own runtime by accident.
 
 E2B had its own friction too. Persistence was in beta and buggy, and the model leaned more toward "create and kill" than true long-lived sessions. We wanted persistence-first from the start.
 
@@ -183,7 +183,7 @@ We next tried [Pi](https://pi.dev/) with Sandbox Agent. Pi gave us skills, MCPs,
 
 ## Pi over RPC
 
-The cleanest setup turned out to be Pi in RPC mode. There's no daemon and no internal HTTP listener, just a process. Gorkie attaches to the thread's Daytona sandbox, starts Pi in RPC mode inside a PTY, and sends it a prompt. Pi runs commands and edits files. Its events stream back as newline-delimited JSON, and Gorkie forwards them to Slack as they arrive.
+The cleanest setup turned out to be Pi in RPC mode. There's no <Term>daemon</Term> and no internal HTTP listener, just a process. Gorkie attaches to the thread's Daytona sandbox, starts Pi in RPC mode inside a <Term>PTY</Term>, and sends it a prompt. Pi runs commands and edits files. Its events stream back as newline-delimited JSON, and Gorkie forwards them to Slack as they arrive.
 
 ```ts title="lib/sandbox/rpc.ts"
 const piCmd = sessionId

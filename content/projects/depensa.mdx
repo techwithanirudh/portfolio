@@ -17,14 +17,14 @@ The first plan looked pretty different from what shipped. You'd sign in to a sho
 
 ## Building it
 
-The first big change was sign-in. Now the shop's own login page opens in a WebView on your phone, you type your password and MFA yourself, and the phone hands only the session (its cookies and `localStorage`) to the backend, which stores it encrypted. Depensa never sees the password.
+The first big change was sign-in. Now the shop's own login page opens in a <Term>WebView</Term> on your phone, you type your password and <Term>MFA</Term> yourself, and the phone hands only the session (its cookies and `localStorage`) to the backend, which stores it encrypted. Depensa never sees the password.
 
 <Screens>
   <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Picking a shop. The region picker covers ten regions, and any other shop can be added by its web address.' />
   <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Every order lands in one total, in your currency, with repeating charges listed as upcoming.' />
 </Screens>
 
-The second was the backend. In September I moved everything agentic out of [Convex](https://www.convex.dev/) into a separate [Mastra](https://mastra.ai/) worker that runs on my own server (I'd already played with Mastra in my [Slack agent template](/projects/mastra_slack_agent_template)). Convex stays the database and the scheduler. The worker holds a websocket to it, claims queued runs and writes results back through mutations, so it never needs an open port.
+The second was the backend. In September I moved everything agentic out of [Convex](https://www.convex.dev/) into a separate [Mastra](https://mastra.ai/) worker that runs on my own server (I'd already played with Mastra in my [Slack agent template](/projects/mastra_slack_agent_template)). Convex stays the database and the scheduler. The worker holds a <Term>websocket</Term> to it, claims queued runs and writes results back through mutations, so it never needs an open port.
 
 The fun part is the reader. The first time you add a shop, a learner agent opens a cloud browser with your session and pokes around until it finds your orders.
 

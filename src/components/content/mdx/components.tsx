@@ -19,6 +19,7 @@ import { Heading } from './heading'
 import { LinkPreviewAnchor } from './link-preview'
 import { Mermaid } from './mermaid'
 import { Screen, Screens } from './screens'
+import { Term } from './term'
 
 export const mdxComponents: MDXComponents = {
   ...defaultMdxComponents,
@@ -53,5 +54,6 @@ export const mdxComponents: MDXComponents = {
   Steps,
   Tab,
   Tabs,
+  Term,
   VideoPlayer,
 }

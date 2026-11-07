@@ -22,7 +22,7 @@ Blurring is the obvious way to anonymize, but the main thing I wanted to try was
 
 I tried three approaches on recorded video, and each one taught me something about the next.
 
-1. **OpenCV face swap.** [OpenCV](https://pypi.org/project/opencv-python/) splits the video into frames, the code finds the face, splits it into triangles with Delaunay triangulation, swaps in a preset AI-generated face and smooths the edges. It worked up close, but it fell apart for people far from the camera, which is kind of the whole situation on a street.
+1. **OpenCV face swap.** [OpenCV](https://pypi.org/project/opencv-python/) splits the video into frames, the code finds the face, splits it into triangles with <Term>Delaunay triangulation</Term>, swaps in a preset AI-generated face and smooths the edges. It worked up close, but it fell apart for people far from the camera, which is kind of the whole situation on a street.
 2. **MediaPipe Holistic blur.** [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/guide) Holistic finds the face landmarks and the code draws dots over them until the face is gone. Honestly it had no real limitations, but it doesn't swap anything, so it skipped the actual point of the paper.
 3. **MediaPipe Face Mesh swap.** Face Mesh maps the face as a cloud of points, the code swaps the face along those points and smooths it. Better, but it still struggled at a distance. It only worked when the face covered somewhere between 2% and 50% of the frame.
 

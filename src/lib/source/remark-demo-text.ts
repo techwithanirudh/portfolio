@@ -3,7 +3,8 @@ import { visit } from 'unist-util-visit'
 
 // Live demos (DemoCard, Compare) are pure UI, so the processed Markdown that
 // feeds llms.txt, the .md routes and Simba would otherwise get their raw JSX.
-// This swaps each one for plain Markdown saying what the demo shows.
+// This swaps each one for plain Markdown saying what the demo shows. A <Term>
+// (a word with a definition card) reads as just its word, like on the page.
 
 // Borrowed from fumadocs' own signature, so we don't pull in mdast and vfile
 // just for their types
@@ -51,6 +52,12 @@ export function remarkDemoText() {
         // Whatever the card wraps keeps its own text, the caption follows it
         const { caption } = stringAttributes(element)
         replaceSource(file, node, (s) => paragraphs(s.inner(node), caption))
+      }
+    })
+
+    visit(tree, 'mdxJsxTextElement', (node: Node) => {
+      if ((node as unknown as JsxElement).name === 'Term') {
+        replaceSource(file, node, (s) => s.inner(node))
       }
     })
   }
