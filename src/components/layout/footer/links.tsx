@@ -95,7 +95,7 @@ export const Links = () => {
       iconRow: true,
       items: socials.map((social) => ({
         children: (
-          <span className='inline-flex items-center gap-1.5 max-sm:-m-2.5 max-sm:p-2.5 [&_svg]:size-4 max-sm:[&_svg]:size-5'>
+          <span className='inline-flex items-center gap-1.5 max-sm:-m-2.5 max-sm:p-2.5 [&_svg]:size-4'>
             {social.icon}
             <span className='max-sm:sr-only'>{social.name}</span>
           </span>

@@ -24,8 +24,12 @@ export default function CTA(): React.ReactElement {
         <div className='flex flex-col items-center gap-5 sm:gap-4'>
           <ViewAnimation delay={0.15}>
             <p className='typography-body text-pretty text-center text-muted-foreground sm:text-xl'>
-              Have a question or an idea? Send me a message through the contact
-              form or find me on social media.
+              Have a question or an idea?
+              <span className='max-sm:hidden'>
+                {' '}
+                Send me a message through the contact form or find me on social
+                media.
+              </span>
             </p>
           </ViewAnimation>
           <div className='flex flex-col gap-4 sm:flex-row sm:items-center'>
