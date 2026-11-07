@@ -37,12 +37,12 @@ export const HeroSection = ({
   <Section className={cn('px-6 sm:p-4', sectionClassName)}>
     <div
       className={cn(
-        'flex flex-col items-start justify-center gap-4 py-6 lg:px-2 lg:py-12',
+        'flex flex-col items-start justify-center gap-4 py-12 sm:py-6 lg:px-2 lg:py-12',
         className
       )}
     >
       {image && <ViewAnimation>{image}</ViewAnimation>}
-      <div className='flex w-full flex-col gap-4'>
+      <div className='flex w-full flex-col gap-2 sm:gap-4'>
         {caption && (
           <ViewAnimation>
             <small className='block text-balance text-muted-foreground text-sm sm:text-base'>
