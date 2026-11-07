@@ -10,13 +10,11 @@ image: /images/projects/speaking_meeting_bot/cover.png
 tags: ['Python', 'Pipecat', 'MeetingBaaS', 'WebSocket']
 ---
 
-AI agents that join a Google Meet or Teams call and talk in it, each with its own personality. I wrote the first version in November 2024, and the Meeting BaaS team added more after that. It's open source under the MIT license and lives in the Meeting BaaS org now.
-
-The hosted API still runs, and its docs page loads.
+AI agents that hop into a Google Meet or Teams call and actually talk. I built the first version in November 2024, and the Meeting BaaS team kept going from there, adding personas and a hosted API. It's open source under MIT and lives in their org now.
 
 ## What it does
 
-You give it a meeting link and a persona, and the agent joins and holds a spoken conversation. A persona is a Markdown file that sets the agent's traits, voice and first line.
+You give it a meeting link and pick a persona, and the agent joins the meeting and holds a spoken conversation. Personas are just Markdown files with the agent's traits, voice and first line.
 
 <Screens>
   <Screen frame='wide' height={1158} src='/images/projects/speaking_meeting_bot/persona-file.webp' width={1600} alt='The interviewer persona README on GitHub, with sections for characteristics, voice and metadata, next to the list of persona folders' caption='A persona is a Markdown file with traits, voice and entry message.' />
@@ -25,4 +23,4 @@ You give it a meeting link and a persona, and the agent joins and holds a spoken
 
 ## How it works
 
-[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio. [Pipecat](https://www.pipecat.ai/) runs the voice pipeline, so [Deepgram](https://deepgram.com/) transcribes speech, an OpenAI model writes the reply and [Cartesia](https://cartesia.ai/) speaks it back. My version started each bot by script, each with its own [ngrok](https://ngrok.com/) tunnel. Today a FastAPI server starts them.
+[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams its audio over a WebSocket. In my version, a small proxy turned those audio frames into something [Pipecat](https://www.pipecat.ai/) could read, and Pipecat ran the rest: [Deepgram](https://deepgram.com/) transcribed what people said, an OpenAI model wrote the reply and [Cartesia](https://cartesia.ai/) spoke it back. A script started each bot and proxy pair with its own [ngrok](https://ngrok.com/) tunnel, so a few bots could join at once.
