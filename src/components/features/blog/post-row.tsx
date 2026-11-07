@@ -32,7 +32,7 @@ export const PostRow = ({ date = 'full', meta = true, post }: PostRowProps) => {
   return (
     <Link
       className={cn(
-        'group grid gap-x-6 gap-y-0.5 wide:gap-y-1.5 px-6 py-4 wide:py-8 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80',
+        'group grid gap-x-6 gap-y-1.5 px-6 py-6 wide:py-8 transition-colors duration-150 hover:bg-card/80 focus-visible:bg-card/80',
         date === 'short'
           ? 'wide:grid-cols-[4.75rem_minmax(0,1fr)]'
           : 'wide:grid-cols-[7.5rem_minmax(0,1fr)]'
