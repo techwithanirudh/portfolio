@@ -14,6 +14,9 @@ import { cn } from '@/lib/utils'
 const footerIconClassName =
   'flex h-11 w-10 touch-manipulation items-center justify-center text-muted-foreground transition-colors hover:text-foreground [&_svg]:size-3.5'
 
+const menuItemClassName =
+  'flex touch-manipulation select-none items-center gap-2 px-4 py-3 text-sm transition-colors [-webkit-touch-callout:none] hover:bg-muted active:bg-muted [&_svg]:size-3.5'
+
 export function MenuPanel({
   menuId,
   onAssistantOpen,
@@ -60,7 +63,7 @@ export function MenuPanel({
                 <Link
                   aria-current={active ? 'page' : undefined}
                   className={cn(
-                    'flex touch-manipulation select-none items-center gap-2 px-4 py-3 text-sm transition-colors [-webkit-touch-callout:none] hover:bg-muted active:bg-muted [&_svg]:size-3.5',
+                    menuItemClassName,
                     active
                       ? 'font-medium text-primary'
                       : 'text-muted-foreground'
@@ -77,31 +80,31 @@ export function MenuPanel({
           </div>
         ))}
       </nav>
-      <div className='flex items-center justify-between border-t border-dashed px-1.5 py-0.5'>
-        <div className='flex items-center'>
-          {socials.map((social) => (
-            <a
-              aria-label={social.name}
-              className={footerIconClassName}
-              href={social.url}
-              key={social.name}
-              {...externalLinkProps}
-            >
-              {social.icon}
-            </a>
-          ))}
-        </div>
-        <div className='flex items-center gap-1'>
-          <button
-            aria-label='Ask Simba'
+      {/* Socials get a row of their own: next to Simba and the theme toggle
+          they overflow a 360px screen */}
+      <div className='flex items-center justify-between border-t border-dashed px-1.5'>
+        {socials.map((social) => (
+          <a
+            aria-label={social.name}
             className={footerIconClassName}
-            onClick={onAssistantOpen}
-            type='button'
+            href={social.url}
+            key={social.name}
+            {...externalLinkProps}
           >
-            <Icons.aiChat />
-          </button>
-          <ThemeToggle mode='light-dark-system' />
-        </div>
+            {social.icon}
+          </a>
+        ))}
+      </div>
+      <div className='flex items-center justify-between border-t border-dashed pe-3'>
+        <button
+          className={cn(menuItemClassName, 'text-muted-foreground')}
+          onClick={onAssistantOpen}
+          type='button'
+        >
+          <Icons.aiChat />
+          Ask Simba
+        </button>
+        <ThemeToggle mode='light-dark-system' />
       </div>
     </DialogPrimitive.Popup>
   )
