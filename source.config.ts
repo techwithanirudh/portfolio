@@ -10,6 +10,7 @@ import lastModified from 'fumadocs-mdx/plugins/last-modified'
 import { transformerTwoslash } from 'fumadocs-twoslash'
 import { createFileSystemTypesCache } from 'fumadocs-twoslash/cache-fs'
 import { z } from 'zod'
+import { remarkDemoText } from './src/lib/source/remark-demo-text'
 
 const dateSchema = z.union([z.string(), z.date()]).pipe(z.coerce.date())
 
@@ -118,7 +119,12 @@ export default defineConfig({
           id: 'package-manager',
         },
       },
-      remarkPlugins: [remarkSteps, remarkMath, remarkAutoTypeTable],
+      remarkPlugins: [
+        remarkSteps,
+        remarkMath,
+        remarkAutoTypeTable,
+        remarkDemoText,
+      ],
     }
   },
   plugins: [lastModified()],

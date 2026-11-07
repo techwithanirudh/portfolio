@@ -11,6 +11,8 @@ import type { MDXComponents } from 'mdx/types'
 // rather than blocking every page
 import 'katex/dist/katex.css'
 import { VideoPlayer } from '@/components/ui/video-player'
+import { Compare } from './compare'
+import { DemoCard } from './demo-card'
 import { FramedImage, type FramedImageProps, IframeEmbed } from './embed'
 import { GithubRepo } from './github-repo'
 import { Heading } from './heading'
@@ -26,6 +28,8 @@ export const mdxComponents: MDXComponents = {
   Callout,
   Card,
   Cards,
+  Compare,
+  DemoCard,
   File,
   Files,
   Folder,
