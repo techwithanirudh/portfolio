@@ -23,7 +23,8 @@ export const Footer = () => (
         <ViewAnimation className='hidden w-min sm:flex' delay={0.1}>
           <UserButton className='size-9' />
         </ViewAnimation>
-        <div className='flex items-center justify-center'>
+        {/* On phones the controls row comes first and the copyright closes the footer */}
+        <div className='flex items-center justify-center max-sm:order-last'>
           <ViewAnimation delay={0.15}>
             <p className='text-balance text-center text-muted-foreground text-sm'>
               &copy; {new Date().getFullYear()} {owner}. All rights reserved.

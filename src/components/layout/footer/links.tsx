@@ -18,6 +18,8 @@ interface LinkEntry {
 }
 
 interface LinkGroup {
+  /** Lays the items out in a row on phones, for links that are mostly an icon */
+  iconRow?: boolean
   items: LinkEntry[]
   title: string
 }
@@ -89,11 +91,13 @@ export const Links = () => {
       title: 'More',
     },
     {
+      // One link per line made the phone footer long
+      iconRow: true,
       items: socials.map((social) => ({
         children: (
-          <span className='inline-flex items-center gap-1.5 [&_svg]:size-4'>
+          <span className='inline-flex items-center gap-1.5 max-sm:-m-2.5 max-sm:p-2.5 [&_svg]:size-4 max-sm:[&_svg]:size-5'>
             {social.icon}
-            {social.name}
+            <span className='max-sm:sr-only'>{social.name}</span>
           </span>
         ),
         external: true,
@@ -117,7 +121,12 @@ export const Links = () => {
           <div className='border-b pb-1 font-medium text-foreground sm:border-none sm:pb-0'>
             <p>{list.title}</p>
           </div>
-          <ul className='flex flex-col gap-2 sm:gap-3'>
+          <ul
+            className={cn(
+              'flex flex-col gap-2 sm:gap-3',
+              list.iconRow && 'max-sm:flex-row max-sm:gap-7'
+            )}
+          >
             {list.items.map((item) => (
               <li key={item.href}>
                 <FooterLink item={item} />
