@@ -31,13 +31,22 @@ export const getSortedProjects = () =>
     return b.data.date.getTime() - a.data.date.getTime()
   })
 
-/** The project after this one in the list, wrapping to the first */
-export const getNextProject = (page: ProjectPage) => {
+/** The projects before and after this one in the list, wrapping at the ends */
+export const getAdjacentProjects = (page: ProjectPage) => {
   const projects = getSortedProjects()
   const index = projects.findIndex((project) => project.url === page.url)
-  const next = projects[(index + 1) % projects.length]
-  return next && next.url !== page.url ? next : undefined
+  const at = (offset: number) => {
+    const project =
+      projects[(index + offset + projects.length) % projects.length]
+    return project && project.url !== page.url ? project : undefined
+  }
+
+  return { next: at(1), previous: at(-1) }
 }
+
+/** The project after this one in the list, wrapping to the first */
+export const getNextProject = (page: ProjectPage) =>
+  getAdjacentProjects(page).next
 
 export const getProjectYear = (page: ProjectPage) =>
   page.data.date.getUTCFullYear()

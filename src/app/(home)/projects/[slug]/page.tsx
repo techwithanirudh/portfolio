@@ -7,6 +7,7 @@ import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
 import { PROJECT_COVER_SIZES } from '@/components/features/projects/cover'
 import { ProjectFacts } from '@/components/features/projects/project-facts'
+import { ProjectNav } from '@/components/features/projects/project-nav'
 import { ProjectStatus } from '@/components/features/projects/project-status'
 import {
   projectTransitionName,
@@ -19,22 +20,34 @@ import { heroTitleClassName, TitleDot } from '@/components/layout/sections/hero'
 import { Prose } from '@/components/prose'
 import { createArticleMetadata, getProjectPageImage } from '@/lib/metadata'
 import { hasStatusStrip } from '@/lib/project-links'
-import { getProject, getProjectPages, type ProjectPage } from '@/lib/source'
+import {
+  getAdjacentProjects,
+  getProject,
+  getProjectPages,
+  type ProjectPage,
+} from '@/lib/source'
+
+const neighbour = (page?: ProjectPage) =>
+  page ? { title: page.data.title, url: page.url } : undefined
 
 function Header({ page }: { page: ProjectPage }) {
   const slug = page.slugs.join('/')
+  const { previous, next } = getAdjacentProjects(page)
 
   return (
     <header className='flex flex-col gap-4 px-6 pt-8 pb-6 lg:pt-12'>
-      <ViewTransition
-        name={projectTransitionName(slug, 'title')}
-        share={projectTransitionShare}
-      >
-        <h1 className={heroTitleClassName}>
-          {page.data.title}
-          <TitleDot />
-        </h1>
-      </ViewTransition>
+      <div className='flex items-start justify-between gap-4'>
+        <ViewTransition
+          name={projectTransitionName(slug, 'title')}
+          share={projectTransitionShare}
+        >
+          <h1 className={heroTitleClassName}>
+            {page.data.title}
+            <TitleDot />
+          </h1>
+        </ViewTransition>
+        <ProjectNav next={neighbour(next)} previous={neighbour(previous)} />
+      </div>
       <ViewTransition
         name={projectTransitionName(slug, 'description')}
         share={projectTransitionShare}
