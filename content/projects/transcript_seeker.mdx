@@ -27,6 +27,10 @@ Transcript Seeker is a project I did for Meeting BaaS, and I think it was my fir
   <Screen frame='wide' height={1020} src='/images/projects/transcript_seeker/upload.webp' width={1150} alt='The Upload File page with a sidebar to pick Gladia or AssemblyAI, a language, and extras such as speaker diarization and summarization' caption='Upload File, with provider, language and extras.' />
 </Screens>
 
+## How it went
+
+The app already existed when I picked it up in October 2024. It was a React client talking to an Express API with its own Postgres database, plus a few bits stashed in IndexedDB. I moved the data into the browser with PGLite, then split the project into a Turborepo monorepo with the web app, the proxy, a small API and a docs site built with [Fumadocs](https://fumadocs.dev/). Calendars came next, so you could see your upcoming meetings, and the last stretch was mostly fighting deployment configs. Right after this I built the [Speaking Meeting Bot](/projects/speaking_meeting_bot).
+
 ## How it works
 
-The fun part is the architecture. It's a fully client-side SPA with no backend of its own. Everything lives in [PGLite](https://pglite.dev/), which is Postgres running right in your browser, with [Drizzle](https://orm.drizzle.team/) on top. Your keys, meetings, notes and chats all stay on your machine. The only extra piece is a tiny [Nitro](https://nitro.build/) proxy that passes requests through to the Meeting BaaS API. The UI is built with [shadcn/ui](https://ui.shadcn.com/).
+The fun part is the architecture. The core app is a client-side SPA with no backend of its own. Everything lives in [PGLite](https://pglite.dev/), which is Postgres running right in your browser, with [Drizzle](https://orm.drizzle.team/) on top. Your keys, meetings, notes and chats all stay on your machine. A tiny [Nitro](https://nitro.build/) proxy passes requests through to the Meeting BaaS API. The one thing that does need a server is calendar sync, so a small API with [Better Auth](https://www.better-auth.com/) sign-in keeps calendar data in a SQLite database on Turso. Recordings play in [Vidstack](https://vidstack.io/), and the transcript scrolls along with the video. The UI is built with [shadcn/ui](https://ui.shadcn.com/).

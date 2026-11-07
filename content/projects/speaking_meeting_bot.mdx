@@ -10,7 +10,7 @@ image: /images/projects/speaking_meeting_bot/cover.png
 tags: ['Python', 'Pipecat', 'MeetingBaaS', 'WebSocket']
 ---
 
-A bot that joins a Google Meet or Teams call and talks like a person. I built the first version over a few days in November 2024, and then the Meeting BaaS team took it over. They added the persona files, a proper server and a hosted API, so the repo today does a lot more than mine did. It's open source under MIT and lives in their org now.
+A bot that joins a Google Meet or Teams call and talks like a person. I built the first version over a few days in November 2024, right after [Transcript Seeker](/projects/transcript_seeker), and then the Meeting BaaS team took it over. They added the persona files, a proper server and a hosted API, so the repo today does a lot more than mine did. It's open source under MIT and lives in their org now.
 
 ## What my version did
 
@@ -18,7 +18,7 @@ You gave it a meeting link, and it joined the call and held a spoken conversatio
 
 ## How I built it
 
-[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams the meeting's audio over a WebSocket. My bot was a [Pipecat](https://www.pipecat.ai/) pipeline on the other end: [Deepgram](https://deepgram.com/) turned speech into text, an OpenAI model wrote the reply and [Cartesia](https://cartesia.ai/) spoke it back. The awkward part was the glue. Meeting BaaS sends plain audio and Pipecat wants its own frames, so I wrote a small proxy that wrapped the audio going in and unwrapped the replies coming out, and I had to pin the voice to the same 16 kHz as the call. A script started each bot, its proxy and its own [ngrok](https://ngrok.com/) tunnel so Meeting BaaS could reach it, which is how I got a few bots into a meeting at once.
+[Meeting BaaS](https://www.meetingbaas.com/) joins the call and streams the meeting's audio over a WebSocket. My bot was a [Pipecat](https://www.pipecat.ai/) pipeline on the other end: [Deepgram](https://deepgram.com/) turned speech into text, an OpenAI model wrote the reply and [Cartesia](https://cartesia.ai/) spoke it back. The awkward part was the glue. Meeting BaaS sends plain audio and Pipecat wants its own protobuf frames, so I wrote a small proxy that wrapped the audio going in and unwrapped the replies coming out, and I had to pin the voice to the same 16 kHz as the call. A script started each bot, its proxy and its own [ngrok](https://ngrok.com/) tunnel so Meeting BaaS could reach it, which is how I got a few bots into a meeting at once.
 
 ## What the team did next
 

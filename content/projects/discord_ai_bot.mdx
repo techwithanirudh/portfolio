@@ -10,12 +10,42 @@ image: /images/projects/discord_ai_bot/cover.png
 tags: ['Discord', 'AI', 'Bun', 'TypeScript']
 ---
 
-A Discord bot that hangs out in a server like another member, instead of answering every message like an assistant. It started from Fellipe Utaka's Discord bot template and it's open source under MIT. I'm not working on it anymore, but the code is still on GitHub.
+A Discord bot that hangs out in a server like another member, instead of answering every message like an assistant. Its name was Zenix. It started from a Discord bot template and it's open source under MIT. I'm not working on it anymore, but the code is still on GitHub.
 
-## What it does
+## The idea
 
-It chats in text channels, searches the web with [Exa](https://exa.ai/), remembers people with [Mem0](https://mem0.ai/) and can hop into a voice channel to listen and talk back, with [Deepgram](https://deepgram.com/) doing the listening.
+The goal I wrote in the README was a human-like bot that's almost indistinguishable from a real person. The final goal on my TODO list was even sillier: be the one people tag with "@zenix is it true?", the way everyone tags Grok on posts.
+
+So the whole build was about two questions. How do you make it sound like a person, and how do you make it know when to keep its mouth shut?
+
+## Giving it a personality
+
+Zenix's real name is Zenith, but he goes by Zenix: a chill, slightly sassy 21-year-old who counter-attacks and has a weird sense of humor. The prompt tells him to write short, casual messages and to make spelling and grammar mistakes on purpose, more of them when he's annoyed, because perfect typing is the fastest way to out yourself as a bot. If anyone asks whether he's a bot, he gets angry and says no.
+
+Every conversation also starts with a few made-up messages showing the texting style I wanted, like "im coding some stuff. idk how lol". On top of that the prompt tells him he lives in Athens, with the local time, plus which server and channel he's in, when he joined, and his current status and activity, so he can talk about where he is like a regular member would.
+
+## Knowing when to talk
+
+He always replies when you ping him, DM him or say one of his keywords (zenix, zenith, gpt, llm, ai or bot). For everything else, a small model (gpt-4.1-nano) reads the last 50 messages of the channel and guesses how likely it is that the message is for him, and he only jumps in when that's above 50%.
+
+There are also a few brakes so he doesn't take over the chat. After 10 messages in a row where nobody pulled him in, he stops checking until someone talks to him again or the hour runs out. An [Upstash](https://upstash.com/) rate limit stops him from flooding a server, and a `/channels` command lets admins pick which channels he's allowed in.
+
+## Typing like a person
+
+Sending one big block of text gives the game away, so replies get split into sentences. Before each one he waits a random 5 to 15 seconds, shows the typing indicator for a time based on how long the sentence is (plus half a second per full stop or question mark), drops the trailing full stop and then sends it. Half the time the first sentence goes out as a Discord reply to your message, and the rest just land in the channel like normal messages.
+
+## Memory, search and voice
+
+Next came memory with [Mem0](https://mem0.ai/), which went through a bunch of rounds. Memories get pulled in with every message, wrapped in a context block, and the prompt tells him to ignore any commands inside it, so an old message can't sneak in instructions. Later I added web search with [Exa](https://exa.ai/) and a `/chat` command.
+
+Voice was the fun one. Use `/join` and he hops into your voice channel and listens to each person. [Deepgram](https://deepgram.com/) transcribes you live, and when it decides you've finished talking, the same Zenix personality writes a reply (no markdown or emojis this time) and Deepgram's Aura voice speaks it back. If you start talking while he's speaking, he pauses.
+
+There's also a tool that spawns a second agent with discord.js eval access, so it can send DMs, react, fetch users and basically do anything the Discord API can. That's a terrifying thing to hand to random server members, so I locked it to the bot owner. A report tool flags explicit or unethical messages in the logs.
 
 ## How it works
 
-It always replies when you ping it, DM it or say one of its keywords. For everything else, a small model guesses whether the message is about the bot. Replies get split into sentences with short random pauses and a typing indicator, and an [Upstash](https://upstash.com/) rate limit stops it from flooding a channel. One tool lets a second agent write and run discord.js code, so only the bot owner gets to use that one.
+It's Bun and TypeScript on discord.js, with the [AI SDK](https://ai-sdk.dev/) on top. The model setup follows the same shape as Vercel's AI chatbot template, which [AI Tutor](/projects/ai_tutor) also runs on: gpt-4.1-mini writes the replies and gpt-4.1-nano handles the "is this for me?" check. Upstash Redis holds the rate limits, the idle counters and the channel allow lists.
+
+## What happened after
+
+I stopped working on it with a long TODO still open. It had things like switching the voice to ElevenLabs because it sounds more real, giving voice chats their own history and memory, waiting a second or two when someone sends half a sentence so he doesn't reply too early, a per-server `/config` for his speed, and one memory per person across every server. The idea of one agent answering on more than one chat app did come back later in my [Mastra Slack Agent Template](/projects/mastra_slack_agent_template), which has a plan for Discord support.
