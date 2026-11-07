@@ -80,7 +80,7 @@ export function NavigatePart({ part }: { part: ToolPart<'navigate'> }) {
     if (!isDocked) {
       setOpen(false)
     } else if (mode === 'expanded') {
-      setExpanded(false)
+      setExpanded(false, { navigating: true })
     }
     router.push(target, { scroll: !id })
     if (id) {

@@ -6,6 +6,7 @@ import {
   type ReactNode,
   type RefObject,
   type SetStateAction,
+  startTransition,
   use,
   useCallback,
   useEffect,
@@ -35,7 +36,7 @@ const AssistantContext = createContext<{
   open: boolean
   popupRef: RefObject<HTMLDivElement | null>
   setContext: Dispatch<SetStateAction<string | null>>
-  setExpanded: (next: boolean) => void
+  setExpanded: (next: boolean, options?: { navigating?: boolean }) => void
   setOpen: (next: boolean) => void
 } | null>(null)
 
@@ -57,10 +58,20 @@ export function AssistantProvider({ children }: { children: ReactNode }) {
 
   const mode = panelMode(expanded, isDocked)
 
-  const setExpanded = useCallback((next: boolean) => {
-    morphFrom.current = popupRef.current?.getBoundingClientRect() ?? null
-    setExpandedState(next)
-  }, [])
+  const setExpanded = useCallback(
+    (next: boolean, { navigating = false }: { navigating?: boolean } = {}) => {
+      if (navigating) {
+        // A link is leaving the page: resize inside the navigation's own view
+        // transition instead of running a second morph on top of it
+        morphFrom.current = null
+        startTransition(() => setExpandedState(next))
+        return
+      }
+      morphFrom.current = popupRef.current?.getBoundingClientRect() ?? null
+      setExpandedState(next)
+    },
+    []
+  )
 
   const setOpen = useCallback((next: boolean) => {
     if (next) {

@@ -261,7 +261,7 @@ export function AssistantPanel() {
             if (!isDocked) {
               setOpen(false)
             } else if (expanded) {
-              setExpanded(false)
+              setExpanded(false, { navigating: true })
             }
           }}
           ref={popupRef}
