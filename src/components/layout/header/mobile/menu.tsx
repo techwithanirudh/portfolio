@@ -4,10 +4,9 @@ import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useRef } from 'react'
-import { externalLinkProps } from '@/components/external-link'
 import { Icons } from '@/components/icons/icons'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
-import { linkItems, socials } from '@/constants/navigation'
+import { linkItems } from '@/constants/navigation'
 import { pages } from '@/constants/pages'
 import { isLinkItemActive } from '@/lib/is-active'
 import { cn } from '@/lib/utils'
@@ -91,24 +90,6 @@ export function MenuPanel({
           </div>
         ))}
       </nav>
-      {/* Socials get a row of their own: next to Simba and the theme toggle
-          they overflow a 360px screen */}
-      <div className='grid grid-cols-5'>
-        {socials.map((social) => (
-          <a
-            aria-label={social.name}
-            className={cn(
-              cellClassName,
-              'justify-center text-muted-foreground hover:text-foreground [&_svg]:size-3.5'
-            )}
-            href={social.url}
-            key={social.name}
-            {...externalLinkProps}
-          >
-            {social.icon}
-          </a>
-        ))}
-      </div>
       {/* Same two columns as the nav, so the middle line runs straight down
           and the theme cells split the right column into thirds */}
       <div className='grid grid-cols-2 divide-x divide-dashed'>

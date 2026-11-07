@@ -135,6 +135,14 @@ export function MobileNav() {
         open={open}
       >
         <DialogPrimitive.Portal>
+          {/* Dims and softens the page so the menu reads as its own layer.
+              It only filters what's behind it and paints no color of its own,
+              so Safari's bar tint keeps following the page */}
+          <DialogPrimitive.Backdrop
+            className='fixed inset-0 z-31 backdrop-blur-[2px] backdrop-brightness-90 transition-[backdrop-filter,opacity] duration-200 ease-out-strong data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 md:hidden dark:backdrop-brightness-50'
+            forceRender
+            onClick={closeMenu}
+          />
           <MenuPanel
             menuId={MENU_ID}
             onAssistantOpen={() => {
