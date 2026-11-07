@@ -10,6 +10,7 @@ import {
 import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 import type { ExperienceItemType } from '@/types/experience'
+import { ClampedDescription } from './clamped-description'
 import { ExperienceRail, RailNode } from './experience-rail'
 
 type TimelineVariant = 'preview' | 'full'
@@ -25,6 +26,9 @@ const markdownComponents: Components = {
     ),
   p: ({ children }) => children,
 }
+
+const descriptionClassName =
+  'typography-body mt-2 text-pretty text-muted-foreground leading-relaxed'
 
 const rowClassName =
   'grid grid-cols-[40px_minmax(0,1fr)] gap-x-3.5 px-6 wide:grid-cols-[200px_64px_minmax(0,1fr)] wide:gap-x-0'
@@ -109,6 +113,11 @@ function TimelineRow({
 
   const { start, end } = position.employmentPeriod
   const NodeComponent = variant === 'full' ? RailNode : 'div'
+  const description = (
+    <ReactMarkdown components={markdownComponents}>
+      {position.description}
+    </ReactMarkdown>
+  )
 
   return (
     <article className={cn(rowClassName, 'py-7 wide:py-6')}>
@@ -162,18 +171,17 @@ function TimelineRow({
           )}
         </p>
 
-        {position.description && (
-          <p
-            className={cn(
-              'typography-body mt-2 text-pretty text-muted-foreground leading-relaxed',
-              variant === 'preview' && 'wide:line-clamp-1 max-sm:line-clamp-2'
-            )}
-          >
-            <ReactMarkdown components={markdownComponents}>
-              {position.description}
-            </ReactMarkdown>
-          </p>
-        )}
+        {position.description &&
+          (variant === 'preview' ? (
+            <ClampedDescription
+              clampClassName='wide:line-clamp-1 max-sm:line-clamp-2'
+              className={descriptionClassName}
+            >
+              {description}
+            </ClampedDescription>
+          ) : (
+            <p className={descriptionClassName}>{description}</p>
+          ))}
 
         {variant === 'full' &&
           position.skills &&
