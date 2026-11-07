@@ -19,15 +19,35 @@ The arrows move the pointer. Tap to nudge it a few pixels, hold to glide, and it
 The onboarding takes after [Alcove](https://tryalcove.com/). It goes one step at a time, shows where your TV brand hides its HDMI-CEC setting, gets the Accessibility permission, then has you practice each gesture with the real remote, so you know it works before you're done.
 
 <Screens>
-  <Screen frame='wide' height={371} src='/images/projects/remotely/welcome.webp' width={660} alt='The first onboarding step, reading Your TV remote becomes a pointer for this Mac, with hints for Hold to move, Center to click and Back twice to scroll' caption='Onboarding goes one step at a time.' />
-  <Screen frame='wide' height={371} src='/images/projects/remotely/connect-step.webp' width={660} alt='The Connect over HDMI step with the display brand set to Samsung and the menu path to Anynet+ (HDMI-CEC)' caption='It shows where your TV brand hides HDMI-CEC.' />
-  <Screen frame='wide' height={371} src='/images/projects/remotely/practice-move.webp' width={660} alt='The practice step titled Hold an arrow to move the pointer, with a target to move the pointer onto' caption='Practice only counts input from the remote.' />
+  <Screen height={1010} src='/images/projects/remotely/welcome.webp' width={660} alt="The Welcome step, reading Your TV remote becomes a pointer for this Mac, with hints for Hold to move, Center to click and Back twice to scroll" caption="Onboarding starts by saying what the remote will do." />
+  <Screen height={1010} src='/images/projects/remotely/connect-step.webp' width={660} alt="The Connect over HDMI step with the display brand set to Samsung and the menu path to Anynet+ (HDMI-CEC)" caption="It shows where your TV brand hides HDMI-CEC." />
+  <Screen height={1010} src='/images/projects/remotely/permission.webp' width={660} alt="The permission step, saying Remotely needs permission to move the pointer, with Permission allowed shown" caption="Then it asks for the Accessibility permission." />
+</Screens>
+
+<Screens>
+  <Screen height={1010} src='/images/projects/remotely/practice-move.webp' width={660} alt="The practice step Hold an arrow to move the pointer, with a spot to move the pointer onto" caption="Practice only counts input from the remote." />
+  <Screen height={1010} src='/images/projects/remotely/practice-click.webp' width={660} alt="The practice step Press Center to click" caption="Clicking, double-clicking and right-clicking each get a step." />
+  <Screen height={1010} src='/images/projects/remotely/practice-scroll.webp' width={660} alt="The practice step Press Back twice to scroll, with a short list of scrollable lines" caption="Scrolling has one too." />
+</Screens>
+
+<Screens>
+  <Screen height={1010} src='/images/projects/remotely/finish.webp' width={660} alt="The last step, reading You're all set, with notes about the menu bar, remapping buttons and diagnostics" caption="It ends by pointing at the menu bar, remapping and diagnostics." />
 </Screens>
 
 The settings window takes after [Loop](https://github.com/MrKai77/Loop) by MrKai. A sidebar holds General, Controls, Connection, Diagnostics and About, so you can rebind buttons or check that the remote is actually coming through.
 
 <Screens>
-  <Screen frame='wide' height={506} src='/images/projects/remotely/diagnostics-log.webp' width={900} alt='The Diagnostics pane with Remote signal awaiting input, Accessibility granted and an event log naming the connected display' caption='Diagnostics shows whether the remote is heard.' />
+  <Screen height={1374} src='/images/projects/remotely/settings-general.webp' width={1370} alt="The General pane with switches for Enable Remotely, Launch at login and Show in the menu bar, Accessibility granted and a pointer speed slider at 1.0x" caption="General has the on switch, launch at login and pointer speed." />
+  <Screen height={1374} src='/images/projects/remotely/settings-controls.webp' width={1370} alt="The Controls pane with a short guide to using the remote and a list of bindings, such as Move Pointer Up and Left Click" caption="Controls lists the gestures and lets you rebind each button." />
+</Screens>
+
+<Screens>
+  <Screen height={1374} src='/images/projects/remotely/settings-connection.webp' width={1370} alt="The Connection pane with a Ready to Receive status, three setup steps and the Samsung menu path to Anynet+" caption="Connection keeps the setup checklist and the HDMI-CEC hint for your brand." />
+  <Screen height={1374} src='/images/projects/remotely/settings-diagnostics.webp' width={1370} alt="The Diagnostics pane with Remote signal awaiting input, Accessibility granted and an event log naming the connected display" caption="Diagnostics shows whether the remote is heard." />
+</Screens>
+
+<Screens>
+  <Screen height={1374} src='/images/projects/remotely/settings-about.webp' width={1370} alt="The About pane for version 0.7.5 with update settings, a release channel picker and Replay and Reset buttons for onboarding" caption="About holds the update settings and a button to replay onboarding." />
 </Screens>
 
 ## How it works
