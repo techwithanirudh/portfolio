@@ -74,7 +74,7 @@ function TOCPopoverContent({ className }: { className?: string }) {
   return (
     <Collapsible
       className={cn(
-        'not-prose sticky top-14 z-10 xl:block 2xl:hidden',
+        'not-prose sticky top-0 z-10 md:top-14 xl:block 2xl:hidden',
         className
       )}
       data-toc-popover=''
