@@ -11,19 +11,31 @@ tags: ['Expo', 'React Native', 'Convex', 'Firecrawl', 'HeroUI Native']
 ---
 Depensa is an expense tracker that reads your order history from the shops you buy from and puts it all in one list, with no bank account or card to link. On Android you can get it from [Google Play](https://play.google.com/store/apps/details?id=com.techwithanirudh.depensa). It's not on the [App Store](https://www.apple.com/app-store/), so on iPhone you install it with [SideStore](https://sidestore.io/) or [AltStore](https://altstore.io/).
 
-## What it does
+## How it started
 
-It works with 100 shops across ten regions, and you can add another one by its web address. Each order turns into an expense in your currency. It also spots repeating charges, lets you set monthly limits, and will email you a CSV if you ask.
+Funny thing: the repo didn't start as Depensa at all. In March 2026 it was Medex, an app for keeping medical documents in folders, sorted by visit and hospital. In August I deleted all of that in one commit and rebuilt the same Expo foundation as an expense tracker.
 
-<Screens>
-  <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Adding a source.' />
-  <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Spending, with upcoming charges.' />
-</Screens>
+The first plan looked pretty different from what shipped. You'd sign in to a shop inside a [Firecrawl](https://www.firecrawl.dev/) cloud browser, an AI would learn how to read that shop, and bank exports would get merged in too. One idea survived every rewrite though: the AI only *learns* a shop, it doesn't do the daily syncing. A model browsing on every sync costs money every time and answers a bit differently each run, so the daily path had to be plain code.
 
-## How it works
+## Building it
 
-You sign in on the shop's own page inside the app, so Depensa never sees your password. The first time you add a shop, an AI model writes a small reader for its orders, and after that every sync just replays it on a schedule. Sync jobs are queued in [Convex](https://www.convex.dev/). If a site has no orders it can use, the app tells you it can't read it.
+The first big change was sign-in. Now the shop's own login page opens in a WebView on your phone, you type your password and MFA yourself, and the phone hands only the session (its cookies and `localStorage`) to the backend, which stores it encrypted. Depensa never sees the password.
 
 <Screens>
-  <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights.' />
+  <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Picking a shop. The region picker covers ten regions, and any other shop can be added by its web address.' />
+  <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Every order lands in one total, in your currency, with repeating charges listed as upcoming.' />
 </Screens>
+
+The second was the backend. In September I moved everything agentic out of [Convex](https://www.convex.dev/) into a separate [Mastra](https://mastra.ai/) worker that runs on my own server (I'd already played with Mastra in my [Slack agent template](/projects/mastra_slack_agent_template)). Convex stays the database and the scheduler. The worker holds a websocket to it, claims queued runs and writes results back through mutations, so it never needs an open port.
+
+The fun part is the reader. The first time you add a shop, a learner agent opens a cloud browser with your session and explores the site. It tries three things in order: the JSON request the site itself makes for your orders, a data blob baked into the page (like `__NEXT_DATA__`), and, as a last resort, a script over the rendered order cards. Whatever works is saved as versioned JSON with one [JSONata](https://jsonata.org/) expression per field, and a plain runner replays it on a schedule from then on. Every order is converted to your currency when it's saved. Some shops needed extra tricks: Blinkit's order list only has IDs, so its reader fetches each order's details too. When a site changes and a reader breaks, a repair agent writes a new version, and the old one stays active until the new one passes a live test. If nothing works, the app tells you it can't read that site.
+
+<Screens>
+  <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights sums up the period, with averages and your biggest order.' />
+</Screens>
+
+## Where it is now
+
+It works with 100 shops across ten regions. On top of the list you can move orders between categories, set a monthly limit for a category or a shop, and ask for an email with all your expenses as a CSV. Version 1.1.0 added home screen widgets for this month, your budget and what's coming up.
+
+Next on my list: an Expo SDK upgrade, moving the widgets onto `expo-widgets` and adding Live Activities, and learning readers for the big shops in every country ahead of time, so the first person to add one doesn't have to wait.

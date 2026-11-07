@@ -14,22 +14,34 @@ Coolify Tweaks is a [Stylus](https://github.com/openstyles/stylus) userstyle tha
 
 It's live and maintained, and the latest release is v4.1.2.
 
-## What it does
+## How it started
 
-Projects turn into a grid of rounded cards, and pages like New Resource get cleaner rows. Install it with Stylus, or add it on the server with a [Traefik](https://traefik.io/) plugin so it works in any browser without an extension.
+It began in June 2025 as a single `style.user.css` file: a few fixes for spacing, toasts and that sponsorship popup. A day later it was a Stylus `.styl` file, and by the end of the month I'd thrown that out too and moved to SCSS split into partials, built with PostCSS. A small PostCSS plugin wraps the output in the `@-moz-document` block Stylus uses to decide which hosts to style, and another writes the userstyle header.
+
+v3 came out in early July with a proper release workflow. That month I put [Phosphor](https://phosphoricons.com/) icons in the sidebar and redesigned the dashboard's project list into cards.
 
 <Screens>
-  <Screen frame='wide' height={986} src='/images/projects/coolify_tweaks/dashboard-before.webp' width={1600} alt='The stock Coolify dashboard in dark mode, with projects as wide rows and a purple highlighted row' caption='The stock dashboard, on Coolify v4.0.0-beta.420.6.' />
-  <Screen frame='wide' height={986} src='/images/projects/coolify_tweaks/dashboard-after.webp' width={1600} alt='The same Coolify dashboard with Coolify Tweaks, projects shown as a grid of rounded cards' caption='The same dashboard with the style.' />
+  <Screen frame='wide' height={986} src='/images/projects/coolify_tweaks/dashboard-before.webp' width={1600} alt='The stock Coolify dashboard in dark mode, with projects as wide rows and a purple highlighted row' caption='Stock Coolify (v4.0.0-beta.420.6): every project is a wide row.' />
+  <Screen frame='wide' height={986} src='/images/projects/coolify_tweaks/dashboard-after.webp' width={1600} alt='The same Coolify dashboard with Coolify Tweaks, projects shown as a grid of rounded cards' caption='Same page with the style: projects become a grid of rounded cards.' />
 </Screens>
 
+## The v4 rewrite
+
+In October 2025 I rebuilt the whole thing as a [Turborepo](https://turbo.build/repo), starting from create-t3-turbo and ripping out what I didn't need (the Expo app, auth, the default API). The style became one app, and two new ones joined it: a [Nitro](https://nitro.build/) API and a docs site on [Fumadocs](https://fumadocs.dev/) with install guides, before and after screenshots and video walkthroughs. TweakCN themes came in with that rewrite too, and v4.0.0 shipped at the end of November.
+
 <Screens>
-  <Screen frame='wide' height={994} src='/images/projects/coolify_tweaks/theme-claude-dark.webp' width={1600} alt='The Coolify dashboard with the Claude theme from TweakCN applied in dark mode' caption='The TweakCN Claude theme, dark mode.' />
-  <Screen frame='wide' height={994} src='/images/projects/coolify_tweaks/theme-bubblegum-light.webp' width={1600} alt='The Coolify dashboard with the pink and yellow Bubblegum theme from TweakCN in light mode' caption='The TweakCN Bubblegum theme, light mode.' />
+  <Screen frame='wide' height={994} src='/images/projects/coolify_tweaks/theme-claude-dark.webp' width={1600} alt='The Coolify dashboard with the Claude theme from TweakCN applied in dark mode' caption='The TweakCN Claude theme in dark mode, pulled in from just a theme ID.' />
+  <Screen frame='wide' height={994} src='/images/projects/coolify_tweaks/theme-bubblegum-light.webp' width={1600} alt='The Coolify dashboard with the pink and yellow Bubblegum theme from TweakCN in light mode' caption='Bubblegum in light mode. Fonts come along with the colors.' />
 </Screens>
 
 ## How it works
 
 The style is about 2,300 lines of SCSS aimed straight at Coolify's page structure. That's also its weak spot: a Coolify update every now and then breaks a few selectors, and I patch them in the next release.
 
-Releases go up on GitHub, and a small [Nitro](https://nitro.build/) API sits in front of them. Your install link points at that API instead of a fixed file, so Stylus always pulls the latest release. Add a TweakCN theme ID to the link and the API fetches that theme, drops its colors into the style's CSS variables and loads its fonts, so any theme works without me shipping it.
+Releases go up on GitHub, and the Nitro API sits in front of them. Your install link (and the `@updateURL` in the userstyle header) points at that API instead of a fixed file, so Stylus always pulls the latest release. Add a TweakCN theme ID to the link and the API fetches that theme from TweakCN's registry, turns its colors into the style's CSS variables with PostCSS, adds a Google Fonts import for its fonts and runs the result through Lightning CSS for your browsers. So any theme works without me shipping it.
+
+Don't want an extension? The second way in is Traefik's `rewrite-body` plugin, which injects the CSS into every dashboard response on the server, so it works in any browser on any device. You can also grab it from [userstyles.world](https://userstyles.world/style/22850/coolify-enhanced-ui).
+
+## What's next
+
+My TODO list still says "fix the ugly colors (WIP)", which is fair. There's also light mode screenshots for the docs, a general troubleshooting section and a re-recorded theming video.
