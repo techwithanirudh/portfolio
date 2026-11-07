@@ -14,7 +14,7 @@ export default function ExperiencePreview() {
       className='relative w-full pt-8 sm:pt-10'
       id={sectionIds.experience}
     >
-      <div className='flex flex-col gap-6 sm:gap-10'>
+      <div className='flex flex-col gap-8 sm:gap-10'>
         <SectionHeader
           align='left'
           className='px-6'
