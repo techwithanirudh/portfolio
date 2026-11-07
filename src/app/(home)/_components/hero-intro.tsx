@@ -35,7 +35,7 @@ export const HeroIntro = () => {
       <button
         aria-controls={id}
         aria-expanded={expanded}
-        className='-my-1 -ml-2 h-10 rounded-md px-2 text-muted-foreground text-sm underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:text-foreground sm:hidden'
+        className='-my-1 -ml-2 h-10 rounded-md px-2 text-muted-foreground text-sm underline-offset-4 transition-colors hover:text-foreground hover:underline focus-visible:text-foreground active:text-foreground sm:hidden'
         onClick={() => setExpanded((open) => !open)}
         type='button'
       >

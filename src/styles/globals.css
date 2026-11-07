@@ -11,6 +11,15 @@
 @plugin "tailwind-scrollbar";
 
 @custom-variant dark (&:is(.dark *));
+/* Tailwind's hover: only checks (hover: hover), which some touch devices claim;
+   a tap would leave the hover style stuck until the next tap elsewhere */
+@custom-variant hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
 @custom-variant supports-timeline-scroll {
   @supports (animation-timeline: scroll()) {
     @slot;
@@ -160,6 +169,9 @@ html > body[data-scroll-locked] {
   }
 
   body {
+    /* viewport-fit=cover lets landscape phones paint under the notch; the
+       background still does, the content steps back in */
+    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
     font-synthesis-weight: none;
     text-wrap: pretty;
     text-rendering: optimizeLegibility;
@@ -167,6 +179,8 @@ html > body[data-scroll-locked] {
   }
 
   html {
+    /* The gray tap flash fights each control's own :active state */
+    -webkit-tap-highlight-color: transparent;
     @apply scroll-smooth scroll-pt-16 accent-primary scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border max-md:scroll-pb-24 dark:scrollbar-track-transparent;
   }
 
@@ -196,6 +210,40 @@ html > body[data-scroll-locked] {
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+
+  /* No double-tap-to-zoom wait on controls, so taps land at once; pinch zoom still works */
+  :where(
+    a[href],
+    button,
+    summary,
+    label,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    [role="checkbox"],
+    [role="radio"],
+    [role="menuitem"],
+    [role="option"]
+  ) {
+    touch-action: manipulation;
+  }
+
+  /* A long press on a control selects its label; text in links and prose stays selectable */
+  :where(
+    button,
+    summary,
+    [role="button"],
+    [role="tab"],
+    [role="switch"],
+    [role="menuitem"],
+    [role="option"]
+  ) {
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 

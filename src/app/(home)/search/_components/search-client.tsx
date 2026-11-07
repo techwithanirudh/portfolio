@@ -227,7 +227,7 @@ export function SearchClient() {
                       'inline-flex flex-1 items-center gap-2 p-2 px-3 text-sm transition-colors',
                       isActive
                         ? 'bg-card text-card-foreground'
-                        : 'bg-transparent text-muted-foreground hover:text-card-foreground'
+                        : 'bg-transparent text-muted-foreground hover:text-card-foreground active:bg-card active:text-card-foreground'
                     )}
                     key={value}
                     onClick={() => {

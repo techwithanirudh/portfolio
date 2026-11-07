@@ -26,7 +26,7 @@ export const SiteShell = ({ children }: { children: ReactNode }) => (
         id='main-content'
         tabIndex={-1}
       >
-        <main className='flex min-h-[calc(100dvh-3.5rem)] flex-col'>
+        <main className='flex min-h-[calc(100svh-3.5rem)] flex-col'>
           {/* A `contents` wrapper can't paint borders and hides the sections from a parent
               `divide-y`, so the dividers live here and the last rule is restored */}
           <div className='dashed-stack contents [&>:last-child]:border-b [&>:last-child]:border-dashed'>

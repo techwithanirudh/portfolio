@@ -312,7 +312,7 @@ export default function SearchDialog({
 
       <div className='rounded-xl bg-background ring-1 ring-border'>
         <CommandList
-          className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-[min(20rem,50dvh)] [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-[min(20rem,60dvh)]'
+          className='supports-timeline-scroll:scroll-fade-effect-y no-scrollbar max-h-[60dvh] min-h-[min(20rem,50dvh)] overscroll-contain [--mask-height:32px] [--scroll-buffer:1rem] sm:max-h-[min(20rem,60dvh)]'
           data-lenis-prevent
         >
           {groups.map((group, i) => renderGroup(group, { separated: i > 0 }))}

@@ -27,7 +27,7 @@ export default function ResumePage() {
 
   return (
     <main
-      className='flex min-h-dvh flex-col bg-background text-foreground print:block print:min-h-0 print:p-[0.55in]'
+      className='flex min-h-svh flex-col bg-background text-foreground print:block print:min-h-0 print:p-[0.55in]'
       data-resume
     >
       <div className='sticky top-0 z-10 border-border border-b border-dashed bg-background/80 backdrop-blur-sm print:hidden'>

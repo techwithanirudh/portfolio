@@ -172,7 +172,7 @@ function PromptContext({
       {/* The pseudo element grows the 14px icon's target to 24px */}
       <button
         aria-label='Remove context'
-        className='after:-translate-1/2 relative inline-flex items-center justify-center text-muted-foreground transition-colors after:absolute after:top-1/2 after:left-1/2 after:size-6 hover:text-foreground'
+        className='after:-translate-1/2 relative inline-flex items-center justify-center text-muted-foreground transition-colors after:absolute after:top-1/2 after:left-1/2 after:size-6 hover:text-foreground active:text-foreground'
         onClick={onClear}
         type='button'
       >
