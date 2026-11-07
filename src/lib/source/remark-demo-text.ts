@@ -1,7 +1,8 @@
 import { replaceSource } from 'fumadocs-core/mdx-plugins/stringifier'
 import { visit } from 'unist-util-visit'
+import { readerLadderText } from '../../components/content/mdx/reader-ladder/data'
 
-// Live demos (DemoCard, Compare) are pure UI, so the processed Markdown that
+// Live demos (DemoCard, Compare, ReaderLadder) are pure UI, so the processed Markdown that
 // feeds llms.txt, the .md routes and Simba would otherwise get their raw JSX.
 // This swaps each one for plain Markdown saying what the demo shows. A <Term>
 // (a word with a definition card) reads as just its word, like on the page.
@@ -48,6 +49,8 @@ export function remarkDemoText() {
             a.caption
           )
         )
+      } else if (element.name === 'ReaderLadder') {
+        replaceSource(file, node, readerLadderText())
       } else if (element.name === 'DemoCard') {
         // Whatever the card wraps keeps its own text, the caption follows it
         const { caption } = stringAttributes(element)

@@ -26,26 +26,11 @@ The first big change was sign-in. Now the shop's own login page opens in a <Term
 
 The second was the backend. In September I moved everything agentic out of [Convex](https://www.convex.dev/) into a separate [Mastra](https://mastra.ai/) worker that runs on my own server (I'd already played with Mastra in my [Slack agent template](/projects/mastra_slack_agent_template)). Convex stays the database and the scheduler. The worker holds a <Term>websocket</Term> to it, claims queued runs and writes results back through mutations, so it never needs an open port.
 
-The fun part is the reader. The first time you add a shop, a learner agent opens a cloud browser with your session and pokes around until it finds your orders.
+The fun part is the reader. The first time you add a shop, a learner agent opens a cloud browser with your session and pokes around until it finds your orders. It tries three ways, in order, and whatever works gets saved as data, not code: versioned JSON with one [JSONata](https://jsonata.org/) expression per field. A plain runner replays that from then on, with no model in the loop.
 
-<Mermaid
-  chart="flowchart LR
-  L[Learner agent] --> A{Site's own orders JSON?}
-  A -- no --> B{Data blob in the page?}
-  B -- no --> C{Script over order cards?}
-  C -- no --> X[Can't read this site]
-  A -- yes --> R[Saved reader]
-  B -- yes --> R
-  C -- yes --> R
-  R --> S[Plain runner on a schedule]"
-/>
+<ReaderLadder />
 
-- **Three tries, in order:** the JSON request the site makes for your orders, then a data blob baked into the page (like `__NEXT_DATA__`), then a script over the rendered order cards as a last resort.
-- **Saved as data, not code:** whatever works becomes versioned JSON with one [JSONata](https://jsonata.org/) expression per field, and a plain runner replays it from then on.
-- **One currency:** every order is converted to yours when it's saved.
-- **Extra tricks when needed:** Blinkit's order list only has IDs, so its reader fetches each order's details too.
-- **Self-healing:** when a site changes and a reader breaks, a repair agent writes a new version. The old one stays active until the new one passes a live test.
-- **Honest failure:** if nothing works, the app tells you it can't read that site.
+Every order is converted to your currency when it's saved, so it all lands in one total.
 
 <Screens>
   <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights sums up the period, with averages and your biggest order.' />
