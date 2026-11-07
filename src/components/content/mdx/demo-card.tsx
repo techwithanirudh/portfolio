@@ -48,7 +48,8 @@ export function DemoCard({
   )
 }
 
-// A control bar button, sized for thumbs (44px tall) on every screen
+// A control bar button, sized for thumbs (44px tall) on every screen. It sits
+// flat on the frame like a segmented control; the picked one lifts onto a card.
 export function DemoCardButton({
   active,
   children,
@@ -59,7 +60,7 @@ export function DemoCardButton({
     <button
       aria-pressed={active}
       className={cn(
-        'inline-flex h-11 min-w-11 select-none items-center justify-center gap-2 rounded-[10px] bg-card px-4 font-medium text-muted-foreground text-sm shadow-xs outline-none ring-1 ring-black/8 transition-[color,background-color,box-shadow,scale,opacity] duration-150 ease-out-strong hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 aria-pressed:bg-foreground aria-pressed:text-background aria-pressed:ring-transparent dark:ring-white/10 [&_svg]:size-4 [&_svg]:shrink-0',
+        'inline-flex h-11 min-w-11 select-none items-center justify-center gap-2 rounded-[10px] px-3.5 font-medium text-muted-foreground text-sm outline-none transition-[color,background-color,box-shadow,scale,opacity] duration-150 ease-out-strong hover:bg-foreground/5 hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 active:scale-[0.96] disabled:pointer-events-none disabled:opacity-50 aria-pressed:bg-card aria-pressed:text-foreground aria-pressed:shadow-xs aria-pressed:ring-1 aria-pressed:ring-black/8 dark:aria-pressed:ring-white/10 [&_svg]:size-4 [&_svg]:shrink-0',
         className
       )}
       type='button'
