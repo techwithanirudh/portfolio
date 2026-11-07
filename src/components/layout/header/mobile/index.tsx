@@ -105,7 +105,10 @@ export function MobileNav() {
       }
       const focusable = getFocusable()
       const index = focusable.indexOf(document.activeElement as HTMLElement)
-      const next = event.shiftKey ? index - 1 : index + 1
+      // index is -1 while the panel itself holds focus (right after opening),
+      // so Shift+Tab from there wraps to the last control
+      const step = event.shiftKey ? -1 : 1
+      const next = index === -1 && event.shiftKey ? -1 : index + step
       event.preventDefault()
       focusable.at(next % focusable.length)?.focus()
     }

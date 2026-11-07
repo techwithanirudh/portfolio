@@ -24,6 +24,20 @@ const itemVariants = cva(
   }
 )
 
+// Flush cells for the mobile menu's dashed grid: no box of its own, the
+// parent's dashed lines do the framing
+const gridItemVariants = cva(
+  'flex h-12 touch-manipulation items-center justify-center transition-colors focus-visible:rounded-none focus-visible:-outline-offset-4 [&_svg]:size-3.5',
+  {
+    variants: {
+      active: {
+        false: 'text-muted-foreground hover:bg-muted hover:text-foreground',
+        true: 'bg-accent text-accent-foreground',
+      },
+    },
+  }
+)
+
 const lightDarkActive = {
   dark: 'dark:bg-accent dark:text-accent-foreground',
   light:
@@ -44,9 +58,12 @@ const shouldSkipViewTransitionForBrowserTint = () =>
 export function ThemeToggle({
   className,
   mode = 'light-dark',
+  variant = 'pill',
 }: {
   className?: string
   mode?: 'light-dark' | 'light-dark-system'
+  /** `grid` only applies to `light-dark-system` */
+  variant?: 'pill' | 'grid'
 }) {
   const { resolvedTheme, setTheme, theme } = useTheme()
   const mounted = useSyncExternalStore(
@@ -120,6 +137,31 @@ export function ThemeToggle({
   }
 
   const value = mounted ? theme : null
+
+  if (variant === 'grid') {
+    return (
+      <fieldset
+        aria-label='Theme'
+        className={cn('grid grid-cols-3 divide-x divide-dashed', className)}
+        data-theme-toggle=''
+      >
+        {themeOptions.map(({ Icon, label, value: option }) => (
+          <button
+            aria-label={label}
+            aria-pressed={value === option}
+            className={gridItemVariants({ active: value === option })}
+            data-sound-press='off'
+            key={option}
+            onClick={() => handleChangeTheme(option)}
+            type='button'
+          >
+            {/* Outlined, like the nav icons sitting above them */}
+            <Icon />
+          </button>
+        ))}
+      </fieldset>
+    )
+  }
 
   return (
     <fieldset aria-label='Theme' className={container} data-theme-toggle=''>
