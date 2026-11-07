@@ -9,11 +9,11 @@ platform: iOS and Android
 image: /images/projects/depensa/cover.png
 tags: ['Expo', 'React Native', 'Convex', 'Firecrawl', 'HeroUI Native']
 ---
-Depensa is an expense tracker that reads your order history from the shops you buy from and puts it all in one list. There's no bank account or card to link. It's live, and it runs on Android and iPhone. On Android it's on [Google Play](https://play.google.com/store/apps/details?id=com.techwithanirudh.depensa). It's not on the [App Store](https://www.apple.com/app-store/), so on iPhone you use [SideStore](https://sidestore.io/) or [AltStore](https://altstore.io/).
+Depensa is an expense tracker that reads your order history from the shops you buy from and puts it all in one list, with no bank account or card to link. On Android you can get it from [Google Play](https://play.google.com/store/apps/details?id=com.techwithanirudh.depensa). It's not on the [App Store](https://www.apple.com/app-store/), so on iPhone you install it with [SideStore](https://sidestore.io/) or [AltStore](https://altstore.io/).
 
 ## What it does
 
-It supports 100 shops across ten regions, and you can add another by its web address. Each order becomes an expense in your currency. It also spots repeating charges, lets you set monthly limits, and will email you a CSV if you ask.
+It works with 100 shops across ten regions, and you can add another one by its web address. Each order turns into an expense in your currency. It also spots repeating charges, lets you set monthly limits, and will email you a CSV if you ask.
 
 <Screens>
   <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Adding a source.' />
@@ -22,7 +22,7 @@ It supports 100 shops across ten regions, and you can add another by its web add
 
 ## How it works
 
-You sign in on the shop's own page inside the app, so Depensa never sees your password. The first time through a shop, an AI model writes a small reader for its orders, and every sync after that replays it on a schedule. Sync jobs are queued in [Convex](https://www.convex.dev/). If a site has no usable orders, the app says it can't read it.
+You sign in on the shop's own page inside the app, so Depensa never sees your password. The first time you add a shop, an AI model writes a small reader for its orders, and after that every sync just replays it on a schedule. Sync jobs are queued in [Convex](https://www.convex.dev/). If a site has no orders it can use, the app tells you it can't read it.
 
 <Screens>
   <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights.' />

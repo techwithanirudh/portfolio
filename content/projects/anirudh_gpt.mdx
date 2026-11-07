@@ -9,11 +9,11 @@ platform: Web
 image: /images/projects/anirudh_gpt/cover.jpg
 tags: ['Next.js', 'Firebase', 'OpenAI', 'ChatGPT']
 ---
-AnirudhGPT is a chat app on top of the OpenAI API, with Google sign-in, saved conversations and optional web search. It ran on Replit in spring 2023. The Replit app is gone and the repo is archived. The code is public under AGPL.
+My own ChatGPT-style app on top of the OpenAI API, with Google sign-in, saved conversations and optional web search. I ran it on Replit back in spring 2023. The Replit app is gone now, but the code is still public (archived, under AGPL).
 
 ## What it does
 
-You sign in with Google through [NextAuth](https://next-auth.js.org/), chat, and come back to your old conversations later. With web search on, it looks up a few results first and answers with links.
+You sign in with Google through [NextAuth](https://next-auth.js.org/), chat, and pick up your old conversations later. Turn on web search and it looks up a few results first, then answers with links.
 
 <Screens>
   <Screen frame='wide' height={1000} src='/images/projects/anirudh_gpt/google-sign-in.webp' width={1600} alt='A dark blue sign-in page titled TechWithAnirudh ChatGPT with a Login heading, a Sign in with Google button and an illustration of a person walking through a door' caption='Sign-in with Google as the only option, from an Internet Archive copy.' />
@@ -21,7 +21,7 @@ You sign in with Google through [NextAuth](https://next-auth.js.org/), chat, and
 
 ## How it works
 
-The chat API has no memory. So before each call the server loads the whole conversation from [Firestore](https://firebase.google.com/docs/firestore) and sends it along. Search results came from a small [DuckDuckGo](https://duckduckgo.com/) scraper I ran on Replit.
+The chat API doesn't remember anything on its own, so before each call the server loads the whole conversation from [Firestore](https://firebase.google.com/docs/firestore) and sends it along. Search results came from a little [DuckDuckGo](https://duckduckgo.com/) scraper I ran on Replit.
 
 <Screens>
   <Screen frame='wide' height={800} src='/images/projects/anirudh_gpt/welcome-march.webp' width={1600} alt='A light welcome screen with the OpenAI logo, the text Welcome to TechWithAnirudh ChatGPT, and green Log in and Sign up buttons' caption='The signed-out screen in March 2023, from an Internet Archive copy.' />

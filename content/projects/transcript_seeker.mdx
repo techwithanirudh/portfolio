@@ -11,13 +11,11 @@ image: /images/projects/transcript_seeker/cover.png
 tags: ['React', 'Vite', 'Turborepo', 'Drizzle', 'MeetingBaaS']
 ---
 
-Transcript Seeker records a meeting with a bot or takes an uploaded file, then gives you a transcript you can search and ask questions about. Lazare Rossillon at Meeting Baas started it in July 2024 and built the viewer, search and chat. I did most of the work from October 2 to November 5, 2024.
-
-It's open source under the MIT license and lives in the Meeting BaaS org. The last change was in May 2025, and the hosted app wasn't loading when I checked on October 24, 2026.
+Transcript Seeker records a meeting with a bot or takes a file you upload, then gives you a transcript you can search and ask questions about. It started at Meeting BaaS in July 2024 with the viewer, search and chat, and I did most of the work on it in October and November 2024. It's open source under MIT and lives in the Meeting BaaS org.
 
 ## What it does
 
-[Meeting Baas](https://www.meetingbaas.com/) sends bots into calls, and [Gladia](https://www.gladia.io/) or [AssemblyAI](https://www.assemblyai.com/) transcribe uploads. You bring your own keys, and OpenAI answers your questions. Click a word in the transcript and it jumps to that moment.
+[Meeting Baas](https://www.meetingbaas.com/) sends bots into calls, and [Gladia](https://www.gladia.io/) or [AssemblyAI](https://www.assemblyai.com/) transcribe uploads. You bring your own API keys, and OpenAI answers your questions. Click a word in the transcript and it jumps to that moment.
 
 <Screens>
   <Screen frame='wide' height={1170} src='/images/projects/transcript_seeker/home.webp' width={1000} alt='The Transcript Seeker home screen with three numbered steps, Settings, Record Meeting or Upload File, and Recordings or Upcoming Meetings, under a notice that no API key is set' caption='The home screen. Nothing works until you add a key.' />
@@ -31,4 +29,4 @@ It's open source under the MIT license and lives in the Meeting BaaS org. The la
 
 ## How it works
 
-Keys, meetings, notes and chats are saved in a database inside your browser, so the basic app needs no server. I swapped Lazare's IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top. The repo is a [Turborepo](https://turborepo.dev/) that also holds a [Nitro](https://nitro.build/) proxy for the Meeting Baas API and a [Hono](https://hono.dev/) API that uses [Better Auth](https://www.better-auth.com/) for Google sign-in. The web app and proxy ran on [Firebase](https://firebase.google.com/).
+Keys, meetings, notes and chats are saved in a database right in your browser, so the basic app doesn't need a server. I swapped the original IndexedDB store and Express server for [PGLite](https://pglite.dev/) with [Drizzle](https://orm.drizzle.team/) on top. The repo is a [Turborepo](https://turborepo.dev/) that also holds a [Nitro](https://nitro.build/) proxy for the Meeting Baas API and a [Hono](https://hono.dev/) API that uses [Better Auth](https://www.better-auth.com/) for Google sign-in. The web app and proxy ran on [Firebase](https://firebase.google.com/).

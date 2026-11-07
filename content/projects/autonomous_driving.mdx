@@ -10,11 +10,11 @@ github: https://github.com/techwithanirudh/AutonomousDrivingPaperCode/
 image: /images/projects/autonomous_driving/cover.png
 tags: ['Research', 'AI', 'Autonomous Driving', 'Privacy']
 ---
-This is a research paper on swapping faces to hide who was recorded in self-driving car footage, while keeping the footage useful for training driving models. The paper is posted on OSF, and the demo code is public on GitHub. The code swaps faces on a live webcam feed.
+My research paper on swapping faces in self-driving car footage, so you can't tell who was recorded but the footage is still useful for training driving models. The paper is up on OSF, and the demo code (which swaps faces on a live webcam feed) is on GitHub.
 
 ## What it found
 
-The paper tries three approaches on recorded video: a face swap with OpenCV, blurring with [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/guide), and a MediaPipe Face Mesh swap. The OpenCV swap did not work for people far away. Blurring hides faces but swaps nothing. The paper's combined approach works well up to 15 feet away.
+I tried three approaches on recorded video: a face swap with OpenCV, blurring with [MediaPipe](https://ai.google.dev/edge/mediapipe/solutions/guide), and a MediaPipe Face Mesh swap. The OpenCV swap didn't work for people far from the camera, and blurring hides faces but doesn't swap anything. The combined approach from the paper works well up to 15 feet away.
 
 <Screens>
   <Screen frame='wide' height={640} src='/images/projects/autonomous_driving/opencv-swap-result.webp' width={1952} alt='Three portraits side by side, a man in a checked shirt, a smiling person in a red top, and the first man with the second face swapped onto his head' caption='The first approach. Both input faces are AI generated, not real people.' />
@@ -22,10 +22,10 @@ The paper tries three approaches on recorded video: a face swap with OpenCV, blu
 
 ## How it works
 
-The combined approach finds each person, zooms in on the face, swaps it and pastes the result back, then repeats for the next person.
+The combined approach finds each person, zooms in on their face, swaps it and pastes the result back, then moves on to the next person.
 
 <Screens>
   <Screen frame='wide' height={455} src='/images/projects/autonomous_driving/combined-pipeline.webp' width={1600} alt='Hand-drawn flow where a video goes through MediaPipe Holistic segmentation, a face zoom to about 40 percent, a Face Mesh swap and a mask step, and comes out as an MP4 file, repeated for each person' caption='The combined approach, from the paper.' />
 </Screens>
 
-The replacement faces come from [This Person Does Not Exist](https://thispersondoesnotexist.com/), so they belong to no real person. [AutonomousDrivingPaperCode](https://github.com/techwithanirudh/AutonomousDrivingPaperCode/) runs the swap on a webcam and [AutonomousDrivingPaperCodeCombined](https://github.com/techwithanirudh/AutonomousDrivingPaperCodeCombined) on a video file. Neither has the full combined pipeline.
+The new faces come from [This Person Does Not Exist](https://thispersondoesnotexist.com/), so they don't belong to anyone real. [AutonomousDrivingPaperCode](https://github.com/techwithanirudh/AutonomousDrivingPaperCode/) runs the swap on a webcam and [AutonomousDrivingPaperCodeCombined](https://github.com/techwithanirudh/AutonomousDrivingPaperCodeCombined) runs it on a video file. Neither one has the full combined pipeline, though.
