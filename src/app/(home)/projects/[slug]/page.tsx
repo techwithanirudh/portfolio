@@ -92,11 +92,12 @@ export default async function Page(props: {
   return (
     <TOCProvider toc={toc}>
       <Section
-        className='grid grid-rows-[auto_auto_1fr] md:grid-cols-[minmax(0,1fr)_20rem] md:grid-rows-[auto_1fr]'
+        className='grid grid-rows-[auto_1fr_auto] md:grid-cols-[minmax(0,1fr)_20rem] md:grid-rows-[auto_1fr]'
         fill
       >
         <Header page={page} />
-        <aside className='border-t border-dashed px-6 py-8 md:col-start-2 md:row-span-2 md:row-start-1 md:border-t-0 md:border-l md:px-7 lg:py-12'>
+        {/* Phones get the story first; year and stack trail after it */}
+        <aside className='border-t border-dashed px-6 py-8 max-md:order-last md:col-start-2 md:row-span-2 md:row-start-1 md:border-t-0 md:border-l md:px-7 lg:py-12'>
           <div className='md:sticky md:top-20'>
             <ProjectFacts page={page} />
           </div>
