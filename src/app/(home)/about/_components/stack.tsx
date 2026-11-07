@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 import type { TechStackItem } from '@/types'
 
 const iconClassName =
-  'size-3.5 opacity-60 grayscale transition group-hover/tag:opacity-100 group-hover/tag:grayscale-0'
+  'size-3.5 opacity-60 grayscale transition group-hover/tag:opacity-100 group-hover/tag:grayscale-0 group-focus-visible/tag:opacity-100 group-focus-visible/tag:grayscale-0'
 
 export default function Stack(): React.ReactElement {
   return (
@@ -44,7 +44,7 @@ export default function Stack(): React.ReactElement {
 function TechBadge({ item: { href, icon, label } }: { item: TechStackItem }) {
   return (
     <Badge
-      className='group/tag gap-1.5 rounded-full px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground'
+      className='group/tag gap-1.5 rounded-full px-2.5 py-1 font-mono text-muted-foreground text-xs transition-colors hover:bg-accent hover:text-foreground focus-visible:bg-accent focus-visible:text-foreground'
       render={
         <a aria-label={label} href={href} rel='noreferrer' target='_blank' />
       }
