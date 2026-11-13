@@ -26,9 +26,9 @@ It's also where I first learned [Firebase](https://firebase.google.com/). And I'
 In 2022 I rebuilt it as a proper React app with its own Express and MongoDB server, so your projects lived on a server instead of in one browser. It got a real editor with a page list, a block panel and a toolbar on every selected component, plus its own landing page. I even started a Docusaurus docs site for it on Replit, which never got past the starter template.
 
 <Screens>
-  <Screen frame='wide' height={817} src='/images/projects/anikode/editor-2022.webp' width={1695} alt='The AniKode editor with a page list and block panel on the left, a row of tool icons along the top, and a page with a photo of a dog on the canvas' caption='The 2022 editor, with pages and blocks on the left. The dog was mandatory.' />
-  <Screen frame='wide' height={475} src='/images/projects/anikode/component-toolbar.webp' width={760} alt='A selected heading on the editor canvas, outlined in blue, with a row of round toolbar buttons in its corner' caption='Click any component and you get a blue outline and its own little toolbar.' />
-  <Screen frame='wide' height={1000} src='/images/projects/anikode/landing-2022.webp' width={1600} alt='The 2022 AniKode landing page with the headline Simplify the way you build websites next to a photo of two people at their desks' caption='The 2022 landing page, peak stock-photo era.' />
+  <Screen frame='wide' height={817} src='/images/projects/anikode/editor-2022.webp' width={1695} alt='The AniKode editor with a page list and block panel on the left, a row of tool icons along the top, and a page with a photo of a dog on the canvas' />
+  <Screen frame='wide' height={475} src='/images/projects/anikode/component-toolbar.webp' width={760} alt='A selected heading on the editor canvas, outlined in blue, with a row of round toolbar buttons in its corner' />
+  <Screen frame='wide' height={1000} src='/images/projects/anikode/landing-2022.webp' width={1600} alt='The 2022 AniKode landing page with the headline Simplify the way you build websites next to a photo of two people at their desks' />
 </Screens>
 
 ## AniKode Studio
@@ -36,7 +36,7 @@ In 2022 I rebuilt it as a proper React app with its own Express and MongoDB serv
 The latest rewrite is AniKode Studio, in Next.js with [shadcn/ui](https://ui.shadcn.com/). It was my first T3 stack project ever (shout-out to Theo, the goat), and my first time using [Drizzle](https://orm.drizzle.team/) and [Zod](https://zod.dev/), which I'd heard so many good things about that I had to try them.
 
 <Screens>
-  <Screen frame='wide' height={1133} src='/images/projects/anikode/studio-landing-dark.webp' width={1600} alt='The AniKode Studio landing page in dark mode, with the headline Build stunning websites with ease above a screenshot of the editor' caption='The Studio landing page, a long way from the 2022 one.' />
+  <Screen frame='wide' height={1133} src='/images/projects/anikode/studio-landing-dark.webp' width={1600} alt='The AniKode Studio landing page in dark mode, with the headline Build stunning websites with ease above a screenshot of the editor' />
 </Screens>
 
 You make a project, add some pages and open one in the editor. Blocks sit on the left, and styles, settings, layers and pages are on the right. The panels are React components, so the editor follows the app's light and dark theme instead of looking like a GrapesJS demo.
@@ -48,5 +48,5 @@ After every change, the editor posts the page's GrapesJS project JSON to that pa
 Sign-in goes through [NextAuth](https://next-auth.js.org/), with a magic link sent by [Resend](https://resend.com/) or a GitHub account.
 
 <Screens>
-  <Screen frame='wide' height={733} src='/images/projects/anikode/studio-login.webp' width={1100} alt='The AniKode Studio sign-in form in dark mode, with an email field, a Sign In with Email button and a GitHub button' caption='Studio sign-in: an emailed magic link, or GitHub.' />
+  <Screen frame='wide' height={733} src='/images/projects/anikode/studio-login.webp' width={1100} alt='The AniKode Studio sign-in form in dark mode, with an email field, a Sign In with Email button and a GitHub button' />
 </Screens>

@@ -16,7 +16,7 @@ Classnotes Buddy is a site for uploading class notes and sharing them with a lin
 This one started as Web Dev Simplified's Google Drive clone tutorial. Following along got me a working file manager on [Firebase](https://firebase.google.com/), and then I kept going, rewriting chunks of it and bolting on everything a notes site for a class seemed to need.
 
 <Screens>
-  <Screen frame='wide' height={644} src='/images/projects/classnotes_buddy/classnotes-buddy-2022.webp' width={1600} alt='The 2022 Classnotes Buddy landing page with the heading Simplify the way you share notes, a Get started button and a How to video button' caption='The 2022 landing page. It even had a How to video button, because of course it did.' />
+  <Screen frame='wide' height={644} src='/images/projects/classnotes_buddy/classnotes-buddy-2022.webp' width={1600} alt='The 2022 Classnotes Buddy landing page with the heading Simplify the way you share notes, a Get started button and a How to video button' />
 </Screens>
 
 Search ran on [Algolia](https://www.algolia.com/), so you could actually find a note once there were a lot of them. Sign-up had hCaptcha to keep bots out. Since anyone could upload, new uploads went into an approval queue, and an admin had to approve them before they showed up for everyone.
@@ -30,7 +30,7 @@ It's still running at notes-buddy.vercel.app.
 In 2024 I rebuilt it from scratch as Notes Buddy on the create-t3-turbo-supabase template, a Turborepo with a Next.js web app and an Expo mobile app in one workspace.
 
 <Screens>
-  <Screen frame='wide' height={860} src='/images/projects/classnotes_buddy/sign-in-dark.webp' width={960} alt='The Notes Buddy sign-in form in dark mode with Continue with Email and Continue with Google buttons' caption='Notes Buddy sign-in, now on Supabase with email or Google.' />
+  <Screen frame='wide' height={860} src='/images/projects/classnotes_buddy/sign-in-dark.webp' width={960} alt='The Notes Buddy sign-in form in dark mode with Continue with Email and Continue with Google buttons' />
 </Screens>
 
 You sign in with email or Google through [Supabase](https://supabase.com/), upload files and sort them into folders, and folders can live inside other folders. Anyone signed in can browse, but only the person who uploaded something can rename or delete it. The Expo app never got finished, so it's web only.

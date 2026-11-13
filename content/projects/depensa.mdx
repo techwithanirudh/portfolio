@@ -20,18 +20,16 @@ The first plan looked pretty different from what shipped, but one idea survived 
 Sign-in happens on your phone. The shop's own login page opens inside the app, you log in yourself, and only the session goes to the backend, where it's stored encrypted. Depensa never sees your password.
 
 <Screens>
-  <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' caption='Picking a shop. The region picker covers ten regions, and any other shop can be added by its web address.' />
-  <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' caption='Every order lands in one total, in your currency, with repeating charges listed as upcoming.' />
+  <Screen height={1688} src='/images/projects/depensa/add-source.webp' width={780} alt='The Add a source sheet with a search field, a region picker and a list of shops' />
+  <Screen height={1688} src='/images/projects/depensa/spending.webp' width={780} alt='The Spending screen with a total for the last 28 days, a category breakdown and upcoming charges' />
 </Screens>
 
 The first time you add a shop, an agent figures out where your orders live and saves what it learned. After that, syncing just replays it, with no model in the loop. Every order is converted to your currency when it's saved, so it all lands in one total.
 
 <Screens>
-  <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' caption='Insights sums up the period, with averages and your biggest order.' />
+  <Screen height={1688} src='/images/projects/depensa/insights.webp' width={780} alt='The Insights screen with a written summary of the period and cards for averages and the biggest order' />
 </Screens>
 
 ## Where it is now
 
-It works with 100 shops across ten regions. On top of the list you can move orders between categories, set a monthly limit for a category or a shop, and ask for an email with all your expenses as a CSV. Version 1.1.0 added home screen widgets for this month, your budget and what's coming up.
-
-Next on my list: an Expo SDK upgrade, moving the widgets onto `expo-widgets` and adding Live Activities, and having the big shops in every country ready ahead of time, so the first person to add one doesn't have to wait.
+It works with 100 shops across ten regions. On top of the list you can move orders between categories, set a monthly limit for a category or a shop, and ask for an email with all your expenses as a CSV.

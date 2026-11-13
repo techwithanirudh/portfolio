@@ -27,7 +27,7 @@ I tried three approaches on recorded video, and each one taught me something abo
 3. **MediaPipe Face Mesh swap.** Face Mesh maps the face as a cloud of points, the code swaps the face along those points and smooths it. Better, but it still struggled at a distance. It only worked when the face covered somewhere between 2% and 50% of the frame.
 
 <Screens>
-  <Screen frame='wide' height={640} src='/images/projects/autonomous_driving/opencv-swap-result.webp' width={1952} alt='Three portraits side by side, a man in a checked shirt, a smiling person in a red top, and the first man with the second face swapped onto his head' caption='The OpenCV swap: person one, person two, and person one wearing person two’s face. Both inputs are AI generated, so no real people were harmed.' />
+  <Screen frame='wide' height={640} src='/images/projects/autonomous_driving/opencv-swap-result.webp' width={1952} alt='Three portraits side by side, a man in a checked shirt, a smiling person in a red top, and the first man with the second face swapped onto his head' />
 </Screens>
 
 That 2% to 50% window was the clue. A person 15 feet away has a tiny face, way under 2% of the frame. So the combined approach stitches the pieces together:
@@ -40,7 +40,7 @@ That 2% to 50% window was the clue. A person 15 feet away has a tiny face, way u
 It repeats that for every person in the frame and writes out an MP4. In the paper I found this works well for faces up to 15 feet away, where the plain OpenCV swap had already given up.
 
 <Screens>
-  <Screen frame='wide' height={455} src='/images/projects/autonomous_driving/combined-pipeline.webp' width={1600} alt='Hand-drawn flow where a video goes through MediaPipe Holistic segmentation, a face zoom to about 40 percent, a Face Mesh swap and a mask step, and comes out as an MP4 file, repeated for each person' caption='My hand-drawn diagram of the combined approach, straight from the paper. The zoom step is what gets far-away faces into Face Mesh’s comfort zone.' />
+  <Screen frame='wide' height={455} src='/images/projects/autonomous_driving/combined-pipeline.webp' width={1600} alt='Hand-drawn flow where a video goes through MediaPipe Holistic segmentation, a face zoom to about 40 percent, a Face Mesh swap and a mask step, and comes out as an MP4 file, repeated for each person' />
 </Screens>
 
 To be upfront about the limits: it's a solo-author preprint, not peer reviewed, and 15 feet is the only number in it. I didn't measure accuracy or how well a driving model trains on the swapped footage. The conclusion is pretty modest: every single approach had a weak spot, and combining them fixed some of those weak spots.

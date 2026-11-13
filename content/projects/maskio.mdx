@@ -18,7 +18,7 @@ Maskio is a little pixel-art platformer I made during the pandemic. You play a m
 Back then I built pretty much everything on Replit, and Replit had a template for [Kaboom](https://kaboomjs.com/), a small JavaScript game library. Maskio started from that template. If you dig through the history, the project was originally called `mario-updates` and loaded its assets from a `mario` subdomain, so yeah, you can probably guess what I was riffing on.
 
 <Screens>
-  <Screen frame='wide' height={900} src='/images/projects/maskio/title-screen.webp' width={1600} alt='The Maskio start screen, with orange pixel text reading Corona Virus Superhero Game above a boy wearing a face mask' caption='The start screen. Subtle title, I know.' />
+  <Screen frame='wide' height={900} src='/images/projects/maskio/title-screen.webp' width={1600} alt='The Maskio start screen, with orange pixel text reading Corona Virus Superhero Game above a boy wearing a face mask' />
 </Screens>
 
 The first commits on GitHub are from the end of November 2021, and they're mostly me fighting with sprite sizes: make the images smaller, scale them down again, then make the player bigger. The vaccine came in a couple of days later, which is when the game finally had a way to fight back.
@@ -28,8 +28,8 @@ The first commits on GitHub are from the end of November 2021, and they're mostl
 You get 20 seconds to reach the portal in each world. Hit blocks from below for a coin, an apple that makes you twice as big (and jump higher) for six seconds, or the vaccine. Land on a virus to squash it, but walk into one and it's game over. Once you've got the vaccine, space fires syringes at them.
 
 <Screens>
-  <Screen frame='wide' height={631} src='/images/projects/maskio/world-2.webp' width={1600} alt='The second world, with sand ground, a wall of snow blocks on the left, a row of jump blocks and two red viruses' caption='World 2 of 12, on sand tiles, with two viruses on patrol.' />
-  <Screen frame='wide' height={330} src='/images/projects/maskio/vaccine-shot.webp' width={760} alt='Maskio standing on grass blocks while a syringe flies toward a red virus' caption='Vaccine collected, syringe away.' />
+  <Screen frame='wide' height={631} src='/images/projects/maskio/world-2.webp' width={1600} alt='The second world, with sand ground, a wall of snow blocks on the left, a row of jump blocks and two red viruses' />
+  <Screen frame='wide' height={330} src='/images/projects/maskio/vaccine-shot.webp' width={760} alt='Maskio standing on grass blocks while a syringe flies toward a red virus' />
 </Screens>
 
 ## How it works
@@ -37,7 +37,7 @@ You get 20 seconds to reach the portal in each world. Hit blocks from below for 
 Each world is just a text grid where every character is a tile: `=` is a block, `^` is a virus, `+` is the portal, and `%` and `*` are the blocks with a coin or a power-up inside. Kaboom turns the grid into a level. The viruses use a tiny custom patrol component that walks them sideways and flips their direction whenever they bump into something, and the apple is another small component that scales the hero up, swaps in a bigger jump and counts the six seconds down.
 
 <Screens>
-  <Screen frame='wide' height={900} src='/images/projects/maskio/game-over.webp' width={1600} alt='The Game Over screen showing the time left, a coin count of zero and the controls' caption='Game over, zero coins. The controls are right there on the screen, so no excuses.' />
+  <Screen frame='wide' height={900} src='/images/projects/maskio/game-over.webp' width={1600} alt='The Game Over screen showing the time left, a coin count of zero and the controls' />
 </Screens>
 
 ## Moving it off Replit

@@ -19,17 +19,17 @@ Mention it, message it or reply in a thread and it answers in Slack, streaming t
 This one grew out of Gorkie, the Slack bot [Devarsh](https://github.com/imdevarsh) built and where I led the sandbox and runtime work. I wrote up that whole saga, from Vercel Sandboxes to E2B to Daytona, in [How we taught a Slack bot to run code](/blog/gorkie-sandboxes). By the time I started this template, Gorkie ran on Mastra, so I took its code, stripped out the Gorkie-specific parts and shaped what was left into something anyone can clone and make their own.
 
 <Screens>
-  <Screen frame='wide' height={720} src='/images/projects/mastra_slack_agent_template/readme-features.webp' width={1280} alt="The README's Features list and Required services table, with Slack, PostgreSQL, OpenRouter, E2B and Exa" caption='The feature list, and the five services you bring to run your own copy.' />
+  <Screen frame='wide' height={720} src='/images/projects/mastra_slack_agent_template/readme-features.webp' width={1280} alt="The README's Features list and Required services table, with Slack, PostgreSQL, OpenRouter, E2B and Exa" />
 </Screens>
 
 ## What it does
 
-Under the hood it's a small team of agents. The main one talks to you in Slack and hands work off to helpers for exploring, research and running code, while a cheap summarizer model writes thread titles and memory notes. It can read, create and update Slack canvases, add reactions, and set up recurring tasks on a cron schedule (no more often than every five minutes, so nobody accidentally builds a spam cannon). Some tools, like posting a separate message to a thread, channel or person, wait for a human to approve them first.
+The main agent is the orchestrator. It talks to you in Slack and hands work off to subagents for exploring, research and running code. It can read, write and update Slack canvases, add reactions and set up recurring tasks on a cron. A cheap model writes thread titles and memory notes, and posting a new message somewhere else waits for a human to approve it.
 
 It also tries to behave in a busy channel. Start a line with `##` and it stays quiet. Send `!stop` and it stops mid-reply. Ask it to leave a thread and it stops following along until someone mentions it again.
 
 <Screens>
-  <Screen frame='wide' height={720} src='/images/projects/mastra_slack_agent_template/docs-messaging.webp' width={1280} alt="The Messaging guide's Steer a thread section with three example replies" caption="Once it's following a thread, every reply steers the same task, so you can say actually use TypeScript instead without starting over." />
+  <Screen frame='wide' height={720} src='/images/projects/mastra_slack_agent_template/docs-messaging.webp' width={1280} alt="The Messaging guide's Steer a thread section with three example replies" />
 </Screens>
 
 ## How the build went
