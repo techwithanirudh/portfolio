@@ -7,5 +7,7 @@ const subscribe = (onChange: () => void) => {
   return () => query.removeEventListener('change', onChange)
 }
 
+// Not motion/react's useReducedMotion: this server snapshot is `true`, so SSR
+// and hydration render the still state before the media query is known
 export const useReducedMotion = () =>
   useSyncExternalStore(subscribe, prefersReducedMotion, () => true)

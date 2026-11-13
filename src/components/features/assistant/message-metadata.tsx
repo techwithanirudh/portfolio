@@ -7,42 +7,37 @@ import {
   SourcesTrigger,
 } from '@/components/ai-elements/sources'
 import { Icons } from '@/components/icons/icons'
-import type { ChatTools, MyUIMessage } from '@/lib/ai/chat/types'
+import type { SvgIcon } from '@/components/icons/utils'
+import type { ChatTools, ChatUIMessage } from '@/lib/ai/chat/types'
 
 interface MessageMetadataProps {
   inProgress: boolean
-  parts: MyUIMessage['parts']
+  parts: ChatUIMessage['parts']
 }
 
 export const MessagePending = () => (
-  <div className='flex items-center gap-2'>
-    <Icons.pawPrint
-      aria-hidden
-      className='size-4 animate-spin text-primary motion-reduce:animate-none'
-    />
+  <div className='flex h-5 items-center gap-2'>
+    <Icons.brain aria-hidden className='size-4 animate-pulse text-primary' />
     <span className='sr-only'>Simba is thinking</span>
   </div>
 )
 
-// These tools render their own progress row in the message body
-const toolsWithOwnStatus = new Set<keyof ChatTools>(['navigate'])
+type ToolWithOwnStatus = 'celebrate' | 'navigate' | 'renderPortfolio'
 
-const toolStatus = (toolName: keyof ChatTools) => {
-  switch (toolName) {
-    case 'searchDocs':
-      return { Icon: Icons.search, label: 'Sniffing the pages' }
-    case 'getPageContent':
-      return { Icon: Icons.link, label: 'Fetching a page' }
-    case 'showContactForm':
-      return { Icon: Icons.mail, label: 'Fetching contact form' }
-    default:
-      return {
-        Icon: Icons.wrench,
-        label: `Running ${String(toolName)
-          .replace(/([A-Z])/g, ' $1')
-          .trim()}`,
-      }
-  }
+const hasOwnStatus = (
+  toolName: keyof ChatTools
+): toolName is ToolWithOwnStatus =>
+  toolName === 'celebrate' ||
+  toolName === 'navigate' ||
+  toolName === 'renderPortfolio'
+
+const toolStatus: Record<
+  Exclude<keyof ChatTools, ToolWithOwnStatus>,
+  { Icon: SvgIcon; label: string }
+> = {
+  getPageContent: { Icon: Icons.link, label: 'Fetching a page' },
+  searchDocs: { Icon: Icons.search, label: 'Sniffing the pages' },
+  showContactForm: { Icon: Icons.mail, label: 'Fetching contact form' },
 }
 
 export const MessageMetadata = ({
@@ -62,7 +57,7 @@ export const MessageMetadata = ({
     return reasoning ? (
       <div className='flex items-center gap-2 text-muted-foreground'>
         <Icons.brain aria-hidden className='size-4' />
-        <Shimmer>Sniffing around...</Shimmer>
+        <Shimmer>Sniffing around…</Shimmer>
       </div>
     ) : (
       <MessagePending />
@@ -98,16 +93,16 @@ export const MessageMetadata = ({
     )
   }
 
-  if (
-    tool &&
-    inProgress &&
-    isStaticToolUIPart<ChatTools>(tool) &&
-    !toolsWithOwnStatus.has(getStaticToolName(tool))
-  ) {
-    const { Icon, label } = toolStatus(getStaticToolName(tool))
+  const toolName =
+    tool && inProgress && isStaticToolUIPart<ChatTools>(tool)
+      ? getStaticToolName(tool)
+      : null
+
+  if (toolName && !hasOwnStatus(toolName)) {
+    const { Icon, label } = toolStatus[toolName]
 
     return (
-      <div className='flex animate-pulse items-center gap-2 text-muted-foreground motion-reduce:animate-none'>
+      <div className='flex animate-pulse items-center gap-2 text-muted-foreground'>
         <Icon aria-hidden className='size-4' />
         <Shimmer>{label}</Shimmer>
       </div>

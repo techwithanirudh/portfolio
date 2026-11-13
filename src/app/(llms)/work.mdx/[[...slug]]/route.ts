@@ -1,9 +1,8 @@
 import { createLLMRoute } from '@/app/(llms)/utils/create-llm-route'
-import { getWorkLLMText } from '@/lib/get-llm-text'
-import { workSource } from '@/lib/source'
+import { getProjectLLMText } from '@/lib/get-llm-text'
+import { projectSource } from '@/lib/source'
 
 export const dynamic = 'force-static'
-export const revalidate = false
 export const dynamicParams = false
 
-export const { GET, generateStaticParams } = createLLMRoute(workSource, getWorkLLMText)
+export const { GET, generateStaticParams } = createLLMRoute(projectSource, getProjectLLMText)

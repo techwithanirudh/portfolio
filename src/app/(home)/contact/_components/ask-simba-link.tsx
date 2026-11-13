@@ -13,7 +13,6 @@ export const AskSimbaLink = () => {
       onClick={() => setOpen(true)}
       type='button'
     >
-      {/* Margins rather than spaces, so the underline skips the chip */}
       Ask
       <SimbaChip className='mx-[0.25em]' />
       Simba

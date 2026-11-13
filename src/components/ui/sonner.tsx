@@ -4,6 +4,14 @@ import { useTheme } from 'next-themes'
 import { Toaster as Sonner, type ToasterProps } from 'sonner'
 import { Icons } from '@/components/icons/icons'
 
+// Sonner's own gaps, kept clear of the notch and home indicator
+const safeOffset = (gap: string): ToasterProps['offset'] => ({
+  bottom: `max(${gap}, env(safe-area-inset-bottom))`,
+  left: `max(${gap}, env(safe-area-inset-left))`,
+  right: `max(${gap}, env(safe-area-inset-right))`,
+  top: `max(${gap}, env(safe-area-inset-top))`,
+})
+
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme()
 
@@ -19,6 +27,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
           <Icons.spinner className='size-4 animate-spin' strokeWidth={2} />
         ),
       }}
+      mobileOffset={safeOffset('16px')}
+      offset={safeOffset('24px')}
       style={
         {
           '--normal-bg': 'var(--color-fd-popover)',

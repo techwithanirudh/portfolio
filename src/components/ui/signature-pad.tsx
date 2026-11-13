@@ -28,6 +28,8 @@ export interface SignaturePadHandle {
 }
 
 interface SignaturePadProps {
+  /** Names the canvas, which a <label> cannot (it is not labelable) */
+  'aria-label'?: string
   className?: string
   disabled?: boolean
   onChange?: (dataUrl: string) => void
@@ -38,10 +40,6 @@ interface SignaturePadProps {
 
 const OUTPUT_WIDTH = 560
 const OUTPUT_HEIGHT = 252
-
-function getStrokeColor(theme: string | undefined): string {
-  return theme === 'dark' ? '#fff' : '#000'
-}
 
 function exportCanvas(source: HTMLCanvasElement): string {
   const normalized = document.createElement('canvas')
@@ -83,6 +81,7 @@ function exportCanvas(source: HTMLCanvasElement): string {
 }
 
 export function SignaturePad({
+  'aria-label': ariaLabel = 'Signature',
   onChange,
   onClear,
   strokeWidth = 2,
@@ -98,11 +97,11 @@ export function SignaturePad({
   const isDrawing = useRef(false)
   const lastPoint = useRef<Point | null>(null)
   const strokes = useRef(0)
-  const strokeColor = useRef(getStrokeColor(resolvedTheme))
+  const strokeColor = useRef('')
   const history = useRefHistory<ImageData>()
 
   useEffect(() => {
-    strokeColor.current = getStrokeColor(resolvedTheme)
+    strokeColor.current = resolvedTheme === 'dark' ? '#fff' : '#000'
 
     const canvas = canvasRef.current
     const ctx = ctxRef.current
@@ -313,6 +312,7 @@ export function SignaturePad({
       ref={containerRef}
     >
       <canvas
+        aria-label={ariaLabel}
         className={cn(
           'size-full rounded-md border border-input bg-background shadow-xs',
           disabled ? 'cursor-not-allowed opacity-50' : 'cursor-crosshair'
@@ -322,6 +322,7 @@ export function SignaturePad({
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         ref={canvasRef}
+        role='img'
         style={{ touchAction: 'none' }}
       />
       <div className='absolute top-2 left-2 flex gap-1'>

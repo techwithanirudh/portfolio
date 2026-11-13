@@ -1,14 +1,15 @@
-import { baseUrl } from '@/constants'
 import { socials } from '@/constants/navigation'
+import { pages } from '@/constants/pages'
 import { aboutIntro, heroIntro } from '@/constants/portfolio/intro'
 import { profile } from '@/constants/portfolio/profile'
 import { story } from '@/constants/portfolio/story'
 import { description, owner } from '@/constants/site'
+import { baseUrl } from '@/lib/metadata'
 import { absoluteMarkdownLinks, url } from '@/lib/url'
 
 export function getAboutText() {
   return `# About
-Route: ${url('/about')}
+Route: ${url(pages.about.path)}
 
 ${description}
 
@@ -19,7 +20,7 @@ ${absoluteMarkdownLinks(heroIntro)}
 ${absoluteMarkdownLinks(aboutIntro.join(' '))}
 
 ## Story
-Route: ${url('/about#story')}
+Route: ${url(`${pages.about.path}#story`)}
 
 ${story.map((chapter) => `### ${chapter.title} (${chapter.when})\n\n${absoluteMarkdownLinks(chapter.body)}`).join('\n\n')}
 
@@ -29,7 +30,7 @@ ${story.map((chapter) => `### ${chapter.title} (${chapter.when})\n\n${absoluteMa
 - Location: ${profile.location}
 - Pronouns: ${profile.pronouns}
 - Website: ${baseUrl.toString()}
-- Resume: ${url('/resume')}
+- Resume: ${url(pages.resume.path)}
 
 ## Social links
 

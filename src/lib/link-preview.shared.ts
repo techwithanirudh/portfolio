@@ -1,24 +1,29 @@
 import crypto from 'node:crypto'
+import { z } from 'zod'
 
-export interface LinkPreviewEntry {
-  errorMessage?: string
-  generatedAt: string
-  height: number
-  screenshotPath: string
-  status: 'failed' | 'success'
-  url: string
-  width: number
-}
+const linkPreviewEntrySchema = z.object({
+  errorMessage: z.string().optional(),
+  generatedAt: z.string(),
+  height: z.number(),
+  screenshotPath: z.string(),
+  status: z.enum(['failed', 'success']),
+  url: z.string(),
+  width: z.number(),
+})
+
+export const linkPreviewManifestSchema = z.object({
+  generated: z.string(),
+  previews: z.record(z.string(), linkPreviewEntrySchema),
+})
+
+export type LinkPreviewEntry = z.infer<typeof linkPreviewEntrySchema>
 
 export type LinkPreviewImage = Pick<
   LinkPreviewEntry,
   'height' | 'screenshotPath' | 'width'
 >
 
-export interface LinkPreviewManifest {
-  generated: string
-  previews: Record<string, LinkPreviewEntry>
-}
+export type LinkPreviewManifest = z.infer<typeof linkPreviewManifestSchema>
 
 export function hashUrl(url: string): string {
   return crypto.createHash('sha256').update(url).digest('hex').slice(0, 12)

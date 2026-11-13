@@ -3,6 +3,7 @@
 import { useSound } from '@web-kits/audio/react'
 import { useOptimisticAction } from 'next-safe-action/hooks'
 import { useState } from 'react'
+import type { z } from 'zod'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -18,7 +19,8 @@ import {
 } from '@/components/ui/popover'
 import { error, pop } from '@/lib/audio/minimal'
 import { cn } from '@/lib/utils'
-import type { GuestbookReactionItem } from '@/lib/validators/guestbook'
+import type { GuestbookReactionSchema } from '@/lib/validators/guestbook'
+import type { GuestbookReactionItem } from '@/types/guestbook'
 import { toggleGuestbookReaction } from '../actions/guestbook'
 
 const reactionCountFormat = new Intl.NumberFormat('en', {
@@ -37,7 +39,7 @@ interface OptimisticState {
 
 const updateOptimisticReactions = (
   state: OptimisticState,
-  payload: { entryId: number; emoji: string }
+  payload: z.infer<typeof GuestbookReactionSchema>
 ) => {
   const { emoji } = payload
   const existing = state.reactions.find((item) => item.emoji === emoji)
@@ -84,7 +86,7 @@ export const GuestbookReactions = ({
   const playError = useSound(error)
   const playReaction = useSound(pop)
 
-  const { execute, optimisticState, status } = useOptimisticAction(
+  const { execute, isExecuting, optimisticState } = useOptimisticAction(
     toggleGuestbookReaction,
     {
       currentState: { reactions },
@@ -106,13 +108,17 @@ export const GuestbookReactions = ({
   return (
     <div className='space-y-2'>
       <div className='flex flex-wrap gap-2'>
-        {optimisticReactions.map((reaction: GuestbookReactionItem) => (
+        {optimisticReactions.map((reaction) => (
           <Button
+            aria-pressed={reaction.reacted}
             className={cn(
               'gap-2 px-3 text-xs',
-              reaction.reacted && 'border-primary text-primary'
+              // A solid, doubled border as well as the color (1.4.1)
+              reaction.reacted &&
+                'border-primary border-solid text-primary shadow-[inset_0_0_0_1px_var(--color-primary)]'
             )}
-            disabled={!canReact || status === 'executing'}
+            disabled={!canReact || isExecuting}
+            focusableWhenDisabled={canReact}
             key={`${entryId}-${reaction.emoji}`}
             onClick={() => handleReaction(reaction.emoji)}
             shape='square'
@@ -131,7 +137,8 @@ export const GuestbookReactions = ({
             render={
               <Button
                 className='gap-2 px-3 text-xs'
-                disabled={!canReact || status === 'executing'}
+                disabled={!canReact || isExecuting}
+                focusableWhenDisabled={canReact}
                 shape='square'
                 size='sm'
                 type='button'
@@ -140,7 +147,7 @@ export const GuestbookReactions = ({
             }
           >
             <Icons.add className='size-3' />
-            Add
+            React
           </PopoverTrigger>
           <PopoverContent className='w-fit p-0'>
             <EmojiPicker

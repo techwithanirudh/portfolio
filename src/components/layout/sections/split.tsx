@@ -86,31 +86,15 @@ export const SplitSectionSidebar = ({
   </div>
 )
 
-type SplitSectionHeaderProps = Omit<SectionHeaderProps, 'align'> & {
-  align?: SectionHeaderProps['align']
-}
-
 export const SplitSectionHeader = ({
   align = 'left',
   ...props
-}: SplitSectionHeaderProps) => <SectionHeader align={align} {...props} />
+}: SectionHeaderProps) => <SectionHeader align={align} {...props} />
 
-const splitSectionContentVariants = cva('', {
-  defaultVariants: {
-    inset: false,
-  },
-  variants: {
-    inset: {
-      false: '',
-      true: 'px-6 py-8',
-    },
-  },
-})
-
-interface SplitSectionContentProps
-  extends VariantProps<typeof splitSectionContentVariants> {
+interface SplitSectionContentProps {
   children: ReactNode
   className?: string
+  inset?: boolean
 }
 
 export const SplitSectionContent = ({
@@ -118,7 +102,5 @@ export const SplitSectionContent = ({
   inset,
   className,
 }: SplitSectionContentProps) => (
-  <div className={cn(splitSectionContentVariants({ inset }), className)}>
-    {children}
-  </div>
+  <div className={cn(inset && 'px-6 py-8', className)}>{children}</div>
 )

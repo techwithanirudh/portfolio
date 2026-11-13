@@ -30,7 +30,12 @@ import {
 import { Input } from '@/components/ui/input'
 import { authClient, type User } from '@/lib/auth-client'
 import { toast } from '@/lib/toast'
-import { type Account, AccountSchema } from '@/lib/validators/account'
+import {
+  ACCOUNT_NAME_MAX_LENGTH,
+  type Account,
+  AccountSchema,
+} from '@/lib/validators/account'
+import { AccountField } from './account-field'
 
 interface AccountSettingsProps {
   user: User
@@ -40,32 +45,30 @@ export function AccountSettings({ user }: AccountSettingsProps) {
   return (
     <Card className='dashed-stack rounded-none border-0' variant='flat'>
       <div className='flex items-center justify-between p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Avatar</span>
+        <AccountField label='Avatar'>
           <UserAvatar className='size-16' user={user} />
-        </div>
+        </AccountField>
       </div>
 
       <div className='flex items-center justify-between p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Display name</span>
+        <AccountField label='Display name'>
           <span className='text-sm'>{user.name || 'No name set'}</span>
-        </div>
-        <EditNameDialog name={user.name ?? ''} />
+        </AccountField>
+        <EditNameDialog name={user.name} />
       </div>
 
       <div className='p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Email</span>
+        <AccountField label='Email'>
           <span className='text-sm'>{user.email}</span>
-        </div>
+        </AccountField>
       </div>
 
       <div className='p-4 sm:p-6'>
-        <div className='flex flex-col gap-2'>
-          <span className='text-muted-foreground text-sm'>Account created</span>
-          <span className='text-sm'>{formatAccountDate(user.createdAt)}</span>
-        </div>
+        <AccountField label='Account created'>
+          <span className='text-sm'>
+            {`${format(user.createdAt, 'MMMM d, yyyy')} (${formatDistanceToNow(user.createdAt, { addSuffix: true })})`}
+          </span>
+        </AccountField>
       </div>
     </Card>
   )
@@ -84,15 +87,17 @@ function EditNameDialog({ name }: { name: string }) {
 
   const onSubmit = async (values: Account) => {
     const { error } = await authClient.updateUser({
-      name: values.name.trim(),
+      name: values.name,
     })
 
     if (error) {
-      toast.error('Failed to update name.')
+      toast.error(
+        "Your display name wasn't saved. Check your connection and try again."
+      )
       return
     }
 
-    toast.success('Name updated.')
+    toast.success('Display name updated')
     setOpen(false)
     router.refresh()
   }
@@ -108,13 +113,20 @@ function EditNameDialog({ name }: { name: string }) {
       open={open}
     >
       <AlertDialogTrigger
-        render={<Button shape='square' size='sm' variant='secondary' />}
+        render={
+          <Button
+            aria-label='Edit display name'
+            shape='square'
+            size='sm'
+            variant='secondary'
+          />
+        }
       >
         Edit
       </AlertDialogTrigger>
-      <AlertDialogContent className='dashed-frame rounded-none shadow-none ring-0'>
+      <AlertDialogContent className='rounded-none border border-dashed shadow-none ring-0'>
         <AlertDialogHeader>
-          <AlertDialogTitle>Edit name</AlertDialogTitle>
+          <AlertDialogTitle>Edit display name</AlertDialogTitle>
           <AlertDialogDescription>
             Enter your full name, or a display name you are comfortable with.
           </AlertDialogDescription>
@@ -130,12 +142,13 @@ function EditNameDialog({ name }: { name: string }) {
               name='name'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Display name</FormLabel>
                   <FormControl>
                     <Input
+                      autoComplete='nickname'
                       className='rounded-none'
-                      maxLength={32}
-                      placeholder='Your name'
+                      maxLength={ACCOUNT_NAME_MAX_LENGTH}
+                      placeholder='Jane Smith'
                       {...field}
                       disabled={form.formState.isSubmitting}
                     />
@@ -156,6 +169,7 @@ function EditNameDialog({ name }: { name: string }) {
           </AlertDialogCancel>
           <Button
             disabled={form.formState.isSubmitting}
+            focusableWhenDisabled
             form='edit-name-form'
             shape='square'
             type='submit'
@@ -169,13 +183,4 @@ function EditNameDialog({ name }: { name: string }) {
       </AlertDialogContent>
     </AlertDialog>
   )
-}
-
-function formatAccountDate(date: Date | string) {
-  const parsedDate = new Date(date)
-
-  const absoluteDate = format(parsedDate, 'MMMM d, yyyy')
-  const relativeDate = formatDistanceToNow(parsedDate, { addSuffix: true })
-
-  return `${absoluteDate} (${relativeDate})`
 }

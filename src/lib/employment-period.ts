@@ -1,7 +1,10 @@
 import { differenceInMonths, format, parse } from 'date-fns'
 
 /** Parses an `MM.yyyy` or `yyyy` period value; year-only values snap to January or December. */
-function parsePeriodDate(str: string, fallbackMonth: 'first' | 'last'): Date {
+export function parsePeriodDate(
+  str: string,
+  fallbackMonth: 'first' | 'last'
+): Date {
   if (str.includes('.')) {
     return parse(str, 'MM.yyyy', new Date())
   }
@@ -12,12 +15,22 @@ function parsePeriodDate(str: string, fallbackMonth: 'first' | 'last'): Date {
   )
 }
 
+/** The year of an `MM.yyyy` or `yyyy` period value */
+export const periodYear = (value: string) =>
+  String(parsePeriodDate(value, 'first').getFullYear())
+
+/** Months a period covers, counting both edge months; negative when the range is inverted. */
+export const monthsInPeriod = (start: string, end?: string, now = new Date()) =>
+  differenceInMonths(
+    end ? parsePeriodDate(end, 'last') : now,
+    parsePeriodDate(start, 'first')
+  ) + 1
+
 /** Compact duration like `4m`, `2y`, or `1y 3m`; empty when the range is invalid. */
 export function formatDuration(start: string, end?: string): string {
   const startHasMonth = start.includes('.')
   const endHasMonth = end ? end.includes('.') : true
 
-  // Both year-only: granularity is years, no month arithmetic needed.
   if (!startHasMonth && end && !endHasMonth) {
     const years = Number.parseInt(end, 10) - Number.parseInt(start, 10)
     if (years <= 0) {
@@ -26,11 +39,7 @@ export function formatDuration(start: string, end?: string): string {
     return `${years}y`
   }
 
-  const startDate = parsePeriodDate(start, 'first')
-  const endDate = end ? parsePeriodDate(end, 'last') : new Date()
-
-  // +1 to count both the start and end months inclusively.
-  const totalMonths = differenceInMonths(endDate, startDate) + 1
+  const totalMonths = monthsInPeriod(start, end)
   if (totalMonths <= 0) {
     return ''
   }
@@ -48,11 +57,15 @@ export function formatDuration(start: string, end?: string): string {
 }
 
 /** Human-readable range like `Aug 2026 – Present` or `2019 – 2020`. */
-export function formatPeriod(start: string, end?: string): string {
+export function formatPeriod(
+  start: string,
+  end?: string,
+  separator = ' – '
+): string {
   const label = (value: string) =>
     value.includes('.')
       ? format(parsePeriodDate(value, 'first'), 'MMM yyyy')
       : value
 
-  return `${label(start)} – ${end ? label(end) : 'Present'}`
+  return `${label(start)}${separator}${end ? label(end) : 'Present'}`
 }

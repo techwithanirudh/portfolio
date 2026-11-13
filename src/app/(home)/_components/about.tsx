@@ -10,6 +10,7 @@ import {
 import { Prose } from '@/components/prose'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
+import { pages } from '@/constants/pages'
 import { aboutIntro } from '@/constants/portfolio/intro'
 import { cn } from '@/lib/utils'
 
@@ -22,10 +23,14 @@ export default function About(): React.ReactElement {
 
       <SplitSectionContent inset>
         <ViewAnimation className='relative' delay={0.1}>
-          <div className='space-y-4'>
+          <div className='space-y-3 sm:space-y-4'>
             <Prose className='typography-body w-full space-y-4'>
-              {aboutIntro.map((paragraph) => (
-                <p className='text-lg' key={paragraph}>
+              {aboutIntro.map((paragraph, index) => (
+                // Phones read the first paragraph; "Learn more" carries the rest
+                <p
+                  className={cn('sm:text-lg', index > 0 && 'max-sm:hidden')}
+                  key={paragraph}
+                >
                   <InlineMarkdown
                     linkClassName='whitespace-nowrap'
                     text={paragraph}
@@ -41,9 +46,10 @@ export default function About(): React.ReactElement {
                 }),
                 '!p-0 h-fit'
               )}
-              href='/about'
+              href={pages.about.path}
             >
               Learn more
+              <span className='sr-only'> about me</span>
               <Icons.arrowRight className='icon-arrow-button size-4' />
             </Link>
           </div>

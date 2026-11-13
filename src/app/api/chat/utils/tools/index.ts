@@ -1,23 +1,15 @@
-import { type ToolSet, tool } from 'ai'
-import { z } from 'zod'
+import { celebrateTool } from './celebrate'
 import { getPageContent } from './get-page-content'
 import { navigateTool } from './navigate'
+import { renderPortfolioTool } from './render-portfolio'
+import { searchDocsTool } from './search-docs'
 import { showContactFormTool } from './show-contact-form'
 
-const searchDocsToolType = tool({
-  description: 'Search the portfolio content',
-  execute: async () => 'Search results',
-  inputSchema: z.object({
-    limit: z.number().optional(),
-    locale: z.string().optional(),
-    query: z.string(),
-    tag: z.union([z.literal('all'), z.literal('blog'), z.literal('projects')]),
-  }),
-})
-
-export const tools = {
+export const chatTools = {
+  celebrate: celebrateTool,
   getPageContent,
   navigate: navigateTool,
-  searchDocs: searchDocsToolType,
+  renderPortfolio: renderPortfolioTool,
+  searchDocs: searchDocsTool,
   showContactForm: showContactFormTool,
-} satisfies ToolSet
+}

@@ -1,0 +1,44 @@
+---
+title: Fumadocs Starter
+description: A docs starter with AI chat, OpenAPI pages, and llms.txt built in.
+date: 2025-03-21
+order: 13
+website: https://fumadocsstarter.vercel.app
+github: https://github.com/techwithanirudh/fumadocs-starter
+status: Template
+platform: Web
+image: /images/projects/fumadocs_starter/cover.png
+tags: ['Next.js', 'Fumadocs', 'AI SDK', 'OpenAPI', 'TypeScript']
+---
+
+A ready-made docs site you can copy and fill with your own pages. It's built on Create Fumadocs, it's MIT licensed, and there's a live demo you can poke around.
+
+## How it started
+
+It began in March 2025 under a different name, Fumadocs MCP. The pitch in that first README was a [Fumadocs](https://fumadocs.dev/) site with Orama search, AI chat through the [AI SDK](https://ai-sdk.dev/) and room for an optional <Term>MCP</Term> server. The first real work was plumbing: Fumadocs' AI search dialog expected an "engine", so I wrote one that streamed answers from the AI SDK, and then spent a day fixing how it replaced the last message while the answer streamed in.
+
+Two days later I started [Shadcn SaaS Landing](/projects/shadcn_saas_landing) on the same stack. The MCP name is gone now, and the repo is just Fumadocs Starter.
+
+## Building it
+
+By May 2025 it had `llms.txt` routes, so AI tools could read the whole site in one go. A v2 landed over the summer: newer Shiki and [Twoslash](https://twoslash.netlify.app/) so code samples are type-checked with real hovers, shared layout config, and an upgraded OpenAPI integration.
+
+<Screens>
+  <Screen frame='wide' height={1060} src='/images/projects/fumadocs_starter/twoslash-hover.webp' width={1200} alt='A Twoslash hover over console in a code sample, showing its type and the Node.js docs, with an autocomplete list below' />
+  <Screen frame='wide' height={1000} src='/images/projects/fumadocs_starter/api-reference.webp' width={1600} alt='An API reference page for a POST endpoint, with a request playground, a Send button and cURL, JavaScript, Go, Python, Java and C# samples' />
+</Screens>
+
+The AI chat got rewritten in December 2025. The old engine was replaced by a chat route on the newer AI SDK that streams the answer and lets the model call two tools: `searchDocs`, which queries the Fumadocs search index (optionally inside one section), and `getPageContent`, which pulls a whole page when a snippet isn't enough. The site's `llms.txt` goes into the system prompt so the model knows what exists before it searches. The panel shows each tool call as it runs and lists the pages the answer came from. In February 2026 the tool status got approval states and icons.
+
+## How it works
+
+Every page also has a plain Markdown copy for AI tools: add `.mdx` to any docs URL and you get it. The Open menu on each page links to that Markdown, to GitHub, or straight into an AI chat app with the page attached. On top of that the site serves `llms.txt`, `llms-full.txt`, an RSS changelog, a sitemap and generated Open Graph images.
+
+<Screens>
+  <Screen frame='wide' height={540} src='/images/projects/fumadocs_starter/page-actions.webp' width={960} alt='The Open menu on a docs page in light mode, with Open in GitHub, View as Markdown, and Open in Scira AI, ChatGPT, Claude and Cursor' />
+  <Screen frame='wide' height={630} src='/images/projects/fumadocs_starter/og-image.webp' width={1200} alt='A dark gradient Open Graph card reading Starter Kit, HOME, OpenAPI, Generate and document your OpenAPI schema' />
+</Screens>
+
+## What's next
+
+My TODO list has a few big ones: custom themes through [TweakCN](https://tweakcn.com/) (like I did in [Coolify Tweaks](/projects/coolify_tweaks)), making OpenAPI and the changelog optional add-ons you install with the shadcn CLI, docs for switching Fumadocs layouts, and going Bun only.

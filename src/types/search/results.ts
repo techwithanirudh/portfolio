@@ -1,6 +1,6 @@
 import type { SortedResult } from 'fumadocs-core/search'
 
-export interface SearchPage {
+interface SearchPage {
   content: string
   id: string
   url: string

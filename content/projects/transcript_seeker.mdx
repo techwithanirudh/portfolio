@@ -1,0 +1,36 @@
+---
+title: Transcript Seeker
+description: One place to manage and look through all your Meeting BaaS meetings.
+date: 2025-05-02
+order: 7
+website: https://app.transcriptseeker.com
+github: https://github.com/Meeting-BaaS/transcript-seeker
+status: Open source
+platform: Web
+image: /images/projects/transcript_seeker/cover.png
+tags: ['React', 'Vite', 'PGLite', 'Drizzle', 'shadcn/ui', 'MeetingBaaS']
+---
+
+Transcript Seeker is a project I did for Meeting BaaS, and I think it was my first one there. The idea was simple: one app where you can manage and look through all your Meeting BaaS meetings, read the transcripts and ask questions about them.
+
+## What it does
+
+[Meeting Baas](https://www.meetingbaas.com/) sends bots into calls, and [Gladia](https://www.gladia.io/) or [AssemblyAI](https://www.assemblyai.com/) transcribe uploads. You bring your own API keys, and OpenAI answers your questions. Click a word in the transcript and it jumps to that moment.
+
+<Screens>
+  <Screen frame='wide' height={1170} src='/images/projects/transcript_seeker/home.webp' width={1000} alt='The Transcript Seeker home screen with three numbered steps, Settings, Record Meeting or Upload File, and Recordings or Upcoming Meetings, under a notice that no API key is set' />
+  <Screen frame='wide' height={900} src='/images/projects/transcript_seeker/settings.webp' width={1600} alt='The settings page with empty API key fields for Meeting Baas, OpenAI, Gladia and AssemblyAI' />
+</Screens>
+
+<Screens>
+  <Screen frame='wide' height={888} src='/images/projects/transcript_seeker/record-meeting.webp' width={1600} alt='The Record Meeting form with fields for the meeting URL, the bot name, its image and the message it posts when it joins' />
+  <Screen frame='wide' height={1020} src='/images/projects/transcript_seeker/upload.webp' width={1150} alt='The Upload File page with a sidebar to pick Gladia or AssemblyAI, a language, and extras such as speaker diarization and summarization' />
+</Screens>
+
+## How it went
+
+The app already existed when I picked it up in October 2024. It was a React client talking to an Express API with its own Postgres database, plus a few bits stashed in IndexedDB. I moved the data into the browser with <Term>PGLite</Term>, then split the project into a Turborepo <Term>monorepo</Term> with the web app, the proxy, a small API and a docs site built with [Fumadocs](https://fumadocs.dev/). Calendars came next, so you could see your upcoming meetings, and the last stretch was mostly fighting deployment configs. Right after this I built the [Speaking Meeting Bot](/projects/speaking_meeting_bot).
+
+## How it works
+
+The fun part is the architecture. The core app is a client-side SPA with no backend of its own. Everything lives in [PGLite](https://pglite.dev/), which is Postgres running right in your browser, with [Drizzle](https://orm.drizzle.team/) on top. Your keys, meetings, notes and chats all stay on your machine. A tiny [Nitro](https://nitro.build/) proxy passes requests through to the Meeting BaaS API. The one thing that does need a server is calendar sync, so a small API with [Better Auth](https://www.better-auth.com/) sign-in keeps calendar data in a SQLite database on Turso. Recordings play in [Vidstack](https://vidstack.io/), and the transcript scrolls along with the video. The UI is built with [shadcn/ui](https://ui.shadcn.com/).

@@ -1,11 +1,13 @@
 import { resolveLinkItems } from 'fumadocs-ui/layouts/shared'
-import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { ActiveLink } from '@/components/layout/footer/active-link'
+import { splitLinkItems } from '@/components/layout/split-link-items'
 import { PreviewLink } from '@/components/preview-link'
 import { ViewAnimation } from '@/components/view-animation'
-import { linkItems, socials } from '@/constants/navigation'
+import { linkItems, socials, v1Portfolio } from '@/constants/navigation'
+import { pages } from '@/constants/pages'
 import { baseOptions } from '@/constants/site'
+import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 
 interface LinkEntry {
@@ -15,9 +17,9 @@ interface LinkEntry {
   routeHandler?: boolean
 }
 
-interface ListItem {
-  external?: boolean
-  href?: string
+interface LinkGroup {
+  /** Lays the items out in a row on phones, for links that are mostly an icon */
+  iconRow?: boolean
   items: LinkEntry[]
   title: string
 }
@@ -27,8 +29,6 @@ const plainLinkClassName =
 
 const FooterLink = ({ item }: { item: LinkEntry }) => {
   if (item.external) {
-    // No hover previews down here: most socials sit behind a login wall, so
-    // only GitHub ever had one
     return (
       <PreviewLink
         className={plainLinkClassName}
@@ -56,14 +56,12 @@ export const Links = () => {
     githubUrl: baseOptions.githubUrl,
     links: linkItems,
   })
-  const navItems = links.filter((item) =>
-    ['nav', 'all'].includes(item.on ?? 'all')
-  )
+  const { navItems } = splitLinkItems(links)
 
-  const lists: ListItem[] = [
+  const lists: LinkGroup[] = [
     {
       items: [
-        { children: 'Home', href: '/' },
+        { children: pages.home.title, href: pages.home.path },
         ...navItems
           .filter(
             (item) =>
@@ -84,20 +82,22 @@ export const Links = () => {
         { children: 'Colophon', href: '/colophon' },
         { children: 'Resume', href: '/resume' },
         {
-          children: 'V1 portfolio',
+          children: v1Portfolio.name,
           external: true,
-          href: 'https://v1.techwithanirudh.com/',
+          href: v1Portfolio.url,
         },
-        { children: 'RSS feed', href: '/rss.xml', routeHandler: true },
+        { children: 'RSS feed', href: '/blog/rss.xml', routeHandler: true },
       ],
       title: 'More',
     },
     {
+      // One link per line made the phone footer long
+      iconRow: true,
       items: socials.map((social) => ({
         children: (
-          <span className='inline-flex items-center gap-1.5 [&_svg]:size-4'>
+          <span className='inline-flex items-center gap-1.5 max-sm:-m-2.5 max-sm:p-2.5 [&_svg]:size-4'>
             {social.icon}
-            {social.name}
+            <span className='max-sm:sr-only'>{social.name}</span>
           </span>
         ),
         external: true,
@@ -115,17 +115,18 @@ export const Links = () => {
             'flex flex-col gap-3 sm:gap-6',
             index === lists.length - 1 && 'max-sm:col-span-2'
           )}
-          delay={0.05 * index}
+          delay={staggerDelay(index)}
           key={list.title}
         >
           <div className='border-b pb-1 font-medium text-foreground sm:border-none sm:pb-0'>
-            {list.href ? (
-              <Link href={list.href}>{list.title}</Link>
-            ) : (
-              <p>{list.title}</p>
-            )}
+            <p>{list.title}</p>
           </div>
-          <ul className='flex flex-col gap-2 sm:gap-3'>
+          <ul
+            className={cn(
+              'flex flex-col gap-2 sm:gap-3',
+              list.iconRow && 'max-sm:flex-row max-sm:gap-7'
+            )}
+          >
             {list.items.map((item) => (
               <li key={item.href}>
                 <FooterLink item={item} />

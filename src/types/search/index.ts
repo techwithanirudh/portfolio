@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 export type CommandKind = 'command' | 'page' | 'link'
-export type AccountAction = 'account' | 'logout' | 'signin'
+type AccountAction = 'account' | 'logout' | 'signin'
 
 interface BaseItem {
   icon?: ReactNode

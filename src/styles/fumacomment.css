@@ -19,5 +19,5 @@
 }
 
 @theme static {
-  --color-fc-error: hsl(0 84.2% 60.2%);
+  --color-fc-error: var(--color-destructive);
 }

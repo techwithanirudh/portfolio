@@ -1,0 +1,59 @@
+---
+title: Remotely
+description: Use a TV remote as a mouse for a Mac connected to a TV.
+date: 2026-07-30
+order: 6
+github: https://github.com/techwithanirudh/remotely
+status: Live
+platform: macOS
+image: /images/projects/remotely/cover.png
+tags: ['Swift', 'SwiftUI', 'macOS', 'HDMI-CEC', 'Accessibility']
+---
+
+Remotely lets you drive a Mac with your TV remote. I wanted to watch stuff on the TV from my chair (or my bed) without getting up for a mouse every time, and the remote was already sitting right there. It's my first macOS app, a small menu bar app for macOS 15 and later, and you can grab it from the GitHub releases page.
+
+## What it does
+
+The arrows move the pointer. Tap to nudge it a few pixels, hold to glide, and it speeds up the longer you hold. Center clicks, twice double-clicks and holding right-clicks. Back works as back, and tapping it twice flips the arrows into scrolling, with a little chip next to the pointer showing which mode you're in. You can rebind all of it, including to your own keyboard shortcuts.
+
+The onboarding takes after [Alcove](https://tryalcove.com/). It goes one step at a time, shows where your TV brand hides its <Term>HDMI-CEC</Term> setting, gets the Accessibility permission, then has you practice each gesture with the real remote, so you know it works before you're done.
+
+<Screens>
+  <Screen height={1010} src='/images/projects/remotely/welcome.webp' width={660} alt="The Welcome step, reading Your TV remote becomes a pointer for this Mac, with hints for Hold to move, Center to click and Back twice to scroll" />
+  <Screen height={1010} src='/images/projects/remotely/connect-step.webp' width={660} alt="The Connect over HDMI step with the display brand set to Samsung and the menu path to Anynet+ (HDMI-CEC)" />
+  <Screen height={1010} src='/images/projects/remotely/permission.webp' width={660} alt="The permission step, saying Remotely needs permission to move the pointer, with Permission allowed shown" />
+</Screens>
+
+<Screens>
+  <Screen height={1010} src='/images/projects/remotely/practice-move.webp' width={660} alt="The practice step Hold an arrow to move the pointer, with a spot to move the pointer onto" />
+  <Screen height={1010} src='/images/projects/remotely/practice-click.webp' width={660} alt="The practice step Press Center to click" />
+  <Screen height={1010} src='/images/projects/remotely/practice-scroll.webp' width={660} alt="The practice step Press Back twice to scroll, with a short list of scrollable lines" />
+</Screens>
+
+<Screens>
+  <Screen height={1010} src='/images/projects/remotely/finish.webp' width={660} alt="The last step, reading You're all set, with notes about the menu bar, remapping buttons and diagnostics" />
+</Screens>
+
+The settings window takes after [Loop](https://github.com/MrKai77/Loop) by MrKai. A sidebar holds General, Controls, Connection, Diagnostics and About, so you can rebind buttons or check that the remote is actually coming through.
+
+<Screens>
+  <Screen height={1374} src='/images/projects/remotely/settings-general.webp' width={1370} alt="The General pane with switches for Enable Remotely, Launch at login and Show in the menu bar, Accessibility granted and a pointer speed slider at 1.0x" />
+  <Screen height={1374} src='/images/projects/remotely/settings-controls.webp' width={1370} alt="The Controls pane with a short guide to using the remote and a list of bindings, such as Move Pointer Up and Left Click" />
+</Screens>
+
+<Screens>
+  <Screen height={1374} src='/images/projects/remotely/settings-connection.webp' width={1370} alt="The Connection pane with a Ready to Receive status, three setup steps and the Samsung menu path to Anynet+" />
+  <Screen height={1374} src='/images/projects/remotely/settings-diagnostics.webp' width={1370} alt="The Diagnostics pane with Remote signal awaiting input, Accessibility granted and an event log naming the connected display" />
+</Screens>
+
+<Screens>
+  <Screen height={1374} src='/images/projects/remotely/settings-about.webp' width={1370} alt="The About pane for version 0.7.5 with update settings, a release channel picker and Replay and Reset buttons for onboarding" />
+</Screens>
+
+## How it works
+
+TVs with HDMI-CEC already send the remote's button presses down the HDMI cable to whatever's plugged in. On a Mac, a system <Term>daemon</Term> (`corercd`) owns that connection and won't let other apps talk to it. It does write every press to the system log, though, so Remotely streams that log, reads the raw CEC button code from each line and turns it into pointer moves, clicks, scrolls and shortcuts (that's what the Accessibility permission is for). No account, no network. Updates come through [Sparkle](https://sparkle-project.org/).
+
+Getting there took a couple of wrong turns. It started as M7 Remote Bridge, built for my own setup: an M4 Mac mini and a Samsung Smart M70D. My first try talked to Apple's CoreRC service directly and just sat on "Waiting for HDMI" forever. The daemon was getting every button press and handing exactly zero of them to me, because it won't list the HDMI connection for third-party apps. That's how I ended up reading the log instead. A later rewrite quietly brought the old approach back and the remote went undetected again, so I put the log reader back and gave it tests this time.
+
+Volume, media and Home turned out to never reach the Mac at all, since the TV handles those itself and never puts them on the cable. I cut them instead of shipping buttons that could never fire, and built the gestures out of timing instead. Holding and double-tapping are worked out from when each press and release lands, and clicks still go out right away instead of waiting to see if a second tap is coming. Once it worked with any HDMI-CEC display, not just mine, I renamed it Remotely.

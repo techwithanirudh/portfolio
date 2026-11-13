@@ -1,6 +1,5 @@
-import { boolean, pgTableCreator, text, timestamp } from 'drizzle-orm/pg-core'
-
-const createTable = pgTableCreator((name) => `portfolio_${name}`)
+import { boolean, text, timestamp } from 'drizzle-orm/pg-core'
+import { createTable } from './table'
 
 export const users = createTable('users', {
   banExpires: timestamp('ban_expires'),

@@ -4,27 +4,22 @@ import { useSearchContext } from 'fumadocs-ui/contexts/search'
 import type { ComponentProps } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
-
-interface SearchToggleProps
-  extends Pick<ComponentProps<typeof Button>, 'className' | 'size'> {
-  hideIfDisabled?: boolean
-}
+import { cn } from '@/lib/utils'
 
 export const SearchToggle = ({
   className,
-  hideIfDisabled,
   size = 'icon-sm',
-}: SearchToggleProps) => {
+}: Pick<ComponentProps<typeof Button>, 'className' | 'size'>) => {
   const { setOpenSearch, enabled } = useSearchContext()
 
-  if (hideIfDisabled && !enabled) {
+  if (!enabled) {
     return null
   }
 
   return (
     <Button
       aria-label='Open search'
-      className={className}
+      className={cn('relative after:absolute after:-inset-1', className)}
       data-search=''
       data-sound-press='off'
       onClick={() => setOpenSearch(true)}

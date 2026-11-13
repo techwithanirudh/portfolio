@@ -1,0 +1,49 @@
+---
+title: Portfolio
+description: My personal site with a blog, projects, guestbook, and AI chat.
+date: 2026-01-12
+order: 12
+website: https://www.imanirudh.com
+status: Live
+platform: Web
+github: https://github.com/techwithanirudh/portfolio
+image: /images/projects/portfolio/cover.png
+tags: ['Next.js', 'Fumadocs', 'Drizzle', 'MDX', 'TypeScript']
+---
+
+This site! It's where my blog, my projects, a guestbook and an assistant named Simba all live.
+
+## How it started
+
+I build a lot with Next.js, [Fumadocs](https://fumadocs.dev/) and shadcn/ui, so when I redesigned my site in January 2026 I didn't start from zero. The first commit grew out of my [SaaS landing template](/projects/shadcn_saas_landing): it still had that template's inspiration list in the README and its `blog_` table prefix, which I renamed to `portfolio_` the next day. For the look I took a lot of inspiration from [chanhdai.com](https://chanhdai.com/), [nelsonlai.dev](https://nelsonlai.dev/) and [braydoncoyer.dev](https://braydoncoyer.dev/).
+
+<Screens>
+  <Screen frame='wide' height={825} src='/images/projects/portfolio/home-hero.webp' width={1600} alt='The home page hero in dark mode, with the name Anirudh Sriram, a short intro, a Browse projects button and a grain gradient on the right' />
+  <Screen frame='wide' height={1125} src='/images/projects/portfolio/projects-list.webp' width={1800} alt='The Projects page in light mode with a search field and cards for Depensa and the Mastra Slack Agent Template' />
+</Screens>
+
+The first two weeks went fast: a guestbook on day two, `llms.txt` the day after, my GitHub activity on the About page, then search.
+
+## Meet Simba
+
+At the end of January I added an assistant and named him Simba, after my dog. He talks like a dog too (goofy, a bit too excited). He can search the site, open a page for you, pull up the contact form already filled in, or render pieces of the site right in the chat, like my contributions graph or a stretch of my experience timeline, built with `@json-render`. He can also throw confetti, which is obviously the most important feature. In February he learned to read the page you're on and the text you've selected.
+
+<Screens>
+  <Screen fit='contain' height={1023} src='/images/projects/portfolio/simba-panel.webp' width={743} alt='The Ask Simba panel open over the home page, with Simba the dog and a greeting saying he can answer questions about Anirudh, his work or the site' />
+  <Screen frame='wide' height={824} src='/images/projects/portfolio/command-menu.webp' width={1036} alt='The search menu with the query mastra, showing the Mastra Slack Agent Template project and a matching line from its page' />
+</Screens>
+
+In October I redrew him with in-between frames, so he now idles, naps, reads along while an answer streams and grins when you click him. Yes, I spent way too long on a dog.
+
+## The guestbook and the blog
+
+In February the guestbook got a signature pad (with undo and redo) and moderation: a model checks every entry before it's saved, and I can ban people who get past it. Blog comments go through the same kind of check. Posts kept pushing the site too. My Gorkie sandboxes post needed sequence diagrams, and by August [Mermaid](https://mermaid.js.org/) was rendering them on the server so the page stops jumping while they load. Links in posts get hover previews, and GitHub code snippets render inline.
+
+<Screens>
+  <Screen frame='wide' height={942} src='/images/projects/portfolio/mermaid-diagram.webp' width={1130} alt='A sequence diagram from the Gorkie sandboxes blog post with Gorkie, Subagent, Sandbox and Slack columns' />
+  <Screen frame='wide' height={935} src='/images/projects/portfolio/github-activity.webp' width={1800} alt='The Activity section of the About page with a year of GitHub contributions in shades of blue and a list of recent pushes and branches' />
+</Screens>
+
+## How it works
+
+Fumadocs loads and searches the MDX files for the blog and projects. [Drizzle](https://orm.drizzle.team/) and [Better Auth](https://www.better-auth.com/) handle the guestbook, and comments run on [Fuma Comment](https://github.com/fuma-nama/fuma-comment). Simba's chat route runs on the [AI SDK](https://ai-sdk.dev/) and checks every request with Vercel's BotID first. The same content is served to AI tools through `/llms.txt` and a Markdown copy of each page, and Simba gets his facts from the same place, so when a page changes he knows. There's also an OIIA mode easter egg hiding somewhere. Have fun finding it.
