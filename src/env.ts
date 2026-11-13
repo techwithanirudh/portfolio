@@ -44,7 +44,6 @@ export const env = createEnv({
     HACKCLUB_API_KEY: z.string().min(1).startsWith('sk-hc-'),
     OPENAI_API_KEY: z.string().min(1).startsWith('sk-proj-'),
     RESEND_API_KEY: z.string().min(1).startsWith('re_').optional(),
-    RESEND_AUDIENCE_ID: z.string().min(1).optional(),
     SOURCE_MAPS: z.string().optional(),
   },
   shared: {
