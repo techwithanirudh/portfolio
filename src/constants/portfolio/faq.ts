@@ -1,3 +1,5 @@
+import { email } from '@/constants/site'
+
 export const faq = [
   {
     answer:
@@ -6,12 +8,11 @@ export const faq = [
   },
   {
     answer:
-      "I'm focused on shipping personal products, polishing this portfolio, and learning more about scalable web app architecture.",
+      "I'm shipping my own products, polishing this portfolio and learning how to build web apps that scale.",
     question: 'What are you focusing on right now?',
   },
   {
-    answer:
-      'Use the contact form on this website or email me at hello@imanirudh.com. You can also connect with me on GitHub or LinkedIn.',
+    answer: `Use the contact form on this website or email me at ${email}. You can also connect with me on GitHub or LinkedIn.`,
     question: 'How can I get in touch with you?',
   },
   {

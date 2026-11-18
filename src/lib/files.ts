@@ -3,8 +3,10 @@ export interface Base64FileParts {
   mediaType: string
 }
 
+const DATA_URL_PREFIX = 'data:'
+
 export const parseB64File = (value: string): Base64FileParts | null => {
-  if (!value.startsWith('data:')) {
+  if (!value.startsWith(DATA_URL_PREFIX)) {
     return null
   }
 
@@ -15,7 +17,7 @@ export const parseB64File = (value: string): Base64FileParts | null => {
     return null
   }
 
-  const mediaType = value.slice(5, separatorIndex).trim()
+  const mediaType = value.slice(DATA_URL_PREFIX.length, separatorIndex).trim()
   const data = value.slice(separatorIndex + separator.length).trim()
 
   if (!(mediaType && data)) {

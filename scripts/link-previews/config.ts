@@ -1,44 +1,36 @@
-import type {
-  DetectionConfig,
-  ExclusionsConfig,
-  ScreenshotConfig,
-} from './types'
+import { z } from 'zod'
 
-export const content = [
+export const contentGlobs = [
   'content/blog/**/*.{md,mdx}',
-  'content/work/**/*.{md,mdx}',
+  'content/projects/**/*.{md,mdx}',
 ]
 
-export const previewLinkSourceFiles = [
-  'src/constants/navigation/social.tsx',
-  'src/constants/portfolio/colophon.ts',
-  'src/constants/portfolio/experiences.tsx',
-  'src/constants/portfolio/skills.tsx',
-  'src/constants/portfolio/uses.ts',
-  'src/app/(home)/colophon/_components/attribution.tsx',
-  'src/app/(home)/uses/_components/coding.tsx',
-  'src/components/layout/footer/links.tsx',
-]
+export const previewLinkSourceGlobs = ['src/constants/**/*.{ts,tsx}']
 
 export const concurrency = 3
 
 export const maxScreenshotAgeMs = 6 * 30 * 24 * 60 * 60 * 1000
 
-export const screenshot: ScreenshotConfig = {
+const publicPath = '/previews'
+
+export const screenshot = {
   image: {
     format: 'jpeg',
     quality: 92,
-  },
+  } as const,
   paths: {
-    manifest: 'public/previews/manifest.json',
-    output: 'public/previews',
+    manifest: `public${publicPath}/manifest.json`,
+    output: `public${publicPath}`,
+    publicPath,
   },
+  retryTimeout: 45_000,
   timeout: 60_000,
   viewport: { height: 630, width: 1200 },
+  waitAfterFallback: 3000,
   waitAfterLoad: 10_000,
 }
 
-export const exclusions: ExclusionsConfig = {
+export const exclusions = {
   domains: [
     'twitter.com',
     'x.com',
@@ -67,7 +59,7 @@ export const exclusions: ExclusionsConfig = {
   hostnames: ['localhost', 'www.w3.org'],
 }
 
-export const detection: DetectionConfig = {
-  components: {},
-  frontmatter: ['website', 'github'],
-}
+export const frontmatterLinks = z.object({
+  github: z.string().optional().catch(undefined),
+  website: z.string().optional().catch(undefined),
+})

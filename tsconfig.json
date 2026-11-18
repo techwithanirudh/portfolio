@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "ESNext",
@@ -9,12 +8,10 @@
     "moduleDetection": "force",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "checkJs": true,
-    /* Bundled projects */
     "lib": ["dom", "dom.iterable", "ESNext"],
     "noEmit": true,
     "module": "ESNext",
@@ -26,16 +23,15 @@
       }
     ],
     "incremental": true,
-    /* Path Aliases */
     "paths": {
       "@/*": ["./src/*"],
+      "@/emails/*": ["./emails/*"],
       "@/public/*": ["./public/*"],
       "fumadocs-mdx:collections/*": ["./.source/*"]
     },
     "allowImportingTsExtensions": true
   },
   "include": [
-    ".eslintrc.cjs",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",

@@ -1,7 +1,5 @@
 import { unstable_cache } from 'next/cache'
-import { octokit } from '@/lib/github'
-
-const DEFAULT_REVALIDATE_SECONDS = 60 * 60
+import { GITHUB_REVALIDATE_SECONDS, octokit } from '@/lib/github'
 
 export interface GitHubRepoInput {
   branch?: string
@@ -9,7 +7,7 @@ export interface GitHubRepoInput {
   repo: string
 }
 
-export interface GitHubRepoDetails extends GitHubRepoInput {
+interface GitHubRepoDetails extends GitHubRepoInput {
   defaultBranch: string
   description: string | null
   forks: number
@@ -18,7 +16,7 @@ export interface GitHubRepoDetails extends GitHubRepoInput {
   license: string | null
   name: string
   openIssues: number
-  pushedAt: string | null
+  pushedAt: string
   stars: number
   topics: string[]
   url: string
@@ -76,17 +74,15 @@ export const getGitHubRepoDetails = unstable_cache(
       name: response.data.full_name,
       openIssues: response.data.open_issues_count,
       owner: parsed.owner,
-      pushedAt: response.data.pushed_at ?? null,
+      pushedAt: response.data.pushed_at,
       repo: parsed.repo,
       stars: response.data.stargazers_count,
       topics: response.data.topics ?? [],
-      url: parsed.branch
-        ? getGitHubRepoUrl(parsed)
-        : (response.data.html_url ?? getGitHubRepoUrl(parsed)),
+      url: parsed.branch ? getGitHubRepoUrl(parsed) : response.data.html_url,
       visibility: response.data.visibility ?? 'public',
       watchers: response.data.watchers_count,
     }
   },
   ['github-repo'],
-  { revalidate: DEFAULT_REVALIDATE_SECONDS }
+  { revalidate: GITHUB_REVALIDATE_SECONDS }
 )

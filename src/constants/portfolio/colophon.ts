@@ -76,6 +76,24 @@ export const attributions = [
   { name: 'Noah Dunnagan', url: 'https://noahdunnagan.com/' },
 ] satisfies AttributionItem[]
 
+export const designNotes = {
+  layout:
+    'The layout uses wide spacing and dashed borders. Geist Sans sets headings and body text, and Geist Mono sets code and labels.',
+  palette:
+    'The palette is neutral, with a blue accent for focus rings and links.',
+}
+
+export const attributionIntro =
+  'I borrowed code and design ideas from these people.'
+
+export const designInspiration = {
+  name: 'Godly',
+  url: 'https://godly.website/',
+}
+
+export const typographyIntro =
+  'Geist Sans sets most of the interface, and Geist Mono sets code and labels.'
+
 export const typography = [
   { className: 'font-normal', label: 'Geist Regular' },
   { className: 'font-medium', label: 'Geist Medium' },

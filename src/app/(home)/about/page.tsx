@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { ProfilePageJsonLd } from '@/components/json-ld'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { pages } from '@/constants/pages'
 import { description as profileDescription } from '@/constants/site'
@@ -15,17 +15,23 @@ import Hero from './_components/hero'
 import Stack from './_components/stack'
 import Story from './_components/story'
 
-// A profile page, so search results get the full site description rather
-// than the hero's short line
+// Reads "About me" with the portrait between the words, like the page heading
+const aboutOgImage = `/og?${new URLSearchParams({
+  description: profileDescription,
+  portrait: '1',
+  title: 'About me',
+})}`
+
 export const metadata: Metadata = createMetadata({
   alternates: { canonical: pages.about.path },
   description: profileDescription,
-  openGraph: { url: pages.about.path },
+  openGraph: { images: aboutOgImage, url: pages.about.path },
   title: pages.about.title,
+  twitter: { images: aboutOgImage },
 })
 
-export default function AboutPage() {
-  const contributions = getGitHubContributions()
+export default async function AboutPage() {
+  const contributions = await getGitHubContributions()
 
   return (
     <>
@@ -37,15 +43,15 @@ export default function AboutPage() {
       <Wrapper>
         <Hero />
         <Story />
-        <Separator />
+        <SectionDivider />
         <Experience />
-        <Separator />
+        <SectionDivider />
         <Stack />
-        <Separator />
+        <SectionDivider />
         <ActivityHeader />
         <Contributions contributions={contributions} />
         <Feed />
-        <Separator />
+        <SectionDivider />
         <CTA />
       </Wrapper>
     </>

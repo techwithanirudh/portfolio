@@ -1,21 +1,8 @@
-import {
-  getAboutText,
-  getCommitHistoryText,
-  getProfileFactsText,
-} from '../utils'
+import { markdownResponse } from '../utils/markdown-response'
+import { getAboutMarkdown } from '../utils/site-path'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const commitHistory = await getCommitHistoryText()
-  const content = [getProfileFactsText(), getAboutText(), commitHistory]
-    .filter(Boolean)
-    .join('\n')
-    .trim()
-
-  return new Response(content, {
-    headers: {
-      'Content-Type': 'text/markdown;charset=utf-8',
-    },
-  })
+  return markdownResponse(await getAboutMarkdown())
 }

@@ -1,9 +1,8 @@
 'use client'
 
-import type { UseChatHelpers } from '@ai-sdk/react'
 import { useSound } from '@web-kits/audio/react'
-import { isToolUIPart } from 'ai'
-import { memo } from 'react'
+import { type ChatStatus, isToolUIPart } from 'ai'
+import { memo, type ReactNode } from 'react'
 import {
   Conversation,
   ConversationContent,
@@ -12,36 +11,59 @@ import {
 } from '@/components/ai-elements/conversation'
 import {
   Message,
+  MessageAction,
+  MessageActions,
   MessageContent,
   MessageHeader,
   MessageResponse,
 } from '@/components/ai-elements/message'
+import { Suggestion, Suggestions } from '@/components/ai-elements/suggestion'
 import { Tool, ToolContent, ToolHeader } from '@/components/ai-elements/tool'
+import { CopyStateIcon } from '@/components/copy-state-icon'
 import { Icons } from '@/components/icons/icons'
-import { contextDataSchema, type MyUIMessage } from '@/lib/ai/chat/types'
-import { tap } from '@/lib/audio/minimal'
-import { useChatContext } from './chat-context'
+import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
+import type { ChatUIMessage } from '@/lib/ai/chat/types'
+import { copy as copySound, tap } from '@/lib/audio/minimal'
+import { toast } from '@/lib/toast'
+import { cn } from '@/lib/utils'
+import { isChatBusy, useChatContext } from './chat-context'
+import { expandedColumn, eyebrow } from './class-names'
+import { useAssistantContext } from './context'
+import { useAskSimba } from './input'
 import { AvatarIcon } from './mascot/avatar-icon'
+import { SimbaChip } from './mascot/simba-chip'
 import { MessageMetadata, MessagePending } from './message-metadata'
-import { ContactForm, ContactFormSkeleton } from './tools/contact-form'
+import { ownerName } from './owner-name'
+import { CelebratePart } from './tools/celebrate'
+import {
+  ContactForm,
+  ContactFormCanceled,
+  ContactFormSent,
+  ContactFormSkeleton,
+} from './tools/contact-form'
 import { NavigatePart } from './tools/navigate'
+import { PortfolioPart } from './tools/portfolio'
+import type { ToolPart } from './tools/types'
 
-const roleName: Record<string, string> = {
-  assistant: 'assistant',
-  user: 'you',
+function SimbaTurn({ children }: { children: ReactNode }) {
+  return (
+    <Message className='mt-4 first:mt-0' from='assistant'>
+      <MessageHeader className='sr-only'>Simba</MessageHeader>
+      <MessageContent className='grid grid-cols-[1.25rem_minmax(0,1fr)] gap-x-2.5'>
+        <SimbaChip className='mx-0 mt-0 size-5 translate-y-0' />
+        {children}
+      </MessageContent>
+    </Message>
+  )
 }
-
-const hasReplyContent = (message: MyUIMessage) =>
-  message.parts.some((part) => part.type === 'text' || isToolUIPart(part))
 
 function ReplyError() {
   const { regenerate } = useChatContext()
   const playRetry = useSound(tap)
 
   return (
-    <Message className='py-4' from='assistant'>
-      <MessageHeader>{roleName.assistant}</MessageHeader>
-      <p className='text-destructive text-sm' role='alert'>
+    <SimbaTurn>
+      <p className='col-start-2 text-destructive text-sm' role='alert'>
         Simba lost the scent.{' '}
         <button
           className='link-underline'
@@ -54,7 +76,83 @@ function ReplyError() {
           Try again
         </button>
       </p>
-    </Message>
+    </SimbaTurn>
+  )
+}
+
+const suggestions = [
+  { icon: <Icons.work />, text: 'show me his projects' },
+  { icon: <Icons.wrench />, text: "what's his stack" },
+  { icon: <Icons.mail />, text: 'how do i reach him' },
+]
+
+function SuggestedQuestions() {
+  const { context } = useAssistantContext()
+  const ask = useAskSimba()
+
+  if (context) {
+    return null
+  }
+
+  return (
+    <Suggestions aria-label='Suggested questions' className='pt-1' role='group'>
+      {suggestions.map(({ icon, text }, index) => (
+        <Suggestion
+          className={cn(
+            index === 0 && 'border-primary/50 text-primary [&_svg]:text-primary'
+          )}
+          key={text}
+          onClick={ask}
+          suggestion={text}
+        >
+          {icon}
+          {text}
+        </Suggestion>
+      ))}
+    </Suggestions>
+  )
+}
+
+function ReplyActions({ canCopy }: { canCopy: boolean }) {
+  const { regenerate } = useChatContext()
+  const playCopy = useSound(copySound)
+  const playRegenerate = useSound(tap)
+  const { copy, state } = useCopyToClipboard({
+    onCopyError: () => toast.error("Couldn't copy that reply."),
+    onCopySuccess: () => playCopy(),
+  })
+
+  return (
+    <MessageActions className='col-start-2 -ml-1.5 opacity-0 pointer-coarse:opacity-100 transition-opacity duration-150 ease-out-strong group-focus-within/message:opacity-100 group-hover/message:opacity-100'>
+      {canCopy ? (
+        <MessageAction
+          label={state === 'done' ? 'Copied' : 'Copy'}
+          // Copies the rendered reply so markdown syntax stays out of the clipboard
+          onClick={(event) => {
+            const replies = event.currentTarget
+              .closest('[data-role=assistant]')
+              ?.querySelectorAll<HTMLElement>('[data-slot=message-response]')
+            copy(
+              Array.from(replies ?? [], (reply) => reply.innerText).join('\n\n')
+            )
+          }}
+        >
+          <CopyStateIcon className='[&_svg]:size-3.5' state={state} />
+        </MessageAction>
+      ) : null}
+      <MessageAction
+        label='Regenerate'
+        onClick={() => {
+          playRegenerate()
+          regenerate()
+        }}
+      >
+        <Icons.refresh className='icon-turn-button' />
+      </MessageAction>
+      <span aria-live='polite' className='sr-only'>
+        {state === 'done' ? 'Copied' : ''}
+      </span>
+    </MessageActions>
   )
 }
 
@@ -62,20 +160,20 @@ export function MessageList({
   messages: allMessages,
   status,
 }: {
-  messages: MyUIMessage[]
-  status: UseChatHelpers<MyUIMessage>['status']
+  messages: ChatUIMessage[]
+  status: ChatStatus
 }) {
-  const isBusy = status === 'streaming' || status === 'submitted'
-  // No assistant message exists before the first chunk, so show a placeholder
+  const isBusy = isChatBusy(status)
   const isAwaitingReply =
     status === 'submitted' && allMessages.at(-1)?.role === 'user'
   const isFailed = status === 'error'
   const lastMessage = allMessages.at(-1)
-  // A failed call can leave an empty assistant message; the error stands in for it
   const messages =
     isFailed &&
     lastMessage?.role === 'assistant' &&
-    !hasReplyContent(lastMessage)
+    !lastMessage.parts.some(
+      (part) => part.type === 'text' || isToolUIPart(part)
+    )
       ? allMessages.slice(0, -1)
       : allMessages
 
@@ -87,7 +185,7 @@ export function MessageList({
       data-lenis-prevent
     >
       <ConversationContent
-        className='dashed-stack px-3'
+        className={cn('px-3 py-4', expandedColumn)}
         scrollClassName='fd-scroll-container supports-timeline-scroll:scroll-fade-effect-y'
       >
         {messages.length === 0 && !isFailed ? (
@@ -97,9 +195,9 @@ export function MessageList({
               size={64}
             />
             <p>
-              heya! im simba, anirudh's dog. i can answer questions about him,
-              his work, or the site.
+              {`hey, i'm simba, ${ownerName}'s dog. i can answer questions about him, his work, or the site.`}
             </p>
+            <SuggestedQuestions />
           </ConversationEmptyState>
         ) : (
           messages.map((item, idx) => (
@@ -107,14 +205,20 @@ export function MessageList({
               isInProgress={messages.length - 1 === idx && isBusy}
               key={item.id}
               message={item}
+              showActions={
+                messages.length - 1 === idx &&
+                item.role === 'assistant' &&
+                status === 'ready'
+              }
             />
           ))
         )}
         {isAwaitingReply ? (
-          <Message className='py-4' from='assistant'>
-            <MessageHeader>{roleName.assistant}</MessageHeader>
-            <MessagePending />
-          </Message>
+          <SimbaTurn>
+            <div className='col-start-2'>
+              <MessagePending />
+            </div>
+          </SimbaTurn>
         ) : null}
         {isFailed ? <ReplyError /> : null}
       </ConversationContent>
@@ -123,9 +227,7 @@ export function MessageList({
   )
 }
 
-const contactFormStatus = (
-  part: Extract<MyUIMessage['parts'][number], { type: 'tool-showContactForm' }>
-) => {
+const contactFormStatus = (part: ToolPart<'showContactForm'>) => {
   if (part.state === 'output-available') {
     return part.output?.success ? 'sent' : 'canceled'
   }
@@ -137,25 +239,33 @@ const contactFormStatus = (
   }
 }
 
-function ContactFormPart({
-  part,
-}: {
-  part: Extract<MyUIMessage['parts'][number], { type: 'tool-showContactForm' }>
-}) {
-  const isSubmitted = part.state === 'output-available'
-  const submittedData =
-    isSubmitted &&
-    part.output?.success &&
-    part.output.name &&
-    part.output.email &&
-    part.output.message
-      ? {
-          email: part.output.email,
-          message: part.output.message,
-          name: part.output.name,
-        }
-      : undefined
+function ContactFormBody({ part }: { part: ToolPart<'showContactForm'> }) {
+  if (part.state === 'output-available') {
+    const { output } = part
+    return output?.success && output.name && output.email && output.message ? (
+      <ContactFormSent
+        data={{
+          email: output.email,
+          message: output.message,
+          name: output.name,
+        }}
+      />
+    ) : (
+      <ContactFormCanceled />
+    )
+  }
+  if (part.state !== 'input-available') {
+    return <ContactFormSkeleton />
+  }
+  return (
+    <ContactForm
+      prefill={part.input?.prefill ?? undefined}
+      toolCallId={part.toolCallId}
+    />
+  )
+}
 
+function ContactFormPart({ part }: { part: ToolPart<'showContactForm'> }) {
   return (
     <Tool defaultOpen>
       <ToolHeader
@@ -165,16 +275,7 @@ function ContactFormPart({
         title='contact form'
       />
       <ToolContent>
-        {!isSubmitted && part.state !== 'input-available' ? (
-          <ContactFormSkeleton />
-        ) : (
-          <ContactForm
-            isSubmitted={isSubmitted}
-            prefill={part.input?.prefill ?? undefined}
-            submittedData={submittedData}
-            toolCallId={part.toolCallId}
-          />
-        )}
+        <ContactFormBody part={part} />
       </ToolContent>
     </Tool>
   )
@@ -183,52 +284,97 @@ function ContactFormPart({
 const AssistantMessage = memo(function AssistantMessage({
   message,
   isInProgress,
+  showActions,
 }: {
-  message: MyUIMessage
+  message: ChatUIMessage
   isInProgress: boolean
+  showActions: boolean
 }) {
   const { parts } = message
-  const context = (() => {
-    const contextPart = parts.find((part) => part.type === 'data-context')
-    if (!(contextPart && 'data' in contextPart)) {
-      return
-    }
-    return contextDataSchema.safeParse(contextPart.data).data?.text
-  })()
 
-  return (
-    <Message className='py-4' from={message.role}>
-      <MessageHeader>{roleName[message.role] ?? 'unknown'}</MessageHeader>
-      <MessageContent>
-        {message.role === 'user' && context ? (
-          <div className='not-prose rounded-md border border-border border-dashed bg-muted/40 p-2 text-xs'>
-            <p className='mb-1 font-medium text-[11px] text-muted-foreground uppercase tracking-wide'>
-              Context
-            </p>
-            <p className='line-clamp-3 break-words'>{context}</p>
-          </div>
-        ) : null}
-        <MessageMetadata inProgress={isInProgress} parts={parts} />
-        {parts.map((part, index) => {
-          if (part.type === 'text') {
-            return (
-              <MessageResponse
+  if (message.role === 'user') {
+    const context = parts.find((part) => part.type === 'data-context')?.data
+      .text
+    return (
+      <Message className='mt-6 first:mt-0' from='user'>
+        <MessageHeader className='sr-only'>you</MessageHeader>
+        <MessageContent>
+          {context ? (
+            <div className='not-prose rounded-md border border-border border-dashed bg-muted/40 p-2 text-xs'>
+              <p className={cn('mb-1', eyebrow)}>Context</p>
+              <p className='line-clamp-3 break-words'>{context}</p>
+            </div>
+          ) : null}
+          {parts.map((part, index) =>
+            part.type === 'text' ? (
+              <p
+                className='whitespace-pre-wrap'
                 // biome-ignore lint/suspicious/noArrayIndexKey: message parts are rendered in source order and don't expose a stable id
                 key={`${message.id}-text-${index}`}
               >
                 {part.text}
-              </MessageResponse>
-            )
-          }
-          if (part.type === 'tool-showContactForm') {
-            return <ContactFormPart key={part.toolCallId} part={part} />
-          }
-          if (part.type === 'tool-navigate') {
-            return <NavigatePart key={part.toolCallId} part={part} />
-          }
-          return null
-        })}
-      </MessageContent>
-    </Message>
+              </p>
+            ) : null
+          )}
+        </MessageContent>
+      </Message>
+    )
+  }
+
+  return (
+    <SimbaTurn>
+      <div className='col-start-2 empty:hidden'>
+        <MessageMetadata inProgress={isInProgress} parts={parts} />
+      </div>
+      {parts.map((part, index) => {
+        if (part.type === 'text') {
+          return (
+            <MessageResponse
+              className='col-start-2'
+              // biome-ignore lint/suspicious/noArrayIndexKey: message parts are rendered in source order and don't expose a stable id
+              key={`${message.id}-text-${index}`}
+            >
+              {part.text}
+            </MessageResponse>
+          )
+        }
+        if (part.type === 'tool-showContactForm') {
+          return (
+            <div className='col-start-2' key={part.toolCallId}>
+              <ContactFormPart part={part} />
+            </div>
+          )
+        }
+        if (part.type === 'tool-celebrate') {
+          return (
+            <div className='col-start-2 empty:hidden' key={part.toolCallId}>
+              <CelebratePart part={part} />
+            </div>
+          )
+        }
+        if (part.type === 'tool-navigate') {
+          return (
+            <div className='col-start-2 empty:hidden' key={part.toolCallId}>
+              <NavigatePart part={part} />
+            </div>
+          )
+        }
+        if (part.type === 'tool-renderPortfolio') {
+          return (
+            <div className='col-start-2' key={part.toolCallId}>
+              <PortfolioPart part={part} />
+            </div>
+          )
+        }
+        return null
+      })}
+      {showActions ? (
+        <ReplyActions
+          canCopy={parts.some(
+            (part) => part.type === 'text' && part.text.trim().length > 0
+          )}
+        />
+      ) : null}
+    </SimbaTurn>
   )
 })

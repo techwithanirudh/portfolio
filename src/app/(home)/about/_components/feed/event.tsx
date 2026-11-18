@@ -1,15 +1,7 @@
-import type { RestEndpointMethodTypes } from '@octokit/rest'
 import type { ComponentType } from 'react'
 import { Icons } from '@/components/icons/icons'
-import { isSupportedEvent } from './event-types'
-
-export type GitHubEvent =
-  RestEndpointMethodTypes['activity']['listPublicEventsForUser']['response']['data'][number]
-
-export interface PushCommit {
-  message: string
-  sha: string
-}
+import { formatDate } from '@/lib/format-date'
+import type { GitHubEvent, PushCommit } from './event-types'
 
 interface IssuesPayload {
   action?:
@@ -28,6 +20,7 @@ interface IssuesPayload {
 }
 
 interface PullRequestPayload {
+  action?: string
   pull_request?: {
     title?: string
     number?: number
@@ -48,13 +41,7 @@ const EventDate = ({ date }: { date: string | null }) => {
   }
 
   return (
-    <div className='shrink-0 text-muted-foreground'>
-      {new Date(date).toLocaleDateString('en-US', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      })}
-    </div>
+    <div className='shrink-0 text-muted-foreground'>{formatDate(date)}</div>
   )
 }
 
@@ -72,7 +59,6 @@ const EventRow = ({
 }: {
   date: string | null | undefined
   description: string
-  // Octicons, so only className is shared with the other icon sets
   icon: ComponentType<{ className?: string }>
 }) => (
   <div className='flex items-center gap-4'>
@@ -84,13 +70,15 @@ const EventRow = ({
   </div>
 )
 
-const PushEvent = ({
-  event,
-  commits,
-}: {
-  event: GitHubEvent
-  commits?: PushCommit[]
-}) => {
+interface EventDescription {
+  description: string
+  icon: ComponentType<{ className?: string }>
+}
+
+const describePush = (
+  event: GitHubEvent,
+  commits: PushCommit[] | undefined
+): EventDescription => {
   const repoName = getRepoName(event)
   const commitMessages = commits?.map((commit) => commit.message) ?? []
   const commitCount = commitMessages.length
@@ -102,38 +90,47 @@ const PushEvent = ({
     description = `Pushed ${commitCount} ${commitLabel} to ${repoName}: ${list}`
   }
 
-  return (
-    <EventRow
-      date={event.created_at}
-      description={description}
-      icon={Icons.gitCommit}
-    />
-  )
+  return { description, icon: Icons.gitCommit }
 }
 
-const PullRequestEvent = ({ event }: { event: GitHubEvent }) => {
+const pullRequestVerb = ({ action }: PullRequestPayload, merged: boolean) => {
+  switch (action) {
+    case 'opened':
+      return 'Opened'
+    case 'reopened':
+      return 'Reopened'
+    case 'closed':
+      return merged ? 'Merged' : 'Closed'
+    default:
+      return 'Updated'
+  }
+}
+
+// GitHub can leave the title out of the payload, so the noun lives here and
+// the label never reads "pull request a pull request"
+const pullRequestLabel = (payload: PullRequestPayload) => {
+  const title = payload.pull_request?.title
+  const number = payload.pull_request?.number
+  if (title) {
+    return number
+      ? `pull request ${title} (#${number})`
+      : `pull request ${title}`
+  }
+  return number ? `pull request #${number}` : 'a pull request'
+}
+
+const describePullRequest = (
+  event: GitHubEvent,
+  merged: boolean
+): EventDescription => {
   const payload = event.payload as PullRequestPayload
-  const pullRequest = payload.pull_request
-  const repoName = getRepoName(event)
-  const number = pullRequest?.number
-  const title =
-    pullRequest?.title ??
-    (number ? `pull request #${number}` : 'a pull request')
-  const user = pullRequest?.user?.login
-  const description = user
-    ? `Merged ${user}'s ${title} on ${repoName}`
-    : `Merged ${title} on ${repoName}`
+  const user = payload.pull_request?.user?.login
+  const description = `${pullRequestVerb(payload, merged)} ${pullRequestLabel(payload)}${user ? ` by ${user}` : ''} on ${getRepoName(event)}`
 
-  return (
-    <EventRow
-      date={event.created_at}
-      description={description}
-      icon={Icons.gitPullRequest}
-    />
-  )
+  return { description, icon: Icons.gitPullRequest }
 }
 
-const IssuesEvent = ({ event }: { event: GitHubEvent }) => {
+const describeIssue = (event: GitHubEvent): EventDescription => {
   const payload = event.payload as IssuesPayload
   const action = payload.action ?? 'updated'
   const issueTitle = payload.issue?.title ?? 'an issue'
@@ -149,24 +146,13 @@ const IssuesEvent = ({ event }: { event: GitHubEvent }) => {
     icon = Icons.issueTracks
   }
 
-  return (
-    <EventRow
-      date={event.created_at}
-      description={`${event.actor?.login ?? 'Someone'} ${action} ${issueTitle} on ${getRepoName(event)}`}
-      icon={icon}
-    />
-  )
+  return {
+    description: `${event.actor?.login ?? 'Someone'} ${action} ${issueTitle} on ${getRepoName(event)}`,
+    icon,
+  }
 }
 
-const PublicEvent = ({ event }: { event: GitHubEvent }) => (
-  <EventRow
-    date={event.created_at}
-    description={`Open-sourced ${getRepoName(event)} on GitHub`}
-    icon={Icons.feedPublic}
-  />
-)
-
-const IssueCommentEvent = ({ event }: { event: GitHubEvent }) => {
+const describeIssueComment = (event: GitHubEvent): EventDescription => {
   const payload = event.payload as IssuesPayload
   const issueTitle = payload.issue?.title ?? 'an issue'
   const issueNumber = payload.issue?.number
@@ -174,16 +160,10 @@ const IssueCommentEvent = ({ event }: { event: GitHubEvent }) => {
     ? `${issueTitle} (#${issueNumber})`
     : issueTitle
 
-  return (
-    <EventRow
-      date={event.created_at}
-      description={`Commented on ${issueLabel}`}
-      icon={Icons.comment}
-    />
-  )
+  return { description: `Commented on ${issueLabel}`, icon: Icons.comment }
 }
 
-const CreateEvent = ({ event }: { event: GitHubEvent }) => {
+const describeCreate = (event: GitHubEvent): EventDescription => {
   const payload = event.payload as CreatePayload
   const refType = payload.ref_type ?? 'branch'
   let icon = Icons.gitBranch
@@ -194,118 +174,91 @@ const CreateEvent = ({ event }: { event: GitHubEvent }) => {
     icon = Icons.gitTag
   }
 
-  return (
-    <EventRow
-      date={event.created_at}
-      description={`Created a ${refType} on ${getRepoName(event)}`}
-      icon={icon}
-    />
-  )
+  return {
+    description: `Created a ${refType} on ${getRepoName(event)}`,
+    icon,
+  }
 }
 
-const DeleteEvent = ({ event }: { event: GitHubEvent }) => {
+const describeDelete = (event: GitHubEvent): EventDescription => {
   const payload = event.payload as CreatePayload
   const refType = payload.ref_type ?? 'branch'
 
-  return (
-    <EventRow
-      date={event.created_at}
-      description={`Deleted a ${refType} on ${getRepoName(event)}`}
-      icon={refType === 'branch' ? Icons.gitBranch : Icons.gitTag}
-    />
-  )
+  return {
+    description: `Deleted a ${refType} on ${getRepoName(event)}`,
+    icon: refType === 'branch' ? Icons.gitBranch : Icons.gitTag,
+  }
 }
 
-const WatchEvent = ({ event }: { event: GitHubEvent }) => (
-  <EventRow
-    date={event.created_at}
-    description={`Starred ${getRepoName(event)}`}
-    icon={Icons.star}
-  />
-)
-
-const ForkEvent = ({ event }: { event: GitHubEvent }) => (
-  <EventRow
-    date={event.created_at}
-    description={`Forked ${getRepoName(event)}`}
-    icon={Icons.repoForked}
-  />
-)
-
-// GitHub can leave the title out of the payload, so the noun lives here and
-// the label never reads "pull request a pull request"
-const pullRequestLabel = (payload: PullRequestPayload) => {
-  const title = payload.pull_request?.title
-  const number = payload.pull_request?.number
-  if (title) {
-    return number
-      ? `pull request ${title} (#${number})`
-      : `pull request ${title}`
-  }
-  return number ? `pull request #${number}` : 'a pull request'
-}
-
-const PullRequestReviewEvent = ({ event }: { event: GitHubEvent }) => (
-  <EventRow
-    date={event.created_at}
-    description={`Reviewed ${pullRequestLabel(event.payload as PullRequestPayload)}`}
-    icon={Icons.gitPullRequest}
-  />
-)
-
-const PullRequestReviewCommentEvent = ({ event }: { event: GitHubEvent }) => (
-  <EventRow
-    date={event.created_at}
-    description={`Commented on ${pullRequestLabel(event.payload as PullRequestPayload)}`}
-    icon={Icons.gitPullRequest}
-  />
-)
-
-const PullRequestReviewThreadEvent = ({ event }: { event: GitHubEvent }) => (
-  <EventRow
-    date={event.created_at}
-    description={`Marked a pull request thread as ${event.payload?.action ?? 'resolved'} on ${getRepoName(event)}`}
-    icon={Icons.gitPullRequest}
-  />
-)
-
-export const GitHubEvent = ({
-  event,
-  commits,
-}: {
-  event: GitHubEvent
-  commits?: PushCommit[]
-}) => {
-  if (!isSupportedEvent(event)) {
-    return null
-  }
-
+const describeEvent = (
+  event: GitHubEvent,
+  commits: PushCommit[] | undefined,
+  merged: boolean
+): EventDescription | null => {
   switch (event.type) {
     case 'PushEvent':
-      return <PushEvent commits={commits} event={event} />
+      return describePush(event, commits)
     case 'PullRequestEvent':
-      return <PullRequestEvent event={event} />
+      return describePullRequest(event, merged)
     case 'WatchEvent':
-      return <WatchEvent event={event} />
+      return {
+        description: `Starred ${getRepoName(event)}`,
+        icon: Icons.star,
+      }
     case 'ForkEvent':
-      return <ForkEvent event={event} />
+      return {
+        description: `Forked ${getRepoName(event)}`,
+        icon: Icons.repoForked,
+      }
     case 'PullRequestReviewEvent':
-      return <PullRequestReviewEvent event={event} />
+      return {
+        description: `Reviewed ${pullRequestLabel(event.payload as PullRequestPayload)}`,
+        icon: Icons.gitPullRequest,
+      }
     case 'PullRequestReviewCommentEvent':
-      return <PullRequestReviewCommentEvent event={event} />
+      return {
+        description: `Commented on ${pullRequestLabel(event.payload as PullRequestPayload)}`,
+        icon: Icons.gitPullRequest,
+      }
     case 'PullRequestReviewThreadEvent':
-      return <PullRequestReviewThreadEvent event={event} />
+      return {
+        description: `Marked a pull request thread as ${event.payload?.action ?? 'resolved'} on ${getRepoName(event)}`,
+        icon: Icons.gitPullRequest,
+      }
     case 'PublicEvent':
-      return <PublicEvent event={event} />
+      return {
+        description: `Open-sourced ${getRepoName(event)} on GitHub`,
+        icon: Icons.feedPublic,
+      }
     case 'IssueCommentEvent':
-      return <IssueCommentEvent event={event} />
+      return describeIssueComment(event)
     case 'CreateEvent':
-      return <CreateEvent event={event} />
+      return describeCreate(event)
     case 'DeleteEvent':
-      return <DeleteEvent event={event} />
+      return describeDelete(event)
     case 'IssuesEvent':
-      return <IssuesEvent event={event} />
+      return describeIssue(event)
     default:
       return null
   }
+}
+
+export const GitHubEventRow = ({
+  event,
+  commits,
+  merged = false,
+}: {
+  event: GitHubEvent
+  commits?: PushCommit[]
+  merged?: boolean
+}) => {
+  const described = describeEvent(event, commits, merged)
+
+  return described ? (
+    <EventRow
+      date={event.created_at}
+      description={described.description}
+      icon={described.icon}
+    />
+  ) : null
 }

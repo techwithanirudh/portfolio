@@ -20,16 +20,17 @@ import { getActionErrorMessage } from '@/lib/safe-action/error-message'
 import { toast } from '@/lib/toast'
 import {
   CONTACT_MESSAGE_MAX_LENGTH,
+  CONTACT_MESSAGE_MIN_LENGTH,
   CONTACT_NAME_MAX_LENGTH,
   ContactSchema,
 } from '@/lib/validators/contact'
 import { contact } from '../actions/contact'
 
-const sendFailedMessage = 'Your message failed to send. Please try again.'
+const sendFailedMessage =
+  "Your message didn't send. Check your connection and try again."
 
-// Nothing here suspends, so no Suspense boundary: React streams any boundary
-// over 500 bytes out of line and reveals it after first paint, which pushed the
-// FAQ down the page (CLS 0.32 on mobile)
+// No Suspense boundary: React streams boundaries over 500 bytes out of line and
+// reveals them after first paint, which shifted the FAQ (CLS 0.32 on mobile)
 export const ContactForm = () => {
   const { form, action, handleSubmitWithAction } = useHookFormAction(
     contact,
@@ -40,14 +41,9 @@ export const ContactForm = () => {
           toast.error(getActionErrorMessage(error, sendFailedMessage))
         },
         onSuccess: ({ data }) => {
-          toast.success(
-            data?.success && data.message
-              ? data.message
-              : "Thanks, I got your message. I'll reply soon."
-          )
+          toast.success(data.message)
         },
       },
-      errorMapProps: {},
       formProps: {
         defaultValues: {
           email: '',
@@ -79,7 +75,7 @@ export const ContactForm = () => {
                   maxLength={CONTACT_NAME_MAX_LENGTH}
                   placeholder='Jane Smith'
                   {...field}
-                  disabled={action.status === 'executing'}
+                  disabled={action.isExecuting}
                 />
               </FormControl>
               {form.formState.errors.name ? (
@@ -102,9 +98,9 @@ export const ContactForm = () => {
                 <Input
                   autoComplete='email'
                   className='bg-background'
-                  placeholder='jane@acme.com'
+                  placeholder='jane@example.com'
                   {...field}
-                  disabled={action.status === 'executing'}
+                  disabled={action.isExecuting}
                   type='email'
                 />
               </FormControl>
@@ -112,7 +108,7 @@ export const ContactForm = () => {
                 <FormMessage />
               ) : (
                 <FormDescription>
-                  I will never share your email with anyone else.
+                  I won't share your email with anyone.
                 </FormDescription>
               )}
             </FormItem>
@@ -128,16 +124,16 @@ export const ContactForm = () => {
                 <Textarea
                   className='max-h-[20rem] min-h-[10rem] resize-y bg-background'
                   maxLength={CONTACT_MESSAGE_MAX_LENGTH}
-                  placeholder="Hi there, I'm interested in..."
+                  placeholder="Hi there, I'm interested in…"
                   {...field}
-                  disabled={action.status === 'executing'}
+                  disabled={action.isExecuting}
                 />
               </FormControl>
               {form.formState.errors.message ? (
                 <FormMessage />
               ) : (
                 <FormDescription>
-                  Please include at least 30 characters.
+                  {`Use at least ${CONTACT_MESSAGE_MIN_LENGTH} characters.`}
                 </FormDescription>
               )}
             </FormItem>
@@ -145,11 +141,12 @@ export const ContactForm = () => {
         />
         <Button
           className='w-full'
-          disabled={action.status === 'executing'}
+          disabled={action.isExecuting}
+          focusableWhenDisabled
           type='submit'
         >
           <span>Send message</span>
-          {action.status === 'executing' ? (
+          {action.isExecuting ? (
             <Icons.spinner
               className='size-4 animate-spin'
               data-icon='inline-end'
@@ -161,13 +158,11 @@ export const ContactForm = () => {
             />
           )}
         </Button>
-        {action.status === 'hasSucceeded' && (
+        {action.hasSucceeded && (
           <Alert variant='success'>
             <Icons.success size={16} />
             <AlertTitle className='mb-0 leading-normal'>
-              {action.result.data?.success && action.result.data?.message
-                ? action.result.data.message
-                : "Thanks, I got your message. I'll reply soon."}
+              {action.result.data?.message}
             </AlertTitle>
           </Alert>
         )}

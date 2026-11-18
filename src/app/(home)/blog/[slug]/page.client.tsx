@@ -1,8 +1,6 @@
 'use client'
 
-import { Comments } from '@fuma-comment/react'
-import { useEffect, useState } from 'react'
-import { useSignInModal } from '@/components/features/auth/sign-in-modal'
+import { useSyncExternalStore } from 'react'
 import { Icons } from '@/components/icons/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -11,20 +9,23 @@ import {
   DropdownMenuIconItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { isProduction } from '@/constants'
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard'
 import { toast } from '@/lib/toast'
-import { cn } from '@/lib/utils'
+
+const subscribeNoop = () => () => undefined
 
 export function ShareMenu({ title, url }: { title: string; url: string }) {
-  const [canShare, setCanShare] = useState(false)
+  const canShare = useSyncExternalStore(
+    subscribeNoop,
+    () => 'share' in navigator,
+    () => false
+  )
   const encoded = encodeURIComponent(url)
 
-  useEffect(() => {
-    setCanShare('share' in navigator)
-  }, [])
-
   const { copy } = useCopyToClipboard({
-    onCopyError: () => toast.error('Unable to copy link'),
+    onCopyError: () =>
+      toast.error("Couldn't copy the link. Copy it from the address bar."),
     onCopySuccess: () => toast.success('Link copied'),
   })
 
@@ -47,7 +48,8 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
         align='start'
         className='w-(--anchor-width) gap-0.5 rounded-xl p-1.5'
         collisionPadding={8}
-        finalFocus={false}
+        // Return focus only on a keyboard close, or Escape leaves keyboard users on <body>
+        finalFocus={(closeType) => closeType === 'keyboard'}
       >
         <DropdownMenuIconItem icon={Icons.link} onClick={() => copy(url)}>
           Copy link
@@ -83,7 +85,7 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
             icon={Icons.moreHorizontal}
             onClick={() => {
               navigator.share({ title, url }).catch((error) => {
-                if (process.env.NODE_ENV !== 'production') {
+                if (!isProduction) {
                   console.error(error)
                 }
               })
@@ -94,28 +96,5 @@ export function ShareMenu({ title, url }: { title: string; url: string }) {
         )}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
-
-export function PostComments({
-  slug,
-  className,
-}: {
-  slug: string
-  className?: string
-}) {
-  const { openSignIn } = useSignInModal()
-
-  return (
-    <Comments
-      auth={{
-        signIn: () => {
-          openSignIn(`/blog/${slug}`)
-        },
-        type: 'api',
-      }}
-      className={cn('w-full', className)}
-      page={slug}
-    />
   )
 }

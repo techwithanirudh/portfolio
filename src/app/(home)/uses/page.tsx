@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { HeroSection } from '@/components/layout/sections/hero'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
@@ -17,30 +17,36 @@ import { SoftwareGrid } from './_components/software'
 
 const { description, path, title } = pages.uses
 
-export function generateMetadata(): Metadata {
-  return createMetadata({
-    alternates: { canonical: path },
-    description,
-    openGraph: { url: path },
-    title,
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: path },
+  description,
+  openGraph: { url: path },
+  title,
+})
 
 export default function UsesPage() {
-  const sections: Array<{ title?: string | null; content: ReactNode }> = [
+  const sections: Array<{
+    id: string
+    title?: string | null
+    content: ReactNode
+  }> = [
     {
       content: <Setup />,
+      id: 'setup',
     },
     {
       content: <HardwareGrid items={hardware} />,
+      id: 'hardware',
       title: 'Hardware',
     },
     {
       content: <SoftwareGrid items={software} />,
+      id: 'software',
       title: 'Software',
     },
     {
       content: <Coding />,
+      id: 'coding',
       title: 'Coding',
     },
   ]
@@ -48,14 +54,14 @@ export default function UsesPage() {
   return (
     <Wrapper>
       <HeroSection description={description} title={title} />
-      <Separator />
+      <SectionDivider />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
         const headingDelay = section.title ? baseDelay : 0
         const contentDelay = section.title ? headingDelay + 0.05 : 0
 
         return (
-          <Fragment key={section.title ?? `uses-section-${index}`}>
+          <Fragment key={section.id}>
             {section.title && (
               <Section className='px-6 py-8'>
                 <ViewAnimation delay={headingDelay}>
@@ -69,7 +75,7 @@ export default function UsesPage() {
               </ViewAnimation>
             </Section>
             {index < sections.length - 1 && (
-              <Separator variant={index < 1 ? 'dashed' : 'transparent'} />
+              <SectionDivider variant={index < 1 ? 'dashed' : 'transparent'} />
             )}
           </Fragment>
         )

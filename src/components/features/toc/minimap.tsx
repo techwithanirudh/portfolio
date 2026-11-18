@@ -2,11 +2,12 @@
 
 import type { TOCItemType } from 'fumadocs-core/toc'
 import { useActiveAnchor, useItems } from 'fumadocs-ui/components/toc'
+import { useState } from 'react'
 import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card'
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 
 export function TOCMinimap({
@@ -26,9 +27,10 @@ export function TOCMinimap({
 function TOCMinimapContent({ className }: { className?: string }) {
   const items = useItems()
   const activeAnchor = useActiveAnchor()
+  const [open, setOpen] = useState(false)
 
   return (
-    <aside
+    <div
       className={cn(
         'hidden w-[72px] shrink-0 2xl:absolute 2xl:inset-y-0 2xl:right-full 2xl:block',
         className
@@ -37,10 +39,13 @@ function TOCMinimapContent({ className }: { className?: string }) {
       data-toc-minimap=''
     >
       <div className='sticky top-14'>
-        <HoverCard>
-          <HoverCardTrigger
+        {/* A popover rather than a hover card: hover still opens it, and
+            click, Enter or Space open it too with focus moved into the list */}
+        <Popover onOpenChange={setOpen} open={open}>
+          <PopoverTrigger
             closeDelay={100}
             delay={100}
+            openOnHover
             render={
               <button
                 aria-label='Open table of contents'
@@ -58,12 +63,13 @@ function TOCMinimapContent({ className }: { className?: string }) {
                 key={item.id}
               />
             ))}
-          </HoverCardTrigger>
+          </PopoverTrigger>
 
-          <HoverCardContent
+          <PopoverContent
             align='start'
             alignOffset={16}
-            className='w-56 overflow-hidden p-0'
+            aria-label='On this page'
+            className='w-56 gap-0 overflow-hidden border p-0 ring-0'
             side='left'
             sideOffset={-60}
           >
@@ -75,15 +81,16 @@ function TOCMinimapContent({ className }: { className?: string }) {
                     data-active={item.active}
                     data-depth={item.original.depth}
                     href={item.original.url}
+                    onClick={() => setOpen(false)}
                   >
                     {item.original.title}
                   </a>
                 </li>
               ))}
             </ul>
-          </HoverCardContent>
-        </HoverCard>
+          </PopoverContent>
+        </Popover>
       </div>
-    </aside>
+    </div>
   )
 }

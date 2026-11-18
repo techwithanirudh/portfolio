@@ -1,11 +1,12 @@
 import Image from 'next/image'
+import { initials } from '@/lib/initials'
 import { cn } from '@/lib/utils'
-import type { Logo as LogoType } from '@/types'
+import type { ThemedImage } from '@/types'
 
 interface LogoProps {
   alt: string
   className?: string
-  logo?: LogoType
+  logo?: ThemedImage
   size?: number
 }
 
@@ -13,12 +14,6 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
   const wrapper = cn('flex items-center justify-center bg-muted', className)
 
   if (!logo) {
-    const initials = alt
-      .split(' ')
-      .map((w) => w[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase()
     return (
       <div
         aria-hidden='true'
@@ -28,7 +23,7 @@ export function Logo({ alt, logo, size = 44, className }: LogoProps) {
         )}
         style={{ height: size, width: size }}
       >
-        {initials}
+        {initials(alt)}
       </div>
     )
   }

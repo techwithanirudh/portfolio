@@ -9,15 +9,9 @@ interface EmptyLink {
   label: string
 }
 
-const everyPost: EmptyLink = { href: pages.blog.path, label: 'See every post' }
-
-/**
- * Shown when a search or tag filter turns up nothing: bashful Simba, a line
- * saying so and a way back to the full list
- */
 export const PostEmpty = ({
   className,
-  link = everyPost,
+  link = { href: pages.blog.path, label: 'See every post' },
   tag,
 }: {
   className?: string
@@ -33,7 +27,7 @@ export const PostEmpty = ({
     )}
     role='status'
   >
-    <PageSimba pose='bashful' size={96} />
+    <PageSimba pose='rest' size={96} />
     <p className='font-medium'>
       {tag ? `Nothing tagged ${tag} yet.` : 'Nothing matches that yet.'}
     </p>
@@ -43,10 +37,7 @@ export const PostEmpty = ({
         href={link.href}
       >
         {link.label}
-        <Icons.arrowRight
-          aria-hidden
-          className='size-4 transition-transform group-hover:translate-x-0.5'
-        />
+        <Icons.arrowRight aria-hidden className='icon-arrow size-4' />
       </Link>
     )}
   </div>

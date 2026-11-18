@@ -3,15 +3,14 @@ import { cn } from '@/lib/utils'
 
 type SectionProps = {
   /**
-   * Takes the leftover screen height in place of the shell's PageFill. It
-   * still grows with taller content; `contain` holds it to exactly the
-   * leftover height so the content scrolls inside instead (guestbook)
+   * Takes the leftover screen height in place of the shell's PageFill. `contain`
+   * holds it to exactly that height so the content scrolls inside
    */
   fill?: boolean | 'contain'
   sectionClassName?: string
 } & HTMLAttributes<HTMLDivElement>
 
-export const Cross = ({ className }: { className?: string }) => (
+const Cross = ({ className }: { className?: string }) => (
   <div
     className={cn(
       'pointer-events-none absolute -bottom-2 z-10 hidden size-[15px] sm:block',
@@ -21,6 +20,13 @@ export const Cross = ({ className }: { className?: string }) => (
     <span className='absolute top-0 left-[7px] h-full w-px bg-border' />
     <span className='absolute top-[7px] left-0 h-px w-full bg-border' />
   </div>
+)
+
+export const CrossPair = () => (
+  <>
+    <Cross className='-left-[7px]' />
+    <Cross className='-right-[7px]' />
+  </>
 )
 
 export const Section = ({
@@ -56,8 +62,7 @@ export const Section = ({
       >
         {children}
       </div>
-      <Cross className='-left-[7px]' />
-      <Cross className='-right-[7px]' />
+      <CrossPair />
     </div>
   </section>
 )

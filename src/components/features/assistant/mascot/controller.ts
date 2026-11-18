@@ -6,19 +6,21 @@ import {
   SIMBA_ANIMATIONS,
 } from './constants'
 
-export const pick = <T>(items: readonly T[]) =>
-  items[Math.floor(Math.random() * items.length)] as T
+export const pick = <T>(items: readonly [T, ...T[]]): T =>
+  items[Math.floor(Math.random() * items.length)] ?? items[0]
 
-const restCycles = () => 3 + Math.floor(Math.random() * 4)
+/** Idle cycles (2.6 s each) before a big idle animation: 5 to 9, about every 13 to 23 s */
+const restCycles = () => 5 + Math.floor(Math.random() * 5)
 
-const REST: Frame = { duration: 0, pose: 'rest' }
+export const REST: Frame = { duration: 0, pose: 'rest' }
+const HIDDEN: Frame = { duration: 0, pose: 'hidden' }
+const SLEEP: Frame = { duration: 0, pose: 'sleeping' }
 
-// Steps Simba through key poses on timers; CSS transitions ease between them.
-// With nothing queued he loops the current activity, or rests and now and then
-// plays an idle animation
 export class SimbaController {
   private activity: AnimationName | null = null
+  private away = false
   private current: { frames: Frame[]; index: number } | null = null
+  private drowsy = false
   private frame: Frame = REST
   private readonly listeners = new Set<() => void>()
   private motionQuery: MediaQueryList | undefined
@@ -33,7 +35,6 @@ export class SimbaController {
     this.motionQuery = reducedMotionQuery()
     this.motionQuery.addEventListener('change', this.onMotionChange)
     this.still = this.motionQuery.matches
-    // Pops in from nothing, like he just trotted over
     this.play(animations.show)
   }
 
@@ -53,19 +54,18 @@ export class SimbaController {
   getFrame = () => this.frame
 
   play(name: AnimationName, { interrupt = false } = {}) {
+    this.drowsy = false
     if (interrupt) {
       this.queue = [name]
       this.stopCurrent()
       return
     }
     this.queue.push(name)
-    // Resting counts as idle, so a queued animation starts right away
     if (!this.current || this.resting) {
       this.stopCurrent()
     }
   }
 
-  /** Loops an animation while Simba works on something; null winds it down */
   setActivity(name: AnimationName | null) {
     if (name === this.activity) {
       return
@@ -75,13 +75,58 @@ export class SimbaController {
     if (name) {
       this.play(name, { interrupt: true })
     } else if (previous) {
+      this.restartRests()
       this.stopCurrent()
     }
   }
 
-  stop() {
-    this.queue = []
+  /** Falls asleep once he finishes what he's doing, unless he has an activity */
+  nap() {
+    if (this.drowsy || this.activity) {
+      return
+    }
+    this.drowsy = true
+    if (!this.current || this.resting) {
+      this.stopCurrent()
+    }
+  }
+
+  wake() {
+    if (!this.drowsy) {
+      return
+    }
+    this.drowsy = false
+    if (this.frame === SLEEP) {
+      this.restartRests()
+      this.stopCurrent()
+    }
+  }
+
+  /** Hides while his spot is gone; comes back with Show or whatever was queued meanwhile */
+  setAway(away: boolean) {
+    if (away === this.away) {
+      return
+    }
+    this.away = away
+    if (away) {
+      this.queue = []
+    } else if (this.queue.length === 0) {
+      this.queue = [animations.show]
+    }
     this.stopCurrent()
+  }
+
+  /** Drops what he's doing, his activity too, and settles on rest */
+  settle() {
+    this.activity = null
+    this.queue = this.away ? [] : [animations.settle]
+    this.restartRests()
+    this.stopCurrent()
+  }
+
+  private restartRests() {
+    this.rests = 0
+    this.restTarget = restCycles()
   }
 
   stopCurrent() {
@@ -92,25 +137,37 @@ export class SimbaController {
 
   private readonly onMotionChange = (event: MediaQueryListEvent) => {
     this.still = event.matches
-    if (this.still) {
-      clearTimeout(this.timer)
-      this.current = null
-      this.show(REST)
-      return
-    }
+    clearTimeout(this.timer)
     this.next()
   }
 
   private next() {
+    if (this.away) {
+      this.current = null
+      this.show(HIDDEN)
+      return
+    }
     if (this.still) {
+      this.current = null
+      this.queue = []
+      const idle = this.drowsy ? SLEEP : REST
+      this.show((this.activity && SIMBA_ANIMATIONS[this.activity][0]) || idle)
       return
     }
     this.resting = false
     let name = this.queue.shift() ?? this.activity
+    if (
+      !name &&
+      this.drowsy &&
+      (this.frame === SLEEP || this.frame.pose === 'rest')
+    ) {
+      this.current = null
+      this.show(SLEEP)
+      return
+    }
     if (!name) {
-      if (this.rests >= this.restTarget) {
-        this.rests = 0
-        this.restTarget = restCycles()
+      if (this.rests >= this.restTarget && !this.drowsy) {
+        this.restartRests()
         name = pick(animations.idle)
       } else {
         this.rests++

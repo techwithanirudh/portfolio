@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { AboutPageJsonLd } from '@/components/json-ld'
 import { Section } from '@/components/layout/sections'
 import { HeroSection } from '@/components/layout/sections/hero'
-import Separator from '@/components/layout/sections/separator'
+import { SectionDivider } from '@/components/layout/sections/separator'
 import { Wrapper } from '@/components/layout/wrapper'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
@@ -17,7 +17,7 @@ import { Typography } from './_components/typography'
 const { description, path, title } = pages.colophon
 
 export default function ColophonPage() {
-  const sections: Array<{ title?: string | null; content: ReactNode }> = [
+  const sections: Array<{ title: string; content: ReactNode }> = [
     {
       content: <Technology />,
       title: 'Technology',
@@ -39,27 +39,26 @@ export default function ColophonPage() {
   return (
     <Wrapper>
       <HeroSection description={description} title={title} />
-      <Separator />
+      <SectionDivider />
       {sections.map((section, index) => {
         const baseDelay = 0.1 + index * 0.1
-        const headingDelay = section.title ? baseDelay : 0
-        const contentDelay = section.title ? headingDelay + 0.05 : 0
+        const contentDelay = baseDelay + 0.05
 
         return (
-          <Fragment key={section.title ?? `colophon-section-${index}`}>
-            {section.title && (
-              <Section className='px-6 py-8'>
-                <ViewAnimation delay={headingDelay}>
-                  <h2 className='font-medium text-3xl'>{section.title}</h2>
-                </ViewAnimation>
-              </Section>
-            )}
+          <Fragment key={section.title}>
+            <Section className='px-6 py-8'>
+              <ViewAnimation delay={baseDelay}>
+                <h2 className='font-medium text-3xl'>{section.title}</h2>
+              </ViewAnimation>
+            </Section>
             <Section>
               <ViewAnimation delay={contentDelay}>
                 {section.content}
               </ViewAnimation>
             </Section>
-            {index < sections.length - 1 && <Separator variant='transparent' />}
+            {index < sections.length - 1 && (
+              <SectionDivider variant='transparent' />
+            )}
           </Fragment>
         )
       })}
@@ -68,11 +67,9 @@ export default function ColophonPage() {
   )
 }
 
-export function generateMetadata(): Metadata {
-  return createMetadata({
-    alternates: { canonical: path },
-    description,
-    openGraph: { url: path },
-    title,
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: { canonical: path },
+  description,
+  openGraph: { url: path },
+  title,
+})

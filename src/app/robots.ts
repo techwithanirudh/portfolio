@@ -1,14 +1,16 @@
 import type { MetadataRoute } from 'next'
+import { pages } from '@/constants/pages'
 import { baseUrl } from '@/lib/metadata'
+import { url } from '@/lib/url'
 
 export default function robots(): MetadataRoute.Robots {
   return {
     host: baseUrl.origin,
     rules: {
       allow: '/',
-      disallow: ['/api/', '/account', '/login', '/search'],
+      disallow: ['/api/', pages.account.path, '/login', pages.search.path],
       userAgent: '*',
     },
-    sitemap: new URL('/sitemap.xml', baseUrl).href,
+    sitemap: url('/sitemap.xml'),
   }
 }

@@ -1,5 +1,5 @@
 import { UserButton } from '@/components/features/auth'
-import { GuestbookBand } from '@/components/guestbook-cue'
+import { GuestbookBand } from '@/components/guestbook-band'
 import { Clock } from '@/components/layout/footer/clock'
 import { SoundToggle } from '@/components/layout/footer/sound-toggle'
 import { ThemeToggle } from '@/components/layout/header/theme-toggle'
@@ -9,21 +9,22 @@ import { cn } from '@/lib/utils'
 import { Links } from './links'
 
 export const Footer = () => (
-  <>
-    <GuestbookBand before='since you read all the way down, leave proof you were here in the' />
-    <footer
+  <footer className='flex flex-col'>
+    <GuestbookBand />
+    <div
       className={cn(
-        'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
+        'container mx-auto flex flex-col gap-10 px-6 py-12 pb-28',
         'border-border border-b border-dashed',
         'sm:gap-16 sm:px-8 sm:pt-16 sm:pb-24 md:pb-16'
       )}
     >
       <Links />
-      <div className='grid items-center gap-4 sm:grid-cols-3'>
+      <div className='grid items-center gap-6 max-sm:border-border max-sm:border-t max-sm:border-dashed max-sm:pt-8 sm:grid-cols-3 sm:gap-4'>
         <ViewAnimation className='hidden w-min sm:flex' delay={0.1}>
           <UserButton className='size-9' />
         </ViewAnimation>
-        <div className='flex items-center justify-center'>
+        {/* On phones the controls row comes first and the copyright closes the footer */}
+        <div className='flex items-center justify-center max-sm:order-last'>
           <ViewAnimation delay={0.15}>
             <p className='text-balance text-center text-muted-foreground text-sm'>
               &copy; {new Date().getFullYear()} {owner}. All rights reserved.
@@ -52,6 +53,6 @@ export const Footer = () => (
           </ViewAnimation>
         </div>
       </div>
-    </footer>
-  </>
+    </div>
+  </footer>
 )

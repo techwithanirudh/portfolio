@@ -1,19 +1,7 @@
-import {
-  Body,
-  Container,
-  Font,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Link,
-  Preview,
-  Section,
-  Tailwind,
-  Text,
-} from '@react-email/components'
-import { baseUrl } from '@/constants'
-import { handle } from '@/constants/site'
+import { Heading, Link, Section, Text } from '@react-email/components'
+import { url } from '@/lib/url'
+import { ArrowButton, Block, EmailShell } from './components'
+import { styles } from './theme'
 
 interface ContactNotificationEmailProps {
   email: string
@@ -22,10 +10,6 @@ interface ContactNotificationEmailProps {
   sentAt: string
 }
 
-const primary = '#3451b2'
-
-// Kept plain on purpose: it reads like a note, and the mail app's own Reply
-// already goes to the visitor through replyTo
 export default function ContactNotificationEmail({
   email,
   message,
@@ -33,62 +17,68 @@ export default function ContactNotificationEmail({
   sentAt,
 }: ContactNotificationEmailProps) {
   return (
-    <Html>
-      <Head>
-        <Font
-          fallbackFontFamily='Helvetica'
-          fontFamily='Geist'
-          fontStyle='normal'
-          fontWeight={400}
-          webFont={{
-            format: 'woff2',
-            url: 'https://fonts.gstatic.com/s/geist/v5/gyByhwUxId8gMEwcGFWNOITd.woff2',
+    <EmailShell label='Contact form' preview={message}>
+      <Block>
+        <Heading
+          className='em-fg'
+          style={{
+            ...styles.heading,
+            fontSize: '28px',
+            letterSpacing: '-1.2px',
+            lineHeight: '34px',
           }}
-        />
-      </Head>
-      <Preview>{message.slice(0, 120)}</Preview>
-      <Tailwind>
-        <Body className='m-0 bg-white py-8 font-sans'>
-          <Container className='mx-auto w-full max-w-[520px] px-6'>
-            <Heading className='m-0 font-semibold text-[#0a0a0a] text-[20px] tracking-tight'>
-              {name}
-            </Heading>
-            <Text className='mt-0.5 mb-0 text-[#737373] text-[14px]'>
-              <Link href={`mailto:${email}`} style={{ color: primary }}>
-                {email}
-              </Link>{' '}
-              · {sentAt}
-            </Text>
+        >
+          {name}
+        </Heading>
+        <Text
+          className='em-muted'
+          style={{ ...styles.muted, marginTop: '6px' }}
+        >
+          <Link
+            className='em-link'
+            href={`mailto:${email}`}
+            style={styles.link}
+          >
+            {email}
+          </Link>{' '}
+          · {sentAt}
+        </Text>
+      </Block>
 
-            <Hr className='my-5 border-[#e5e5e5]' />
+      <Block>
+        <Section className='em-card' style={styles.card}>
+          <Text
+            className='em-fg'
+            style={{ ...styles.text, margin: 0, whiteSpace: 'pre-wrap' }}
+          >
+            {message}
+          </Text>
+        </Section>
+        <Section style={{ marginTop: '24px' }}>
+          <ArrowButton href={`mailto:${email}`}>Reply to {name}</ArrowButton>
+        </Section>
+      </Block>
 
-            <Section
-              className='pl-4'
-              style={{ borderLeft: `2px solid ${primary}` }}
-            >
-              {/* Keeps the visitor's own line breaks */}
-              <Text className='m-0 whitespace-pre-wrap text-[#0a0a0a] text-[16px] leading-[26px]'>
-                {message}
-              </Text>
-            </Section>
-
-            <Text className='mt-8 mb-0 text-[13px]'>
-              <Link href={`${baseUrl}/contact`} style={{ color: '#737373' }}>
-                {handle}
-                <span style={{ color: primary }}>.</span>
-              </Link>
-            </Text>
-          </Container>
-        </Body>
-      </Tailwind>
-    </Html>
+      <Block>
+        <Text
+          className='em-muted'
+          style={{ ...styles.muted, fontSize: '13px' }}
+        >
+          Sent from the{' '}
+          <Link className='em-link' href={url('/contact')} style={styles.link}>
+            contact form
+          </Link>{' '}
+          on your site.
+        </Text>
+      </Block>
+    </EmailShell>
   )
 }
 
 ContactNotificationEmail.PreviewProps = {
-  email: 'luiggi@example.com',
+  email: 'sam@example.com',
   message:
     'sup! love the dog, cool website!\n\nalso where did you get that hero gradient, been looking for something like it for my own site',
-  name: 'luiggi',
+  name: 'Sam',
   sentAt: 'Oct 18, 2026, 2:11 AM IST',
 } satisfies ContactNotificationEmailProps

@@ -1,35 +1,26 @@
 import Link from 'next/link'
 import { Icons } from '@/components/icons/icons'
-import { getPostsByTag } from '@/lib/source'
 import { cn } from '@/lib/utils'
+import { tagPath } from './tag-path'
 
 export const TagCard = ({
   name,
-  displayCount = false,
-  className = '',
+  className,
 }: {
   name: string
-  displayCount?: boolean
   className?: string
-}) => {
-  const posts = getPostsByTag(name)
-
-  return (
-    <Link
-      className={cn(
-        'group inline-flex items-center gap-2 rounded-lg bg-card/50 px-3 py-2 text-sm transition-colors hover:bg-card/80',
-        className
-      )}
-      href={`/blog/tags/${name}`}
-    >
-      <Icons.tag
-        className='my-auto text-muted-foreground transition-transform group-hover:rotate-12'
-        size={18}
-      />
-      <span className='text-card-foreground'>{name}</span>
-      {displayCount && (
-        <span className='ml-auto text-muted-foreground'>({posts.length})</span>
-      )}
-    </Link>
-  )
-}
+}) => (
+  <Link
+    className={cn(
+      'group inline-flex items-center gap-2 rounded-lg bg-card/50 px-3 py-2 text-sm transition-colors hover:bg-card/80',
+      className
+    )}
+    href={tagPath(name)}
+  >
+    <Icons.tag
+      className='my-auto text-muted-foreground transition-transform group-hover:rotate-12'
+      size={18}
+    />
+    <span className='text-card-foreground'>{name}</span>
+  </Link>
+)

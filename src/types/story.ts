@@ -1,6 +1,6 @@
 import type { Icons } from '@/components/icons/icons'
 
-export interface StoryPhoto {
+interface StoryPhoto {
   alt: string
   caption: string
   /** Logos sit on white with some breathing room instead of filling the frame */
@@ -18,5 +18,6 @@ export interface StoryChapter {
   id: string
   photo?: StoryPhoto
   title: string
-  when: string
+  /** A year or a span of years. Chapters without a date leave it out */
+  when?: string
 }

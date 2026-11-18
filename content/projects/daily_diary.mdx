@@ -1,0 +1,30 @@
+---
+title: Daily Diary
+description: A journal app for writing daily entries.
+date: 2022-07-30
+order: 17
+image: /images/projects/daily_diary/cover.jpg
+tags: ['ReactJS', 'Bootstrap']
+status: Offline
+platform: Web
+---
+
+Daily Diary was a journal app I built in the summer of 2022, with [React](https://react.dev/) and [Bootstrap](https://getbootstrap.com/). Every entry was its own dated page, styled like a page in a book, and instead of staring at a blank page you got little prompts, like what you're thankful for or what you learned today.
+
+## What it was like
+
+It also had a social side. The helper on the login page sums it up: you can write your daily diary in the app and share it with your friends.
+
+Sign-in went through [FirebaseUI](https://github.com/firebase/firebaseui-web) on top of [Firebase](https://firebase.google.com/) Authentication, which hands you a ready-made sign-in flow, and I switched on Google, Facebook, GitHub, email and phone. Five ways to log in to a diary is maybe a lot, but FirebaseUI made each one pretty much a checkbox.
+
+<Screens>
+  <Screen frame='wide' height={1000} src='/images/projects/daily_diary/login-helper.webp' width={1600} alt='The DailyDiary login page with a Welcome to DailyDiary card, sign-in buttons for Google, Facebook, GitHub, email and phone, and a helper bubble reading You can write your daily diary in the app and share it with your friends' />
+</Screens>
+
+## The helper
+
+The fun bit was the helper. A button on the login page opened a five-step intro to the app, one speech bubble at a time. Next to it was a mic button, and pressing it made the browser read the current step out loud with the Web Speech API's speech synthesis, no audio files or extra services needed.
+
+## What happened to it
+
+It used to live at diary.techwithanirudh.com, but it's offline now. The Internet Archive only kept the login page, so sadly that's the only screen left to show here.

@@ -11,21 +11,19 @@ import { FloatingPill } from '@/components/layout/header/mobile/pill'
 import { MEDIA } from '@/lib/media'
 
 const MENU_ID = 'mobile-navigation-menu'
-const FOCUSABLE = 'a[href], button:not([disabled])'
 const KEEP_OPEN_SELECTOR = '[role="dialog"], [data-mobile-nav-pill]'
 
-const getToggle = () =>
-  document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`)
 const getFocusable = () => [
   ...(document
     .getElementById(MENU_ID)
-    ?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []),
-  ...[getToggle()].filter((el): el is HTMLElement => el !== null),
+    ?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? []),
+  ...[
+    document.querySelector<HTMLElement>(`[aria-controls="${MENU_ID}"]`),
+  ].filter((el): el is HTMLElement => el !== null),
 ]
 
-// Safari 26 tints its bottom bar from the fixed elements at the bottom edge and
-// does not re-read their color when it changes in place, but it re-samples
-// elements that are added.
+// Safari 26 tints its bottom bar from fixed elements at the bottom edge and re-samples
+// only elements that are added, not color changes in place
 function useRemountAfterThemeApplied() {
   const { resolvedTheme } = useTheme()
   const [generation, setGeneration] = useState(0)
@@ -81,14 +79,11 @@ function useCloseMenuOnOutsideClick(open: boolean, closeMenu: () => void) {
 
 export function MobileNav() {
   const pathname = usePathname()
-  // The path the menu was opened on, or null while it is closed
   const [openPath, setOpenPath] = useState<string | null>(null)
   const { setOpenSearch } = useSearchContext()
   const { open: assistantOpen, setOpen: setOpenAssistant } =
     useAssistantContext()
 
-  // Navigating or opening the assistant closes the menu. Adjusting state
-  // while rendering saves the extra commit a syncing effect would cost
   if (openPath !== null && (openPath !== pathname || assistantOpen)) {
     setOpenPath(null)
   }
@@ -110,7 +105,10 @@ export function MobileNav() {
       }
       const focusable = getFocusable()
       const index = focusable.indexOf(document.activeElement as HTMLElement)
-      const next = event.shiftKey ? index - 1 : index + 1
+      // index is -1 while the panel itself holds focus (right after opening),
+      // so Shift+Tab from there wraps to the last control
+      const step = event.shiftKey ? -1 : 1
+      const next = index === -1 && event.shiftKey ? -1 : index + step
       event.preventDefault()
       focusable.at(next % focusable.length)?.focus()
     }
@@ -123,7 +121,7 @@ export function MobileNav() {
     <>
       <div
         aria-hidden
-        className='pointer-events-none fixed inset-x-0 bottom-0 z-[30] md:hidden'
+        className='pointer-events-none fixed inset-x-0 bottom-0 z-30 md:hidden'
         key={`fade-${tintGeneration}`}
       >
         <div className='mask-linear-[to_top,var(--background)_25%,transparent] h-24 bg-linear-to-b from-transparent to-background backdrop-blur-[1px]' />
@@ -137,6 +135,14 @@ export function MobileNav() {
         open={open}
       >
         <DialogPrimitive.Portal>
+          {/* Dims and softens the page so the menu reads as its own layer.
+              It only filters what's behind it and paints no color of its own,
+              so Safari's bar tint keeps following the page */}
+          <DialogPrimitive.Backdrop
+            className='fixed inset-0 z-31 backdrop-blur-[2px] backdrop-brightness-90 transition-[backdrop-filter,opacity] duration-200 ease-out-strong data-ending-style:opacity-0 data-starting-style:opacity-0 data-ending-style:duration-150 md:hidden dark:backdrop-brightness-50'
+            forceRender
+            onClick={closeMenu}
+          />
           <MenuPanel
             menuId={MENU_ID}
             onAssistantOpen={() => {

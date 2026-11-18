@@ -11,7 +11,7 @@
   <p>
     <a href="https://techwithanirudh.com">Live site</a>
     ·
-    <a href="https://techwithanirudh.com/work">Work</a>
+    <a href="https://techwithanirudh.com/projects">Projects</a>
     ·
     <a href="https://techwithanirudh.com/blog">Blog</a>
     ·
@@ -41,9 +41,9 @@ Content lives in `content/` and UI lives in `src/components`. Routes use the Nex
 
 ## Features
 
-- **Portfolio pages.** Each project has a work page with metadata, screenshots, links, and MDX content.
+- **Portfolio pages.** Each project has a page with metadata, screenshots, links, and MDX content.
 - **Blog.** MDX posts with tags, RSS, syntax highlighting, and generated social images.
-- **Search.** One search box covers blog and work pages.
+- **Search.** One search box covers blog and project pages.
 - **AI-readable routes.** `/llms.txt`, markdown endpoints, and raw MDX routes let models read the content.
 - **Contact form.** A server action handles the form, with spam protection and email integration.
 - **Guestbook and auth.** Better Auth, database-backed sessions, comments, reactions, and moderation helpers.
@@ -68,7 +68,7 @@ Content lives in `content/` and UI lives in `src/components`. Routes use the Nex
 
 ```txt
 .
-├── content/              # Blog posts and work pages written in MDX
+├── content/              # Blog posts and project pages written in MDX
 ├── emails/               # React Email templates
 ├── public/               # Static images, assets, sitemap, robots
 ├── scripts/              # Local maintenance and general scripts
@@ -83,7 +83,7 @@ Content lives in `content/` and UI lives in `src/components`. Routes use the Nex
 ## Content workflow
 
 - Write blog posts in `content/blog`.
-- Write project pages in `content/work`.
+- Write project pages in `content/projects`.
 - Use MDX frontmatter for titles, descriptions, dates, links, images, and tags.
 - Run `bun run typegen` after changing content schemas or generated route types.
 

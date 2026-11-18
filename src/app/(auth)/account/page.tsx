@@ -1,29 +1,28 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import { Footer } from '@/components/layout/footer'
 import { Section } from '@/components/layout/sections'
+import { pages } from '@/constants/pages'
 import { createMetadata } from '@/lib/metadata'
 import { AccountLogoutButton } from './_components/account-logout-button'
-import { AccountSettingsSection } from './_components/account-settings-section'
-import { AccountSettingsSkeleton } from './_components/account-settings-skeleton'
-import { ActiveSessionsSection } from './_components/active-sessions-section'
-import { ActiveSessionsSkeleton } from './_components/active-sessions-skeleton'
+import { AccountSettings } from './_components/account-settings'
+import { ActiveSessions } from './_components/active-sessions'
+import { requireSession } from './_lib/session'
 
-export async function generateMetadata(): Promise<Metadata> {
-  return createMetadata({
-    alternates: {
-      canonical: '/account',
-    },
-    description: 'Manage your account information and active sessions.',
-    openGraph: {
-      url: '/account',
-    },
-    robots: { follow: false, index: false },
-    title: 'Account settings',
-  })
-}
+export const metadata: Metadata = createMetadata({
+  alternates: {
+    canonical: pages.account.path,
+  },
+  description: pages.account.description,
+  openGraph: {
+    url: pages.account.path,
+  },
+  robots: { follow: false, index: false },
+  title: pages.account.title,
+})
 
-export default function AccountPage() {
+export default async function AccountPage() {
+  const session = await requireSession()
+
   return (
     <>
       <Section className='px-6 py-10 sm:py-14'>
@@ -40,17 +39,13 @@ export default function AccountPage() {
         </div>
       </Section>
       <Section>
-        <Suspense fallback={<AccountSettingsSkeleton />}>
-          <AccountSettingsSection />
-        </Suspense>
+        <AccountSettings user={session.user} />
       </Section>
       <Section className='px-6 pt-6'>
         <h2 className='font-medium text-lg'>Active sessions</h2>
       </Section>
       <Section sectionClassName='flex-1'>
-        <Suspense fallback={<ActiveSessionsSkeleton />}>
-          <ActiveSessionsSection />
-        </Suspense>
+        <ActiveSessions currentToken={session.session.token} />
       </Section>
       <Footer />
     </>

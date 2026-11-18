@@ -1,13 +1,27 @@
 import { tool, type UIMessageStreamWriter } from 'ai'
-import { Document } from 'flexsearch'
+import { Document, type DocumentData } from 'flexsearch'
 import { z } from 'zod'
-import type { CustomDocument } from '@/lib/ai/chat/types'
-import { post as blogSource, workSource } from '@/lib/source'
+import {
+  type BlogPage,
+  blogSource,
+  type PageEntry,
+  type ProjectPage,
+  projectSource,
+} from '@/lib/source'
+
+interface SearchDocument extends DocumentData {
+  content: string
+  description: string
+  tag: PageEntry['tag']
+  title: string
+  url: string
+}
 
 const searchServer = createSearchServer()
+const WHITESPACE = /\s+/
 
 async function createSearchServer() {
-  const search = new Document<CustomDocument>({
+  const search = new Document<SearchDocument>({
     document: {
       id: 'url',
       index: ['title', 'description', 'content'],
@@ -16,102 +30,81 @@ async function createSearchServer() {
     },
   })
 
-  const [blog, work] = await Promise.all([
-    Promise.all(
-      blogSource.getPages().map(async (page) => {
-        if (!('getText' in page.data)) {
-          return null
-        }
+  const toDocument =
+    (tag: SearchDocument['tag']) =>
+    async (page: BlogPage | ProjectPage): Promise<SearchDocument> => ({
+      content: await page.data.getText('processed'),
+      description: page.data.description ?? '',
+      tag,
+      title: page.data.title,
+      url: page.url,
+    })
 
-        return {
-          content: await page.data.getText('processed'),
-          description: page.data.description ?? '',
-          tag: 'blog',
-          title: page.data.title ?? 'Untitled',
-          url: page.url,
-        } as CustomDocument
-      })
-    ),
-    Promise.all(
-      workSource.getPages().map(async (page) => {
-        if (!('getText' in page.data)) {
-          return null
-        }
-
-        return {
-          content: await page.data.getText('processed'),
-          description: page.data.description ?? '',
-          tag: 'projects',
-          title: page.data.title ?? 'Untitled',
-          url: page.url,
-        } as CustomDocument
-      })
-    ),
+  const [blog, projects] = await Promise.all([
+    Promise.all(blogSource.getPages().map(toDocument('blog'))),
+    Promise.all(projectSource.getPages().map(toDocument('projects'))),
   ])
 
-  for (const post of blog) {
-    if (post) {
-      search.add(post)
-    }
-  }
-
-  for (const page of work) {
-    if (page) {
-      search.add(page)
-    }
+  for (const page of [...blog, ...projects]) {
+    search.add(page)
   }
 
   return search
 }
 
-const Tag = z.union([
-  z.literal('all'),
-  z.literal('blog'),
-  z.literal('projects'),
-])
+export const searchDocsTool = tool({
+  contextSchema: z.object({ writer: z.custom<UIMessageStreamWriter>() }),
+  description: "Search the site's blog posts and projects.",
+  execute: async ({ query, tag, limit }, { context }) => {
+    const search = await searchServer
+    const results = await search.searchAsync({
+      enrich: true,
+      limit,
+      merge: true,
+      query,
+      tag: tag === 'all' ? undefined : { tag },
+    })
+    const terms = query.toLowerCase().split(WHITESPACE).filter(Boolean)
 
-export const createSearchDocsTool = (writer: UIMessageStreamWriter) =>
-  tool({
-    description:
-      'Search the portfolio content using the internal search server.',
-    execute: async ({ query, tag: tagParam, limit }) => {
-      const tag = tagParam === 'all' ? undefined : tagParam
-      const search = await searchServer
-      const raw = await search.searchAsync({
-        enrich: true,
-        limit,
-        merge: true,
-        query,
-        tag: tag ? ({ tag } as Record<string, string>) : undefined,
-      })
-      const results = raw as Array<{ doc: CustomDocument }>
-
-      for (const [index, result] of results.entries()) {
-        writer.write({
-          sourceId: `search-doc-${index}-${result.doc.url}`,
-          title: result.doc.title,
-          type: 'source-url',
-          url: result.doc.url,
-        })
+    return results.flatMap(({ doc }, index) => {
+      if (!doc) {
+        return []
       }
+      context.writer.write({
+        sourceId: `search-doc-${index}-${doc.url}`,
+        title: doc.title,
+        type: 'source-url',
+        url: doc.url,
+      })
+      const lower = doc.content.toLowerCase()
+      const hit = Math.min(
+        ...terms.map((term) => lower.indexOf(term)).filter((at) => at >= 0)
+      )
+      const start = Number.isFinite(hit) ? Math.max(0, hit - 200) : 0
 
-      return results
-    },
-    inputSchema: z.object({
-      limit: z
-        .number()
-        .int()
-        .min(1)
-        .max(100)
-        .default(10)
-        .describe(
-          'Maximum number of results to return (default: 10, max: 100).'
-        ),
-      locale: z
-        .string()
-        .optional()
-        .describe('Optional locale for i18n setups.'),
-      query: z.string().describe('The query to search for.'),
-      tag: Tag.default('all').describe('Optional tag filter.'),
-    }),
-  })
+      return [
+        {
+          description: doc.description,
+          excerpt: doc.content.slice(start, start + 800).trim(),
+          tag: doc.tag,
+          title: doc.title,
+          url: doc.url,
+        },
+      ]
+    })
+  },
+  inputSchema: z.object({
+    limit: z
+      .number()
+      .int()
+      .min(1)
+      .max(100)
+      .default(10)
+      .describe('Maximum number of results to return (default: 10, max: 100).'),
+    query: z.string().describe('The query to search for.'),
+    tag: z
+      .enum(['all', 'blog', 'projects'])
+      .default('all')
+      .describe('Limit results to blog posts or projects. Defaults to all.'),
+  }),
+})

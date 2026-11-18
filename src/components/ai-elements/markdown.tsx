@@ -5,7 +5,7 @@ import { toJsxRuntime } from 'hast-util-to-jsx-runtime'
 import {
   Children,
   type ComponentProps,
-  type ReactElement,
+  isValidElement,
   type ReactNode,
   Suspense,
   use,
@@ -19,11 +19,7 @@ import { visit } from 'unist-util-visit'
 
 const WHITESPACE_LOOKAHEAD = /(?=\s)/
 
-export interface Processor {
-  process: (content: string) => Promise<ReactNode>
-}
-
-export function rehypeWrapWords() {
+function rehypeWrapWords() {
   return (tree: Root) => {
     visit(tree, ['text', 'element'], (node, index, parent) => {
       if (node.type === 'element' && node.tagName === 'pre') {
@@ -61,35 +57,30 @@ export function rehypeWrapWords() {
   }
 }
 
-function createProcessor(): Processor {
-  const processor = remark()
-    .use(remarkGfm)
-    .use(remarkRehype)
-    .use(rehypeWrapWords)
+const processor = remark().use(remarkGfm).use(remarkRehype).use(rehypeWrapWords)
 
-  return {
-    async process(content) {
-      const nodes = processor.parse({ value: content })
-      const hast = await processor.run(nodes)
+async function processMarkdown(content: string): Promise<ReactNode> {
+  const hast = await processor.run(processor.parse({ value: content }))
 
-      return toJsxRuntime(hast, {
-        components: {
-          ...defaultMdxComponents,
-          img: undefined,
-          pre: Pre,
-        },
-        development: false,
-        Fragment,
-        jsx,
-        jsxs,
-      })
+  return toJsxRuntime(hast, {
+    components: {
+      ...defaultMdxComponents,
+      img: undefined,
+      pre: Pre,
     },
-  }
+    development: false,
+    Fragment,
+    jsx,
+    jsxs,
+  })
 }
 
 function Pre(props: ComponentProps<'pre'>) {
-  const code = Children.only(props.children) as ReactElement
-  const codeProps = code.props as ComponentProps<'code'>
+  const code = Children.only(props.children)
+  if (!isValidElement<ComponentProps<'code'>>(code)) {
+    return null
+  }
+  const codeProps = code.props
   const content = codeProps.children
   if (typeof content !== 'string') {
     return null
@@ -108,22 +99,31 @@ function Pre(props: ComponentProps<'pre'>) {
   return <DynamicCodeBlock code={content.trimEnd()} lang={lang} />
 }
 
-const processor = createProcessor()
 const cache = new Map<string, Promise<ReactNode>>()
 
 export function Markdown({ text }: { text: string }) {
   const deferredText = useDeferredValue(text)
 
   return (
-    <Suspense fallback={<p className='invisible'>{text}</p>}>
+    <Suspense
+      fallback={<p className='invisible whitespace-pre-line'>{text}</p>}
+    >
       <Renderer text={deferredText} />
     </Suspense>
   )
 }
 
-function Renderer({ text }: { text: string }) {
-  const result = cache.get(text) ?? processor.process(text)
+const processCached = (text: string) => {
+  const result = cache.get(text) ?? processMarkdown(text)
+  cache.delete(text)
   cache.set(text, result)
+  const oldest = cache.keys().next()
+  if (cache.size > 200 && !oldest.done) {
+    cache.delete(oldest.value)
+  }
+  return result
+}
 
-  return use(result)
+function Renderer({ text }: { text: string }) {
+  return use(processCached(text))
 }

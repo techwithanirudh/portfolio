@@ -1,0 +1,38 @@
+---
+title: AI Tutor
+description: A study app for chat, quizzes, flashcards, and voice sessions.
+date: 2023-11-20
+order: 8
+website: https://tutor.techwithanirudh.com
+status: Live
+platform: Web
+image: /images/projects/ai_tutor/cover.png
+tags: ['Next.js', 'AI', 'Drizzle', 'NextAuth', 'LiveKit']
+---
+A study app that teaches you by asking questions, then turns the same topic into a quiz, flashcards or a voice session. It's live (you just need to sign in), though honestly it's on life support right now.
+
+## How it started
+
+Back in 2023, when the first OpenAI models came out, I was so amazed by the ChatGPT UI that I built my own clone on Firebase, [AnirudhGPT](/projects/anirudh_gpt). This was back when I built everything on Replit (RIP, I'll miss you Replit). A lot of students ended up using it to ask study questions, and that gave me an idea: what if I turned it into a tutor? I'd been reading about <Term>RAG</Term>, so the dream was that you could upload a textbook and get help with it.
+
+The first version was built on top of AnirudhGPT and ran on Firebase. Then it got a few rewrites and moved onto [Vercel's AI chatbot template](https://vercel.com/templates/next.js/nextjs-ai-chatbot), where I added the tutor prompt, quizzes, flashcards, uploads, sign-in and voice. Along the way I sent a few changes back to the AI chatbot itself and met some amazing people like N1cklas and Nishimiya in the (unofficial) Vercel Discord server. It even got a mobile app at one point, though that got scrapped, sadly. It was a good run!
+
+## What it does
+
+First it asks what you want to learn, your level and what you already know. Then it explains things with examples, gives you a hint when you're stuck and ends each reply with a question. You can also attach a JPEG, PNG or PDF (up to 5MB).
+
+<Screens>
+  <Screen frame='wide' height={888} src='/images/projects/ai_tutor/landing-hero.webp' width={1600} alt='The AI Tutor landing page with the heading The Future of Learning Starts Here and a Sign up button' />
+</Screens>
+
+Fun fact: I built this landing page with [Shadcn SaaS Landing](/projects/shadcn_saas_landing), which I made because I wanted a reusable way to put it together, and then turned into a template for anyone to use.
+
+Right from the chat, it can make a quiz or flashcards on the same topic. Voice sessions run on [LiveKit](https://livekit.io/agents), and the transcript lands in the same chat.
+
+<Screens>
+  <Screen fit='contain' height={1000} src='/images/projects/ai_tutor/app-login-light.webp' width={1040} alt='The AI Tutor sign-in form in the light theme, with an email field and buttons for Google and Keycloak' />
+</Screens>
+
+## How it works
+
+Quiz answers stay on the server until you submit, so no peeking. All the model calls go through the [Hack Club AI](https://ai.hackclub.com/) proxy.

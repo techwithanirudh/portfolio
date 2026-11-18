@@ -12,7 +12,7 @@ export function PagesProvider({
   pages: PageEntry[]
   children: ReactNode
 }) {
-  return <PagesContext.Provider value={pages}>{children}</PagesContext.Provider>
+  return <PagesContext value={pages}>{children}</PagesContext>
 }
 
 export function usePages(): PageEntry[] {

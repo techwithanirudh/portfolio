@@ -1,0 +1,52 @@
+---
+title: AniKode Website Builder
+description: A drag-and-drop website builder with HTML and JavaScript blocks.
+date: 2023-06-15
+order: 15
+website: https://anikode.techwithanirudh.com/
+status: Deprecated
+platform: Web
+image: /images/projects/anikode/cover.png
+tags: ['Next.js', 'GrapesJS', 'Drizzle ORM', 'NextAuth', 'TailwindCSS']
+---
+AniKode is a drag-and-drop website builder, and it's also my first ever real HTML, CSS and JavaScript project. I've built it three times since 2021, and every version is basically a snapshot of what I knew how to do that year. It's super old now, so I count it as deprecated, but AniKode Studio is still online behind a sign-in.
+
+## How it started
+
+When I first learned HTML, all I wanted was to make pretty websites. So I went looking for inspiration and ended up poking around website builders like Wix and Builder.io. The templates were nice, but what I really fell in love with was the drag-and-drop idea: you grab a block, drop it on the page, and it just works. That sent me down a huge rabbit hole of how you'd even build something like that, and at the bottom of it I found [GrapesJS](https://grapesjs.com/), an awesome framework for building website builders.
+
+## The 2021 version
+
+The first AniKode was one GrapesJS page with more than 20 plugins stacked on top, saving everything to IndexedDB in your browser. I struggled a lot with this one. To get proper pages and templates working, I forked a GrapesJS template manager plugin in December 2021 and hacked in my own functions for adding a page or a template.
+
+It's also where I first learned [Firebase](https://firebase.google.com/). And I'll be honest about why: I used it for the free `.web.app` domain, because it looked more professional, haha.
+
+## The 2022 version
+
+In 2022 I rebuilt it as a proper React app with its own Express and MongoDB server, so your projects lived on a server instead of in one browser. It got a real editor with a page list, a block panel and a toolbar on every selected component, plus its own landing page. I even started a Docusaurus docs site for it on Replit, which never got past the starter template.
+
+<Screens>
+  <Screen frame='wide' height={817} src='/images/projects/anikode/editor-2022.webp' width={1695} alt='The AniKode editor with a page list and block panel on the left, a row of tool icons along the top, and a page with a photo of a dog on the canvas' />
+  <Screen frame='wide' height={475} src='/images/projects/anikode/component-toolbar.webp' width={760} alt='A selected heading on the editor canvas, outlined in blue, with a row of round toolbar buttons in its corner' />
+  <Screen frame='wide' height={1000} src='/images/projects/anikode/landing-2022.webp' width={1600} alt='The 2022 AniKode landing page with the headline Simplify the way you build websites next to a photo of two people at their desks' />
+</Screens>
+
+## AniKode Studio
+
+The latest rewrite is AniKode Studio, in Next.js with [shadcn/ui](https://ui.shadcn.com/). It was my first T3 stack project ever (shout-out to Theo, the goat), and my first time using [Drizzle](https://orm.drizzle.team/) and [Zod](https://zod.dev/), which I'd heard so many good things about that I had to try them.
+
+<Screens>
+  <Screen frame='wide' height={1133} src='/images/projects/anikode/studio-landing-dark.webp' width={1600} alt='The AniKode Studio landing page in dark mode, with the headline Build stunning websites with ease above a screenshot of the editor' />
+</Screens>
+
+You make a project, add some pages and open one in the editor. Blocks sit on the left, and styles, settings, layers and pages are on the right. The panels are React components, so the editor follows the app's light and dark theme instead of looking like a GrapesJS demo.
+
+## How it works
+
+After every change, the editor posts the page's GrapesJS project JSON to that page's API route. The route checks your session, makes sure you own the page, and stores the JSON in a Postgres column through Drizzle. If a save fails, the editor tells you, so you don't lose an afternoon of work without knowing.
+
+Sign-in goes through [NextAuth](https://next-auth.js.org/), with a magic link sent by [Resend](https://resend.com/) or a GitHub account.
+
+<Screens>
+  <Screen frame='wide' height={733} src='/images/projects/anikode/studio-login.webp' width={1100} alt='The AniKode Studio sign-in form in dark mode, with an email field, a Sign In with Email button and a GitHub button' />
+</Screens>

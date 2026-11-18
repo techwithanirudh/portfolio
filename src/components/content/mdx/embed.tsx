@@ -4,6 +4,10 @@ import Image from 'next/image'
 import type { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 
+const FrameOutline = () => (
+  <div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10' />
+)
+
 export function IframeEmbed({
   className,
   title,
@@ -16,7 +20,7 @@ export function IframeEmbed({
         title={title}
         {...props}
       />
-      <div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10' />
+      <FrameOutline />
     </div>
   )
 }
@@ -63,7 +67,7 @@ export function FramedImage({
           {...props}
         />
       )}
-      <div className='pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10' />
+      <FrameOutline />
     </figure>
   )
 }

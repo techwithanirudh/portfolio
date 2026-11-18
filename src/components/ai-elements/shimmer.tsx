@@ -3,7 +3,7 @@
 import { type CSSProperties, type ElementType, memo } from 'react'
 import { cn } from '@/lib/utils'
 
-export interface TextShimmerProps {
+interface TextShimmerProps {
   as?: ElementType
   children: string
   className?: string
@@ -20,7 +20,7 @@ const ShimmerComponent = ({
 }: TextShimmerProps) => (
   <Component
     className={cn(
-      'relative inline-block animate-shimmer bg-[length:250%_100%,auto] bg-clip-text text-transparent [background-position:100%_center] motion-reduce:animate-none',
+      'relative inline-block animate-shimmer bg-[length:250%_100%,auto] bg-clip-text text-transparent [background-position:100%_center]',
       '[--bg:linear-gradient(90deg,#0000_calc(50%-var(--spread)),var(--color-background),#0000_calc(50%+var(--spread)))] [background-repeat:no-repeat,padding-box]',
       className
     )}

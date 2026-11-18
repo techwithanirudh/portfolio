@@ -1,6 +1,7 @@
 import { Icons } from '@/components/icons/icons'
 import { socials } from '@/constants/navigation'
-import type { CommandGroup, CommandKind } from '@/types/search'
+import { pages } from '@/constants/pages'
+import type { CommandGroup, CommandItem, CommandKind } from '@/types/search'
 
 export const commands: CommandGroup[] = [
   {
@@ -9,57 +10,57 @@ export const commands: CommandGroup[] = [
       {
         icon: <Icons.user className='size-4' />,
         kind: 'page',
-        title: 'About',
-        url: '/about',
+        title: pages.about.title,
+        url: pages.about.path,
       },
       {
         icon: <Icons.experience className='size-4' />,
         kind: 'page',
         title: 'Experience',
-        url: '/about#experience',
+        url: `${pages.about.path}#experience`,
       },
       {
         icon: <Icons.download className='size-4' />,
         keywords: ['cv', 'pdf'],
         kind: 'page',
-        title: 'Resume',
-        url: '/resume',
+        title: pages.resume.title,
+        url: pages.resume.path,
       },
       {
         icon: <Icons.mail className='size-4' />,
         kind: 'page',
-        title: 'Contact',
-        url: '/contact',
+        title: pages.contact.title,
+        url: pages.contact.path,
       },
       {
         icon: <Icons.messageSquare className='size-4' />,
         kind: 'page',
-        title: 'Guestbook',
-        url: '/guestbook',
+        title: pages.guestbook.title,
+        url: pages.guestbook.path,
       },
       {
         icon: <Icons.work className='size-4' />,
         kind: 'page',
-        title: 'Projects',
-        url: '/projects',
+        title: pages.projects.title,
+        url: pages.projects.path,
       },
       {
         icon: <Icons.blog className='size-4' />,
         kind: 'page',
-        title: 'Blog',
-        url: '/blog',
+        title: pages.blog.title,
+        url: pages.blog.path,
       },
       {
         icon: <Icons.wrench className='size-4' />,
         kind: 'page',
-        title: 'Uses',
-        url: '/uses',
+        title: pages.uses.title,
+        url: pages.uses.path,
       },
       {
         icon: <Icons.post className='size-4' />,
         kind: 'page',
-        title: 'Colophon',
-        url: '/colophon',
+        title: pages.colophon.title,
+        url: pages.colophon.path,
       },
     ],
   },
@@ -119,7 +120,7 @@ export const commands: CommandGroup[] = [
         icon: <Icons.rss className='size-4' />,
         kind: 'link',
         title: 'RSS feed',
-        url: '/rss.xml',
+        url: '/blog/rss.xml',
       },
       {
         icon: <Icons.post className='size-4' />,
@@ -138,20 +139,16 @@ export const commands: CommandGroup[] = [
   },
 ]
 
+const commandKinds: Record<CommandItem['kind'], CommandKind> = {
+  account: 'page',
+  link: 'link',
+  page: 'page',
+  sound: 'command',
+  theme: 'command',
+}
+
 export const COMMAND_META_MAP = new Map<string, CommandKind>(
   commands.flatMap(({ items }) =>
-    items.map((item) => {
-      let kind: CommandKind = 'page'
-
-      if (item.kind === 'theme' || item.kind === 'sound') {
-        kind = 'command'
-      }
-
-      if (item.kind === 'link') {
-        kind = 'link'
-      }
-
-      return [item.title, kind]
-    })
+    items.map((item) => [item.title, commandKinds[item.kind]])
   )
 )

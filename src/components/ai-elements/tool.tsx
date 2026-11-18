@@ -10,9 +10,9 @@ import {
 } from '@/components/ui/collapsible'
 import { cn } from '@/lib/utils'
 
-export type ToolState = ToolUIPart['state']
+type ToolState = ToolUIPart['state']
 
-export type ToolProps = ComponentProps<typeof Collapsible>
+type ToolProps = ComponentProps<typeof Collapsible>
 
 export const Tool = ({ className, ...props }: ToolProps) => (
   <Collapsible
@@ -44,7 +44,7 @@ const statusTone: Record<ToolState, string> = {
   'output-error': 'text-destructive',
 }
 
-export type ToolHeaderProps = ComponentProps<typeof CollapsibleTrigger> & {
+type ToolHeaderProps = ComponentProps<typeof CollapsibleTrigger> & {
   title: string
   state: ToolState
   icon?: ReactNode
@@ -78,18 +78,18 @@ export const ToolHeader = ({
       </span>
       <Icons.chevronDown
         aria-hidden
-        className='size-3.5 text-muted-foreground transition-transform duration-200 group-data-panel-open/tool-trigger:rotate-180 motion-reduce:transition-none'
+        className='size-3.5 text-muted-foreground transition-transform duration-200 group-data-panel-open/tool-trigger:rotate-180'
       />
     </span>
   </CollapsibleTrigger>
 )
 
-export type ToolContentProps = ComponentProps<typeof CollapsibleContent>
+type ToolContentProps = ComponentProps<typeof CollapsibleContent>
 
 export const ToolContent = ({ className, ...props }: ToolContentProps) => (
   <CollapsibleContent
     className={cn(
-      'h-(--collapsible-panel-height) overflow-hidden border-t border-dashed transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0 motion-reduce:transition-none',
+      'h-(--collapsible-panel-height) overflow-hidden border-t border-dashed transition-[height] duration-200 ease-out data-ending-style:h-0 data-starting-style:h-0',
       className
     )}
     {...props}

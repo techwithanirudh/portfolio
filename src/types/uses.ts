@@ -1,9 +1,9 @@
-export type Logo = string | { light: string; dark: string }
+import type { ThemedImage } from './themed-image'
 
 export interface SoftwareItem {
   description: string
   featured?: boolean
-  logo?: Logo
+  logo?: ThemedImage
   name: string
   url: string
 }

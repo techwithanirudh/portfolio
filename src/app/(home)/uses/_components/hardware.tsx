@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { externalLinkProps } from '@/components/external-link'
 import { cn } from '@/lib/utils'
 import type { HardwareItem } from '@/types'
 
@@ -39,12 +40,7 @@ function HardwareCard({ name, description, url, image }: HardwareItem) {
   )
 
   return url ? (
-    <a
-      className={className}
-      href={url}
-      rel='noopener noreferrer'
-      target='_blank'
-    >
+    <a className={className} href={url} {...externalLinkProps}>
       {content}
     </a>
   ) : (
