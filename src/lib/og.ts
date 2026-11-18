@@ -133,8 +133,9 @@ const SWATCH_HEX: Record<CoverSwatch, string> = {
 const BLOB_SPREAD_FACTOR = 1.1
 const BLOB_RADIUS_FACTOR = 0.9
 
-const WASH_GRADIENT =
-  '<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".55" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
+/** Fades the blobs behind the title so the text stays readable */
+const washGradient = (background: string) =>
+  `<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="${background}" stop-opacity=".85"/><stop offset=".55" stop-color="${background}" stop-opacity=".5"/><stop offset="1" stop-color="${background}" stop-opacity="0"/></radialGradient>`
 
 const grainFilter = ({
   height,
@@ -149,7 +150,8 @@ const grainFilter = ({
 
 export const getCoverDataUrl = (
   seed: string,
-  { height, width }: { height: number; width: number }
+  { height, width }: { height: number; width: number },
+  background = '#fff'
 ): string => {
   const cover = createCover(seed)
   const gradients = cover.blobs
@@ -165,6 +167,6 @@ export const getCoverDataUrl = (
       return `<ellipse cx="${cx}" cy="${cy}" rx="${blob.rx * BLOB_RADIUS_FACTOR}" ry="${blob.ry * BLOB_RADIUS_FACTOR}" fill="url(#g${i})" transform="rotate(${rotate} ${cx} ${cy})"/>`
     })
     .join('')
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${WASH_GRADIENT}${grainFilter({ height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="#fff"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${washGradient(background)}${grainFilter({ height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="${background}"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
 }

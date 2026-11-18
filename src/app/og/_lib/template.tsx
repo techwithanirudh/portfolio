@@ -4,18 +4,37 @@ import { formatDate } from '@/lib/format-date'
 
 export const ogImageSize = { height: 630, width: 1200 }
 
-// Light-theme tokens from globals.css, written out because the renderer has
-// no access to CSS variables
-const colors = {
-  border: '#d9d9d9',
-  cross: '#a3a3a3',
-  foreground: '#0a0a0a',
-  muted: '#4d4d4d',
-  page: '#f4f4f4',
-  primary: 'hsl(226, 55%, 45%)',
-  surface: '#f5f5f5',
-  white: '#ffffff',
+// Theme tokens from globals.css, written out because the renderer has no
+// access to CSS variables
+const palettes = {
+  dark: {
+    border: '#2e2e2e',
+    cover: '#141414',
+    cross: '#5c5c5c',
+    foreground: '#ededed',
+    muted: '#a1a1a1',
+    page: '#0b0b0b',
+    primary: 'hsl(234, 100%, 83%)',
+    surface: '#1c1c1c',
+  },
+  light: {
+    border: '#d9d9d9',
+    cover: '#ffffff',
+    cross: '#a3a3a3',
+    foreground: '#0a0a0a',
+    muted: '#4d4d4d',
+    page: '#f4f4f4',
+    primary: 'hsl(226, 55%, 45%)',
+    surface: '#f5f5f5',
+  },
 }
+
+export type OgTheme = keyof typeof palettes
+type Palette = (typeof palettes)[OgTheme]
+
+/** The cover's base color, so the grain cover matches the card it sits on */
+export const ogCoverBackground = (theme: OgTheme): string =>
+  palettes[theme].cover
 
 const rail = { bottom: 566, left: 64, right: 1136, top: 64 }
 
@@ -24,7 +43,15 @@ export const ogCoverSize = {
   width: rail.right - rail.left,
 }
 
-function Cross({ x, y }: { x: number; y: number }): ReactElement {
+function Cross({
+  palette,
+  x,
+  y,
+}: {
+  palette: Palette
+  x: number
+  y: number
+}): ReactElement {
   return (
     <div
       style={{
@@ -38,7 +65,7 @@ function Cross({ x, y }: { x: number; y: number }): ReactElement {
     >
       <div
         style={{
-          backgroundColor: colors.cross,
+          backgroundColor: palette.cross,
           height: 1,
           left: 0,
           position: 'absolute',
@@ -48,7 +75,7 @@ function Cross({ x, y }: { x: number; y: number }): ReactElement {
       />
       <div
         style={{
-          backgroundColor: colors.cross,
+          backgroundColor: palette.cross,
           height: 17,
           left: 8,
           position: 'absolute',
@@ -60,8 +87,8 @@ function Cross({ x, y }: { x: number; y: number }): ReactElement {
   )
 }
 
-function Rails(): ReactElement {
-  const dashed = `1px dashed ${colors.border}`
+function Rails({ palette }: { palette: Palette }): ReactElement {
+  const dashed = `1px dashed ${palette.border}`
   return (
     <>
       {[rail.left, rail.right].map((x) => (
@@ -90,7 +117,7 @@ function Rails(): ReactElement {
       ))}
       {[rail.left, rail.right].flatMap((x) =>
         [rail.top, rail.bottom].map((y) => (
-          <Cross key={`${x},${y}`} x={x} y={y} />
+          <Cross key={`${x},${y}`} palette={palette} x={x} y={y} />
         ))
       )}
     </>
@@ -98,19 +125,21 @@ function Rails(): ReactElement {
 }
 
 function PortraitChip({
+  palette,
   size,
   src,
 }: {
+  palette: Palette
   size: number
   src: string
 }): ReactElement {
   return (
     <div
       style={{
-        backgroundColor: colors.surface,
+        backgroundColor: palette.surface,
         backgroundImage: `url(${src})`,
         backgroundSize: 'cover',
-        border: `1px solid ${colors.border}`,
+        border: `1px solid ${palette.border}`,
         borderRadius: '50%',
         display: 'flex',
         flexShrink: 0,
@@ -125,14 +154,20 @@ interface OgFrameProps {
   children: ReactNode
   coverSrc: string
   gap: number
+  palette: Palette
 }
 
-function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
+function OgFrame({
+  children,
+  coverSrc,
+  gap,
+  palette,
+}: OgFrameProps): ReactElement {
   return (
     <div
       style={{
-        backgroundColor: colors.page,
-        color: colors.foreground,
+        backgroundColor: palette.page,
+        color: palette.foreground,
         display: 'flex',
         // Geist comes from getOgFonts; the renderer's bundled Geist Sans covers
         // anything it doesn't
@@ -142,14 +177,11 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
         width: '100%',
       }}
     >
-      <Rails />
-
       <div
         style={{
-          backgroundColor: colors.white,
+          backgroundColor: palette.cover,
           backgroundImage: `url(${coverSrc})`,
           backgroundSize: '100% 100%',
-          border: `1px solid ${colors.border}`,
           display: 'flex',
           flexDirection: 'column',
           gap,
@@ -164,12 +196,16 @@ function OgFrame({ children, coverSrc, gap }: OgFrameProps): ReactElement {
       >
         {children}
       </div>
+
+      {/* Drawn over the cover so its edges stay dashed and the corner crosses aren't clipped */}
+      <Rails palette={palette} />
     </div>
   )
 }
 
 interface TitleProps {
   maxWidth?: number
+  palette: Palette
   /** Sits after the first word, like the portrait in the page's own heading */
   portraitSrc?: string | null
   size: number
@@ -178,6 +214,7 @@ interface TitleProps {
 
 function Title({
   maxWidth,
+  palette,
   portraitSrc,
   size,
   title,
@@ -204,10 +241,14 @@ function Title({
         }}
       >
         <span>{first}</span>
-        <PortraitChip size={Math.round(size * 0.82)} src={portraitSrc} />
+        <PortraitChip
+          palette={palette}
+          size={Math.round(size * 0.82)}
+          src={portraitSrc}
+        />
         <span>
           {rest.join(' ')}
-          <span style={{ color: colors.primary }}>{mark}</span>
+          <span style={{ color: palette.primary }}>{mark}</span>
         </span>
       </div>
     )
@@ -227,16 +268,22 @@ function Title({
       }}
     >
       {body}
-      <span style={{ color: colors.primary }}>{mark}</span>
+      <span style={{ color: palette.primary }}>{mark}</span>
     </div>
   )
 }
 
-function Description({ children }: { children: string }): ReactElement {
+function Description({
+  children,
+  palette,
+}: {
+  children: string
+  palette: Palette
+}): ReactElement {
   return (
     <div
       style={{
-        color: colors.muted,
+        color: palette.muted,
         display: 'block',
         fontSize: 30,
         letterSpacing: '-0.01em',
@@ -288,15 +335,19 @@ export function PageImage({
   title,
 }: PageImageProps): ReactElement {
   const size = getTitleSize(title, pageTitleSizes)
+  const palette = palettes.light
   return (
-    <OgFrame coverSrc={coverSrc} gap={18}>
+    <OgFrame coverSrc={coverSrc} gap={18} palette={palette}>
       <Title
         maxWidth={size >= 72 ? 860 : undefined}
+        palette={palette}
         portraitSrc={portraitSrc}
         size={size}
         title={title}
       />
-      {description && <Description>{description}</Description>}
+      {description && (
+        <Description palette={palette}>{description}</Description>
+      )}
     </OgFrame>
   )
 }
@@ -315,15 +366,19 @@ export function PostImage({
   title,
 }: PostImageProps): ReactElement {
   const size = getTitleSize(title, postTitleSizes)
+  const palette = palettes.light
   return (
-    <OgFrame coverSrc={coverSrc} gap={28}>
+    <OgFrame coverSrc={coverSrc} gap={28} palette={palette}>
       <Title
         maxWidth={size >= 64 ? 860 : undefined}
+        palette={palette}
         size={size}
         title={title}
       />
       <div style={{ alignItems: 'center', display: 'flex', gap: 14 }}>
-        {portraitSrc && <PortraitChip size={40} src={portraitSrc} />}
+        {portraitSrc && (
+          <PortraitChip palette={palette} size={40} src={portraitSrc} />
+        )}
         <span
           style={{
             fontSize: 26,
@@ -334,7 +389,7 @@ export function PostImage({
           {owner}
         </span>
         {date && (
-          <span style={{ color: colors.muted, fontSize: 26 }}>
+          <span style={{ color: palette.muted, fontSize: 26 }}>
             {`· ${formatDate(date)}`}
           </span>
         )}
@@ -347,6 +402,7 @@ interface BannerImageProps {
   coverSrc: string
   description: string
   portraitSrc?: string | null
+  theme?: OgTheme
   title: string
 }
 
@@ -354,12 +410,19 @@ export function BannerImage({
   coverSrc,
   description,
   portraitSrc,
+  theme = 'light',
   title,
 }: BannerImageProps): ReactElement {
+  const palette = palettes[theme]
   return (
-    <OgFrame coverSrc={coverSrc} gap={18}>
-      <Title portraitSrc={portraitSrc} size={96} title={title} />
-      <Description>{description}</Description>
+    <OgFrame coverSrc={coverSrc} gap={18} palette={palette}>
+      <Title
+        palette={palette}
+        portraitSrc={portraitSrc}
+        size={96}
+        title={title}
+      />
+      <Description palette={palette}>{description}</Description>
     </OgFrame>
   )
 }
