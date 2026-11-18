@@ -13,12 +13,11 @@ import { getCoverDataUrl, getOgFonts, getPortraitDataUrl } from '@/lib/og'
 export const GET = async (request: NextRequest): Promise<ImageResponse> => {
   const theme =
     request.nextUrl.searchParams.get('theme') === 'dark' ? 'dark' : 'light'
-  const { background, intensity } = ogCoverTone(theme)
   const fonts = await getOgFonts()
 
   return new ImageResponse(
     <BannerImage
-      coverSrc={getCoverDataUrl(owner, ogCoverSize, background, intensity)}
+      coverSrc={getCoverDataUrl(owner, ogCoverSize, ogCoverTone(theme))}
       description={tagline}
       portraitSrc={await getPortraitDataUrl()}
       theme={theme}
