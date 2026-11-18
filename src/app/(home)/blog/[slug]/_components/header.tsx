@@ -1,6 +1,7 @@
 // adapted from https://github.com/braydoncoyer/braydoncoyer.dev/
 import * as m from 'motion/react-m'
 import { BlurImage } from '@/components/blur-image'
+import { AdjacentNav } from '@/components/features/adjacent-nav'
 import { TagCard } from '@/components/features/blog/tag-card'
 import { Section } from '@/components/layout/sections'
 import { ViewAnimation } from '@/components/view-animation'
@@ -9,10 +10,15 @@ import type { BlogPage } from '@/lib/source'
 import { staggerDelay } from '@/lib/stagger'
 
 interface HeaderProps {
+  next?: BlogPage
   page: BlogPage
+  previous?: BlogPage
 }
 
-export const Header = ({ page }: HeaderProps) => {
+const toAdjacent = (post?: BlogPage) =>
+  post ? { title: post.data.title, url: post.url } : undefined
+
+export const Header = ({ next, page, previous }: HeaderProps) => {
   const { image, tags } = page.data
 
   return (
@@ -36,6 +42,12 @@ export const Header = ({ page }: HeaderProps) => {
           <div
             className='absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent'
             style={{ viewTransitionName: 'none' }}
+          />
+          <AdjacentNav
+            className='absolute top-4 right-4 z-10 md:top-6 md:right-6'
+            next={toAdjacent(next)}
+            noun='post'
+            previous={toAdjacent(previous)}
           />
           <div className='relative z-5 mt-auto p-8 md:p-16'>
             {tags?.length ? (

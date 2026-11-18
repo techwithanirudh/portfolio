@@ -1,6 +1,6 @@
 'use client'
 
-// Previous/next project arrows plus ←/→ keys, adapted from chanhdai.com's doc
+// Previous/next arrows (projects, posts) plus ←/→ keys, adapted from chanhdai.com's doc
 // adjacent-page nav (https://github.com/ncdai/chanhdai.com, MIT)
 
 import Link from 'next/link'
@@ -14,8 +14,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { cn } from '@/lib/utils'
 
-interface AdjacentProject {
+interface Adjacent {
   title: string
   url: string
 }
@@ -25,12 +26,17 @@ const isTyping = (target: EventTarget | null) =>
   (target.isContentEditable ||
     ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
 
-export function ProjectNav({
+export function AdjacentNav({
+  className,
+  noun,
   previous,
   next,
 }: {
-  previous?: AdjacentProject
-  next?: AdjacentProject
+  className?: string
+  /** What the arrows move between, for the labels */
+  noun: 'post' | 'project'
+  previous?: Adjacent
+  next?: Adjacent
 }) {
   const router = useRouter()
 
@@ -58,19 +64,24 @@ export function ProjectNav({
   }, [previous, next, router])
 
   return (
-    <nav aria-label='Previous and next project' className='flex gap-2'>
+    <nav
+      aria-label={`Previous and next ${noun}`}
+      className={cn('flex gap-2', className)}
+    >
       {previous && (
         <NavButton
           direction='previous'
           icon={<Icons.arrowLeft />}
-          project={previous}
+          item={previous}
+          noun={noun}
         />
       )}
       {next && (
         <NavButton
           direction='next'
           icon={<Icons.arrowRight />}
-          project={next}
+          item={next}
+          noun={noun}
         />
       )}
     </nav>
@@ -80,13 +91,15 @@ export function ProjectNav({
 function NavButton({
   direction,
   icon,
-  project,
+  item,
+  noun,
 }: {
   direction: 'previous' | 'next'
   icon: React.ReactNode
-  project: AdjacentProject
+  item: Adjacent
+  noun: string
 }) {
-  const label = direction === 'previous' ? 'Previous project' : 'Next project'
+  const label = `${direction === 'previous' ? 'Previous' : 'Next'} ${noun}`
 
   return (
     <Tooltip>
@@ -95,10 +108,7 @@ function NavButton({
           <Button
             nativeButton={false}
             render={
-              <Link
-                aria-label={`${label}: ${project.title}`}
-                href={project.url}
-              />
+              <Link aria-label={`${label}: ${item.title}`} href={item.url} />
             }
             size='icon-sm'
             variant='outline'
@@ -109,7 +119,7 @@ function NavButton({
       </TooltipTrigger>
       <TooltipContent>
         <span className='flex items-center gap-3'>
-          {project.title}
+          {item.title}
           <Kbd>{icon}</Kbd>
         </span>
       </TooltipContent>

@@ -14,7 +14,7 @@ import { githubBranch, githubRepoUrl } from '@/constants/config'
 import { formatDate } from '@/lib/format-date'
 import { getContentSourcePath } from '@/lib/get-llm-text'
 import { createArticleMetadata, getBlogPageImage } from '@/lib/metadata'
-import { getPost, getPosts } from '@/lib/source'
+import { getAdjacentPosts, getPost, getPosts } from '@/lib/source'
 import { url } from '@/lib/url'
 import { Header } from './_components/header'
 
@@ -28,6 +28,7 @@ export default async function Page(props: {
     notFound()
   }
   const { body: Mdx, toc, lastModified } = page.data
+  const { next, previous } = getAdjacentPosts(page)
 
   const pageActions = (
     <>
@@ -59,7 +60,7 @@ export default async function Page(props: {
 
   return (
     <TOCProvider toc={toc}>
-      <Header page={page} />
+      <Header next={next} page={page} previous={previous} />
 
       <Section className='flex' fill>
         <TOCMinimap items={toc} />

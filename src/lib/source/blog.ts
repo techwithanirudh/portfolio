@@ -31,3 +31,15 @@ export const getTags = () => {
 
 export const getPostsByTag = (tag: string) =>
   getSortedByDatePosts().filter((post) => post.data.tags?.includes(tag))
+
+/** The posts before (newer) and after (older) this one, wrapping at the ends */
+export const getAdjacentPosts = (page: BlogPage) => {
+  const sorted = getSortedByDatePosts()
+  const index = sorted.findIndex((post) => post.url === page.url)
+  const at = (offset: number) => {
+    const post = sorted[(index + offset + sorted.length) % sorted.length]
+    return post && post.url !== page.url ? post : undefined
+  }
+
+  return { next: at(1), previous: at(-1) }
+}

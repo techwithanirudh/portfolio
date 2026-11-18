@@ -5,9 +5,9 @@ import { ViewTransition } from 'react'
 import { BlurImage } from '@/components/blur-image'
 import { mdxComponents } from '@/components/content/mdx/components'
 import { GitHubCode } from '@/components/content/mdx/github-code'
+import { AdjacentNav } from '@/components/features/adjacent-nav'
 import { PROJECT_COVER_SIZES } from '@/components/features/projects/cover'
 import { ProjectFacts } from '@/components/features/projects/project-facts'
-import { ProjectNav } from '@/components/features/projects/project-nav'
 import { ProjectStatus } from '@/components/features/projects/project-status'
 import {
   projectTransitionName,
@@ -46,7 +46,11 @@ function Header({ page }: { page: ProjectPage }) {
             <TitleDot />
           </h1>
         </ViewTransition>
-        <ProjectNav next={toAdjacent(next)} previous={toAdjacent(previous)} />
+        <AdjacentNav
+          next={toAdjacent(next)}
+          noun='project'
+          previous={toAdjacent(previous)}
+        />
       </div>
       <ViewTransition
         name={projectTransitionName(slug, 'description')}
