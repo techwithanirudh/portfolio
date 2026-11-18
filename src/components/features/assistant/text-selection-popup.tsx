@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { MAX_CONTEXT_LENGTH } from '@/lib/ai/chat/types'
 import { MEDIA } from '@/lib/media'
 import { useAssistantContext } from './context'
-import { SimbaChip } from './mascot/simba-chip'
 
 const getContainer = () => document.getElementById('main-content')
 
@@ -146,7 +145,7 @@ export function TextSelectionPopup() {
               }}
               size='sm'
             >
-              Ask <SimbaChip className='translate-y-0' /> Simba
+              Ask Simba
             </Button>
           </Popover.Popup>
         </Popover.Positioner>
