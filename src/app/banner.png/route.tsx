@@ -2,8 +2,8 @@ import { ImageResponse } from '@takumi-rs/image-response'
 import type { NextRequest } from 'next/server'
 import {
   BannerImage,
-  ogCoverBackground,
   ogCoverSize,
+  ogCoverTone,
   ogImageSize,
 } from '@/app/og/_lib/template'
 import { owner, tagline } from '@/constants/site'
@@ -13,11 +13,12 @@ import { getCoverDataUrl, getOgFonts, getPortraitDataUrl } from '@/lib/og'
 export const GET = async (request: NextRequest): Promise<ImageResponse> => {
   const theme =
     request.nextUrl.searchParams.get('theme') === 'dark' ? 'dark' : 'light'
+  const { background, intensity } = ogCoverTone(theme)
   const fonts = await getOgFonts()
 
   return new ImageResponse(
     <BannerImage
-      coverSrc={getCoverDataUrl(owner, ogCoverSize, ogCoverBackground(theme))}
+      coverSrc={getCoverDataUrl(owner, ogCoverSize, background, intensity)}
       description={tagline}
       portraitSrc={await getPortraitDataUrl()}
       theme={theme}

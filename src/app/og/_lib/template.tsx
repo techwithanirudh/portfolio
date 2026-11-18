@@ -32,9 +32,13 @@ const palettes = {
 export type OgTheme = keyof typeof palettes
 type Palette = (typeof palettes)[OgTheme]
 
-/** The cover's base color, so the grain cover matches the card it sits on */
-export const ogCoverBackground = (theme: OgTheme): string =>
-  palettes[theme].cover
+/** The cover's base color and blob strength for each theme */
+export const ogCoverTone = (
+  theme: OgTheme
+): { background: string; intensity: number } => ({
+  background: palettes[theme].cover,
+  intensity: theme === 'dark' ? 0.45 : 1,
+})
 
 const rail = { bottom: 566, left: 64, right: 1136, top: 64 }
 

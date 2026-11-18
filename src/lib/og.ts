@@ -151,7 +151,9 @@ const grainFilter = ({
 export const getCoverDataUrl = (
   seed: string,
   { height, width }: { height: number; width: number },
-  background = '#fff'
+  background = '#fff',
+  /** Dims the blobs, since full-strength grain glares on a dark card */
+  intensity = 1
 ): string => {
   const cover = createCover(seed)
   const gradients = cover.blobs
@@ -167,6 +169,6 @@ export const getCoverDataUrl = (
       return `<ellipse cx="${cx}" cy="${cy}" rx="${blob.rx * BLOB_RADIUS_FACTOR}" ry="${blob.ry * BLOB_RADIUS_FACTOR}" fill="url(#g${i})" transform="rotate(${rotate} ${cx} ${cy})"/>`
     })
     .join('')
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${washGradient(background)}${grainFilter({ height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="${background}"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${washGradient(background)}${grainFilter({ height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="${background}"/><g filter="url(#grain)" opacity="${intensity}"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
 }
