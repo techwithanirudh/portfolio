@@ -6,18 +6,14 @@ import { SectionHeader } from '@/components/layout/sections/header'
 import { Button } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages, sectionIds } from '@/constants/pages'
-import { experienceIntro, experiences } from '@/constants/portfolio/experiences'
+import { experiences } from '@/constants/portfolio/experiences'
 
 export default function Experience(): React.ReactElement {
   return (
     <Section className='relative w-full pt-10' id={sectionIds.experience}>
       <div className='flex flex-col gap-12'>
         <div className='flex flex-wrap items-end justify-between gap-6 px-6'>
-          <SectionHeader
-            align='left'
-            description={experienceIntro}
-            title='Experience'
-          />
+          <SectionHeader align='left' title='Experience' />
           <ViewAnimation delay={0.15}>
             <Button
               nativeButton={false}

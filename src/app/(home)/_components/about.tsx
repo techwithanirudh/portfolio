@@ -11,7 +11,7 @@ import { Prose } from '@/components/prose'
 import { buttonVariants } from '@/components/ui/button'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages } from '@/constants/pages'
-import { aboutIntro } from '@/constants/portfolio/intro'
+import { aboutIntro, aboutMobileDetail } from '@/constants/portfolio/intro'
 import { cn } from '@/lib/utils'
 
 export default function About(): React.ReactElement {
@@ -37,6 +37,8 @@ export default function About(): React.ReactElement {
                   />
                 </p>
               ))}
+              {/* The hero keeps phones to two lines, so the rest of it lands here */}
+              <p className='sm:hidden'>{aboutMobileDetail}</p>
             </Prose>
             <Link
               className={cn(

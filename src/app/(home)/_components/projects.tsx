@@ -11,7 +11,6 @@ export default function ProjectsPreview({
 }) {
   return (
     <ListSection
-      description={pages.projects.description}
       more={{
         delay: staggerDelay(projects.length),
         href: pages.projects.path,

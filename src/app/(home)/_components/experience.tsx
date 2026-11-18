@@ -10,17 +10,9 @@ export default function ExperiencePreview() {
   const recent = experiences.slice(0, 3)
 
   return (
-    <Section
-      className='relative w-full pt-10'
-      id={sectionIds.experience}
-    >
+    <Section className='relative w-full pt-10' id={sectionIds.experience}>
       <div className='flex flex-col gap-10'>
-        <SectionHeader
-          align='left'
-          className='px-6'
-          description='Where I have worked recently.'
-          title='Experience'
-        />
+        <SectionHeader align='left' className='px-6' title='Experience' />
 
         <div>
           <ExperienceTimeline experiences={recent} />

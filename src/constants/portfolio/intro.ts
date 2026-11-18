@@ -1,9 +1,15 @@
 import { tagline } from '@/constants/site'
 
-export const heroIntro = `${tagline} I design websites and write the code behind them. Right now that means AI products with Next.js, React and TypeScript, as a software engineering intern at [QuiverAI](https://quiver.ai).`
+const heroDetail =
+  'I design websites and write the code behind them. Right now that means AI products with Next.js, React and TypeScript'
 
-/** The hero on phones until "More" opens the full `heroIntro` */
+export const heroIntro = `${tagline} ${heroDetail}, as a software engineering intern at [QuiverAI](https://quiver.ai).`
+
+/** The hero on phones, which read just this */
 export const heroIntroShort = `${tagline} Software engineering intern at [QuiverAI](https://quiver.ai).`
+
+/** What the phone hero leaves out, picked up in the About me section on phones */
+export const aboutMobileDetail = `${heroDetail}.`
 
 export const aboutIntro = [
   "I'm Anirudh, a full-stack developer who builds practical web apps. I started tinkering with Lego and kept building from there.",

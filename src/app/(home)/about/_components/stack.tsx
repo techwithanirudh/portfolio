@@ -3,7 +3,7 @@ import { ListSection } from '@/components/layout/sections/list-section'
 import { Badge } from '@/components/ui/badge'
 import { ViewAnimation } from '@/components/view-animation'
 import { pages, sectionIds } from '@/constants/pages'
-import { groupTechnologies, stackIntro } from '@/constants/portfolio/skills'
+import { groupTechnologies } from '@/constants/portfolio/skills'
 import { staggerDelay } from '@/lib/stagger'
 import { cn } from '@/lib/utils'
 import type { TechStackItem } from '@/types'
@@ -14,7 +14,6 @@ const iconClassName =
 export default function Stack(): React.ReactElement {
   return (
     <ListSection
-      description={stackIntro}
       id={sectionIds.stack}
       more={{ delay: 0.1, href: pages.uses.path, label: 'Everything I use' }}
       title='Stack'

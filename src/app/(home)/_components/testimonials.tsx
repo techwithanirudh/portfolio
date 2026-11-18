@@ -113,10 +113,7 @@ const Testimonials = ({ testimonials }: TestimonialsProps) => {
   }, [api, playing])
 
   return (
-    <ListSection
-      description={testimonialsIntro.description}
-      title={testimonialsIntro.title}
-    >
+    <ListSection title={testimonialsIntro.title}>
       <ViewAnimation>
         {/* A tab stop so its arrow keys work: the slides hold nothing focusable */}
         <Carousel

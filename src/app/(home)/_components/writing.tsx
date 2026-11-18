@@ -7,7 +7,6 @@ import { staggerDelay } from '@/lib/stagger'
 export default function Writing({ posts }: { posts: BlogPage[] }) {
   return (
     <ListSection
-      description='Notes on things I build and learn.'
       more={{
         delay: staggerDelay(posts.length),
         href: pages.blog.path,
