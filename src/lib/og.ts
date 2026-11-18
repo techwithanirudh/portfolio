@@ -134,24 +134,37 @@ const BLOB_SPREAD_FACTOR = 1.1
 const BLOB_RADIUS_FACTOR = 0.9
 
 /** Fades the blobs behind the title so the text stays readable */
-const WASH_GRADIENT =
-  '<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".55" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
+const washGradient = (color: string) =>
+  `<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="${color}" stop-opacity=".85"/><stop offset=".55" stop-color="${color}" stop-opacity=".5"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></radialGradient>`
+
+/**
+ * Light dithers fine; on dark the same dots read as sand, so dark gets coarser
+ * grain and slightly dimmer blobs
+ */
+const COVER_THEMES = {
+  dark: { background: '#141414', frequency: 0.55, opacity: 0.85 },
+  light: { background: '#fff', frequency: 1.1, opacity: 1 },
+} as const
 
 const grainFilter = ({
+  frequency,
   height,
   seed,
   width,
 }: {
+  frequency: number
   height: number
   seed: number
   width: number
 }) =>
-  `<filter id="grain" x="0" y="0" width="${width}" height="${height}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="${seed % 1000}"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -0.8"/><feComposite in="SourceAlpha" operator="arithmetic" k2="1" k3="-1" k4="0.5"/><feComponentTransfer result="mask"><feFuncA type="linear" slope="3" intercept="-1"/></feComponentTransfer><feComponentTransfer in="SourceGraphic"><feFuncA type="linear" slope="24"/></feComponentTransfer><feComposite in2="mask" operator="in"/></filter>`
+  `<filter id="grain" x="0" y="0" width="${width}" height="${height}" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="${frequency}" numOctaves="1" seed="${seed % 1000}"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.6 0 0 0 -0.8"/><feComposite in="SourceAlpha" operator="arithmetic" k2="1" k3="-1" k4="0.5"/><feComponentTransfer result="mask"><feFuncA type="linear" slope="3" intercept="-1"/></feComponentTransfer><feComponentTransfer in="SourceGraphic"><feFuncA type="linear" slope="24"/></feComponentTransfer><feComposite in2="mask" operator="in"/></filter>`
 
 export const getCoverDataUrl = (
   seed: string,
-  { height, width }: { height: number; width: number }
+  { height, width }: { height: number; width: number },
+  theme: keyof typeof COVER_THEMES = 'light'
 ): string => {
+  const { background, frequency, opacity } = COVER_THEMES[theme]
   const cover = createCover(seed)
   const gradients = cover.blobs
     .map(
@@ -166,24 +179,6 @@ export const getCoverDataUrl = (
       return `<ellipse cx="${cx}" cy="${cy}" rx="${blob.rx * BLOB_RADIUS_FACTOR}" ry="${blob.ry * BLOB_RADIUS_FACTOR}" fill="url(#g${i})" transform="rotate(${rotate} ${cx} ${cy})"/>`
     })
     .join('')
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${WASH_GRADIENT}${grainFilter({ height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="#fff"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
-  return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
-}
-
-let heroGradient: Promise<string> | undefined
-
-/** The home hero's grain gradient (at 80% on light, like the hero) */
-export const getHeroGradientCoverDataUrl = async (
-  { height, width }: { height: number; width: number },
-  theme: 'dark' | 'light'
-): Promise<string> => {
-  heroGradient ??= readFile(
-    path.join(process.cwd(), 'public/images/hero-gradient.png')
-  ).then((png) => png.toString('base64'))
-  // Flipped into the top right corner, clear of the title and description
-  const size = { height: 720, width: 753 }
-  const x = width - size.width * 0.62
-  const y = -size.height * 0.5
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="${theme === 'dark' ? '#141414' : '#fff'}"/><image opacity="${theme === 'dark' ? 1 : 0.8}" href="data:image/png;base64,${await heroGradient}" x="${x}" y="${-y - size.height}" width="${size.width}" height="${size.height}" transform="scale(1 -1)"/></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${washGradient(background)}${grainFilter({ frequency, height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="${background}"/><g filter="url(#grain)" opacity="${opacity}"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
 }
