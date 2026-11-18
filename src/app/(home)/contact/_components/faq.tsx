@@ -16,7 +16,7 @@ import { staggerDelay } from '@/lib/stagger'
 import { AskSimbaLink } from './ask-simba-link'
 
 export const FAQ = () => (
-  <SplitSection fill>
+  <SplitSection>
     <SplitSectionSidebar>
       <SectionHeader
         align='left'
@@ -31,7 +31,8 @@ export const FAQ = () => (
     </SplitSectionSidebar>
 
     <SplitSectionContent>
-      <Accordion className='w-full'>
+      {/* The first answer starts open, so the section isn't just four closed rows */}
+      <Accordion className='w-full' defaultValue={['index-0']}>
         {faq.map((item, index) => (
           <ViewAnimation
             className='border-border border-b border-dashed last:border-b-0'

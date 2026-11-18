@@ -17,13 +17,13 @@ export default function Contact(): React.ReactElement {
   return (
     <Wrapper>
       <SplitSection>
-        <SplitSectionSidebar className='px-6 py-14'>
+        <SplitSectionSidebar className='px-6 py-14 xl:py-20'>
           <ViewAnimation>
             <Hero />
           </ViewAnimation>
         </SplitSectionSidebar>
 
-        <SplitSectionContent className='flex w-full items-center px-6 py-14'>
+        <SplitSectionContent className='flex w-full items-center px-6 py-14 xl:py-20'>
           <ViewAnimation className='w-full' delay={0.1}>
             <ContactForm />
           </ViewAnimation>
