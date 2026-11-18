@@ -32,15 +32,6 @@ const palettes = {
 export type OgTheme = keyof typeof palettes
 type Palette = (typeof palettes)[OgTheme]
 
-/** How the cover behind the card is drawn for each theme */
-export const ogCoverTone = (
-  theme: OgTheme
-): { background: string; grain: boolean; intensity: number } =>
-  theme === 'dark'
-    ? // Full-strength dither glares on a dark card, so dark mode dims it
-      { background: palettes.dark.cover, grain: true, intensity: 0.6 }
-    : { background: palettes.light.cover, grain: true, intensity: 1 }
-
 const rail = { bottom: 566, left: 64, right: 1136, top: 64 }
 
 export const ogCoverSize = {

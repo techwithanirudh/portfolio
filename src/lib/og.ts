@@ -134,8 +134,8 @@ const BLOB_SPREAD_FACTOR = 1.1
 const BLOB_RADIUS_FACTOR = 0.9
 
 /** Fades the blobs behind the title so the text stays readable */
-const washGradient = (background: string) =>
-  `<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="${background}" stop-opacity=".85"/><stop offset=".55" stop-color="${background}" stop-opacity=".5"/><stop offset="1" stop-color="${background}" stop-opacity="0"/></radialGradient>`
+const WASH_GRADIENT =
+  '<radialGradient id="wash" cx="0.2" cy="0.85" r="0.75"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".55" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>'
 
 const grainFilter = ({
   height,
@@ -150,17 +150,7 @@ const grainFilter = ({
 
 export const getCoverDataUrl = (
   seed: string,
-  { height, width }: { height: number; width: number },
-  {
-    background = '#fff',
-    grain = true,
-    intensity = 1,
-  }: {
-    background?: string
-    /** Dithers the blobs; off draws them as smooth glows */
-    grain?: boolean
-    intensity?: number
-  } = {}
+  { height, width }: { height: number; width: number }
 ): string => {
   const cover = createCover(seed)
   const gradients = cover.blobs
@@ -176,6 +166,27 @@ export const getCoverDataUrl = (
       return `<ellipse cx="${cx}" cy="${cy}" rx="${blob.rx * BLOB_RADIUS_FACTOR}" ry="${blob.ry * BLOB_RADIUS_FACTOR}" fill="url(#g${i})" transform="rotate(${rotate} ${cx} ${cy})"/>`
     })
     .join('')
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${washGradient(background)}${grain ? grainFilter({ height, seed: cover.seed, width }) : ''}</defs><rect width="${width}" height="${height}" fill="${background}"/><g${grain ? ' filter="url(#grain)"' : ''} opacity="${intensity}"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><defs>${gradients}${WASH_GRADIENT}${grainFilter({ height, seed: cover.seed, width })}</defs><rect width="${width}" height="${height}" fill="#fff"/><g filter="url(#grain)"><g transform="scale(${width / 100} ${height / 100})">${blobs}</g></g><rect width="${width}" height="${height}" fill="url(#wash)"/></svg>`
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
+}
+
+let heroGradient: Promise<string> | undefined
+
+/**
+ * The home hero's grain gradient, anchored bottom right the way the hero places
+ * it on large screens (and at 80% on light, like the hero)
+ */
+export const getHeroGradientCoverDataUrl = async (
+  { height, width }: { height: number; width: number },
+  theme: 'dark' | 'light'
+): Promise<string> => {
+  heroGradient ??= readFile(
+    path.join(process.cwd(), 'public/images/hero-gradient.png')
+  ).then((png) => png.toString('base64'))
+  // The hero draws it 1004x960, pushed 38% right and 42% down past the corner
+  const size = { height: 960, width: 1004 }
+  const x = width - size.width * 0.62
+  const y = height - size.height * 0.58
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="${theme === 'dark' ? '#141414' : '#fff'}"/><image opacity="${theme === 'dark' ? 1 : 0.8}" href="data:image/png;base64,${await heroGradient}" x="${x}" y="${y}" width="${size.width}" height="${size.height}"/></svg>`
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
 }
