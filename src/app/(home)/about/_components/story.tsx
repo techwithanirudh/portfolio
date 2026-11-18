@@ -70,10 +70,15 @@ function ChapterRow({
         )}
         delay={0.1}
       >
-        <p className='mb-3 font-medium text-primary text-sm' data-track-marker>
-          {chapter.when}
-        </p>
-        <h2 className='mb-5 text-balance font-medium text-2xl leading-tight tracking-tighter sm:text-3xl'>
+        {chapter.when ? (
+          <p className='mb-3 font-medium text-primary text-sm'>
+            {chapter.when}
+          </p>
+        ) : null}
+        <h2
+          className='mb-5 text-balance font-medium text-2xl leading-tight tracking-tighter sm:text-3xl'
+          data-track-marker
+        >
           {chapter.title}
         </h2>
         <p className='text-pretty text-base text-muted-foreground leading-8'>
@@ -112,7 +117,7 @@ function Snapshot({
       <ShadowBox height={278} label={photo.caption} width={188} />
       <div
         className={cn(
-          'absolute top-0 left-0 h-[270px] w-[180px] overflow-hidden rounded-xl shadow-black/15 shadow-lg dark:shadow-black/50',
+          'absolute top-1 left-1 h-[270px] w-[180px] overflow-hidden rounded-xl shadow-black/15 shadow-lg dark:shadow-black/50',
           'motion-reduce:transition-none lg:transition-transform lg:duration-300 lg:ease-out lg:group-data-reached/chapter:rotate-0 lg:hover:rotate-0',
           tilt < 0 ? 'lg:-rotate-8' : 'lg:rotate-8',
           photo.contain && 'bg-white',

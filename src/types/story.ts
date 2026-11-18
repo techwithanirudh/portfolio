@@ -18,5 +18,6 @@ export interface StoryChapter {
   id: string
   photo?: StoryPhoto
   title: string
-  when: string
+  /** A year or a span of years. Chapters without a date leave it out */
+  when?: string
 }

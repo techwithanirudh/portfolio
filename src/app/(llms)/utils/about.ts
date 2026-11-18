@@ -22,7 +22,7 @@ ${absoluteMarkdownLinks(aboutIntro.join(' '))}
 ## Story
 Route: ${url(`${pages.about.path}#story`)}
 
-${story.map((chapter) => `### ${chapter.title} (${chapter.when})\n\n${absoluteMarkdownLinks(chapter.body)}`).join('\n\n')}
+${story.map((chapter) => `### ${chapter.title}${chapter.when ? ` (${chapter.when})` : ''}\n\n${absoluteMarkdownLinks(chapter.body)}`).join('\n\n')}
 
 ## Personal information
 

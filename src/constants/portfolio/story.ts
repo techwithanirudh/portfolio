@@ -12,7 +12,6 @@ export const story: StoryChapter[] = [
       src: '/images/about/lego-boost.webp',
     },
     title: 'Tinkering first',
-    when: 'the beginning',
   },
   {
     body: 'From bricks to code. I picked up Python around 2020 and spent a while tinkering with AI: TensorFlow, image classifiers, GPT-2, deepfakes and face swaps.',
@@ -23,7 +22,6 @@ export const story: StoryChapter[] = [
       src: '/images/about/face-swap-demo.webp',
     },
     title: 'Then Python',
-    when: 'python, then ml',
   },
   {
     body: 'After the ML phase I went on a web dev journey: a pile of plain HTML experiments, then [Daily Diary](/projects/daily_diary), a journal app, and [AniKode](/projects/anikode), a drag-and-drop website builder.',
@@ -35,7 +33,6 @@ export const story: StoryChapter[] = [
       src: '/images/about/anikode-landing.webp',
     },
     title: 'Then the web',
-    when: 'the web',
   },
   {
     body: 'I co-authored a research paper with Bosch on [privacy challenges for autonomous vehicles](https://osf.io/preprints/osf/mtfpy_v1).',
@@ -58,7 +55,6 @@ export const story: StoryChapter[] = [
       src: '/images/about/ai-tutor-login.webp',
     },
     title: 'Then LLMs',
-    when: 'llms',
   },
   {
     body: 'I did freelance full-stack work for MeetingBaaS, building [Transcript Seeker](/projects/transcript_seeker), [Speaking Meeting Bot](/projects/speaking_meeting_bot) and the AI chat and MCP tooling around their meeting APIs. Then I interned at [Energent.ai](https://energent.ai), working on the frontend and microservices of their AI data analysis platform.',
@@ -82,6 +78,5 @@ export const story: StoryChapter[] = [
       src: '/images/companies/quiverai.png',
     },
     title: 'These days',
-    when: 'now',
   },
 ]
