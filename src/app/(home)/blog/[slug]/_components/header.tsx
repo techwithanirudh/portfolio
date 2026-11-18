@@ -44,7 +44,8 @@ export const Header = ({ next, page, previous }: HeaderProps) => {
             style={{ viewTransitionName: 'none' }}
           />
           <AdjacentNav
-            className='absolute top-4 right-4 z-10 md:top-6 md:right-6'
+            // Inside the frame lines, on the same inset as the tags and title
+            className='absolute top-8 right-8 z-10 md:top-16 md:right-16'
             next={toAdjacent(next)}
             noun='post'
             previous={toAdjacent(previous)}
@@ -55,7 +56,7 @@ export const Header = ({ next, page, previous }: HeaderProps) => {
                 {tags.map((tag, index) => (
                   <ViewAnimation delay={staggerDelay(index, 0.1)} key={tag}>
                     <TagCard
-                      className='border border-white/60 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
+                      className='border border-white/20 bg-white/10 text-white hover:bg-white/20 [&_span]:text-white [&_svg]:text-white/70'
                       name={tag}
                     />
                   </ViewAnimation>
