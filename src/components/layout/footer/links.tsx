@@ -108,12 +108,13 @@ export const Links = () => {
   ]
 
   return (
-    <div className='grid grid-cols-2 gap-6 text-muted-foreground text-sm sm:grid-cols-3 sm:gap-8'>
+    <div className='grid gap-10 text-muted-foreground text-sm sm:grid-cols-3 sm:gap-8'>
       {lists.map((list, index) => (
         <ViewAnimation
           className={cn(
             'flex flex-col gap-3 sm:gap-6',
-            index === lists.length - 1 && 'max-sm:col-span-2'
+            // Phones skip Navigate: the bottom pill and its menu already list those pages
+            index === 0 && 'max-sm:hidden'
           )}
           delay={staggerDelay(index)}
           key={list.title}

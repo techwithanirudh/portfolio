@@ -13,13 +13,13 @@ export const Footer = () => (
     <GuestbookBand />
     <div
       className={cn(
-        'container mx-auto flex flex-col gap-6 px-4 py-6 pb-24',
+        'container mx-auto flex flex-col gap-10 px-6 py-12 pb-28',
         'border-border border-b border-dashed',
         'sm:gap-16 sm:px-8 sm:pt-16 sm:pb-24 md:pb-16'
       )}
     >
       <Links />
-      <div className='grid items-center gap-4 sm:grid-cols-3'>
+      <div className='grid items-center gap-6 max-sm:border-border max-sm:border-t max-sm:border-dashed max-sm:pt-8 sm:grid-cols-3 sm:gap-4'>
         <ViewAnimation className='hidden w-min sm:flex' delay={0.1}>
           <UserButton className='size-9' />
         </ViewAnimation>
