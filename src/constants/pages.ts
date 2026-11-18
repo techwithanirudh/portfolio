@@ -24,8 +24,7 @@ export const pages = {
     title: 'Account settings',
   },
   blog: {
-    description:
-      'Notes on design engineering, full-stack development, AI experiments, and how I built recent projects.',
+    description: 'Notes on what I build and what I learn along the way.',
     path: '/blog',
     summary:
       'Every post grouped by year, newest first, with inline tag filters and post search.',
