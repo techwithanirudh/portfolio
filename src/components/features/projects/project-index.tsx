@@ -42,7 +42,6 @@ const Cover = ({
       >
         <BlurImage
           alt=''
-          blur={false}
           className='absolute inset-0'
           fill
           imageClassName='object-cover'
@@ -78,26 +77,24 @@ export const ProjectIndex = ({
   projects,
 }: {
   projects: ProjectIndexItem[]
-}) => {
-  return (
-    <div>
-      <ViewAnimation>
-        <SearchRedirectInput
-          className='h-10 min-w-full rounded-none border-0 pl-1 shadow-none ring-inset'
-          placeholder='Search projects…'
-          tag='projects'
-        />
-      </ViewAnimation>
-      <div className='dashed-grid lg:dashed-grid-2 grid grid-cols-1 border-t border-dashed text-left lg:grid-cols-2'>
-        {projects.map((project, index) => (
-          <ViewAnimation delay={staggerDelay(index)} key={project.url}>
-            <GridCard project={project} />
-          </ViewAnimation>
-        ))}
-        {projects.length % 2 === 1 && (
-          <div aria-hidden className='hidden bg-dashed lg:block' />
-        )}
-      </div>
+}) => (
+  <div>
+    <ViewAnimation>
+      <SearchRedirectInput
+        className='h-10 min-w-full rounded-none border-0 pl-1 shadow-none ring-inset'
+        placeholder='Search projects…'
+        tag='projects'
+      />
+    </ViewAnimation>
+    <div className='dashed-grid lg:dashed-grid-2 grid grid-cols-1 border-t border-dashed text-left lg:grid-cols-2'>
+      {projects.map((project, index) => (
+        <ViewAnimation delay={staggerDelay(index)} key={project.url}>
+          <GridCard project={project} />
+        </ViewAnimation>
+      ))}
+      {projects.length % 2 === 1 && (
+        <div aria-hidden className='hidden bg-dashed lg:block' />
+      )}
     </div>
-  )
-}
+  </div>
+)

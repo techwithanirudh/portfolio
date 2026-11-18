@@ -61,7 +61,6 @@ export const ProjectCard = ({
         <SharedTransition name={sharedName('image')}>
           <BlurImage
             alt={title}
-            blur={false}
             className={cn(
               'relative aspect-2/1 w-full overflow-hidden rounded-lg bg-background outline outline-black/10 -outline-offset-1 transition-transform group-hover:scale-102 sm:aspect-video dark:outline-white/10'
             )}

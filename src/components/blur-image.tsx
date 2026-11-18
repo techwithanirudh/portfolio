@@ -5,7 +5,7 @@
  * Source: https://github.com/delbaoliveira/website/blob/59e6f181ad75751342ceaa8931db4cbcef86b018/ui/BlurImage.tsx
  */
 import NextImage from 'next/image'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 export const IMAGE_QUALITY = 85
@@ -27,6 +27,12 @@ const BlurImage = (props: ImageProps) => {
   } = props
   const [loaded, setLoaded] = useState(false)
   const isLoading = blur && !loaded
+  // A cached image can finish before hydration, so onLoad never fires
+  const checkCached = useCallback((img: HTMLImageElement | null) => {
+    if (img?.complete && img.naturalWidth > 0) {
+      setLoaded(true)
+    }
+  }, [])
 
   return (
     <div
@@ -42,6 +48,7 @@ const BlurImage = (props: ImageProps) => {
         loading={loading}
         onLoad={() => setLoaded(true)}
         quality={IMAGE_QUALITY}
+        ref={checkCached}
         src={src}
         {...rest}
       />
