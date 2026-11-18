@@ -172,10 +172,7 @@ export const getCoverDataUrl = (
 
 let heroGradient: Promise<string> | undefined
 
-/**
- * The home hero's grain gradient, anchored bottom right the way the hero places
- * it on large screens (and at 80% on light, like the hero)
- */
+/** The home hero's grain gradient (at 80% on light, like the hero) */
 export const getHeroGradientCoverDataUrl = async (
   { height, width }: { height: number; width: number },
   theme: 'dark' | 'light'
@@ -183,10 +180,10 @@ export const getHeroGradientCoverDataUrl = async (
   heroGradient ??= readFile(
     path.join(process.cwd(), 'public/images/hero-gradient.png')
   ).then((png) => png.toString('base64'))
-  // The hero draws it 1004x960, pushed 38% right and 42% down past the corner
-  const size = { height: 960, width: 1004 }
+  // Flipped into the top right corner, clear of the title and description
+  const size = { height: 720, width: 753 }
   const x = width - size.width * 0.62
-  const y = height - size.height * 0.58
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="${theme === 'dark' ? '#141414' : '#fff'}"/><image opacity="${theme === 'dark' ? 1 : 0.8}" href="data:image/png;base64,${await heroGradient}" x="${x}" y="${y}" width="${size.width}" height="${size.height}"/></svg>`
+  const y = -size.height * 0.5
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}"><rect width="${width}" height="${height}" fill="${theme === 'dark' ? '#141414' : '#fff'}"/><image opacity="${theme === 'dark' ? 1 : 0.8}" href="data:image/png;base64,${await heroGradient}" x="${x}" y="${-y - size.height}" width="${size.width}" height="${size.height}" transform="scale(1 -1)"/></svg>`
   return `data:image/svg+xml;base64,${Buffer.from(svg).toString('base64')}`
 }
