@@ -16,7 +16,7 @@ import { staggerDelay } from '@/lib/stagger'
 import { AskSimbaLink } from './ask-simba-link'
 
 export const FAQ = () => (
-  <SplitSection>
+  <SplitSection fill>
     <SplitSectionSidebar>
       <SectionHeader
         align='left'
@@ -35,7 +35,7 @@ export const FAQ = () => (
       <Accordion className='w-full' defaultValue={['index-0']}>
         {faq.map((item, index) => (
           <ViewAnimation
-            className='border-border border-b border-dashed last:border-b-0'
+            className='border-border border-b border-dashed'
             delay={staggerDelay(index)}
             key={item.question}
           >
